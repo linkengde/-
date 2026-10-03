@@ -1,0 +1,221 @@
+{
+  "model_version": "MACE v10 energy/reference calibration dataset",
+  "purpose": "Add independent PBE elemental composition anchors, label Ag-Ti periodic interface energies, and preserve an unseen periodic distance holdout.",
+  "parent_dataset": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data",
+  "splits": {
+    "train": 23,
+    "valid": 2,
+    "test": 3
+  },
+  "energy_frame_counts": {
+    "train": 15,
+    "valid": 2,
+    "test": 3
+  },
+  "force_frame_counts": {
+    "train": 23,
+    "valid": 2,
+    "test": 3
+  },
+  "training_energy_composition_matrix": {
+    "columns_element_order": [
+      "Ag",
+      "C",
+      "Si",
+      "Ti"
+    ],
+    "rank": 4,
+    "columns": 4,
+    "singular_values": [
+      57.64295330431763,
+      15.798346851251367,
+      9.016738162424096,
+      7.2388261502883395
+    ],
+    "compositions": [
+      {
+        "config_type": "Ti_gap_2p3",
+        "n_atoms": 32,
+        "counts": {
+          "Ag": 10,
+          "C": 8,
+          "Si": 2,
+          "Ti": 12
+        }
+      },
+      {
+        "config_type": "Ti_gap_2p6",
+        "n_atoms": 32,
+        "counts": {
+          "Ag": 10,
+          "C": 8,
+          "Si": 2,
+          "Ti": 12
+        }
+      },
+      {
+        "config_type": "Ti_gap_2p9",
+        "n_atoms": 32,
+        "counts": {
+          "Ag": 10,
+          "C": 8,
+          "Si": 2,
+          "Ti": 12
+        }
+      },
+      {
+        "config_type": "Si_gap_2p6",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 4,
+          "Si": 4,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "C_gap_2p6",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 6,
+          "Si": 2,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "Si_gap_2p4",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 4,
+          "Si": 4,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "C_gap_2p4",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 6,
+          "Si": 2,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "Si_gap_2p8",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 4,
+          "Si": 4,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "C_gap_2p8",
+        "n_atoms": 20,
+        "counts": {
+          "Ag": 6,
+          "C": 6,
+          "Si": 2,
+          "Ti": 6
+        }
+      },
+      {
+        "config_type": "AgTi_2p3871A_periodic_PW_PBE_force_only",
+        "n_atoms": 49,
+        "counts": {
+          "Ag": 28,
+          "C": 11,
+          "Si": 1,
+          "Ti": 9
+        }
+      },
+      {
+        "config_type": "AgTi_2p55_periodic_PW_PBE_energy_force",
+        "n_atoms": 49,
+        "counts": {
+          "Ag": 28,
+          "C": 11,
+          "Si": 1,
+          "Ti": 9
+        }
+      },
+      {
+        "config_type": "v10_element_reference_Ag_fcc",
+        "n_atoms": 4,
+        "counts": {
+          "Ag": 4,
+          "C": 0,
+          "Si": 0,
+          "Ti": 0
+        }
+      },
+      {
+        "config_type": "v10_element_reference_Ti_hcp",
+        "n_atoms": 2,
+        "counts": {
+          "Ag": 0,
+          "C": 0,
+          "Si": 0,
+          "Ti": 2
+        }
+      },
+      {
+        "config_type": "v10_element_reference_Si_diamond",
+        "n_atoms": 8,
+        "counts": {
+          "Ag": 0,
+          "C": 0,
+          "Si": 8,
+          "Ti": 0
+        }
+      },
+      {
+        "config_type": "v10_element_reference_C_diamond",
+        "n_atoms": 8,
+        "counts": {
+          "Ag": 0,
+          "C": 8,
+          "Si": 0,
+          "Ti": 0
+        }
+      }
+    ]
+  },
+  "added_training_data": {
+    "elemental_references": [
+      "v10_element_reference_Ag_fcc",
+      "v10_element_reference_Ti_hcp",
+      "v10_element_reference_Si_diamond",
+      "v10_element_reference_C_diamond"
+    ],
+    "AgTi_periodic_energy_points": [
+      "2.3871 A existing force-only frame receives its matching DFT energy",
+      "2.55 A new periodic DFT energy/force frame"
+    ]
+  },
+  "independent_holdout": {
+    "config_type": "AgTi_2p70_periodic_PW_PBE_energy_force_holdout",
+    "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p7/retry1/summary.json",
+    "reason": "periodic PW-PBE energy/force point excluded from training; same motif at distinct separation"
+  },
+  "method_caveat": "All are PBE/500 eV GPAW labels. Elemental anchors use dense phase-specific k meshes while interfaces use Gamma or 1x4x2. The elemental references make composition offsets identifiable, but their own cross-cell numerical convergence and interface energy transfer still require evaluation.",
+  "source_sha256": {
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/valid.extxyz": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/test.extxyz": "df2aac452ae14f14b564a28f44e705d3cf65d73a965591d66b9bc0506f361770",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/AgTi_cluster_PW_PBE.extxyz": "0b49ea7bf39fdcf7a0cf0bca13b69f23606eebf50f93519010280fb6e02a7f1e",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/AgTi_d2p55_cluster_PW_PBE.extxyz": "e4e6636aebed69100bdaa27fa429e283e61321b111c7eff1986a46ae3dc0c9ac",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p7/retry1/AgTi_d2p7_cluster_PW_PBE.extxyz": "7aa0810b6f0f5789798c68cdd409e50f9b6bad92f1cf22ec5963fea936c8bdf6",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/summary.json": "29b3538c132dd3c29066377516437653656c4af6d218b223934248f773862ab8",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/summary.json": "5f877bd0c6c9dd504f5741a6559c30b1bce2cfd839bfa7edfc41cc905399e3dc",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p7/retry1/summary.json": "bd6e824b09be87124f592ffae1de7e9c896f78e0821dd58734b4e38df6bced06",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ag_fcc.extxyz": "075467297df82b431a09b6cc2acd6c5072e72209e1013b27962d2080e1681376",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ti_hcp.extxyz": "d451f70509829a0680b605e9b81fca2d63ccec5416dc6b2860f2fa0ce2b1a305",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Si_diamond.extxyz": "aaaa6cff3b5c8c6d527c8f1d0a8c2202763eb35d8810e872669ee628090ac92a",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/C_diamond.extxyz": "d4616e6bb212744cec2c38896b7b7454875916637d4a7f0e8a9a5a733070e6a8"
+  }
+}
