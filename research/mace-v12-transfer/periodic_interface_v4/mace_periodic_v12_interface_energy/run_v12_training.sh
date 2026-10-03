@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-FOUNDATION_MODEL="${FOUNDATION_MODEL:?Set FOUNDATION_MODEL to a local MACE-MP-0b3-medium model file}"
+FOUNDATION_MODEL="${FOUNDATION_MODEL:-$ROOT/foundation_models/mace-mp-0b3-medium.model}"
 [[ -f "$FOUNDATION_MODEL" ]] || { echo "Foundation model not found: $FOUNDATION_MODEL" >&2; exit 2; }
 cd "$ROOT"
-mkdir -p logs models checkpoints results /tmp/mace-v12-cache /tmp/mpl-v12-cache
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-/tmp/mace-v12-cache}"
+export MPLCONFIGDIR="${MPLCONFIGDIR:-/tmp/mpl-v12-cache}"
+export FC_CACHEDIR="${FC_CACHEDIR:-$XDG_CACHE_HOME/fontconfig}"
+mkdir -p logs models checkpoints results "$XDG_CACHE_HOME" "$MPLCONFIGDIR" "$FC_CACHEDIR"
 export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=1
-export XDG_CACHE_HOME=/tmp/mace-v12-cache MPLCONFIGDIR=/tmp/mpl-v12-cache
 mace_run_train \
   --name MACE_periodic_v12_interface_energy \
   --work_dir "$ROOT" --log_dir "$ROOT/logs" --model_dir "$ROOT/models" \
