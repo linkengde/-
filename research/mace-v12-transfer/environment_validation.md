@@ -11,3 +11,10 @@ Validated in the original cloud on 2026-10-04 (Asia/Shanghai):
 ## Still required
 
 The three existing PW-PBE calculations must converge and their compact archives must be copied here. The new window must run the missing AgSi 2.2 A point and add its converged archive. Only after all four `summary.json` files report `scf_converged: true` should it run `archive_completed_pw.py`, `build_v12_dataset.py`, v12 training, and frozen/external evaluation. No long MD or TTM is authorized by this handoff.
+
+## New-window handoff action
+
+1. Open this repository on branch `main`, follow `environment_setup.md`, and run `./run_AgSi_d2p2.sh` from `periodic_interface_v4/pbe_interface_energy_additions_v12/`.
+2. Require `summary.json` to report `scf_converged: true`; verify its source hash matches `input_manifest.json`.
+3. Commit and push only the compact AgSi_d2p2 archive files (`AgSi_d2p2_PW_PBE.extxyz`, `summary.json`, `gpaw.log`, `progress.json`). Do not add `state.gpw`.
+4. Wait for the original window to upload the other three converged archives. Pull `main`, then run `archive_completed_pw.py`, build the dataset, train v12, and run the frozen/external evaluation.
