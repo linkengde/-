@@ -120,3 +120,13 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - `AgSi_lateral_registry_holdout_v13`: SCF converged in 46 iterations; energy -207.5444919019 eV/cell.
 - Evidence: `periodic_interface_v4/pbe_interface_v13_holdouts/archive_manifest.json` and each label's `verification.json`.
 - These labels remain excluded from v13 training; score them before considering them for v14.
+
+
+### 2026-10-04 20:48 UTC: v13 blind scoring and v14 holdouts
+
+- Independently rechecked all four B archive records against their input/output hashes, verification records, summaries, geometries, IDs, finite labels and GPAW logs. All four passed; `AgTi_registry_holdout_v14_01` remains reserved and is excluded from v14 training. No `.gpw` checkpoint is in the archive.
+- Ran `mace_periodic_v14_interface_energy/evaluate_v13_acquisition.py` on the five verified acquisition structures plus the frozen v13 test set. v13 is `FAIL_SCREENING`: AgC force-vector RMSE 0.11368 eV/Å and max separating-force error 0.35750 eV/Å; AgSi 0.09037 and 0.16178; AgTi 0.06259 and 0.04392. Energy errors pass the provisional 10 meV/atom screen for all three interfaces, but force thresholds (0.05 eV/Å) fail for all; AgC and AgSi also miss the provisional separating-force threshold (0.10 eV/Å).
+- The five new geometries are registry/local perturbations of prior small-cell motifs. This screening result does not establish transfer to extended interfaces, thermal disorder, liquid Ag or pressure. Keep v13 out of production MD/TTM.
+- Evaluation artifacts: `mace_periodic_v13_interface_energy/results/v13_independent_holdout_comparison.{json,csv}`. The JSON records v9-v13 model hashes and per-structure errors.
+- Started A's two reserved v14 blind DFT labels with four MPI ranks after confirming there were no existing runs or outputs: `AgC_registry_holdout_v14_01` is running and `AgSi_registry_holdout_v14_01` is queued. Their labels stay out of v14 training and model selection. Progress is published to `coordination/progress/window-a.json`.
+- Next: finish and verify both reserved labels, build v14 from the five scored acquisition labels, keep all three reserved labels outside training, verify the dataset gates, then train/evaluate v14 against those holdouts.
