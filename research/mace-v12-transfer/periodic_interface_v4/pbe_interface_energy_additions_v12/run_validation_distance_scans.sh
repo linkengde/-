@@ -17,8 +17,17 @@ export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_TH
 for LABEL in AgC_validation_d2p30 AgSi_validation_d2p60 AgTi_validation_d2p60; do
   INPUT=$ADD/inputs/validation_distance_scans/$LABEL.extxyz
   OUT=$RUN_ROOT/$LABEL
-  [[ ! -e "$OUT" ]] || { echo "Refusing to reuse existing run directory: $OUT" >&2; exit 2; }
-  [[ ! -e "$ARCHIVE_ROOT/$LABEL" ]] || { echo "Refusing to overwrite existing archive: $ARCHIVE_ROOT/$LABEL" >&2; exit 3; }
+  if [[ -d "$ARCHIVE_ROOT/$LABEL" ]]; then
+    "$PY" - "$ARCHIVE_ROOT/$LABEL/summary.json" <<'PY'
+import json, sys
+from pathlib import Path
+s=json.loads(Path(sys.argv[1]).read_text())
+assert s['scf_converged'] is True and s['mpi_ranks'] == 4 and s['scf_iterations'] > 0
+print(f"Skipping already archived {s['label']}: SCF PASS in {s['scf_iterations']} iterations.")
+PY
+    continue
+  fi
+  [[ ! -e "$OUT" ]] || { echo "Refusing to reuse existing run directory without an archive: $OUT" >&2; exit 2; }
   echo "Starting $LABEL from SCF iteration 1 on four MPI ranks."
   mpirun --bind-to core --map-by core -n 4 "$PY" \
     "$ADD/run_validation_pw_reference.py" "$LABEL" "$INPUT" "$OUT" \
