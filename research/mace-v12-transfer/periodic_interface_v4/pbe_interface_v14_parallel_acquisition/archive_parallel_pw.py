@@ -27,6 +27,12 @@ for rec in manifest['records']:
     forces = np.asarray(atoms.arrays['PW_PBE_forces'])
     pair = np.flatnonzero(original.arrays['central_pair'])
     distance = float(original.get_distance(int(pair[0]), int(pair[1]), mic=True))
+    # The manifest distance is calculated from the in-memory geometry before
+    # extxyz serialization.  The input coordinates are written to 8 decimal
+    # places, so their reconstructed distance can differ by up to about
+    # sqrt(3) * 1e-8 A.  Keep exact file hash, position, and summary checks
+    # below; only account for this bounded text serialization error here.
+    distance_manifest_atol = 2e-8
     checks = {
         'input_hash': sha256(source.read_bytes()).hexdigest() == rec['input_sha256'] == summary['source_sha256'],
         'convergence': summary.get('scf_converged') is True and progress.get('status') == 'complete',
@@ -37,7 +43,7 @@ for rec in manifest['records']:
         'positions': np.allclose(atoms.positions, original.positions, atol=1e-12, rtol=0),
         'cell': np.allclose(atoms.cell.array, original.cell.array, atol=1e-12, rtol=0),
         'pbc': np.array_equal(atoms.pbc, original.pbc) and np.all(atoms.pbc),
-        'distance': np.isclose(distance, rec['central_pair']['input_distance_A'], atol=1e-10, rtol=0) and np.isclose(distance, summary['central_pair']['distance_A'], atol=1e-10, rtol=0),
+        'distance': np.isclose(distance, rec['central_pair']['input_distance_A'], atol=distance_manifest_atol, rtol=0) and np.isclose(distance, summary['central_pair']['distance_A'], atol=1e-10, rtol=0),
         'finite': np.isfinite(energy) and forces.shape == (len(atoms), 3) and np.isfinite(forces).all(),
         'energy': np.isclose(energy, summary['energy_eV_cell'], atol=1e-10, rtol=0),
         'log': f"Converged in {summary['scf_iterations']} steps" in (folder / 'gpaw.log').read_text(errors='replace'),
