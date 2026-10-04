@@ -14,7 +14,7 @@ Read [`WORK_LOG_2026-10.md`](WORK_LOG_2026-10.md), including its latest continua
 
 ## Next work
 
-Use [`coordination/README.md`](coordination/README.md) and the per-window task JSON files before starting work. Window A owns the running DFT checks, two future v14 blind labels and all model training/evaluation. A separate cloud window B claims four new DFT labels and publishes them one at a time; its entry point is [`coordination/START_WINDOW_B.md`](coordination/START_WINDOW_B.md). Each window has separate result directories. See [`coordination/ITERATION_PROTOCOL.md`](coordination/ITERATION_PROTOCOL.md) for the agreed screening thresholds and v14/v15/v16 data policy. Production candidate static checks, short stability tests, TTM and paired pressure simulations follow sufficient independent validation.
+Use [`coordination/README.md`](coordination/README.md) and the per-window task JSON files before starting work. Window A owns the running DFT checks, two future v14 blind labels and all model training/evaluation. A separate cloud window B claims four new DFT labels and publishes them one at a time; its entry point is [`coordination/START_WINDOW_B.md`](coordination/START_WINDOW_B.md). Each window has separate result directories. The guarded v14 builder, training and comparison entry points are in `periodic_interface_v4/mace_periodic_v14_interface_energy/`; they require completed labels and a scored v13 evaluation. See [`coordination/ITERATION_PROTOCOL.md`](coordination/ITERATION_PROTOCOL.md) for the agreed screening thresholds and v14/v15/v16 data policy. Production candidate static checks, short stability tests, TTM and paired pressure simulations follow sufficient independent validation.
 
 ## Environment and artifacts
 

@@ -41,6 +41,19 @@ for source_record in manifest["records"]:
     print(label, json.dumps(checks, sort_keys=True))
     if not all(checks.values()):
         raise SystemExit(f"Archive validation failed for {label}")
+    verification = {
+        "status": "PASS",
+        "label": label,
+        "role": "v13_independent_geometry_check; eligible for v14 training only after v13 scoring",
+        "checks": checks,
+        "input_sha256": source_record["input_sha256"],
+        "sha256": {
+            name: sha256((folder / name).read_bytes()).hexdigest()
+            for name in (output_path.name, "summary.json", "gpaw.log", "progress.json")
+        },
+        "state_gpw_archived": False,
+    }
+    (folder / "verification.json").write_text(json.dumps(verification, indent=2) + "\n")
     records.append({
         "label": label,
         "input_sha256": source_record["input_sha256"],
