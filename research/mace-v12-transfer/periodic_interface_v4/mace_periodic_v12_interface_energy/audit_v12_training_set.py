@@ -47,15 +47,30 @@ force_rows = [r for r in rows if "force_vector_RMSE_eV_A" in r]
 energy_errors = np.asarray([r["energy_error_DFT_minus_MACE_meV_atom"] for r in energy_rows])
 atom_counts = np.asarray([r["atoms"] for r in energy_rows], dtype=float)
 force_squared = sum(r["atoms"] * r["force_vector_RMSE_eV_A"] ** 2 for r in force_rows)
+all_energy_errors = np.asarray(
+    [
+        r["energy_error_DFT_minus_MACE_meV_atom"]
+        if "energy_error_DFT_minus_MACE_meV_atom" in r
+        else -1000.0 * r["predicted_energy_eV_cell"] / r["atoms"]
+        for r in rows
+    ]
+)
 reported = None
 match = re.search(r"\|\s*train_Default\s*\|\s*([0-9.]+)", TRAIN_LOG.read_text(errors="replace"))
 if match:
     reported = float(match.group(1))
 
+zero_filled_rmse = float(np.sqrt(np.mean(all_energy_errors**2)))
+metric_reconciled = reported is not None and abs(zero_filled_rmse - reported) < 1.0
+
 OUT.mkdir(exist_ok=True)
 csv_path = OUT / "v12_training_frame_audit.csv"
 with csv_path.open("w", newline="") as stream:
-    writer = csv.DictWriter(stream, fieldnames=sorted(set().union(*(r.keys() for r in rows))))
+    writer = csv.DictWriter(
+        stream,
+        fieldnames=sorted(set().union(*(r.keys() for r in rows))),
+        lineterminator="\n",
+    )
     writer.writeheader()
     writer.writerows(rows)
 
@@ -64,13 +79,23 @@ summary = {
     "train_file_sha256": hashlib.sha256(TRAIN.read_bytes()).hexdigest(),
     "train_frames": len(rows),
     "energy_labeled_frames": len(energy_rows),
+    "unlabeled_energy_frames": len(rows) - len(energy_rows),
     "force_labeled_frames": len(force_rows),
     "standalone_energy_MAE_meV_atom": float(np.mean(np.abs(energy_errors))),
     "standalone_energy_RMSE_meV_atom_unweighted_by_atoms": float(np.sqrt(np.mean(energy_errors**2))),
     "standalone_energy_RMSE_meV_atom_atom_weighted": float(np.sqrt(np.sum(atom_counts * energy_errors**2) / np.sum(atom_counts))),
     "standalone_force_vector_RMSE_eV_A_atom_weighted": float(np.sqrt(force_squared / sum(r["atoms"] for r in force_rows))),
     "mace_training_stdout_reported_RMSE_E_meV_atom": reported,
-    "assessment": "The standalone selected-checkpoint training-set RMSE does not reproduce the MACE training stdout summary; investigate before treating the model as validated.",
+    "all_frame_RMSE_meV_atom_if_missing_energy_targets_are_zero": zero_filled_rmse,
+    "training_stdout_metric_reconciled": metric_reconciled,
+    "assessment": (
+        "The 1800.8 meV/atom MACE table metric is reproduced when the four force-only frames "
+        "are included with their zero-filled energy targets. For the 19 frames with actual "
+        "energy labels, the selected-checkpoint RMSE is 40.99 meV/atom. This is a reporting "
+        "artifact from unmasked missing-energy frames, not a checkpoint/evaluator mismatch."
+        if metric_reconciled
+        else "The standalone labelled-frame audit does not yet reconcile with the MACE training summary."
+    ),
     "per_frame_csv": csv_path.name,
 }
 (OUT / "v12_training_frame_audit.json").write_text(json.dumps(summary, indent=2) + "\n")

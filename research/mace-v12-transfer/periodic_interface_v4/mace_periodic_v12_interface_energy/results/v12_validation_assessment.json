@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-10-04T07:00:00Z",
+  "updated_utc": "2026-10-04T07:28:24Z",
   "overall_v12_validation": "UNDETERMINED",
   "production_candidate_or_long_md_ttm_authorized_by_evidence": false,
   "stages": {
@@ -27,13 +27,16 @@
       "manifest": "data/dataset_manifest.json"
     },
     "training": {
-      "status": "COMPLETED_WITH_DIAGNOSTIC_MISMATCH",
+      "status": "COMPLETED_METRIC_RECONCILED",
       "epochs_completed": 80,
       "selected_checkpoint_epoch": 76,
       "model_sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
       "reported_stdout_train_energy_RMSE_meV_atom": 1800.8,
       "standalone_train_energy_RMSE_meV_atom": 40.99324851859653,
-      "evidence": "The selected checkpoint completed training, but the MACE final train-table energy RMSE does not agree with an independent mace_eval_configs frame-by-frame audit; investigate before relying on the model."
+      "unlabeled_energy_frames": 4,
+      "all_frame_RMSE_meV_atom_if_missing_energy_targets_are_zero": 1800.8342231755419,
+      "metric_reconciled": true,
+      "evidence": "The selected checkpoint's labelled-frame RMSE is 40.99 meV/atom over 19 energy-labelled frames. MACE's 1800.8 meV/atom table metric is reproduced (1800.83) when four force-only frames with missing energies are included as zero-energy targets in its unmasked summary metric. This is a reporting artifact, not a checkpoint/evaluator mismatch."
     },
     "frozen_test": {
       "status": "IMPROVED_VS_V11_ON_THIS_SMALL_SET",
@@ -99,11 +102,14 @@
     "standalone_energy_RMSE_meV_atom_atom_weighted": 23.099230929334976,
     "standalone_force_vector_RMSE_eV_A_atom_weighted": 0.07920216855844332,
     "mace_training_stdout_reported_RMSE_E_meV_atom": 1800.8,
-    "assessment": "The standalone selected-checkpoint training-set RMSE does not reproduce the MACE training stdout summary; investigate before treating the model as validated.",
+    "mace_unmasked_all_frame_RMSE_with_zero_filled_missing_energies_meV_atom": 1800.8342231755419,
+    "unlabeled_energy_frames": 4,
+    "training_stdout_metric_reconciled": true,
+    "assessment": "The MACE training-table metric is reconciled: its 1800.8 meV/atom value includes four force-only frames as zero-energy targets. On the 19 frames with actual energy labels, the selected-checkpoint RMSE is 40.99 meV/atom.",
     "per_frame_csv": "v12_training_frame_audit.csv"
   },
   "next_actions": [
-    "Resolve why the MACE training summary reports 1800.8 meV/atom energy RMSE while an independent frame-by-frame evaluation reports about 41.0 meV/atom.",
+    "The MACE training-table energy-metric issue is resolved; exclude force-only frames from energy-error metrics in future reports.",
     "Add and evaluate more independent DFT interface geometries or distances, especially Ag-C near the 2.20 A midpoint where the separating-force prediction differs from DFT.",
     "Keep candidate-structure MD and TTM on hold until the diagnostic discrepancy is explained and the expanded independent checks support the model."
   ],

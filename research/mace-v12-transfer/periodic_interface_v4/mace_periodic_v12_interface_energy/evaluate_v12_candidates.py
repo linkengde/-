@@ -22,6 +22,9 @@ TEST = ROOT / "data/test.extxyz"
 HOLDOUTS = {
     "AgSi_midpoint": PROJECT / "pbe_external_v8_motif_holdouts/AgSi/retry1/AgSi_cluster_PW_PBE.extxyz",
     "AgC_midpoint": PROJECT / "pbe_cluster_transfer_pw_20261002_run3_mixer_retry2/AgC_cluster_PW_PBE.extxyz",
+    "AgC_validation_d2p30": PROJECT / "pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgC_validation_d2p30/AgC_validation_d2p30_PW_PBE.extxyz",
+    "AgSi_validation_d2p60": PROJECT / "pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgSi_validation_d2p60/AgSi_validation_d2p60_PW_PBE.extxyz",
+    "AgTi_validation_d2p60": PROJECT / "pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgTi_validation_d2p60/AgTi_validation_d2p60_PW_PBE.extxyz",
 }
 if any(not p.is_file() for p in [*MODELS.values(), TEST, *HOLDOUTS.values()]):
     missing = [str(p) for p in [*MODELS.values(), TEST, *HOLDOUTS.values()] if not p.is_file()]

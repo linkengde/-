@@ -24,7 +24,6 @@ manifest = json.loads((ROOT / "validation_distance_input_manifest.json").read_te
 record = next((r for r in manifest["records"] if r["label"] == LABEL), None)
 if record is None or hashlib.sha256(SOURCE.read_bytes()).hexdigest() != record["input_sha256"]:
     raise SystemExit(f"Input does not match the validation manifest for {LABEL}")
-OUT.mkdir(parents=True, exist_ok=False)
 
 import gpaw_data
 os.environ["GPAW_SETUP_PATH"] = str(gpaw_data.datapath())
@@ -35,6 +34,9 @@ from gpaw.occupations import FermiDirac
 
 if world.size != 4:
     raise SystemExit(f"Expected exactly 4 MPI ranks, got {world.size}")
+if world.rank == 0:
+    OUT.mkdir(parents=True, exist_ok=False)
+world.barrier()
 
 atoms = read(SOURCE)
 if not np.all(atoms.pbc):
@@ -46,15 +48,16 @@ if any(k in atoms.arrays for k in ("REF_forces", "PW_PBE_forces", "forces")):
 started = time.time()
 progress_path = OUT / "progress.json"
 state_path = OUT / "state.gpw"  # rolling checkpoint remains in /tmp
-progress_path.write_text(json.dumps({
-    "label": LABEL,
-    "status": "running",
-    "iteration": 0,
-    "started_from_iteration": 1,
-    "source_sha256": record["input_sha256"],
-    "mpi_ranks": world.size,
-    "started_utc_epoch_s": started,
-}, indent=2) + "\n")
+if world.rank == 0:
+    progress_path.write_text(json.dumps({
+        "label": LABEL,
+        "status": "running",
+        "iteration": 0,
+        "started_from_iteration": 1,
+        "source_sha256": record["input_sha256"],
+        "mpi_ranks": world.size,
+        "started_utc_epoch_s": started,
+    }, indent=2) + "\n")
 calc = GPAW(
     mode=PW(500),
     xc="PBE",
