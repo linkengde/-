@@ -1,0 +1,63 @@
+{
+  "purpose": "Independent v13 checks using a lateral Ag-registry shift and small interface-local displacements, rather than central-pair distance-only scans.",
+  "method": "Translate all Ag atoms by 0.18 A perpendicular to the tagged contact vector; apply deterministic 0.015 A Gaussian displacements to non-Ag atoms within 4.2 A of the tagged pair; fixed-cell single-point PBE labels remain outside v13 training.",
+  "records": [
+    {
+      "label": "AgC_lateral_registry_holdout_v13",
+      "input": "inputs/AgC_lateral_registry_holdout_v13.extxyz",
+      "input_sha256": "6b9aa1c30203841d9fa673e91cbd5e671c495bc8f7ff1ff4fb83af6141d2b846",
+      "source": "pbe_cluster_transfer_pw_20261002_run3_mixer_retry2/AgC_cluster_PW_PBE.extxyz",
+      "source_sha256": "7e7d098a13743ee7a85bb24cffff1e4c88b06694b83bd4faeee394b9999a1d27",
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "central_pair": {
+        "elements": "Ag-C",
+        "Ag_id": 688433,
+        "contact_id": 604804,
+        "source_distance_A": 2.202603164364853,
+        "input_distance_A": 2.2239001591660523,
+        "registry_translation_A": [
+          -0.15919705949957436,
+          0.0840017633546402,
+          0.0
+        ]
+      },
+      "interface_atoms_randomly_displaced": 22,
+      "local_noise_sigma_A": 0.015,
+      "random_seed": 13001,
+      "labels_removed_from_input": true
+    },
+    {
+      "label": "AgSi_lateral_registry_holdout_v13",
+      "input": "inputs/AgSi_lateral_registry_holdout_v13.extxyz",
+      "input_sha256": "91c9495684f8497d7dd28f4b4075c0749b285627ff383aeff638d166b3672e4b",
+      "source": "pbe_external_v8_motif_holdouts/AgSi/retry1/AgSi_cluster_PW_PBE.extxyz",
+      "source_sha256": "e20fe3f7572b436a5afdcb67fb8c3f7c664036a6d10963dd8cac2a49d4e4773d",
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "central_pair": {
+        "elements": "Ag-Si",
+        "Ag_id": 683609,
+        "contact_id": 366934,
+        "source_distance_A": 2.454117131713038,
+        "input_distance_A": 2.463244228212635,
+        "registry_translation_A": [
+          -0.17109363479956888,
+          0.05591930016614786,
+          0.0
+        ]
+      },
+      "interface_atoms_randomly_displaced": 14,
+      "local_noise_sigma_A": 0.015,
+      "random_seed": 13002,
+      "labels_removed_from_input": true
+    }
+  ],
+  "DFT_solver_parallelization": {
+    "ScaLAPACK": true,
+    "GPAW_parallel": {
+      "sl_auto": true
+    },
+    "MPI_ranks": 4
+  }
+}

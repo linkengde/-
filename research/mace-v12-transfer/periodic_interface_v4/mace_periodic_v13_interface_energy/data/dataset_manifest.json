@@ -1,0 +1,111 @@
+{
+  "model_version": "MACE v13 Ag/Ti/Si/C with three independently evaluated PW-PBE distance labels",
+  "parent_v12_model_sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
+  "parent_v12_train_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+  "parent_v12_valid_sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+  "parent_v12_test_sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+  "split_sizes": {
+    "train": 26,
+    "valid": 2,
+    "test": 3
+  },
+  "energy_label_counts": {
+    "train": 22,
+    "valid": 2,
+    "test": 3
+  },
+  "force_label_counts": {
+    "train": 26,
+    "valid": 2,
+    "test": 3
+  },
+  "energy_composition_matrix": {
+    "elements": [
+      "Ag",
+      "C",
+      "Si",
+      "Ti"
+    ],
+    "rank": 4,
+    "singular_values": [
+      87.0011606358293,
+      37.84339856227398,
+      10.431780138825431,
+      7.864680312047954
+    ]
+  },
+  "added_training_labels": [
+    {
+      "label": "AgC_validation_d2p30",
+      "config_type": "AgC_validation_d2p30_periodic_PW_PBE_energy_force",
+      "input_sha256": "63b5bc33dabab88ead78de5ccfc0c403ed7a0db906ae24722e6e9b30e37ff5d2",
+      "extxyz_sha256": "c08c555553e7406bfd90b827d722ff5406c5df15edcf755eba6f6d6b5fa2813e",
+      "summary_sha256": "f84eada01569fd2358db069e6573b01f4e455512276c54e255bbcd2c1bbb62fe",
+      "energy_eV_cell": -259.0564822554769,
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "central_pair": {
+        "elements": "Ag-C",
+        "Ag_id": 688433,
+        "contact_id": 604804,
+        "distance_A": 2.2999999936366904,
+        "separating_force_eV_A": -2.175738336715043
+      },
+      "scf_iterations": 60,
+      "previous_role": "independent_v12_validation; now assigned to v13 training"
+    },
+    {
+      "label": "AgSi_validation_d2p60",
+      "config_type": "AgSi_validation_d2p60_periodic_PW_PBE_energy_force",
+      "input_sha256": "e41850562f973c8f588deb1d14f2c7aeabd13c083d3928951e0d1b09be5f4cd0",
+      "extxyz_sha256": "1e66a16de50d7cedc1e720199988b584711a14f734fcb59cd9b268738da589ed",
+      "summary_sha256": "99fd7961ac10718f77c3cb89276c40748ba226cfa5d79b2c5af8490fc9e44c3d",
+      "energy_eV_cell": -207.52808183257918,
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "central_pair": {
+        "elements": "Ag-Si",
+        "Ag_id": 683609,
+        "contact_id": 366934,
+        "distance_A": 2.600000003474848,
+        "separating_force_eV_A": 0.25973082767750766
+      },
+      "scf_iterations": 49,
+      "previous_role": "independent_v12_validation; now assigned to v13 training"
+    },
+    {
+      "label": "AgTi_validation_d2p60",
+      "config_type": "AgTi_validation_d2p60_periodic_PW_PBE_energy_force",
+      "input_sha256": "996b73776e1193ac85146561e2a6e643bb590916b5f31ae00b7b5d052f97bbc2",
+      "extxyz_sha256": "5213d9578c8e4e1febe02b19f0d5a066cc903f1cb80a0743795d318daf223af4",
+      "summary_sha256": "c2aeaa720eebde45f7e36e7c2136ac003177afa43388137605f055114de025d4",
+      "energy_eV_cell": -177.01645998197077,
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "central_pair": {
+        "elements": "Ag-Ti",
+        "Ag_id": 687247,
+        "contact_id": 479027,
+        "distance_A": 2.600000000616813,
+        "separating_force_eV_A": 0.7168740864429127
+      },
+      "scf_iterations": 37,
+      "previous_role": "independent_v12_validation; now assigned to v13 training"
+    }
+  ],
+  "frozen_splits": {
+    "valid_byte_identical_to_v12": true,
+    "test_byte_identical_to_v12": true,
+    "test_frames": [
+      "Si_gap_2p9",
+      "C_gap_2p9",
+      "AgTi_2p70_periodic_PW_PBE_energy_force_holdout"
+    ]
+  },
+  "validation_caveat": "The three added labels were independent checks of v12, but they share fixed-distance midpoint motifs with external structures. Do not reuse them as v13 holdouts; obtain additional independent Ag-C and Ag-Si DFT interface checks before production conclusions.",
+  "output_sha256": {
+    "train.extxyz": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+    "valid.extxyz": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+    "test.extxyz": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e"
+  }
+}
