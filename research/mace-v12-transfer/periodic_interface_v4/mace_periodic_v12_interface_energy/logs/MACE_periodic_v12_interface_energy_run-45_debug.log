@@ -1,0 +1,234 @@
+2026-10-04 06:16:12.923 INFO: ===========VERIFYING SETTINGS===========
+2026-10-04 06:16:12.923 INFO: MACE version: 0.3.16
+2026-10-04 06:16:12.923 DEBUG: Configuration: Namespace(config=None, name='MACE_periodic_v12_interface_energy', seed=45, work_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy', log_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/logs', model_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/models', checkpoints_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints', results_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/results', downloads_dir='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/downloads', device='cpu', default_dtype='float64', distributed=False, launcher='slurm', log_level='INFO', plot=True, plot_frequency=0, plot_interaction_e=False, error_table='PerAtomRMSE', model='MACE', r_max=5.0, radial_type='bessel', num_radial_basis=8, num_cutoff_basis=5, pair_repulsion=False, distance_transform='None', apply_cutoff=True, use_last_readout_only=False, use_embedding_readout=False, interaction='RealAgnosticResidualInteractionBlock', interaction_first='RealAgnosticResidualInteractionBlock', max_ell=3, correlation=3, use_reduced_cg=False, use_so3=False, use_agnostic_product=False, num_interactions=2, MLP_irreps='16x0e', radial_MLP='[64, 64, 64]', hidden_irreps='128x0e + 128x1o', edge_irreps=None, use_edge_irreps_first=False, num_channels=128, max_L=1, gate='silu', kspace_cutoff_factor=1.5, atomic_multipoles_max_l=0, atomic_multipoles_smearing_width=1.0, field_feature_max_l=0, field_feature_widths='[1.0]', field_feature_norms=None, num_recursion_steps=1, field_si=False, include_electrostatic_self_interaction=False, add_local_electron_energy=False, quadrupole_feature_corrections=False, return_electrostatic_potentials=False, field_norm_factor=0.02, fixedpoint_update_config=None, field_readout_config=None, scaling='rms_forces_scaling', avg_num_neighbors=1, compute_avg_num_neighbors=True, compute_stress=False, compute_forces=True, compute_polarizability=False, compute_atomic_dipole=False, train_file='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz', valid_file='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/valid.extxyz', valid_fraction=0.1, test_file='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/test.extxyz', test_dir=None, multi_processed_test=False, num_workers=0, pin_memory=True, atomic_numbers=None, mean=None, std=None, statistics_file=None, les_arguments=None, E0s='estimated', pseudolabel_replay=False, pseudolabel_replay_compute_stress=False, foundation_filter_elements=True, heads=None, multiheads_finetuning=True, foundation_head=None, weight_pt_head=1.0, real_pt_data_ratio_threshold=0.1, num_samples_pt=10000, force_mh_ft_lr=False, subselect_pt='random', filter_type_pt='none', allow_random_padding_pt=True, pt_train_file=None, pt_valid_file=None, foundation_model_elements=False, keep_isolated_atoms=False, lora=False, lora_rank=4, lora_alpha=1.0, energy_key='REF_energy', forces_key='REF_forces', virials_key='REF_virials', stress_key='REF_stress', dipole_key='dipole', polarizability_key='polarizability', head_key='head', charges_key='REF_charges', elec_temp_key='elec_temp', total_spin_key='total_spin', total_charge_key='total_charge', embedding_specs=None, skip_evaluate_heads='pt_head', loss='weighted', forces_weight=1000.0, swa_forces_weight=100.0, energy_weight=100.0, swa_energy_weight=1000.0, virials_weight=1.0, swa_virials_weight=10.0, stress_weight=1.0, swa_stress_weight=10.0, dipole_weight=1.0, swa_dipole_weight=1.0, swa_polarizability_weight=1.0, polarizability_weight=1.0, config_type_weights='{"Default":1.0}', huber_delta=0.01, optimizer='adam', beta=0.9, beta1_schedulefree=0.9, beta2_schedulefree=0.98, batch_size=1, valid_batch_size=10, lr=0.0001, swa_lr=0.001, weight_decay=5e-07, lr_params_factors='{"embedding_lr_factor": 1.0, "interactions_lr_factor": 1.0, "products_lr_factor": 1.0, "readouts_lr_factor": 1.0}', freeze=None, amsgrad=True, scheduler='ReduceLROnPlateau', lr_factor=0.8, scheduler_patience=50, lr_scheduler_gamma=0.9993, swa=False, start_swa=None, lbfgs=False, ema=False, ema_decay=0.99, max_num_epochs=80, patience=2048, foundation_model='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model', foundation_model_kwargs='{}', foundation_model_readout=True, eval_interval=1, keep_checkpoints=False, save_all_checkpoints=False, restart_latest=False, save_cpu=False, clip_grad=10.0, dry_run=False, enable_cueq=False, only_cueq=False, enable_oeq=False, wandb=False, wandb_dir=None, wandb_project='', wandb_entity='', wandb_name='', wandb_log_hypers=['num_channels', 'max_L', 'correlation', 'lr', 'swa_lr', 'weight_decay', 'batch_size', 'max_num_epochs', 'start_swa', 'energy_weight', 'forces_weight'], key_specification=KeySpecification(info_keys={'energy': 'REF_energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'REF_forces', 'charges': 'REF_charges'}))
+2026-10-04 06:16:12.923 INFO: Using CPU
+2026-10-04 06:16:12.962 DEBUG: Popen(['git', 'version'], cwd=/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy, stdin=None, shell=False, universal_newlines=False)
+2026-10-04 06:16:12.965 DEBUG: Popen(['git', 'version'], cwd=/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy, stdin=None, shell=False, universal_newlines=False)
+2026-10-04 06:16:12.968 DEBUG: sys.platform='linux', git_executable='git'
+2026-10-04 06:16:12.969 DEBUG: Popen(['git', 'cat-file', '--batch-check'], cwd=/workspace/-, stdin=<valid stream>, shell=False, universal_newlines=False)
+2026-10-04 06:16:12.972 DEBUG: Current Git commit: b645213c9a4f60c0fb58632f73c0a9fd2c37e42d
+2026-10-04 06:16:13.360 INFO: Using foundation model /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model as initial checkpoint.
+2026-10-04 06:16:13.360 WARNING: Using multiheads finetuning with a foundation model that is not a Materials Project model, need to provied a path to a pretraining file with --pt_train_file.
+2026-10-04 06:16:13.361 INFO: ===========LOADING INPUT DATA===========
+2026-10-04 06:16:13.361 INFO: Using heads: ['Default']
+2026-10-04 06:16:13.361 INFO: Using the key specifications to parse data:
+2026-10-04 06:16:13.361 INFO: Default: KeySpecification(info_keys={'energy': 'REF_energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'REF_forces', 'charges': 'REF_charges'})
+2026-10-04 06:16:13.361 INFO: =============    Processing head Default     ===========
+2026-10-04 06:16:13.361 DEBUG: Loading training file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz
+2026-10-04 06:16:13.390 INFO: Training set 1/1 [energy: 19, stress: 0, virials: 0, dipole components: 0, head: 23, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 23, charges: 0]
+2026-10-04 06:16:13.391 INFO: Total Training set [energy: 19, stress: 0, virials: 0, dipole components: 0, head: 23, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 23, charges: 0]
+2026-10-04 06:16:13.394 INFO: Validation set 1/1 [energy: 2, stress: 0, virials: 0, dipole components: 0, head: 2, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 2, charges: 0]
+2026-10-04 06:16:13.394 INFO: Total Validation set [energy: 2, stress: 0, virials: 0, dipole components: 0, head: 2, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 2, charges: 0]
+2026-10-04 06:16:13.400 INFO: Test set 1/1 [energy: 3, stress: 0, virials: 0, dipole components: 0, head: 3, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 3, charges: 0]
+2026-10-04 06:16:13.401 INFO: Total Test set [energy: 3, stress: 0, virials: 0, dipole components: 0, head: 3, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 3, charges: 0]
+2026-10-04 06:16:13.401 INFO: Total number of configurations: train=23, valid=2, tests=[Si_gap_2p9_Default: 1, C_gap_2p9_Default: 1, AgTi_2p70_periodic_PW_PBE_energy_force_holdout_Default: 1],
+2026-10-04 06:16:13.401 WARNING: Validation batch size (10) is larger than the number of validation data (2)
+2026-10-04 06:16:13.401 INFO: Atomic Numbers used: [np.int64(6), np.int64(14), np.int64(22), np.int64(47)]
+2026-10-04 06:16:13.401 INFO: Estimating E0s from foundation model predictions on training data
+2026-10-04 06:16:13.402 INFO: Estimating E0s using foundation model on 19 configurations with 4 elements
+2026-10-04 06:16:17.207 INFO: ================================================================================
+2026-10-04 06:16:17.207 INFO: E0 ESTIMATION FROM FOUNDATION MODEL
+2026-10-04 06:16:17.207 INFO: ================================================================================
+2026-10-04 06:16:17.207 INFO: Rank of system: 4/4
+2026-10-04 06:16:17.207 INFO: Residuals: [96.50863639]
+2026-10-04 06:16:17.208 INFO: Element 6: foundation E0 = -1.261735 eV, correction = 0.314895 eV, new E0 = -0.946840 eV
+2026-10-04 06:16:17.208 INFO: Element 14: foundation E0 = -0.826390 eV, correction = 0.407404 eV, new E0 = -0.418987 eV
+2026-10-04 06:16:17.208 INFO: Element 22: foundation E0 = -2.500549 eV, correction = 1.255846 eV, new E0 = -1.244703 eV
+2026-10-04 06:16:17.208 INFO: Element 47: foundation E0 = -0.339546 eV, correction = 0.010694 eV, new E0 = -0.328852 eV
+2026-10-04 06:16:17.208 INFO: ================================================================================
+2026-10-04 06:16:17.208 INFO: FIT STATISTICS
+2026-10-04 06:16:17.208 INFO: ================================================================================
+2026-10-04 06:16:17.208 INFO: RMSE before E0 correction: 18.009746 eV
+2026-10-04 06:16:17.208 INFO: RMSE after E0 correction:  2.253753 eV
+2026-10-04 06:16:17.208 INFO: MAE before E0 correction:  13.993037 eV
+2026-10-04 06:16:17.208 INFO: MAE after E0 correction:   1.910550 eV
+2026-10-04 06:16:17.208 INFO: ================================================================================
+2026-10-04 06:16:17.208 INFO: Atomic Energies used (z: eV) for head Default: {6: -0.9468397117049809, 14: -0.4189865091198222, 22: -1.2447029391154352, 47: -0.328852028170349}
+2026-10-04 06:16:17.208 INFO: Processing datasets for head 'Default'
+2026-10-04 06:16:17.226 DEBUG: Successfully loaded dataset from ASE files: ['/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz']
+2026-10-04 06:16:17.226 INFO: Combining 1 list datasets for head 'Default'
+2026-10-04 06:16:17.227 DEBUG: Successfully loaded validation dataset from ASE files: ['/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/valid.extxyz']
+2026-10-04 06:16:17.227 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-10-04 06:16:17.228 INFO: Combined validation datasets for Default
+2026-10-04 06:16:17.228 INFO: Head 'Default' training dataset size: 23
+2026-10-04 06:16:17.228 INFO: Computing average number of neighbors
+2026-10-04 06:16:17.248 INFO: Average number of neighbors: 35.5989010989011
+2026-10-04 06:16:17.249 INFO: During training the following quantities will be reported: energy, forces
+2026-10-04 06:16:17.249 INFO: ===========MODEL DETAILS===========
+2026-10-04 06:16:17.269 INFO: Loading FOUNDATION model
+2026-10-04 06:16:17.269 INFO: Using filtered elements: [np.int64(6), np.int64(14), np.int64(22), np.int64(47)]
+2026-10-04 06:16:17.269 INFO: Model configuration extracted from foundation model
+2026-10-04 06:16:17.270 INFO: Using weighted loss function for fine-tuning
+2026-10-04 06:16:17.270 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-10-04 06:16:17.270 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-10-04 06:16:17.270 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-10-04 06:16:17.270 INFO: Distance transform for radial basis functions: Agnesi
+2026-10-04 06:16:18.459 INFO: ===========OPTIMIZER INFORMATION===========
+2026-10-04 06:16:18.459 INFO: Using ADAM as parameter optimizer
+2026-10-04 06:16:18.459 INFO: Batch size: 1
+2026-10-04 06:16:18.459 INFO: Number of gradient updates: 1840
+2026-10-04 06:16:18.460 INFO: Learning rate: 0.0001, weight decay: 5e-07
+2026-10-04 06:16:18.460 INFO: WeightedEnergyForcesLoss(energy_weight=100.000, forces_weight=1000.000)
+2026-10-04 06:16:18.460 INFO: === Layer's learning rates ===
+2026-10-04 06:16:18.460 INFO: Param group 0: lr = 0.0001
+2026-10-04 06:16:18.460 INFO: Param group 1: lr = 0.0001
+2026-10-04 06:16:18.460 INFO: Param group 2: lr = 0.0001
+2026-10-04 06:16:18.460 INFO: Param group 3: lr = 0.0001
+2026-10-04 06:16:18.460 INFO: Param group 4: lr = 0.0001
+2026-10-04 06:16:18.460 INFO: Using gradient clipping with tolerance=10.000
+2026-10-04 06:16:18.461 INFO: 
+2026-10-04 06:16:18.461 INFO: ===========TRAINING===========
+2026-10-04 06:16:18.461 INFO: Started training, reporting errors on validation set
+2026-10-04 06:16:18.461 INFO: Loss metrics on validation set
+2026-10-04 06:16:19.160 INFO: Initial: head: Default, loss=34.63453417, RMSE_E_per_atom=   83.39 meV, RMSE_F=  261.87 meV / A
+2026-10-04 06:16:37.852 INFO: Epoch 0: head: Default, loss=13.26437535, RMSE_E_per_atom=   73.47 meV, RMSE_F=  161.21 meV / A
+2026-10-04 06:16:37.853 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-0.pt
+2026-10-04 06:16:55.079 INFO: Epoch 1: head: Default, loss=8.36096566, RMSE_E_per_atom=   39.25 meV, RMSE_F=  128.72 meV / A
+2026-10-04 06:16:55.081 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-0.pt
+2026-10-04 06:16:55.082 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-1.pt
+2026-10-04 06:17:12.940 INFO: Epoch 2: head: Default, loss=6.65973734, RMSE_E_per_atom=   28.66 meV, RMSE_F=  115.05 meV / A
+2026-10-04 06:17:12.941 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-1.pt
+2026-10-04 06:17:12.943 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-2.pt
+2026-10-04 06:17:41.103 INFO: Epoch 3: head: Default, loss=3.87692678, RMSE_E_per_atom=   31.57 meV, RMSE_F=   87.49 meV / A
+2026-10-04 06:17:41.105 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-2.pt
+2026-10-04 06:17:41.107 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-3.pt
+2026-10-04 06:18:14.993 INFO: Epoch 4: head: Default, loss=3.38492106, RMSE_E_per_atom=   26.31 meV, RMSE_F=   81.86 meV / A
+2026-10-04 06:18:14.995 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-3.pt
+2026-10-04 06:18:14.996 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-4.pt
+2026-10-04 06:18:38.060 INFO: Epoch 5: head: Default, loss=2.21270128, RMSE_E_per_atom=   28.26 meV, RMSE_F=   65.92 meV / A
+2026-10-04 06:18:38.061 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-4.pt
+2026-10-04 06:18:38.062 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-5.pt
+2026-10-04 06:18:56.404 INFO: Epoch 6: head: Default, loss=3.46426879, RMSE_E_per_atom=   19.54 meV, RMSE_F=   83.01 meV / A
+2026-10-04 06:19:14.533 INFO: Epoch 7: head: Default, loss=2.60710740, RMSE_E_per_atom=   23.10 meV, RMSE_F=   71.84 meV / A
+2026-10-04 06:19:32.186 INFO: Epoch 8: head: Default, loss=1.95223679, RMSE_E_per_atom=   12.95 meV, RMSE_F=   62.35 meV / A
+2026-10-04 06:19:32.187 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-5.pt
+2026-10-04 06:19:32.189 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-8.pt
+2026-10-04 06:19:49.847 INFO: Epoch 9: head: Default, loss=1.66064236, RMSE_E_per_atom=   13.63 meV, RMSE_F=   57.47 meV / A
+2026-10-04 06:19:49.848 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-8.pt
+2026-10-04 06:19:49.850 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-9.pt
+2026-10-04 06:20:08.194 INFO: Epoch 10: head: Default, loss=1.88143979, RMSE_E_per_atom=   14.09 meV, RMSE_F=   61.18 meV / A
+2026-10-04 06:20:27.192 INFO: Epoch 11: head: Default, loss=1.33874227, RMSE_E_per_atom=   16.64 meV, RMSE_F=   51.48 meV / A
+2026-10-04 06:20:27.193 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-9.pt
+2026-10-04 06:20:27.195 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-11.pt
+2026-10-04 06:20:46.429 INFO: Epoch 12: head: Default, loss=1.39935815, RMSE_E_per_atom=   11.78 meV, RMSE_F=   52.77 meV / A
+2026-10-04 06:21:07.852 INFO: Epoch 13: head: Default, loss=1.45006131, RMSE_E_per_atom=   27.23 meV, RMSE_F=   53.16 meV / A
+2026-10-04 06:21:27.237 INFO: Epoch 14: head: Default, loss=1.22159588, RMSE_E_per_atom=    7.47 meV, RMSE_F=   49.37 meV / A
+2026-10-04 06:21:27.239 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-11.pt
+2026-10-04 06:21:27.243 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-14.pt
+2026-10-04 06:21:51.698 INFO: Epoch 15: head: Default, loss=1.10147346, RMSE_E_per_atom=   17.14 meV, RMSE_F=   46.62 meV / A
+2026-10-04 06:21:51.699 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-14.pt
+2026-10-04 06:21:51.701 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-15.pt
+2026-10-04 06:22:14.718 INFO: Epoch 16: head: Default, loss=1.46081737, RMSE_E_per_atom=    7.52 meV, RMSE_F=   54.00 meV / A
+2026-10-04 06:22:39.741 INFO: Epoch 17: head: Default, loss=1.28958505, RMSE_E_per_atom=    4.61 meV, RMSE_F=   50.76 meV / A
+2026-10-04 06:23:05.639 INFO: Epoch 18: head: Default, loss=1.14328250, RMSE_E_per_atom=   21.06 meV, RMSE_F=   47.35 meV / A
+2026-10-04 06:23:25.172 INFO: Epoch 19: head: Default, loss=1.01816030, RMSE_E_per_atom=    8.79 meV, RMSE_F=   45.04 meV / A
+2026-10-04 06:23:25.175 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-15.pt
+2026-10-04 06:23:25.177 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-19.pt
+2026-10-04 06:24:11.219 INFO: Epoch 20: head: Default, loss=1.02007335, RMSE_E_per_atom=    9.09 meV, RMSE_F=   45.08 meV / A
+2026-10-04 06:24:36.511 INFO: Epoch 21: head: Default, loss=1.31636853, RMSE_E_per_atom=    4.57 meV, RMSE_F=   51.29 meV / A
+2026-10-04 06:25:05.069 INFO: Epoch 22: head: Default, loss=1.20413828, RMSE_E_per_atom=    8.46 meV, RMSE_F=   49.00 meV / A
+2026-10-04 06:25:32.415 INFO: Epoch 23: head: Default, loss=1.41600477, RMSE_E_per_atom=    1.93 meV, RMSE_F=   53.21 meV / A
+2026-10-04 06:25:56.186 INFO: Epoch 24: head: Default, loss=0.90220255, RMSE_E_per_atom=    2.85 meV, RMSE_F=   42.47 meV / A
+2026-10-04 06:25:56.191 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-19.pt
+2026-10-04 06:25:56.193 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-24.pt
+2026-10-04 06:26:24.129 INFO: Epoch 25: head: Default, loss=1.19258615, RMSE_E_per_atom=    4.15 meV, RMSE_F=   48.82 meV / A
+2026-10-04 06:26:49.203 INFO: Epoch 26: head: Default, loss=1.26357380, RMSE_E_per_atom=    4.24 meV, RMSE_F=   50.25 meV / A
+2026-10-04 06:27:11.722 INFO: Epoch 27: head: Default, loss=1.12101691, RMSE_E_per_atom=    4.22 meV, RMSE_F=   47.33 meV / A
+2026-10-04 06:27:36.513 INFO: Epoch 28: head: Default, loss=0.96287941, RMSE_E_per_atom=   18.50 meV, RMSE_F=   43.49 meV / A
+2026-10-04 06:27:54.968 INFO: Epoch 29: head: Default, loss=1.20730844, RMSE_E_per_atom=    4.92 meV, RMSE_F=   49.11 meV / A
+2026-10-04 06:28:14.143 INFO: Epoch 30: head: Default, loss=0.97766455, RMSE_E_per_atom=   15.21 meV, RMSE_F=   43.96 meV / A
+2026-10-04 06:28:34.449 INFO: Epoch 31: head: Default, loss=0.99137875, RMSE_E_per_atom=    3.83 meV, RMSE_F=   44.51 meV / A
+2026-10-04 06:28:58.033 INFO: Epoch 32: head: Default, loss=1.32984318, RMSE_E_per_atom=    9.12 meV, RMSE_F=   51.49 meV / A
+2026-10-04 06:29:27.400 INFO: Epoch 33: head: Default, loss=1.25781062, RMSE_E_per_atom=    7.55 meV, RMSE_F=   50.10 meV / A
+2026-10-04 06:29:53.902 INFO: Epoch 34: head: Default, loss=1.20133683, RMSE_E_per_atom=    8.51 meV, RMSE_F=   48.94 meV / A
+2026-10-04 06:30:16.969 INFO: Epoch 35: head: Default, loss=1.57980698, RMSE_E_per_atom=    7.76 meV, RMSE_F=   56.16 meV / A
+2026-10-04 06:30:43.176 INFO: Epoch 36: head: Default, loss=0.98922822, RMSE_E_per_atom=    6.98 meV, RMSE_F=   44.43 meV / A
+2026-10-04 06:31:13.504 INFO: Epoch 37: head: Default, loss=1.32322095, RMSE_E_per_atom=    6.73 meV, RMSE_F=   51.40 meV / A
+2026-10-04 06:31:41.680 INFO: Epoch 38: head: Default, loss=2.23865181, RMSE_E_per_atom=    5.82 meV, RMSE_F=   66.89 meV / A
+2026-10-04 06:31:58.680 INFO: Epoch 39: head: Default, loss=1.10779703, RMSE_E_per_atom=    4.94 meV, RMSE_F=   47.04 meV / A
+2026-10-04 06:32:21.657 INFO: Epoch 40: head: Default, loss=0.89365543, RMSE_E_per_atom=    8.83 meV, RMSE_F=   42.18 meV / A
+2026-10-04 06:32:21.660 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-24.pt
+2026-10-04 06:32:21.663 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-40.pt
+2026-10-04 06:32:40.570 INFO: Epoch 41: head: Default, loss=0.94785795, RMSE_E_per_atom=    3.07 meV, RMSE_F=   43.53 meV / A
+2026-10-04 06:32:57.927 INFO: Epoch 42: head: Default, loss=1.49111693, RMSE_E_per_atom=    6.66 meV, RMSE_F=   54.57 meV / A
+2026-10-04 06:33:29.295 INFO: Epoch 43: head: Default, loss=0.91868663, RMSE_E_per_atom=    3.31 meV, RMSE_F=   42.85 meV / A
+2026-10-04 06:33:52.883 INFO: Epoch 44: head: Default, loss=1.60514024, RMSE_E_per_atom=    8.50 meV, RMSE_F=   56.60 meV / A
+2026-10-04 06:34:22.198 INFO: Epoch 45: head: Default, loss=0.96551237, RMSE_E_per_atom=    3.84 meV, RMSE_F=   43.93 meV / A
+2026-10-04 06:35:20.159 INFO: Epoch 46: head: Default, loss=1.02783665, RMSE_E_per_atom=    6.07 meV, RMSE_F=   45.30 meV / A
+2026-10-04 06:35:46.424 INFO: Epoch 47: head: Default, loss=0.98466976, RMSE_E_per_atom=    4.07 meV, RMSE_F=   44.36 meV / A
+2026-10-04 06:36:46.395 INFO: Epoch 48: head: Default, loss=1.06213911, RMSE_E_per_atom=    6.46 meV, RMSE_F=   46.04 meV / A
+2026-10-04 06:37:05.088 INFO: Epoch 49: head: Default, loss=1.00259182, RMSE_E_per_atom=    5.65 meV, RMSE_F=   44.74 meV / A
+2026-10-04 06:37:24.962 INFO: Epoch 50: head: Default, loss=1.29683562, RMSE_E_per_atom=    3.73 meV, RMSE_F=   50.91 meV / A
+2026-10-04 06:37:44.692 INFO: Epoch 51: head: Default, loss=1.01631984, RMSE_E_per_atom=    6.68 meV, RMSE_F=   45.04 meV / A
+2026-10-04 06:38:05.157 INFO: Epoch 52: head: Default, loss=0.96515763, RMSE_E_per_atom=    5.15 meV, RMSE_F=   43.91 meV / A
+2026-10-04 06:38:26.589 INFO: Epoch 53: head: Default, loss=1.21779922, RMSE_E_per_atom=    2.47 meV, RMSE_F=   49.35 meV / A
+2026-10-04 06:38:48.621 INFO: Epoch 54: head: Default, loss=1.16186061, RMSE_E_per_atom=    5.35 meV, RMSE_F=   48.18 meV / A
+2026-10-04 06:39:16.172 INFO: Epoch 55: head: Default, loss=1.16836533, RMSE_E_per_atom=   18.47 meV, RMSE_F=   47.99 meV / A
+2026-10-04 06:39:41.559 INFO: Epoch 56: head: Default, loss=0.86045806, RMSE_E_per_atom=    8.52 meV, RMSE_F=   41.40 meV / A
+2026-10-04 06:39:41.562 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-40.pt
+2026-10-04 06:39:41.567 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-56.pt
+2026-10-04 06:40:07.570 INFO: Epoch 57: head: Default, loss=0.99551713, RMSE_E_per_atom=   15.35 meV, RMSE_F=   44.36 meV / A
+2026-10-04 06:40:40.831 INFO: Epoch 58: head: Default, loss=0.87671338, RMSE_E_per_atom=    3.48 meV, RMSE_F=   41.86 meV / A
+2026-10-04 06:41:04.230 INFO: Epoch 59: head: Default, loss=1.24742885, RMSE_E_per_atom=   11.09 meV, RMSE_F=   49.83 meV / A
+2026-10-04 06:41:33.837 INFO: Epoch 60: head: Default, loss=0.85262310, RMSE_E_per_atom=    6.84 meV, RMSE_F=   41.24 meV / A
+2026-10-04 06:41:33.847 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-56.pt
+2026-10-04 06:41:33.857 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-60.pt
+2026-10-04 06:42:01.996 INFO: Epoch 61: head: Default, loss=1.18617536, RMSE_E_per_atom=   12.70 meV, RMSE_F=   48.54 meV / A
+2026-10-04 06:42:24.987 INFO: Epoch 62: head: Default, loss=0.87430429, RMSE_E_per_atom=    7.12 meV, RMSE_F=   41.76 meV / A
+2026-10-04 06:42:46.307 INFO: Epoch 63: head: Default, loss=1.40287566, RMSE_E_per_atom=   17.21 meV, RMSE_F=   52.69 meV / A
+2026-10-04 06:43:10.180 INFO: Epoch 64: head: Default, loss=1.05918679, RMSE_E_per_atom=    1.19 meV, RMSE_F=   46.02 meV / A
+2026-10-04 06:43:27.536 INFO: Epoch 65: head: Default, loss=1.23013443, RMSE_E_per_atom=   15.77 meV, RMSE_F=   49.35 meV / A
+2026-10-04 06:43:46.340 INFO: Epoch 66: head: Default, loss=0.94668335, RMSE_E_per_atom=    1.90 meV, RMSE_F=   43.51 meV / A
+2026-10-04 06:44:04.239 INFO: Epoch 67: head: Default, loss=0.96326177, RMSE_E_per_atom=    6.52 meV, RMSE_F=   43.84 meV / A
+2026-10-04 06:44:31.310 INFO: Epoch 68: head: Default, loss=0.94097338, RMSE_E_per_atom=   14.73 meV, RMSE_F=   43.13 meV / A
+2026-10-04 06:44:52.847 INFO: Epoch 69: head: Default, loss=1.27021927, RMSE_E_per_atom=   10.96 meV, RMSE_F=   50.28 meV / A
+2026-10-04 06:45:19.198 INFO: Epoch 70: head: Default, loss=0.83879656, RMSE_E_per_atom=    8.33 meV, RMSE_F=   40.87 meV / A
+2026-10-04 06:45:19.199 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-60.pt
+2026-10-04 06:45:19.203 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-70.pt
+2026-10-04 06:45:38.021 INFO: Epoch 71: head: Default, loss=0.93590384, RMSE_E_per_atom=    4.39 meV, RMSE_F=   43.24 meV / A
+2026-10-04 06:45:57.280 INFO: Epoch 72: head: Default, loss=1.00368776, RMSE_E_per_atom=   22.98 meV, RMSE_F=   44.21 meV / A
+2026-10-04 06:46:15.411 INFO: Epoch 73: head: Default, loss=1.21628021, RMSE_E_per_atom=   10.95 meV, RMSE_F=   49.20 meV / A
+2026-10-04 06:46:37.131 INFO: Epoch 74: head: Default, loss=1.08645942, RMSE_E_per_atom=   18.96 meV, RMSE_F=   46.23 meV / A
+2026-10-04 06:46:56.893 INFO: Epoch 75: head: Default, loss=1.46583682, RMSE_E_per_atom=    8.07 meV, RMSE_F=   54.08 meV / A
+2026-10-04 06:47:19.003 INFO: Epoch 76: head: Default, loss=0.82330064, RMSE_E_per_atom=    4.73 meV, RMSE_F=   40.55 meV / A
+2026-10-04 06:47:19.009 DEBUG: Deleting old checkpoint file: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-70.pt
+2026-10-04 06:47:19.015 DEBUG: Saving checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-76.pt
+2026-10-04 06:47:40.743 INFO: Epoch 77: head: Default, loss=1.48594697, RMSE_E_per_atom=   11.62 meV, RMSE_F=   54.39 meV / A
+2026-10-04 06:48:04.018 INFO: Epoch 78: head: Default, loss=0.96130932, RMSE_E_per_atom=    7.26 meV, RMSE_F=   43.79 meV / A
+2026-10-04 06:48:22.619 INFO: Epoch 79: head: Default, loss=1.29157038, RMSE_E_per_atom=    1.83 meV, RMSE_F=   50.82 meV / A
+2026-10-04 06:48:22.620 INFO: Training complete
+2026-10-04 06:48:22.620 INFO: 
+2026-10-04 06:48:22.620 INFO: ===========RESULTS===========
+2026-10-04 06:48:22.634 INFO: Loading checkpoint: /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45_epoch-76.pt
+2026-10-04 06:48:22.668 INFO: Loaded Stage one model from epoch 76 for evaluation
+2026-10-04 06:48:22.668 INFO: Saving model to /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45.model
+2026-10-04 06:48:22.878 INFO: Compiling model, saving metadata to /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/models/MACE_periodic_v12_interface_energy_compiled.model
+2026-10-04 06:48:23.664 INFO: Computing metrics for training, validation, and test sets
+2026-10-04 06:48:23.665 INFO: Skipping evaluation for heads: ['pt_head']
+2026-10-04 06:48:23.668 INFO: Evaluating train_Default ...
+2026-10-04 06:48:32.897 INFO: Evaluating valid_Default ...
+2026-10-04 06:48:33.554 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % |
++---------------+---------------------+------------------+-------------------+
+| train_Default |         1800.8      |         45.7     |          4.25     |
+| valid_Default |            4.7      |         40.6     |          6.98     |
++---------------+---------------------+------------------+-------------------+
+2026-10-04 06:48:33.554 INFO: Evaluating AgTi_2p70_periodic_PW_PBE_energy_force_holdout_Default ...
+2026-10-04 06:48:33.954 INFO: Evaluating C_gap_2p9_Default ...
+2026-10-04 06:48:34.301 INFO: Evaluating Si_gap_2p9_Default ...
+2026-10-04 06:48:34.655 INFO: Error-table on TEST:
++--------------------------------------------------------+---------------------+------------------+-------------------+
+|                      config_type                       | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % |
++--------------------------------------------------------+---------------------+------------------+-------------------+
+| AgTi_2p70_periodic_PW_PBE_energy_force_holdout_Default |            2.5      |         31.0     |          2.85     |
+|                   C_gap_2p9_Default                    |            7.7      |         49.0     |          7.19     |
+|                   Si_gap_2p9_Default                   |           11.7      |         16.3     |          6.31     |
++--------------------------------------------------------+---------------------+------------------+-------------------+
+2026-10-04 06:48:34.656 DEBUG: Running inference on train_Default dataset
+2026-10-04 06:48:42.025 DEBUG: Running inference on valid_Default dataset
+2026-10-04 06:48:42.361 DEBUG: Running inference on Si_gap_2p9_Default dataset
+2026-10-04 06:48:42.557 DEBUG: Running inference on C_gap_2p9_Default dataset
+2026-10-04 06:48:42.731 DEBUG: Running inference on AgTi_2p70_periodic_PW_PBE_energy_force_holdout_Default dataset
+2026-10-04 06:48:43.065 DEBUG: Plotting failed: label must be scalar or have the same length as the input data, but found 2 for 1 datasets.
+2026-10-04 06:48:43.065 INFO: Done

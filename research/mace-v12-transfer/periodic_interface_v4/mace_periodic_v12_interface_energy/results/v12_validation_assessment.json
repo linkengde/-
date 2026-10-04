@@ -1,0 +1,120 @@
+{
+  "updated_utc": "2026-10-04T07:00:00Z",
+  "overall_v12_validation": "UNDETERMINED",
+  "production_candidate_or_long_md_ttm_authorized_by_evidence": false,
+  "stages": {
+    "dft_labels": {
+      "status": "PASS",
+      "labels": [
+        "AgSi_d2p2",
+        "AgSi_d2p8",
+        "AgC_d2p0",
+        "AgC_d2p4"
+      ],
+      "evidence": "All four PW-PBE outputs passed convergence, hash, structure, finite-label, energy-consistency, and log checks.",
+      "archive_manifest": "../pbe_interface_energy_additions_v12/archive_manifest.json",
+      "commit": "b645213"
+    },
+    "dataset": {
+      "status": "PASS",
+      "split_sizes": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_composition_matrix_rank": "4/4",
+      "evidence": "The four PW-PBE labels replaced the corresponding LCAO force frames; frozen validation/test frames were preserved.",
+      "manifest": "data/dataset_manifest.json"
+    },
+    "training": {
+      "status": "COMPLETED_WITH_DIAGNOSTIC_MISMATCH",
+      "epochs_completed": 80,
+      "selected_checkpoint_epoch": 76,
+      "model_sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
+      "reported_stdout_train_energy_RMSE_meV_atom": 1800.8,
+      "standalone_train_energy_RMSE_meV_atom": 40.99324851859653,
+      "evidence": "The selected checkpoint completed training, but the MACE final train-table energy RMSE does not agree with an independent mace_eval_configs frame-by-frame audit; investigate before relying on the model."
+    },
+    "frozen_test": {
+      "status": "IMPROVED_VS_V11_ON_THIS_SMALL_SET",
+      "structures": 3,
+      "v11": {
+        "energy_MAE_meV_atom": 10.643493636189193,
+        "energy_max_abs_error_meV_atom": 16.761870394546463,
+        "force_vector_RMSE_eV_A": 0.06322730586641451
+      },
+      "v12": {
+        "energy_MAE_meV_atom": 7.308694009545075,
+        "energy_max_abs_error_meV_atom": 11.731673413577681,
+        "force_vector_RMSE_eV_A": 0.05821068216568924
+      },
+      "evidence": "Three structures only: Ag-Ti, Ag-C, and Ag-Si fixed-geometry holdouts."
+    },
+    "external_holdout": {
+      "status": "MIXED_FORCE_RESULT",
+      "structures": 2,
+      "v11": {
+        "energy_MAE_meV_atom": 155.69753286443174,
+        "energy_max_abs_error_meV_atom": 203.48752707967913,
+        "force_vector_RMSE_eV_A": 0.09032557432386099
+      },
+      "v12": {
+        "energy_MAE_meV_atom": 11.691071740419288,
+        "energy_max_abs_error_meV_atom": 15.20213333675685,
+        "force_vector_RMSE_eV_A": 0.09223849271384651
+      },
+      "per_structure": [
+        {
+          "label": "AgSi_midpoint",
+          "v11_energy_abs_error_meV_atom": 107.90753864918433,
+          "v12_energy_abs_error_meV_atom": 15.20213333675685,
+          "v11_force_vector_RMSE_eV_A": 0.0737437797647167,
+          "v12_force_vector_RMSE_eV_A": 0.061011992105121614,
+          "DFT_separating_force_eV_A": 1.7079510603267585,
+          "v11_separating_force_eV_A": 1.8149147466855151,
+          "v12_separating_force_eV_A": 1.4268569790455754
+        },
+        {
+          "label": "AgC_midpoint",
+          "v11_energy_abs_error_meV_atom": 203.48752707967913,
+          "v12_energy_abs_error_meV_atom": 8.180010144081725,
+          "v11_force_vector_RMSE_eV_A": 0.10511569326255667,
+          "v12_force_vector_RMSE_eV_A": 0.11658691250715983,
+          "DFT_separating_force_eV_A": -1.4154912201066192,
+          "v11_separating_force_eV_A": -1.423845503203934,
+          "v12_separating_force_eV_A": -1.6940658971224187
+        }
+      ],
+      "evidence": "Energy errors improve strongly vs v11, while aggregate force RMSE is slightly worse; AgC midpoint force error increases and AgSi improves. Only two external structures are available."
+    }
+  },
+  "training_set_audit": {
+    "model_sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
+    "train_file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+    "train_frames": 23,
+    "energy_labeled_frames": 19,
+    "force_labeled_frames": 23,
+    "standalone_energy_MAE_meV_atom": 15.704998946899863,
+    "standalone_energy_RMSE_meV_atom_unweighted_by_atoms": 40.99324851859653,
+    "standalone_energy_RMSE_meV_atom_atom_weighted": 23.099230929334976,
+    "standalone_force_vector_RMSE_eV_A_atom_weighted": 0.07920216855844332,
+    "mace_training_stdout_reported_RMSE_E_meV_atom": 1800.8,
+    "assessment": "The standalone selected-checkpoint training-set RMSE does not reproduce the MACE training stdout summary; investigate before treating the model as validated.",
+    "per_frame_csv": "v12_training_frame_audit.csv"
+  },
+  "next_actions": [
+    "Resolve why the MACE training summary reports 1800.8 meV/atom energy RMSE while an independent frame-by-frame evaluation reports about 41.0 meV/atom.",
+    "Add and evaluate more independent DFT interface geometries or distances, especially Ag-C near the 2.20 A midpoint where the separating-force prediction differs from DFT.",
+    "Keep candidate-structure MD and TTM on hold until the diagnostic discrepancy is explained and the expanded independent checks support the model."
+  ],
+  "evidence_files": [
+    "../pbe_interface_energy_additions_v12/archive_manifest.json",
+    "data/dataset_manifest.json",
+    "train.stdout",
+    "results/v9_v10_v11_v12_candidate_comparison.json",
+    "results/v9_v10_v11_v12_candidate_comparison.csv",
+    "results/v12_training_frame_audit.json",
+    "results/v12_training_frame_audit.csv"
+  ],
+  "model_validation_scope_note": "Small fixed-geometry checks only. AgC is a method-transfer check on a previously studied geometry; these metrics do not establish liquid, TTM, long-MD, or production validation."
+}

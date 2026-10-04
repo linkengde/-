@@ -35,11 +35,27 @@ for name, path in MODELS.items():
 
 
 def reference(atoms):
-    energy = atoms.info.get("REF_energy", atoms.info.get("PW_PBE_energy_eV"))
-    forces = atoms.arrays.get("REF_forces", atoms.arrays.get("PW_PBE_forces"))
+    energy_key = next(
+        (key for key in ("REF_energy", "PW_PBE_energy_eV", "energy") if key in atoms.info),
+        None,
+    )
+    force_key = next(
+        (key for key in ("REF_forces", "PW_PBE_forces", "forces") if key in atoms.arrays),
+        None,
+    )
+    energy = atoms.info.get(energy_key) if energy_key else None
+    forces = atoms.arrays.get(force_key) if force_key else None
+    calc_results = getattr(atoms.calc, "results", {}) if atoms.calc is not None else {}
+    if energy is None and "energy" in calc_results:
+        energy, energy_key = calc_results["energy"], "SinglePointCalculator.energy"
+    if forces is None and "forces" in calc_results:
+        forces, force_key = calc_results["forces"], "SinglePointCalculator.forces"
     if energy is None or forces is None:
         raise SystemExit(f"Missing reference energy/forces for {atoms.info.get('config_type')}")
-    return float(energy), np.asarray(forces, dtype=float)
+    forces = np.asarray(forces, dtype=float)
+    if forces.shape != (len(atoms), 3) or not np.isfinite(forces).all() or not np.isfinite(float(energy)):
+        raise SystemExit(f"Invalid reference energy/forces for {atoms.info.get('config_type')}")
+    return float(energy), forces, energy_key, force_key
 
 
 def pair_force(atoms, forces):
@@ -62,8 +78,8 @@ def pair_force(atoms, forces):
 
 
 def evaluate(source, label, split):
+    eref, fref, energy_key, force_key = reference(source)
     atoms = source.copy()
-    eref, fref = reference(atoms)
     row = {
         "split": split,
         "label": label,
@@ -71,6 +87,8 @@ def evaluate(source, label, split):
         "formula": atoms.get_chemical_formula(),
         "atoms": len(atoms),
         "DFT_energy_eV_cell": eref,
+        "DFT_energy_key": energy_key,
+        "DFT_force_key": force_key,
     }
     row.update({f"DFT_{k}": v for k, v in pair_force(atoms, fref).items()})
     for name, calc in calculators.items():
@@ -94,6 +112,7 @@ for label, path in HOLDOUTS.items():
     rows.append(evaluate(read(path), label, "external_holdout"))
 
 summary = {
+    "evaluation_script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     "models": {
         name: {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
         for name, path in MODELS.items()
