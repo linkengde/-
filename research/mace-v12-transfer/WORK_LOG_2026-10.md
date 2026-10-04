@@ -112,3 +112,11 @@
 - 续记更新（2026-10-04 16:20 UTC）：A 的 AgC 仍为第 62 轮收敛、待归档核验；AgSi 在本机日志到第 4 轮，远端 heartbeat 最新第 2 轮，四进程作业仍运行。B 的 `AgTi_registry_probe_v13_01` 在 38 轮收敛，但归档距离元数据检查报差值 `2.4538869e-9 Å`，旧阈值 `1e-10 Å`；B 窗口确认结果已保留、计算队列已暂停且当前无计算进程。核对输入后确认差值来自 manifest 在 extxyz 写盘舍入前记录距离；本地六份 v13/v14 输入的最大同类偏差为 `5.22e-9 Å`。三个归档验证器现将仅对比预写盘 manifest 的距离容差调整为 `1e-8 Å`；输入哈希、读回结构/原子位置、能量和 summary 距离检查仍保持严格。B 拉取修正后可对已保留 AgTi 标签重跑归档核验，再从该点继续队列，无需重算。该修复已本地验证输入距离边界，尚待推送及 B 复核结果。
 - 续记更新（2026-10-04 16:22 UTC）：B 随后重跑归档核验，AgTi 标签 PASS 并已推到 `main`；远端任务记录显示余下 AgC 标签已启动，另两项仍排队。B 的归档器将 manifest 距离容差设为 `2e-8 Å`（覆盖 8 位小数坐标序列化的最坏界限），摘要距离仍为 `1e-10 Å`，输入哈希与坐标校验未放宽。A 的 v13 和 v14 主窗口归档器同步采用该界限，避免同类输入元数据舍入误差阻塞结果；尚未据此标记任何 A 标签归档通过。
 - 续记更新（2026-10-04 16:24 UTC）：从 `main` 独立复核 B 已发布的 AgTi 标签，归档验证记录和四个文件哈希全部匹配；输入哈希、原子 ID/元素/坐标、晶胞、PBC、有限能量受力、摘要能量和 summary 距离均通过。该 DFT 能量为 −176.579846274888 eV/cell，38 轮收敛。A 的 AgSi 本地日志到第 7 轮，仍在运行；A 的两份 v13 标签尚未完成归档核验。
+
+### v13 independent holdout archive
+
+Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and were published independently of window B.
+- `AgC_lateral_registry_holdout_v13`: SCF converged in 62 iterations; energy -258.9555196097 eV/cell.
+- `AgSi_lateral_registry_holdout_v13`: SCF converged in 46 iterations; energy -207.5444919019 eV/cell.
+- Evidence: `periodic_interface_v4/pbe_interface_v13_holdouts/archive_manifest.json` and each label's `verification.json`.
+- These labels remain excluded from v13 training; score them before considering them for v14.
