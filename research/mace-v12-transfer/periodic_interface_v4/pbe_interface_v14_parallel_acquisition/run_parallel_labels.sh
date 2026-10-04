@@ -28,6 +28,18 @@ PY
 RUN_ROOT="${DFT_RUN_ROOT:-/tmp/mace_assigned_pw_$TASK}"
 mkdir -p "$RUN_ROOT" "$ROOT/calculations"
 mapfile -t LABELS < <(python3 -c 'import json,sys; print("\n".join(r["label"] for r in json.load(open(sys.argv[1]))["records"]))' "$ROOT/input_manifest.json")
+WATCHER_PID=""
+stop_watcher() {
+  if [[ -n "$WATCHER_PID" ]]; then
+    kill "$WATCHER_PID" 2>/dev/null || true
+    wait "$WATCHER_PID" 2>/dev/null || true
+    WATCHER_PID=""
+  fi
+}
+trap stop_watcher EXIT
+"$PY" "$ROOT/../../coordination/watch_progress.py" "$TASK" "$RUN_ROOT" "$ROOT/calculations" \
+  "${LABELS[@]}" --parent-pid "$$" >"$RUN_ROOT/progress-publisher.log" 2>&1 &
+WATCHER_PID=$!
 for LABEL in "${LABELS[@]}"; do
   ARCHIVE="$ROOT/calculations/$LABEL"
   OUT="$RUN_ROOT/$LABEL"
@@ -44,4 +56,5 @@ for LABEL in "${LABELS[@]}"; do
   "$PY" "$ROOT/archive_parallel_pw.py" "$LABEL"
   python3 "$COORD" publish "$TASK" --label "$LABEL"
 done
+stop_watcher
 echo "$TASK assigned label queue completed and published."

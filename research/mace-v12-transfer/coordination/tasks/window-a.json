@@ -21,9 +21,11 @@
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
   "allowed_publish_paths": [
     "research/mace-v12-transfer/coordination/tasks/window-a.json",
+    "research/mace-v12-transfer/coordination/progress/window-a.json",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts"
   ],
-  "coordination_duties": "Own training, evaluation, main work log and global file manifest. The automated publish command only handles the assigned extra DFT directory.",
+  "coordination_duties": "Own training, evaluation, main work log and global file manifest. The v13 holdout runner verifies and publishes A's two labels; the shared task publisher handles A's assigned v14 labels.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "After both current outputs converge and verify, run evaluate_v13_acquisition.py once window-b acquisition labels are published; then run the two assigned v14 holdouts."
+  "next_action": "After both current outputs converge and verify, the runner publishes them to main. Then pull main; run evaluate_v13_acquisition.py when window-b acquisition labels are published; continue with A's two v14 holdouts."
 }

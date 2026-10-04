@@ -37,6 +37,14 @@ bash research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel
 
 输出目录存在但未归档时，先检查本机进程、日志和 `.gpw`，保留现有输出并诊断恢复方法。现有启动脚本拒绝覆盖未归档目录，不能盲目重启。大 `state.gpw` 留在 `/tmp`。
 
+此队列会逐标签自动归档并推送。若推送失败，保留当前 B 环境和本地提交；不要重算该标签，也不要修改 owner。先检查 Git 错误，在同一环境同步 `origin/main` 并解决普通 rebase/push；冲突解决后推送成功，才继续队列。A 可以并行继续自己的任务，但在标签出现于远端 `main` 前不能读取或训练使用它。
+
+队列运行时会每 10 轮把小型进度记录推送到 `coordination/progress/window-b.json`。两边的最新进度可一起查看：
+
+```bash
+python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
+```
+
 这些新构型与现有母结构有联系，用于检验新排布和小扰动，不是完全独立的材料形貌，也不是指定温度的热平衡快照。真实周期延展界面、高温/液态环境和应变响应仍需后续专门验证。
 
 辅助窗口只维护自己的目录和任务 JSON。当前 AgC/AgSi v13 DFT、另外两份 v14 盲测、模型训练及总日志由 A 负责。需要额外任务时先读取远端登记，等待 A 明确分配新标签。
