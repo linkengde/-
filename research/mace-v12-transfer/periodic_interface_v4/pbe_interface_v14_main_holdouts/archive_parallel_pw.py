@@ -27,6 +27,10 @@ for rec in manifest['records']:
     forces = np.asarray(atoms.arrays['PW_PBE_forces'])
     pair = np.flatnonzero(original.arrays['central_pair'])
     distance = float(original.get_distance(int(pair[0]), int(pair[1]), mic=True))
+    # The manifest was measured before extxyz rounded coordinates to 8 decimals.
+    # Input hashes and coordinate identity are checked separately at tighter tolerances.
+    manifest_distance_ok = np.isclose(distance, rec['central_pair']['input_distance_A'], atol=2e-8, rtol=0)
+    summary_distance_ok = np.isclose(distance, summary['central_pair']['distance_A'], atol=1e-10, rtol=0)
     checks = {
         'input_hash': sha256(source.read_bytes()).hexdigest() == rec['input_sha256'] == summary['source_sha256'],
         'convergence': summary.get('scf_converged') is True and progress.get('status') == 'complete',
@@ -37,7 +41,7 @@ for rec in manifest['records']:
         'positions': np.allclose(atoms.positions, original.positions, atol=1e-12, rtol=0),
         'cell': np.allclose(atoms.cell.array, original.cell.array, atol=1e-12, rtol=0),
         'pbc': np.array_equal(atoms.pbc, original.pbc) and np.all(atoms.pbc),
-        'distance': np.isclose(distance, rec['central_pair']['input_distance_A'], atol=1e-10, rtol=0) and np.isclose(distance, summary['central_pair']['distance_A'], atol=1e-10, rtol=0),
+        'distance': manifest_distance_ok and summary_distance_ok,
         'finite': np.isfinite(energy) and forces.shape == (len(atoms), 3) and np.isfinite(forces).all(),
         'energy': np.isclose(energy, summary['energy_eV_cell'], atol=1e-10, rtol=0),
         'log': f"Converged in {summary['scf_iterations']} steps" in (folder / 'gpaw.log').read_text(errors='replace'),

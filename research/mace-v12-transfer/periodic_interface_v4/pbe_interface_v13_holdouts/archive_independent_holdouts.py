@@ -23,6 +23,15 @@ for source_record in manifest["records"]:
     energy = float(result.info["PW_PBE_energy_eV"])
     pair = np.flatnonzero(np.asarray(input_atoms.arrays["central_pair"], dtype=bool))
     input_distance = float(input_atoms.get_distance(int(pair[0]), int(pair[1]), mic=True))
+    # The manifest records the in-memory geometry before extxyz's 8-decimal
+    # coordinate serialization. Keep that metadata check within the writer's
+    # rounding error; the input hash and output/input position checks stay strict.
+    manifest_distance_ok = np.isclose(
+        input_distance, source_record["central_pair"]["input_distance_A"], atol=2e-8, rtol=0
+    )
+    summary_distance_ok = np.isclose(
+        input_distance, summary["central_pair"]["distance_A"], atol=1e-10, rtol=0
+    )
     checks = {
         "input_hash": sha256(input_path.read_bytes()).hexdigest() == source_record["input_sha256"] == summary["source_sha256"],
         "converged": summary.get("scf_converged") is True and progress.get("status") == "complete",
@@ -33,7 +42,7 @@ for source_record in manifest["records"]:
         "positions": np.allclose(result.positions, input_atoms.positions, rtol=0, atol=1e-12),
         "cell": np.allclose(result.cell.array, input_atoms.cell.array, rtol=0, atol=1e-12),
         "pbc": bool(np.all(result.pbc)),
-        "distance": bool(np.isclose(input_distance, source_record["central_pair"]["input_distance_A"], atol=1e-10, rtol=0) and np.isclose(input_distance, summary["central_pair"]["distance_A"], atol=1e-10, rtol=0)),
+        "distance": bool(manifest_distance_ok and summary_distance_ok),
         "finite": bool(np.isfinite(energy) and forces.shape == (len(result), 3) and np.isfinite(forces).all()),
         "energy_consistent": bool(np.isclose(energy, summary["energy_eV_cell"], atol=1e-10, rtol=0)),
         "log": f"Converged in {summary['scf_iterations']} steps" in (folder / "gpaw.log").read_text(errors="replace"),
