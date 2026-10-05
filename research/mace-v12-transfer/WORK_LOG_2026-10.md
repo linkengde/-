@@ -165,4 +165,4 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - Reviewed B’s v13 localization report and prepared one fixed-geometry DFT candidate for each Ag-C, Ag-Si and Ag-Ti interface, targeting local force-residual hotspots. The perturbations preserve atom counts and cell shapes, pass the protected-v14 geometry duplicate checks, and keep minimum pair distances above 1.75 Å.
 - The inputs and reproducible generator are in `periodic_interface_v4/pbe_interface_v15_targeted_acquisition/`. These labels are explicitly excluded from v14 train/validation/test and the three reserved holdouts. If used for v15 training, new blind geometries must be reserved.
-- A is starting the three four-rank PW-PBE single points while B trains v14 on its separate cloud CPU. No production MD/TTM is running.
+- A is starting the three four-rank PW-PBE single points while B trains v14 on its separate cloud CPU. The first runner attempt stopped before SCF because the task publish path lacked the repository prefix; the scope is corrected and no DFT process was started by that attempt. No production MD/TTM is running.
