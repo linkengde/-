@@ -233,3 +233,21 @@ causal-evidence report and SHA256 inventory. Future withheld V16 outputs remain
 unread; do not use them in this diagnosis. Stop on hash/ID/nonfinite failure.
 Publish job completion and continue assigned queue without asking user to forward
 individual tasks. A owns changes and actual subsequent experiments.
+
+## targeted_transverse_framework_design
+
+After freezing your current proposed V16 withheld geometries for A review, prepare
+geometry-only TRAINING acquisition proposals in
+reports/window-b/targeted_transverse_framework_design/. This follows matched-driver
+diagnosis: keep a fixed parent/control and distinguish (a) opposite transverse Ag
+translations at fixed longitudinal projection and (b) opposite small framework
+neighbor displacements with Ag fixed. Prioritize the AgSi transverse Si/Ag error
+and the AgC/AgTi contact C/Ti contributions. Use the diagnosis's suggested scales
+(about ±0.15A transverse, ±0.04A framework) only if species-aware geometry permits.
+Record axes, changed IDs, displacement vectors, parent hash, contacts and how
+marked-pair radial distance differs from longitudinal projection. Propose a compact
+priority subset rather than calculate every combination. Preserve IDs/cell/PBC,
+strip labels, screen against all training/acquisition/frozen validation INPUTS.
+Never mix these training proposals with the newly withheld geometry role; do not
+read unseen labels or change frozen files. Publish report/manifest/hashes. No DFT,
+training/inference or production edits under this job; A decides labels and timing.

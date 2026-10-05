@@ -266,3 +266,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Confirmed A registered instance and four active MPI ranks; AgC registry log reached iteration30, not yet converged. Existing queue/checkpoints retained without restart.
 - Independently rechecked B AgC distance compact archive: PASS and convergence59 iterations, every declared member/input hash, ordered IDs/elements, positions/cell/PBC, finite energy/force arrays and summary agreement, and converged-log evidence all pass. No method/force-weight changes made.
 - B matched-geometry driver diagnosis remains a separate future job, not the already completed V15 localization. New withheld V16 geometry design remains pending; training cannot start merely because six acquisition labels exist.
+
+### 2026-10-06 Beijing: A reviews matched-driver report and B V16 labels
+
+- Synced diagnosis publication and verified all ten package hashes from its declared relative working directory. Same-geometry V14/V15 vectorRMSE: AgC0.142882/0.135282, AgSi0.335893/0.313283, AgTi0.116872/0.117514; all separation errors worsened. These simultaneous dataset edits do not isolate one causal factor.
+- Strongest observed error mode is transverse/local-neighbor response, especially AgSi. Provenance uncertainty remains a risk without proof it caused these probe errors. Metric/order/PBC checks on these references passed. No evidence justifies blindly increasing force weight/epochs; preserve controlled recipe for the next reviewed data cycle.
+- Independently rechecked all three B V16 distance archives: declared hashes, convergence, geometry/ID order, cell/PBC, finite forces and summary energy pass. A AgSi registry calculation is active (latest inspected SCF5), AgTi queued.
+- B is designing new withheld geometries. Added subsequent geometry-only paired transverse/framework training-acquisition design, with roles and proposed scales explicitly separated; no extra DFT or model run authorized under that design job.
