@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T05:21:08.574026+00:00",
+  "updated_utc": "2026-10-05T05:29:52.141612+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 remains SCREEN_FAIL. V15 residual AgC/AgSi labels are archived and verified; AgTi residual DFT is running at SCF iteration 10 with four MPI ranks. B completed the species-aware Ag-C review. Three fresh local-registry holdout inputs are now frozen and hashed; their DFT labels are still uncomputed, and no v15 training has started.",
+  "current_stage": "V14 remains SCREEN_FAIL. V15 residual AgC/AgSi labels are archived and verified; AgTi residual DFT is active at SCF iteration 20 with four MPI ranks. Three fresh local-registry holdout inputs are frozen and hashed; their labels are uncomputed. B completed geometry review and is assigned a read-only v15 dataset-integrity audit. No v15 training has started.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -47,9 +47,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json",
     "research/mace-v12-transfer/WORK_LOG_2026-10.md",
     "research/mace-v12-transfer/periodic_interface_v4/V15_FORCE_SEPARATION_PLAN.md",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts",
+    "research/mace-v12-transfer/coordination/tasks/window-b.json",
+    "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
+    "research/mace-v12-transfer/coordination/README.md"
   ],
-  "coordination_duties": "A owns the active residual DFT queue, reviews B registry candidates, owns any holdout DFT and v15 data/model/evaluation, work log and manifest. B prepares candidate geometries only.",
+  "coordination_duties": "A owns the active residual DFT queue, v15 holdout DFT, dataset construction, training, evaluation, work log and manifest. B performs the assigned read-only v15 dataset-integrity and provenance audit without editing data or running calculations.",
   "task_boundary": "Do not calculate window-b assigned labels.",
   "next_action": "Continue the active four-rank AgTi residual-shell DFT without restart; archive and publish it after strict verification. Then run the three frozen registry holdout DFT labels serially with four MPI ranks. Keep those labels out of v15 training/validation/model selection. After all labels pass, build and audit v15 training data, address legacy LCAO reference consistency, train the controlled baseline, then score the frozen registry holdouts and historical regressions.",
   "live_progress": {

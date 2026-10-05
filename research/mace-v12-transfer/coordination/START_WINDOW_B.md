@@ -1,40 +1,59 @@
 # Window B current assignment
 
-V14 is SCREEN_FAIL. The v14 per-atom force localization and source-geometry audit are complete. Window A's AgC v15 targeted DFT label passed archive verification; A is running the assigned AgSi label, then will run AgTi.
+Window B's Ag-C species-aware geometry review is complete. A is running the four-rank Ag-Ti residual PW-PBE label. B has a separate, read-only audit task that can proceed without using DFT/MACE resources or touching A's work.
 
-## Run now: propose new v15 registry holdout geometries
+## Assignment: audit v15 dataset integrity and label provenance
 
-This is geometry generation and screening only. Do not start DFT, MACE inference/training, alter existing data/holdouts, or run MD/TTM.
+Goal: give Window A an independent, evidence-based checklist for building v15 after the current DFT labels finish. This assignment is an audit only. Do not edit scripts, datasets, labels, manifests, or holdout inputs.
 
-First sync and verify B ownership:
+First synchronize and verify this is the registered B machine:
 
-    cd /workspace/-
-    git fetch origin main
-    git merge --ff-only origin/main
-    python3 research/mace-v12-transfer/coordination/sync_tasks.py identity
-    python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
+```bash
+set -e
+cd /workspace/-
+git fetch origin main
+git merge --ff-only origin/main
+python3 research/mace-v12-transfer/coordination/sync_tasks.py identity
+python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
+```
 
-The B identity must be c5035b48-f43b-4da0-b8e4-e2862817f86a. If it differs or fast-forward fails, stop and report it.
+The B identity must be `c5035b48-f43b-4da0-b8e4-e2862817f86a`. Confirm `v15_dataset_integrity_audit` is assigned in `window-b.json`. If the identity differs, the branch cannot fast-forward, or the assignment is absent, stop and report the issue.
 
-Publish progress before work:
+Publish the start event:
 
-    python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_registry_candidate_design --state running --iteration 0 --note "Generating and screening label-free new Ag registry candidates for v15 holdouts."
+```bash
+python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_dataset_integrity_audit --state running --iteration 0 --note "Auditing existing v15 data provenance, split leakage, and builder acceptance checks; read-only, no calculations."
+```
 
-Use these parent motifs from the V14 training file, not any currently running A output:
-- Ag-C: AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train
-- Ag-Si: AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train
-- Ag-Ti: AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train
+Review existing repository files only, including:
 
-Generate label-free alternatives by translating the full Ag sublattice rigidly relative to the carbide/silicide framework. Use reproducible lateral shifts (screen several magnitudes around 0.4-0.7 Angstrom and choose a safe, clearly distinct registry); do not add random noise in this first geometry-only comparison. Preserve atom IDs, cell, PBC and central-pair tags. Strip any energy/force labels from proposal inputs.
+- v12, v13, and v14 dataset builders, manifests, splits, and training-frame audits;
+- the v15 residual acquisition input manifest and the already published Ag-C and Ag-Si results;
+- the three frozen v15 registry holdout inputs and their manifest; their labels are still pending until A publishes them;
+- `V15_FORCE_SEPARATION_PLAN.md` and the V14 validation assessment.
 
-Write candidate extxyz files, a source/input SHA256 manifest and a report under:
-coordination/reports/window-b/v15_registry_candidates/
+Record evidence for:
 
-For each interface, report the Ag registry vector, marked-pair distance, shortest total and Ag-nonAg distances, nearest neighbors, displacement/RMS from source, and exact/near-duplicate checks against v14 train/valid/test, all v13/v14 holdouts/acquisitions and the existing v15 targeted candidates. Reject candidates with pair distances below 1.75 Angstrom or exact duplicates. Select one candidate per interface if it passes. Explicitly label these as new local registries derived from existing small-cluster motifs; they do not establish independent morphology or extended-interface coverage.
+1. Each existing training/validation/test frame's label types, source method, configuration tag, and file provenance; distinguish force-only LCAO labels from PW-PBE energy-and-force labels.
+2. Exact and near-duplicate risks across train/valid/test and reserved holdouts, comparing atom IDs, elements, cell/PBC, and same-ID coordinates. Give the threshold used and identify any split that must not count as independent evidence.
+3. The four legacy force-only LCAO training frames: their identities, what provenance is present, what is missing, and a conservative v15 inclusion rule. Do not infer undocumented GPAW/basis settings.
+4. Expected v15 frame and energy/force label counts if verified residual labels enter training, while all three v15 registry holdouts remain blind and excluded from training, validation, checkpoint selection, and hyperparameter selection.
+5. The elemental-composition matrix rank and checks a v15 builder should enforce, plus hash and byte-preservation checks for frozen splits.
+6. A concise pass/fail/unknown recommendation for each audit item, with paths and hashes as evidence.
 
-After publishing the candidate files and report:
+Do not inspect or depend on A's `/tmp` checkpoint or live process. Treat Ag-Ti residual and all three new registry labels as pending until their verified compact archives appear on `main`. Do not start DFT, run MACE inference/training, run MD/TTM, or perform any additional calculation. Do not edit data/build scripts. Publish only:
 
-    python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_registry_candidate_design --state completed --iteration 1 --note "Published screened label-free registry candidates; no DFT or model run."
-    python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
+```text
+research/mace-v12-transfer/coordination/reports/window-b/v15_dataset_integrity_audit.md
+research/mace-v12-transfer/coordination/reports/window-b/v15_dataset_integrity_audit.json
+research/mace-v12-transfer/coordination/reports/window-b/v15_dataset_integrity_audit_SHA256SUMS.txt
+```
 
-A will review candidates and decide which receive DFT labels. If the geometry axes or distinctness are ambiguous, document the issue and stop; do not start DFT.
+Include the analyzed `main` commit and input SHA256 values. Before publishing, fetch `main` again; if relevant inputs changed, refresh the audit against the latest committed files. Then finish:
+
+```bash
+python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_dataset_integrity_audit --state completed --iteration 1 --note "Published read-only v15 dataset-integrity and label-provenance audit with evidence hashes."
+python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
+```
+
+Do not claim that v15 is ready to train. Window A owns the eventual dataset build, training, and scoring.

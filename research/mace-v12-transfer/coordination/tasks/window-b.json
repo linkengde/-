@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T04:49:19.153915+00:00",
+  "updated_utc": "2026-10-05T05:29:39+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "Geometry-only Ag-C review completed. C#604587-Ti#604590 is a recurrent, locally compressed framework first-shell bond; a label-free Ag-C registry candidate passes empirical species-pair and nonduplicate screens. Candidate and audit are published for Window A review; no calculations were started.",
+  "current_stage": "Geometry-only Ag-C review completed. New assignment: read-only audit of v15 dataset construction, label provenance, split leakage, and legacy LCAO/PW-PBE consistency while A's AgTi DFT runs. No calculation or dataset changes are permitted.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Do not start DFT, run MACE inference/training, alter existing datasets or holdouts, or run MD/TTM. Generate only new label-free geometry proposals and their audit under coordination/reports/window-b/v15_registry_candidates/; preserve all current inputs/results.",
+  "task_boundary": "Read-only audit of existing v12-v14 dataset builders, manifests, extxyz labels and published v15 DFT archives. Report v15 inclusion/exclusion rules, exact/near-duplicate leakage risks, force-only LCAO reference provenance/consistency, label counts and composition-rank checks, plus acceptance checks for A's future v15 builder. Do not start DFT or MACE inference/training; do not edit datasets, builders, labels, holdout inputs or A's running job; do not run MD/TTM. Publish only the audit report and its hash manifest under coordination/reports/window-b/ and update this task/progress.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -43,13 +43,14 @@
     "v14_force_localization": "completed; report published at coordination/reports/window-b/v14_force_localization.md",
     "v15_holdout_design_audit": "completed; found no unused distinct registry inputs in existing records",
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
-    "v15_AgC_species_aware_registry_search": "completed; geometry-only review and candidate published; no DFT/MACE/MD/TTM run."
+    "v15_AgC_species_aware_registry_search": "completed; geometry-only review and candidate published; no DFT/MACE/MD/TTM run.",
+    "v15_dataset_integrity_audit": "assigned; read-only review of existing data/builders; no DFT, MACE, MD/TTM, or edits to datasets/holdouts"
   },
-  "coordination_duties": "B prepares and geometrically screens new registry candidates for prospective v15 blind holdouts. A independently reviews and owns any DFT, dataset, training and scoring.",
-  "next_action": "Window A reviews and decides whether to freeze the label-free Ag-C registry candidate. Window B must not start DFT, MACE, MD or TTM; wait for a new assignment.",
+  "coordination_duties": "B performs the assigned read-only v15 dataset-integrity and provenance audit. A owns DFT, dataset construction, training and scoring.",
+  "next_action": "Run the assigned static v15 dataset-integrity audit, publish the report and hashes, then wait for A's next assignment. Do not run DFT, MACE, MD or TTM.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
-    "v15": "Window A owns training/evaluation. Window B completed species-aware Ag-C framework review and published a label-free local-registry candidate; it has no labels, is not a fresh morphology, and awaits A review."
+    "v15": "Window A owns DFT, dataset construction, training and evaluation. Window B is assigned a read-only audit of data provenance, split leakage, legacy LCAO consistency and v15 builder acceptance checks; it will not edit data or run calculations."
   }
 }
