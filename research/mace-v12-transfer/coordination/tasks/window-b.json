@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T04:23:42.828521+00:00",
+  "updated_utc": "2026-10-05T04:49:19.153915+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "New geometry-only assignment: audit whether the 1.7413 A Ag-C parent C-Ti contact is normal Ti3SiC2 framework coordination, then search existing Ag-C structures for an unlabeled, nonduplicate registry candidate. No DFT/MACE/MD/TTM; do not modify Window A records.",
+  "current_stage": "Geometry-only Ag-C review completed. C#604587-Ti#604590 is a recurrent, locally compressed framework first-shell bond; a label-free Ag-C registry candidate passes empirical species-pair and nonduplicate screens. Candidate and audit are published for Window A review; no calculations were started.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -26,11 +26,11 @@
     "task_id": "window-b",
     "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
     "job": "v15_AgC_species_aware_registry_search",
-    "state": "running",
-    "iteration": 0,
+    "state": "completed",
+    "iteration": 1,
     "elapsed_s": null,
-    "note": "Auditing whether the 1.7413 A C-Ti contact is framework coordination and searching existing Ag-C geometries for a nonduplicate label-free registry; geometry only.",
-    "updated_utc": "2026-10-05T04:23:42.828521+00:00"
+    "note": "Geometry audit published: recurring short framework C-Ti adjacency confirmed; label-free Ag-C registry candidate passes species-aware pair and duplicate screens. No DFT/MACE/MD/TTM run.",
+    "updated_utc": "2026-10-05T04:48:30.543825+00:00"
   },
   "current_jobs": {
     "AgTi_registry_probe_v13_01": "completed; SCF iteration 38; elapsed 2691s; updated 2026-10-04T16:20:00.894244+00:00",
@@ -43,13 +43,13 @@
     "v14_force_localization": "completed; report published at coordination/reports/window-b/v14_force_localization.md",
     "v15_holdout_design_audit": "completed; found no unused distinct registry inputs in existing records",
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
-    "v15_AgC_species_aware_registry_search": "running; SCF iteration 0; updated 2026-10-05T04:23:42.828521+00:00"
+    "v15_AgC_species_aware_registry_search": "completed; geometry-only review and candidate published; no DFT/MACE/MD/TTM run."
   },
   "coordination_duties": "B prepares and geometrically screens new registry candidates for prospective v15 blind holdouts. A independently reviews and owns any DFT, dataset, training and scoring.",
-  "next_action": "Compare C#604587-Ti#604590 and its neighbor shell with framework C-Ti pairs in repository Ti3SiC2 structures. Search existing Ag-C structures for a registry not duplicated by train/valid/test or already computed DFT configurations. Preserve atom count, IDs, cell and PBC; write structure/source/screening/SHA256 audit under coordination/reports/window-b/v15_registry_candidates/. Do not start DFT, MACE, MD or TTM; do not alter Window A task/results.",
+  "next_action": "Window A reviews and decides whether to freeze the label-free Ag-C registry candidate. Window B must not start DFT, MACE, MD or TTM; wait for a new assignment.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
-    "v15": "Window A has residual-targeted labels in progress. Window B completed label-free registry proposals: Ag-Si and Ag-Ti pass geometry gates; Ag-C is rejected by strict total-pair cutoff. These are local registry variants of existing small-cluster motifs, not independent morphology holdouts. A owns review and any DFT."
+    "v15": "Window A owns training/evaluation. Window B completed species-aware Ag-C framework review and published a label-free local-registry candidate; it has no labels, is not a fresh morphology, and awaits A review."
   }
 }
