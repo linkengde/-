@@ -250,3 +250,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Reviewed B metric checks and fixed immediate derived-metric finiteness checks and selection-snapshot hash binding before evaluation.
 - First fresh registry screen completed: AgC energy0.8571meV/atom, vectorRMSE0.13528eV/A, separation0.38744eV/A; AgSi4.6344,0.31328,0.03630; AgTi1.3162,0.11751,0.35013. All energy gates pass, all force gates fail; only AgSi separation passes. Overall FAIL; no MD/TTM. Different V14/V15 probes are not a matched direct improvement comparison.
 - Published training logs/configs/models/checkpoint, frozen selection and evaluation/hash evidence. B assigned post-evaluation force localization with explicit inference authorization; no retraining or DFT by B yet.
+
+### 2026-10-05 UTC: V16 wider-span acquisition owners assigned
+
+- Reviewed B execution pack and V15 force-localization report; hash checks passed. AgSi marked Si error is primarily transverse, so a scalar separating-force pass is insufficient.
+- Integrated unchanged six candidate geometries into separate A registry and B distance acquisition directories, three labels per registered environment. Reused proven four-rank runner/archive/queue guards, recording native and free energies separately. A explicitly authorizes these assigned DFT jobs; no V16 training or model claim. B can consume the standing queue without user per-task forwarding.
+- This batch samples complementary axes but does not independently displace the full high-error framework or provide new unseen validation. V16 requires future withheld geometry design, label-role ledger and dataset audit before training; do not promote old scored V15 probes to fresh validation.

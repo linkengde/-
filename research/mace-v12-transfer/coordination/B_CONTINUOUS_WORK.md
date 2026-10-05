@@ -142,3 +142,23 @@ if reused for future training, their future role must be acquisition/history, no
 new independent validation. Do not generate/tune a new model, inspect other unseen
 labels, start DFT/MD/TTM, modify production files, or claim validation PASS.
 Publish script, compact CSV/JSON/report/hash and completion, then sync queue.
+
+## v16_distance_dft_acquisition — actual DFT authorized
+
+A reviewed V15 FAIL/localization and assigned three complementary wider-distance
+training labels in pbe_interface_v16_parallel_acquisition/input_manifest.json.
+Run these only on the registered B instance. Verify no B DFT/training is active,
+reuse existing GPAW MPI/ScaLAPACK environment and four actual cores. Execute:
+
+```bash
+bash research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/run_assigned_labels.sh
+```
+
+Set GPAW_PYTHON if the known venv path differs; verify software/feature support
+before launch, never silently switch calculator settings. The runner claims B,
+publishes per-label progress and verified compact archives and skips completed
+labels. Existing unarchived runs must be inspected, never duplicated. Keep large
+state.gpw local. Stop on SCF/verification/ownership/environment failure with
+diagnostics. No A registry labels, dataset edits, training, MD/TTM. Complete job
+state only after all three assigned archives pass and publish; then sync queue.
+These are future training acquisitions, not new blind tests.

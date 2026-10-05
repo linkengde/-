@@ -5,21 +5,25 @@
   "updated_utc": "2026-10-05T14:21:27.786406+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "V15 force-error localization completed: 148 atoms, three scored probes, published metrics reproduced; AgSi dominated by local/transverse Ag/Si errors. No training/DFT.",
+  "current_stage": "V15 localization complete; three V16 distance DFT acquisitions explicitly assigned and queued.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
     "AgSi_registry_strain_acq_v14_01": "completed",
-    "AgTi_registry_holdout_v14_01": "completed"
+    "AgTi_registry_holdout_v14_01": "completed",
+    "AgC_widespan_distance_acq_v16_01": "queued",
+    "AgSi_widespan_distance_acq_v16_01": "queued",
+    "AgTi_widespan_distance_acq_v16_01": "queued"
   },
-  "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
+  "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition",
   "allowed_publish_paths": [
     "research/mace-v12-transfer/coordination/tasks/window-b.json",
     "research/mace-v12-transfer/coordination/reports/window-b",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
-    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition"
   ],
-  "task_boundary": "For this assigned post-evaluation job, read published V15 model and already-scored reference labels and run inference to localize errors. Publish only reports/window-b/v15_force_error_localization/. No model selection, retraining, DFT or production edits.",
+  "task_boundary": "Run B-owned V16 distance DFT only in pbe_interface_v16_parallel_acquisition. Preserve other jobs and production datasets/models; no training/MD/TTM.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -54,10 +58,14 @@
     "v15_reference_convention_review": "completed; SCF iteration 1; updated 2026-10-05T10:54:57.287497+00:00",
     "next_acquisition_execution_pack": "completed; SCF iteration 1; updated 2026-10-05T12:17:04.437769+00:00",
     "v15_metric_implementation_review": "completed; SCF iteration 1; updated 2026-10-05T12:55:03.953823+00:00",
-    "v15_force_error_localization": "completed; SCF iteration 1; updated 2026-10-05T14:21:27.786406+00:00"
+    "v15_force_error_localization": "completed; SCF iteration 1; updated 2026-10-05T14:21:27.786406+00:00",
+    "AgC_widespan_distance_acq_v16_01": "queued; four-rank V16 training acquisition",
+    "AgSi_widespan_distance_acq_v16_01": "queued; four-rank V16 training acquisition",
+    "AgTi_widespan_distance_acq_v16_01": "queued; four-rank V16 training acquisition",
+    "v16_distance_dft_acquisition": "queued; run assigned three V16 distance DFT labels serially"
   },
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
-  "next_action": "A reviews post-hoc localization and acquisition gaps. B checks queued_work_order every 20 minutes while this session remains active; no unseen validation reuse.",
+  "next_action": "Continue standing queue: v16_distance_dft_acquisition; actual four-rank DFT now authorized for B-owned three distance labels.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
@@ -70,6 +78,7 @@
     "v15_reference_convention_review",
     "next_acquisition_execution_pack",
     "v15_metric_implementation_review",
-    "v15_force_error_localization"
+    "v15_force_error_localization",
+    "v16_distance_dft_acquisition"
   ]
 }
