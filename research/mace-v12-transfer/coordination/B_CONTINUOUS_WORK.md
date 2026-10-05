@@ -184,3 +184,52 @@ morphology/thermal coverage limits. No candidate receives a training role silent
 If no suitable distinct inputs can be produced, publish the geometric blocker and
 required new parent source, not a false independence claim. No new DFT/model
 training/inference/MD/TTM under this design job. Publish report/manifest/hashes.
+
+## force_separation_driver_diagnosis — priority analytical task
+
+User explicitly asks B to determine what drives vector-force and separating-force
+errors so A can modify the next cycle rationally. Finish existing DFT first; do
+not interrupt or oversubscribe four-rank computation. This analytical job permits
+CPU inference on committed V14/V15 models and already-scored references. No new
+training/DFT under this diagnosis task. Write only
+reports/window-b/force_separation_driver_diagnosis/.
+
+1. Build a matched comparison: evaluate V14 and V15 on the SAME already-scored
+AgC/AgSi/AgTi V15 structures, plus suitable already-scored historical references
+where useful. Verify model/reference hashes, formula/IDs/geometry and label-role
+history. Report both model metrics and deltas on common geometries. Do not compare
+different probes as if controlled. Training inclusion and motif correlation must
+be recorded; these retrospective comparisons are diagnostics, not new blind tests.
+2. Decompose marked-pair error into individual Ag/X signed longitudinal terms
+and transverse vectors; report cancellation versus projection effects. For full
+forces separate marked pair, Ag neighbors, framework shell and outside region,
+with species and Cartesian distributions, top IDs, species-aware nearest neighbors
+and local registry/contact geometry. Reuse prior localization rather than merely
+republishing it.
+3. Link changes to actual V14/V15 dataset edits: excluded LCAO/unresolved AgTi
+rows, three residual additions, preserved method-declaration uncertainty, unchanged
+weights/architecture and checkpoint selection. Multiple simultaneous changes mean
+observed differences cannot identify one causal factor; say so explicitly. Analyze
+coverage of transverse/registry versus distance and framework motion, near training
+geometry errors versus distinct geometry errors, and shared motifs.
+4. Audit plausible implementation/reference drivers against evidence: atom ID and
+force-vector order, energy/native/free convention, finite smearing, method/k-point
+convergence evidence, PBC/image convention, MACE vector-vs-component RMSE and
+checkpoint settings. Distinguish defects ruled out by checks from missing evidence;
+smearing energy offsets alone do not establish a force-error cause. Do not silently
+change reference labels or score definitions.
+5. Produce a ranked hypothesis table: supporting evidence, counterevidence,
+confidence, confounding factors, precise discriminating test and proposed remedy.
+Separate coverage gaps, reference-method uncertainty and optimization/objective
+issues. Don't default to more epochs or larger force weight without evidence.
+6. Map each of the six planned V16 inputs to hypotheses it can test and gaps it
+cannot resolve. Suggest a MINIMAL follow-up design for paired transverse and
+framework perturbations with matched settings, or a controlled future training
+ablation if essential. This is a proposal only; no new DFT/retraining or new blind
+label access. Explain which hypotheses cannot be decided from existing records.
+
+Deliver reproducible script, common-geometry score CSV, decomposition JSON, concise
+causal-evidence report and SHA256 inventory. Future withheld V16 outputs remain
+unread; do not use them in this diagnosis. Stop on hash/ID/nonfinite failure.
+Publish job completion and continue assigned queue without asking user to forward
+individual tasks. A owns changes and actual subsequent experiments.

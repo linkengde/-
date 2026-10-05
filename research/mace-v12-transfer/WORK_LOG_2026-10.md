@@ -256,3 +256,7 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Reviewed B execution pack and V15 force-localization report; hash checks passed. AgSi marked Si error is primarily transverse, so a scalar separating-force pass is insufficient.
 - Integrated unchanged six candidate geometries into separate A registry and B distance acquisition directories, three labels per registered environment. Reused proven four-rank runner/archive/queue guards, recording native and free energies separately. A explicitly authorizes these assigned DFT jobs; no V16 training or model claim. B can consume the standing queue without user per-task forwarding.
 - This batch samples complementary axes but does not independently displace the full high-error framework or provide new unseen validation. V16 requires future withheld geometry design, label-role ledger and dataset audit before training; do not promote old scored V15 probes to fresh validation.
+
+### 2026-10-05 UTC: B assigned matched force/separation driver diagnosis
+
+- User requested direct investigation of error drivers before subsequent changes. Added priority analytical job after existing B DFT, before validation geometry design. Compare V14/V15 on common already-scored geometries, decompose longitudinal/transverse and framework responses, and rank coverage/reference/optimization hypotheses with discriminating tests. No claim of causal identification from simultaneous dataset changes; no blind V16 outputs, new DFT or retraining in the diagnosis.
