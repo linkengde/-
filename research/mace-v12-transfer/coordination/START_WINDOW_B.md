@@ -1,9 +1,7 @@
-# Window B: inherited-method provenance trace
+# Window B: provenance-aware builder revision
 
-Task: `v15_inherited_method_provenance_trace`.
-Registered owner: `c5035b48-f43b-4da0-b8e4-e2862817f86a`.
-
-## Start
+Job `v15_provenance_aware_builder_revision`. Owner remains
+`c5035b48-f43b-4da0-b8e4-e2862817f86a`.
 
 ```bash
 set -e
@@ -11,47 +9,46 @@ cd /workspace/-
 git fetch origin main
 git merge --ff-only origin/main
 python3 research/mace-v12-transfer/coordination/sync_tasks.py claim window-b
-python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_inherited_method_provenance_trace --state running --iteration 0 --note "Tracing 15 unknown inherited training methods from historical evidence; no calculations."
+python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_provenance_aware_builder_revision --state running --iteration 0 --note "Updating isolated provenance ledger and exercising explicit unresolved-row exclusion; no calculations."
 ```
 
-If ownership or synchronization fails, stop and report the exact conflict.
+Stop on owner mismatch or synchronization conflict. Read your completed builder
+and inherited-method trace, plus A review in WORK_LOG_2026-10.md.
 
-## Work
+## Scope
 
-Use the 15 `unknown_inherited_method` training records in
-`reports/window-b/v15_builder_draft/generated_data/dataset_manifest.json`.
-Read the prior dataset-integrity audit first; do not repeat its completed checks.
+Create a new copy of the builder under
+`coordination/reports/window-b/v15_provenance_aware_builder_revision/`.
+Do not change the original published draft or production files. Permit output
+only in child directories of this new report directory, with nonempty-directory
+refusal. Keep all existing archive, hash, finite-label, geometry, and blind-input
+isolation checks. Never inspect fresh V15 holdout labels, summaries or outputs.
 
-Trace each record through existing V9-V14 datasets/manifests, original archived
-inputs/outputs, calculation logs and scripts, and relevant Git history. Search
-committed repository evidence only. Do not inspect A's live files, checkpoints,
-V15 blind outputs, labels or summaries. No new DFT or model execution.
+1. Reconcile the provenance ledger with your trace. Preserve raw `source_method`
+and `dft_method` separately, recorded declarations versus original-run evidence,
+and partial/unresolved status. Do not invent settings. Expose available k-point,
+cutoff, smearing and energy-convention declarations with precise evidence paths.
+Maintain original serialized REF labels; never substitute free_energy.
+2. Add an explicit exclusion option for the unresolved
+`AgTi_2p3871A_periodic_PW_PBE_force_only` row. Match it by config plus source
+frame/hash, not config text alone; require exactly one match. Do not automatically
+exclude the other 14 partially documented frames.
+3. Exercise two isolated scenarios: baseline 30/2/3 and exclusion 29/2/3.
+Check each composition rank 4/4, finite labels, retained frame geometry/label
+identity, historical valid/test byte identity, and fresh blind INPUT isolation.
+Record the exclusion ledger and exact commands. No training or model inference.
+4. Report evidence-tier counts and composition rank for each scenario. Explain
+that excluding the one unresolved row reduces a provenance risk but does not
+fully verify the other inherited rows. Recommend which scenario is suitable for
+an explicitly limited numerical screening run; A decides production integration.
+5. Provide script, README, two manifests, compact comparison report and hashes.
+Avoid republishing duplicate old outputs unless needed for the scenario evidence.
 
-For each record publish:
-- config type, source split/index/hash and persistent atom IDs;
-- traced original calculation paths/commit IDs and evidence hashes;
-- method/basis or PW cutoff, XC, k-points, PBC/cell, convergence and software
-  version only where evidenced; mark missing fields unknown;
-- geometry and energy/force identity to original output, with comparison
-  tolerances stated; do not identify provenance merely by similar geometry,
-  a filename, a config tag or a global manifest;
-- separate evidence-backed recovery, partial recovery and unresolved status;
-- potential reference-method conflicts and missing artifacts needed to resolve
-  them. Where evidence is absent, list exact existing frame geometries for
-  possible matched PW-PBE relabeling; do not start relabeling.
-
-Produce a compact per-frame JSON/CSV ledger, readable report and SHA256 list
-under `coordination/reports/window-b/v15_inherited_method_provenance_trace/`.
-Do not duplicate models or large historical datasets. Do not modify the builder
-draft, production data/scripts, model settings, A task, main worklog or global
-manifest. No DFT/MACE inference/training/MD/TTM. Unknowns must remain unknown;
-this task need not recover all 15 to finish honestly. A decides integration.
-
-## Finish
-
-Publish report artifacts, then update completion through the coordination script:
+No DFT, MACE, MD or TTM. No production dataset/builders, A task, main log, global
+manifest or training settings edits. Do not use blind label results for choices.
+If a check fails, retain diagnostics and report; never bypass it.
 
 ```bash
-python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_inherited_method_provenance_trace --state completed --iteration 1 --note "Published per-frame inherited-method trace and unresolved-evidence remediation ledger; no calculations."
+python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_provenance_aware_builder_revision --state completed --iteration 1 --note "Published provenance-aware isolated builder and checked 30/29-frame scenarios; production decision remains with A."
 python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
 ```
