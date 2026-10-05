@@ -34,6 +34,16 @@ WATCH_PID=$!
 cleanup() { kill "$WATCH_PID" 2>/dev/null || true; }
 trap cleanup EXIT
 for LABEL in "${LABELS[@]}"; do
+  LABEL_STATUS="$(python3 - "$ROOT/../../coordination/tasks/$TASK.json" "$LABEL" <<'PY'
+import json, sys
+task = json.load(open(sys.argv[1]))
+print(task.get('labels', {}).get(sys.argv[2], 'queued'))
+PY
+)"
+  if [[ "$LABEL_STATUS" == "completed" ]]; then
+    echo "Skipping already published label $LABEL."
+    continue
+  fi
   ARCHIVE="$ROOT/calculations/$LABEL"
   OUT="$RUN_ROOT/$LABEL"
   if [[ -f "$ARCHIVE/summary.json" ]]; then

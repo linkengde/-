@@ -44,6 +44,8 @@ The V9-V15 history report added at commit `c48ae13` conflates two AgTi structure
 
 ## Current queue and gates
 
-AgC_residual_shell_v15_01 converged in 60 SCF iterations and passed archive verification. AgSi_residual_shell_v15_01 is running; AgTi_residual_shell_v15_01 is queued. Do not restart either existing job.
+AgC_residual_shell_v15_01 converged in 60 SCF iterations and passed archive verification. AgSi_residual_shell_v15_01 converged in 49 iterations and passed archive verification; it was published with its compact log and manifest at commit `9c5c670`. AgTi_residual_shell_v15_01 remains queued. Do not restart completed jobs.
+
+B's label-free registry screen nominated AgSi and AgTi proposals for A review. Both pass its geometry/duplicate checks, but they are translations of small motifs already present in v14 training, so any DFT labels should be described as new local-registry holdouts only. The AgC proposal was withheld because its unchanged framework C#604587-Ti#604590 pair is 1.7413 Å. Before rejecting it, assess that pair against species-specific Ti-C framework distances and connectivity; a universal all-pair cutoff alone does not establish that a bonded framework pair is unphysical. A fresh AgC proposal must still pass a chemically appropriate geometry screen and the duplicate audit.
 
 The next gates are: finish/verify the acquisition queue; generate and freeze/hash new registry holdouts; build and audit the v15 dataset; train once with the controlled baseline; score old regression and fresh blind structures; decide PASS, FAIL or UNDETERMINED. No production long MD or TTM before the force and separation-force screens pass.

@@ -2,16 +2,16 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T04:17:59.211089+00:00",
+  "updated_utc": "2026-10-05T04:20:40.435254+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 is SCREEN_FAIL. AgC residual-targeted v15 DFT converged at 60 iterations and passed archive verification; AgSi is running and AgTi is queued. B's source audit found no unused holdout inputs and B is now preparing controlled new registry candidates for A to review.",
+  "current_stage": "V14 is SCREEN_FAIL. V15 residual-targeted AgC and AgSi DFT labels are archived, verified and published; AgTi remains queued. B published label-free AgSi/AgTi registry proposals. Its AgC proposal is flagged because a rigidly unchanged framework C-Ti pair is 1.7413 Å; a species-aware framework check is needed before deciding whether that candidate is suitable. Fresh holdouts are not frozen and v15 has not been trained.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_residual_shell_v15_01": "completed; SCF iteration 60; archive verification PASS; energy -257.906079 eV/cell",
-    "AgSi_residual_shell_v15_01": "running; SCF iteration 40; elapsed 4454s; updated 2026-10-05T03:53:57.825567+00:00",
+    "AgSi_residual_shell_v15_01": "completed; SCF iteration 49; archive verification PASS; energy -208.578424 eV/cell; published 2026-10-05T04:17:59Z",
     "AgTi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:31.938454+00:00",
     "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository",
     "v15_registry_candidate_design_window_b": "assigned; B preparing label-free registry candidates; no overlap with A DFT queue"
@@ -20,7 +20,7 @@
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
-    "v15": "AgC residual-targeted label is archived and verified; AgSi running, AgTi queued. Current labels are correlated training candidates, not blind holdouts. Fresh registry holdouts are required before v15 training/evaluation."
+    "v15": "AgC and AgSi residual-targeted labels are archived, verified and published; AgTi is queued. These are training candidates, not blind holdouts. Fresh registry holdouts are required before v15 training/evaluation."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -44,7 +44,7 @@
   ],
   "coordination_duties": "A owns the active residual DFT queue, reviews B registry candidates, owns any holdout DFT and v15 data/model/evaluation, work log and manifest. B prepares candidate geometries only.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue existing AgSi then AgTi DFT without restart. Verify current acquisition labels, review B's geometry candidates, run DFT only on approved new-registry blind holdouts, then build/train/evaluate v15 with current candidates as training only and fresh holdouts excluded.",
+  "next_action": "Continue only the queued AgTi residual-shell DFT; verify, archive and publish it. Review B's AgSi/AgTi proposals as limited local-registry holdouts. Ask B to assess whether the 1.7413 Å C-Ti pair is a normal framework bond and to search for a valid Ag-C registry candidate using species-aware checks. Freeze/hash approved blind holdouts before v15 dataset construction and training; keep all fresh holdouts excluded from training and model selection.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
