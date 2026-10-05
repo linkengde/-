@@ -1,0 +1,1244 @@
+{
+  "models": {
+    "v14": {
+      "sha256": "41bd411355b034b0dab85dbdbda932ecfc394122cb67a2b51a550bd04207645d",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45.model",
+      "selected_checkpoint_one_based_epoch": 71,
+      "evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json",
+      "status": "SCREEN_FAIL"
+    },
+    "v15": {
+      "sha256": "f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/checkpoints/MACE_periodic_v15_interface_energy_run-45.model",
+      "selection_sha256": "2aa414226837cd95d90f9e18c42844460c4c20ed302024d4aab16caed178ddd4",
+      "selected_checkpoint_one_based_epoch": 75,
+      "selection_uses_only_training_validation": true,
+      "status": "FAIL"
+    }
+  },
+  "reference_and_geometry": {
+    "probe_labels": [
+      "AgC_registry_holdout_v15_01",
+      "AgSi_registry_holdout_v15_01",
+      "AgTi_registry_holdout_v15_01"
+    ],
+    "all_probes_already_scored_in_v15": true,
+    "v15_published_score_reproduction": {
+      "AgC_registry_holdout_v15_01": {
+        "reproduced": {
+          "force_vector_RMSE_eV_A": 0.13528201482610835,
+          "force_vector_max_error_eV_A": 0.3838422392178233,
+          "separating_force_abs_error_eV_A": 0.3874399086324558,
+          "energy_prediction_eV_cell": -258.10295153314655
+        },
+        "published": {
+          "force_vector_RMSE_eV_A": 0.135282014826108,
+          "force_vector_max_error_eV_A": 0.3838422392178232,
+          "separating_force_abs_error_eV_A": 0.38743990863244826,
+          "energy_prediction_eV_cell": -258.10295153314655
+        },
+        "abs_deltas": {
+          "force_vector_RMSE_eV_A": 3.608224830031759e-16,
+          "force_vector_max_error_eV_A": 1.1102230246251565e-16,
+          "separating_force_abs_error_eV_A": 7.549516567451064e-15,
+          "energy_prediction_eV_cell": 0.0
+        }
+      },
+      "AgSi_registry_holdout_v15_01": {
+        "reproduced": {
+          "force_vector_RMSE_eV_A": 0.31328263677672086,
+          "force_vector_max_error_eV_A": 1.325495050283707,
+          "separating_force_abs_error_eV_A": 0.036304507469365976,
+          "energy_prediction_eV_cell": -207.25611748770956
+        },
+        "published": {
+          "force_vector_RMSE_eV_A": 0.31328263677672125,
+          "force_vector_max_error_eV_A": 1.325495050283705,
+          "separating_force_abs_error_eV_A": 0.03630450746936509,
+          "energy_prediction_eV_cell": -207.2561174877095
+        },
+        "abs_deltas": {
+          "force_vector_RMSE_eV_A": 3.885780586188048e-16,
+          "force_vector_max_error_eV_A": 1.9984014443252818e-15,
+          "separating_force_abs_error_eV_A": 8.881784197001252e-16,
+          "energy_prediction_eV_cell": 5.684341886080802e-14
+        }
+      },
+      "AgTi_registry_holdout_v15_01": {
+        "reproduced": {
+          "force_vector_RMSE_eV_A": 0.1175137742780565,
+          "force_vector_max_error_eV_A": 0.2932577917307219,
+          "separating_force_abs_error_eV_A": 0.3501261126928561,
+          "energy_prediction_eV_cell": -177.15556623559257
+        },
+        "published": {
+          "force_vector_RMSE_eV_A": 0.1175137742780561,
+          "force_vector_max_error_eV_A": 0.29325779173072236,
+          "separating_force_abs_error_eV_A": 0.35012611269285565,
+          "energy_prediction_eV_cell": -177.15556623559257
+        },
+        "abs_deltas": {
+          "force_vector_RMSE_eV_A": 4.0245584642661925e-16,
+          "force_vector_max_error_eV_A": 4.440892098500626e-16,
+          "separating_force_abs_error_eV_A": 4.440892098500626e-16,
+          "energy_prediction_eV_cell": 0.0
+        }
+      }
+    },
+    "localization_cutoff_A": 4.5,
+    "direct_cluster_vs_MIC_pair_image_checked": true,
+    "reference_order": "output and frozen input have exact same numbers, lammps_id, central_pair, positions, cell, PBC; reference force vectors are read at matching serialized atom indices"
+  },
+  "splits": {
+    "v14": {
+      "train": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+        "sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+        "frames": 31,
+        "config_types": [
+          "Ti_gap_2p3",
+          "Ti_gap_2p6",
+          "Ti_gap_2p9",
+          "Si_gap_2p6",
+          "C_gap_2p6",
+          "Si_gap_2p4",
+          "C_gap_2p4",
+          "Si_gap_2p8",
+          "C_gap_2p8",
+          "AgC_primary_2.0A_LCAO",
+          "AgC_primary_2.4A_LCAO",
+          "AgTi_2p1A_LCAO",
+          "AgTi_2p7A_LCAO",
+          "AgTi_2p3871A_periodic_PW_PBE_force_only",
+          "AgTi_2p55_periodic_PW_PBE_energy_force",
+          "v10_element_reference_Ag_fcc",
+          "v10_element_reference_Ti_hcp",
+          "v10_element_reference_Si_diamond",
+          "v10_element_reference_C_diamond",
+          "AgSi_d2p2_periodic_PW_PBE_energy_force",
+          "AgSi_d2p8_periodic_PW_PBE_energy_force",
+          "AgC_d2p0_periodic_PW_PBE_energy_force",
+          "AgC_d2p4_periodic_PW_PBE_energy_force",
+          "AgC_validation_d2p30_periodic_PW_PBE_energy_force",
+          "AgSi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "AgTi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "AgC_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "AgSi_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+          "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+          "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train"
+        ]
+      },
+      "valid": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/valid.extxyz",
+        "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+        "frames": 2,
+        "config_types": [
+          "Si_gap_2p3",
+          "C_gap_2p3"
+        ]
+      },
+      "test": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/test.extxyz",
+        "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+        "frames": 3,
+        "config_types": [
+          "Si_gap_2p9",
+          "C_gap_2p9",
+          "AgTi_2p70_periodic_PW_PBE_energy_force_holdout"
+        ]
+      }
+    },
+    "v15": {
+      "train": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/train.extxyz",
+        "sha256": "e358e49cf99b42d7c8ec6e482f1de5e777fa0f5da916ae9c22311ec5fc84bcf0",
+        "frames": 29,
+        "config_types": [
+          "Ti_gap_2p3",
+          "Ti_gap_2p6",
+          "Ti_gap_2p9",
+          "Si_gap_2p6",
+          "C_gap_2p6",
+          "Si_gap_2p4",
+          "C_gap_2p4",
+          "Si_gap_2p8",
+          "C_gap_2p8",
+          "AgTi_2p55_periodic_PW_PBE_energy_force",
+          "v10_element_reference_Ag_fcc",
+          "v10_element_reference_Ti_hcp",
+          "v10_element_reference_Si_diamond",
+          "v10_element_reference_C_diamond",
+          "AgSi_d2p2_periodic_PW_PBE_energy_force",
+          "AgSi_d2p8_periodic_PW_PBE_energy_force",
+          "AgC_d2p0_periodic_PW_PBE_energy_force",
+          "AgC_d2p4_periodic_PW_PBE_energy_force",
+          "AgC_validation_d2p30_periodic_PW_PBE_energy_force",
+          "AgSi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "AgTi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "AgC_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "AgSi_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+          "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+          "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+          "AgC_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+          "AgSi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+          "AgTi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train"
+        ]
+      },
+      "valid": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/valid.extxyz",
+        "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+        "frames": 2,
+        "config_types": [
+          "Si_gap_2p3",
+          "C_gap_2p3"
+        ]
+      },
+      "test": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/test.extxyz",
+        "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+        "frames": 3,
+        "config_types": [
+          "Si_gap_2p9",
+          "C_gap_2p9",
+          "AgTi_2p70_periodic_PW_PBE_energy_force_holdout"
+        ]
+      }
+    }
+  },
+  "v14_to_v15_train_edit": {
+    "v14_frames": 31,
+    "v15_frames": 29,
+    "removed": [
+      {
+        "config_type": "AgC_primary_2.0A_LCAO",
+        "source_method": null,
+        "dft_method": null,
+        "energy_present": false,
+        "forces_present": true,
+        "evidence_status": "four force-only LCAO frames removed"
+      },
+      {
+        "config_type": "AgC_primary_2.4A_LCAO",
+        "source_method": null,
+        "dft_method": null,
+        "energy_present": false,
+        "forces_present": true,
+        "evidence_status": "four force-only LCAO frames removed"
+      },
+      {
+        "config_type": "AgTi_2p1A_LCAO",
+        "source_method": null,
+        "dft_method": null,
+        "energy_present": false,
+        "forces_present": true,
+        "evidence_status": "four force-only LCAO frames removed"
+      },
+      {
+        "config_type": "AgTi_2p3871A_periodic_PW_PBE_force_only",
+        "source_method": null,
+        "dft_method": null,
+        "energy_present": true,
+        "forces_present": true,
+        "evidence_status": "AgTi original source unresolved; excluded"
+      },
+      {
+        "config_type": "AgTi_2p7A_LCAO",
+        "source_method": null,
+        "dft_method": null,
+        "energy_present": false,
+        "forces_present": true,
+        "evidence_status": "four force-only LCAO frames removed"
+      }
+    ],
+    "added": [
+      {
+        "config_type": "AgC_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "source_method": "GPAW 26.7.0 PW-PBE 500 eV Gamma single point",
+        "dft_method": null,
+        "energy_present": true,
+        "forces_present": true,
+        "source_label": "AgC_residual_shell_v15_01"
+      },
+      {
+        "config_type": "AgSi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "source_method": "GPAW 26.7.0 PW-PBE 500 eV Gamma single point",
+        "dft_method": null,
+        "energy_present": true,
+        "forces_present": true,
+        "source_label": "AgSi_residual_shell_v15_01"
+      },
+      {
+        "config_type": "AgTi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "source_method": "GPAW 26.7.0 PW-PBE 500 eV Gamma single point",
+        "dft_method": null,
+        "energy_present": true,
+        "forces_present": true,
+        "source_label": "AgTi_residual_shell_v15_01"
+      }
+    ],
+    "validation_and_test_byte_identical": true,
+    "holdout_input_labels_excluded_from_both_training_splits": true,
+    "history": "V15 probe geometries are translated registry variants of existing V14 training motifs; they were post-freeze V15 evaluation and are now scored acquisition/history, not blind data."
+  },
+  "inherited_provenance": {
+    "source_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_inherited_method_provenance_trace/per_frame_ledger.json",
+    "reported_counts": {
+      "partial_recovery": 14,
+      "unresolved": 1
+    },
+    "fully_confirmed_original_calculations": 0,
+    "reviewed_method_convention": {
+      "source_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_reference_convention_review/convention_review.json",
+      "summary": "14/15 historical recovery rows have partial method declarations without original run/convergence confirmation; 1 unresolved AgTi row was excluded. Physical method consistency remains UNKNOWN. Three V15 residual labels have stronger direct runner/log/archive linkage; no inference that their method is historically universal."
+    }
+  },
+  "training": {
+    "cli_settings_confirmed_by_hashed_run_scripts": {
+      "foundation_model": "mace-mp-0b3-medium.model",
+      "foundation_model_sha256": "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012",
+      "seed": "45",
+      "device": "cpu",
+      "batch_size": "1",
+      "max_num_epochs": "80",
+      "lr": "0.0001",
+      "weight_decay": "5e-7",
+      "energy_weight": "100",
+      "forces_weight": "1000",
+      "energy_key": "REF_energy",
+      "forces_key": "REF_forces",
+      "selected_by": "training/validation only"
+    },
+    "model_architecture_state_dict_schema_identical": true,
+    "model_architecture_schema": {
+      "class": "ScaleShiftMACE",
+      "state_dict_shapes": [
+        [
+          "atomic_energies_fn.atomic_energies",
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          "atomic_numbers",
+          [
+            4
+          ]
+        ],
+        [
+          "interactions.0.conv_tp.output_mask",
+          [
+            2048
+          ]
+        ],
+        [
+          "interactions.0.conv_tp.weight",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.0.conv_tp_weights.layer0.weight",
+          [
+            10,
+            64
+          ]
+        ],
+        [
+          "interactions.0.conv_tp_weights.layer1.weight",
+          [
+            64,
+            64
+          ]
+        ],
+        [
+          "interactions.0.conv_tp_weights.layer2.weight",
+          [
+            64,
+            64
+          ]
+        ],
+        [
+          "interactions.0.conv_tp_weights.layer3.weight",
+          [
+            64,
+            512
+          ]
+        ],
+        [
+          "interactions.0.density_fn.layer0.weight",
+          [
+            10,
+            1
+          ]
+        ],
+        [
+          "interactions.0.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.0.linear.output_mask",
+          [
+            2048
+          ]
+        ],
+        [
+          "interactions.0.linear.weight",
+          [
+            65536
+          ]
+        ],
+        [
+          "interactions.0.linear_up.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.0.linear_up.output_mask",
+          [
+            128
+          ]
+        ],
+        [
+          "interactions.0.linear_up.weight",
+          [
+            16384
+          ]
+        ],
+        [
+          "interactions.0.skip_tp.output_mask",
+          [
+            2048
+          ]
+        ],
+        [
+          "interactions.0.skip_tp.weight",
+          [
+            262144
+          ]
+        ],
+        [
+          "interactions.1.conv_tp._compiled_main_left_right._w3j_1_1_2",
+          [
+            3,
+            3,
+            5
+          ]
+        ],
+        [
+          "interactions.1.conv_tp._compiled_main_left_right._w3j_1_2_1",
+          [
+            3,
+            5,
+            3
+          ]
+        ],
+        [
+          "interactions.1.conv_tp._compiled_main_left_right._w3j_1_2_3",
+          [
+            3,
+            5,
+            7
+          ]
+        ],
+        [
+          "interactions.1.conv_tp._compiled_main_left_right._w3j_1_3_2",
+          [
+            3,
+            7,
+            5
+          ]
+        ],
+        [
+          "interactions.1.conv_tp.output_mask",
+          [
+            5120
+          ]
+        ],
+        [
+          "interactions.1.conv_tp.weight",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.1.conv_tp_weights.layer0.weight",
+          [
+            10,
+            64
+          ]
+        ],
+        [
+          "interactions.1.conv_tp_weights.layer1.weight",
+          [
+            64,
+            64
+          ]
+        ],
+        [
+          "interactions.1.conv_tp_weights.layer2.weight",
+          [
+            64,
+            64
+          ]
+        ],
+        [
+          "interactions.1.conv_tp_weights.layer3.weight",
+          [
+            64,
+            1280
+          ]
+        ],
+        [
+          "interactions.1.density_fn.layer0.weight",
+          [
+            10,
+            1
+          ]
+        ],
+        [
+          "interactions.1.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.1.linear.output_mask",
+          [
+            2048
+          ]
+        ],
+        [
+          "interactions.1.linear.weight",
+          [
+            163840
+          ]
+        ],
+        [
+          "interactions.1.linear_up.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "interactions.1.linear_up.output_mask",
+          [
+            512
+          ]
+        ],
+        [
+          "interactions.1.linear_up.weight",
+          [
+            32768
+          ]
+        ],
+        [
+          "interactions.1.skip_tp.output_mask",
+          [
+            128
+          ]
+        ],
+        [
+          "interactions.1.skip_tp.weight",
+          [
+            65536
+          ]
+        ],
+        [
+          "node_embedding.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "node_embedding.linear.output_mask",
+          [
+            128
+          ]
+        ],
+        [
+          "node_embedding.linear.weight",
+          [
+            512
+          ]
+        ],
+        [
+          "num_interactions",
+          []
+        ],
+        [
+          "pair_repulsion_fn.a_exp",
+          []
+        ],
+        [
+          "pair_repulsion_fn.a_prefactor",
+          []
+        ],
+        [
+          "pair_repulsion_fn.c",
+          [
+            4
+          ]
+        ],
+        [
+          "pair_repulsion_fn.covalent_radii",
+          [
+            119
+          ]
+        ],
+        [
+          "pair_repulsion_fn.p",
+          []
+        ],
+        [
+          "products.0.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "products.0.linear.output_mask",
+          [
+            512
+          ]
+        ],
+        [
+          "products.0.linear.weight",
+          [
+            32768
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.U_matrix_1",
+          [
+            16,
+            1
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.U_matrix_2",
+          [
+            16,
+            16,
+            4
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.U_matrix_3",
+          [
+            16,
+            16,
+            16,
+            23
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights.0",
+          [
+            4,
+            4,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights.1",
+          [
+            4,
+            1,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights_0_zeroed",
+          []
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights_1_zeroed",
+          []
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights_max",
+          [
+            4,
+            23,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.0.weights_max_zeroed",
+          []
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.U_matrix_1",
+          [
+            3,
+            16,
+            1
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.U_matrix_2",
+          [
+            3,
+            16,
+            16,
+            6
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.U_matrix_3",
+          [
+            3,
+            16,
+            16,
+            16,
+            51
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights.0",
+          [
+            4,
+            6,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights.1",
+          [
+            4,
+            1,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights_0_zeroed",
+          []
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights_1_zeroed",
+          []
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights_max",
+          [
+            4,
+            51,
+            128
+          ]
+        ],
+        [
+          "products.0.symmetric_contractions.contractions.1.weights_max_zeroed",
+          []
+        ],
+        [
+          "products.1.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "products.1.linear.output_mask",
+          [
+            128
+          ]
+        ],
+        [
+          "products.1.linear.weight",
+          [
+            16384
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.U_matrix_1",
+          [
+            16,
+            1
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.U_matrix_2",
+          [
+            16,
+            16,
+            4
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.U_matrix_3",
+          [
+            16,
+            16,
+            16,
+            23
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights.0",
+          [
+            4,
+            4,
+            128
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights.1",
+          [
+            4,
+            1,
+            128
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights_0_zeroed",
+          []
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights_1_zeroed",
+          []
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights_max",
+          [
+            4,
+            23,
+            128
+          ]
+        ],
+        [
+          "products.1.symmetric_contractions.contractions.0.weights_max_zeroed",
+          []
+        ],
+        [
+          "r_max",
+          []
+        ],
+        [
+          "radial_embedding.bessel_fn.bessel_weights",
+          [
+            10
+          ]
+        ],
+        [
+          "radial_embedding.bessel_fn.prefactor",
+          []
+        ],
+        [
+          "radial_embedding.bessel_fn.r_max",
+          []
+        ],
+        [
+          "radial_embedding.cutoff_fn.p",
+          []
+        ],
+        [
+          "radial_embedding.cutoff_fn.r_max",
+          []
+        ],
+        [
+          "radial_embedding.distance_transform.a",
+          []
+        ],
+        [
+          "radial_embedding.distance_transform.covalent_radii",
+          [
+            119
+          ]
+        ],
+        [
+          "radial_embedding.distance_transform.p",
+          []
+        ],
+        [
+          "radial_embedding.distance_transform.q",
+          []
+        ],
+        [
+          "readouts.0.linear.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "readouts.0.linear.output_mask",
+          [
+            1
+          ]
+        ],
+        [
+          "readouts.0.linear.weight",
+          [
+            128
+          ]
+        ],
+        [
+          "readouts.1.linear_1.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "readouts.1.linear_1.output_mask",
+          [
+            16
+          ]
+        ],
+        [
+          "readouts.1.linear_1.weight",
+          [
+            2048
+          ]
+        ],
+        [
+          "readouts.1.linear_2.bias",
+          [
+            0
+          ]
+        ],
+        [
+          "readouts.1.linear_2.output_mask",
+          [
+            1
+          ]
+        ],
+        [
+          "readouts.1.linear_2.weight",
+          [
+            16
+          ]
+        ],
+        [
+          "scale_shift.scale",
+          [
+            1
+          ]
+        ],
+        [
+          "scale_shift.shift",
+          [
+            1
+          ]
+        ]
+      ]
+    },
+    "validation_curves": {
+      "v14": {
+        "epochs_evaluated": 80,
+        "selected_epoch_zero_based": 70,
+        "selected_validation": {
+          "mae_e_per_atom": 0.0031628809038718227,
+          "rmse_e_per_atom": 0.0037850915407010603,
+          "mae_f": 0.02448403391935634,
+          "rmse_f": 0.0441038822744492
+        },
+        "minimum_validation_force_RMSE": {
+          "epoch_zero_based": 71,
+          "rmse_f": 0.038332345630547195
+        },
+        "epoch79_validation": {
+          "mae_e_per_atom": 0.007328371976180392,
+          "rmse_e_per_atom": 0.007430672958740811,
+          "mae_f": 0.02376422351977914,
+          "rmse_f": 0.04534794069093354
+        }
+      },
+      "v15": {
+        "epochs_evaluated": 80,
+        "selected_epoch_zero_based": 74,
+        "selected_validation": {
+          "mae_e_per_atom": 0.002237282819344699,
+          "rmse_e_per_atom": 0.0025699620055273844,
+          "mae_f": 0.01850342460869196,
+          "rmse_f": 0.03881549968016922
+        },
+        "minimum_validation_force_RMSE": {
+          "epoch_zero_based": 74,
+          "rmse_f": 0.03881549968016922
+        },
+        "epoch79_validation": {
+          "mae_e_per_atom": 0.00392237231060868,
+          "rmse_e_per_atom": 0.004925079456312842,
+          "mae_f": 0.021505189615636085,
+          "rmse_f": 0.04072937816794576
+        }
+      }
+    },
+    "v14_run_script_sha256": "a8597aaefe09fcfbe7c0240f6fbf5abd6b29218347b6c45b91a400f61996e320",
+    "v15_run_script_sha256": "d828c20a00878733d926a490b8fa9e22567de05811fb291bf3892e90a0e289f5"
+  },
+  "reference_driver": {
+    "runner_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/run_pw_registry_holdout.py",
+    "runner_sha256": "07d4a6cb898bd314bd6332865165df252fdeca0f09de2020dcfc8f4ae040a765",
+    "summary_method": "fixed geometry GPAW PW-PBE 500 eV, Gamma 1x1x1, FermiDirac 0.1 eV; energy is native extrapolated from get_potential_energy(force_consistent=False), free energy separately stored; get_forces separately requested; SCF thresholds 1e-5; archived force array ordered with same ASE atoms object and checked against frozen input",
+    "known_limit": "same run recipe is directly documented for these three labels only; historical inherited frames do not all have original logs/getter/convergence evidence"
+  },
+  "rmse_definition": {
+    "vector": "sqrt(mean_i(sum_xyz((F_pred-F_ref)^2)))",
+    "component": "sqrt(mean_all_atoms_and_xyz((F_pred-F_ref)^2))",
+    "ratio": "vector RMSE = sqrt(3) times component RMSE for a single complete atom set",
+    "separation": "(F_X-F_Ag) dot direct cluster-coordinate unit vector; signed Ag and X residual projections are reported separately",
+    "PBC": "MIC for nearest-neighbor/local-shell distances; legacy separation score uses direct cluster vector, and direct vs MIC pair distance is verified equal for these probes"
+  },
+  "v16_inputs_only": [
+    {
+      "label": "AgC_widespan_distance_acq_v16_01",
+      "candidate_id": "AgC_wide_distance_p0p35",
+      "owner": "window-b",
+      "role": "v16_training_acquisition",
+      "input_sha256": "75841f91e522499e24953b3d6c9454cccc09bab484e1f55001ad26380686dd21",
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "central_pair": {
+        "elements": "Ag-C",
+        "Ag_id": 688433,
+        "contact_id": 604804,
+        "persistent_ids": [
+          688433,
+          604804
+        ],
+        "distance_A": 2.6099629668318904,
+        "input_distance_A": 2.6099629668318904
+      },
+      "parent_direct_distance_A": 2.2599629638032552,
+      "candidate_direct_distance_A": 2.6099629668318904,
+      "direct_distance_delta_A": 0.3500000030286352,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        -0.1284605800000005,
+        -0.3160866699999989,
+        0.07801986000000127
+      ],
+      "parent_config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "26e44aa3caea382ceb631493823033d949d4ee318c6210aff9ed861d5bdce7b2",
+      "design_axis": "radial/distance",
+      "can_test": "Ag-X normal distance response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    },
+    {
+      "label": "AgSi_widespan_distance_acq_v16_01",
+      "candidate_id": "AgSi_wide_distance_p0p50",
+      "owner": "window-b",
+      "role": "v16_training_acquisition",
+      "input_sha256": "cccdfcdd8891216a4078d11cd618dd862daae2c368bfe74cef7c3a73ac3b6049",
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "central_pair": {
+        "elements": "Ag-Si",
+        "Ag_id": 683609,
+        "contact_id": 366934,
+        "persistent_ids": [
+          683609,
+          366934
+        ],
+        "distance_A": 2.9400939898518934,
+        "input_distance_A": 2.9400939898518934
+      },
+      "parent_direct_distance_A": 2.44009398913327,
+      "candidate_direct_distance_A": 2.9400939898518934,
+      "direct_distance_delta_A": 0.5000000007186234,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        -0.10519210000000001,
+        -0.4737635600000001,
+        0.12034414000000027
+      ],
+      "parent_config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "3dad8caf2cc912de64bdc9b7b4f46165847df2b3215572a2d7e6780599f284bf",
+      "design_axis": "radial/distance",
+      "can_test": "Ag-X normal distance response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    },
+    {
+      "label": "AgTi_widespan_distance_acq_v16_01",
+      "candidate_id": "AgTi_wide_distance_p0p35",
+      "owner": "window-b",
+      "role": "v16_training_acquisition",
+      "input_sha256": "d9a2a87496d133e22778f0531c2a2742a61d0c5a86c61a04fea44d4d500f6115",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "central_pair": {
+        "elements": "Ag-Ti",
+        "Ag_id": 687247,
+        "contact_id": 479027,
+        "persistent_ids": [
+          687247,
+          479027
+        ],
+        "distance_A": 2.9379870355304165,
+        "input_distance_A": 2.9379870355304165
+      },
+      "parent_direct_distance_A": 2.5879870375495697,
+      "candidate_direct_distance_A": 2.9379870355304165,
+      "direct_distance_delta_A": 0.3499999979808468,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        -0.3470334200000007,
+        0.03636353999999997,
+        -0.02730379000000127
+      ],
+      "parent_config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "b78ee569d0bafe0cbb68dc693ce5a47df03eff043b70e2ea8ca96c5bca7e8964",
+      "design_axis": "radial/distance",
+      "can_test": "Ag-X normal distance response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    },
+    {
+      "label": "AgC_widespan_registry_acq_v16_01",
+      "candidate_id": "AgC_wide_registry_p0p45",
+      "owner": "window-a",
+      "role": "v16_training_acquisition",
+      "input_sha256": "061e1c3374962e2da4ee1378f36f00895df8d669758334620277e275821c051a",
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "central_pair": {
+        "elements": "Ag-C",
+        "Ag_id": 688433,
+        "contact_id": 604804,
+        "persistent_ids": [
+          688433,
+          604804
+        ],
+        "distance_A": 2.3043290969320154,
+        "input_distance_A": 2.3043290969320154
+      },
+      "parent_direct_distance_A": 2.2599629638032552,
+      "candidate_direct_distance_A": 2.3043290969320154,
+      "direct_distance_delta_A": 0.044366133128760143,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        -0.4168867899999995,
+        0.16942669000000166,
+        0.0
+      ],
+      "parent_config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "26e44aa3caea382ceb631493823033d949d4ee318c6210aff9ed861d5bdce7b2",
+      "design_axis": "lateral registry",
+      "can_test": "lateral Ag registry/contact response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    },
+    {
+      "label": "AgSi_widespan_registry_acq_v16_01",
+      "candidate_id": "AgSi_wide_registry_m0p30",
+      "owner": "window-a",
+      "role": "v16_training_acquisition",
+      "input_sha256": "92dd6a42087553d506e438cfae153f2bc58c1bc415d70f3f58da33d0e34cea91",
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "central_pair": {
+        "elements": "Ag-Si",
+        "Ag_id": 683609,
+        "contact_id": 366934,
+        "persistent_ids": [
+          683609,
+          366934
+        ],
+        "distance_A": 2.4584667356823218,
+        "input_distance_A": 2.4584667356823218
+      },
+      "parent_direct_distance_A": 2.44009398913327,
+      "candidate_direct_distance_A": 2.4584667356823218,
+      "direct_distance_delta_A": 0.018372746549051744,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        0.2928677199999985,
+        -0.06502689000000039,
+        0.0
+      ],
+      "parent_config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "3dad8caf2cc912de64bdc9b7b4f46165847df2b3215572a2d7e6780599f284bf",
+      "design_axis": "lateral registry",
+      "can_test": "lateral Ag registry/contact response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    },
+    {
+      "label": "AgTi_widespan_registry_acq_v16_01",
+      "candidate_id": "AgTi_wide_registry_p0p45",
+      "owner": "window-a",
+      "role": "v16_training_acquisition",
+      "input_sha256": "6c619d9fcda72876449c2792b4d6c4d3db4afcde86bf976cb824e5e15ef74a6a",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "central_pair": {
+        "elements": "Ag-Ti",
+        "Ag_id": 687247,
+        "contact_id": 479027,
+        "persistent_ids": [
+          687247,
+          479027
+        ],
+        "distance_A": 2.626818784063684,
+        "input_distance_A": 2.626818784063684
+      },
+      "parent_direct_distance_A": 2.5879870375495697,
+      "candidate_direct_distance_A": 2.626818784063684,
+      "direct_distance_delta_A": 0.03883174651411414,
+      "Ag_to_X_pair_vector_delta_from_parent_A": [
+        0.04689604000000003,
+        0.4475497300000004,
+        0.0
+      ],
+      "parent_config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+      "parent_geometry_sha256": "b78ee569d0bafe0cbb68dc693ce5a47df03eff043b70e2ea8ca96c5bca7e8964",
+      "design_axis": "lateral registry",
+      "can_test": "lateral Ag registry/contact response",
+      "cannot_test": "independent framework morphology/thermal response; provenance of inherited labels; optimizer causality"
+    }
+  ],
+  "input_sha256": {
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_inherited_method_provenance_trace/per_frame_ledger.json": "a77de8340442fcfa0c3ab3ba2aacfd17f790a7ec87f48f7af4336347bbfa8be1",
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_reference_convention_review/convention_review.json": "ade42c90043041db7c7d39ff0ca470a66742843ca92a382b7ed3db2243a97513",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model": "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45.model": "41bd411355b034b0dab85dbdbda932ecfc394122cb67a2b51a550bd04207645d",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/test.extxyz": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/valid.extxyz": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/MACE_periodic_v14_interface_energy_run-45_train.txt": "97283500e020be3678b896aaceac744c7b69c48213c9bd2cc73643ed2381a5d8",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_independent_holdout_comparison.json": "912eddc8ab1288c625aa89003389289526fb74227ca6ce859757427cd9ccf38c",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json": "c38aed8bd178d201d289f8d36417a251bd60c8b53242efb4bd9adc379bac88e6",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/run_v14_training.sh": "a8597aaefe09fcfbe7c0240f6fbf5abd6b29218347b6c45b91a400f61996e320",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/test.extxyz": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/train.extxyz": "e358e49cf99b42d7c8ec6e482f1de5e777fa0f5da916ae9c22311ec5fc84bcf0",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/valid.extxyz": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluation_01/evaluation.json": "12746c827e0d1f9f953addc09bd73ef829c7da009eec2e415593e3073e318dc1",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/run_v15_training.sh": "d828c20a00878733d926a490b8fa9e22567de05811fb291bf3892e90a0e289f5",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/selected_model_record.json": "2aa414226837cd95d90f9e18c42844460c4c20ed302024d4aab16caed178ddd4",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/checkpoints/MACE_periodic_v15_interface_energy_run-45.model": "f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/results/MACE_periodic_v15_interface_energy_run-45_train.txt": "c85ed9827a7802d298030c7fc94b75831ec557e62f5f3a61540c4340c822ffb5",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/AgC_registry_holdout_v15_01_PW_PBE.extxyz": "c96c495d4472ae4979ac5c146c8f48a408ca0895d9712f530832e7457f83dd88",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/gpaw.log": "64e42b89c75f0ebab70d7db6b52ce6ca9d12907b91d97609a2d838d1b5f912f4",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/progress.json": "98d16fc02f3fcbd6ae8c8be6227cd440246b3dc1f3b3e5a37f4d3c5f6d0ecf2f",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/summary.json": "f727e79e071672b2af5525b96ac7e58420b5a75197ffb944facd84c33639ad63",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/verification.json": "621c05963591230227b287286af3a6ec515e67e7c2d8b2fd09492aa0fb83a650",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/AgSi_registry_holdout_v15_01_PW_PBE.extxyz": "f44d8c6cec9368f43aad216ad2cf4a00c3bfb9974e84efd4d61f19963a11d465",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/gpaw.log": "b0ac997d40244301e95dad7c187da1b1e1188fbfef6189d6b3db25d94e939e7e",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/progress.json": "d9d044f4a3e69ad973f823845f887d3ed8a4f1661e641c7da4348ecf095d6582",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/summary.json": "f3741eeead6e898d1f5b184d28a420b98e05459e3ebdf9bebd821dcd9e975259",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/verification.json": "7f93a2fbdb56dd59ccc83b8749b025c3429fa2eb8f367e3d4def5b6ab04e2976",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/AgTi_registry_holdout_v15_01_PW_PBE.extxyz": "b2b3449bf30e3e42c4df0b61422e9f618a83054e0472988b14a741c88ee3e167",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/gpaw.log": "94df0d42fde97e8623a416b0bcdf2c34747243e8bb6a4c7ec65b9f1f24402f97",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/progress.json": "b0ce8eae1bd8e38499146e02e0cad895b111db15d329a00136b0f46c9e1082db",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/summary.json": "f1ec557deaf37ec0e64df4c0cbc7f66530225fdfb5e47affadaa11f21ea878a2",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/verification.json": "59bc81c80ca02796e0dd6b5e70e78188f24ec81aafd5b7155c33f98e524a5cf8",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/input_manifest.json": "efa2f79fefff53aa53e6404896ea75d6e6be655a788520e8331e735a77ef30fd",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgC_registry_holdout_v15_01.extxyz": "f528a051246a1a89546da6f55ee3e3b66222cd08caefca039d77989049d25135",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgSi_registry_holdout_v15_01.extxyz": "95e9980d1a2671c97865c17e3a49bda9278376d5ff550495f28802b4f84b5b70",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgTi_registry_holdout_v15_01.extxyz": "0291123e4f6db7f1f4f5e4291366048fec2fb0b7bacbf922836b16878e7b929e",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/run_pw_registry_holdout.py": "07d4a6cb898bd314bd6332865165df252fdeca0f09de2020dcfc8f4ae040a765",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/input_manifest.json": "91cf925171adbc75dec6b0c5e66604ef69d290e8836a2084fb03a12953dc74b2",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgC_widespan_registry_acq_v16_01.extxyz": "061e1c3374962e2da4ee1378f36f00895df8d669758334620277e275821c051a",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgSi_widespan_registry_acq_v16_01.extxyz": "92dd6a42087553d506e438cfae153f2bc58c1bc415d70f3f58da33d0e34cea91",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgTi_widespan_registry_acq_v16_01.extxyz": "6c619d9fcda72876449c2792b4d6c4d3db4afcde86bf976cb824e5e15ef74a6a",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/input_manifest.json": "1f1719ef0cb20c4b431e3602d1bc7bb2a31a7cfa21b2d9fa2afcc1c0177bceec",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgC_widespan_distance_acq_v16_01.extxyz": "75841f91e522499e24953b3d6c9454cccc09bab484e1f55001ad26380686dd21",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgSi_widespan_distance_acq_v16_01.extxyz": "cccdfcdd8891216a4078d11cd618dd862daae2c368bfe74cef7c3a73ac3b6049",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgTi_widespan_distance_acq_v16_01.extxyz": "d9a2a87496d133e22778f0531c2a2742a61d0c5a86c61a04fea44d4d500f6115"
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "torch": "2.5.1+cpu",
+    "mace_torch": "0.3.16",
+    "ase": "3.29.0",
+    "device": "CPU",
+    "torch_threads": 1
+  }
+}
