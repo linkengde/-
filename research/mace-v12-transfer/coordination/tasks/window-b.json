@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T09:48:46.681035+00:00",
+  "updated_utc": "2026-10-05T10:02:42.034934+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "Isolated V15 builder draft and provenance exercise completed: train/valid/test 30/2/3 with complete finite labels, energy composition rank 4/4, four unsupported LCAO frames excluded and three verified residual acquisitions added. Frozen V15 input geometry is isolated; historical valid/test bytes preserved. Fifteen inherited training methods remain unknown and historical AgTi test is not independent. Engineering checks PASS with provenance/independence limits; A integration pending.",
+  "current_stage": "Builder draft completed; inherited-method provenance trace queued.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Prepare and exercise an isolated V15 dataset builder under coordination/reports/window-b/v15_builder_draft/. Do not modify production datasets/scripts, inspect fresh V15 holdout labels, or run DFT/MACE/MD/TTM.",
+  "task_boundary": "Read-only historical evidence tracing for 15 unknown inherited training frames. Publish only under reports/window-b/v15_inherited_method_provenance_trace/. No production dataset edits, fresh blind-label reads, DFT, MACE, MD or TTM.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -46,10 +46,11 @@
     "v15_AgC_species_aware_registry_search": "completed; geometry-only review and candidate published; no DFT/MACE/MD/TTM run.",
     "v15_dataset_integrity_audit": "completed; audit and evidence hashes published at main commit 5feea61",
     "v15_wide_span_sampling_design": "completed; SCF iteration 1; updated 2026-10-05T09:02:29.464605+00:00",
-    "v15_builder_draft_and_provenance": "completed; SCF iteration 1; updated 2026-10-05T09:48:46.681035+00:00"
+    "v15_builder_draft_and_provenance": "completed; SCF iteration 1; updated 2026-10-05T09:48:46.681035+00:00",
+    "v15_inherited_method_provenance_trace": "queued; trace 15 unknown inherited training methods using committed historical evidence"
   },
-  "coordination_duties": "A continues blind DFT and owns production integration/training/evaluation. B prepares isolated dataset engineering and provenance evidence.",
-  "next_action": "Wait for A review and integration of coordination/reports/window-b/v15_builder_draft/. The generated data is an isolated report artifact, not production or training authorization. Do not read V15 blind labels or run DFT/MACE/MD/TTM.",
+  "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
+  "next_action": "Read START_WINDOW_B.md and execute v15_inherited_method_provenance_trace on the registered B instance.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
