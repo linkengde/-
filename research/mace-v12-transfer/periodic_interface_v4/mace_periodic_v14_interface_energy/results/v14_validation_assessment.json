@@ -1,0 +1,103 @@
+{
+  "model": "v14",
+  "status": "SCREEN_FAIL",
+  "thresholds": {
+    "energy_MAE_meV_atom": 10.0,
+    "force_vector_RMSE_eV_A": 0.05,
+    "separating_force_abs_error_eV_A": 0.1
+  },
+  "training": {
+    "last_optimizer_epoch": 79,
+    "selected_checkpoint": "periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45_epoch-71.pt",
+    "selected_checkpoint_sha256": "d639c13499d86418d66f59b9be4800a3758bfdb68aeccdf9c60a0ecca27a9fa9",
+    "evaluated_model": "periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45.model",
+    "evaluated_model_sha256": "41bd411355b034b0dab85dbdbda932ecfc394122cb67a2b51a550bd04207645d",
+    "training_log_sha256": "97283500e020be3678b896aaceac744c7b69c48213c9bd2cc73643ed2381a5d8"
+  },
+  "evaluation": {
+    "report": "periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_independent_holdout_comparison.json",
+    "report_sha256": "912eddc8ab1288c625aa89003389289526fb74227ca6ce859757427cd9ccf38c",
+    "csv_sha256": "8c55c76dc11b136962e86dbc6c692379f9a056866c53b701f37b7989ab2a3943",
+    "stdout_sha256": "5e4c5673cd53cf72a43eb2c47643c0c35be7c99bd9d7c554bf922cd9f843f0be",
+    "independent_geometry_holdouts": {
+      "AgC_registry_holdout_v14_01": {
+        "role": "v14_holdout",
+        "path": "pbe_interface_v14_main_holdouts/calculations/AgC_registry_holdout_v14_01/AgC_registry_holdout_v14_01_PW_PBE.extxyz",
+        "sha256": "dc5b9422a03aa11fa2d2d8c020f713efca0f72dc7a118af4f234c1069100e5fc"
+      },
+      "AgSi_registry_holdout_v14_01": {
+        "role": "v14_holdout",
+        "path": "pbe_interface_v14_main_holdouts/calculations/AgSi_registry_holdout_v14_01/AgSi_registry_holdout_v14_01_PW_PBE.extxyz",
+        "sha256": "816a61c36f77c3a19644ebfc529028cb034e7f43163b9e5eecf8193243afdb4c"
+      },
+      "AgTi_registry_holdout_v14_01": {
+        "role": "v14_holdout",
+        "path": "pbe_interface_v14_parallel_acquisition/calculations/AgTi_registry_holdout_v14_01/AgTi_registry_holdout_v14_01_PW_PBE.extxyz",
+        "sha256": "f42d47b951113be65ae0b4fdd784ebd550136b7e303b4955e77ad7fa82104264"
+      }
+    },
+    "per_interface": {
+      "AgC": {
+        "structures": 1,
+        "energy_MAE_meV_atom": 3.2291336067160614,
+        "force_vector_RMSE_eV_A": 0.15366691264271926,
+        "separating_force_max_abs_error_eV_A": 0.061394615472253555,
+        "energy_gate_pass": true,
+        "force_gate_pass": false,
+        "separating_force_gate_pass": true,
+        "screen_pass": false
+      },
+      "AgSi": {
+        "structures": 1,
+        "energy_MAE_meV_atom": 4.622513754457277,
+        "force_vector_RMSE_eV_A": 0.11782112404658075,
+        "separating_force_max_abs_error_eV_A": 0.23490006361997562,
+        "energy_gate_pass": true,
+        "force_gate_pass": false,
+        "separating_force_gate_pass": false,
+        "screen_pass": false
+      },
+      "AgTi": {
+        "structures": 1,
+        "energy_MAE_meV_atom": 1.6801824191593462,
+        "force_vector_RMSE_eV_A": 0.14660567659012905,
+        "separating_force_max_abs_error_eV_A": 0.1926052074822161,
+        "energy_gate_pass": true,
+        "force_gate_pass": false,
+        "separating_force_gate_pass": false,
+        "screen_pass": false
+      }
+    },
+    "frozen_test": [
+      {
+        "label": "Si_gap_2p9",
+        "energy_abs_error_meV_atom": 15.908389046676064,
+        "force_vector_RMSE_eV_A": 0.03309644551509923,
+        "separating_force_abs_error_eV_A": null,
+        "energy_gate_pass": false,
+        "force_gate_pass": true,
+        "separating_force_gate_pass": true
+      },
+      {
+        "label": "C_gap_2p9",
+        "energy_abs_error_meV_atom": 3.5991870150667182,
+        "force_vector_RMSE_eV_A": 0.08263263663950214,
+        "separating_force_abs_error_eV_A": null,
+        "energy_gate_pass": true,
+        "force_gate_pass": false,
+        "separating_force_gate_pass": true
+      },
+      {
+        "label": "AgTi_2p70_periodic_PW_PBE_energy_force_holdout",
+        "energy_abs_error_meV_atom": 1.028403460044065,
+        "force_vector_RMSE_eV_A": 0.03822725199382061,
+        "separating_force_abs_error_eV_A": 0.046117547361076094,
+        "energy_gate_pass": true,
+        "force_gate_pass": true,
+        "separating_force_gate_pass": true
+      }
+    ]
+  },
+  "decision": "Do not use v14 for production long MD or TTM. The force-vector RMSE gate fails on all three independent interface holdouts; the frozen C test force error and Si test energy error also miss their thresholds. Continue with residual-targeted DFT data and a new v15 evaluation; keep the existing v14 results as blind evidence and reserve fresh holdouts before training v15.",
+  "scope_limit": "Single geometries from existing cluster motifs are narrow checks, not broad transfer validation for an extended periodic interface or thermal/liquid configurations."
+}

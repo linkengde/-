@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T00:48:18.321356+00:00",
+  "updated_utc": "2026-10-05T01:03:31+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "A prepared three new residual-targeted Ag-C/Ag-Si/Ag-Ti PW-PBE acquisition candidates for v15; A is starting their fixed-geometry labels while B runs the single v14 CPU training. These new labels are excluded from v14 data and reserved tests.",
+  "current_stage": "B completed v14 training/evaluation with SCREEN_FAIL; A is running three residual-targeted DFT acquisition labels for the v15 cycle. The first AgC SCF is active; all new labels remain excluded from v14.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -17,7 +17,8 @@
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
-    "v14": "single authorized CPU training run active on B; independent frozen-test and three reserved-holdout evaluation pending."
+    "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. All three independent holdout force-vector RMSEs exceed 0.05 eV/Å; production MD/TTM is not authorized.",
+    "v15": "three residual-targeted Ag-C/Ag-Si/Ag-Ti PW-PBE candidates prepared; fixed-geometry DFT queue active on A; dataset/training pending."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -33,11 +34,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
     "research/mace-v12-transfer/coordination/sync_tasks.py",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json"
   ],
   "coordination_duties": "A owns residual-targeted v15 candidate DFT acquisition, reviews B v14 evaluation, and maintains the global work log/manifest. B owns the single v14 training/evaluation cycle.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Run and archive the three residual-targeted DFT labels in parallel with B training; then review the v14 evaluation before deciding whether these labels enter v15 training.",
+  "next_action": "Finish and verify A’s three targeted DFT labels; then build a v15 dataset using only verified acquisition labels, reserve fresh independent holdouts, train once, and evaluate per interface before any MD/TTM.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
