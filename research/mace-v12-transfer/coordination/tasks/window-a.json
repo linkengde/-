@@ -2,22 +2,23 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T01:13:05.329891+00:00",
+  "updated_utc": "2026-10-05T01:31:53.854772+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "B completed v14 training/evaluation with SCREEN_FAIL; A is running three residual-targeted DFT acquisition labels for the v15 cycle. The first AgC SCF is active; all new labels remain excluded from v14. B is assigned post-hoc per-atom localization on the scored v14 holdouts in parallel.",
+  "current_stage": "V14 screened SCREEN_FAIL. A is running the first of three residual-targeted v15 DFT labels (AgC active; AgSi and AgTi queued). B has completed v14 force localization and is assigned a non-overlapping, read-only v15 blind-holdout design audit.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
-    "AgC_residual_shell_v15_01": "running; SCF iteration 10; elapsed 1513s; updated 2026-10-05T01:13:05.329891+00:00",
+    "AgC_residual_shell_v15_01": "running; local GPAW log at SCF iteration 17; 4 MPI ranks; remote heartbeat updates every 10 iterations",
     "AgSi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:30.604429+00:00",
-    "AgTi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:31.938454+00:00"
+    "AgTi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:31.938454+00:00",
+    "v15_holdout_design_audit_window_b": "assigned; B to audit independent fresh blind-holdout geometry design; no DFT/model run"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
-    "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. All three independent holdout force-vector RMSEs exceed 0.05 eV/Å; production MD/TTM is not authorized.",
+    "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
     "v15": "three residual-targeted Ag-C/Ag-Si/Ag-Ti PW-PBE candidates prepared; fixed-geometry DFT queue active on A; dataset/training pending."
   },
   "labels": {
@@ -37,9 +38,9 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json"
   ],
-  "coordination_duties": "A owns residual-targeted v15 candidate DFT acquisition, reviews B v14 evaluation, and maintains the global work log/manifest. B owns the single v14 training/evaluation cycle.",
+  "coordination_duties": "A owns residual-targeted v15 DFT, verifies labels, reserves blind holdouts, maintains the global work log/manifest and conducts v15 dataset/training/evaluation. B owns the independent geometry design audit only; no DFT or model cycle.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue and archive the three A-owned DFT labels; review B’s v14 localization report; then build v15 data from verified acquisitions, reserve fresh blind holdouts, and train/evaluate once.",
+  "next_action": "Continue the existing A DFT queue without restart; verify and archive all three labels, review B's v15_holdout_design_audit.md, then build v15 data with fresh blind holdouts, train and evaluate. No production MD/TTM before validation passes.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
