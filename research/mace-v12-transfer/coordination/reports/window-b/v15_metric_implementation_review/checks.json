@@ -1,0 +1,135 @@
+{
+  "reviewed_files_sha256": {
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluate_v15.py": "5a17c7cb20db79f51e19600843a1808950f93942952540eb1de4226ae9108297",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/preflight.py": "4c98059da221ddffd64aae51a4d7e45bb5133ebebd4f886d76ef4fc3dd515da6"
+  },
+  "synthetic_checks": [
+    {
+      "check": "energy normalization: 0.48 eV for 48 atoms",
+      "status": "PASS",
+      "observed": 10.0,
+      "expected": 10.0
+    },
+    {
+      "check": "per-atom force vector RMSE",
+      "status": "PASS",
+      "observed": 0.05,
+      "expected": 0.05
+    },
+    {
+      "check": "vector versus component ratio",
+      "status": "PASS",
+      "observed": 1.7320508075688772,
+      "expected": 1.7320508075688772
+    },
+    {
+      "check": "maximum is max vector norm",
+      "status": "PASS",
+      "observed": 0.05,
+      "expected": 0.05
+    },
+    {
+      "check": "aggregate atom-weighted vector RMSE",
+      "status": "PASS",
+      "observed": 0.18027756377319948,
+      "expected": 0.18027756377319948
+    },
+    {
+      "check": "aggregate energy is per-structure mean",
+      "status": "PASS",
+      "observed": 6.0,
+      "expected": 6.0
+    },
+    {
+      "check": "aggregate maximum vector error",
+      "status": "PASS",
+      "observed": 0.25,
+      "expected": 0.25
+    },
+    {
+      "check": "aggregate maximum separation error",
+      "status": "PASS",
+      "observed": 0.07,
+      "expected": 0.07
+    },
+    {
+      "check": "positive separating force with reversed array order",
+      "status": "PASS",
+      "observed": 2.0,
+      "expected": 2.0
+    },
+    {
+      "check": "gate equality accepted",
+      "status": "PASS"
+    },
+    {
+      "check": "immediately above gate rejected",
+      "status": "PASS"
+    },
+    {
+      "check": "missing metric not accepted",
+      "status": "PASS"
+    },
+    {
+      "check": "synthetic finite labels and matching geometry accepted",
+      "status": "PASS"
+    },
+    {
+      "check": "missing reference energy fails clearly",
+      "status": "PASS",
+      "diagnostic": "Missing reference fields"
+    },
+    {
+      "check": "nonfinite force fails clearly",
+      "status": "PASS",
+      "diagnostic": "Nonfinite/invalid reference"
+    },
+    {
+      "check": "wrong persistent ID fails clearly",
+      "status": "PASS",
+      "diagnostic": "Wrong IDs/marked pair"
+    },
+    {
+      "check": "wrong PBC fails clearly",
+      "status": "PASS",
+      "diagnostic": "Wrong elements/order/PBC"
+    },
+    {
+      "check": "wrong position fails clearly",
+      "status": "PASS",
+      "diagnostic": "Wrong geometry/cell"
+    }
+  ],
+  "definite_robustness_findings": [
+    {
+      "id": "D1_derived_nonfinite_not_fail_fast",
+      "severity": "low robustness",
+      "finite_force_inputs": true,
+      "derived_RMSE": "inf",
+      "serialization_rejects": true,
+      "meaning": "JSON prevents publishing invalid metrics, but failure occurs after later evaluations/output mkdir rather than at the offending frame. Add a finite guard to derived metrics."
+    },
+    {
+      "id": "D2_selection_record_snapshot_not_bound",
+      "severity": "medium evidence integrity",
+      "checked_snapshot": {
+        "model_sha256": "selected-A",
+        "blind_labels_used_for_selection": false
+      },
+      "possible_later_snapshot": {
+        "model_sha256": "selected-B",
+        "blind_labels_used_for_selection": true
+      },
+      "meaning": "Lines27/73 read and hash different snapshots if selection file is rewritten during evaluation. Preserve/check initial selection bytes/hash before final reporting. No real files/models/evaluation were run."
+    }
+  ],
+  "limitations": [
+    {
+      "id": "L1_periodic_image_convention",
+      "direct_separation_eV_A": 0.9948341425312659,
+      "MIC_separation_eV_A": -0.19611613513818402,
+      "meaning": "Synthetic wrapped-cell example; does not show any actual blind input or score is affected. Direct cluster convention explicitly retained from V14; periodic-image policy must be reviewed before reuse."
+    }
+  ],
+  "scope": "Only production source code read. No label/input datasets, model files, Torch/MACE/GPAW imports or evaluation main execution."
+}

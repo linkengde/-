@@ -1,0 +1,22 @@
+--- a/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluate_v15.py
++++ b/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluate_v15.py
+@@ -5,0 +6 @@
++from hashlib import sha256
+@@ -13 +14 @@
+-    return {'structures':len(rows),'atoms':sum(r['atoms'] for r in rows),
++    metrics={'structures':len(rows),'atoms':sum(r['atoms'] for r in rows),
+@@ -17,0 +19,2 @@
++    require(all(value is None or np.isfinite(value) for value in metrics.values()),'Nonfinite aggregate metric')
++    return metrics
+@@ -27 +30,3 @@
+-    selection=json.loads(args.selection_record.read_text())
++    selection_bytes=args.selection_record.read_bytes()
++    selection_digest=sha256(selection_bytes).hexdigest()
++    selection=json.loads(selection_bytes)
+@@ -63,0 +69,2 @@
++        derived=[rows[-1][key] for key in ['energy_abs_error_meV_atom','force_vector_RMSE_eV_A','force_vector_max_error_eV_A','separating_force_abs_error_eV_A'] if rows[-1][key] is not None]
++        require(all(np.isfinite(value) for value in derived),'Nonfinite derived metric: '+name)
+@@ -73 +80,2 @@
+-    report={'model_path':str(model),'model_sha256':sha(model),'selection_record_sha256':sha(args.selection_record),
++    require(sha(args.selection_record)==selection_digest,'Selection record changed during evaluation')
++    report={'model_path':str(model),'model_sha256':sha(model),'selection_record_sha256':selection_digest,
