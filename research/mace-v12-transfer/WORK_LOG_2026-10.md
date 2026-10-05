@@ -173,3 +173,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - B completed the one 80-epoch v14 CPU run (last optimizer epoch 79; selected checkpoint epoch 71) and published the independent evaluation. Status: `SCREEN_FAIL`. The three blind holdout force-vector RMSEs are Ag-C 0.15367, Ag-Si 0.11782 and Ag-Ti 0.14661 eV/Å, all above 0.05. Holdout energy MAEs are below 10 meV/atom; separating-force errors pass for Ag-C (0.06139) and fail for Ag-Si (0.23490) and Ag-Ti (0.19261) eV/Å.
 - On the frozen test, `C_gap_2p9` force RMSE is 0.08263 eV/Å and `Si_gap_2p9` energy error is 15.91 meV/atom, both above their gates. The evidence is still narrow: one reserved geometry per interface from related cluster motifs. See `periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json` and the comparison JSON/CSV.
 - V14 is not suitable for production long MD/TTM. A is running three new local residual-targeted PW-PBE labels in parallel with B’s completed v14 cycle. They are excluded from v14; any v15 training will use fresh blind holdouts.
+
+
+### 2026-10-05 UTC: B assigned v14 residual localization in parallel
+
+- To keep both windows active without duplicating A’s DFT or retraining v14, B is assigned post-hoc per-atom residual localization on the three already-scored v14 blind holdouts. The output will identify local/remote force errors, top-error atoms and neighbors for the next DFT sampling decision.
+- This is diagnostic analysis only; the v14 screen remains failed. B must wait for A’s next explicit assignment after publishing the report.

@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T00:42:56.952918+00:00",
+  "updated_utc": "2026-10-05T01:08:35+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "v13 force-error localization and the single v14 training/evaluation cycle are complete; v14 screen failed and results are ready for Window A review.",
+  "current_stage": "V14 training/evaluation completed with SCREEN_FAIL. New task: post-hoc atom-level localization on the three scored v14 holdouts while A runs targeted DFT.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Do not repeat completed DFT; do not modify v14 data or blind holdouts; do not modify the global work log/file_manifest.json; do not run production MD/TTM.",
+  "task_boundary": "Do not repeat DFT; do not retrain v14; do not change v14 data or holdouts; do not run MD/TTM. Publish only the v14 localization report and B task/progress.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -39,12 +39,14 @@
     "AgTi_registry_holdout_v14_01": "completed; SCF iteration 34; elapsed 2208s; updated 2026-10-04T18:28:37.689972+00:00",
     "v13_force_localization": "completed; five verified structures analyzed; report pushed; updated 2026-10-05T00:42:56.917328+00:00",
     "v14_training": "completed; 80 epochs; selected checkpoint epoch 71; updated 2026-10-05T00:42:56.917328+00:00",
-    "v14_evaluation": "completed; SCREEN_FAIL; report pushed; updated 2026-10-05T00:42:56.917328+00:00"
+    "v14_evaluation": "completed; SCREEN_FAIL; report pushed; updated 2026-10-05T00:42:56.917328+00:00",
+    "v14_force_localization": "queued; diagnose per-atom v14 holdout force residuals and nearest neighbors; do not retrain."
   },
-  "coordination_duties": "Do not repeat DFT. B owns v13 per-atom force residual localization and, after A publishes the verified isolated dataset, the single v14 training/evaluation run on B compute. A owns ongoing DFT, v14 data construction, main work log and global file manifest.",
-  "next_action": "Window A reviews coordination/reports/window-b/v13_force_localization.md and mace_periodic_v14_interface_energy/results/v14_independent_holdout_comparison.json, then issues any next assignment. B must not retrain or start production MD/TTM without a new assignment.",
+  "coordination_duties": "B owns post-hoc per-atom localization on the three v14 holdout structures; do not retrain or start DFT. A owns v15 candidate DFT, the main work log and global manifest.",
+  "next_action": "Fetch main and run coordination/reports/window-b/run_v14_force_localization.sh once. After publishing its diagnostic report, wait for A’s next explicit assignment.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
-    "v14": "One training run completed (80 epochs; selected checkpoint epoch 71). Independent holdout screen SCREEN_FAIL: energy MAE passes all interfaces, force-vector RMSE fails all three; see v14_independent_holdout_comparison.json."
+    "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
+    "v15": "Await A residual-targeted DFT labels; B currently assigned post-hoc v14 error localization only."
   }
 }
