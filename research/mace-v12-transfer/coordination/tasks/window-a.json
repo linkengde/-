@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T04:52:35.188836+00:00",
+  "updated_utc": "2026-10-05T05:04:26.831048+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 is SCREEN_FAIL. V15 residual-targeted AgC and AgSi labels are archived, verified and published. AgTi_residual_shell_v15_01 is actively running with four MPI ranks; SCF iteration 1 is visible in the GPAW log. B is auditing Ag-C framework geometry and searching for a label-free nonduplicate registry candidate. Fresh holdouts are not frozen; v15 has not been trained.",
+  "current_stage": "V14 remains SCREEN_FAIL. V15 residual AgC/AgSi labels are archived and verified; AgTi residual DFT is running at SCF iteration 10 with four MPI ranks. B completed the species-aware Ag-C review. Three fresh local-registry holdout inputs are now frozen and hashed; their DFT labels are still uncomputed, and no v15 training has started.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -12,22 +12,29 @@
     "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_residual_shell_v15_01": "completed; SCF iteration 60; elapsed 6698s; updated 2026-10-05T04:21:00.218053+00:00",
     "AgSi_residual_shell_v15_01": "completed; SCF iteration 49; elapsed 5209s; updated 2026-10-05T04:21:01.644612+00:00",
-    "AgTi_residual_shell_v15_01": "running; SCF iteration 10; elapsed 1879s; updated 2026-10-05T04:52:35.188836+00:00",
+    "AgTi_residual_shell_v15_01": "running; SCF iteration 10; elapsed 1879s; updated 2026-10-05T04:52:35Z",
     "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository",
-    "v15_registry_candidate_design_window_b": "assigned; B preparing label-free registry candidates; no overlap with A DFT queue"
+    "v15_registry_candidate_design_window_b": "assigned; B preparing label-free registry candidates; no overlap with A DFT queue",
+    "v15_AgC_species_aware_registry_search_window_b": "completed; report and candidate published at ac415b5; SHA256 inventory verified; geometry-only.",
+    "AgC_registry_holdout_v15_01": "queued; frozen label-free registry input; awaiting residual AgTi queue completion",
+    "AgSi_registry_holdout_v15_01": "queued; frozen label-free registry input; awaiting residual AgTi queue completion",
+    "AgTi_registry_holdout_v15_01": "queued; frozen label-free registry input; awaiting residual AgTi queue completion"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
-    "v15": "AgC and AgSi residual-targeted labels are archived, verified and published; AgTi residual-targeted DFT is running. These are training candidates, not blind holdouts. Fresh registry holdouts are required before v15 training/evaluation."
+    "v15": "Three new local-registry blind holdout inputs are frozen and hashed, to remain excluded from v15 training and selection. Residual AgC/AgSi DFT labels are verified; residual AgTi is running. B reports AgC candidate passes species-aware contact and duplicate screening. No v15 dataset, training or scoring yet."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
     "AgSi_registry_holdout_v14_01": "completed",
     "AgC_residual_shell_v15_01": "completed",
     "AgSi_residual_shell_v15_01": "completed",
-    "AgTi_residual_shell_v15_01": "queued"
+    "AgTi_residual_shell_v15_01": "queued",
+    "AgC_registry_holdout_v15_01": "queued",
+    "AgSi_registry_holdout_v15_01": "queued",
+    "AgTi_registry_holdout_v15_01": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
   "allowed_publish_paths": [
@@ -44,7 +51,7 @@
   ],
   "coordination_duties": "A owns the active residual DFT queue, reviews B registry candidates, owns any holdout DFT and v15 data/model/evaluation, work log and manifest. B prepares candidate geometries only.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue only the queued AgTi residual-shell DFT; verify, archive and publish it. Review B's AgSi/AgTi proposals as limited local-registry holdouts. Ask B to assess whether the 1.7413 Å C-Ti pair is a normal framework bond and to search for a valid Ag-C registry candidate using species-aware checks. Freeze/hash approved blind holdouts before v15 dataset construction and training; keep all fresh holdouts excluded from training and model selection.",
+  "next_action": "Continue the active four-rank AgTi residual-shell DFT without restart; archive and publish it after strict verification. Then run the three frozen registry holdout DFT labels serially with four MPI ranks. Keep those labels out of v15 training/validation/model selection. After all labels pass, build and audit v15 training data, address legacy LCAO reference consistency, train the controlled baseline, then score the frozen registry holdouts and historical regressions.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
@@ -58,6 +65,9 @@
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
     "AgSi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
-    "AgTi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition"
+    "AgTi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
+    "AgC_registry_holdout_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts",
+    "AgSi_registry_holdout_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts",
+    "AgTi_registry_holdout_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts"
   }
 }

@@ -1,0 +1,236 @@
+{
+  "title": "A frozen v15 new-local-registry blind holdout inputs",
+  "owner_task": "window-a",
+  "status": "inputs_frozen_labels_not_computed",
+  "method_plan": {
+    "calculator": "GPAW 26.7.0",
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "kpoints": [
+      1,
+      1,
+      1
+    ],
+    "smearing_eV": 0.1,
+    "mpi_ranks": 4,
+    "geometry": "fixed-geometry single-point"
+  },
+  "split_policy": "Keep all three inputs outside v15 train/valid, checkpoint selection, and hyperparameter tuning. Evaluate only after the v15 model/checkpoint is frozen. Preserve V14 data and scores unchanged.",
+  "scope_limit": "Registry holdouts probe lateral Ag placements over existing small-cluster motifs. They do not test new morphology, larger interfaces, thermal disorder, liquid Ag, or pressure.",
+  "source_audits": [
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/audit_report.md",
+      "sha256": "8f8fdb5583cbfc42b8b050d02e3a5f28fb7a058cd5ce365e3ac8ec28ce08d01e"
+    },
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/candidate_screening_manifest.json",
+      "sha256": "858748ff056545ea14eeaf7182f0dc32a49eb8fb9866fbd63f8477ed255b92f3"
+    },
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/AgC_species_aware_review.md",
+      "sha256": "e48e41a0689ba5592cf54fefbfc0e55863961c495028e0f037810dd87dba76af"
+    },
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/AgC_species_aware_manifest.json",
+      "sha256": "128e61e170b9696d3d0082707c602e01a351ab335fcc83e35006e158425ec0bc"
+    }
+  ],
+  "records": [
+    {
+      "label": "AgC_registry_holdout_v15_01",
+      "interface": "AgC",
+      "role": "v15_blind_registry_holdout",
+      "input": "inputs/AgC_registry_holdout_v15_01.extxyz",
+      "input_sha256": "f528a051246a1a89546da6f55ee3e3b66222cd08caefca039d77989049d25135",
+      "source_candidate_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/AgC_v15_registry_candidate_species_aware.extxyz",
+      "source_candidate_sha256": "f528a051246a1a89546da6f55ee3e3b66222cd08caefca039d77989049d25135",
+      "source_config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "source_dataset_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_dataset_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "source_frame_geometry_sha256": "72d649542158aade39a3cf50dc73759ad25df8a7ff7b2b117f1aa0c6ffc513a3",
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "n_Ag": 2,
+      "cell_A": [
+        [
+          28.139999999999997,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          28.139999999999997,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          28.139999999999997
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "central_pair": {
+        "elements": "Ag-C",
+        "Ag_id": 688433,
+        "contact_id": 604804,
+        "input_distance_A": 2.3658893886048586,
+        "persistent_ids": [
+          604804,
+          688433
+        ]
+      },
+      "species_pair_minima_A": {
+        "Ag-C": 2.3658893886048586,
+        "Ag-Ti": 2.602663001729525,
+        "Ag-Si": 3.9472599792709273,
+        "Ag-Ag": 2.9181713593385563,
+        "C-Ti": 1.7413001819076432
+      },
+      "geometry_audit": {
+        "persistent_ids_and_species_match_source": true,
+        "cell_pbc_match_source": true,
+        "Ag_sublattice_rigid_translation_residual_max_A": 8.881784197001252e-16,
+        "framework_max_coordinate_change_A": 0.0,
+        "energy_force_labels_absent": true,
+        "duplicate_and_species_screen": "See hashed Window B screening/review manifests; duplicate and near-duplicate screens passed."
+      },
+      "model_use": "Exclude from v15 training, validation, checkpoint selection, and hyperparameter selection. Use only for reserved post-training evaluation.",
+      "independence_limit": "New local Ag registry on an existing small-cluster framework motif; not independent morphology or extended-interface coverage."
+    },
+    {
+      "label": "AgSi_registry_holdout_v15_01",
+      "interface": "AgSi",
+      "role": "v15_blind_registry_holdout",
+      "input": "inputs/AgSi_registry_holdout_v15_01.extxyz",
+      "input_sha256": "95e9980d1a2671c97865c17e3a49bda9278376d5ff550495f28802b4f84b5b70",
+      "source_candidate_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/AgSi_v15_registry_candidate_label_free.extxyz",
+      "source_candidate_sha256": "95e9980d1a2671c97865c17e3a49bda9278376d5ff550495f28802b4f84b5b70",
+      "source_config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+      "source_dataset_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_dataset_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "source_frame_geometry_sha256": "4a5540c7fd824a01df8fcb6155e62c7ff045ec36d637ac5f405247c9b5dbe4e5",
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "n_Ag": 17,
+      "cell_A": [
+        [
+          27.86,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          27.86,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          27.86
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "central_pair": {
+        "elements": "Ag-Si",
+        "Ag_id": 683609,
+        "contact_id": 366934,
+        "input_distance_A": 2.538515049446632,
+        "persistent_ids": [
+          366934,
+          683609
+        ]
+      },
+      "species_pair_minima_A": {
+        "Ag-C": 1.9604788553975117,
+        "Ag-Ti": 2.499246749030573,
+        "Ag-Si": 2.000847243603418,
+        "Ag-Ag": 2.8515866416098263,
+        "C-Ti": 1.871930863866463
+      },
+      "geometry_audit": {
+        "persistent_ids_and_species_match_source": true,
+        "cell_pbc_match_source": true,
+        "Ag_sublattice_rigid_translation_residual_max_A": 1.900395703982448e-15,
+        "framework_max_coordinate_change_A": 0.0,
+        "energy_force_labels_absent": true,
+        "duplicate_and_species_screen": "See hashed Window B screening/review manifests; duplicate and near-duplicate screens passed."
+      },
+      "model_use": "Exclude from v15 training, validation, checkpoint selection, and hyperparameter selection. Use only for reserved post-training evaluation.",
+      "independence_limit": "New local Ag registry on an existing small-cluster framework motif; not independent morphology or extended-interface coverage."
+    },
+    {
+      "label": "AgTi_registry_holdout_v15_01",
+      "interface": "AgTi",
+      "role": "v15_blind_registry_holdout",
+      "input": "inputs/AgTi_registry_holdout_v15_01.extxyz",
+      "input_sha256": "0291123e4f6db7f1f4f5e4291366048fec2fb0b7bacbf922836b16878e7b929e",
+      "source_candidate_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_registry_candidates/AgTi_v15_registry_candidate_label_free.extxyz",
+      "source_candidate_sha256": "0291123e4f6db7f1f4f5e4291366048fec2fb0b7bacbf922836b16878e7b929e",
+      "source_config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+      "source_dataset_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_dataset_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "source_frame_geometry_sha256": "18dc1be733a506b748386175293d2f094e720e3e1c9dc96e259623088c005b7c",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "n_Ag": 28,
+      "cell_A": [
+        [
+          28.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          28.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          28.0
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "central_pair": {
+        "elements": "Ag-Ti",
+        "Ag_id": 687247,
+        "contact_id": 479027,
+        "input_distance_A": 2.6809843180532917,
+        "persistent_ids": [
+          479027,
+          687247
+        ]
+      },
+      "species_pair_minima_A": {
+        "Ag-C": 2.1415933889324577,
+        "Ag-Ti": 2.4610037207132716,
+        "Ag-Si": 3.419275475406344,
+        "Ag-Ag": 2.816620715577418,
+        "C-Ti": 1.8721725260232214
+      },
+      "geometry_audit": {
+        "persistent_ids_and_species_match_source": true,
+        "cell_pbc_match_source": true,
+        "Ag_sublattice_rigid_translation_residual_max_A": 3.552822097363439e-15,
+        "framework_max_coordinate_change_A": 0.0,
+        "energy_force_labels_absent": true,
+        "duplicate_and_species_screen": "See hashed Window B screening/review manifests; duplicate and near-duplicate screens passed."
+      },
+      "model_use": "Exclude from v15 training, validation, checkpoint selection, and hyperparameter selection. Use only for reserved post-training evaluation.",
+      "independence_limit": "New local Ag registry on an existing small-cluster framework motif; not independent morphology or extended-interface coverage."
+    }
+  ]
+}
