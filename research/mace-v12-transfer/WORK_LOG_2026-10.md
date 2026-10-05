@@ -260,3 +260,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 ### 2026-10-05 UTC: B assigned matched force/separation driver diagnosis
 
 - User requested direct investigation of error drivers before subsequent changes. Added priority analytical job after existing B DFT, before validation geometry design. Compare V14/V15 on common already-scored geometries, decompose longitudinal/transverse and framework responses, and rank coverage/reference/optimization hypotheses with discriminating tests. No claim of causal identification from simultaneous dataset changes; no blind V16 outputs, new DFT or retraining in the diagnosis.
+
+### 2026-10-05 UTC: V16 active queue and independent B label check
+
+- Confirmed A registered instance and four active MPI ranks; AgC registry log reached iteration30, not yet converged. Existing queue/checkpoints retained without restart.
+- Independently rechecked B AgC distance compact archive: PASS and convergence59 iterations, every declared member/input hash, ordered IDs/elements, positions/cell/PBC, finite energy/force arrays and summary agreement, and converged-log evidence all pass. No method/force-weight changes made.
+- B matched-geometry driver diagnosis remains a separate future job, not the already completed V15 localization. New withheld V16 geometry design remains pending; training cannot start merely because six acquisition labels exist.
