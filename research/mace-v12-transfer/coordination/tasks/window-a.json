@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T02:56:16.199212+00:00",
+  "updated_utc": "2026-10-05T02:58:26.422396+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 is SCREEN_FAIL. AgC residual-targeted v15 DFT converged at 60 SCF iterations and passed archive verification; AgSi is now running and AgTi is queued. B completed the geometry audit and found no unused holdout registry inputs. A is preserving the current queue and preparing fresh registry blind geometries before v15 training.",
+  "current_stage": "V14 is SCREEN_FAIL. AgC residual-targeted v15 DFT converged at 60 iterations and passed archive verification; AgSi is running and AgTi is queued. B's source audit found no unused holdout inputs and B is now preparing controlled new registry candidates for A to review.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -13,7 +13,8 @@
     "AgC_residual_shell_v15_01": "completed; SCF iteration 60; archive verification PASS; energy -257.906079 eV/cell",
     "AgSi_residual_shell_v15_01": "running; SCF iteration 0; elapsed 22s; updated 2026-10-05T02:39:35.356572+00:00",
     "AgTi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:31.938454+00:00",
-    "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository"
+    "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository",
+    "v15_registry_candidate_design_window_b": "assigned; B preparing label-free registry candidates; no overlap with A DFT queue"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -38,11 +39,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json",
     "research/mace-v12-transfer/WORK_LOG_2026-10.md",
-    "research/mace-v12-transfer/periodic_interface_v4/V15_FORCE_SEPARATION_PLAN.md"
+    "research/mace-v12-transfer/periodic_interface_v4/V15_FORCE_SEPARATION_PLAN.md",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts"
   ],
-  "coordination_duties": "A owns the active residual DFT queue, new registry holdout preparation, verification, v15 data/model/evaluation, work log and global manifest. B completed the read-only holdout design audit and awaits the next explicit assignment.",
+  "coordination_duties": "A owns the active residual DFT queue, reviews B registry candidates, owns any holdout DFT and v15 data/model/evaluation, work log and manifest. B prepares candidate geometries only.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue the existing AgSi then AgTi DFT queue without restart. Verify all three acquisition labels and use them only as v15 training additions. Prepare and freeze/hash fresh controlled registry holdouts, then build/audit the v15 dataset, train with the unchanged V14 force/energy weighting as a controlled baseline, and evaluate per-interface force and separating-force gates.",
+  "next_action": "Continue existing AgSi then AgTi DFT without restart. Verify current acquisition labels, review B's geometry candidates, run DFT only on approved new-registry blind holdouts, then build/train/evaluate v15 with current candidates as training only and fresh holdouts excluded.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
@@ -58,4 +60,4 @@
     "AgSi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
     "AgTi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition"
   }
-}
+}\n

@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T02:08:52.383294+00:00",
+  "updated_utc": "2026-10-05T02:58:26.422396+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "Read-only v15 blind-holdout geometry audit is complete and published. No fresh independent source geometry was found for Ag-C, Ag-Si, or Ag-Ti; waiting for Window A to provide new source geometries or a next assignment.",
+  "current_stage": "The read-only source audit is complete. New assignment: prepare and screen label-free Ag lateral-registry candidate geometries for prospective v15 holdouts; no DFT or MACE run.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Do not repeat or start DFT, run MACE inference/training, alter existing v14/v15 datasets or holdout structures, or run MD/TTM. Read repository records and publish only coordination/reports/window-b plus B task/progress.",
+  "task_boundary": "Do not start DFT, run MACE inference/training, alter existing datasets or holdouts, or run MD/TTM. Generate only new label-free geometry proposals and their audit under coordination/reports/window-b/v15_registry_candidates/; preserve all current inputs/results.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -41,13 +41,14 @@
     "v14_training": "completed; 80 epochs; selected checkpoint epoch 71; updated 2026-10-05T00:42:56.917328+00:00",
     "v14_evaluation": "completed; SCREEN_FAIL; report pushed; updated 2026-10-05T00:42:56.917328+00:00",
     "v14_force_localization": "completed; report published at coordination/reports/window-b/v14_force_localization.md",
-    "v15_holdout_design_audit": "completed; read-only audit published; no fresh independent candidate found for all three interfaces; updated 2026-10-05T02:08:52.331105+00:00"
+    "v15_holdout_design_audit": "completed; found no unused distinct registry inputs in existing records",
+    "v15_registry_candidate_design": "assigned; generate and screen label-free new registry candidates only"
   },
-  "coordination_duties": "B audits v15 acquisition-candidate versus blind-holdout geometry independence and proposes fresh holdout designs; A owns targeted DFT, global work log, manifest, dataset, training and evaluation.",
-  "next_action": "Window A continues its existing v15 DFT queue and reviews coordination/reports/window-b/v15_holdout_design_audit.md. B waits for an explicit next assignment; do not start DFT, MACE inference/training, or MD/TTM.",
+  "coordination_duties": "B prepares and geometrically screens new registry candidates for prospective v15 blind holdouts. A independently reviews and owns any DFT, dataset, training and scoring.",
+  "next_action": "Use the three v14 training parent motifs named in START_WINDOW_B.md. Create controlled rigid Ag-registry translations, record input/source hashes and persistent pair IDs, screen minimum distances and exact/near duplicates against all v14 data and v13/v14/v15 inputs. Publish the candidate structures and a report under coordination/reports/window-b/v15_registry_candidates/. State that these are new registries of existing small-cluster motifs, not independent morphologies. Do not start DFT.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
     "v15": "A has three residual-targeted labels in progress. B completed the holdout design audit and found no defensible fresh source geometry among the repository records; see v15_holdout_design_audit.md."
   }
-}
+}\n
