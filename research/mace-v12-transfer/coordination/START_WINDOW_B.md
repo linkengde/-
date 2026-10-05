@@ -49,3 +49,8 @@ Do not modify production scripts, A task, main worklog or global manifest.
 python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_training_evaluation_entry_draft --state completed --iteration 1 --note "Published isolated V15 training/evaluation entry drafts and readiness notes; actual execution remains with A."
 python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
 ```
+
+## Continue automatically
+
+After this task, follow `B_CONTINUOUS_WORK.md` and the ordered B task queue.
+Do not stop merely to request the next per-task command from the user.

@@ -28,3 +28,9 @@ A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。当前 v14 三份盲
 ```bash
 python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
 ```
+
+## Standing B work queue
+
+See [B_CONTINUOUS_WORK.md](B_CONTINUOUS_WORK.md). A maintains assigned queue order
+in tasks/window-b.json; B publishes stages, syncs main and continues assigned work
+while its session remains active. Git alone cannot restart an ended agent session.
