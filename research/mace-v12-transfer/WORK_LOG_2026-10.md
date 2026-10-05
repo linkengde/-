@@ -230,3 +230,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Integration requirements: preserve both method fields with explicit declaration-versus-verification status; never fill absent parameters from config names. Keep energy/free-energy conventions distinct. Different declared k meshes are a convergence-review issue, not proof of a common model-error cause.
 - No automatic blanket exclusion: B reports excluding all 15 gives composition rank 3/4. A must review the unresolved AgTi 2.387 row first and document any exclusion/relabeling decision; the 29-frame scenario retaining rank 4/4 does not resolve other provenance gaps. No production dataset or training was authorized by this trace.
 - AgC and AgSi V15 blind labels are archived and verified (AgSi published `a3276c4`, 47 SCF iterations). The queue has started AgTi with four active MPI ranks. B tracing is complete; no additional calculation has been started by B. Formal V15 dataset integration and training are pending.
+
+### 2026-10-05 UTC: A integrates limited V15 29-frame screening data
+
+- Synced B revision `8069026`; selected explicit unresolved-AgTi exclusion independently of blind-label values. A build completed with 29/2/3 frames, finite labels and composition rank 4/4. Historical valid/test bytes and blind-input isolation checks passed. The new production screening builder pins B draft SHA256 and refuses nonempty data.
+- Training provenance remains limited: 14 partial method declarations, 12 historical explicit declarations not reverified, three verified residual archives. This is screening data, not proof of unified reference-method consistency or model validity.
+- AgTi blind DFT is active (latest inspected iteration 6). Training remains pending until the DFT queue completes. B is assigned isolated training/evaluation entry preparation only, with no blind-label access or model execution.
