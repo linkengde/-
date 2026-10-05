@@ -106,3 +106,17 @@ runner/archive drafts, readiness checklist and SHA256 list. No calculation,
 training/inference, MD/TTM, production edits or old artifact overwrite. Preserve
 all failure diagnostics. Publish this stage and continue the standing queue;
 if no assigned jobs remain, report waiting rather than repeating completed work.
+
+## v15_metric_implementation_review
+
+While A trains V15, independently review the integrated evaluate_v15.py and
+preflight.py under mace_periodic_v15_interface_energy. Write only
+reports/window-b/v15_metric_implementation_review/. Do not edit production files.
+Check energy units/atom normalization, atom-weighted vector versus component
+RMSE, maximum-error definitions, separating-force sign and marked ID mapping,
+coordinate/PBC conventions, historical-versus-fresh aggregation, gate handling,
+selection-record checks and fail-fast behavior. Exercise pure mathematical
+examples with synthetic arrays if needed; no model inference, reference label
+reads, training or GPAW. Report definite defects with reproduction and proposed
+patch separately from limitations. Never read V15 blind outputs, summaries or
+models. Publish report/compact checks/hashes and completion, then sync queue.
