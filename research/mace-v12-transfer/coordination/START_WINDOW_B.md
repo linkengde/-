@@ -1,26 +1,37 @@
 # Window B current assignment
 
-The four B DFT labels, v13 residual report, and the single v14 training/evaluation run are complete. V14 screened `SCREEN_FAIL`; do not retrain it or use it for production MD/TTM.
+V14 training/evaluation is complete and screened SCREEN_FAIL. The v14 per-atom force localization report is complete and published. Window A is running three residual-targeted Ag-C/Ag-Si/Ag-Ti DFT labels for a possible v15 cycle.
 
-## Run now: localize v14 holdout force errors
+## Run now: audit fresh v15 blind-holdout design
 
-Window A is running three residual-targeted Ag-C/Ag-Si/Ag-Ti DFT candidates for a possible v15 cycle. While those run, B should diagnose which atoms and neighbors dominate the v14 holdout force errors. This is post-hoc analysis only: do not retrain, edit the v14 dataset/holdouts, or start DFT.
+This is a read-only geometry audit. Do not start DFT, run MACE inference/training, edit any dataset or holdout input, or run MD/TTM.
 
-Send this command to Window B:
+First sync the repository and confirm the owner:
 
-```bash
-cd /workspace/-
-git fetch origin main
-git merge --ff-only origin/main
-bash research/mace-v12-transfer/coordination/reports/window-b/run_v14_force_localization.sh
-```
+    cd /workspace/-
+    git fetch origin main
+    git merge --ff-only origin/main
+    python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
 
-The script verifies the B owner and the exact v14 checkpoint/reference hashes, analyzes the three scored blind holdouts, and publishes a per-atom JSON/Markdown report under `coordination/reports/window-b/`.
+Then inspect:
+- coordination/reports/window-b/v14_force_localization.md and .json;
+- mace_periodic_v14_interface_energy/results/v14_validation_assessment.json;
+- pbe_interface_v15_targeted_acquisition/input_manifest.json and its input geometries;
+- v14 training/validation/test data and all existing v13/v14 holdout/acquisition geometries.
 
-## After the report
+Publish coordination/reports/window-b/v15_holdout_design_audit.md. For Ag-C, Ag-Si and Ag-Ti separately, document the source geometry and marked pair, candidate-to-training/holdout structural overlap evidence, contact distances and nearest-neighbor environment, and whether the v15 acquisition structures cover the localized residuals. Recommend one fresh blind geometry per interface, selected from a distinct available motif/registry if one exists. If the repository has no defensible independent candidate, report the missing source data instead of fabricating coordinates. Proposed candidates must stay out of v15 training and validation until their blind score is recorded.
 
-Wait for Window A to publish and verify the targeted DFT labels and issue a new explicit assignment before B starts another model cycle. Any v15 training must use newly reserved blind geometries. Do not run production MD or TTM before the validation gates pass.
+Before analysis, publish a B progress event:
+
+    python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_holdout_design_audit --state running --iteration 0 --note "Auditing v15 candidate geometry independence and fresh blind holdout coverage."
+
+After writing the report, publish it and mark the task complete:
+
+    python3 research/mace-v12-transfer/coordination/sync_tasks.py progress window-b --job v15_holdout_design_audit --state completed --iteration 1 --note "Published read-only v15 blind-holdout geometry design audit."
+    python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
+
+If fetch/fast-forward fails, the B owner differs from c5035b48-f43b-4da0-b8e4-e2862817f86a, or any overlap/geometry check is ambiguous, stop and report the exact issue. Do not change the owner or start a calculation.
 
 ## Task ownership
 
-Window B remains owned by instance `c5035b48-f43b-4da0-b8e4-e2862817f86a`. If the claim fails or the instance ID differs, stop and report it; do not change the owner. B may publish only its task/progress, `coordination/reports/window-b/`, its assigned acquisition results, and the assigned v14 model-cycle artifacts. A owns the main work log and global SHA256 manifest.
+Window B remains owned by instance c5035b48-f43b-4da0-b8e4-e2862817f86a. B may publish only its task/progress and coordination/reports/window-b/. Window A owns the v15 DFT inputs/results, main work log and global SHA256 manifest. The three active A DFT candidates remain excluded from every v14 score and any future blind set.
