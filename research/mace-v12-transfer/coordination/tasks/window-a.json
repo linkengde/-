@@ -2,24 +2,24 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T02:39:35.356572+00:00",
+  "updated_utc": "2026-10-05T02:56:16.199212+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 screened SCREEN_FAIL. A is running the first of three residual-targeted v15 DFT labels (AgC active; AgSi and AgTi queued). B has completed v14 force localization and is assigned a non-overlapping, read-only v15 blind-holdout design audit.",
+  "current_stage": "V14 is SCREEN_FAIL. AgC residual-targeted v15 DFT converged at 60 SCF iterations and passed archive verification; AgSi is now running and AgTi is queued. B completed the geometry audit and found no unused holdout registry inputs. A is preserving the current queue and preparing fresh registry blind geometries before v15 training.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
-    "AgC_residual_shell_v15_01": "completed; SCF iteration 60; elapsed 6698s; updated 2026-10-05T02:39:33.684280+00:00",
+    "AgC_residual_shell_v15_01": "completed; SCF iteration 60; archive verification PASS; energy -257.906079 eV/cell",
     "AgSi_residual_shell_v15_01": "running; SCF iteration 0; elapsed 22s; updated 2026-10-05T02:39:35.356572+00:00",
     "AgTi_residual_shell_v15_01": "queued; SCF iteration 0; updated 2026-10-05T00:47:31.938454+00:00",
-    "v15_holdout_design_audit_window_b": "assigned; B to audit independent fresh blind-holdout geometry design; no DFT/model run"
+    "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
-    "v15": "three residual-targeted Ag-C/Ag-Si/Ag-Ti PW-PBE candidates prepared; fixed-geometry DFT queue active on A; dataset/training pending."
+    "v15": "AgC residual-targeted label is archived and verified; AgSi running, AgTi queued. Current labels are correlated training candidates, not blind holdouts. Fresh registry holdouts are required before v15 training/evaluation."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -36,11 +36,13 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
     "research/mace-v12-transfer/coordination/sync_tasks.py",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
-    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json"
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_validation_assessment.json",
+    "research/mace-v12-transfer/WORK_LOG_2026-10.md",
+    "research/mace-v12-transfer/periodic_interface_v4/V15_FORCE_SEPARATION_PLAN.md"
   ],
-  "coordination_duties": "A owns residual-targeted v15 DFT, verifies labels, reserves blind holdouts, maintains the global work log/manifest and conducts v15 dataset/training/evaluation. B owns the independent geometry design audit only; no DFT or model cycle.",
+  "coordination_duties": "A owns the active residual DFT queue, new registry holdout preparation, verification, v15 data/model/evaluation, work log and global manifest. B completed the read-only holdout design audit and awaits the next explicit assignment.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue the existing A DFT queue without restart; verify and archive all three labels, review B's v15_holdout_design_audit.md, then build v15 data with fresh blind holdouts, train and evaluate. No production MD/TTM before validation passes.",
+  "next_action": "Continue the existing AgSi then AgTi DFT queue without restart. Verify all three acquisition labels and use them only as v15 training additions. Prepare and freeze/hash fresh controlled registry holdouts, then build/audit the v15 dataset, train with the unchanged V14 force/energy weighting as a controlled baseline, and evaluate per-interface force and separating-force gates.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",

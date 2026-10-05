@@ -179,3 +179,13 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - To keep both windows active without duplicating A’s DFT or retraining v14, B is assigned post-hoc per-atom residual localization on the three already-scored v14 blind holdouts. The output will identify local/remote force errors, top-error atoms and neighbors for the next DFT sampling decision.
 - This is diagnostic analysis only; the v14 screen remains failed. B must wait for A’s next explicit assignment after publishing the report.
+
+### 2026-10-05 UTC: v14 force diagnosis and evidence-led v15 changes
+
+- V14's evaluated checkpoint used forces_weight=1000 and energy_weight=100; its force loss weight was already ten times the energy loss weight. Raising this weight alone is not the first change.
+- The three V14 blind holdouts pass energy MAE (Ag-C 3.23, Ag-Si 4.62, Ag-Ti 1.68 meV/atom) but fail force-vector RMSE (0.154, 0.118, 0.147 eV/Å). Ag-Si and Ag-Ti also fail marked-pair separating-force error (0.235 and 0.193 eV/Å); Ag-C passes that component at 0.061 eV/Å.
+- Gap-distance-only undercoverage is not sufficient to explain the force errors: Ag-Si's 2.439 Å holdout is near V14 training distances 2.440/2.463 Å; Ag-Ti's 2.564 Å holdout is near 2.588/2.600 Å. Local registry/coordination and wider force response remain likely contributors, but the limited number of holdouts does not isolate a single root cause.
+- B's audit found the three pending v15 residual candidates are small perturbations of V14 training frames (same-ID positional RMS 0.029/0.052/0.044 Å for Ag-C/Ag-Si/Ag-Ti). Treat them as candidate training additions, never as independent v15 validation. The repository has no unused distinct-registry holdout inputs.
+- AgC_residual_shell_v15_01 converged in 60 iterations, energy -257.906079 eV/cell, archive verification PASS. The existing queue has advanced to AgSi; AgTi remains queued.
+- V15 plan: preserve the active DFT queue; use verified residual labels for training; create and hash new controlled registry holdouts before training; sample Ag-C/Ag-Ti contact shells and broader Ag-Si framework environments; keep V14 optimizer/loss weights fixed in the first data-driven comparison; evaluate force-vector and separating-force errors independently. Do not begin production MD/TTM before fresh tests pass.
+- Detailed decisions and limits are in periodic_interface_v4/V15_FORCE_SEPARATION_PLAN.md; B's source-overlap evidence is in coordination/reports/window-b/v15_holdout_design_audit.md.
