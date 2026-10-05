@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T06:06:26.481407+00:00",
+  "updated_utc": "2026-10-05T08:32:17+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "Geometry-only Ag-C review completed. New assignment: read-only audit of v15 dataset construction, label provenance, split leakage, and legacy LCAO/PW-PBE consistency while A's AgTi DFT runs. No calculation or dataset changes are permitted.",
+  "current_stage": "The read-only v15 data-integrity audit is complete and published. New assignment: design a wider span of label-free Ag-X contact-distance and lateral-registry candidates for possible future training acquisition, without touching A’s active blind holdout.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Read-only audit of existing v12-v14 dataset builders, manifests, extxyz labels and published v15 DFT archives. Report v15 inclusion/exclusion rules, exact/near-duplicate leakage risks, force-only LCAO reference provenance/consistency, label counts and composition-rank checks, plus acceptance checks for A's future v15 builder. Do not start DFT or MACE inference/training; do not edit datasets, builders, labels, holdout inputs or A's running job; do not run MD/TTM. Publish only the audit report and its hash manifest under coordination/reports/window-b/ and update this task/progress.",
+  "task_boundary": "Use committed V14 force diagnostics, dataset audit and verified training geometries to propose wider-span Ag-C, Ag-Si and Ag-Ti training-acquisition structures. Generate label-free geometry proposals and screen species-resolved contacts and duplicates. Do not inspect A /tmp or active holdout outputs; do not modify frozen inputs, datasets or scripts; do not run DFT, MACE inference/training, MD or TTM. Publish only candidate geometry files, design report and hashes under coordination/reports/window-b/v15_wide_span_sampling_design/.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -44,13 +44,14 @@
     "v15_holdout_design_audit": "completed; found no unused distinct registry inputs in existing records",
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
     "v15_AgC_species_aware_registry_search": "completed; geometry-only review and candidate published; no DFT/MACE/MD/TTM run.",
-    "v15_dataset_integrity_audit": "completed; SCF iteration 1; updated 2026-10-05T06:06:24.948705+00:00"
+    "v15_dataset_integrity_audit": "completed; audit and evidence hashes published at main commit 5feea61",
+    "v15_wide_span_sampling_design": "assigned; broader Ag-X distance brackets and lateral registries as label-free future training candidates; no DFT/MACE/MD/TTM"
   },
-  "coordination_duties": "B performs the assigned read-only v15 dataset-integrity and provenance audit. A owns DFT, dataset construction, training and scoring.",
-  "next_action": "Run the assigned static v15 dataset-integrity audit, publish the report and hashes, then wait for A's next assignment. Do not run DFT, MACE, MD or TTM.",
+  "coordination_duties": "B designs and geometrically screens label-free wider-span future training candidates. A owns DFT, blind holdouts, dataset construction, training and scoring.",
+  "next_action": "Complete the assigned wide-span geometry design, publish candidate files, report and SHA256 inventory, then wait for A review. Do not run calculations.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
-    "v15": "Window A owns DFT, dataset construction, training and evaluation. Window B is assigned a read-only audit of data provenance, split leakage, legacy LCAO consistency and v15 builder acceptance checks; it will not edit data or run calculations."
+    "v15": "Window A owns blind DFT, dataset construction, training and evaluation. Window B is assigned geometry-only wider-span training proposals; proposals are not labels, not blind tests, and not approved for training until A reviews them."
   }
 }

@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T08:30:53.779216+00:00",
+  "updated_utc": "2026-10-05T08:32:17+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V14 remains SCREEN_FAIL. V15 residual AgC/AgSi labels are archived and verified; AgTi residual DFT is active at SCF iteration 20 with four MPI ranks. Three fresh local-registry holdout inputs are frozen and hashed; their labels are uncomputed. B completed geometry review and is assigned a read-only v15 dataset-integrity audit. No v15 training has started.",
+  "current_stage": "V14 remains SCREEN_FAIL. All three V15 residual PW-PBE labels are archive-verified. AgC registry blind holdout converged and passed archive verification; AgSi registry holdout is now running with four MPI ranks and AgTi is queued. B completed the data-integrity audit and is assigned a wider-span label-free geometry design. No V15 dataset or training exists yet.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -12,19 +12,21 @@
     "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
     "AgC_residual_shell_v15_01": "completed; SCF iteration 60; elapsed 6698s; updated 2026-10-05T04:21:00.218053+00:00",
     "AgSi_residual_shell_v15_01": "completed; SCF iteration 49; elapsed 5209s; updated 2026-10-05T04:21:01.644612+00:00",
-    "AgTi_residual_shell_v15_01": "running; SCF iteration 30; elapsed 4734s; updated 2026-10-05T05:40:40.553165+00:00",
+    "AgTi_residual_shell_v15_01": "completed; SCF iteration 36; elapsed 5458s; archive verification PASS; published at commit 8055684",
     "v15_holdout_design_audit_window_b": "completed; report published; no fresh independent registry inputs already exist in the repository",
     "v15_registry_candidate_design_window_b": "assigned; B preparing label-free registry candidates; no overlap with A DFT queue",
     "v15_AgC_species_aware_registry_search_window_b": "completed; report and candidate published at ac415b5; SHA256 inventory verified; geometry-only.",
-    "AgC_registry_holdout_v15_01": "completed; SCF iteration 60; elapsed 6622s; updated 2026-10-05T08:30:03.555374+00:00",
-    "AgSi_registry_holdout_v15_01": "running; SCF iteration 0; elapsed 48s; updated 2026-10-05T08:30:53.779216+00:00",
-    "AgTi_registry_holdout_v15_01": "queued; SCF iteration 0; updated 2026-10-05T08:30:07.123706+00:00"
+    "AgC_registry_holdout_v15_01": "completed; SCF iteration 60; elapsed 6622s; archive verification PASS; published at commit b1f5ddb",
+    "AgSi_registry_holdout_v15_01": "running; four MPI ranks; SCF started; latest task heartbeat iteration 0 at 2026-10-05T08:30:53Z",
+    "AgTi_registry_holdout_v15_01": "queued; SCF iteration 0; updated 2026-10-05T08:30:07.123706+00:00",
+    "v15_dataset_integrity_audit_window_b": "completed; report and evidence hashes published at 5feea61",
+    "v15_wide_span_sampling_design_window_b": "assigned; geometry-only wider Ag-X distance/registry proposals; no DFT or model inference"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
-    "v15": "Three new local-registry blind holdout inputs are frozen and hashed, to remain excluded from v15 training and selection. Residual AgC/AgSi DFT labels are verified; residual AgTi is running. B reports AgC candidate passes species-aware contact and duplicate screening. No v15 dataset, training or scoring yet."
+    "v15": "Three residual PW-PBE labels are verified. AgC blind registry holdout is verified and published; AgSi holdout is running and AgTi queued. B is preparing wider-span label-free acquisition candidates, not blind tests. No v15 dataset, training or evaluation yet."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -52,9 +54,9 @@
     "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
     "research/mace-v12-transfer/coordination/README.md"
   ],
-  "coordination_duties": "A owns the active residual DFT queue, v15 holdout DFT, dataset construction, training, evaluation, work log and manifest. B performs the assigned read-only v15 dataset-integrity and provenance audit without editing data or running calculations.",
+  "coordination_duties": "A owns V15 blind holdout DFT, dataset construction, training, evaluation and the main log. B prepares wider-span label-free candidate geometries only; A decides whether any are labeled after reviewing V15 results.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue the active four-rank AgTi residual-shell DFT without restart; archive and publish it after strict verification. Then run the three frozen registry holdout DFT labels serially with four MPI ranks. Keep those labels out of v15 training/validation/model selection. After all labels pass, build and audit v15 training data, address legacy LCAO reference consistency, train the controlled baseline, then score the frozen registry holdouts and historical regressions.",
+  "next_action": "Continue the active AgSi registry holdout without restart; archive and publish after strict verification, then run AgTi serially. Keep both blind labels outside v15 training and model selection. Review B wide-span proposals separately. After all holdouts pass archive checks, build v15 data excluding the four unproven force-only LCAO frames, audit leakage and hashes, train the controlled baseline, and score blind holdouts and historical regressions.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",

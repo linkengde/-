@@ -6,14 +6,14 @@ GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程
 
 | 窗口 | 当前工作 | 不负责的工作 |
 |---|---|---|
-| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | v14 `SCREEN_FAIL`。V15 Ag-C、Ag-Si 残差标签已核验；Ag-Ti 残差 DFT 正在四核运行，最新日志到 SCF 第 20 轮。完成后由 A 依次计算三个冻结的 V15 registry 盲测点，再独立构建、训练和评估 V15。 | 不计算 B 的审计任务；三个 V15 盲测不进入训练/验证/模型选择。 |
-| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 几何审查已完成。当前分配只读 V15 数据完整性审计：标签来源、切分泄漏、旧 LCAO 力标签一致性及数据构建验收条件。 | 不运行 DFT/MACE/MD/TTM；不修改训练数据、脚本、标签或盲测输入。 |
+| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | v14 `SCREEN_FAIL`。三个 V15 residual 标签已核验，Ag-C registry 盲测已核验，Ag-Si 盲测四核运行，Ag-Ti 排队。之后构建、训练、评估 V15。 | 三份 V15 盲测不进入训练/验证/模型选择；不改正在运行的盲测。 |
+| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | V15 数据完整性审计已完成。当前任务是设计跨度更大的 Ag-X 接触距离和横向 registry 候选结构，仅作未来训练采样提案。 | 不运行 DFT/MACE/MD/TTM；不修改数据集、脚本、标签或冻结盲测。 |
 
 A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。当前 v14 三份盲测的力向量 RMSE 都高于 0.05 eV/Å，因此 v14 不用于长时间 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
 
 ## B 当前命令
 
-把 `coordination/START_WINDOW_B.md` 中的同步、身份检查和进度命令发给 B。B 只发布只读审计报告和哈希清单。若 owner 校验失败或身份不符，B 停止并回报；不要手动改 owner。
+把 `coordination/START_WINDOW_B.md` 中的同步、身份检查和进度命令发给 B。B 只发布未标注候选结构、几何审查报告和哈希清单。若 owner 校验失败或身份不符，B 停止并回报；不要手动改 owner。
 
 ## 同步与归档
 
