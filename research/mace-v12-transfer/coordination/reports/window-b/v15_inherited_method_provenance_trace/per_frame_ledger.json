@@ -1,0 +1,3533 @@
+{
+  "task": "v15_inherited_method_provenance_trace",
+  "analyzed_main_commit": "3e8577e4f30dc476960f7d5cedd5c6bc7b3649e7",
+  "counts": {
+    "partial_recovery": 14,
+    "unresolved": 1
+  },
+  "fully_confirmed_original_calculations": 0,
+  "correction_to_prior_unknown_label": "14/15 lack source_method but preserve dft_method. This supports partial method metadata recovery; it does not confirm original run, software version or convergence. The previous builder/audit artifacts are preserved.",
+  "inputs_sha256": {
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/dataset_manifest.json": "7d0d3cf82477374ed1a69ed4efbb6022a2ae9d98dd15969e754b9b9220c80073",
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_dataset_integrity_audit.md": "fdb763c31b042e0156752ee37607397f34a2c97c30bf04c92f158b331888e8ad",
+    "research/mace-v12-transfer/file_manifest.json": "b80f19a2fa666e4169837623b399827b0eada44507953fbea010e595058d056e",
+    "research/mace-v12-transfer/periodic_interface_v4/MACE_VERSION_HISTORY.md": "423f0a10294f8e0f45fa43e4ef2ab155c2958dd2e4778154b8cb11464d5e8f28",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/README.md": "55e2a077e3a1e9f871a8185ad3851ffca2bb89e158298dc9fa4326f0020d85d7",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/dataset_manifest.json": "69b15c3c820668c789136da2b69b3f5e9ecffa95e68b23f31804cac230c95dd8",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/build_v12_dataset.py": "a806e635582cfe15da2237e2f8a97b6f3ae4135343861ae52e5e6d3999fc8f45",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/dataset_manifest.json": "32e7c905b7ef7d9fe38f9212d7dd890340a47bf4029b384c3f30d1d164bcb39d",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/build_v13_dataset.py": "5773afe05bff282b7e2bfec645c7df8b603b51941a401d3f0b16a83f3f3d4295",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/dataset_manifest.json": "0b32eb4373d767147e58119da681cf8caef12e51ca849c2466e8641aa244d94b",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/build_v14_dataset.py": "2c50615d0fda8e64530897063f139225746d2ff75f38436596c13c2b09f16bfc",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/dataset_manifest.json": "134dc1292ee82ae26da2a0798b9168f4ef06c6f363bc0ff1e93a7053ccbaa320",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf"
+  },
+  "rank_scenarios": {
+    "draft_all_30": {
+      "frames": 30,
+      "rank": 4,
+      "elements": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "analysis_only_no_dataset_modified": true
+    },
+    "exclude_all_15_previous_unknown": {
+      "frames": 15,
+      "rank": 3,
+      "elements": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "analysis_only_no_dataset_modified": true
+    },
+    "exclude_only_unresolved_AgTi2p387": {
+      "frames": 29,
+      "rank": 4,
+      "elements": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "analysis_only_no_dataset_modified": true
+    },
+    "exclude_four_element_anchors": {
+      "frames": 26,
+      "rank": 4,
+      "elements": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "analysis_only_no_dataset_modified": true
+    }
+  },
+  "frames": [
+    {
+      "draft_train_frame": 0,
+      "config_type": "Ti_gap_2p3",
+      "source_split": "train",
+      "source_frame": 0,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 32,
+      "formula": "C8Ag10Si2Ti12",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 0,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -207.46396832165877,
+        "config_type": "Ti_gap_2p3",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoints_500eV/summary_recovered_from_extxyz.json",
+        "nominal_top_gap_A": 2.3,
+        "nominal_bottom_gap_A": 2.9000000000000004
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              28.373244997441823,
+              -5.228439678057898e-06,
+              0.11265358847449992
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 0,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 0,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 0,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 0,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoints_500eV/summary_recovered_from_extxyz.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoints_500eV/summary_recovered_from_extxyz.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.19665014314097107
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Independent original log: the declared recovered-from-extxyz summary would be circular evidence",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 0,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "9f37bf908add549e2fe553e71de3f236e583e91e8d33b6e3b0d27f4829733834",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 1,
+      "config_type": "Ti_gap_2p6",
+      "source_split": "train",
+      "source_frame": 1,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 32,
+      "formula": "C8Ag10Si2Ti12",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 1,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -208.71816251321513,
+        "config_type": "Ti_gap_2p6",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_run2/summary.json",
+        "nominal_top_gap_A": 2.6,
+        "nominal_bottom_gap_A": 2.6
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              28.373244997441823,
+              -5.228439678057898e-06,
+              0.11265358847449992
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 1,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 1,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 1,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 1,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_run2/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_run2/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.20956438369447028
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 1,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "8db8137fb92b9a9125e3c353fa7d69dabbcb68e09bbf34e13db56f377e79474e",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 2,
+      "config_type": "Ti_gap_2p9",
+      "source_split": "train",
+      "source_frame": 2,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 32,
+      "formula": "C8Ag10Si2Ti12",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 2,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -208.85041513518868,
+        "config_type": "Ti_gap_2p9",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.9_500eV_run1/summary.json",
+        "nominal_top_gap_A": 2.9,
+        "nominal_bottom_gap_A": 2.3000000000000003
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              28.373244997441823,
+              -5.228439678057898e-06,
+              0.11265358847449992
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 2,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 2,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 2,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 2,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.9_500eV_run1/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.9_500eV_run1/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.2131237927052041
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 2,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "7496c61c8bfcfddeb2cd3887d0fa712b1219b1b158e499ca5f607526c827341d",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 3,
+      "config_type": "Si_gap_2p6",
+      "source_split": "train",
+      "source_frame": 3,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C4Ag6Si4Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 3,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -122.68931638552769,
+        "config_type": "Si_gap_2p6",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_Si_terminated/summary.json",
+        "nominal_top_gap_A": 2.6,
+        "nominal_bottom_gap_A": 2.6
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              18.960623920333415,
+              -3.493942213333126e-06,
+              0.07528156629717833
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 3,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 3,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 3,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 3,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_Si_terminated/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_Si_terminated/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.12017597850331185
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 3,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "e55bcab964895c682fe2cedc81ca1cb3145cc920dd6ad548fb49b04ee7dd19e0",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 4,
+      "config_type": "C_gap_2p6",
+      "source_split": "train",
+      "source_frame": 4,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C6Ag6Si2Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 4,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -117.67722361730821,
+        "config_type": "C_gap_2p6",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_C_terminated/summary.json",
+        "nominal_top_gap_A": 2.6,
+        "nominal_bottom_gap_A": 2.6
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              18.96062392033341,
+              -3.4939422133331256e-06,
+              0.07528156629717832
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 4,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 4,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 4,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 4,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_C_terminated/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.6_500eV_C_terminated/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.24188487469982078
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 4,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "241422fd55cf982147cc084e719dce14ac54f1c266d33c03ab88bdaf802572fa",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 5,
+      "config_type": "Si_gap_2p4",
+      "source_split": "train",
+      "source_frame": 5,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C4Ag6Si4Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 5,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -122.96810095249856,
+        "config_type": "Si_gap_2p4",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_Si_midgap_scan/summary.json",
+        "nominal_top_gap_A": 2.4,
+        "nominal_bottom_gap_A": 2.4
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              18.56062707313693,
+              -3.4202333588412015e-06,
+              0.07369341237896303
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 5,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 5,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 5,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 5,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_Si_midgap_scan/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_Si_midgap_scan/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.12036079740329342
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 5,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "f41700bc5f62ea6d2497238bc0540c5db2daac623f89860a7dde5ea5b6734b78",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 6,
+      "config_type": "C_gap_2p4",
+      "source_split": "train",
+      "source_frame": 6,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C6Ag6Si2Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 6,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -118.4754892758412,
+        "config_type": "C_gap_2p4",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_C_midgap_scan/summary.json",
+        "nominal_top_gap_A": 2.4,
+        "nominal_bottom_gap_A": 2.4
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              18.56062707313693,
+              -3.4202333588412015e-06,
+              0.07369341237896303
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 6,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 6,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 6,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 6,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_C_midgap_scan/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.4_500eV_C_midgap_scan/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.23251397894730985
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 6,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "436dde6f223b4ef1f2fa0f14adb64fc0591dd8a62e5c6403de5cef605ffa6316",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 7,
+      "config_type": "Si_gap_2p8",
+      "source_split": "train",
+      "source_frame": 7,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C4Ag6Si4Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 7,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -122.13192134562402,
+        "config_type": "Si_gap_2p8",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_Si_midgap_scan/summary.json",
+        "nominal_top_gap_A": 2.8,
+        "nominal_bottom_gap_A": 2.8
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              19.3606207675299,
+              -3.56765106782505e-06,
+              0.07686972021539364
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 7,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 7,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 7,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 7,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_Si_midgap_scan/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_Si_midgap_scan/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.12063751120707877
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 7,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "5544cec28485481536c198b4fe70035badce840cfaa2dadbfd654da0f2b20b1b",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 8,
+      "config_type": "C_gap_2p8",
+      "source_split": "train",
+      "source_frame": 8,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 20,
+      "formula": "C6Ag6Si2Ti6",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 8,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -116.98888372458761,
+        "config_type": "C_gap_2p8",
+        "dft_method": "GPAW PW-PBE 500 eV, 1x4x2, 0.1 eV smearing",
+        "source_summary": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_C_midgap_scan/summary.json",
+        "nominal_top_gap_A": 2.8,
+        "nominal_bottom_gap_A": 2.8
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            4,
+            2
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              19.3606207675299,
+              -3.56765106782505e-06,
+              0.07686972021539364
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 8,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 8,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 8,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 8,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_C_midgap_scan/summary.json",
+          "role": "claimed source summary; not an SCF log",
+          "claimed_sha256": null,
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_singlepoint_d2.8_500eV_C_midgap_scan/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "role": "declared V9 parent training dataset",
+          "claimed_sha256": "be21a803c2ed6b0b3eb8ae34467a43bac681c94d65c1e9114b465dbac9d774d3",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/data/train.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.244260603842136
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Declared 1x4x2 historical sampling differs from newer Gamma cluster references; cell-dependent sampling needs convergence review, not an assumption that all references are Gamma",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 8,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "267ab1b0fb874392f72037f40dd1dac1e2255c3b1e1b39b8654e477dce7bc6dd",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 9,
+      "config_type": "AgTi_2p3871A_periodic_PW_PBE_force_only",
+      "source_split": "train",
+      "source_frame": 13,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": [
+        478831,
+        478840,
+        478841,
+        478844,
+        479021,
+        479027,
+        479028,
+        479030,
+        479031,
+        480798,
+        480801,
+        480802,
+        480805,
+        480807,
+        480810,
+        480811,
+        480812,
+        480813,
+        480974,
+        480975,
+        480980,
+        682693,
+        685396,
+        685467,
+        686309,
+        686324,
+        686418,
+        686622,
+        686899,
+        687243,
+        687247,
+        688096,
+        688280,
+        688689,
+        688707,
+        689682,
+        690927,
+        691757,
+        694331,
+        696686,
+        700223,
+        701905,
+        703736,
+        704767,
+        716228,
+        720990,
+        721910,
+        728014,
+        741114
+      ],
+      "atom_order_identity_only": false,
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "status": "unresolved",
+      "status_reason": "Serialized lineage confirmed but no direct frame-specific calculator method declaration or original run evidence",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 17,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": null,
+      "source_method_field": null,
+      "original_serialized_info": {
+        "config_type": "AgTi_2p3871A_periodic_PW_PBE_force_only",
+        "training_label_policy": "PBE energy and force labels; repeated geometry retained once",
+        "REF_energy": -176.73077526876207
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": null,
+          "evidence": "unknown; config/global method caveat insufficient"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "XC": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "cutoff_eV": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "k_points": {
+          "value": null,
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": null,
+          "distribution": null,
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 17,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 13,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 13,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 13,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/AgTi_cluster_PW_PBE.extxyz",
+          "role": "claimed original AgTi frame or summary",
+          "claimed_sha256": "0b49ea7bf39fdcf7a0cf0bca13b69f23606eebf50f93519010280fb6e02a7f1e",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/AgTi_cluster_PW_PBE.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/summary.json",
+          "role": "claimed original AgTi frame or summary",
+          "claimed_sha256": "29b3538c132dd3c29066377516437653656c4af6d218b223934248f773862ab8",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {},
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Exact phase-specific k-point mesh/offset; global dense-mesh claim is not a per-frame value",
+        "Direct basis/XC/cutoff/k-grid/smearing evidence for the AgTi frame whose energy was appended to an older force-only geometry"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Energy was declared added to an older force-only frame; no independent original evidence binds the energy and force calculations/settings"
+      ],
+      "relabel_recommendation": {
+        "priority": "first: unmatched energy/force method binding",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 9,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "bfbed204492f1ca9fb6ab6732be15781ef9c92833172c6341bdf4fa019ce8696",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 10,
+      "config_type": "AgTi_2p55_periodic_PW_PBE_energy_force",
+      "source_split": "train",
+      "source_frame": 14,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": [
+        478831,
+        478840,
+        478841,
+        478844,
+        479021,
+        479027,
+        479028,
+        479030,
+        479031,
+        480798,
+        480801,
+        480802,
+        480805,
+        480807,
+        480810,
+        480811,
+        480812,
+        480813,
+        480974,
+        480975,
+        480980,
+        682693,
+        685396,
+        685467,
+        686309,
+        686324,
+        686418,
+        686622,
+        686899,
+        687243,
+        687247,
+        688096,
+        688280,
+        688689,
+        688707,
+        689682,
+        690927,
+        691757,
+        694331,
+        696686,
+        700223,
+        701905,
+        703736,
+        704767,
+        716228,
+        720990,
+        721910,
+        728014,
+        741114
+      ],
+      "atom_order_identity_only": false,
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 18,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV, Gamma, Fermi smearing 0.1 eV",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -176.9875287485398,
+        "dft_method": "GPAW PW-PBE 500 eV, Gamma, Fermi smearing 0.1 eV",
+        "config_type": "AgTi_2p55_periodic_PW_PBE_energy_force",
+        "training_label_policy": "Added periodic PBE energy and force frame for the Ag-Ti distance curve"
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": [
+            1,
+            1,
+            1
+          ],
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": "Fermi",
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 18,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 14,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 14,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 14,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "persistent_ID_and_element",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/AgTi_d2p55_cluster_PW_PBE.extxyz",
+          "role": "claimed original AgTi frame or summary",
+          "claimed_sha256": "e4e6636aebed69100bdaa27fa429e283e61321b111c7eff1986a46ae3dc0c9ac",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/AgTi_d2p55_cluster_PW_PBE.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        },
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/summary.json",
+          "role": "claimed original AgTi frame or summary",
+          "claimed_sha256": "5f877bd0c6c9dd504f5741a6559c30b1bce2cfd839bfa7edfc41cc905399e3dc",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/retry1/summary.json",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {
+        "REF_to_native_energy_abs_delta_eV": 0.0,
+        "REF_to_native_force_max_component_delta_eV_A": 0.0,
+        "REF_minus_native_free_energy_eV": 0.6352834014493851
+      },
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "REF_energy equals stored native energy, not native free_energy; choose and record the same energy convention for any matched relabeling"
+      ],
+      "relabel_recommendation": {
+        "priority": "recover original records first; matched relabel if unavailable",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 10,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "440b8f50fccb7b4ae511cf0e7f407ee1e9628066d73724fb56a81719328f271a",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 11,
+      "config_type": "v10_element_reference_Ag_fcc",
+      "source_split": "train",
+      "source_frame": 15,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 4,
+      "formula": "Ag4",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 19,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -11.438932342911405,
+        "config_type": "v10_element_reference_Ag_fcc",
+        "dft_method": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+        "energy_reference_note": "pure elemental solid training anchor; not an isolated-atom chemical potential"
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": null,
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": "Fermi",
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              4.152,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              4.152,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              4.152
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 19,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 15,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 15,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 15,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ag_fcc.extxyz",
+          "role": "claimed original elemental DFT frame",
+          "claimed_sha256": "075467297df82b431a09b6cc2acd6c5072e72209e1013b27962d2080e1681376",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ag_fcc.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {},
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Exact phase-specific k-point mesh/offset; global dense-mesh claim is not a per-frame value",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Elemental solid anchor: exact k mesh unknown; bulk-reference convergence and energy convention can affect composition offsets"
+      ],
+      "relabel_recommendation": {
+        "priority": "high: elemental numerical reference",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 11,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "1bd1ed66ca00f61e7f33bd69da102a271da8a75d683166c02aefd572da5f309d",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 12,
+      "config_type": "v10_element_reference_Ti_hcp",
+      "source_split": "train",
+      "source_frame": 16,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 2,
+      "formula": "Ti2",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 20,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -13.297651852669311,
+        "config_type": "v10_element_reference_Ti_hcp",
+        "dft_method": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+        "energy_reference_note": "pure elemental solid training anchor; not an isolated-atom chemical potential"
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": null,
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": "Fermi",
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              2.94,
+              0.0,
+              0.0
+            ],
+            [
+              -1.47,
+              2.5461146871262494,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              4.67
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 20,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 16,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 16,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 16,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ti_hcp.extxyz",
+          "role": "claimed original elemental DFT frame",
+          "claimed_sha256": "d451f70509829a0680b605e9b81fca2d63ccec5416dc6b2860f2fa0ce2b1a305",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Ti_hcp.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {},
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Exact phase-specific k-point mesh/offset; global dense-mesh claim is not a per-frame value",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Elemental solid anchor: exact k mesh unknown; bulk-reference convergence and energy convention can affect composition offsets"
+      ],
+      "relabel_recommendation": {
+        "priority": "high: elemental numerical reference",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 12,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "9a77c251e130f9e6cfb164a1d439d6375d9b6b5b087301592db388c724923515",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 13,
+      "config_type": "v10_element_reference_Si_diamond",
+      "source_split": "train",
+      "source_frame": 17,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 8,
+      "formula": "Si8",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 21,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -43.196889449252104,
+        "config_type": "v10_element_reference_Si_diamond",
+        "dft_method": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+        "energy_reference_note": "pure elemental solid training anchor; not an isolated-atom chemical potential"
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": null,
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": "Fermi",
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              5.47,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              5.47,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              5.47
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 21,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 17,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 17,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 17,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Si_diamond.extxyz",
+          "role": "claimed original elemental DFT frame",
+          "claimed_sha256": "aaaa6cff3b5c8c6d527c8f1d0a8c2202763eb35d8810e872669ee628090ac92a",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/Si_diamond.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {},
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Exact phase-specific k-point mesh/offset; global dense-mesh claim is not a per-frame value",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Elemental solid anchor: exact k mesh unknown; bulk-reference convergence and energy convention can affect composition offsets"
+      ],
+      "relabel_recommendation": {
+        "priority": "high: elemental numerical reference",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 13,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "dcd3ca1b8014bc44be24a7299594409d67d94bee917e3cd0a82a71d37edf4e35",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    },
+    {
+      "draft_train_frame": 14,
+      "config_type": "v10_element_reference_C_diamond",
+      "source_split": "train",
+      "source_frame": 18,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "source_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "draft_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+      "draft_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+      "persistent_atom_ids": null,
+      "atom_order_identity_only": true,
+      "atoms": 8,
+      "formula": "C8",
+      "status": "partial_recovery",
+      "status_reason": "Frame-specific dft_method and exact serialized lineage recovered; original execution/convergence artifacts absent",
+      "original_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+      "original_import_frame": 22,
+      "original_import_file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "dft_method_declaration": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+      "source_method_field": null,
+      "original_serialized_info": {
+        "REF_energy": -72.67662529200653,
+        "config_type": "v10_element_reference_C_diamond",
+        "dft_method": "GPAW PW-PBE 500 eV; Fermi smearing 0.1 eV",
+        "energy_reference_note": "pure elemental solid training anchor; not an isolated-atom chemical potential"
+      },
+      "method_parameter_evidence": {
+        "code": {
+          "value": "GPAW",
+          "evidence": "per-frame dft_method declaration"
+        },
+        "software_version": {
+          "value": null,
+          "evidence": "No original run log/version found"
+        },
+        "basis": {
+          "value": "plane wave",
+          "evidence": "PW in per-frame dft_method"
+        },
+        "XC": {
+          "value": "PBE",
+          "evidence": "per-frame dft_method"
+        },
+        "cutoff_eV": {
+          "value": 500,
+          "evidence": "per-frame dft_method"
+        },
+        "k_points": {
+          "value": null,
+          "evidence": "per-frame dft_method; exact elemental mesh absent"
+        },
+        "smearing_eV": {
+          "value": 0.1,
+          "distribution": "Fermi",
+          "evidence": "per-frame dft_method; unspecified distribution remains unknown"
+        },
+        "PBC": {
+          "value": [
+            true,
+            true,
+            true
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "cell_A": {
+          "value": [
+            [
+              3.57,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              3.57,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              3.57
+            ]
+          ],
+          "evidence": "V11-V15 serialized geometry, identical"
+        },
+        "SCF_converged": {
+          "value": null,
+          "evidence": "No original SCF log/verified summary; finite stored labels do not establish convergence"
+        },
+        "SCF_thresholds": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "PAW_setup_version": {
+          "value": null,
+          "evidence": "unknown"
+        },
+        "spin_and_other_calculator_settings": {
+          "value": null,
+          "evidence": "unknown"
+        }
+      },
+      "lineage": [
+        {
+          "version": "v11",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+          "file_sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+          "frame": 22,
+          "current_snapshot_git_blob_oid": "a11e518826e1b011e23616a04d7b80c558e114a5",
+          "first_import_commit": "56b2370e0b2829ca4d6f9ba17a0a559c199240b0",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v12",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+          "file_sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+          "frame": 18,
+          "current_snapshot_git_blob_oid": "09f1ed54644a47f9a49758f206b0f03f7ee3c49f",
+          "first_import_commit": "9ba5cd4dd14f5e87a262ed4fff107e1b2faa0841",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v13",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+          "file_sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+          "frame": 18,
+          "current_snapshot_git_blob_oid": "29a06260b881ad8359e011918dc16e45b7b3e93c",
+          "first_import_commit": "db3daa7ecda177e7321cecbf50b12481e96356d9",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        },
+        {
+          "version": "v14",
+          "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+          "file_sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+          "frame": 18,
+          "current_snapshot_git_blob_oid": "830a1fb839e147a88a80ecda83a785d75dd643e2",
+          "first_import_commit": "ee4754894c71078e1c0380cb2c69c33e25fb6f06",
+          "comparison_to_current_draft": {
+            "identity": true,
+            "mapping": "stored_atom_order; original persistent IDs unavailable",
+            "position_max_component_delta_A": 0.0,
+            "cell_max_component_delta_A": 0.0,
+            "PBC_match": true,
+            "energy_abs_delta_eV": 0.0,
+            "force_max_component_delta_eV_A": 0.0
+          }
+        }
+      ],
+      "original_calculation_claims": [
+        {
+          "claimed_original_path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/C_diamond.extxyz",
+          "role": "claimed original elemental DFT frame",
+          "claimed_sha256": "d4616e6bb212744cec2c38896b7b7454875916637d4a7f0e8a9a5a733070e6a8",
+          "expected_repository_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v10_energycal/element_reference_dft/frames/C_diamond.extxyz",
+          "path_present_in_reachable_history": false,
+          "matching_original_bytes_elsewhere_in_scanned_history": [],
+          "original_content_read": false,
+          "proof_level": "secondary path/hash declaration; source file absent from searched committed evidence"
+        }
+      ],
+      "native_alias_identity": {},
+      "original_calculation_output_geometry_energy_force_identity": {
+        "status": "unknown",
+        "reason": "Original archived output absent; equality to a later dataset or its duplicate calculator fields cannot prove original-run identity"
+      },
+      "missing_materials": [
+        "Original fixed-geometry calculator input/script and full parameters",
+        "Original run log with SCF stopping evidence and tolerances",
+        "GPAW/ASE and PAW setup versions",
+        "Original labeled output plus input/output SHA256 link to the stored REF arrays",
+        "Exact phase-specific k-point mesh/offset; global dense-mesh claim is not a per-frame value",
+        "Original persistent IDs are absent; recover ordered element/position mapping, never invent historical IDs"
+      ],
+      "potential_conflicts": [
+        "Declaration/serialized-field identity is not original-run verification; convergence and source-to-label binding remain unverified",
+        "Elemental solid anchor: exact k mesh unknown; bulk-reference convergence and energy convention can affect composition offsets"
+      ],
+      "relabel_recommendation": {
+        "priority": "high: elemental numerical reference",
+        "existing_geometry_path": "research/mace-v12-transfer/coordination/reports/window-b/v15_builder_draft/generated_data/train.extxyz",
+        "existing_geometry_file_sha256": "b7edc25d671fb26e16637805b4a67493c543f66eb3302d96505dd29c34470ff7",
+        "existing_geometry_frame": 14,
+        "geometry_sha256_ordered_elements_positions_cell_PBC_IDs": "b2b686073468f81426081ee5aef9817795adf9785247b445c4d81b3bc2794608",
+        "preserve_atom_count_order_cell_PBC_IDs": true,
+        "recommendation": "A may commission a matched PW-PBE single point on this exact stored geometry, record all parameters and energy convention, convergence and hash-linked energy/forces together; select k grid for the actual periodic cell and demonstrate convergence rather than blindly forcing Gamma. Do not fabricate missing original IDs or provenance. No calculation authorized/executed by this trace."
+      }
+    }
+  ]
+}
