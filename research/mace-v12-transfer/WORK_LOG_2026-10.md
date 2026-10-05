@@ -243,3 +243,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Adapted entry output boundaries to new children of the V15 directory, preserving original B artifacts, all input pins and numerical settings. An initial default preflight rejected A's appended README because it was pinned; restored the original README and moved entry usage to ENTRY_USAGE.md. Default preflight then passed 29/2/3 counts, rank4 and frozen-input isolation without reading blind outputs. Actual training/evaluation not executed; script runtime remains unverified.
 - Convention review supports current residual REF energy linkage to GPAW extrapolated/native energy, not free energy. Historical native aliases are lineage, not original-run verification. Preserve REF targets; energy offsets alone do not establish the cause of force errors.
 - Latest inspected AgTi blind log is iteration32, unconverged. Training waits for the DFT queue and all archive checks; no production MD/TTM.
+
+### 2026-10-05 UTC: V15 trained and first blind screen FAIL
+
+- Training launcher exit0 confirmed; all epochs0-79 and Done present. MACE selected epoch74 by train/valid criteria. Frozen model SHA256 f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a; selection record uses one-based75 plus zero-based74 explicitly.
+- Reviewed B metric checks and fixed immediate derived-metric finiteness checks and selection-snapshot hash binding before evaluation.
+- First fresh registry screen completed: AgC energy0.8571meV/atom, vectorRMSE0.13528eV/A, separation0.38744eV/A; AgSi4.6344,0.31328,0.03630; AgTi1.3162,0.11751,0.35013. All energy gates pass, all force gates fail; only AgSi separation passes. Overall FAIL; no MD/TTM. Different V14/V15 probes are not a matched direct improvement comparison.
+- Published training logs/configs/models/checkpoint, frozen selection and evaluation/hash evidence. B assigned post-evaluation force localization with explicit inference authorization; no retraining or DFT by B yet.

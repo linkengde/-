@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """A runtime only: evaluate a frozen selected model; never select from blind scores."""
 import argparse
+from hashlib import sha256
 import csv
 import json
 from pathlib import Path
@@ -10,11 +11,14 @@ from preflight import checks, labels, sha, require, DRAFT
 GATES={'energy_MAE_meV_atom':10.,'force_vector_RMSE_eV_A':.05,'separating_force_max_abs_error_eV_A':.10}
 
 def aggregate(rows):
-    return {'structures':len(rows),'atoms':sum(r['atoms'] for r in rows),
+    metrics={'structures':len(rows),'atoms':sum(r['atoms'] for r in rows),
             'energy_MAE_meV_atom':float(np.mean([r['energy_abs_error_meV_atom'] for r in rows])),
             'force_vector_RMSE_eV_A':float(np.sqrt(sum(r['atoms']*r['force_vector_RMSE_eV_A']**2 for r in rows)/sum(r['atoms'] for r in rows))),
             'force_vector_max_error_eV_A':max(r['force_vector_max_error_eV_A'] for r in rows),
             'separating_force_max_abs_error_eV_A':max((r['separating_force_abs_error_eV_A'] for r in rows if r['separating_force_abs_error_eV_A'] is not None),default=None)}
+
+    require(all(value is None or np.isfinite(value) for value in metrics.values()),'Nonfinite aggregate metric')
+    return metrics
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
@@ -24,7 +28,9 @@ def main():
     require(out.is_relative_to(repo/DRAFT) and out!=repo/DRAFT,'Output must be V15 run child')
     require(not out.exists() or (out.is_dir() and not any(out.iterdir())),'Nonempty evaluation output refused')
     require(model.is_file(),'Selected model missing')
-    selection=json.loads(args.selection_record.read_text())
+    selection_bytes=args.selection_record.read_bytes()
+    selection_digest=sha256(selection_bytes).hexdigest()
+    selection=json.loads(selection_bytes)
     require(selection['model_sha256']==sha(model) and Path(selection['model_path']).resolve()==model,'Selected model/hash changed')
     require(selection['training_exit_code']==0 and selection['completed_epochs']==80 and 1<=selection['selected_epoch']<=80,'A must inspect 80-epoch completion and selection')
     require(selection['selection_uses_only_training_validation'] is True and selection['blind_labels_used_for_selection'] is False,'Blind selection forbidden')
@@ -61,6 +67,8 @@ def main():
                      'force_vector_max_error_eV_A':float(np.linalg.norm(delta,axis=1).max()),
                      'separating_force_reference_eV_A':radial_ref,'separating_force_prediction_eV_A':radial_pred,
                      'separating_force_abs_error_eV_A':radial_error})
+        derived=[rows[-1][key] for key in ['energy_abs_error_meV_atom','force_vector_RMSE_eV_A','force_vector_max_error_eV_A','separating_force_abs_error_eV_A'] if rows[-1][key] is not None]
+        require(all(np.isfinite(value) for value in derived),'Nonfinite derived metric: '+name)
     groups={role:aggregate([r for r in rows if r['role']==role]) for role in ['historical_regression','fresh_local_registry']}
     interfaces={}
     for kind in ['AgC','AgSi','AgTi']:
@@ -70,7 +78,8 @@ def main():
     # Even meeting narrow gates does not establish reliable transfer or production PASS.
     status='FAIL' if any(not x['provisional_gates_met'] for x in interfaces.values()) else 'UNDETERMINED'
     require(sha(model)==selection['model_sha256'],'Model changed during evaluation')
-    report={'model_path':str(model),'model_sha256':sha(model),'selection_record_sha256':sha(args.selection_record),
+    require(sha(args.selection_record)==selection_digest,'Selection record changed during evaluation')
+    report={'model_path':str(model),'model_sha256':sha(model),'selection_record_sha256':selection_digest,
             'thresholds':GATES,'per_structure':rows,'aggregate_by_role':groups,'by_interface':interfaces,
             'overall_status':status,'all_provisional_gates_met':all(x['provisional_gates_met'] for x in interfaces.values()),
             'limitations':'14 partial and 12 declared inherited rows lack complete original-run revalidation; physical-method consistency UNKNOWN. Historical test correlated; fresh registry probes share small-cluster motifs, not independent morphology/thermal validation. No MD/TTM authorization.'}

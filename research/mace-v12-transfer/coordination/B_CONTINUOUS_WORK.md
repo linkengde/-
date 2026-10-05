@@ -120,3 +120,25 @@ examples with synthetic arrays if needed; no model inference, reference label
 reads, training or GPAW. Report definite defects with reproduction and proposed
 patch separately from limitations. Never read V15 blind outputs, summaries or
 models. Publish report/compact checks/hashes and completion, then sync queue.
+
+## v15_force_error_localization — post-evaluation authorization
+
+A has finished 80 epochs, frozen model selection and scored all V15 probes once.
+This specific job now permits reading the published V15 selected model, selection
+record, completed evaluation and its already-scored reference labels, and CPU
+inference. Earlier preparation-only restrictions continue for other tasks.
+Write only reports/window-b/v15_force_error_localization/. Verify model/reference
+hashes. Reuse your historical localization method for the three fresh V15 probes:
+per-atom vector and Cartesian errors, species breakdown, contact-shell versus
+outside-shell RMSE with stated geometric cutoff, largest-error IDs/neighbors, and
+marked-pair projected contributions. Confirm the aggregate metrics reproduce A's
+published values within justified numerical tolerance. Compare V14/V15 patterns
+without treating different probes as a matched direct model comparison.
+
+Report AgSi's high vector RMSE but small marked-pair separation error distinctly.
+Suggest which existing wider-distance/registry candidates address observed local
+coverage gaps and which do not. V15 probe labels are no longer blind after scoring:
+if reused for future training, their future role must be acquisition/history, not
+new independent validation. Do not generate/tune a new model, inspect other unseen
+labels, start DFT/MD/TTM, modify production files, or claim validation PASS.
+Publish script, compact CSV/JSON/report/hash and completion, then sync queue.
