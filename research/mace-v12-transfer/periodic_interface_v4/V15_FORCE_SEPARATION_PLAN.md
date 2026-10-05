@@ -28,6 +28,8 @@ The V14 frozen AgTi test geometry is an exact train/test geometry duplicate. `Ag
 
 V14 has four legacy force-only LCAO training frames in total (two AgC and two AgTi); it has 31 training structures but only 27 energy labels. Treat these as a reference-consistency risk until their source settings and matched PW-PBE labels are audited. Do not use the duplicate AgTi frame as independent evidence of generalization. Keep all V14 files and scores unchanged as historical evidence; apply the corrections to v15 data and split design.
 
+The V9-V15 history report added at commit `c48ae13` conflates two AgTi structures in its independence note. `AgTi_registry_holdout_v14_01` is **not** an exact geometry duplicate of `AgTi_2p7A_LCAO`: it is derived from the frozen 2.70 Angstrom parent but uses a 2.60 Angstrom target contact; its nearest V14 training geometry has same-ID positional RMS 0.4153 Angstrom and maximum displacement 0.5746 Angstrom. The exact duplicate is instead the separate frozen-test frame `AgTi_2p70_periodic_PW_PBE_energy_force_holdout`, which exactly matches `AgTi_2p7A_LCAO`. The reported historical scores on the V14 registry holdout remain scores on a distinct geometry; its broader independence is still limited by shared parent-motif lineage and by unverified V9-V11 training membership.
+
 ## Changes for v15
 
 1. Finish and archive the existing three residual-targeted DFT labels. If verification passes, add them to v15 training only. Do not count them as validation or blind tests.
