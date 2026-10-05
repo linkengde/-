@@ -2,10 +2,10 @@
   "task_id": "window-b",
   "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-05T00:41:27.839368+00:00",
+  "updated_utc": "2026-10-05T00:42:56.952918+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "v14 dataset is published and audited; run residual localization, then the single assigned v14 training/evaluation cycle on B compute.",
+  "current_stage": "v13 force-error localization and the single v14 training/evaluation cycle are complete; v14 screen failed and results are ready for Window A review.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -37,14 +37,14 @@
     "AgC_registry_strain_acq_v14_01": "completed; SCF iteration 58; elapsed 2819s; updated 2026-10-04T17:07:37.869311+00:00",
     "AgSi_registry_strain_acq_v14_01": "completed; SCF iteration 49; elapsed 2573s; updated 2026-10-04T17:50:36.236674+00:00",
     "AgTi_registry_holdout_v14_01": "completed; SCF iteration 34; elapsed 2208s; updated 2026-10-04T18:28:37.689972+00:00",
-    "v13_force_localization": "completed; SCF iteration 1; updated 2026-10-05T00:10:00.701788+00:00",
-    "v14_training": "completed; SCF iteration 80; updated 2026-10-05T00:41:09.276372+00:00",
-    "v14_evaluation": "completed; SCF iteration 1; updated 2026-10-05T00:41:26.177952+00:00"
+    "v13_force_localization": "completed; five verified structures analyzed; report pushed; updated 2026-10-05T00:42:56.917328+00:00",
+    "v14_training": "completed; 80 epochs; selected checkpoint epoch 71; updated 2026-10-05T00:42:56.917328+00:00",
+    "v14_evaluation": "completed; SCREEN_FAIL; report pushed; updated 2026-10-05T00:42:56.917328+00:00"
   },
   "coordination_duties": "Do not repeat DFT. B owns v13 per-atom force residual localization and, after A publishes the verified isolated dataset, the single v14 training/evaluation run on B compute. A owns ongoing DFT, v14 data construction, main work log and global file manifest.",
-  "next_action": "Fetch main; run run_v13_force_localization.sh, then fetch main again and run run_v14_training_and_evaluation.sh exactly once.",
+  "next_action": "Window A reviews coordination/reports/window-b/v13_force_localization.md and mace_periodic_v14_interface_energy/results/v14_independent_holdout_comparison.json, then issues any next assignment. B must not retrain or start production MD/TTM without a new assignment.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
-    "v14": "pending verified dataset from A; window-b owns training and blind evaluation."
+    "v14": "One training run completed (80 epochs; selected checkpoint epoch 71). Independent holdout screen SCREEN_FAIL: energy MAE passes all interfaces, force-vector RMSE fails all three; see v14_independent_holdout_comparison.json."
   }
 }
