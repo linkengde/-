@@ -153,3 +153,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Ran `mace_periodic_v14_interface_energy/build_v14_dataset.py` after all three reserved v14 DFT holdouts had archive verification PASS. The v14 dataset contains 31/2/3 train/valid/test frames, 27/2/3 energy labels, 31/2/3 force labels, and energy-composition rank 4/4.
 - Independently checked train/valid/test hashes against `dataset_manifest.json`; the v13 validation and frozen test files are byte-identical. Confirmed all five acquisition labels were added to training, and all three v14 holdouts have PASS verification, matching output hashes, distinct geometry and blind/excluded roles. The builder's duplicate checks passed.
 - B's task is now ready: run the v13 per-atom residual-localization report, then train v14 once and evaluate it against the frozen test and all three independent holdouts. Training is assigned to B's separate cloud CPU; A will review the metrics and update the main log/manifest.
+
+
+### 2026-10-05 UTC: B residual report reviewed; v14 training underway
+
+- Reviewed `coordination/reports/window-b/v13_force_localization.md`. The largest interface-local residual is AgC strain acquisition (local force-vector RMSE 0.1606 eV/Å); AgC and AgSi registry holdouts also show elevated contact-separation errors. This is diagnostic evidence for follow-up sampling, not a validation pass.
+- B completed the localization report and started the single v14 CPU training run. The latest shared heartbeat observed during this update is epoch 22/80 at 2026-10-05T00:19:19Z; independent evaluation has not started. A has no active DFT or model-training process and will review the published evaluation before any v15 decision.
