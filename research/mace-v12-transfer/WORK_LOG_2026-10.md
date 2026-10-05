@@ -159,3 +159,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - Reviewed `coordination/reports/window-b/v13_force_localization.md`. The largest interface-local residual is AgC strain acquisition (local force-vector RMSE 0.1606 eV/Å); AgC and AgSi registry holdouts also show elevated contact-separation errors. This is diagnostic evidence for follow-up sampling, not a validation pass.
 - B completed the localization report and started the single v14 CPU training run. The latest shared heartbeat observed during this update is epoch 22/80 at 2026-10-05T00:19:19Z; independent evaluation has not started. A has no active DFT or model-training process and will review the published evaluation before any v15 decision.
+
+
+### 2026-10-05 UTC: A prepared residual-targeted v15 DFT candidates
+
+- Reviewed B’s v13 localization report and prepared one fixed-geometry DFT candidate for each Ag-C, Ag-Si and Ag-Ti interface, targeting local force-residual hotspots. The perturbations preserve atom counts and cell shapes, pass the protected-v14 geometry duplicate checks, and keep minimum pair distances above 1.75 Å.
+- The inputs and reproducible generator are in `periodic_interface_v4/pbe_interface_v15_targeted_acquisition/`. These labels are explicitly excluded from v14 train/validation/test and the three reserved holdouts. If used for v15 training, new blind geometries must be reserved.
+- A is starting the three four-rank PW-PBE single points while B trains v14 on its separate cloud CPU. No production MD/TTM is running.

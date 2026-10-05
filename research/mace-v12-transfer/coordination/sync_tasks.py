@@ -94,7 +94,8 @@ def publish(name, label):
     if label:
         if label not in task.get('labels', {}):
             raise SystemExit('Label is outside this task assignment: ' + label)
-        folder = REPO / task['result_directory'] / 'calculations' / label
+        result_directory = task.get('label_result_directories', {}).get(label, task['result_directory'])
+        folder = REPO / result_directory / 'calculations' / label
         summary = json.loads((folder / 'summary.json').read_text())
         if summary.get('scf_converged') is not True:
             raise SystemExit('Only converged, archive-verified labels may be marked completed.')

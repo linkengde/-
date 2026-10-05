@@ -2,42 +2,55 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-05T00:20:22+00:00",
+  "updated_utc": "2026-10-05T00:40:53+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "A completed and published both v14 blind DFT labels and the audited v14 dataset; A reviewed B’s v13 residual report and is monitoring B’s single v14 CPU training run. Latest shared B progress: epoch 22/80 at 2026-10-05T00:19:19Z.",
+  "current_stage": "A prepared three new residual-targeted Ag-C/Ag-Si/Ag-Ti PW-PBE acquisition candidates for v15; A is starting their fixed-geometry labels while B runs the single v14 CPU training. These new labels are excluded from v14 data and reserved tests.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_registry_holdout_v14_01": "complete; archive verification PASS",
-    "AgC_registry_holdout_v14_01": "complete; archive verification PASS"
+    "AgC_registry_holdout_v14_01": "complete; archive verification PASS",
+    "AgC_residual_shell_v15_01": "queued; residual-targeted v15 candidate DFT input is prepared.",
+    "AgSi_residual_shell_v15_01": "queued; residual-targeted v15 candidate DFT input is prepared.",
+    "AgTi_residual_shell_v15_01": "queued; residual-targeted v15 candidate DFT input is prepared."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
     "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
-    "v14": "single authorized MACE CPU training run active on B; latest shared status epoch 22/80 at 2026-10-05T00:19:19Z; frozen-test and three independent holdout evaluation pending."
+    "v14": "single authorized CPU training run active on B; independent frozen-test and three reserved-holdout evaluation pending."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
-    "AgSi_registry_holdout_v14_01": "completed"
+    "AgSi_registry_holdout_v14_01": "completed",
+    "AgC_residual_shell_v15_01": "queued",
+    "AgSi_residual_shell_v15_01": "queued",
+    "AgTi_residual_shell_v15_01": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
   "allowed_publish_paths": [
     "research/mace-v12-transfer/coordination/tasks/window-a.json",
     "research/mace-v12-transfer/coordination/progress/window-a.json",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts",
+    "coordination/sync_tasks.py",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition"
   ],
-  "coordination_duties": "A completed v14 blind DFT and dataset construction/audit; currently monitor B training, review the v14 evaluation, and maintain the main work log/global manifest.",
+  "coordination_duties": "A owns residual-targeted v15 candidate DFT acquisition, reviews B v14 evaluation, and maintains the global work log/manifest. B owns the single v14 training/evaluation cycle.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Monitor B training progress; after B publishes the completed checkpoint and evaluation, review per-interface errors against the provisional thresholds, record PASS/FAIL/UNDETERMINED, and decide whether targeted v15 data are needed.",
+  "next_action": "Run and archive the three residual-targeted DFT labels in parallel with B training; then review the v14 evaluation before deciding whether these labels enter v15 training.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-    "job": "review_B_v14_cycle",
-    "state": "running",
-    "iteration": 22,
+    "job": "AgC_residual_shell_v15_01",
+    "state": "queued",
+    "iteration": 0,
     "elapsed_s": null,
-    "note": "A DFT and dataset audit are complete; reviewed B residual report and monitoring B v14 training (latest shared epoch 22/80). No A compute process is active.",
-    "updated_utc": "2026-10-05T00:20:22+00:00"
+    "note": "Three v15 residual-targeted DFT candidates are prepared; A is starting the AgC label. They remain excluded from v14 training and holdouts.",
+    "updated_utc": "2026-10-05T00:40:53+00:00"
+  },
+  "label_result_directories": {
+    "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
+    "AgSi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
+    "AgTi_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition"
   }
 }
