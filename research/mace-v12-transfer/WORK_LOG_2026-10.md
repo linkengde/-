@@ -146,3 +146,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Rebalanced the two cloud windows after the original four B DFT labels completed: A owns the final DFT publication, v14 data construction/audit, main work log and global manifest. B now owns independent per-atom localization of v13 force errors and, after A publishes the gated dataset, the single v14 training and blind evaluation on B's separate compute. Do not rerun DFT or v12/v13 training.
 - Added a B residual-localization entry point that ranks atom force residuals, direction mismatch and nearest neighbors, and separates errors near the marked interface pair from the rest of each small-cell motif. This is diagnostic evidence for follow-up sampling, not another validation pass.
 - The B training entry point will refuse to run unless the v14 31/2/3 dataset, rank 4/4 energy composition, hashes and all three isolated holdout archives pass. A still must build and audit the dataset before sending B its second-stage command.
+
+
+### 2026-10-05 UTC: v14 dataset built and independently audited
+
+- Ran `mace_periodic_v14_interface_energy/build_v14_dataset.py` after all three reserved v14 DFT holdouts had archive verification PASS. The v14 dataset contains 31/2/3 train/valid/test frames, 27/2/3 energy labels, 31/2/3 force labels, and energy-composition rank 4/4.
+- Independently checked train/valid/test hashes against `dataset_manifest.json`; the v13 validation and frozen test files are byte-identical. Confirmed all five acquisition labels were added to training, and all three v14 holdouts have PASS verification, matching output hashes, distinct geometry and blind/excluded roles. The builder's duplicate checks passed.
+- B's task is now ready: run the v13 per-atom residual-localization report, then train v14 once and evaluate it against the frozen test and all three independent holdouts. Training is assigned to B's separate cloud CPU; A will review the metrics and update the main log/manifest.
