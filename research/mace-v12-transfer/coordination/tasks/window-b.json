@@ -5,7 +5,7 @@
   "updated_utc": "2026-10-05T10:55:29.980762+00:00",
   "requires_separate_instance_from": "window-a",
   "auto_complete_after_labels": false,
-  "current_stage": "All three queued report jobs completed and published: entry drafts, six-candidate priority batch, historical reference convention review; no calculations.",
+  "current_stage": "Three assistance stages completed; next acquisition execution-pack preparation queued.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -19,7 +19,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Write training/evaluation entry drafts only under reports/window-b/v15_training_evaluation_entry_draft/. Read integrated V15 train/valid/test and historical V14 scripts; do not read V15 blind outputs or run training/inference/DFT/MD/TTM.",
+  "task_boundary": "Prepare next acquisition pack only under reports/window-b/next_acquisition_execution_pack/. No DFT execution, blind-label access, production edits or ownership changes.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -51,10 +51,11 @@
     "v15_provenance_aware_builder_revision": "completed; SCF iteration 1; updated 2026-10-05T10:27:17.347360+00:00",
     "v15_training_evaluation_entry_draft": "completed; SCF iteration 1; updated 2026-10-05T10:49:34.273389+00:00",
     "v15_acquisition_batch_priority": "completed; SCF iteration 1; updated 2026-10-05T10:51:48.471787+00:00",
-    "v15_reference_convention_review": "completed; SCF iteration 1; updated 2026-10-05T10:54:57.287497+00:00"
+    "v15_reference_convention_review": "completed; SCF iteration 1; updated 2026-10-05T10:54:57.287497+00:00",
+    "next_acquisition_execution_pack": "queued; prepare six-candidate future DFT input/runner pack; launch disabled pending A review"
   },
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
-  "next_action": "Waiting for A to append a ready job to queued_work_order; synchronize main before taking the next assigned B report job. No A jobs or calculations claimed.",
+  "next_action": "Continue standing queue: next_acquisition_execution_pack; read B_CONTINUOUS_WORK.md.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
@@ -64,6 +65,7 @@
   "queued_work_order": [
     "v15_training_evaluation_entry_draft",
     "v15_acquisition_batch_priority",
-    "v15_reference_convention_review"
+    "v15_reference_convention_review",
+    "next_acquisition_execution_pack"
   ]
 }

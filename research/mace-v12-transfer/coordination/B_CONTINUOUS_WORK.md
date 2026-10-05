@@ -74,3 +74,35 @@ python3 research/mace-v12-transfer/coordination/sync_tasks.py publish window-b
 Progress `iteration` for these report jobs is a stage counter, not SCF iteration.
 Do not print credentials or upload large checkpoints. Existing B allowed paths
 remain in force. Keep main worklog/global manifest and A task untouched.
+
+## next_acquisition_execution_pack
+
+Prepare only under `reports/window-b/next_acquisition_execution_pack/`. Use the
+existing six selected candidates in batch_recommendation.json, preserving their
+exact bytes/hashes, IDs, cell/PBC and label absence. Rescreen these INPUT geometries
+against current committed train/valid/test, existing acquisition INPUTS, and frozen
+blind INPUTS only; record exact/near overlap and source inventory hashes. Do not
+read V15 blind labels, summaries, calculations or live A files. Do not regenerate
+candidates or change their geometry.
+
+Produce an input manifest and review-only DFT runner/archive drafts adapted from
+the existing targeted-acquisition workflow, with explicit root/output arguments
+and nonempty/active-job guards. Keep PW-PBE500/Gamma/Fermi0.1 settings for these
+same-motif cells, original energy convention and four MPI ranks. Record both
+native energy and free energy when supported, without changing the chosen REF
+convention. Include geometry/input/output hash, finite-label and convergence
+checks. Do not import or execute GPAW during pack preparation.
+
+Propose balanced future ownership: B three wider-distance candidates (AgC, AgSi,
+AgTi); A three registry candidates. This proposal does NOT claim jobs or change
+owner cards. Planned labels must be distinct from all existing IDs. Mark every
+planned calculation `blocked_pending_A_review_and_V15_screen`, with launch disabled
+until A publishes an explicit authorization/owner assignment. Do not create a
+self-authorization flag or executable shortcut that starts six jobs immediately.
+Actual production job integration/claims stay with A.
+
+Provide README, six input files, source manifest, duplicate/screening report,
+runner/archive drafts, readiness checklist and SHA256 list. No calculation,
+training/inference, MD/TTM, production edits or old artifact overwrite. Preserve
+all failure diagnostics. Publish this stage and continue the standing queue;
+if no assigned jobs remain, report waiting rather than repeating completed work.
