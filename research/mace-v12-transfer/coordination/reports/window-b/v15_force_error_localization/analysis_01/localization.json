@@ -1,0 +1,1525 @@
+{
+  "model_sha256": "f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a",
+  "runtime_versions": {
+    "torch": "2.5.1+cpu",
+    "mace-torch": "0.3.16",
+    "ase": "3.29.0"
+  },
+  "local_cutoff_A": 4.5,
+  "local_geometry": "minimum-image distance to either marked atom; direct cluster vector for separation, consistent with original scorer",
+  "reproduction_tolerances": {
+    "forces_eV_A": 1e-06,
+    "energy_eV_cell": 1e-06,
+    "justification": "CPU float64 and same selected model; small rounding/library-order tolerance, not gate relaxation"
+  },
+  "sources": [
+    {
+      "label": "AgC_registry_holdout_v15_01",
+      "atoms": 48,
+      "reference_sha256": "c96c495d4472ae4979ac5c146c8f48a408ca0895d9712f530832e7457f83dd88",
+      "all": {
+        "atoms": 48,
+        "force_vector_RMSE_eV_A": 0.13528201482610833,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.08196967030524108,
+          0.08491228529547924,
+          0.06612186091876585
+        ],
+        "force_error_SSE_share": 1.0
+      },
+      "local": {
+        "atoms": 30,
+        "force_vector_RMSE_eV_A": 0.15874550559842138,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.09390753565688724,
+          0.0996916082863419,
+          0.08026888271199153
+        ],
+        "force_error_SSE_share": 0.8606028272829066
+      },
+      "outside": {
+        "atoms": 18,
+        "force_vector_RMSE_eV_A": 0.08248052405426587,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.056742366693243826,
+          0.05160324840944191,
+          0.030338843483383067
+        ],
+        "force_error_SSE_share": 0.13939717271709323
+      },
+      "species": {
+        "Ag": {
+          "atoms": 2,
+          "force_vector_RMSE_eV_A": 0.2769613142868448,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.2391006717553581,
+            0.130691777512774,
+            0.04957920600599077
+          ],
+          "force_error_SSE_share": 0.17464125978397346
+        },
+        "C": {
+          "atoms": 13,
+          "force_vector_RMSE_eV_A": 0.14889690332924987,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.06776044863366028,
+            0.11267394560437753,
+            0.0698812664735467
+          ],
+          "force_error_SSE_share": 0.3280902470762968
+        },
+        "Si": {
+          "atoms": 10,
+          "force_vector_RMSE_eV_A": 0.036408264725743295,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.018588035264579836,
+            0.024270691347730647,
+            0.019773219941267354
+          ],
+          "force_error_SSE_share": 0.015089630229901346
+        },
+        "Ti": {
+          "atoms": 23,
+          "force_vector_RMSE_eV_A": 0.13570656185471527,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.07940831644991948,
+            0.07829510426091103,
+            0.07733347824707089
+          ],
+          "force_error_SSE_share": 0.4821788629098284
+        }
+      },
+      "max_force_error_eV_A": 0.38384223921782334,
+      "energy_error_meV_atom": 0.8571461347474477,
+      "marked_pair": {
+        "Ag_id": 688433,
+        "X_id": 604804,
+        "unit_Ag_to_X_direct_cluster": [
+          -0.6246975353617616,
+          -0.7512737951997549,
+          0.21293349656429678
+        ],
+        "DFT_separation_eV_A": -1.0212293355816424,
+        "MACE_separation_eV_A": -1.4086692442140982,
+        "signed_error_eV_A": -0.3874399086324558,
+        "abs_error_eV_A": 0.3874399086324558,
+        "atom_contributions": [
+          {
+            "id": 688433,
+            "element": "Ag",
+            "force_error_vector_eV_A": [
+              -0.32906689276712553,
+              0.18482578189795337,
+              0.06992335116505766
+            ],
+            "projected_error_along_Ag_to_X_eV_A": 0.08160153391860775,
+            "signed_contribution_to_separation_error_eV_A": -0.08160153391860775,
+            "transverse_error_norm_eV_A": 0.3750680661825037,
+            "total_vector_error_norm_eV_A": 0.38384223921782334
+          },
+          {
+            "id": 604804,
+            "element": "C",
+            "force_error_vector_eV_A": [
+              0.11738476862367367,
+              0.2997778857235355,
+              -0.034250736773804524
+            ],
+            "projected_error_along_Ag_to_X_eV_A": -0.30583837471384806,
+            "signed_contribution_to_separation_error_eV_A": -0.30583837471384806,
+            "transverse_error_norm_eV_A": 0.10621660037699768,
+            "total_vector_error_norm_eV_A": 0.32375774530234014
+          }
+        ]
+      },
+      "top_10_atom_errors": [
+        {
+          "id": 688433,
+          "index": 46,
+          "element": "Ag",
+          "force_error_norm_eV_A": 0.38384223921782334,
+          "force_error_vector_eV_A": [
+            -0.32906689276712553,
+            0.18482578189795337,
+            0.06992335116505766
+          ],
+          "distance_to_marked_contact_A": 0.0,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604804,
+              "element": "C",
+              "distance_A": 2.3658893886048586
+            },
+            {
+              "id": 604600,
+              "element": "Ti",
+              "distance_A": 2.602663001729525
+            },
+            {
+              "id": 604602,
+              "element": "C",
+              "distance_A": 2.629114765214537
+            },
+            {
+              "id": 602709,
+              "element": "Ti",
+              "distance_A": 2.6502117834910877
+            }
+          ]
+        },
+        {
+          "id": 604804,
+          "index": 40,
+          "element": "C",
+          "force_error_norm_eV_A": 0.32375774530234014,
+          "force_error_vector_eV_A": [
+            0.11738476862367367,
+            0.2997778857235355,
+            -0.034250736773804524
+          ],
+          "distance_to_marked_contact_A": 0.0,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604589,
+              "element": "Ti",
+              "distance_A": 1.9371144299373555
+            },
+            {
+              "id": 604796,
+              "element": "Ti",
+              "distance_A": 2.104735887853792
+            },
+            {
+              "id": 688433,
+              "element": "Ag",
+              "distance_A": 2.3658893886048586
+            },
+            {
+              "id": 604602,
+              "element": "C",
+              "distance_A": 2.422443461320726
+            }
+          ]
+        },
+        {
+          "id": 602709,
+          "index": 9,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.31508268471421336,
+          "force_error_vector_eV_A": [
+            -0.0989785246948506,
+            -0.15062100420223046,
+            0.258444699982528
+          ],
+          "distance_to_marked_contact_A": 2.6502117834910877,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 602722,
+              "element": "Si",
+              "distance_A": 2.458288246185545
+            },
+            {
+              "id": 602560,
+              "element": "Ti",
+              "distance_A": 2.578325933035992
+            },
+            {
+              "id": 688433,
+              "element": "Ag",
+              "distance_A": 2.6502117834910877
+            },
+            {
+              "id": 602717,
+              "element": "Si",
+              "distance_A": 2.853382743866251
+            }
+          ]
+        },
+        {
+          "id": 604602,
+          "index": 31,
+          "element": "C",
+          "force_error_norm_eV_A": 0.269515709005361,
+          "force_error_vector_eV_A": [
+            0.01785754771870035,
+            0.16636515902589788,
+            0.21128762209941324
+          ],
+          "distance_to_marked_contact_A": 2.422443461320726,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604590,
+              "element": "Ti",
+              "distance_A": 2.0229446169116727
+            },
+            {
+              "id": 604599,
+              "element": "Ti",
+              "distance_A": 2.0638559798518745
+            },
+            {
+              "id": 604600,
+              "element": "Ti",
+              "distance_A": 2.1511066947985933
+            },
+            {
+              "id": 604804,
+              "element": "C",
+              "distance_A": 2.422443461320726
+            }
+          ]
+        },
+        {
+          "id": 604589,
+          "index": 21,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.24108125139101438,
+          "force_error_vector_eV_A": [
+            0.09447753629106703,
+            -0.22133175473672795,
+            -0.014367298068478529
+          ],
+          "distance_to_marked_contact_A": 1.9371144299373555,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 602564,
+              "element": "C",
+              "distance_A": 1.8280959656007036
+            },
+            {
+              "id": 604592,
+              "element": "C",
+              "distance_A": 1.9119177530715639
+            },
+            {
+              "id": 604804,
+              "element": "C",
+              "distance_A": 1.9371144299373555
+            },
+            {
+              "id": 604587,
+              "element": "C",
+              "distance_A": 2.0886139568986546
+            }
+          ]
+        },
+        {
+          "id": 604600,
+          "index": 29,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.21459536421337463,
+          "force_error_vector_eV_A": [
+            -0.16338107644696342,
+            0.06544545209393782,
+            -0.1227790169415055
+          ],
+          "distance_to_marked_contact_A": 2.602663001729525,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604598,
+              "element": "C",
+              "distance_A": 2.098941449543988
+            },
+            {
+              "id": 604602,
+              "element": "C",
+              "distance_A": 2.1511066947985933
+            },
+            {
+              "id": 602568,
+              "element": "C",
+              "distance_A": 2.1656051191934234
+            },
+            {
+              "id": 604603,
+              "element": "C",
+              "distance_A": 2.216283270827745
+            }
+          ]
+        },
+        {
+          "id": 600768,
+          "index": 1,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.20526898118434603,
+          "force_error_vector_eV_A": [
+            0.17857946882649078,
+            -0.09072612629664578,
+            -0.04487201753111725
+          ],
+          "distance_to_marked_contact_A": 5.063791413108523,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 602720,
+              "element": "Ti",
+              "distance_A": 2.9108759150030608
+            },
+            {
+              "id": 751743,
+              "element": "Ag",
+              "distance_A": 2.924840497683264
+            },
+            {
+              "id": 602709,
+              "element": "Ti",
+              "distance_A": 3.8765029328778353
+            },
+            {
+              "id": 602560,
+              "element": "Ti",
+              "distance_A": 4.20184664877578
+            }
+          ]
+        },
+        {
+          "id": 602568,
+          "index": 6,
+          "element": "C",
+          "force_error_norm_eV_A": 0.19690768868055528,
+          "force_error_vector_eV_A": [
+            -0.13731577641533116,
+            0.1405931436397555,
+            0.012271241602394678
+          ],
+          "distance_to_marked_contact_A": 3.981112408021359,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604608,
+              "element": "Ti",
+              "distance_A": 2.0009014137269854
+            },
+            {
+              "id": 602569,
+              "element": "Ti",
+              "distance_A": 2.0290379669557765
+            },
+            {
+              "id": 604600,
+              "element": "Ti",
+              "distance_A": 2.1656051191934234
+            },
+            {
+              "id": 604603,
+              "element": "C",
+              "distance_A": 2.735630325155175
+            }
+          ]
+        },
+        {
+          "id": 604590,
+          "index": 22,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.19585395697264982,
+          "force_error_vector_eV_A": [
+            0.10235100958457677,
+            0.043590495642625626,
+            -0.16119215858252123
+          ],
+          "distance_to_marked_contact_A": 3.365068859631872,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 604587,
+              "element": "C",
+              "distance_A": 1.7413001819076432
+            },
+            {
+              "id": 604596,
+              "element": "C",
+              "distance_A": 1.8963071372352636
+            },
+            {
+              "id": 604602,
+              "element": "C",
+              "distance_A": 2.0229446169116727
+            },
+            {
+              "id": 602563,
+              "element": "C",
+              "distance_A": 2.0276696735670967
+            }
+          ]
+        },
+        {
+          "id": 602569,
+          "index": 7,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.18146939944725954,
+          "force_error_vector_eV_A": [
+            0.13637707659831583,
+            -0.11802441130466745,
+            -0.02006674488881599
+          ],
+          "distance_to_marked_contact_A": 3.3657542408819854,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 602568,
+              "element": "C",
+              "distance_A": 2.0290379669557765
+            },
+            {
+              "id": 602577,
+              "element": "C",
+              "distance_A": 2.3223654193098957
+            },
+            {
+              "id": 602728,
+              "element": "Si",
+              "distance_A": 2.7222851878473953
+            },
+            {
+              "id": 604805,
+              "element": "Ti",
+              "distance_A": 2.7533587769810075
+            }
+          ]
+        }
+      ],
+      "published_metric_abs_deltas": {
+        "force_vector_RMSE_eV_A": 3.3306690738754696e-16,
+        "force_vector_max_error_eV_A": 1.6653345369377348e-16,
+        "separating_force_abs_error_eV_A": 7.549516567451064e-15,
+        "energy_prediction_eV_cell": 0.0
+      },
+      "V14_pattern_context": {
+        "all_RMSE": 0.15366691264271926,
+        "local_RMSE": 0.17615659063725958,
+        "outside_RMSE": 0.09369242911542652,
+        "separation_abs_error": 0.061394615472253555,
+        "warning": "Different probes and trained models; not matched direct improvement/degradation evidence."
+      },
+      "existing_candidate_ids": [
+        "AgC_wide_distance_p0p35",
+        "AgC_wide_registry_p0p45"
+      ]
+    },
+    {
+      "label": "AgSi_registry_holdout_v15_01",
+      "atoms": 51,
+      "reference_sha256": "f44d8c6cec9368f43aad216ad2cf4a00c3bfb9974e84efd4d61f19963a11d465",
+      "all": {
+        "atoms": 51,
+        "force_vector_RMSE_eV_A": 0.31328263677672086,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.23938163336978832,
+          0.10633854231688107,
+          0.171856214693877
+        ],
+        "force_error_SSE_share": 1.0
+      },
+      "local": {
+        "atoms": 28,
+        "force_vector_RMSE_eV_A": 0.3862178428133051,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.297936119929859,
+          0.11096057443023719,
+          0.21928529697773932
+        ],
+        "force_error_SSE_share": 0.8344107142367488
+      },
+      "outside": {
+        "atoms": 23,
+        "force_vector_RMSE_eV_A": 0.18983383085905448,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.13784613389511882,
+          0.10042500782114347,
+          0.08336752672903486
+        ],
+        "force_error_SSE_share": 0.16558928576325133
+      },
+      "species": {
+        "Ag": {
+          "atoms": 17,
+          "force_vector_RMSE_eV_A": 0.37555510823742494,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.2928810136263136,
+            0.11917064319541279,
+            0.2026344220038607
+          ],
+          "force_error_SSE_share": 0.4790197740298547
+        },
+        "C": {
+          "atoms": 13,
+          "force_vector_RMSE_eV_A": 0.23789089923989823,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.1712913213184435,
+            0.11878526000971992,
+            0.11463605535158815
+          ],
+          "force_error_SSE_share": 0.1469793022408937
+        },
+        "Si": {
+          "atoms": 8,
+          "force_vector_RMSE_eV_A": 0.4265794148778002,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.33335626531652107,
+            0.10716384718369217,
+            0.2436380664602678
+          ],
+          "force_error_SSE_share": 0.29083518666508307
+        },
+        "Ti": {
+          "atoms": 13,
+          "force_vector_RMSE_eV_A": 0.17894598464870742,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.12209500488538287,
+            0.06792095643779111,
+            0.11180884974146478
+          ],
+          "force_error_SSE_share": 0.08316573706416869
+        }
+      },
+      "max_force_error_eV_A": 1.325495050283707,
+      "energy_error_meV_atom": 4.634390554286381,
+      "marked_pair": {
+        "Ag_id": 683609,
+        "X_id": 366934,
+        "unit_Ag_to_X_direct_cluster": [
+          0.06696860829604243,
+          -0.9705613644232989,
+          0.23135652874227605
+        ],
+        "DFT_separation_eV_A": 2.2796304522834205,
+        "MACE_separation_eV_A": 2.2433259448140546,
+        "signed_error_eV_A": -0.036304507469365976,
+        "abs_error_eV_A": 0.036304507469365976,
+        "atom_contributions": [
+          {
+            "id": 683609,
+            "element": "Ag",
+            "force_error_vector_eV_A": [
+              0.07732262254272354,
+              -0.025750260538088265,
+              -0.12863969686570917
+            ],
+            "projected_error_along_Ag_to_X_eV_A": 0.0004087626982796485,
+            "signed_contribution_to_separation_error_eV_A": -0.0004087626982796485,
+            "transverse_error_norm_eV_A": 0.1522821998705757,
+            "total_vector_error_norm_eV_A": 0.15228274847915463
+          },
+          {
+            "id": 366934,
+            "element": "Si",
+            "force_error_vector_eV_A": [
+              -0.889859072100859,
+              0.12604482572583642,
+              0.6311951415244237
+            ],
+            "projected_error_along_Ag_to_X_eV_A": -0.035895744771086605,
+            "signed_contribution_to_separation_error_eV_A": -0.035895744771086605,
+            "transverse_error_norm_eV_A": 1.0976589946262112,
+            "total_vector_error_norm_eV_A": 1.0982457707528381
+          }
+        ]
+      },
+      "top_10_atom_errors": [
+        {
+          "id": 685172,
+          "index": 35,
+          "element": "Ag",
+          "force_error_norm_eV_A": 1.325495050283707,
+          "force_error_vector_eV_A": [
+            1.0909452872870702,
+            0.17353846744511725,
+            -0.7325707534358297
+          ],
+          "distance_to_marked_contact_A": 2.000847243603418,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 366934,
+              "element": "Si",
+              "distance_A": 2.000847243603418
+            },
+            {
+              "id": 366936,
+              "element": "Si",
+              "distance_A": 2.3275291197175623
+            },
+            {
+              "id": 367117,
+              "element": "Ti",
+              "distance_A": 2.499246749030573
+            },
+            {
+              "id": 366935,
+              "element": "Ti",
+              "distance_A": 2.5872979003050016
+            }
+          ]
+        },
+        {
+          "id": 366934,
+          "index": 7,
+          "element": "Si",
+          "force_error_norm_eV_A": 1.0982457707528381,
+          "force_error_vector_eV_A": [
+            -0.889859072100859,
+            0.12604482572583642,
+            0.6311951415244237
+          ],
+          "distance_to_marked_contact_A": 0.0,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 685172,
+              "element": "Ag",
+              "distance_A": 2.000847243603418
+            },
+            {
+              "id": 366936,
+              "element": "Si",
+              "distance_A": 2.5203699726963014
+            },
+            {
+              "id": 683609,
+              "element": "Ag",
+              "distance_A": 2.5385150494466315
+            },
+            {
+              "id": 366935,
+              "element": "Ti",
+              "distance_A": 2.557862077998755
+            }
+          ]
+        },
+        {
+          "id": 730721,
+          "index": 44,
+          "element": "Ag",
+          "force_error_norm_eV_A": 0.544197730369762,
+          "force_error_vector_eV_A": [
+            -0.3887614138372898,
+            0.27643136752770864,
+            -0.2619187505651183
+          ],
+          "distance_to_marked_contact_A": 2.8515866416098263,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 368838,
+              "element": "C",
+              "distance_A": 2.5140700314518467
+            },
+            {
+              "id": 683609,
+              "element": "Ag",
+              "distance_A": 2.8515866416098263
+            },
+            {
+              "id": 737082,
+              "element": "Ag",
+              "distance_A": 2.869571442702026
+            },
+            {
+              "id": 710704,
+              "element": "Ag",
+              "distance_A": 2.8715093187512784
+            }
+          ]
+        },
+        {
+          "id": 368838,
+          "index": 27,
+          "element": "C",
+          "force_error_norm_eV_A": 0.4832533887779995,
+          "force_error_vector_eV_A": [
+            0.44149435122475444,
+            -0.17826890283569208,
+            0.08268478628993414
+          ],
+          "distance_to_marked_contact_A": 4.847674631489904,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 707313,
+              "element": "Ag",
+              "distance_A": 2.319966192237332
+            },
+            {
+              "id": 700029,
+              "element": "Ag",
+              "distance_A": 2.4963096029626692
+            },
+            {
+              "id": 730721,
+              "element": "Ag",
+              "distance_A": 2.5140700314518467
+            },
+            {
+              "id": 729574,
+              "element": "Ag",
+              "distance_A": 3.0808039309055544
+            }
+          ]
+        },
+        {
+          "id": 368645,
+          "index": 21,
+          "element": "C",
+          "force_error_norm_eV_A": 0.436156286126057,
+          "force_error_vector_eV_A": [
+            -0.30540503954890086,
+            -0.18101451042791622,
+            0.2533649832947541
+          ],
+          "distance_to_marked_contact_A": 5.09618656301879,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 735549,
+              "element": "Ag",
+              "distance_A": 1.9604788553975117
+            },
+            {
+              "id": 707313,
+              "element": "Ag",
+              "distance_A": 2.8233460658691736
+            },
+            {
+              "id": 368829,
+              "element": "C",
+              "distance_A": 2.8684936995545876
+            },
+            {
+              "id": 730721,
+              "element": "Ag",
+              "distance_A": 3.0763918104762507
+            }
+          ]
+        },
+        {
+          "id": 735549,
+          "index": 45,
+          "element": "Ag",
+          "force_error_norm_eV_A": 0.36575006249670194,
+          "force_error_vector_eV_A": [
+            0.22188261235337026,
+            0.28793798578500485,
+            0.04040953963681995
+          ],
+          "distance_to_marked_contact_A": 4.999175547540151,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 368645,
+              "element": "C",
+              "distance_A": 1.9604788553975117
+            },
+            {
+              "id": 710704,
+              "element": "Ag",
+              "distance_A": 2.8648109906385573
+            },
+            {
+              "id": 707313,
+              "element": "Ag",
+              "distance_A": 2.8695859083312527
+            },
+            {
+              "id": 730721,
+              "element": "Ag",
+              "distance_A": 2.8908006070296426
+            }
+          ]
+        },
+        {
+          "id": 368827,
+          "index": 23,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.3408765527448051,
+          "force_error_vector_eV_A": [
+            -0.2122277905174621,
+            0.02703383216881511,
+            -0.2653777704735769
+          ],
+          "distance_to_marked_contact_A": 3.644974831232437,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 368829,
+              "element": "C",
+              "distance_A": 2.104971796577551
+            },
+            {
+              "id": 366929,
+              "element": "Si",
+              "distance_A": 2.423634733686063
+            },
+            {
+              "id": 366933,
+              "element": "Si",
+              "distance_A": 2.430789068292144
+            },
+            {
+              "id": 368823,
+              "element": "Ti",
+              "distance_A": 2.640669791965095
+            }
+          ]
+        },
+        {
+          "id": 367111,
+          "index": 12,
+          "element": "C",
+          "force_error_norm_eV_A": 0.31271779746800676,
+          "force_error_vector_eV_A": [
+            0.122322258893712,
+            -0.18579298613030612,
+            0.21979684287351553
+          ],
+          "distance_to_marked_contact_A": 3.4921048876527325,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 365320,
+              "element": "Ti",
+              "distance_A": 2.0980759440508976
+            },
+            {
+              "id": 367117,
+              "element": "Ti",
+              "distance_A": 2.1135461599727265
+            },
+            {
+              "id": 366935,
+              "element": "Ti",
+              "distance_A": 2.1485774449522532
+            },
+            {
+              "id": 367113,
+              "element": "Ti",
+              "distance_A": 2.2015372100955344
+            }
+          ]
+        },
+        {
+          "id": 367117,
+          "index": 16,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.27402971142010235,
+          "force_error_vector_eV_A": [
+            -0.259353334661942,
+            0.06189728504259251,
+            -0.06322069791667406
+          ],
+          "distance_to_marked_contact_A": 2.9477838785865047,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 367111,
+              "element": "C",
+              "distance_A": 2.1135461599727265
+            },
+            {
+              "id": 685172,
+              "element": "Ag",
+              "distance_A": 2.499246749030573
+            },
+            {
+              "id": 367122,
+              "element": "C",
+              "distance_A": 2.5484719521793737
+            },
+            {
+              "id": 367113,
+              "element": "Ti",
+              "distance_A": 2.7017001810683388
+            }
+          ]
+        },
+        {
+          "id": 366929,
+          "index": 4,
+          "element": "Si",
+          "force_error_norm_eV_A": 0.2703805413584976,
+          "force_error_vector_eV_A": [
+            0.23034708924015002,
+            0.09659020100993754,
+            0.10351902575258543
+          ],
+          "distance_to_marked_contact_A": 3.4675699430207945,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 368827,
+              "element": "Ti",
+              "distance_A": 2.423634733686063
+            },
+            {
+              "id": 366933,
+              "element": "Si",
+              "distance_A": 2.4666703854945373
+            },
+            {
+              "id": 366936,
+              "element": "Si",
+              "distance_A": 2.508266695998769
+            },
+            {
+              "id": 366934,
+              "element": "Si",
+              "distance_A": 3.4675699430207945
+            }
+          ]
+        }
+      ],
+      "published_metric_abs_deltas": {
+        "force_vector_RMSE_eV_A": 3.885780586188048e-16,
+        "force_vector_max_error_eV_A": 1.9984014443252818e-15,
+        "separating_force_abs_error_eV_A": 8.881784197001252e-16,
+        "energy_prediction_eV_cell": 5.684341886080802e-14
+      },
+      "V14_pattern_context": {
+        "all_RMSE": 0.11782112404658075,
+        "local_RMSE": 0.1266028408798396,
+        "outside_RMSE": 0.10793283440391853,
+        "separation_abs_error": 0.23490006361997562,
+        "warning": "Different probes and trained models; not matched direct improvement/degradation evidence."
+      },
+      "existing_candidate_ids": [
+        "AgSi_wide_distance_p0p50",
+        "AgSi_wide_registry_m0p30"
+      ]
+    },
+    {
+      "label": "AgTi_registry_holdout_v15_01",
+      "atoms": 49,
+      "reference_sha256": "b2b3449bf30e3e42c4df0b61422e9f618a83054e0472988b14a741c88ee3e167",
+      "all": {
+        "atoms": 49,
+        "force_vector_RMSE_eV_A": 0.11751377427805651,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.0666266605666292,
+          0.06900528221536306,
+          0.06788701107863924
+        ],
+        "force_error_SSE_share": 1.0
+      },
+      "local": {
+        "atoms": 27,
+        "force_vector_RMSE_eV_A": 0.12868817678439576,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.06929711295379683,
+          0.08492831118685136,
+          0.06742209533461531
+        ],
+        "force_error_SSE_share": 0.6607960373629285
+      },
+      "outside": {
+        "atoms": 22,
+        "force_vector_RMSE_eV_A": 0.10214237063088716,
+        "Cartesian_component_RMSE_xyz_eV_A": [
+          0.06319524460462195,
+          0.04187569950520515,
+          0.06845327405178864
+        ],
+        "force_error_SSE_share": 0.3392039626370714
+      },
+      "species": {
+        "Ag": {
+          "atoms": 28,
+          "force_vector_RMSE_eV_A": 0.09568454986302327,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.03762124439109265,
+            0.06699662121919224,
+            0.05702304620210278
+          ],
+          "force_error_SSE_share": 0.37885065064564305
+        },
+        "C": {
+          "atoms": 11,
+          "force_vector_RMSE_eV_A": 0.1261952636475187,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.07741830250531911,
+            0.06263016853800124,
+            0.07751846872302894
+          ],
+          "force_error_SSE_share": 0.2588839734056426
+        },
+        "Si": {
+          "atoms": 1,
+          "force_vector_RMSE_eV_A": 0.07663720182185046,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.028203389886326757,
+            0.051704724067560714,
+            0.04903520175445686
+          ],
+          "force_error_SSE_share": 0.008679718665075949
+        },
+        "Ti": {
+          "atoms": 9,
+          "force_vector_RMSE_eV_A": 0.163047025547201,
+          "Cartesian_component_RMSE_xyz_eV_A": [
+            0.11113630159797434,
+            0.08288150843250464,
+            0.08581206539214842
+          ],
+          "force_error_SSE_share": 0.3535856572836383
+        }
+      },
+      "max_force_error_eV_A": 0.2932577917307219,
+      "energy_error_meV_atom": 1.3161534321899144,
+      "marked_pair": {
+        "Ag_id": 687247,
+        "X_id": 479027,
+        "unit_Ag_to_X_direct_cluster": [
+          -0.929920403939656,
+          0.35996837187796504,
+          -0.07530480452291355
+        ],
+        "DFT_separation_eV_A": 0.22772155443242728,
+        "MACE_separation_eV_A": -0.12240455826042884,
+        "signed_error_eV_A": -0.3501261126928561,
+        "abs_error_eV_A": 0.3501261126928561,
+        "atom_contributions": [
+          {
+            "id": 687247,
+            "element": "Ag",
+            "force_error_vector_eV_A": [
+              -0.0906523463198542,
+              0.0013451226039994171,
+              0.019699309164967926
+            ],
+            "projected_error_along_Ag_to_X_eV_A": 0.08330021547566997,
+            "signed_contribution_to_separation_error_eV_A": -0.08330021547566997,
+            "transverse_error_norm_eV_A": 0.040850876751895006,
+            "total_vector_error_norm_eV_A": 0.09277779922854153
+          },
+          {
+            "id": 479027,
+            "element": "Ti",
+            "force_error_vector_eV_A": [
+              0.24897309818194047,
+              -0.11886418400147436,
+              -0.09941747610017537
+            ],
+            "projected_error_along_Ag_to_X_eV_A": -0.2668258972171862,
+            "signed_contribution_to_separation_error_eV_A": -0.2668258972171862,
+            "transverse_error_norm_eV_A": 0.12167198931974063,
+            "total_vector_error_norm_eV_A": 0.2932577917307219
+          }
+        ]
+      },
+      "top_10_atom_errors": [
+        {
+          "id": 479027,
+          "index": 5,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.2932577917307219,
+          "force_error_vector_eV_A": [
+            0.24897309818194047,
+            -0.11886418400147436,
+            -0.09941747610017537
+          ],
+          "distance_to_marked_contact_A": 0.0,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 480805,
+              "element": "C",
+              "distance_A": 1.9646561542639767
+            },
+            {
+              "id": 479030,
+              "element": "C",
+              "distance_A": 2.056509408011863
+            },
+            {
+              "id": 687247,
+              "element": "Ag",
+              "distance_A": 2.6809843180532917
+            },
+            {
+              "id": 480810,
+              "element": "Ti",
+              "distance_A": 2.7221911018636655
+            }
+          ]
+        },
+        {
+          "id": 682693,
+          "index": 21,
+          "element": "Ag",
+          "force_error_norm_eV_A": 0.28718571770917434,
+          "force_error_vector_eV_A": [
+            -0.015362716639907181,
+            0.2822181246432336,
+            -0.05091712400000392
+          ],
+          "distance_to_marked_contact_A": 2.9549065764862306,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 480805,
+              "element": "C",
+              "distance_A": 2.6010709766527
+            },
+            {
+              "id": 686418,
+              "element": "Ag",
+              "distance_A": 2.8854316184406703
+            },
+            {
+              "id": 686309,
+              "element": "Ag",
+              "distance_A": 2.8943526010415352
+            },
+            {
+              "id": 720990,
+              "element": "Ag",
+              "distance_A": 2.8980251310785947
+            }
+          ]
+        },
+        {
+          "id": 701905,
+          "index": 41,
+          "element": "Ag",
+          "force_error_norm_eV_A": 0.2838093280983235,
+          "force_error_vector_eV_A": [
+            0.10083614796070134,
+            0.12197815080640603,
+            0.2355867922993966
+          ],
+          "distance_to_marked_contact_A": 4.712706520233429,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 480975,
+              "element": "C",
+              "distance_A": 2.1415933889324577
+            },
+            {
+              "id": 694331,
+              "element": "Ag",
+              "distance_A": 2.863600965893091
+            },
+            {
+              "id": 690927,
+              "element": "Ag",
+              "distance_A": 2.8843249640345223
+            },
+            {
+              "id": 480980,
+              "element": "Ti",
+              "distance_A": 3.1456234587491156
+            }
+          ]
+        },
+        {
+          "id": 480975,
+          "index": 19,
+          "element": "C",
+          "force_error_norm_eV_A": 0.2216756466053879,
+          "force_error_vector_eV_A": [
+            -0.03110413554348368,
+            -0.14946393713223083,
+            -0.16072696272543063
+          ],
+          "distance_to_marked_contact_A": 4.202856667518898,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 701905,
+              "element": "Ag",
+              "distance_A": 2.1415933889324577
+            },
+            {
+              "id": 480980,
+              "element": "Ti",
+              "distance_A": 2.2223378415131725
+            },
+            {
+              "id": 480974,
+              "element": "C",
+              "distance_A": 2.6645320884957187
+            },
+            {
+              "id": 694331,
+              "element": "Ag",
+              "distance_A": 3.0223302041960878
+            }
+          ]
+        },
+        {
+          "id": 479021,
+          "index": 4,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.20876384249296687,
+          "force_error_vector_eV_A": [
+            0.0906236484344567,
+            -0.18525848990165494,
+            0.032388087257735565
+          ],
+          "distance_to_marked_contact_A": 3.005196538773012,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 480798,
+              "element": "C",
+              "distance_A": 1.9669306135475764
+            },
+            {
+              "id": 480807,
+              "element": "C",
+              "distance_A": 2.0589249307725503
+            },
+            {
+              "id": 478831,
+              "element": "C",
+              "distance_A": 2.198926369481286
+            },
+            {
+              "id": 480805,
+              "element": "C",
+              "distance_A": 2.361058277732741
+            }
+          ]
+        },
+        {
+          "id": 480812,
+          "index": 16,
+          "element": "Ti",
+          "force_error_norm_eV_A": 0.18127283962624546,
+          "force_error_vector_eV_A": [
+            -0.013178553498040868,
+            0.028490616913896344,
+            -0.178534178413343
+          ],
+          "distance_to_marked_contact_A": 3.140817251985049,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 479030,
+              "element": "C",
+              "distance_A": 2.164176577342868
+            },
+            {
+              "id": 480811,
+              "element": "Ti",
+              "distance_A": 2.7079680494045095
+            },
+            {
+              "id": 480810,
+              "element": "Ti",
+              "distance_A": 2.7666305940547447
+            },
+            {
+              "id": 479028,
+              "element": "Ti",
+              "distance_A": 2.972122865580032
+            }
+          ]
+        },
+        {
+          "id": 480798,
+          "index": 9,
+          "element": "C",
+          "force_error_norm_eV_A": 0.16425116500711423,
+          "force_error_vector_eV_A": [
+            0.13639777689457167,
+            -0.010200681821373014,
+            0.09093974793670823
+          ],
+          "distance_to_marked_contact_A": 4.577502766010515,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 479021,
+              "element": "Ti",
+              "distance_A": 1.9669306135475764
+            },
+            {
+              "id": 480801,
+              "element": "Ti",
+              "distance_A": 2.491484589968112
+            },
+            {
+              "id": 480807,
+              "element": "C",
+              "distance_A": 2.6036924980955662
+            },
+            {
+              "id": 480805,
+              "element": "C",
+              "distance_A": 3.130114281837918
+            }
+          ]
+        },
+        {
+          "id": 480802,
+          "index": 11,
+          "element": "C",
+          "force_error_norm_eV_A": 0.15147240087143599,
+          "force_error_vector_eV_A": [
+            0.10237339290229547,
+            -0.02686211494954227,
+            0.1083605252472819
+          ],
+          "distance_to_marked_contact_A": 5.213721101477046,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 480974,
+              "element": "C",
+              "distance_A": 2.1910630069166923
+            },
+            {
+              "id": 480801,
+              "element": "Ti",
+              "distance_A": 2.5885202587139124
+            },
+            {
+              "id": 682693,
+              "element": "Ag",
+              "distance_A": 3.174949774130696
+            },
+            {
+              "id": 741114,
+              "element": "Ag",
+              "distance_A": 3.2344351024837965
+            }
+          ]
+        },
+        {
+          "id": 478831,
+          "index": 0,
+          "element": "C",
+          "force_error_norm_eV_A": 0.13957473754882893,
+          "force_error_vector_eV_A": [
+            -0.13898942687674443,
+            -0.012731946884524614,
+            0.000971651598174833
+          ],
+          "distance_to_marked_contact_A": 4.674273227973479,
+          "local": false,
+          "neighbors": [
+            {
+              "id": 479021,
+              "element": "Ti",
+              "distance_A": 2.198926369481286
+            },
+            {
+              "id": 478840,
+              "element": "Ti",
+              "distance_A": 2.3521236303685877
+            },
+            {
+              "id": 480807,
+              "element": "C",
+              "distance_A": 3.0338651191106223
+            },
+            {
+              "id": 480798,
+              "element": "C",
+              "distance_A": 3.1924971845509273
+            }
+          ]
+        },
+        {
+          "id": 480805,
+          "index": 12,
+          "element": "C",
+          "force_error_norm_eV_A": 0.1315214206718241,
+          "force_error_vector_eV_A": [
+            -0.07054018659879602,
+            -0.0028168211150216838,
+            -0.11096860677213138
+          ],
+          "distance_to_marked_contact_A": 1.9646561542639767,
+          "local": true,
+          "neighbors": [
+            {
+              "id": 479027,
+              "element": "Ti",
+              "distance_A": 1.9646561542639767
+            },
+            {
+              "id": 480810,
+              "element": "Ti",
+              "distance_A": 2.1259968013384323
+            },
+            {
+              "id": 480801,
+              "element": "Ti",
+              "distance_A": 2.238556587310506
+            },
+            {
+              "id": 479021,
+              "element": "Ti",
+              "distance_A": 2.361058277732741
+            }
+          ]
+        }
+      ],
+      "published_metric_abs_deltas": {
+        "force_vector_RMSE_eV_A": 4.163336342344337e-16,
+        "force_vector_max_error_eV_A": 4.440892098500626e-16,
+        "separating_force_abs_error_eV_A": 4.440892098500626e-16,
+        "energy_prediction_eV_cell": 0.0
+      },
+      "V14_pattern_context": {
+        "all_RMSE": 0.14660567659012905,
+        "local_RMSE": 0.17752865798042197,
+        "outside_RMSE": 0.08342412369586709,
+        "separation_abs_error": 0.1926052074822161,
+        "warning": "Different probes and trained models; not matched direct improvement/degradation evidence."
+      },
+      "existing_candidate_ids": [
+        "AgTi_wide_distance_p0p35",
+        "AgTi_wide_registry_p0p45"
+      ]
+    }
+  ],
+  "input_sha256": {
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/selected_model_record.json": "2aa414226837cd95d90f9e18c42844460c4c20ed302024d4aab16caed178ddd4",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluation_01/evaluation.json": "12746c827e0d1f9f953addc09bd73ef829c7da009eec2e415593e3073e318dc1",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/checkpoints/MACE_periodic_v15_interface_energy_run-45.model": "f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/evaluation_01/SHA256SUMS.txt": "e8b9db912d1342140fef54fdf46b02bb4928a3eb5c62f5ac567899e468717bce",
+    "research/mace-v12-transfer/coordination/reports/window-b/v14_force_localization.json": "59a9f17c0170a8310011f95da376df791b493d89204ee45f474230c0b1f20106",
+    "research/mace-v12-transfer/coordination/reports/window-b/analyze_v14_force_localization.py": "82308a75ffd8e61e04bda03d6efc8fcf4ca133282437c08b7b3e11d9fafa5cac",
+    "research/mace-v12-transfer/coordination/reports/window-b/v15_acquisition_batch_priority/batch_recommendation.json": "522dcbde894b4f7846ff5c8e875bdc4cc5ddc6092ac457db6e7dded7e85ec350",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/input_manifest.json": "efa2f79fefff53aa53e6404896ea75d6e6be655a788520e8331e735a77ef30fd",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/verification.json": "621c05963591230227b287286af3a6ec515e67e7c2d8b2fd09492aa0fb83a650",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/summary.json": "f727e79e071672b2af5525b96ac7e58420b5a75197ffb944facd84c33639ad63",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/progress.json": "98d16fc02f3fcbd6ae8c8be6227cd440246b3dc1f3b3e5a37f4d3c5f6d0ecf2f",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/AgC_registry_holdout_v15_01_PW_PBE.extxyz": "c96c495d4472ae4979ac5c146c8f48a408ca0895d9712f530832e7457f83dd88",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgC_registry_holdout_v15_01/gpaw.log": "64e42b89c75f0ebab70d7db6b52ce6ca9d12907b91d97609a2d838d1b5f912f4",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgC_registry_holdout_v15_01.extxyz": "f528a051246a1a89546da6f55ee3e3b66222cd08caefca039d77989049d25135",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/verification.json": "7f93a2fbdb56dd59ccc83b8749b025c3429fa2eb8f367e3d4def5b6ab04e2976",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/summary.json": "f3741eeead6e898d1f5b184d28a420b98e05459e3ebdf9bebd821dcd9e975259",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/progress.json": "d9d044f4a3e69ad973f823845f887d3ed8a4f1661e641c7da4348ecf095d6582",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/AgSi_registry_holdout_v15_01_PW_PBE.extxyz": "f44d8c6cec9368f43aad216ad2cf4a00c3bfb9974e84efd4d61f19963a11d465",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgSi_registry_holdout_v15_01/gpaw.log": "b0ac997d40244301e95dad7c187da1b1e1188fbfef6189d6b3db25d94e939e7e",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgSi_registry_holdout_v15_01.extxyz": "95e9980d1a2671c97865c17e3a49bda9278376d5ff550495f28802b4f84b5b70",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/verification.json": "59bc81c80ca02796e0dd6b5e70e78188f24ec81aafd5b7155c33f98e524a5cf8",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/summary.json": "f1ec557deaf37ec0e64df4c0cbc7f66530225fdfb5e47affadaa11f21ea878a2",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/progress.json": "b0ce8eae1bd8e38499146e02e0cad895b111db15d329a00136b0f46c9e1082db",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/AgTi_registry_holdout_v15_01_PW_PBE.extxyz": "b2b3449bf30e3e42c4df0b61422e9f618a83054e0472988b14a741c88ee3e167",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/calculations/AgTi_registry_holdout_v15_01/gpaw.log": "94df0d42fde97e8623a416b0bcdf2c34747243e8bb6a4c7ec65b9f1f24402f97",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgTi_registry_holdout_v15_01.extxyz": "0291123e4f6db7f1f4f5e4291366048fec2fb0b7bacbf922836b16878e7b929e"
+  },
+  "scope": "Post-hoc localization of three already-scored V15 references; no new validation, model selection, training, DFT or MD/TTM. Scores remain FAIL; future reuse of scored probes is acquisition/history, not unseen validation.",
+  "aggregate_metric_reproduction": {
+    "force_vector_RMSE_eV_A": 0.2105425766725377,
+    "energy_MAE_meV_atom": 2.269230040407914,
+    "separating_force_max_abs_error_eV_A": 0.3874399086324558,
+    "force_vector_max_error_eV_A": 1.325495050283707,
+    "absolute_deltas": {
+      "force_vector_RMSE_eV_A": 5.551115123125783e-17,
+      "energy_MAE_meV_atom": 3.7125857943465235e-13,
+      "separating_force_max_abs_error_eV_A": 7.549516567451064e-15,
+      "force_vector_max_error_eV_A": 1.9984014443252818e-15
+    }
+  }
+}
