@@ -162,3 +162,25 @@ state.gpw local. Stop on SCF/verification/ownership/environment failure with
 diagnostics. No A registry labels, dataset edits, training, MD/TTM. Complete job
 state only after all three assigned archives pass and publish; then sync queue.
 These are future training acquisitions, not new blind tests.
+
+## v16_unseen_validation_geometry_design
+
+After assigned acquisitions finish (or alongside running DFT only if it does not
+compete for MPI/CPU resources), prepare label-free proposals under
+reports/window-b/v16_unseen_validation_geometry_design/. Need a withheld validation
+set distinct from the six training acquisitions and all scored V15 probes. Read
+committed geometries and historical localization only. Never use unseen DFT labels.
+
+Propose one candidate per AgC/AgSi/AgTi with a new registry/environment combination;
+prioritize transverse Ag/Si response and framework-neighbor coverage based on
+observed errors. Screen species-aware contacts and periodic geometry; preserve
+original IDs/order/cell/PBC where applicable, no energy/force fields. Compare exact
+and near geometries against all current train/valid/test and planned acquisition
+INPUTS. Record construction axes, parent lineage, species minima, ID displacements
+and every source hash. A freezes accepted candidates before V16 training; DFT
+label calculation requires separate explicit owner assignment. Do not claim motif
+independence if inherited from existing small-cluster parents. Explain remaining
+morphology/thermal coverage limits. No candidate receives a training role silently.
+If no suitable distinct inputs can be produced, publish the geometric blocker and
+required new parent source, not a false independence claim. No new DFT/model
+training/inference/MD/TTM under this design job. Publish report/manifest/hashes.
