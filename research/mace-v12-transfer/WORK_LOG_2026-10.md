@@ -130,3 +130,19 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Evaluation artifacts: `mace_periodic_v13_interface_energy/results/v13_independent_holdout_comparison.{json,csv}`. The JSON records v9-v13 model hashes and per-structure errors.
 - Started A's two reserved v14 blind DFT labels with four MPI ranks after confirming there were no existing runs or outputs: `AgC_registry_holdout_v14_01` is running and `AgSi_registry_holdout_v14_01` is queued. Their labels stay out of v14 training and model selection. Progress is published to `coordination/progress/window-a.json`.
 - Next: finish and verify both reserved labels, build v14 from the five scored acquisition labels, keep all three reserved labels outside training, verify the dataset gates, then train/evaluate v14 against those holdouts.
+
+
+### 2026-10-04 23:45 UTC: A v14 blind labels complete; B task rebalanced
+
+- A's `AgSi_registry_holdout_v14_01` converged in 47 PW-PBE SCF iterations with four MPI ranks; energy -204.7159976569 eV/cell. The archive verifier passed every check (input/output hashes, geometry, IDs, PBC, finite energy/forces, summary and log); `state.gpw` is not in the archive. Together with the earlier AgC holdout and B's AgTi holdout, all three v14 blind labels are now available.
+- Rebalanced the two cloud windows after the original four B DFT labels completed: A owns the remaining DFT result publication, v14 dataset construction/audit, main work log and global manifest. B now owns an independent per-atom localization of v13 force errors and, once A publishes the validated dataset, the single v14 training and blind evaluation run on B's separate compute. Do not rerun DFT or v12/v13 training.
+- Added a B residual-localization entry point that ranks atom force residuals, direction mismatch and nearby atoms, and separates errors near the marked interface pair from the rest of each small-cell motif. This is diagnostic evidence for follow-up sampling, not another validation pass.
+- The B training entry point will refuse to run unless the v14 31/2/3 dataset, rank 4/4 energy composition, hashes and all three isolated holdout archives pass. A still must run the dataset builder and audit before sending B its second-stage command.
+
+
+### 2026-10-04 23:45 UTC: A v14 blind labels complete; B task rebalanced
+
+- A's `AgSi_registry_holdout_v14_01` converged in 47 PW-PBE SCF iterations with four MPI ranks; energy -204.7159976569 eV/cell. The archive verifier passed every check (input/output hashes, geometry, IDs, PBC, finite energy/forces, summary and log); `state.gpw` is not in the archive. Together with the earlier AgC holdout and B's AgTi holdout, all three v14 blind labels are locally available.
+- Rebalanced the two cloud windows after the original four B DFT labels completed: A owns the final DFT publication, v14 data construction/audit, main work log and global manifest. B now owns independent per-atom localization of v13 force errors and, after A publishes the gated dataset, the single v14 training and blind evaluation on B's separate compute. Do not rerun DFT or v12/v13 training.
+- Added a B residual-localization entry point that ranks atom force residuals, direction mismatch and nearest neighbors, and separates errors near the marked interface pair from the rest of each small-cell motif. This is diagnostic evidence for follow-up sampling, not another validation pass.
+- The B training entry point will refuse to run unless the v14 31/2/3 dataset, rank 4/4 energy composition, hashes and all three isolated holdout archives pass. A still must build and audit the dataset before sending B its second-stage command.

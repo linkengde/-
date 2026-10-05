@@ -1,11 +1,11 @@
 {
   "task_id": "window-b",
-  "status": "completed",
+  "status": "running",
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "updated_utc": "2026-10-04T18:28:41.745563+00:00",
+  "updated_utc": "2026-10-04T23:57:56.734637+00:00",
   "requires_separate_instance_from": "window-a",
-  "auto_complete_after_labels": true,
-  "current_stage": "All four assigned labels converged, passed archive verification, and were published to main; window-b task complete.",
+  "auto_complete_after_labels": false,
+  "current_stage": "Four DFT labels complete. New assignment: localize v13 force residuals; then own one v14 training/evaluation cycle after A publishes the gated dataset.",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -15,9 +15,11 @@
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
   "allowed_publish_paths": [
     "research/mace-v12-transfer/coordination/tasks/window-b.json",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition"
+    "research/mace-v12-transfer/coordination/reports/window-b",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy"
   ],
-  "task_boundary": "Do not repeat window-a DFT or train models. Do not modify the global work log/file_manifest.json.",
+  "task_boundary": "Do not repeat completed DFT; do not modify v14 data or blind holdouts; do not modify the global work log/file_manifest.json; do not run production MD/TTM.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -34,6 +36,15 @@
     "AgTi_registry_probe_v13_01": "completed; SCF iteration 38; elapsed 2691s; updated 2026-10-04T16:20:00.894244+00:00",
     "AgC_registry_strain_acq_v14_01": "completed; SCF iteration 58; elapsed 2819s; updated 2026-10-04T17:07:37.869311+00:00",
     "AgSi_registry_strain_acq_v14_01": "completed; SCF iteration 49; elapsed 2573s; updated 2026-10-04T17:50:36.236674+00:00",
-    "AgTi_registry_holdout_v14_01": "completed; SCF iteration 34; elapsed 2208s; updated 2026-10-04T18:28:37.689972+00:00"
+    "AgTi_registry_holdout_v14_01": "completed; SCF iteration 34; elapsed 2208s; updated 2026-10-04T18:28:37.689972+00:00",
+    "v13_force_localization": "queued; use verified v13 DFT acquisition labels to localize residual atoms/neighbors.",
+    "v14_training": "blocked until A publishes and audits the v14 dataset.",
+    "v14_evaluation": "queued after the single v14 training run."
+  },
+  "coordination_duties": "Do not repeat DFT. B owns v13 per-atom force residual localization and, after A publishes the verified isolated dataset, the single v14 training/evaluation run on B compute. A owns ongoing DFT, v14 data construction, main work log and global file manifest.",
+  "next_action": "Pull main and run coordination/reports/window-b/run_v13_force_localization.sh. After A publishes mace_periodic_v14_interface_energy/data/dataset_manifest.json, pull main and run run_v14_training_and_evaluation.sh exactly once.",
+  "models": {
+    "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
+    "v14": "pending verified dataset from A; window-b owns training and blind evaluation."
   }
 }
