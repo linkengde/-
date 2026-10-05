@@ -141,7 +141,10 @@ def publish(name, label):
     if forbidden:
         raise SystemExit('Preserve changes outside this task; do not publish them: ' + ', '.join(forbidden))
     save_task(name, task)
-    add_paths = [*prefixes]
+    # Some task cards list future publish directories that do not exist yet.
+    # `git add` treats a missing pathspec as fatal, which would block publishing
+    # otherwise valid results. Stage only paths that exist in this checkout.
+    add_paths = [p for p in prefixes if (REPO / p).exists()]
     if (REPO / progress_rel).is_file():
         add_paths.append(progress_rel)
     git('add', '--', *add_paths)
