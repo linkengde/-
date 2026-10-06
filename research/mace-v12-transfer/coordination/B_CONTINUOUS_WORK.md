@@ -324,3 +324,37 @@ and archives; no duplicate launches; verify/publish each completed compact resul
 Stop with diagnostics on SCF/hash/owner/environment failure. No V17 training/model
 selection/MD/TTM under this job. Compare paired labels only after both owners publish
 verified results and A gives analysis assignment. Continue standing queue.
+
+## v17_paired_response_analysis
+
+Dependency: all eight A/B V17 diagnostic archives verified and published. If A's
+queue is unfinished, preserve waiting status and proceed only to independent
+geometry preparation below if useful; do not invent missing results. Write
+reports/window-b/v17_paired_response_analysis/. Match +/- controls by parent
+hash/IDs and axis, compare DFT native/free energies separately, force vectors,
+marked separation projections, transverse/longitudinal and neighboring framework
+response. Run frozen V16 inference on these diagnostic acquisitions/parents to
+identify directional sensitivity errors. No new model selection or retraining.
+Central finite differences at0.04/0.15A are approximate, not proof of infinitesimal
+energy-force consistency; energy convention/smearing caveats explicit. Verify
+source hashes/identity and reproduce parent-control force convention. Recommend
+which labels can enter V17 versus require source/method review. Publish CSV/JSON,
+report/script/hashes. No fresh unseen test-label reads, DFT/MD/TTM.
+
+## v17_split_geometry_design
+
+Write reports/window-b/v17_split_geometry_design/. Prepare label-free candidates
+with explicit roles frozen BEFORE V17 training: at least one new development
+validation geometry per interface, and two withheld-test geometries per interface
+where valid geometries can be supported. Development validation and test must be
+separate geometric sets; new test labels must stay out of checkpoint/parameter
+selection. Existing V16 probes are scored diagnostic/history, never fresh tests.
+Include combined transverse/local-framework directions and species-aware geometry
+screens where feasible; compare exact/near geometry against all35 V16 train rows,
+eight planned V17 training inputs, old splits and scored-probe inputs. Do not
+relabel a near-parent point independent or weaken duplicate thresholds to claim
+novelty. Distinguish parent-motif correlation from input-geometry isolation. If
+current motifs cannot yield adequate samples, document blocker and new parent
+structure needed. No DFT until A reviews/freezes and assigns owners. No unseen
+label reads, inference/training or production edits for this design task.
+Publish role manifest, geometries, source/hash inventory, screening and limits.
