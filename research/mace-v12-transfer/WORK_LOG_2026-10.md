@@ -273,3 +273,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Strongest observed error mode is transverse/local-neighbor response, especially AgSi. Provenance uncertainty remains a risk without proof it caused these probe errors. Metric/order/PBC checks on these references passed. No evidence justifies blindly increasing force weight/epochs; preserve controlled recipe for the next reviewed data cycle.
 - Independently rechecked all three B V16 distance archives: declared hashes, convergence, geometry/ID order, cell/PBC, finite forces and summary energy pass. A AgSi registry calculation is active (latest inspected SCF5), AgTi queued.
 - B is designing new withheld geometries. Added subsequent geometry-only paired transverse/framework training-acquisition design, with roles and proposed scales explicitly separated; no extra DFT or model run authorized under that design job.
+
+### 2026-10-06 Beijing: three new V16 local-registry holdouts frozen for B DFT
+
+- Reviewed B final candidate manifest/contact audit and package hashes. Independently checked identity, unchanged framework, label absence and no near overlap against V15 training, six V16 acquisitions and scored V15 holdout inputs using separate Ag/framework RMS rule.
+- Preserved three candidate bytes/hashes in pbe_interface_v16_blind_holdouts, assigned B four-rank DFT. Frozen before V16 model training; all labels excluded from training/validation/model selection. These remain inherited small-cluster motifs, not independent morphology or thermal tests.
+- A AgTi final training acquisition remains active; no V16 training yet. B now has executable DFT/archive tasks via standing queue without per-task user forwarding.

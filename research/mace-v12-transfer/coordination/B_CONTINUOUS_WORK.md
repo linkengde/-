@@ -251,3 +251,20 @@ strip labels, screen against all training/acquisition/frozen validation INPUTS.
 Never mix these training proposals with the newly withheld geometry role; do not
 read unseen labels or change frozen files. Publish report/manifest/hashes. No DFT,
 training/inference or production edits under this job; A decides labels and timing.
+
+## v16_blind_holdout_dft — execute after A freeze
+
+A has independently reviewed and frozen three input hashes in
+pbe_interface_v16_blind_holdouts/input_manifest.json and assigned them to B.
+Use the registered B four-rank GPAW environment; execute:
+
+```bash
+bash research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts/run_assigned_labels.sh
+```
+
+This authorizes DFT/archive integrity checks and compact publication only.
+No model inference on these references, label use in training/validation or
+parameter/checkpoint selection. Existing jobs/outputs preserved, no duplicate
+launch; pause on convergence/hash/owner/runtime failure. Four MPI ranks and
+one BLAS thread each; no concurrent training. Publish each completed archive;
+mark this job complete only after all three verify. Continue standing queue.

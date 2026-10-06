@@ -13,17 +13,21 @@
     "AgTi_registry_holdout_v14_01": "completed",
     "AgC_widespan_distance_acq_v16_01": "completed",
     "AgSi_widespan_distance_acq_v16_01": "completed",
-    "AgTi_widespan_distance_acq_v16_01": "completed"
+    "AgTi_widespan_distance_acq_v16_01": "completed",
+    "AgC_registry_holdout_v16_01": "queued",
+    "AgSi_registry_holdout_v16_01": "queued",
+    "AgTi_registry_holdout_v16_01": "queued"
   },
-  "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition",
+  "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts",
   "allowed_publish_paths": [
     "research/mace-v12-transfer/coordination/tasks/window-b.json",
     "research/mace-v12-transfer/coordination/reports/window-b",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts"
   ],
-  "task_boundary": "Run B-owned V16 distance DFT only in pbe_interface_v16_parallel_acquisition. Preserve other jobs and production datasets/models; no training/MD/TTM.",
+  "task_boundary": "Calculate only B-owned frozen V16 holdouts; publish verified compact archives. No production dataset/model edits, no inference on these holdouts before frozen V16 selection.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -65,10 +69,14 @@
     "v16_distance_dft_acquisition": "completed; SCF iteration 1; updated 2026-10-05T16:57:19.212367+00:00",
     "v16_unseen_validation_geometry_design": "completed; SCF iteration 1; updated 2026-10-05T23:55:15.333246+00:00",
     "force_separation_driver_diagnosis": "completed; SCF iteration 1; updated 2026-10-05T23:47:27.344995+00:00",
-    "targeted_transverse_framework_design": "completed; SCF iteration 1; updated 2026-10-06T00:02:40.839832+00:00"
+    "targeted_transverse_framework_design": "completed; SCF iteration 1; updated 2026-10-06T00:02:40.839832+00:00",
+    "v16_blind_holdout_dft": "queued; compute three frozen V16 local-registry holdouts, no model inference",
+    "AgC_registry_holdout_v16_01": "queued; frozen blind V16 local-registry holdout",
+    "AgSi_registry_holdout_v16_01": "queued; frozen blind V16 local-registry holdout",
+    "AgTi_registry_holdout_v16_01": "queued; frozen blind V16 local-registry holdout"
   },
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
-  "next_action": "Finish active B DFT without interruption; then force_separation_driver_diagnosis before further geometry design.",
+  "next_action": "Run v16_blind_holdout_dft using assigned four-rank queue; do not use labels for training/model selection.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
@@ -85,6 +93,7 @@
     "v16_distance_dft_acquisition",
     "force_separation_driver_diagnosis",
     "v16_unseen_validation_geometry_design",
-    "targeted_transverse_framework_design"
+    "targeted_transverse_framework_design",
+    "v16_blind_holdout_dft"
   ]
 }
