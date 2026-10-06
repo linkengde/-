@@ -279,3 +279,8 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Reviewed B final candidate manifest/contact audit and package hashes. Independently checked identity, unchanged framework, label absence and no near overlap against V15 training, six V16 acquisitions and scored V15 holdout inputs using separate Ag/framework RMS rule.
 - Preserved three candidate bytes/hashes in pbe_interface_v16_blind_holdouts, assigned B four-rank DFT. Frozen before V16 model training; all labels excluded from training/validation/model selection. These remain inherited small-cluster motifs, not independent morphology or thermal tests.
 - A AgTi final training acquisition remains active; no V16 training yet. B now has executable DFT/archive tasks via standing queue without per-task user forwarding.
+
+### 2026-10-06 Beijing: A AgTi interrupted job recovery
+
+- Actual process inspection found no GPAW ranks; original AgTi log stopped at SCF25 and repository running heartbeat was stale. Reported interruption explicitly and preserved the iteration20 state.gpw (1.87GB), all original logs and input.
+- Confirmed same A instance and GPAW26.7 runtime. Launched four-rank recovery into a new `_resume01` directory using saved GPAW parameters, with restored atom numbers/positions/cell/PBC and XC guards. Original outputs were not overwritten or recalculated from initial density. Recovery script/record retained for audit; convergence and archive verification still pending.
