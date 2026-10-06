@@ -56,7 +56,7 @@ calc = GPAW(str(checkpoint_source), txt=str(OUT / 'gpaw.log'))
 restored_atoms = calc.get_atoms()
 if not np.array_equal(restored_atoms.numbers, atoms.numbers) or not np.allclose(restored_atoms.positions, atoms.positions, atol=1e-8, rtol=0) or not np.allclose(restored_atoms.cell, atoms.cell, atol=1e-8, rtol=0) or not np.array_equal(restored_atoms.pbc, atoms.pbc):
     raise SystemExit('Checkpoint/input geometry mismatch')
-if calc.parameters['xc'] != 'PBE':
+if calc.parameters.xc.name != 'PBE':
     raise SystemExit('Checkpoint XC mismatch')
 
 atoms.calc = calc
