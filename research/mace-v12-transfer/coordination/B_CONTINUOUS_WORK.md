@@ -383,3 +383,44 @@ A must read and record B review before committing a new training recipe/dataset
 for the next version, with accepted/deferred suggestions and reasons. Independent
 ongoing DFT and reversible geometry preparation may continue; no user approval
 is added. Missing/failed review checks are reported and repaired, not bypassed.
+
+## v9_v16_cross_version_root_cause_review — user-priority history synthesis
+
+After current matched V15/V16 review, do this before your pending V17 diagnostic
+DFT queue. A's already active diagnostic DFT is not interrupted. A must review
+this synthesis before freezing V17 training recipe/dataset. Write only
+reports/window-b/v9_v16_cross_version_root_cause_review/.
+
+1. Reuse existing V9-V11 history CSV, MACE_VERSION_HISTORY, worklog, V12-V16
+assessments, provenance/energy-convention audits and matched-driver reviews.
+Make a version timeline V9,V10,V11,V12,V13,V14,V15,V16 with actual source paths,
+model hashes, dataset sizes/label types, calculator/provenance changes, splits,
+weights/lr/seed/architecture/epoch/checkpoint settings where evidenced. Missing
+data/settings remain unknown; don't fabricate logs or rerun training.
+2. Distinguish each published evaluation's geometry/role/metric convention and
+leakage/provenance limitations. Cross-version scores on different references are
+not a controlled improvement curve; mark noncomparable series explicitly.
+3. When archived models and compatible elements/input conventions are available,
+run CPU inference on the SAME already-scored reference set for all eligible
+versions. Prefer the six scored V15/V16 probes, preserving previous-role labels.
+Check model and reference hashes/identity and frozen score reproduction. No new
+unseen-label access, model selection or recalibration. If a model is absent or
+incompatible, mark unrun with reason; use original scores as separate history,
+not substituted common-geometry values. Reuse existing matched outputs where
+identical models/inputs/runtime/metrics permit rather than recompute needlessly.
+4. Analyze per-interface energy/vector-force/separation trends and biggest-atom
+errors/projections; identify persistent AgSi transverse and C/Ti framework modes,
+tradeoffs between global force and marked separation, and validation coverage.
+5. Rank potential causes: coverage, label-method inconsistency/masks, geometry
+leakage, energy-reference convention, loss balance/optimization/architecture.
+For each state evidence, counterevidence, confidence and confounding simultaneous
+changes. A timeline/correlation cannot by itself isolate a causal factor.
+6. Deliver an actionable V17 recommendation: what to preserve/change, why8 paired
+diagnostic labels help or leave gaps, validation needed, minimal one-factor
+experiment to separate competing causes, and stop/acceptance criteria. Don't
+recommend larger force weight/epochs simply because latest screen failed.
+
+No DFT/retraining/MD/TTM or production edits under this review. One CPU inference
+thread; never compete with active four-rank B DFT. Publish report, version ledger,
+common-geometry CSV/JSON, script and SHA256. Completed historical reviews should
+be linked, not duplicated wholesale. Then continue standing queue.
