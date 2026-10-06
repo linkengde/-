@@ -307,3 +307,20 @@ a compact next acquisition subset and which independent validation/ablation woul
 be needed to distinguish data coverage from loss-weight issues. No new DFT, training,
 model selection, MD/TTM or production edits. Publish report/CSV/JSON/hashes and
 completion then continue standing queue.
+
+## v17_paired_diagnostic_dft
+
+After your assigned matched-analysis job finishes and no B model inference or
+DFT is active, execute four B-owned negative-sign diagnostic acquisitions:
+
+```bash
+bash research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/run_assigned_labels.sh
+```
+
+Use existing registered B environment/four MPI ranks, one BLAS thread per rank.
+Opposite signs assigned to A; never calculate A labels. Source parent near matches
+are intentional controlled samples, not independent tests. Preserve all checkpoints
+and archives; no duplicate launches; verify/publish each completed compact result.
+Stop with diagnostics on SCF/hash/owner/environment failure. No V17 training/model
+selection/MD/TTM under this job. Compare paired labels only after both owners publish
+verified results and A gives analysis assignment. Continue standing queue.

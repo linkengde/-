@@ -297,3 +297,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - All epochs0-79, Done and selected epoch79 verified. Launcher session exit receipt unavailable; recorded null instead of fabricating0 and required explicit full-epoch/Done/checkpoint matching before evaluation. Frozen selected model SHA918aad24341c6892d65ec0d31b19baf610ac0efde1cfd9d2e1c0567320e0cf98.
 - First withheld-local-registry screen FAIL: AgC energy0.6979meV/atom, vectorRMSE0.12950eV/A, separation0.04170eV/A; AgSi3.0214,0.09615,0.07928; AgTi1.6120,0.10529,0.32266. All energy gates pass; all force gates fail; AgC/Si separation pass, Ti fails. V15/V16 test geometries differ so these are not matched improvement deltas.
 - B assigned metadata repair check and matched V15/V16 error localization on already-scored geometries, with inference explicitly allowed but no tuning/new DFT. No long MD/TTM.
+
+### 2026-10-06 Beijing: targeted paired diagnostic acquisition approved4+4
+
+- Reviewed and independently checked eight label-free geometries from B targeted design: six framework-contact ±0.04A points plus AgSi transverse Ag ±0.15A. Exactly one framework atom changes with Ag fixed, or rigid Ag-only transverse shift; IDs/cell/PBC preserved. Input hashes checked.
+- A owns four positive signs and B four negative signs; B first completes matched V15/V16 diagnosis. These near-parent correlated points test controlled local sensitivity, not independent model validation. Same PW-PBE reference recipe/native-free convention retained.
+- No automatic incorporation/training: review paired DFT response, conflicts and exact geometry roles first; new V17 unseen validation must be designed separately before training.
