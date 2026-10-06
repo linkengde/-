@@ -1,0 +1,248 @@
+{
+  "versions": [
+    {
+      "version": "v9",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v9_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v9_forceonly.model",
+      "model_sha256": "7d183ed99dae18bfb0f84eaf33be38458671d18508ff59e9413b7339bd97db86",
+      "model_hash_evidence": "v13 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/results/v9_v10_v11_v12_v13_comparison.json",
+      "dataset_manifest": "not preserved in handoff",
+      "splits_train_valid_test": "unknown",
+      "energy_label_counts": "unknown",
+      "force_label_counts": "unknown",
+      "selected_epoch_zero_based": "unknown",
+      "training_completion": "unknown",
+      "settings": "unknown; no per-version launch/log evidence",
+      "training_script": "",
+      "training_script_sha256": "",
+      "training_log": "",
+      "training_log_sha256": "",
+      "data_change": "Initial four-element force-focused baseline; original dataset and complete training command are absent from the handoff.",
+      "evaluation_role_limit": "Retrospective scores inherit the old test roles recorded in the V12 comparison; original V9 split membership is not fully reconstructed."
+    },
+    {
+      "version": "v10",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v10_energycal/checkpoints/MACE_periodic_v10_energycal_run-43.model",
+      "model_sha256": "8ed91080e4646e0e8021a6a5258c28075468d1cb2ef1c4a6f416cb3a89e04d85",
+      "model_hash_evidence": "v13 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/results/v9_v10_v11_v12_v13_comparison.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 15,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": "unknown",
+      "training_completion": "unknown",
+      "settings": "unknown; no per-version launch/log evidence",
+      "training_script": "",
+      "training_script_sha256": "",
+      "training_log": "",
+      "training_log_sha256": "",
+      "data_change": "Added four PBE elemental anchors, an Ag-Ti 2.55 A energy/force frame and an energy label for the 2.3871 A force-only frame; kept 2.70 A same-motif holdout.",
+      "evaluation_role_limit": "Retrospective scores on later registry references are not V10-era tests; elemental reference meshes differ from interface meshes."
+    },
+    {
+      "version": "v11",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/checkpoints/MACE_periodic_v11_energyfocus_run-44.model",
+      "model_sha256": "6ef4fdadddbad35eb340321bacfb60257c4f5c6e3195f45f662c0c5ce081be62",
+      "model_hash_evidence": "v13 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/results/v9_v10_v11_v12_v13_comparison.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 15,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": "unknown",
+      "training_completion": "unknown",
+      "settings": "unknown; no per-version launch/log evidence",
+      "training_script": "",
+      "training_script_sha256": "",
+      "training_log": "",
+      "training_log_sha256": "",
+      "data_change": "Energy-focused model; packaged split/data manifest is the V10 23/2/3 dataset. Exact isolated V10-to-V11 recipe change is undocumented.",
+      "evaluation_role_limit": "Same retrospective scope as V10; split files copied from V10 and exact V11 training change is unknown."
+    },
+    {
+      "version": "v12",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45.model",
+      "model_sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
+      "model_hash_evidence": "v13 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/results/v9_v10_v11_v12_v13_comparison.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 19,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 23,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": 76,
+      "training_completion": "80 epochs0-79 and Done verified",
+      "settings": "foundation mace-mp-0b3-medium; seed45; CPU; batch1; max80; lr1e-4; wd5e-7; energy_weight100; forces_weight1000; E0s estimated",
+      "training_script": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/run_v12_training.sh",
+      "training_script_sha256": "6a221d4f352e86b0b29fa355d815e20f9e052d38bea1799780b0ceef7eed0bc0",
+      "training_log": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/train.stdout",
+      "training_log_sha256": "4160ac89e82c2d765b60721308edff1f48fb6068ad7f361b4b377a269232eab9",
+      "data_change": "Replaced four Ag-Si/Ag-C force-only LCAO frames with same-geometry PW-PBE energy/force labels.",
+      "evaluation_role_limit": "The three frozen regression frames and five independent v13 geometries have different roles; midpoint checks share distance-scan motifs."
+    },
+    {
+      "version": "v13",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/checkpoints/MACE_periodic_v13_interface_energy_run-45.model",
+      "model_sha256": "85c16e3bf920418001377cf7049a788e201ac50811a4b2b639f40507b8bd5ae8",
+      "model_hash_evidence": "v13 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/results/v9_v10_v11_v12_v13_comparison.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 26,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 22,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 26,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": 72,
+      "training_completion": "80 epochs0-79 and Done verified",
+      "settings": "foundation mace-mp-0b3-medium; seed45; CPU; batch1; max80; lr1e-4; wd5e-7; energy_weight100; forces_weight1000; E0s estimated",
+      "training_script": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/run_v13_training.sh",
+      "training_script_sha256": "385aa85a548702bb3fc30336634c239eb6ff5731cde291e81555c711b99b11ab",
+      "training_log": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/train.stdout",
+      "training_log_sha256": "64f81b2c1b6c52b90d1c2f2c201ff11ed7fe61d47d6c514848a4199b35516530",
+      "data_change": "Added three verified PW-PBE distance labels: AgC 2.30 A, AgSi 2.60 A, AgTi 2.60 A.",
+      "evaluation_role_limit": "Independent registry/acquisition screen is narrow and related to existing cluster motifs; earlier V12 validations were promoted into training."
+    },
+    {
+      "version": "v14",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45.model",
+      "model_sha256": "41bd411355b034b0dab85dbdbda932ecfc394122cb67a2b51a550bd04207645d",
+      "model_hash_evidence": "v14 comparison model manifest",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/results/v14_independent_holdout_comparison.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 31,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 27,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 31,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": 71,
+      "training_completion": "80 epochs0-79 and Done verified",
+      "settings": "foundation mace-mp-0b3-medium; seed45; CPU; batch1; max80; lr1e-4; wd5e-7; energy_weight100; forces_weight1000; E0s estimated",
+      "training_script": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/run_v14_training.sh",
+      "training_script_sha256": "a8597aaefe09fcfbe7c0240f6fbf5abd6b29218347b6c45b91a400f61996e320",
+      "training_log": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/train.stdout",
+      "training_log_sha256": "d30d99f76858c2951b4744a6c738ef024368f36fb0aaa571cbe1998c180d92f9",
+      "data_change": "Added five PW-PBE training labels: two lateral-registry holdouts, AgTi probe, AgC/AgSi strain acquisitions.",
+      "evaluation_role_limit": "Three V14 holdouts; AgTi holdout duplicates an AgTi training geometry, so it is not independent geometric validation."
+    },
+    {
+      "version": "v15",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/checkpoints/MACE_periodic_v15_interface_energy_run-45.model",
+      "model_sha256": "f258bee17bc46e9399c1f1d13bb5ed30d4a03997b33baac53b5e58c2df6ebc1a",
+      "model_hash_evidence": "window-A selected model record",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/selected_model_record.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 29,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 29,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 29,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": 74,
+      "training_completion": "80 epochs0-79 and Done verified; launcher exit 0",
+      "settings": "foundation mace-mp-0b3-medium; seed45; CPU; batch1; max80; lr1e-4; wd5e-7; energy_weight100; forces_weight1000; E0s estimated",
+      "training_script": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/run_v15_training.sh",
+      "training_script_sha256": "d828c20a00878733d926a490b8fa9e22567de05811fb291bf3892e90a0e289f5",
+      "training_log": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/training_01/train.stdout",
+      "training_log_sha256": "8bdd3ab652215c19fa1cbca7c0d49a87dc10eb052c68c428a21c8929f83399cd",
+      "data_change": "Excluded four provenance-unknown force-only LCAO frames plus one unresolved AgTi force-only frame; added three verified residual-shell PW-PBE labels.",
+      "evaluation_role_limit": "Three post-freeze registry references; each is a small perturbation of an existing parent motif, not independent morphology."
+    },
+    {
+      "version": "v16",
+      "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/training_01/checkpoints/MACE_periodic_v16_interface_energy_run-45.model",
+      "model_sha256": "918aad24341c6892d65ec0d31b19baf610ac0efde1cfd9d2e1c0567320e0cf98",
+      "model_hash_evidence": "window-A selected model record",
+      "hash_evidence_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/selected_model_record.json",
+      "dataset_manifest": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/dataset_manifest.json",
+      "splits_train_valid_test": {
+        "train": 35,
+        "valid": 2,
+        "test": 3
+      },
+      "energy_label_counts": {
+        "train": 35,
+        "valid": 2,
+        "test": 3
+      },
+      "force_label_counts": {
+        "train": 35,
+        "valid": 2,
+        "test": 3
+      },
+      "selected_epoch_zero_based": 79,
+      "training_completion": "80 epochs0-79 and Done verified; launcher exit receipt unavailable",
+      "settings": "foundation mace-mp-0b3-medium; seed45; CPU; batch1; max80; lr1e-4; wd5e-7; energy_weight100; forces_weight1000; E0s estimated",
+      "training_script": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/run_v16_training.sh",
+      "training_script_sha256": "82d4e5dafcb4cbba4faabc03c38c9b9082fcfcfc4eabc7744ee4aceb888de1b5",
+      "training_log": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/training_01/train.stdout",
+      "training_log_sha256": "bc96e92172aee443c10e5d08ed55d02befd0863ca0bf0f85fadd678eb7319db6",
+      "data_change": "Added three wide-span registry and three wide-span distance PW-PBE labels; corrected metadata counts without changing train/valid/test bytes.",
+      "evaluation_role_limit": "Three frozen local-registry references were screened against split inputs; same six-probe inference is retrospective, not a new blind test."
+    }
+  ]
+}
