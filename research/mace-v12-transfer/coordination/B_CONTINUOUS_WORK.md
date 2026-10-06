@@ -424,3 +424,19 @@ No DFT/retraining/MD/TTM or production edits under this review. One CPU inferenc
 thread; never compete with active four-rank B DFT. Publish report, version ledger,
 common-geometry CSV/JSON, script and SHA256. Completed historical reviews should
 be linked, not duplicated wholesale. Then continue standing queue.
+
+## Rolling cumulative review V9 through each finished Vn
+
+After V17 completes, update V9–V17 synthesis to guide V18; after V18, V9–V18
+to guide V19, and so forth. This cumulative review complements the per-version
+review and is automatic standing work assigned by A, not a user-triggered task.
+Reuse historical ledgers/common-geometry scores with verified model/input/metric
+hashes; add only missing new comparisons and newly supported hypotheses. Avoid
+rerunning unchanged old models or repeating provenance searches without new
+evidence. Record comparable versus incomparable reference sets, label reuse and
+uncertainty. A documents accepted/deferred recommendations before freezing the
+next training cycle. Continue measured data/reference/recipe experiments while
+criteria fail, never lower gates or call insufficient coverage PASS. Independent
+physical applicability/stability/TTM stages still require their own evidence.
+No unconditional promise of convergence: identify specific scientific/environment
+blockers and needed recovery, rather than claiming progress or inventing results.
