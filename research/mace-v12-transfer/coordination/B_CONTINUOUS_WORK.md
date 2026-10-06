@@ -283,3 +283,27 @@ argument/checkpoint-selection use. Report definite integration defects promptly,
 with exact reproduction/proposed fix; distinguish metadata gaps from bad labels.
 Do not repeat the completed broad V15 source-history audit. No DFT/training/model
 changes under this audit. Publish report/JSON/hashes and completed job state.
+
+## v16_matched_error_and_metadata_review
+
+V16 training and first scoring completed. This task permits inference with frozen
+V15/V16 selected models on already-scored V15 and V16 reference geometries only.
+Write reports/window-b/v16_matched_error_and_metadata_review/. First recheck the
+metadata repair: two provenance totals35 including6 additions, script pins, stored
+pre-repair manifest/pins, unchanged train/valid/test bytes. Do not rerun full
+historical provenance searches. Report any actual repair defects immediately.
+
+Compare V15 and V16 on COMMON already-scored three V15 probes and three V16 probes
+(6 geometries per model), verifying model/reference hashes and reproduction of
+A's respective frozen scores. Distinguish source-motif and previous score roles;
+these are retrospective diagnostics, not fresh tests for selecting a model.
+Decompose per-atom vector error, longitudinal/transverse marked-pair terms, Ag and
+framework neighbor/outside errors with same4.5A region rule; top IDs/neighbors.
+Assess whether six distance/registry additions improved same-geometry response,
+and identify remaining framework-motion/coverage gaps. Do not attribute every
+difference to one cause; no ablation or new unseen-label tuning.
+Map findings to existing targeted_transverse_framework_design proposals, recommend
+a compact next acquisition subset and which independent validation/ablation would
+be needed to distinguish data coverage from loss-weight issues. No new DFT, training,
+model selection, MD/TTM or production edits. Publish report/CSV/JSON/hashes and
+completion then continue standing queue.

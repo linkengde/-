@@ -41,6 +41,8 @@ def checks(repo,archives=False,include_references=False):
     pins=load(repo/DRAFT/'input_pins.json')
     for relative,expected in pins['sha256'].items():require(sha(child(repo,relative))==expected,'Pinned input changed: '+relative)
     m=load(data/'dataset_manifest.json'); require(m['split_sizes']=={'train':35,'valid':2,'test':3},'Wrong split counts')
+    require(sum(m['provenance_status_counts_train'].values())==35 and sum(m['evidence_tier_counts_train'].values())==35,'Provenance count total mismatch')
+    require(m['provenance_status_counts_train'].get('verified_V16_PW_PBE_archive')==len(m['V16_additions'])==6,'V16 source count mismatch')
     splits={}
     for s,n in m['split_sizes'].items():
         p=data/(s+'.extxyz');require(sha(p)==m['output_sha256'][s],'Split hash mismatch')

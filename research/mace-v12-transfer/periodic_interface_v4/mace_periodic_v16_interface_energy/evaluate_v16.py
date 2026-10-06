@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """A runtime only: evaluate a frozen selected model; never select from blind scores."""
 import argparse
+import re
 from hashlib import sha256
 import csv
 import json
@@ -25,18 +26,23 @@ def main():
     ap.add_argument('--repo-root',required=True,type=Path);ap.add_argument('--output-dir',required=True,type=Path)
     ap.add_argument('--model',required=True,type=Path);ap.add_argument('--selection-record',required=True,type=Path)
     args=ap.parse_args();repo=args.repo_root.resolve();out=args.output_dir.resolve();model=args.model.resolve()
-    require(out.is_relative_to(repo/DRAFT) and out!=repo/DRAFT,'Output must be V15 run child')
+    require(out.is_relative_to(repo/DRAFT) and out!=repo/DRAFT,'Output must be V16 run child')
     require(not out.exists() or (out.is_dir() and not any(out.iterdir())),'Nonempty evaluation output refused')
     require(model.is_file(),'Selected model missing')
     selection_bytes=args.selection_record.read_bytes()
     selection_digest=sha256(selection_bytes).hexdigest()
     selection=json.loads(selection_bytes)
     require(selection['model_sha256']==sha(model) and Path(selection['model_path']).resolve()==model,'Selected model/hash changed')
-    require(selection['training_exit_code']==0 and selection['completed_epochs']==80 and 1<=selection['selected_epoch']<=80,'A must inspect 80-epoch completion and selection')
+    require(selection.get('training_exit_code') in (0,None) and selection['completed_epochs']==80 and 1<=selection['selected_epoch']<=80,'A must inspect 80-epoch completion and selection')
     require(selection['selection_uses_only_training_validation'] is True and selection['blind_labels_used_for_selection'] is False,'Blind selection forbidden')
     require(selection['reviewed_by']=='window-a' and selection['selection_reason'].strip(),'A reviewed selection record required')
     for field in ['training_stdout','epoch_completion_evidence']:
         require(sha(Path(selection[field]['path']))==selection[field]['sha256'],'Completion evidence changed')
+    completion=Path(selection['training_stdout']['path']).read_text()
+    require([int(x) for x in re.findall(r'INFO: Epoch (\d+):',completion)]==list(range(80)) and 'INFO: Done' in completion,'Incomplete training log')
+    chosen=re.findall(r'Loaded Stage one model from epoch (\d+) for evaluation',completion)
+    require(chosen and int(chosen[-1])==selection['selected_epoch_zero_based'],'Selected checkpoint/log mismatch')
+    require(selection['training_exit_code']==0 or selection.get('completion_basis')=='full_epoch_log_and_selected_checkpoint_verified_launcher_exit_unavailable','Missing completion evidence policy')
     # This is the first blind-label access; it occurs only after frozen selection checks.
     _,splits,blind=checks(repo,archives=True,include_references=True)
     import torch

@@ -27,7 +27,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts"
   ],
-  "task_boundary": "Calculate only B-owned frozen V16 holdouts; publish verified compact archives. No production dataset/model edits, no inference on these holdouts before frozen V16 selection.",
+  "task_boundary": "Read published V15/V16 models and already-scored references; CPU inference for assigned matched error localization permitted. Report-only outputs; no DFT/retraining/production edits.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
   "live_progress": {
@@ -74,10 +74,11 @@
     "AgC_registry_holdout_v16_01": "completed; SCF iteration 57; elapsed 2722s; updated 2026-10-06T05:24:22.682020+00:00",
     "AgSi_registry_holdout_v16_01": "completed; SCF iteration 50; elapsed 2581s; updated 2026-10-06T06:07:18.406106+00:00",
     "AgTi_registry_holdout_v16_01": "completed; SCF iteration 36; elapsed 2595s; updated 2026-10-06T06:50:17.105938+00:00",
-    "v16_dataset_integration_audit": "completed; SCF iteration 1; updated 2026-10-06T07:09:37.798601+00:00"
+    "v16_dataset_integration_audit": "completed; SCF iteration 1; updated 2026-10-06T07:09:37.798601+00:00",
+    "v16_matched_error_and_metadata_review": "queued; recheck repaired metadata then matched V15/V16 post-evaluation localization"
   },
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
-  "next_action": "Window A should reconcile V16 provenance status/evidence counts before relying on those summaries. B has no remaining queued audit task; sync main for the next assignment. Preserve the V16 blind labels.",
+  "next_action": "Continue standing queue: v16_matched_error_and_metadata_review; V16 screening FAIL and artifacts published.",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
@@ -96,6 +97,7 @@
     "v16_unseen_validation_geometry_design",
     "targeted_transverse_framework_design",
     "v16_blind_holdout_dft",
-    "v16_dataset_integration_audit"
+    "v16_dataset_integration_audit",
+    "v16_matched_error_and_metadata_review"
   ]
 }

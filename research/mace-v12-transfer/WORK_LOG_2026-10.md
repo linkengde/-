@@ -290,3 +290,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Verified all nine archive hashes/PASS chains. V16 built from retained V15 training29 plus six reviewed acquisition labels, giving35/2/3 and rank4. Labels finite, source/identity checks and new blind-input isolation pass; historical valid/test copied byte-for-byte. New local-registry test labels not read by builder or used for model selection.
 - Adapted V15 entry to V16, pinned new inputs/manifest/foundation and kept80 epochs/seed45/lr1e-4/energy100/force1000. Full preflight including archive integrity passes. This controlled cycle tests reviewed data augmentation; provenance/motif restrictions persist, no production MD/TTM.
 - B assigned independent V16 integration audit without fresh test-label access; A proceeds to training on idle CPU after DFT completed.
+
+### 2026-10-06 Beijing: V16 metadata repair, completion review and first screen
+
+- B audit found provenance summaries omitted six V16 additions. Fixed builder and current manifest maps to totals35, preflight count guards, entry text and policy-script pins. Preserved before-repair metadata/pins; train/valid/test labels/bytes unchanged. Full preflight PASS.
+- All epochs0-79, Done and selected epoch79 verified. Launcher session exit receipt unavailable; recorded null instead of fabricating0 and required explicit full-epoch/Done/checkpoint matching before evaluation. Frozen selected model SHA918aad24341c6892d65ec0d31b19baf610ac0efde1cfd9d2e1c0567320e0cf98.
+- First withheld-local-registry screen FAIL: AgC energy0.6979meV/atom, vectorRMSE0.12950eV/A, separation0.04170eV/A; AgSi3.0214,0.09615,0.07928; AgTi1.6120,0.10529,0.32266. All energy gates pass; all force gates fail; AgC/Si separation pass, Ti fails. V15/V16 test geometries differ so these are not matched improvement deltas.
+- B assigned metadata repair check and matched V15/V16 error localization on already-scored geometries, with inference explicitly allowed but no tuning/new DFT. No long MD/TTM.

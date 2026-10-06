@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-[[ $# == 4 && "$1" == --repo-root && "$3" == --output-dir ]] || { echo 'usage: run_v15_training.sh --repo-root REPO --output-dir NEW_REPORT_CHILD' >&2; exit 2; }
+[[ $# == 4 && "$1" == --repo-root && "$3" == --output-dir ]] || { echo 'usage: run_v16_training.sh --repo-root REPO --output-dir NEW_REPORT_CHILD' >&2; exit 2; }
 REPO="$(realpath -- "$2")"
 OUT="$(realpath -m -- "$4")"
 ENTRY="$REPO/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy"
-[[ "$OUT" == "$ENTRY/"* && "$OUT" != "$ENTRY" ]] || { echo 'Output must be a new child of the V15 run directory.' >&2; exit 2; }
+[[ "$OUT" == "$ENTRY/"* && "$OUT" != "$ENTRY" ]] || { echo 'Output must be a new child of the V16 run directory.' >&2; exit 2; }
 [[ ! -e "$OUT" || ( -d "$OUT" && -z "$(find "$OUT" -mindepth 1 -print -quit)" ) ]] || { echo 'Refusing nonempty output/existing model.' >&2; exit 2; }
 PYTHON="${MACE_PYTHON:-/workspace/.venvs/mace-v12/bin/python}"
 TRAIN="${MACE_RUN_TRAIN:-/workspace/.venvs/mace-v12/bin/mace_run_train}"
