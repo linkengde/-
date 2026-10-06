@@ -303,3 +303,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Reviewed and independently checked eight label-free geometries from B targeted design: six framework-contact ±0.04A points plus AgSi transverse Ag ±0.15A. Exactly one framework atom changes with Ag fixed, or rigid Ag-only transverse shift; IDs/cell/PBC preserved. Input hashes checked.
 - A owns four positive signs and B four negative signs; B first completes matched V15/V16 diagnosis. These near-parent correlated points test controlled local sensitivity, not independent model validation. Same PW-PBE reference recipe/native-free convention retained.
 - No automatic incorporation/training: review paired DFT response, conflicts and exact geometry roles first; new V17 unseen validation must be designed separately before training.
+
+### 2026-10-06 Beijing: A accepts evidence-based V17 recipe after cumulative review
+
+- Reviewed B V9–V16 report and hash inventory10/10 PASS. Independently recomputed all8 model aggregates from48 CSV rows; V9/V15/V16 matched pooled vectorRMSE0.2905/0.1852/0.1464 confirm49.6% V9 reduction and21% V15 reduction. Per-interface gates remain failed.
+- Adopt unchanged V16 recipe for first V17 data-only cycle; finish8 signed diagnostic labels and review reference sensitivity/identity before integration. Reject blind force-weight/epoch increases and passing scalar separation as complete force validation. Current evidence supports local/transverse coverage as strongest actionable hypothesis, not sole proven cause.
+- A decision/evidence arithmetic saved in V17_REVIEW_DECISION.json. New truly withheld geometry-family evidence remains required; parent-correlated paired labels do not provide independent morphology/thermal coverage. A AgC positive framework log latest observed37 SCF; B negative four-point DFT queue started.
