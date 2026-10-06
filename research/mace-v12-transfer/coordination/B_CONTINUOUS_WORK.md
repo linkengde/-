@@ -268,3 +268,18 @@ parameter/checkpoint selection. Existing jobs/outputs preserved, no duplicate
 launch; pause on convergence/hash/owner/runtime failure. Four MPI ranks and
 one BLAS thread each; no concurrent training. Publish each completed archive;
 mark this job complete only after all three verify. Continue standing queue.
+
+## v16_dataset_integration_audit
+
+Audit A's integrated mace_periodic_v16_interface_energy without modifying it.
+Write only reports/window-b/v16_dataset_integration_audit/. Recompute35/2/3 counts,
+finite labels, rank4 and six acquisition-source identities; compare every retained
+V15 row and historical valid/test byte identity. Inspect source method/energy
+convention metadata, excluded-row ledger and V16_additions versus inherited
+provenance ledger scope. Verify new frozen test INPUT isolation by IDs/geometry
+independent of PBC. Do not read V16 blind reference values or run inference.
+Check training entry preserves intended controlled settings and no blind-file
+argument/checkpoint-selection use. Report definite integration defects promptly,
+with exact reproduction/proposed fix; distinguish metadata gaps from bad labels.
+Do not repeat the completed broad V15 source-history audit. No DFT/training/model
+changes under this audit. Publish report/JSON/hashes and completed job state.

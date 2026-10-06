@@ -284,3 +284,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - Actual process inspection found no GPAW ranks; original AgTi log stopped at SCF25 and repository running heartbeat was stale. Reported interruption explicitly and preserved the iteration20 state.gpw (1.87GB), all original logs and input.
 - Confirmed same A instance and GPAW26.7 runtime. Launched four-rank recovery into a new `_resume01` directory using saved GPAW parameters, with restored atom numbers/positions/cell/PBC and XC guards. Original outputs were not overwritten or recalculated from initial density. Recovery script/record retained for audit; convergence and archive verification still pending.
+
+### 2026-10-06 Beijing: V16 dataset and controlled training entry ready
+
+- Verified all nine archive hashes/PASS chains. V16 built from retained V15 training29 plus six reviewed acquisition labels, giving35/2/3 and rank4. Labels finite, source/identity checks and new blind-input isolation pass; historical valid/test copied byte-for-byte. New local-registry test labels not read by builder or used for model selection.
+- Adapted V15 entry to V16, pinned new inputs/manifest/foundation and kept80 epochs/seed45/lr1e-4/energy100/force1000. Full preflight including archive integrity passes. This controlled cycle tests reviewed data augmentation; provenance/motif restrictions persist, no production MD/TTM.
+- B assigned independent V16 integration audit without fresh test-label access; A proceeds to training on idle CPU after DFT completed.
