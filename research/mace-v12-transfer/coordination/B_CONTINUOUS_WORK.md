@@ -358,3 +358,28 @@ current motifs cannot yield adequate samples, document blocker and new parent
 structure needed. No DFT until A reviews/freezes and assigns owners. No unseen
 label reads, inference/training or production edits for this design task.
 Publish role manifest, geometries, source/hash inventory, screening and limits.
+
+## Recurring review after every model version
+
+User requests B analysis after each V-step so A can plan the next iteration. A
+automatically assigns `vN_iteration_review` once completed artifacts are published;
+no per-version user forwarding. Current V16 matched review fulfills this duty for
+V16. Future versions use the same protocol and never repeat a completed review
+without new evidence/identified failure.
+
+Review model/data/reference hashes, frozen selection and actual completion, split
+roles and inherited provenance; compare previous/current models on COMMON already
+scored geometries, reporting per-interface energy/vector-force/separation changes
+and spatial/projection effects. Distinguish training inclusion/motif lineage and
+post-score reference reuse from truly unseen validation. Compare actual dataset,
+weights/lr/epochs/architecture/seed changes; identify confounds rather than assign
+a single cause without controlled tests. Recommend specific next data/label/recipe
+changes with supporting evidence, expected discriminating outcome and risks.
+Keep energy/native-free conventions and provisional gates fixed unless user
+explicitly changes requirements. No inference on newly withheld reference labels
+before frozen A selection; no tuning/retraining/DFT under review-only assignment.
+
+A must read and record B review before committing a new training recipe/dataset
+for the next version, with accepted/deferred suggestions and reasons. Independent
+ongoing DFT and reversible geometry preparation may continue; no user approval
+is added. Missing/failed review checks are reported and repaired, not bypassed.
