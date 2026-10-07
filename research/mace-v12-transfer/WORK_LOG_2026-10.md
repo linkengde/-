@@ -337,3 +337,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - The corrected launcher exposed a second pre-SCF CLI issue: GPAW parsed driver options as its own. Preserved this second traceback as `development_validation_attempts/AgC_v17_dev_validation_01.launcher_attempt_02.log`. No DFT label or SCF directory was produced by either failed attempt.
 - Added GPAW's `--` argument delimiter. A four-rank `gpaw python` smoke script confirmed all ranks see MPI size4 and receive the driver arguments; the development-label authorization/hash/geometry preflight passed again. Both candidate package SHA256 inventory and A role-decision hashes pass.
 - B has started the now-unblocked V17 paired-response analysis on the eight verified diagnostics. A is restarting the three authorized development-validation labels with the corrected runner.
+
+
+### 2026-10-07 Beijing: A development-validation DFT resumed
+
+- After two logged pre-SCF launcher failures, the corrected GPAW CLI/argument forwarding passed a four-rank smoke check and the exact role/input preflight passed. A's AgC development-validation PW-PBE run is now active on four MPI ranks; local GPAW log reached SCF iteration1. AgSi and AgTi remain queued. No output label exists yet.
+- B's task card reports its V17 signed-pair response analysis running. Withheld-test DFT remains blocked pending a frozen V17 checkpoint selection.
