@@ -15,7 +15,10 @@ DATA="$ENTRY/data"
 mkdir -p "$OUT"/{logs,models,checkpoints,results}
 cd "$OUT"
 export XDG_CACHE_HOME="$OUT/cache" MPLCONFIGDIR="$OUT/mpl-cache" FC_CACHEDIR="$OUT/cache/fontconfig"
-export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=1
+THREADS="${MACE_NUM_THREADS:-4}"
+[[ "$THREADS" =~ ^[1-4]$ ]] || { echo 'MACE_NUM_THREADS must be 1-4 on this five-core instance.' >&2; exit 2; }
+export OMP_NUM_THREADS="$THREADS" MKL_NUM_THREADS="$THREADS" OPENBLAS_NUM_THREADS=1
+echo "CPU training threads: $THREADS"
 "$TRAIN" --name MACE_periodic_v17_provisional_screening --work_dir "$OUT" \
  --log_dir "$OUT/logs" --model_dir "$OUT/models" --checkpoints_dir "$OUT/checkpoints" --results_dir "$OUT/results" \
  --train_file "$DATA/train.extxyz" --valid_file "$DATA/valid.extxyz" \

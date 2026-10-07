@@ -1,0 +1,74 @@
+2026-10-07 13:25:34.889 INFO: ===========VERIFYING SETTINGS===========
+2026-10-07 13:25:34.889 INFO: MACE version: 0.3.16
+2026-10-07 13:25:34.889 INFO: Using CPU
+2026-10-07 13:25:35.227 INFO: Using foundation model /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model as initial checkpoint.
+2026-10-07 13:25:35.227 WARNING: Using multiheads finetuning with a foundation model that is not a Materials Project model, need to provied a path to a pretraining file with --pt_train_file.
+2026-10-07 13:25:35.227 INFO: ===========LOADING INPUT DATA===========
+2026-10-07 13:25:35.227 INFO: Using heads: ['Default']
+2026-10-07 13:25:35.227 INFO: Using the key specifications to parse data:
+2026-10-07 13:25:35.227 INFO: Default: KeySpecification(info_keys={'energy': 'REF_energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'REF_forces', 'charges': 'REF_charges'})
+2026-10-07 13:25:35.227 INFO: =============    Processing head Default     ===========
+2026-10-07 13:25:35.271 INFO: Training set 1/1 [energy: 43, stress: 0, virials: 0, dipole components: 0, head: 43, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 43, charges: 0]
+2026-10-07 13:25:35.271 INFO: Total Training set [energy: 43, stress: 0, virials: 0, dipole components: 0, head: 43, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 43, charges: 0]
+2026-10-07 13:25:35.277 INFO: Validation set 1/1 [energy: 3, stress: 0, virials: 0, dipole components: 0, head: 3, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 3, charges: 0]
+2026-10-07 13:25:35.278 INFO: Total Validation set [energy: 3, stress: 0, virials: 0, dipole components: 0, head: 3, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 3, charges: 0]
+2026-10-07 13:25:35.278 INFO: Total number of configurations: train=43, valid=3, tests=[],
+2026-10-07 13:25:35.278 WARNING: Validation batch size (10) is larger than the number of validation data (3)
+2026-10-07 13:25:35.278 INFO: Atomic Numbers used: [np.int64(6), np.int64(14), np.int64(22), np.int64(47)]
+2026-10-07 13:25:35.278 INFO: Estimating E0s from foundation model predictions on training data
+2026-10-07 13:25:35.279 INFO: Estimating E0s using foundation model on 43 configurations with 4 elements
+2026-10-07 13:25:49.531 INFO: ================================================================================
+2026-10-07 13:25:49.532 INFO: E0 ESTIMATION FROM FOUNDATION MODEL
+2026-10-07 13:25:49.532 INFO: ================================================================================
+2026-10-07 13:25:49.532 INFO: Rank of system: 4/4
+2026-10-07 13:25:49.533 INFO: Residuals: [117.38152738]
+2026-10-07 13:25:49.533 INFO: Element 6: foundation E0 = -1.261735 eV, correction = 0.379445 eV, new E0 = -0.882290 eV
+2026-10-07 13:25:49.534 INFO: Element 14: foundation E0 = -0.826390 eV, correction = 0.523698 eV, new E0 = -0.302692 eV
+2026-10-07 13:25:49.534 INFO: Element 22: foundation E0 = -2.500549 eV, correction = 1.227226 eV, new E0 = -1.273323 eV
+2026-10-07 13:25:49.534 INFO: Element 47: foundation E0 = -0.339546 eV, correction = 0.025935 eV, new E0 = -0.313611 eV
+2026-10-07 13:25:49.534 INFO: ================================================================================
+2026-10-07 13:25:49.534 INFO: FIT STATISTICS
+2026-10-07 13:25:49.534 INFO: ================================================================================
+2026-10-07 13:25:49.534 INFO: RMSE before E0 correction: 24.933012 eV
+2026-10-07 13:25:49.534 INFO: RMSE after E0 correction:  1.652212 eV
+2026-10-07 13:25:49.534 INFO: MAE before E0 correction:  21.818741 eV
+2026-10-07 13:25:49.534 INFO: MAE after E0 correction:   1.062581 eV
+2026-10-07 13:25:49.534 INFO: ================================================================================
+2026-10-07 13:25:49.535 INFO: Atomic Energies used (z: eV) for head Default: {6: -0.8822904025910991, 14: -0.302691905431409, 22: -1.273322768994897, 47: -0.3136110031182735}
+2026-10-07 13:25:49.535 INFO: Processing datasets for head 'Default'
+2026-10-07 13:25:49.577 INFO: Combining 1 list datasets for head 'Default'
+2026-10-07 13:25:49.580 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-10-07 13:25:49.580 INFO: Combined validation datasets for Default
+2026-10-07 13:25:49.580 INFO: Head 'Default' training dataset size: 43
+2026-10-07 13:25:49.581 INFO: Computing average number of neighbors
+2026-10-07 13:25:49.642 INFO: Average number of neighbors: 27.775842044134727
+2026-10-07 13:25:49.642 INFO: During training the following quantities will be reported: energy, forces
+2026-10-07 13:25:49.642 INFO: ===========MODEL DETAILS===========
+2026-10-07 13:25:49.686 INFO: Loading FOUNDATION model
+2026-10-07 13:25:49.687 INFO: Using filtered elements: [np.int64(6), np.int64(14), np.int64(22), np.int64(47)]
+2026-10-07 13:25:49.687 INFO: Model configuration extracted from foundation model
+2026-10-07 13:25:49.687 INFO: Using weighted loss function for fine-tuning
+2026-10-07 13:25:49.687 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-10-07 13:25:49.687 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-10-07 13:25:49.688 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-10-07 13:25:49.688 INFO: Distance transform for radial basis functions: Agnesi
+2026-10-07 13:25:51.446 INFO: ===========OPTIMIZER INFORMATION===========
+2026-10-07 13:25:51.446 INFO: Using ADAM as parameter optimizer
+2026-10-07 13:25:51.446 INFO: Batch size: 1
+2026-10-07 13:25:51.446 INFO: Number of gradient updates: 3440
+2026-10-07 13:25:51.446 INFO: Learning rate: 0.0001, weight decay: 5e-07
+2026-10-07 13:25:51.446 INFO: WeightedEnergyForcesLoss(energy_weight=100.000, forces_weight=1000.000)
+2026-10-07 13:25:51.447 INFO: === Layer's learning rates ===
+2026-10-07 13:25:51.447 INFO: Param group 0: lr = 0.0001
+2026-10-07 13:25:51.447 INFO: Param group 1: lr = 0.0001
+2026-10-07 13:25:51.447 INFO: Param group 2: lr = 0.0001
+2026-10-07 13:25:51.447 INFO: Param group 3: lr = 0.0001
+2026-10-07 13:25:51.447 INFO: Param group 4: lr = 0.0001
+2026-10-07 13:25:51.448 INFO: Using gradient clipping with tolerance=10.000
+2026-10-07 13:25:51.448 INFO: 
+2026-10-07 13:25:51.448 INFO: ===========TRAINING===========
+2026-10-07 13:25:51.448 INFO: Started training, reporting errors on validation set
+2026-10-07 13:25:51.448 INFO: Loss metrics on validation set
+2026-10-07 13:25:53.060 INFO: Initial: head: Default, loss=59.88348460, RMSE_E_per_atom=    9.81 meV, RMSE_F=  423.84 meV / A
+2026-10-07 13:26:53.324 INFO: Epoch 0: head: Default, loss=33.53237545, RMSE_E_per_atom=   51.61 meV, RMSE_F=  316.75 meV / A
+2026-10-07 13:27:56.302 INFO: Epoch 1: head: Default, loss=21.26513251, RMSE_E_per_atom=   53.97 meV, RMSE_F=  252.00 meV / A
