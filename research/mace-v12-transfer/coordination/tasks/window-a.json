@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-07T12:35:13.902877+00:00",
+  "updated_utc": "2026-10-07T12:38:36.726242+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "All three V17 development-validation DFT points are converged and archive-verified PASS: AgC58, AgSi47, AgTi41 SCF iterations. B provenance and split audits passed SHA256; the unary-reference trace found original records absent and all-four removal still leaves full-pool rank4, while the archive-certified 29-row core is rank3. A is preparing a frozen-V16, development-only score; six withheld labels remain sealed.",
+  "current_stage": "The frozen V16 model has been scored on all three archive-verified V17 development structures. DEV_SCREEN_FAIL: energy errors pass, but force-vector RMSE and separating-force error fail for AgC, AgSi and AgTi. No V17 dataset or training run yet. B's certified-core rank-recovery analysis is assigned but has no new progress event; six withheld labels remain sealed.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -34,7 +34,8 @@
     "AgTi_framework_neighbor_p_acq_v17_01": "completed; SCF iteration 38; compact archive verification PASS; published at 43b250f.",
     "AgC_v17_dev_validation_01": "completed; SCF converged in58 steps; finite compact outputs; archive verification PASS.",
     "AgSi_v17_dev_validation_01": "completed; SCF iteration 47; elapsed 7222s; updated 2026-10-07T09:41:59.439605+00:00",
-    "AgTi_v17_dev_validation_01": "completed; SCF iteration 41; compact archive verification PASS; publication pending."
+    "AgTi_v17_dev_validation_01": "completed; SCF iteration 41; compact archive verification PASS; publication pending.",
+    "V16_development_validation_on_V17": "completed; SCF iteration 3; updated 2026-10-07T12:38:36.726242+00:00"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -84,16 +85,16 @@
   ],
   "coordination_duties": "A completes the three positive-sign V17 development-validation acquisitions, reviews B provenance/split audits, and owns V17 role freezing, dataset construction, training and evaluation. B is assigned the training-pool provenance audit followed by geometry-only split leakage review. Matched near-parent labels are training diagnostics, not blind validation.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Publish the AgTi compact archive, then run the frozen selected V16 model only on the three V17 development-validation archives. Review B's certified-core rank-recovery analysis and decide the V17 energy-anchor/inclusion policy. Only after those reviews, build, train and evaluate V17; do not inspect six withheld-test labels until checkpoint selection is frozen.",
+  "next_action": "Review B's minimal certified-core rank-recovery analysis when published. Decide and document how to handle partially supported V16 frames and the V17 energy-anchor policy; do not silently promote uncertain labels. Then construct and audit V17, train only after the rank/provenance gate is resolved, and evaluate the three development structures. Do not inspect the six withheld-test labels until checkpoint selection is frozen.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-    "job": "AgTi_v17_dev_validation_01",
+    "job": "V16_development_validation_on_V17",
     "state": "completed",
-    "iteration": 41,
-    "elapsed_s": 6910.136,
-    "note": "SCF converged; compact archive SHA256 and verification checks PASS; state.gpw excluded.",
-    "updated_utc": "2026-10-07T12:34:44.062109+00:00"
+    "iteration": 3,
+    "elapsed_s": null,
+    "note": "Frozen V16 development-only score on AgC/AgSi/AgTi: energy errors 1.57-2.92 meV/atom pass; force-vector RMSE 0.0729-0.1376 and separation errors 0.1856-0.2044 eV/A fail all three. No withheld labels opened.",
+    "updated_utc": "2026-10-07T12:38:36.726242+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
