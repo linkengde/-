@@ -1,0 +1,42 @@
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/after_hit6_total_1ps_cool_17226.data
+create_atoms 4 single 46.1830000000 27.3890000000 60.0 units box
+include potentials/potential_stage69.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_region block INF INF INF INF -10.0 8.0 units box
+region sink_region block INF INF INF INF 8.0 25.0 units box
+region crater_region cylinder z 45.0 26.9 8.0 25.0 100.0 units box
+group substrate id 1:17226
+group new_projectile id 17227
+group projectiles id 17221:17226
+group all_projectiles union projectiles new_projectile
+group fixed region fixed_region
+group sink region sink_region
+group mobile subtract all fixed
+group crater region crater_region
+group freezone intersect mobile crater
+group free_substrate subtract freezone all_projectiles
+group anchored subtract mobile freezone
+group bath subtract sink all_projectiles
+velocity new_projectile set 0.0 0.0 -105.3164
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 821010 zero yes tally yes
+compute Tfree free_substrate temp
+compute Tmobile mobile temp
+timestep 0.00005
+thermo 500
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 1000 dumps/impact_07_62eV.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 5000
+undump tr
+write_data structures/after_hit7_17227.data
+write_restart structures/after_hit7_17227.restart
