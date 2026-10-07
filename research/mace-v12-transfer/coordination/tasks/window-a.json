@@ -4,7 +4,7 @@
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
   "updated_utc": "2026-10-07T12:57:53.570095+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "Frozen V16 development scoring is complete and its force residuals have been localized. AgC and AgTi errors concentrate in the 4.5 A framework shell; AgSi has a smaller shell excess with strong transverse Si/Ag residuals. B's exact rank-recovery task and a report-only V17 integration-plan follow-up are on main, but B has not published a start heartbeat. No V17 dataset/training yet; six withheld labels remain sealed.",
+  "current_stage": "V17 provisional data build and preflight PASS: 43 training frames, 3 development-validation frames, exact composition rank 4. All eight signed V17 training archives and three dev archives passed per-label checks. The full inherited pool contains 14 partially supported rows. B completed exact rank analysis and the integration recipe; A selected V16 train frame 0 (Ti_gap_2p3) for one matched relabel because it is an interface composition that lifts rank, avoiding an unverified bulk unary anchor. B is assigned archive-manifest reconciliation and this DFT in parallel with A training.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -35,7 +35,10 @@
     "AgC_v17_dev_validation_01": "completed; SCF converged in58 steps; finite compact outputs; archive verification PASS.",
     "AgSi_v17_dev_validation_01": "completed; SCF iteration 47; elapsed 7222s; updated 2026-10-07T09:41:59.439605+00:00",
     "AgTi_v17_dev_validation_01": "completed; SCF iteration 41; compact archive verification PASS; published at a5b1291.",
-    "V16_development_validation_on_V17": "completed; SCF iteration 3; updated 2026-10-07T12:38:36.726242+00:00"
+    "V16_development_validation_on_V17": "completed; SCF iteration 3; updated 2026-10-07T12:38:36.726242+00:00",
+    "V17_provisional_training": "queued; fixed V16 CPU recipe, three development frames only, no test_file.",
+    "V17_provisional_dataset_build": "completed; 43 train/3 development-validation, exact composition rank4; no test file or withheld label opened.",
+    "v17_rank_recovery_frame0_DFT": "assigned to B; exact V16 train frame0 Ti_gap_2p3, fixed V17 screening protocol PW-PBE500/Gamma/0.1, no geometry change."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -81,11 +84,14 @@
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
     "research/mace-v12-transfer/coordination/reports/window-b/v17_holdout_dft_execution_pack",
-    "research/mace-v12-transfer/coordination/B_CONTINUOUS_WORK.md"
+    "research/mace-v12-transfer/coordination/B_CONTINUOUS_WORK.md",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_rank_recovery_parallel",
+    "research/mace-v12-transfer/periodic_interface_v4/V17_REVIEW_DECISION.json"
   ],
-  "coordination_duties": "A completes the three positive-sign V17 development-validation acquisitions, reviews B provenance/split audits, and owns V17 role freezing, dataset construction, training and evaluation. B is assigned the training-pool provenance audit followed by geometry-only split leakage review. Matched near-parent labels are training diagnostics, not blind validation.",
+  "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Review B's interim/minimal rank-recovery result and integration alternatives as soon as published. Choose the smallest exact matched PW-PBE relabel or explicitly provisional source policy that restores rank4 without hiding uncertainty. Then build and audit V17 from the eight verified paired acquisitions, with the three scored development structures held out for validation; train with the fixed V16 recipe first, then evaluate. Do not inspect the six withheld-test labels until checkpoint selection is frozen.",
+  "next_action": "Run the fixed V16 CPU recipe on the explicitly provisional V17 pool using only the three development-validation frames and no test_file. Freeze final epoch79 under the predeclared fixed endpoint, score only those three dev structures, publish model/evaluation, then have B complete the V9-V17 cumulative review. In parallel B reconciles its aggregate label manifest and runs the approved exact frame0 relabel. Do not open the six withheld V17 labels until the checkpoint and selection record are frozen.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
