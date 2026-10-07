@@ -382,3 +382,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Split audit covered52 geometries and405 cross-role pairs, with zero exact/near matches under stated geometry thresholds. It reports shared parent-family correlation separately; this does not establish broader morphology or thermal coverage. No blind/development outputs were opened in B's work.
 - A AgC and AgSi development-validation labels pass archive verification; AgTi is still running on four MPI ranks, last inspected at SCF iteration26.
 - Replenished B's now-empty queue with `v17_element_reference_anchor_recovery_audit`, focused on the four unary reference rows and the smallest evidence-backed way to preserve a rank-4 composition basis. No DFT or training is authorized for B.
+
+### 2026-10-07 UTC: V17 development DFT complete; B rank-recovery analysis assigned
+
+- AgTi V17 development-validation DFT converged in41 SCF iterations on four MPI ranks. Its compact archive SHA256 checks and `verification.json` all pass; native energy is -174.3254015209843 eV/cell and free energy is retained separately. The large state.gpw was not included.
+- All three development-validation points now have compact archive verification PASS: AgC58, AgSi47 and AgTi41 SCF iterations. These remain development evidence, not the six sealed withheld tests.
+- Reviewed B's unary-reference audit: original records for Ag4/Ti2/Si8/C8 were not found in searched history; exact stored geometry/label lineage is preserved, but method/version/k-points/SCF/getter remain unverified. Removing all four unary rows from the full43-row pool leaves rank4; the 29-row archive-supported core remains rank3. The report correctly limits this to composition rank and makes no quality claim.
+- Assigned B `v17_certified_core_rank_recovery_analysis` to enumerate the smallest provisional/relabel subsets that raise the 29-row directly supported core to rank4. This is metadata-only and does not read A development or any withheld outputs.
