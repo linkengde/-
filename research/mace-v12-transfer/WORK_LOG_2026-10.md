@@ -375,3 +375,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - B reported that `v17_training_pool_provenance_audit` had only been registered: no row ledger or report had been produced. The task card's `running / iteration 0` was registration status, not substantive audit progress.
 - Clarified the immediate first milestone in `window-b.json`: publish a hash-checked source inventory and 35-row ledger skeleton, then proceed through the full 35-row/eight-label review. The following geometry-only split audit remains queued.
+
+### 2026-10-07 UTC: reviewed B V17 audit outputs and assigned anchor follow-up
+
+- Verified both B SHA256 manifests: all 10 provenance-audit artifacts and all 4 split-audit artifacts match. Reviewed reports/ledgers. B found 21/35 V16 rows directly archive verified, 14 partial, and all eight paired V17 training diagnostics directly verified; the complete 43-row pool remains not fully original-run-certified. The four unary references are among the unresolved rows; archive-supported-only rank falls to3.
+- Split audit covered52 geometries and405 cross-role pairs, with zero exact/near matches under stated geometry thresholds. It reports shared parent-family correlation separately; this does not establish broader morphology or thermal coverage. No blind/development outputs were opened in B's work.
+- A AgC and AgSi development-validation labels pass archive verification; AgTi is still running on four MPI ranks, last inspected at SCF iteration26.
+- Replenished B's now-empty queue with `v17_element_reference_anchor_recovery_audit`, focused on the four unary reference rows and the smallest evidence-backed way to preserve a rank-4 composition basis. No DFT or training is authorized for B.
