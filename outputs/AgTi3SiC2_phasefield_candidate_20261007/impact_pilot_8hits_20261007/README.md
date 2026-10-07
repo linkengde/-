@@ -3,7 +3,8 @@
 本目录是按实际入射点校正局部区域后重新运行的主结果。相场双连续掩膜、相组成和晶格映射保持不变。
 
 - **结果报告：** [REPORT_中文.md](REPORT_中文.md)
-- **最新形貌预览：** [surface_morphology_8hits_1p85ps.png](surface_morphology_8hits_1p85ps.png)（另有[1.80 ps 版本](surface_morphology_8hits_1p80ps.png)）
+- **三维熔坑视图：** [crater_3d_surface_8hits_1p85ps.png](crater_3d_surface_8hits_1p85ps.png)（末态基底上表面包络与实际原子点；虚线圈为 r=8 Å）
+- **剖面与俯视图：** [surface_morphology_8hits_1p85ps.png](surface_morphology_8hits_1p85ps.png)（另有[1.80 ps 版本](surface_morphology_8hits_1p80ps.png)）
 - **初始结构：** [structures/active_local_relaxed.data](structures/active_local_relaxed.data)
 - **末态结构：** [structures/impact_8hits_final_cool_0p20ps.data](structures/impact_8hits_final_cool_0p20ps.data)
 - **无轰击末态：** [structures/nohit_8shot_final_cool_0p20ps.data](structures/nohit_8shot_final_cool_0p20ps.data)
