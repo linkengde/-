@@ -25,6 +25,25 @@ A reviews B outputs, integrates production files, and replenishes this queue.
 B cannot start A jobs or alter production settings. This is an agent workflow,
 not a background daemon: Git commits cannot awaken a session that has ended.
 
+## A's automatic queue-replenishment duty
+
+- A checks B's remote task/progress record when reviewing project status and after
+  each B completion. A assigns the next useful, non-duplicative support task in
+  `tasks/window-b.json` before B's current task finishes whenever practical, so
+  an active B session can continue without the user forwarding per-task commands.
+- Keep one active B job at a time. A may queue its follow-up early, but B starts
+  it only after publishing the current job complete and only when its stated
+  prerequisites are met. Mark dependencies and the exact release condition in
+  the assignment; while blocked, B may take another independent queued task.
+- If the queue has no unblocked useful task, A creates one from the current A
+  milestone using committed, permitted evidence. Do not assign duplicate audits,
+  unauthorized DFT/training/inference, or work that reads sealed labels. If no
+  safe independent work exists, record the concrete dependency instead of
+  inventing a task.
+- Queue changes and task instructions are published to `main`. They do not wake a
+  stopped B session; if that session has ended, the user only needs to resume that
+  environment, not relay each assignment.
+
 ## Assigned queue
 
 ### v15_training_evaluation_entry_draft

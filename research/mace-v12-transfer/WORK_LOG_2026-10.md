@@ -364,3 +364,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - AgC development-validation archive verification passed and was published. A's old runner stalled after the compact outputs while rank0-only code called collective final `calc.write`; preserved the outputs and did not repeat SCF. Removed the unnecessary final write and added launcher command/exit logging. Execution-pack and role-decision SHA256 manifests both verify.
 - Resumed only the remaining AgSi and AgTi labels with four-rank guarded execution. AgSi passed preflight and is active; its SCF iteration has not yet appeared in the current heartbeat. AgTi remains queued. Six withheld labels remain sealed; no V17 training has started.
 - Assigned B `v17_training_pool_provenance_audit` to reconcile the 35 current V16 training frames plus the eight published V17 training acquisitions, reusing old provenance reports and excluding all A dev and test outputs. This will inform V17 inclusion/energy-convention decisions before data construction.
+
+### 2026-10-07 UTC: automatic B queue replenishment
+
+- The remote B task card shows `v17_training_pool_provenance_audit` running at iteration 0 on its registered instance. No second concurrent task was started.
+- Added a standing A duty to replenish B's queue before the current task finishes, with one active B job at a time and explicit dependency/release conditions. B continues the next unblocked queued task without requiring the user to forward each assignment; a repository update still cannot wake a stopped session.
+- Queued `v17_split_leakage_audit` after the current provenance audit. It checks geometry-role overlap among the 35 V16 train geometries, eight paired V17 training inputs, three development candidates, and six withheld candidates. It is restricted to geometry-only evidence and cannot read held-out labels or outputs.

@@ -1,19 +1,19 @@
 # A/B 窗口协作：当前分工
 
-GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程、Python 环境与 `/tmp` 检查点仍在各自云机器。切换 B 的阶段时，A 必须把 `START_WINDOW_B.md` 中的具体命令发给 B；仓库更新不会自动启动另一个窗口。
+GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程、Python 环境与 `/tmp` 检查点仍在各自云机器。A 在 B 当前任务完成前把下一项不冲突的任务写入 `tasks/window-b.json`。B 会在当前任务发布后同步 `main` 并接续下一项，不需要用户逐条转发命令。仓库提交不能唤醒已经结束的 B 会话；结束后只需恢复该环境。
 
 ## 当前状态与任务
 
 | 窗口 | 当前工作 | 不负责的工作 |
 |---|---|---|
-| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | v14 `SCREEN_FAIL`。三个 V15 residual 标签已核验，Ag-C registry 盲测已核验，Ag-Si 盲测四核运行，Ag-Ti 排队。之后构建、训练、评估 V15。 | 三份 V15 盲测不进入训练/验证/模型选择；不改正在运行的盲测。 |
-| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | V15 数据完整性审计已完成。当前任务是设计跨度更大的 Ag-X 接触距离和横向 registry 候选结构，仅作未来训练采样提案。 | 不运行 DFT/MACE/MD/TTM；不修改数据集、脚本、标签或冻结盲测。 |
+| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | V17 development-validation：AgC 已收敛且归档核验通过；AgSi 四核运行中，AgTi 排队。随后审阅 B 的训练来源审计和三项开发验证结果，再构建、训练、评估 V17。 | 六份 V17 withheld-test 标签继续封存，直到所选 checkpoint 和选择记录冻结。 |
+| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 正在审计 35 个 V16 训练帧和 8 个 V17 配对训练诊断标签的来源/能量约定；随后自动接续 V17 分割泄漏几何审计。 | 不读取 A 的开发验证输出或六份 withheld-test 标签；不擅自运行 DFT、训练/推理、MD/TTM。 |
 
 A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。当前 v14 三份盲测的力向量 RMSE 都高于 0.05 eV/Å，因此 v14 不用于长时间 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
 
-## B 当前命令
+## B 当前任务
 
-把 `coordination/START_WINDOW_B.md` 中的同步、身份检查和进度命令发给 B。B 只发布未标注候选结构、几何审查报告和哈希清单。若 owner 校验失败或身份不符，B 停止并回报；不要手动改 owner。
+无需为队列中的每个任务单独给 B 发命令。A 维护任务卡和后续队列；活跃的 B 会话按 `B_CONTINUOUS_WORK.md` 自动继续。若 B 会话已结束，恢复该云环境后它再同步仓库。若 owner 校验失败或身份不符，B 停止并回报；不要手动改 owner。
 
 ## 同步与归档
 
@@ -31,6 +31,7 @@ python3 research/mace-v12-transfer/coordination/sync_tasks.py status --remote
 
 ## Standing B work queue
 
-See [B_CONTINUOUS_WORK.md](B_CONTINUOUS_WORK.md). A maintains assigned queue order
-in tasks/window-b.json; B publishes stages, syncs main and continues assigned work
-while its session remains active. Git alone cannot restart an ended agent session.
+See [B_CONTINUOUS_WORK.md](B_CONTINUOUS_WORK.md). A replenishes the queue in
+tasks/window-b.json before B's current task ends when practical; only one B task
+runs at a time. B publishes stages, syncs main and continues assigned work while
+its session remains active. Git alone cannot restart an ended agent session.
