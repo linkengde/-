@@ -37,4 +37,4 @@
 
 后续探索性轰击结果单独保存在 [`impact_pilot_8hits_20261007/`](impact_pilot_8hits_20261007/)。该试验沿用上述双连续相区，将局部活动区重新对准实际入射点；不修改相场掩膜、相组成或盒子。报告、OVITO 末态、形貌预览、命中组和无轰击对照均在该目录。
 
-累计 1.85 ps 的末态出现约 12 Å 的中心熔坑样凹陷和局部超热响应；三维坑形图为 `impact_pilot_8hits_20261007/crater_3d_surface_8hits_1p85ps.png`；剖面图为 `impact_pilot_8hits_20261007/surface_morphology_8hits_1p85ps.png`，但势交叉项未验证，末态也有近距离 Ag–Ag 原子对；因此它是探索性几何/动力学候选，不是已验证的真实电弧熔池。
+累计 1.85 ps 的末态出现约 12 Å 的中心熔坑样凹陷和局部超热响应；三维双相原子模型为 `impact_pilot_8hits_20261007/3d_phase_colored_crater_model_8hits_1p85ps.png`（紫色 Ti₃SiC₂、金色 Ag）；三维坑形表面图为 `impact_pilot_8hits_20261007/crater_3d_surface_8hits_1p85ps.png`；剖面图为 `impact_pilot_8hits_20261007/surface_morphology_8hits_1p85ps.png`，但势交叉项未验证，末态也有近距离 Ag–Ag 原子对；因此它是探索性几何/动力学候选，不是已验证的真实电弧熔池。
