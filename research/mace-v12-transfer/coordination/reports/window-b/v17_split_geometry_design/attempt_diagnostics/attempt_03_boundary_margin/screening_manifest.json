@@ -1,0 +1,747 @@
+{
+  "scope": "geometry-only V17 role proposal; no DFT output, unseen labels, model inference/training, MD or TTM read/run",
+  "reader_policy": "extxyz parser converts only species, positions, lammps_id, lammps_type, central_pair, Lattice and PBC; energy/force fields are ignored",
+  "comparison_inventory": {
+    "historical_model_split_files": 18,
+    "historical_model_split_frames": 197,
+    "published_pbe_input_files": 38,
+    "published_pbe_input_frames": 38,
+    "total_geometry_frames": 235,
+    "V16_train_rows": 35,
+    "V17_planned_training_inputs": 8,
+    "V17_planned_training_input_records": [
+      {
+        "label": "AgC_framework_neighbor_m_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgC_framework_neighbor_m_acq_v17_01.extxyz",
+        "sha256": "1ca2296b55c265987291e6167e844cccbaca38822b8340962678e04592ed35ca"
+      },
+      {
+        "label": "AgSi_transverse_Ag_m_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgSi_transverse_Ag_m_acq_v17_01.extxyz",
+        "sha256": "c4a171481ad09968c0bd5980d43fcb6e2afd7e85a7bdee231208747dde3233b5"
+      },
+      {
+        "label": "AgSi_framework_neighbor_m_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgSi_framework_neighbor_m_acq_v17_01.extxyz",
+        "sha256": "57887b262d29cf3659cab1273e4f031a826900318016e8d8fe6e899925689f45"
+      },
+      {
+        "label": "AgTi_framework_neighbor_m_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgTi_framework_neighbor_m_acq_v17_01.extxyz",
+        "sha256": "aac0938a9b417bf4a7f61e5ee76f7485ff7e8af4cb4e06f58001b79d5f636293"
+      },
+      {
+        "label": "AgC_framework_neighbor_p_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgC_framework_neighbor_p_acq_v17_01.extxyz",
+        "sha256": "09dae5405ad3483981c037a625d0ec24345b62de73b05f554297a03a158104b3"
+      },
+      {
+        "label": "AgSi_transverse_Ag_p_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgSi_transverse_Ag_p_acq_v17_01.extxyz",
+        "sha256": "0ec984230be84dec75648be83c7a35355d61b5d3c9f3f40e47dc2958a6703653"
+      },
+      {
+        "label": "AgSi_framework_neighbor_p_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgSi_framework_neighbor_p_acq_v17_01.extxyz",
+        "sha256": "005870fe551a65d70066546a08391c7533e5844693ef1c85a72e5b475966582c"
+      },
+      {
+        "label": "AgTi_framework_neighbor_p_acq_v17_01",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgTi_framework_neighbor_p_acq_v17_01.extxyz",
+        "sha256": "7e0ebb73b6cfd1bcdf3e40e0e8f133aafa059e528961ce7b0c3a0734ad714768"
+      }
+    ]
+  },
+  "duplicate_policy": {
+    "exact": "same composition/order or persistent IDs, same cell/PBC, maximum aligned minimum-image displacement <= 1e-05 A",
+    "near": "same persistent IDs where present, minimum-image align; Ag registry RMS <= 0.15 A AND framework RMS <= 0.15 A",
+    "roles_pairwise_checked": true
+  },
+  "species_contact_policy": "for each element pair, candidate minimum distance must be >= the smallest observed same-composition split/input minimum minus 0.05 A; empirical geometry screen, not a universal bond cutoff",
+  "candidate_count": 9,
+  "development_validation_count": 3,
+  "withheld_test_count": 6,
+  "pairwise_role_overlap_hits": [],
+  "candidate_results": [
+    {
+      "candidate_id": "AgC_v17_dev_validation_01",
+      "interface": "AgC",
+      "role": "development_validation",
+      "file_sha256": "f0d8bb9d065204422d3e11483b9b09505035c837c91faa975fc51414fee70124",
+      "geometry_sha256": "2cc86553bbc94fa70e1b0d5f217fc58edf7e2e504a0caf623638000c9a8db3be",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 32,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 3.552713678800501e-15,
+        "Ag_registry_RMS_A": 0.3879041416639502,
+        "framework_RMS_A": 0.022116293423223667,
+        "framework_max_displacement_A": 0.14999999999992605,
+        "all_atom_RMS_A": 0.08208725619730174,
+        "max_atom_displacement_A": 0.3879041416639509,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgC_v17_test_transverse_framework_01",
+      "interface": "AgC",
+      "role": "withheld_test",
+      "file_sha256": "606a499873f21e37f95dc0d74f74b8d253ed211106da9c9f30d166f8cd8d2d8d",
+      "geometry_sha256": "b263a36e929d69133c2a3ac066e261b60b030636e57fd9a6bf568722c7e5ea3b",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 32,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 3.552713678800501e-15,
+        "Ag_registry_RMS_A": 0.15882813705400123,
+        "framework_RMS_A": 0.022116293423223667,
+        "framework_max_displacement_A": 0.14999999999992605,
+        "all_atom_RMS_A": 0.03898524139553407,
+        "max_atom_displacement_A": 0.15882813705400198,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgC_v17_test_distance_01",
+      "interface": "AgC",
+      "role": "withheld_test",
+      "file_sha256": "977c228186599396f4fed149fc18605ecbc7502759d9ef40a43333bae83aa8fd",
+      "geometry_sha256": "cf6457c530a7ed10fba3ef5e65145dda22fd17095ebad3367ec2fa5ec643983c",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 29,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 3.552713678800501e-15,
+        "Ag_registry_RMS_A": 0.19999999417064268,
+        "framework_RMS_A": 0.0,
+        "framework_max_displacement_A": 0.0,
+        "all_atom_RMS_A": 0.04082482785647372,
+        "max_atom_displacement_A": 0.1999999941706438,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgSi_v17_dev_validation_01",
+      "interface": "AgSi",
+      "role": "development_validation",
+      "file_sha256": "45333ff0759bc42ddcd4227c42fbbddfc66afe9ed273c226993a48c0ef43d51b",
+      "geometry_sha256": "f8ef8de07d77e1174c6d29c3e7f7f62f38952cf9520f0fe13fcc096c4123edf9",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 30,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.2881793102238091,
+        "framework_RMS_A": 0.02572478777141188,
+        "framework_max_displacement_A": 0.15000000000020733,
+        "all_atom_RMS_A": 0.1677009682468955,
+        "max_atom_displacement_A": 0.28817931022381205,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgSi_v17_test_transverse_framework_01",
+      "interface": "AgSi",
+      "role": "withheld_test",
+      "file_sha256": "d03342f465183c00027b8bf051afdc145132c2b6016d6cd67706a5f9efc42eb7",
+      "geometry_sha256": "0eb901dc05a3576ac1fc82430b36589508829569d996ce79f8c4fc5df82c040b",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 33,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.2924417390158653,
+        "framework_RMS_A": 0.02572478777141188,
+        "framework_max_displacement_A": 0.15000000000020733,
+        "all_atom_RMS_A": 0.1701427833031146,
+        "max_atom_displacement_A": 0.29244173901586634,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgSi_v17_test_distance_01",
+      "interface": "AgSi",
+      "role": "withheld_test",
+      "file_sha256": "4744a1c7f9633bffbcd9c90f61bc2da5b77b40d4736b7238e9a7da86c49039f3",
+      "geometry_sha256": "452d8948c47fa538c85ce08519a20c1e1c51f2e3647c594dc1f3a82c4184d7d7",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 33,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.15000000162926494,
+        "framework_RMS_A": 0.0,
+        "framework_max_displacement_A": 0.0,
+        "all_atom_RMS_A": 0.0866025413191004,
+        "max_atom_displacement_A": 0.1500000016292676,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 10,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgTi_v17_dev_validation_01",
+      "interface": "AgTi",
+      "role": "development_validation",
+      "file_sha256": "28386731b897f96cd28737f19fced1b5b16639c48e40a1c848925c29ac73a87e",
+      "geometry_sha256": "ffc564b3c5b771bbeaca6c9ac4d07f5dc1d7f0d4bbf9f1a890b2975d2b5922da",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 34,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.21539460203680158,
+        "framework_RMS_A": 0.032732683535352324,
+        "framework_max_displacement_A": 0.14999999999978678,
+        "all_atom_RMS_A": 0.1642270310361522,
+        "max_atom_displacement_A": 0.21539460203680347,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 9,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgTi_v17_test_transverse_framework_01",
+      "interface": "AgTi",
+      "role": "withheld_test",
+      "file_sha256": "06a0c3ea33d89ae4ea74ad50fdba05c2ac0e258b856add1561d98b6be98800fb",
+      "geometry_sha256": "d9dcea2c00e33c7987200a4a4abd4dc23f10b874fab755ae9e7b573b9507a409",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 34,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.30358698685317864,
+        "framework_RMS_A": 0.032732683535352324,
+        "framework_max_displacement_A": 0.14999999999978678,
+        "all_atom_RMS_A": 0.23048846269875414,
+        "max_atom_displacement_A": 0.3035869868531796,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 9,
+      "species_contact_pass": true
+    },
+    {
+      "candidate_id": "AgTi_v17_test_distance_01",
+      "interface": "AgTi",
+      "role": "withheld_test",
+      "file_sha256": "1815355f62441d8e6c2963a4a973008a834ce897dafeaea019438456cc9c8a60",
+      "geometry_sha256": "50c8a459f0f57e1be516b69d79ee3fee39875d1470274b96c1d717e943a69a44",
+      "decision": "PASS_GEOMETRY_TRIAGE",
+      "nearest_inventory_geometry": {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+        "frame_index_zero_based": 34,
+        "matching_method": "persistent_lammps_id",
+        "cell_max_delta_A": 0.0,
+        "Ag_registry_RMS_A": 0.1500000005516195,
+        "framework_RMS_A": 0.0,
+        "framework_max_displacement_A": 0.0,
+        "all_atom_RMS_A": 0.11338934231975331,
+        "max_atom_displacement_A": 0.15000000055162271,
+        "exact_duplicate": false,
+        "near_duplicate": false
+      },
+      "exact_or_near_hit_count": 0,
+      "contact_check_count": 9,
+      "species_contact_pass": true
+    }
+  ],
+  "limitations": [
+    "All proposals inherit the existing Ti3SiC2-based small-cluster parent motifs; geometry separation does not establish independent morphology or thermal coverage.",
+    "Three development-validation geometries are generated from existing parent inputs with interface-specific transverse Ag translations and a 0.15 A local framework displacement.",
+    "Three withheld-test geometries reuse unlabelled wide-span proposals; their parent lineage remains correlated with existing train motifs.",
+    "Three additional withheld-test geometries combine a lateral Ag translation with a 0.15 A local marked-framework displacement; they are controlled design probes, not relaxed structures.",
+    "A must accept/freeze the role manifest before V17 training; no labels exist, so DFT labels need a separate owner assignment."
+  ],
+  "source_files": [
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+      "sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "role": "historical_model_split_geometry_only",
+      "frames": 23
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+      "sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+      "role": "historical_model_split_geometry_only",
+      "frames": 23
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+      "sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+      "role": "historical_model_split_geometry_only",
+      "frames": 26
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "role": "historical_model_split_geometry_only",
+      "frames": 31
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/train.extxyz",
+      "sha256": "e358e49cf99b42d7c8ec6e482f1de5e777fa0f5da916ae9c22311ec5fc84bcf0",
+      "role": "historical_model_split_geometry_only",
+      "frames": 29
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "role": "historical_model_split_geometry_only",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+      "sha256": "24f454e3a6d5fb1e4f1b576d70b136f20ffff202bd4ad22476c85a2912d60bd0",
+      "role": "historical_model_split_geometry_only",
+      "frames": 35
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "role": "historical_model_split_geometry_only",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgC_d2p0.extxyz",
+      "sha256": "ed7ccf2a4976f2a9afc41cbf38e109d172c2104667934af35e09829c86359f10",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgC_d2p4.extxyz",
+      "sha256": "a9f0ea09afcc2812256cfcbd3633e4d2613c29e106a6c73187a2a9958dcd9ed8",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgSi_d2p2.extxyz",
+      "sha256": "96c5b90d65eb728c46a24dde01aa5214a755f384039f00c873c71959311e74a7",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgSi_d2p8.extxyz",
+      "sha256": "cb415a64a4c868da0a429a9d37cc0581a47a7bc12d1355d0bb0fb2e430602494",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgC_validation_d2p30.extxyz",
+      "sha256": "63b5bc33dabab88ead78de5ccfc0c403ed7a0db906ae24722e6e9b30e37ff5d2",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgSi_validation_d2p60.extxyz",
+      "sha256": "e41850562f973c8f588deb1d14f2c7aeabd13c083d3928951e0d1b09be5f4cd0",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgTi_validation_d2p60.extxyz",
+      "sha256": "996b73776e1193ac85146561e2a6e643bb590916b5f31ae00b7b5d052f97bbc2",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/inputs/AgC_lateral_registry_holdout_v13.extxyz",
+      "sha256": "6b9aa1c30203841d9fa673e91cbd5e671c495bc8f7ff1ff4fb83af6141d2b846",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/inputs/AgSi_lateral_registry_holdout_v13.extxyz",
+      "sha256": "91c9495684f8497d7dd28f4b4075c0749b285627ff383aeff638d166b3672e4b",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts/inputs/AgC_registry_holdout_v14_01.extxyz",
+      "sha256": "7b2b5433270178f9fc17a70c878b568b86fe6a7918f65a5e33d2267b4eaca2a7",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_main_holdouts/inputs/AgSi_registry_holdout_v14_01.extxyz",
+      "sha256": "3762caaeb279b8650f12d21f0379fee38ab0e45657bae640b0971973e1a97dd8",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgC_registry_strain_acq_v14_01.extxyz",
+      "sha256": "ce992b93cf32ebcee7cd65ff7c23dec91dc8e28616893ed414818253ebe1d260",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgSi_registry_strain_acq_v14_01.extxyz",
+      "sha256": "0fd6ed880bdcaf84ec95fc6adc7e247f34256ac28b1191040be3e9679ae147eb",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgTi_registry_holdout_v14_01.extxyz",
+      "sha256": "999ce5c9913634be2fbc4c344f3ab9845a7e80d2f03665e040c2b81e08caf40a",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgTi_registry_probe_v13_01.extxyz",
+      "sha256": "a30b698b2f3af74784ebb0c33ad31207c8d67681d7531b3b4ac98e0148df6694",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgC_registry_holdout_v15_01.extxyz",
+      "sha256": "f528a051246a1a89546da6f55ee3e3b66222cd08caefca039d77989049d25135",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgSi_registry_holdout_v15_01.extxyz",
+      "sha256": "95e9980d1a2671c97865c17e3a49bda9278376d5ff550495f28802b4f84b5b70",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts/inputs/AgTi_registry_holdout_v15_01.extxyz",
+      "sha256": "0291123e4f6db7f1f4f5e4291366048fec2fb0b7bacbf922836b16878e7b929e",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition/inputs/AgC_residual_shell_v15_01.extxyz",
+      "sha256": "ff05df833156ca7569e4c155c327703a429bbc80b3a0240039d6a18d700d0d33",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition/inputs/AgSi_residual_shell_v15_01.extxyz",
+      "sha256": "a860923ba99d6657e42192e26de52d3051904f4cb84a41dfd759fafc5818beb1",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition/inputs/AgTi_residual_shell_v15_01.extxyz",
+      "sha256": "f33cd351b4213cc9aa8e2420e67bba49f4be45727f9fe0408562cc2cb9f9311f",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts/inputs/AgC_registry_holdout_v16_01.extxyz",
+      "sha256": "ceb7b6fcbb1191624eeaba91f06080a4c16686504b9a868150a99265f2ce394c",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts/inputs/AgSi_registry_holdout_v16_01.extxyz",
+      "sha256": "b8542782691bcf4f48d808c46372526ddd3f9a057e6d0c9d2379a3c8c1b3db59",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts/inputs/AgTi_registry_holdout_v16_01.extxyz",
+      "sha256": "bd93ab7da3d9e09b36d553ab3cab4daaba27dc42e4a14948f402b99b86b5ed46",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgC_widespan_registry_acq_v16_01.extxyz",
+      "sha256": "061e1c3374962e2da4ee1378f36f00895df8d669758334620277e275821c051a",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgSi_widespan_registry_acq_v16_01.extxyz",
+      "sha256": "92dd6a42087553d506e438cfae153f2bc58c1bc415d70f3f58da33d0e34cea91",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_main_acquisition/inputs/AgTi_widespan_registry_acq_v16_01.extxyz",
+      "sha256": "6c619d9fcda72876449c2792b4d6c4d3db4afcde86bf976cb824e5e15ef74a6a",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgC_widespan_distance_acq_v16_01.extxyz",
+      "sha256": "75841f91e522499e24953b3d6c9454cccc09bab484e1f55001ad26380686dd21",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgSi_widespan_distance_acq_v16_01.extxyz",
+      "sha256": "cccdfcdd8891216a4078d11cd618dd862daae2c368bfe74cef7c3a73ac3b6049",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition/inputs/AgTi_widespan_distance_acq_v16_01.extxyz",
+      "sha256": "d9a2a87496d133e22778f0531c2a2742a61d0c5a86c61a04fea44d4d500f6115",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgC_framework_neighbor_p_acq_v17_01.extxyz",
+      "sha256": "09dae5405ad3483981c037a625d0ec24345b62de73b05f554297a03a158104b3",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgSi_framework_neighbor_p_acq_v17_01.extxyz",
+      "sha256": "005870fe551a65d70066546a08391c7533e5844693ef1c85a72e5b475966582c",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgSi_transverse_Ag_p_acq_v17_01.extxyz",
+      "sha256": "0ec984230be84dec75648be83c7a35355d61b5d3c9f3f40e47dc2958a6703653",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/inputs/AgTi_framework_neighbor_p_acq_v17_01.extxyz",
+      "sha256": "7e0ebb73b6cfd1bcdf3e40e0e8f133aafa059e528961ce7b0c3a0734ad714768",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgC_framework_neighbor_m_acq_v17_01.extxyz",
+      "sha256": "1ca2296b55c265987291e6167e844cccbaca38822b8340962678e04592ed35ca",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgSi_framework_neighbor_m_acq_v17_01.extxyz",
+      "sha256": "57887b262d29cf3659cab1273e4f031a826900318016e8d8fe6e899925689f45",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgSi_transverse_Ag_m_acq_v17_01.extxyz",
+      "sha256": "c4a171481ad09968c0bd5980d43fcb6e2afd7e85a7bdee231208747dde3233b5",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/inputs/AgTi_framework_neighbor_m_acq_v17_01.extxyz",
+      "sha256": "aac0938a9b417bf4a7f61e5ee76f7485ff7e8af4cb4e06f58001b79d5f636293",
+      "role": "published_dft_input_geometry_only",
+      "frames": 1
+    }
+  ],
+  "source_manifests": [
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v16_unseen_validation_geometry_design/final_candidates/candidate_manifest.json",
+      "sha256": "407493089204d098e1b5543c4ce0353d102b445e43c63c088578bcdbe0b2d358",
+      "role": "geometry/source manifest"
+    },
+    {
+      "path": "research/mace-v12-transfer/coordination/reports/window-b/v15_wide_span_sampling_design/candidate_manifest.json",
+      "sha256": "fe35be3ec75e21cafb0dcf1783b68faebd92a5f5e4dd9a1a3a86aed7ec6faaa2",
+      "role": "geometry/source manifest"
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition/input_manifest.json",
+      "sha256": "f65343c5969f1d06497337290e0e5e179de4c8de6fe51ed62b901651c76514ce",
+      "role": "geometry/source manifest"
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition/input_manifest.json",
+      "sha256": "9ddc53dc04fe1fc03d855ed957ef74e365e6d4100b778a2c2ba34dcf4740aa99",
+      "role": "geometry/source manifest"
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/input_manifest.json",
+      "sha256": "cb9ef96b66d66e6f8418b6ba134e0a8877a58c46feedad7501b9d0d1ad7df3d5",
+      "role": "geometry/source manifest"
+    }
+  ],
+  "historical_split_files": [
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/train.extxyz",
+      "sha256": "b40b72c0d3d1a2c5404f509ce8cc446965b36199b95b98da8d93ab461c500dab",
+      "frames": 23
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v11_energyfocus/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/train.extxyz",
+      "sha256": "5b4a073f0abb4da823d2809635ae5521486c4689831e8696b6697f422135a391",
+      "frames": 23
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/train.extxyz",
+      "sha256": "e940b6d79fc232acb4ebe3636c55c1bcf1b8f89fa4db3e31db0ef41d99d3a481",
+      "frames": 26
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v13_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/train.extxyz",
+      "sha256": "3323cdbd3081fc8d91673662c5f83c8da93ba3b4d7a23428f6b70d0e7a4c9faf",
+      "frames": 31
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/train.extxyz",
+      "sha256": "e358e49cf99b42d7c8ec6e482f1de5e777fa0f5da916ae9c22311ec5fc84bcf0",
+      "frames": 29
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v15_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/test.extxyz",
+      "sha256": "28d3ddc63332361c014b42bfb54c87eb06d0945ede734b965229ceea46c5f60e",
+      "frames": 3
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/train.extxyz",
+      "sha256": "24f454e3a6d5fb1e4f1b576d70b136f20ffff202bd4ad22476c85a2912d60bd0",
+      "frames": 35
+    },
+    {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/data/valid.extxyz",
+      "sha256": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+      "frames": 2
+    }
+  ]
+}
