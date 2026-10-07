@@ -7,9 +7,11 @@ GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程
 | 窗口 | 当前工作 | 不负责的工作 |
 |---|---|---|
 | A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | 三个 V17 开发 DFT 点已归档核验通过；冻结 V16 在这三点的开发评分已完成，DEV_SCREEN_FAIL。能量误差通过，三种界面的受力向量与分离力误差均未通过。等待审阅 B 的组成秩恢复分析，再决定 V17 数据纳入和能量锚点策略。 | 六份 V17 withheld-test 标签继续封存，直到所选 checkpoint 和选择记录冻结。 |
-| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 已完成训练来源、几何分割泄漏和四个元素参考锚点审计。下一项 `v17_certified_core_rank_recovery_analysis` 已分配；截至最近同步，任务卡有指令，但尚无该项的新进度事件。 | 不读取 A 的开发验证输出或六份 withheld-test 标签；不擅自运行 DFT、训练/推理、MD/TTM。 |
+| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 已完成训练来源、几何分割泄漏和四个元素参考锚点审计。主任务 `v17_certified_core_rank_recovery_analysis` 与后续报告型 V17 集成方案已发布在任务卡；截至最近同步，rank 任务尚无新进度事件。 | 不读取 A 的开发验证输出或六份 withheld-test 标签；不擅自运行 DFT、训练/推理、MD/TTM。 |
 
 A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。V16 冻结模型在三个 V17 开发结构上的力向量 RMSE 为 AgC 0.1376、AgSi 0.0729、AgTi 0.1015 eV/Å；分离力绝对误差为 0.2044、0.2035、0.1856 eV/Å，均超过暂定门槛。开发评分不是独立最终盲测，也不支持生产 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
+
+新开发结构的逐原子误差定位显示，AgC 与 AgTi 的 4.5 Å 接触壳误差高于壳外；AgSi 的误差较分散，但标记 Si 与邻近 Ag 存在较大的横向分量。A 已将逐原子证据发布在 V17 acquisition 目录。该结果支持先验证已完成的 V17 配对训练数据覆盖效果；不能据此宣称已找到唯一因果或直接调整损失权重。
 
 ## B 当前任务
 
