@@ -92,7 +92,7 @@ for LABEL in "${LABELS[@]}"; do
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --archive-root "$ARCHIVE_ROOT" --authorization "$AUTHORIZATION" \
     --owner "$OWNER" --labels "$LABEL"
-  mpirun --bind-to core --map-by core -n 4 "$GPAW_CLI" python "$PACK_ROOT/dft_single_point.py" \
+  mpirun --bind-to core --map-by core -n 4 "$GPAW_CLI" python "$PACK_ROOT/dft_single_point.py" -- \
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --authorization "$AUTHORIZATION" --owner "$OWNER" --label "$LABEL" \
     >"$RUN_ROOT/$LABEL.launcher.log" 2>&1

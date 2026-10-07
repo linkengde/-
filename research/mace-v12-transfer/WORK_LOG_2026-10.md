@@ -330,3 +330,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - The first A AgC development-validation launch passed static authorization/geometry preflight, then stopped at import before SCF because GPAW 26.7 requires `gpaw python` for this MPI mode. No DFT label was produced. The launcher traceback is preserved in `development_validation_attempts/AgC_v17_dev_validation_01.launcher_attempt_01.log`.
 - Patched the guarded execution-pack runner to use the selected venv Python for ASE preflight and the matching `gpaw python` CLI for MPI calculation. The four-rank GPAW communicator smoke check passed; the pinned PW-PBE settings and all geometries remain unchanged. Re-running static hashes and input preflight before restarting the A queue.
+
+
+### 2026-10-07 Beijing: finalized GPAW MPI argument forwarding
+
+- The corrected launcher exposed a second pre-SCF CLI issue: GPAW parsed driver options as its own. Preserved this second traceback as `development_validation_attempts/AgC_v17_dev_validation_01.launcher_attempt_02.log`. No DFT label or SCF directory was produced by either failed attempt.
+- Added GPAW's `--` argument delimiter. A four-rank `gpaw python` smoke script confirmed all ranks see MPI size4 and receive the driver arguments; the development-label authorization/hash/geometry preflight passed again. Both candidate package SHA256 inventory and A role-decision hashes pass.
+- B has started the now-unblocked V17 paired-response analysis on the eight verified diagnostics. A is restarting the three authorized development-validation labels with the corrected runner.
