@@ -7,7 +7,7 @@ The recorded inference environment is Python 3.12.14, ASE 3.29.0, PyTorch 2.5.1 
 ```bash
 mkdir -p /tmp/window-b-mpl-cache
 MPLCONFIGDIR=/tmp/window-b-mpl-cache /workspace/.venvs/mace-v14-assist/bin/python \
-  research/mace-v12-transfer/coordination/reports/window-b/v17_paired_response_analysis/analyze_v17_pairs.py \
+  research/mace-v12-transfer/coordination/reports/window-b/v17_paired_response_analysis/analysis.py \
   --repo-root /workspace/- \
   --output-dir /workspace/-/research/mace-v12-transfer/coordination/reports/window-b/v17_paired_response_analysis/analysis_reproduction_01 \
   --model /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v16_interface_energy/training_01/checkpoints/MACE_periodic_v16_interface_energy_run-45.model \
