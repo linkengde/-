@@ -343,3 +343,10 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 
 - After two logged pre-SCF launcher failures, the corrected GPAW CLI/argument forwarding passed a four-rank smoke check and the exact role/input preflight passed. A's AgC development-validation PW-PBE run is now active on four MPI ranks; local GPAW log reached SCF iteration1. AgSi and AgTi remain queued. No output label exists yet.
 - B's task card reports its V17 signed-pair response analysis running. Withheld-test DFT remains blocked pending a frozen V17 checkpoint selection.
+
+### 2026-10-07 UTC: V17 response review and development-validation queue
+
+- Reviewed B's completed eight-pair response report. Its archive checks pass; three V14 parent geometry-hash declarations do not reproduce under the V17 canonical hash, while exact dataset/frame/ID/cell/PBC identity and direct child-displacement checks pass. Native/free-energy secants differ for three pairs, so the V17 target convention must be explicit before dataset construction. Full evidence is in `coordination/reports/window-b/v17_paired_response_analysis/report.md` and `analysis_final/analysis.json`.
+- A's three development-validation labels are running serially. AgC is active on four MPI ranks at SCF iteration30 at 2026-10-07 06:25 UTC; no convergence/archive result yet. AgSi and AgTi remain queued. Two pre-SCF launcher failures remain documented and produced no labels. The six withheld-test labels remain sealed.
+- Assigned B `v17_energy_convention_and_parent_hash_audit` through `coordination/tasks/window-b.json` (published in commit `274f9c7`). B will trace source evidence and hash algorithms only; it must not read A's dev outputs or any withheld labels, edit production data, or run calculations.
+- V17 has not been trained. After all three A labels pass archive checks, integrate only after reviewing both B findings and development-validation metrics; then train/evaluate V17. No production MD/TTM.
