@@ -6,10 +6,10 @@ GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程
 
 | 窗口 | 当前工作 | 不负责的工作 |
 |---|---|---|
-| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | V17 development-validation：AgC 已收敛且归档核验通过；AgSi 四核运行中，AgTi 排队。随后审阅 B 的训练来源审计和三项开发验证结果，再构建、训练、评估 V17。 | 六份 V17 withheld-test 标签继续封存，直到所选 checkpoint 和选择记录冻结。 |
-| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 正在审计 35 个 V16 训练帧和 8 个 V17 配对训练诊断标签的来源/能量约定；随后自动接续 V17 分割泄漏几何审计。 | 不读取 A 的开发验证输出或六份 withheld-test 标签；不擅自运行 DFT、训练/推理、MD/TTM。 |
+| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | 三个 V17 开发 DFT 点已归档核验通过；冻结 V16 在这三点的开发评分已完成，DEV_SCREEN_FAIL。能量误差通过，三种界面的受力向量与分离力误差均未通过。等待审阅 B 的组成秩恢复分析，再决定 V17 数据纳入和能量锚点策略。 | 六份 V17 withheld-test 标签继续封存，直到所选 checkpoint 和选择记录冻结。 |
+| B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | 已完成训练来源、几何分割泄漏和四个元素参考锚点审计。下一项 `v17_certified_core_rank_recovery_analysis` 已分配；截至最近同步，任务卡有指令，但尚无该项的新进度事件。 | 不读取 A 的开发验证输出或六份 withheld-test 标签；不擅自运行 DFT、训练/推理、MD/TTM。 |
 
-A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。当前 v14 三份盲测的力向量 RMSE 都高于 0.05 eV/Å，因此 v14 不用于长时间 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
+A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。V16 冻结模型在三个 V17 开发结构上的力向量 RMSE 为 AgC 0.1376、AgSi 0.0729、AgTi 0.1015 eV/Å；分离力绝对误差为 0.2044、0.2035、0.1856 eV/Å，均超过暂定门槛。开发评分不是独立最终盲测，也不支持生产 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
 
 ## B 当前任务
 
