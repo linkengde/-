@@ -466,11 +466,12 @@ after A publishes the frozen model and development-only score.
 ## v17_clean_core_builder_draft
 
 The four-label archive reconciliation, the approved frame0 DFT, and the
-provisional43 independent audit are complete. Start this isolated data artifact
-while A completes the corrected V17 fixed-epoch training. Use the provenance
-ledger to select exactly the 21 directly archive-supported V16 frames, add the
-eight verified signed V17 diagnostic labels, and add the verified B-owned
-`Ti_gap_2p3` frame0 relabel. Write only under
+provisional43 independent audit are complete. A has published the corrected
+fixed-epoch79 V17 model and development-only score. The immediate priority is
+`v17_iteration_review`; this isolated data artifact follows it in the queue.
+Use the provenance ledger to select exactly the 21 directly archive-supported
+V16 frames, add the eight verified signed V17 diagnostic labels, and add the
+verified B-owned `Ti_gap_2p3` frame0 relabel. Write only under
 `coordination/reports/window-b/v17_clean_core_builder_draft/`; do not modify A's
 official dataset.
 
@@ -483,8 +484,9 @@ Compare development geometry only for overlap and do not read development
 reference values or scores. Do not inspect withheld labels/outputs, run MACE,
 DFT, MD or TTM, or change A's train/valid files. Deliver a candidate extxyz,
 machine-readable manifest/row ledger, reproducible read-only builder/audit
-script, concise report and SHA256 list. Then continue to `v17_iteration_review`
-only after A freezes and publishes its valid epoch79 model and development score.
+script, concise report and SHA256 list. The V17 iteration review is first in
+the current queue; after that review, keep this builder proposal-only until A
+reviews and explicitly integrates it.
 
 ## Rolling cumulative review V9 through each finished Vn
 

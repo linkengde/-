@@ -1,0 +1,74 @@
+{
+  "status": "COMPLETED_PROVISIONAL_SCREENING; DEVELOPMENT_GATES_FAIL",
+  "completed_utc": "2026-10-07T15:55:44Z",
+  "training": {
+    "run": "training_provisional_03",
+    "exit_code": 0,
+    "epochs_completed": 80,
+    "selected_epoch": 79,
+    "threads": 4,
+    "seed": 45,
+    "foundation_model": "MACE-MP-0b3-medium",
+    "batch_size": 1,
+    "learning_rate": 0.0001,
+    "weight_decay": 5e-07,
+    "energy_weight": 100,
+    "force_weight": 1000,
+    "test_file_passed": false
+  },
+  "selected_model": {
+    "path": "models/MACE_periodic_v17_provisional_screening.model",
+    "sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3"
+  },
+  "selected_checkpoint": {
+    "path": "checkpoints/MACE_periodic_v17_provisional_screening_run-45_epoch-79.pt",
+    "sha256": "2caee92b5e74af102e1013c1d53ca0a2a06295e14d5e8c5be53aa975900f737b"
+  },
+  "data": {
+    "manifest_sha256": "0e6f7fa1a7e0296e89d9aa55e9d24f3b38d81282f6f1724c326609808786d5aa",
+    "train_sha256": "b7488b37c628e8432baf0987037aa3c2f7196047185884ac40d78b441e1cd4d1",
+    "development_validation_sha256": "985045431b3b69242ebbb9966393794a18a39fad37e029915e9d75f3b1e06f84",
+    "train_frames": 43,
+    "development_validation_frames": 3,
+    "test_file": null,
+    "withheld_labels_opened": false
+  },
+  "evaluation": {
+    "path": "../evaluation_dev_01/evaluation.json",
+    "sha256": "2cb9fcb4dc16cf403482db569b563df62507cf21b2f39b6c894030b38a900fc3",
+    "status": "FAIL",
+    "gates": {
+      "energy_abs_error_meV_atom": 10.0,
+      "force_vector_RMSE_eV_A": 0.05,
+      "separating_force_abs_error_eV_A": 0.1
+    },
+    "by_interface": {
+      "AgC": {
+        "energy_abs_error_meV_atom": 2.7552374979660974,
+        "force_vector_RMSE_eV_A": 0.12825387741111088,
+        "separating_force_abs_error_eV_A": 0.09479635404966835,
+        "provisional_gates_met": false
+      },
+      "AgSi": {
+        "energy_abs_error_meV_atom": 1.771149838515719,
+        "force_vector_RMSE_eV_A": 0.06129409880223268,
+        "separating_force_abs_error_eV_A": 0.19092631480636124,
+        "provisional_gates_met": false
+      },
+      "AgTi": {
+        "energy_abs_error_meV_atom": 1.2212907977799177,
+        "force_vector_RMSE_eV_A": 0.09416294790821386,
+        "separating_force_abs_error_eV_A": 0.21347105697002045,
+        "provisional_gates_met": false
+      }
+    },
+    "limitations": [
+      "The 14 partially supported and 12 inherited-declaration V16 rows retain their source uncertainty.",
+      "The three dev structures were already used to diagnose V16 and are not fresh final blind tests.",
+      "All eight added labels are paired local training diagnostics, not independent tests.",
+      "A gate pass would not establish thermal, pressure, morphology, or production transferability."
+    ]
+  },
+  "interpretation": "Energy errors meet the provisional gate on all three development frames. Force-vector gates fail on all three. Separating-force gate passes only AgC; AgSi and AgTi fail. This three-frame reused development screen is not a fresh blind test.",
+  "recorded_utc": "2026-10-07T15:58:52Z"
+}

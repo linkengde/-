@@ -14,10 +14,10 @@ From the repository root:
 bash research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/run_v17_training.sh --repo-root "$PWD" --output-dir research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03
 ```
 
-After inspecting the full 80-epoch log and final checkpoint, A records the selected model hash and completion evidence in `selection_record.json`, then runs:
+A froze the final epoch79 model and completion evidence in `training_provisional_03/selection_record.json`; the completed run was scored with:
 
 ```bash
-/workspace/.venvs/mace-v12/bin/python research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/evaluate_v17_dev.py --repo-root "$PWD" --output-dir research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/evaluation_dev_01 --model research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_02/models/MACE_periodic_v17_provisional_screening.model --selection-record research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_02/selection_record.json
+/workspace/.venvs/mace-v12/bin/python research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/evaluate_v17_dev.py --repo-root "$PWD" --output-dir research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/evaluation_dev_01 --model research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03/models/MACE_periodic_v17_provisional_screening.model --selection-record research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03/selection_record.json
 ```
 
-This is a numerical screening step only. It does not authorize MD, TTM, or physical claims. Any failed gate requires a targeted data/source or optimization diagnosis; it is not remedied by lowering the gate.
+Run03 completed and is recorded under `training_provisional_03/`; development-only results are under `evaluation_dev_01/`. The current result is FAIL: energy passes all three structures, force-vector RMSE fails all three, and separation error passes only AgC. This is a numerical screening step only; it does not authorize MD, TTM, or physical claims. Any failed gate requires a targeted data/source or optimization diagnosis; it is not remedied by lowering the gate.
