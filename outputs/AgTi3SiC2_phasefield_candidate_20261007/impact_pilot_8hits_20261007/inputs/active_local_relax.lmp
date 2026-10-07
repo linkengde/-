@@ -1,0 +1,27 @@
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/phasefield_clearance_2p25.data
+change_box all z final -10.0 100.0 units box
+include potentials/potential_stage69.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group active region crater_region
+group constrained subtract all active
+fix hold constrained setforce 0.0 0.0 0.0
+compute fparts all property/atom fx fy fz
+variable fmag atom sqrt(c_fparts[1]*c_fparts[1]+c_fparts[2]*c_fparts[2]+c_fparts[3]*c_fparts[3])
+compute maxf active reduce max v_fmag
+thermo 100
+thermo_style custom step atoms pe c_maxf fmax
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.003
+minimize 0.0 0.05 3000 12000
+dump f all custom 1 audit/active_local_relaxed_forces.dump id type x y z fx fy fz v_fmag
+dump_modify f sort id
+run 0
+undump f
+write_data structures/active_local_relaxed.data

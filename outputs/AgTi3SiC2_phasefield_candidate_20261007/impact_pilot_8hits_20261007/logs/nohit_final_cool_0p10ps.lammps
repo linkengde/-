@@ -1,0 +1,147 @@
+LAMMPS (30 Sep 2026)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/nohit_4shot_control_0p14ps.data
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4305 atoms
+  reading velocities ...
+  4305 velocities
+  read_data CPU = 0.033 seconds
+include potentials/potential_stage69.inc
+# Stage69 collision-ready candidate potential; no physical run is implied.
+# Baseline: Ag EAM + Ti/Si/C TSCBOP + calibrated Ag-interface Morse.
+# ZBL is overlaid only in the 0.8-1.5 A short-range window.
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 0.8 1.5
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+pair_coeff 1 4 zbl 22 47
+pair_coeff 2 4 zbl 14 47
+pair_coeff 3 4 zbl 6 47
+pair_coeff 4 4 zbl 47 47
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_region block INF INF INF INF -10.0 5.0 units box
+region sink_region block INF INF INF INF 5.0 15.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group fixed region fixed_region
+379 atoms in group fixed
+group sink region sink_region
+842 atoms in group sink
+group mobile subtract all fixed
+3926 atoms in group mobile
+group crater region crater_region
+511 atoms in group crater
+group freezone intersect mobile crater
+511 atoms in group freezone
+group anchored subtract mobile freezone
+3415 atoms in group anchored
+group bath subtract sink freezone
+811 atoms in group bath
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 441039 zero yes tally yes
+compute Tfree freezone temp
+compute Tmobile mobile temp
+timestep 0.0001
+thermo 100
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 200 dumps/nohit_final_cool_0p10ps.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 1000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 22
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 13.47 | 13.47 | 13.47 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4305   786.79514      217.41452     -25591.426      110.3044      -25481.122     -0            
+       100   0.01                4305   795.59544      196.03964     -25576.315      99.459938     -25476.855     -4.2665703    
+       200   0.02                4305   752.17314      170.36298     -25558.609      86.432989     -25472.176     -8.9461401    
+       300   0.03                4305   744.53582      189.28262     -25565.805      96.031794     -25469.773     -11.347115    
+       400   0.04                4305   780.32988      219.59172     -25578.441      111.409       -25467.032     -14.089163    
+       500   0.05                4305   762.94848      180.37303     -25556.449      91.51155      -25464.937     -16.182586    
+       600   0.06                4305   799.06659      195.33676     -25561.79       99.10334      -25462.686     -18.434972    
+       700   0.07                4305   800.08659      227.86766     -25578.329      115.60776     -25462.722     -18.399066    
+       800   0.08                4305   820.854        203.2703      -25562.858      103.12839     -25459.73      -21.392653    
+       900   0.09                4305   834.85401      200.31261     -25560.993      101.62781     -25459.365     -21.755944    
+      1000   0.1                 4305   837.2704       228.57647     -25575.345      115.96738     -25459.378     -21.744305    
+Loop time of 28.184 on 1 procs for 1000 steps with 4305 atoms
+
+Performance: 0.307 ns/day, 78.289 hours/ns, 35.481 timesteps/s, 152.746 katom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 27.927     | 27.927     | 27.927     |   0.0 | 99.09
+Neigh   | 0.025195   | 0.025195   | 0.025195   |   0.0 |  0.09
+Comm    | 0.035763   | 0.035763   | 0.035763   |   0.0 |  0.13
+Output  | 0.04896    | 0.04896    | 0.04896    |   0.0 |  0.17
+Modify  | 0.12768    | 0.12768    | 0.12768    |   0.0 |  0.45
+Other   |            | 0.01964    |            |       |  0.07
+
+Nlocal:           4305 ave        4305 max        4305 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7136 ave        7136 max        7136 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 1
+Dangerous builds = 0
+undump tr
+write_data structures/nohit_final_cool_0p10ps.data
+System init for write_data ...
+write_restart restart/nohit_final_cool_0p10ps.restart
+System init for write_restart ...
+Total wall time: 0:00:28

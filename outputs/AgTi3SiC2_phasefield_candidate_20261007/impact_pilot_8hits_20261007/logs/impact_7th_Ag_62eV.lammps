@@ -1,0 +1,162 @@
+LAMMPS (30 Sep 2026)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/impact_6th_Ag_62eV.data
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4311 atoms
+  reading velocities ...
+  4311 velocities
+  read_data CPU = 0.029 seconds
+create_atoms 4 single 9.9573898076 24.2578814220 60.0 units box
+Created 1 atoms
+  using box units in triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+  create_atoms CPU = 0.000 seconds
+include potentials/potential_stage69.inc
+# Stage69 collision-ready candidate potential; no physical run is implied.
+# Baseline: Ag EAM + Ti/Si/C TSCBOP + calibrated Ag-interface Morse.
+# ZBL is overlaid only in the 0.8-1.5 A short-range window.
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 0.8 1.5
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+pair_coeff 1 4 zbl 22 47
+pair_coeff 2 4 zbl 14 47
+pair_coeff 3 4 zbl 6 47
+pair_coeff 4 4 zbl 47 47
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_region block INF INF INF INF -10.0 5.0 units box
+region sink_region block INF INF INF INF 5.0 15.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group projectiles id 4306 4307 4308 4309 4310 4311 4312
+7 atoms in group projectiles
+group new_projectile id 4312
+1 atoms in group new_projectile
+group fixed region fixed_region
+380 atoms in group fixed
+group sink region sink_region
+838 atoms in group sink
+group mobile subtract all fixed
+3932 atoms in group mobile
+group crater region crater_region
+505 atoms in group crater
+group freezone intersect mobile crater
+505 atoms in group freezone
+group free_substrate subtract freezone projectiles
+498 atoms in group free_substrate
+group anchored subtract mobile freezone
+3427 atoms in group anchored
+group bath subtract sink freezone
+809 atoms in group bath
+velocity new_projectile set 0.0 0.0 -105.3164
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 441042 zero yes tally yes
+compute Tfree free_substrate temp
+compute Tmobile mobile temp
+timestep 0.0001
+thermo 100
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 100 dumps/impact_7th_Ag_62eV.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 1400
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 22
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 13.85 | 13.85 | 13.85 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4312   3116.5928      794.13149     -25644.313      403.53546     -25240.778     -0            
+       100   0.01                4312   3119.317       734.50555     -25610.209      373.23823     -25236.971     -3.64725      
+       200   0.02                4312   3159.1246      731.66191     -25603.438      371.79332     -25231.645     -8.8102312    
+       300   0.03                4312   3227.8771      728.62705     -25598.398      370.25124     -25228.147     -12.131135    
+       400   0.04                4312   3381.7193      738.9551      -25601.165      375.49914     -25225.666     -14.431419    
+       500   0.05                4312   3541.7586      727.73796     -25592.817      369.79947     -25223.018     -16.894703    
+       600   0.06                4312   3609.6982      749.56433     -25602.167      380.88992     -25221.277     -18.430109    
+       700   0.07                4312   3580.6081      759.4083      -25607.359      385.89185     -25221.468     -18.032196    
+       800   0.08                4312   3483.732       730.38921     -25590.171      371.14663     -25219.024     -20.240682    
+       900   0.09                4312   3417.0669      722.80733     -25584.215      367.29411     -25216.921     -22.111286    
+      1000   0.1                 4312   3426.6039      732.85631     -25587.601      372.40022     -25215.201     -23.591215    
+      1100   0.11                4312   3349.1396      713.09173     -25576.871      362.3574      -25214.514     -24.024542    
+      1200   0.12                4312   3613.3781      748.52222     -25592.645      380.3604      -25212.285     -25.983871    
+      1300   0.13                4312   3521.4483      747.49883     -25590.818      379.8404      -25210.978     -27.015121    
+      1400   0.14                4312   3514.4385      736.22424     -25585.524      374.11153     -25211.412     -26.289273    
+Loop time of 39.901 on 1 procs for 1400 steps with 4312 atoms
+
+Performance: 0.303 ns/day, 79.169 hours/ns, 35.087 timesteps/s, 151.294 katom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 39.126     | 39.126     | 39.126     |   0.0 | 98.06
+Neigh   | 0.36613    | 0.36613    | 0.36613    |   0.0 |  0.92
+Comm    | 0.055264   | 0.055264   | 0.055264   |   0.0 |  0.14
+Output  | 0.14261    | 0.14261    | 0.14261    |   0.0 |  0.36
+Modify  | 0.18033    | 0.18033    | 0.18033    |   0.0 |  0.45
+Other   |            | 0.03098    |            |       |  0.08
+
+Nlocal:           4312 ave        4312 max        4312 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7154 ave        7154 max        7154 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 14
+Dangerous builds = 0
+undump tr
+write_data structures/impact_7th_Ag_62eV.data
+System init for write_data ...
+write_restart restart/impact_7th_Ag_62eV.restart
+System init for write_restart ...
+Total wall time: 0:00:40
