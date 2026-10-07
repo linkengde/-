@@ -6,7 +6,7 @@ GitHub `main` 同步输入、任务登记、紧凑结果和日志；实时进程
 
 | 窗口 | 当前工作 | 不负责的工作 |
 |---|---|---|
-| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | V17 provisional 43/3 data rebuilt with complete B archive manifest; preflight PASS. Run02 completed80 but exported epoch72 and is ineligible under the frozen epoch79 rule; corrected run03 starts with all checkpoints retained and an epoch79 guard. | Six V17 withheld-test labels stay sealed. |
+| A (`40f189e9-44af-4d33-8992-e3b7b44dbf3b`) | V17 provisional 43/3 data rebuilt with complete B archive manifest; preflight PASS. Run02 completed80 but exported epoch72 and is ineligible under the frozen epoch79 rule; corrected run03 is active with all checkpoints retained and an epoch79 guard. | Six V17 withheld-test labels stay sealed. |
 | B (`c5035b48-f43b-4da0-b8e4-e2862817f86a`) | Archive reconciliation, approved frame0 DFT (50 SCF; verification PASS) and independent 43-row audit are complete. Next: isolated certified30 builder draft; then V9–V17 review after A’s valid fixed-epoch score. | No development reference values or withheld outputs; no edits to A’s dataset or unauthorized calculations. |
 
 A 的 DFT 和 B 的 CPU 分析在独立云环境中并行。V16 冻结模型在三个 V17 开发结构上的力向量 RMSE 为 AgC 0.1376、AgSi 0.0729、AgTi 0.1015 eV/Å；分离力绝对误差为 0.2044、0.2035、0.1856 eV/Å，均超过暂定门槛。开发评分不是独立最终盲测，也不支持生产 MD/TTM。精确进度见 `coordination/tasks/window-*.json` 和 `coordination/progress/window-*.json`。
