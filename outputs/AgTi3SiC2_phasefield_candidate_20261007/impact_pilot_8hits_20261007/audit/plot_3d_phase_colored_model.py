@@ -70,7 +70,7 @@ for panel, mode in enumerate(('full', 'cutaway'), 1):
     ax.set_title(title, pad=8)
     ax.grid(False)
     if panel == 1: ax.legend(loc='upper left', fontsize=8, framealpha=.9)
-fig.suptitle('The 3D crater model with both phases visible\nPurple = connected Ti₃SiC₂ skeleton; gold = connected Ag phase', fontsize=14)
+fig.suptitle('The 3D crater model with both phases visible\nPurple = Ti₃SiC₂ skeleton; gold = Ag filling phase', fontsize=14)
 out = ROOT / '3d_phase_colored_crater_model_8hits_1p85ps.png'
 fig.savefig(out, dpi=200, bbox_inches='tight')
 print(f'{out} {out.stat().st_size} bytes')
