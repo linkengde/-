@@ -1,0 +1,172 @@
+LAMMPS (30 Sep 2026)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/impact_12_62eV.data
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4317 atoms
+  reading velocities ...
+  4317 velocities
+  read_data CPU = 0.029 seconds
+include potentials/potential_stage69.inc
+# Stage69 collision-ready candidate potential; no physical run is implied.
+# Baseline: Ag EAM + Ti/Si/C TSCBOP + calibrated Ag-interface Morse.
+# ZBL is overlaid only in the 0.8-1.5 A short-range window.
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 0.8 1.5
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+pair_coeff 1 4 zbl 22 47
+pair_coeff 2 4 zbl 14 47
+pair_coeff 3 4 zbl 6 47
+pair_coeff 4 4 zbl 47 47
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region sink_region block INF INF INF INF 8.0 18.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group fixed_part_01 id 2 3 9 90 2969 3032 81 82 2909 2910 2914 2975 170 250 251 255 256 257 351 356 2921 341 342 352 444 445 516 2924 2933 2992 2998 3003 436 511 517 596 603 604 2934 2939 3006 597 693 698 699 777 2948 3010 3018 3019 766 849 850 859 2953 2954 2955 2958 3022 3024 851 952 953 2963 24 3033 16 17 25 96 97 104 105 106 189 184 190 260 261 269 270 2915 2916 2983 2989 262 357 358 364 2925
+90 atoms in group fixed_part_01
+group fixed_part_02 id 2926 2993 453 454 523 530 537 626 2935 2999 524 610 611 617 618 708 715 792 2941 2942 778 783 784 785 875 876 882 2949 867 868 869 877 963 970 971 972 2964 23 964 119 120 127 2970 2971 111 112 113 121 203 285 2917 2976 2985 277 286 372 373 380 381 389 475 2984 374 466 470 545 550 2927 2928 2937 538 627 637 638 639 644 2936 3007 628 725 901 2943 2950 3011 3012 3020 883 884 892 893
+90 atoms in group fixed_part_02
+group fixed_part_03 id 984 985 2956 38 986 2965 3025 3035 39 44 2972 40 128 135 136 2911 2918 2977 2978 210 294 295 299 300 396 406 2986 2987 390 397 398 486 2929 2930 556 557 558 654 655 2938 645 646 656 728 818 2944 2951 3013 3014 729 805 806 807 902 912 913 914 922 2957 3021 43 903 991 2959 2966 3026 3027 60 53 54 61 146 150 151 2913 2973 2980 222 223 224 229 315 316 2912 2920 2979 2991 308 309 407
+90 atoms in group fixed_part_03
+group fixed_part_04 id 497 2922 2990 2995 408 562 563 573 574 575 2931 2932 3001 564 659 660 667 2945 3008 3009 742 743 750 819 826 827 828 2952 3015 3016 923 924 930 931 932 999 1000 2960 2967 3028 1001 71 75 76 80 163 2974 3036 3037 156 157 158 164 236 2919 2981 2982 237 325 326 327 334 340 431 432 2997 424 425 433 498 504 505 587 2923 3002 499 580 581 582 588 589 675 681 682 692 2940 3005 756 760 765
+90 atoms in group fixed_part_04
+group fixed_part_05 id 841 842 2946 2947 835 836 837 843 939 946 2962 3023 3031 1 74 1015 2961 2968 3030 4 5 12 91 3105 83 85 94 171 177 181 3110 175 252 254 258 3044 3049 343 346 449 515 518 520 605 607 3063 700 3074 3075 3082 767 769 775 852 863 949 856 954 960 3099 26 3101 98 100 107 3039 3100 3106 185 188 3038 3045 3046 368 459 2994 3050 3051 457 463 531 535 3000 3004 3052 527 619 716 3068 3069
+90 atoms in group fixed_part_05
+group fixed_part_06 id 710 779 780 786 3076 3083 870 872 965 974 3087 3093 32 35 36 122 3034 3102 114 117 123 206 287 3040 291 375 382 3047 3054 377 467 469 471 472 546 3053 539 540 629 3064 3065 3070 3071 632 721 726 793 802 3077 796 885 894 897 987 3088 3089 3095 989 3094 41 45 3103 129 137 141 3041 3107 298 304 399 3048 391 402 3055 3059 551 554 559 560 3058 3066 3072 647 658 736 740 3078 811 817 904
+90 atoms in group fixed_part_06
+group fixed_part_07 id 915 918 3090 3096 62 55 59 66 147 152 3108 148 225 226 231 317 3042 310 312 321 409 413 421 2996 3056 487 488 565 576 577 3060 568 668 672 3017 3073 747 820 830 933 3079 3084 823 925 926 3029 3091 3092 3097 1002 1004 72 73 77 3104 3109 166 247 2988 3043 328 331 335 338 434 426 428 500 3057 3061 3062 583 593 676 683 687 3067 679 757 761 844 3080 3081 838 943 947 951 3085 3086 1016
+90 atoms in group fixed_part_07
+group fixed_part_08 id 1020 1025 3098
+3 atoms in group fixed_part_08
+group fixed union fixed_part_01 fixed_part_02 fixed_part_03 fixed_part_04 fixed_part_05 fixed_part_06 fixed_part_07 fixed_part_08
+633 atoms in group fixed
+group sink region sink_region
+871 atoms in group sink
+group mobile subtract all fixed
+3684 atoms in group mobile
+group crater region crater_region
+476 atoms in group crater
+group freezone intersect mobile crater
+476 atoms in group freezone
+group anchored subtract mobile freezone
+3208 atoms in group anchored
+group bath subtract sink freezone
+790 atoms in group bath
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 552025 zero yes tally yes
+compute Tmobile mobile temp
+compute Tfree freezone temp
+timestep 0.0001
+thermo 250
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 500 dumps/cool_03_0p5ps.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 5000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 22
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 13.85 | 13.85 | 13.85 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4317   5567.5108      933.13656     -25828.056      444.23376     -25383.822     -0            
+       250   0.025               4317   5448.4975      868.82424     -25786.309      413.61691     -25372.693     -11.127359    
+       500   0.05                4317   5154.4969      812.24009     -25753.735      386.67917     -25367.056     -16.761988    
+       750   0.075               4317   5134.0488      807.45741     -25747.139      384.4023      -25362.737     -21.082658    
+      1000   0.1                 4317   4973.5227      813.60293     -25747.379      387.32797     -25360.051     -23.76926     
+      1250   0.125               4317   4824.7471      827.56755     -25753.64       393.97604     -25359.664     -24.159363    
+      1500   0.15                4317   4818.7194      821.87778     -25749.81       391.26734     -25358.543     -25.277586    
+      1750   0.175               4317   4847.124       830.11588     -25753.42       395.18921     -25358.231     -25.571729    
+      2000   0.2                 4317   4889.9185      840.87561     -25758.474      400.31154     -25358.163     -25.641584    
+      2250   0.225               4317   4690.3358      818.61637     -25748.347      389.7147      -25358.633     -25.173115    
+      2500   0.25                4317   4734.7783      836.64374     -25757.416      398.2969      -25359.119     -24.684781    
+      2750   0.275               4317   4547.0166      800.88        -25740.789      381.27103     -25359.518     -24.287097    
+      3000   0.3                 4317   4553.2333      805.16198     -25741.633      383.30953     -25358.324     -25.483042    
+      3250   0.325               4317   4638.8153      827.34849     -25752.687      393.87175     -25358.815     -24.990815    
+      3500   0.35                4317   4636.2323      837.77198     -25757.502      398.83401     -25358.668     -25.138089    
+      3750   0.375               4317   4461.2712      799.16363     -25739.612      380.45393     -25359.158     -24.649967    
+      4000   0.4                 4317   4573.6373      821.27033     -25750.467      390.97815     -25359.489     -24.303693    
+      4250   0.425               4317   4652.1406      840.51111     -25760.492      400.13802     -25360.354     -23.436979    
+      4500   0.45                4317   4270.5942      803.80391     -25742.294      382.663       -25359.631     -24.158947    
+      4750   0.475               4317   4512.3602      832.4294      -25756.233      396.2906      -25359.942     -23.847639    
+      5000   0.5                 4317   4681.0342      853.57039     -25764.443      406.35509     -25358.088     -25.71007     
+Loop time of 139.131 on 1 procs for 5000 steps with 4317 atoms
+
+Performance: 0.310 ns/day, 77.295 hours/ns, 35.937 timesteps/s, 155.141 katom-step/s
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 137.13     | 137.13     | 137.13     |   0.0 | 98.56
+Neigh   | 0.94602    | 0.94602    | 0.94602    |   0.0 |  0.68
+Comm    | 0.17698    | 0.17698    | 0.17698    |   0.0 |  0.13
+Output  | 0.10065    | 0.10065    | 0.10065    |   0.0 |  0.07
+Modify  | 0.67008    | 0.67008    | 0.67008    |   0.0 |  0.48
+Other   |            | 0.104      |            |       |  0.07
+
+Nlocal:           4317 ave        4317 max        4317 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7148 ave        7148 max        7148 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 37
+Dangerous builds = 0
+undump tr
+write_data structures/cool_03_0p5ps.data
+System init for write_data ...
+write_restart restart/cool_03_0p5ps.restart
+System init for write_restart ...
+Total wall time: 0:02:19
