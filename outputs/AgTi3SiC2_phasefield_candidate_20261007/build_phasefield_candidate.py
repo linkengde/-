@@ -298,8 +298,8 @@ def main():
             ag_xyz.append((x, y, atom["z"]))
 
     counts = Counter(a["type"] for a in mapped)
-    if not 4000 <= len(mapped) <= 5000:
-        raise RuntimeError(f"Mapped structure has {len(mapped)} atoms (target 4000-5000)")
+    if not mapped or not any(a["type"] == 4 for a in mapped) or not any(a["type"] in (1, 2, 3) for a in mapped):
+        raise RuntimeError("Direct mapping diagnostic must contain both Ag and Ti3SiC2 sites")
     tsc_xyz = np.asarray(tsc_xyz, float)
     ag_xyz = np.asarray(ag_xyz, float)
     d, _ = min_cross_distances(tsc_xyz, ag_xyz, lx, ly, xy)
@@ -314,6 +314,7 @@ def main():
     map_screen = {
         "status": "direct crystal-site assignment rejected as atomistic input; diagnostic only",
         "method": "TSC and Ag crystal sites classified against the binary phase-field mask",
+        "atom_count_policy": "emergent from mask occupancy and crystal-site termination; no 4000-5000 atom filter",
         "TSC_atoms": int(sum(counts[t] for t in (1, 2, 3))), "Ag_atoms": int(counts[4]),
         "total_atoms": len(mapped), "Ag_mass_fraction_if_counted_as_atoms": ag_mass / total_mass,
         "Ag_TSC_cross_min_distance_A": float(d.min()),
