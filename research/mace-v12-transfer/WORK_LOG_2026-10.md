@@ -370,3 +370,8 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - The remote B task card shows `v17_training_pool_provenance_audit` running at iteration 0 on its registered instance. No second concurrent task was started.
 - Added a standing A duty to replenish B's queue before the current task finishes, with one active B job at a time and explicit dependency/release conditions. B continues the next unblocked queued task without requiring the user to forward each assignment; a repository update still cannot wake a stopped session.
 - Queued `v17_split_leakage_audit` after the current provenance audit. It checks geometry-role overlap among the 35 V16 train geometries, eight paired V17 training inputs, three development candidates, and six withheld candidates. It is restricted to geometry-only evidence and cannot read held-out labels or outputs.
+
+### 2026-10-07 UTC: clarify B audit startup status
+
+- B reported that `v17_training_pool_provenance_audit` had only been registered: no row ledger or report had been produced. The task card's `running / iteration 0` was registration status, not substantive audit progress.
+- Clarified the immediate first milestone in `window-b.json`: publish a hash-checked source inventory and 35-row ledger skeleton, then proceed through the full 35-row/eight-label review. The following geometry-only split audit remains queued.
