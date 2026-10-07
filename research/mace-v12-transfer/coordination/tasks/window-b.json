@@ -101,13 +101,13 @@
     "v17_parallel_archive_manifest_reconciliation": "completed; SCF iteration 1; updated 2026-10-07T13:47:11.946615+00:00",
     "v17_rank_recovery_frame0_DFT": "running; SCF iteration 0; updated 2026-10-07T14:41:55.826787+00:00",
     "v17_iteration_review": "queued until A publishes selected V17 model and three-dev scoring; then compare V9-V17 history and recommend the next controlled change.",
-    "v17_provisional_dataset_independent_audit": "queued; after the fixed frame0 relabel, independently verify the committed provisional V17 training dataset and provenance without reading development labels or withheld outputs."
+    "v17_provisional_dataset_independent_audit": "running; SCF iteration 0; updated 2026-10-07T14:43:10.614882+00:00"
   },
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
   "status": "running",
   "next_action": "The four-label archive reconciliation completed and passed at 13:47 UTC; do not repeat it. Start v17_rank_recovery_frame0_DFT now exactly as assigned. After its compact archive verifies, run v17_provisional_dataset_independent_audit read-only (no development reference values or withheld outputs). Once A publishes the frozen V17 model and three-development score, start v17_iteration_review and extend the rolling V9-V17 review. Continue without waiting for per-task user commands.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-07T14:43:06.455737+00:00",
+  "updated_utc": "2026-10-07T14:43:10.614882+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -127,12 +127,12 @@
   "live_progress": {
     "task_id": "window-b",
     "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-    "job": "v17_rank_recovery_frame0_DFT",
+    "job": "v17_provisional_dataset_independent_audit",
     "state": "running",
     "iteration": 0,
     "elapsed_s": null,
-    "note": "Starting exact32-atom frame0 PW500/PBE/Gamma/Fermi0.1 relabel; MPI four-rank smoke check PASS, BLAS/OMP1. Source1x4x2 mismatch and Gamma convergence uncertainty recorded.",
-    "updated_utc": "2026-10-07T14:41:55.826787+00:00"
+    "note": "Frame0 converged50 steps on4 ranks and compact archive verified/published; starting read-only provisional V17 training audit, no dev reference values or withheld outputs.",
+    "updated_utc": "2026-10-07T14:43:10.614882+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
   "current_stage": "B completed reconciliation of its four existing V17 archives at 13:47 UTC; aggregate archive_manifest.json is complete with four verified records and no missing labels. Next is the single A-approved exact-geometry frame0 PW-PBE relabel, then a read-only independent training-dataset audit. A is running the V17 fixed-recipe four-thread training; no withheld labels have been opened.",
