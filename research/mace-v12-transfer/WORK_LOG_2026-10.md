@@ -324,3 +324,9 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Reviewed and accepted B's nine geometry-only proposals: three development-validation points owned by A and six withheld-test points assigned to B. Both published geometry/package SHA256 inventories pass. The candidate audit reports no duplicate/near-duplicate hits against its recorded inventory and role overlap. All candidates still inherit small-cluster parent motifs; morphology and thermal-state independence are not established.
 - Created a hash-bound A authorization for only the three development-validation labels. A's static source/input/identity preflight passed. The six withheld-test labels are not authorized and cannot be accessed until a V17 selected checkpoint and selection record are hash-frozen.
 - B's paired-response analysis is now assigned and unblocked. A's three four-rank development-validation PW-PBE labels are queued. No V17 training/evaluation has begun; the next training decision follows B's signed-response report.
+
+
+### 2026-10-07 Beijing: corrected V17 validation runner before SCF
+
+- The first A AgC development-validation launch passed static authorization/geometry preflight, then stopped at import before SCF because GPAW 26.7 requires `gpaw python` for this MPI mode. No DFT label was produced. The launcher traceback is preserved in `development_validation_attempts/AgC_v17_dev_validation_01.launcher_attempt_01.log`.
+- Patched the guarded execution-pack runner to use the selected venv Python for ASE preflight and the matching `gpaw python` CLI for MPI calculation. The four-rank GPAW communicator smoke check passed; the pinned PW-PBE settings and all geometries remain unchanged. Re-running static hashes and input preflight before restarting the A queue.

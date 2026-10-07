@@ -56,3 +56,6 @@ For withheld tests, B's allowed responsibility is only an explicitly assigned DF
 - `archive_verify.py`: future convergence/finite-value/identity verifier and compact archive writer. For withheld tests it reports pass/fail only and prints no label values.
 - `readiness_report.md`: completed preparation checks and limits.
 - `SHA256SUMS.txt`: package hashes, excluding itself.
+
+
+A runtime preflight review found this GPAW 26.7 MPI build must launch the calculation driver through `gpaw python` (plain Python exits before SCF). The guarded runner now uses the paired `gpaw` executable from the selected `GPAW_PYTHON` environment for both ASE preflight and the four-rank GPAW driver.

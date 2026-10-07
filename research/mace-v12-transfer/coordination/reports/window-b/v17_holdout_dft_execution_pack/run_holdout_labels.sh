@@ -43,8 +43,13 @@ RUN_ROOT="$(realpath -m "$RUN_ROOT")"
 ARCHIVE_ROOT="$(realpath -m "$ARCHIVE_ROOT")"
 AUTHORIZATION="$(realpath "$AUTHORIZATION")"
 
-# This must pass before any GPAW environment check or MPI process is started.
-python3 "$PACK_ROOT/execution_preflight.py" \
+GPAW_PYTHON="${GPAW_PYTHON:-/workspace/.venvs/gpaw-mpi/bin/python}"
+[[ -x "$GPAW_PYTHON" ]] || { echo "GPAW Python is unavailable: $GPAW_PYTHON" >&2; exit 2; }
+GPAW_CLI="$(dirname "$GPAW_PYTHON")/gpaw"
+[[ -x "$GPAW_CLI" ]] || { echo "GPAW CLI is unavailable: $GPAW_CLI" >&2; exit 2; }
+
+# This must pass before GPAW import or MPI calculation; use the pinned env for ASE.
+"$GPAW_PYTHON" "$PACK_ROOT/execution_preflight.py" \
   --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
   --run-root "$RUN_ROOT" --archive-root "$ARCHIVE_ROOT" --authorization "$AUTHORIZATION" \
   --owner "$OWNER" --labels "${LABELS[@]}"
@@ -57,8 +62,6 @@ if pgrep -f '[d]ft_single_point.py' >/dev/null || pgrep -x mpirun >/dev/null || 
   exit 2
 fi
 
-GPAW_PYTHON="${GPAW_PYTHON:-/workspace/.venvs/gpaw-mpi/bin/python}"
-[[ -x "$GPAW_PYTHON" ]] || { echo "GPAW Python is unavailable: $GPAW_PYTHON" >&2; exit 2; }
 MPI_DEPS="${MPI_DEPS:-/workspace/.local/gpaw-mpi-deps}"
 export GPAW_MPI_BACKEND=cgpaw
 export LD_LIBRARY_PATH="$MPI_DEPS/usr/lib/x86_64-linux-gnu/openmpi/lib:$MPI_DEPS/usr/lib/x86_64-linux-gnu:/workspace/.local/gpaw-libs/usr/lib/x86_64-linux-gnu:/workspace/.local/openblas/usr/lib/x86_64-linux-gnu/openblas-pthread${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
@@ -85,11 +88,11 @@ PY
 
 for LABEL in "${LABELS[@]}"; do
   # Repeat the non-overwrite and authorization checks immediately before each label.
-  python3 "$PACK_ROOT/execution_preflight.py" \
+  "$GPAW_PYTHON" "$PACK_ROOT/execution_preflight.py" \
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --archive-root "$ARCHIVE_ROOT" --authorization "$AUTHORIZATION" \
     --owner "$OWNER" --labels "$LABEL"
-  mpirun --bind-to core --map-by core -n 4 "$GPAW_PYTHON" "$PACK_ROOT/dft_single_point.py" \
+  mpirun --bind-to core --map-by core -n 4 "$GPAW_CLI" python "$PACK_ROOT/dft_single_point.py" \
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --authorization "$AUTHORIZATION" --owner "$OWNER" --label "$LABEL" \
     >"$RUN_ROOT/$LABEL.launcher.log" 2>&1
