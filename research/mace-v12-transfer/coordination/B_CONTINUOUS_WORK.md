@@ -444,6 +444,25 @@ thread; never compete with active four-rank B DFT. Publish report, version ledge
 common-geometry CSV/JSON, script and SHA256. Completed historical reviews should
 be linked, not duplicated wholesale. Then continue standing queue.
 
+## v17_provisional_dataset_independent_audit
+
+After `v17_rank_recovery_frame0_DFT` is compactly archived and verified,
+independently audit A's committed provisional V17 dataset. Write only under
+`coordination/reports/window-b/v17_provisional_dataset_independent_audit/`.
+Read the built training frames, dataset manifest, builder/preflight scripts and
+source manifests. Verify exact counts, ordered frame identities and source hashes,
+role/provenance flags, finite training labels, method metadata, exact composition
+rank, and correspondence of the eight verified V17 diagnostic labels; include
+frame0 only if A has integrated the verified relabel. Check development geometry
+overlap without reading its reference energy/force values. Confirm no withheld
+inputs or labels entered training using role manifests and hashes only. Do not
+edit or rebuild A's data; do not run MACE, DFT, MD or TTM; do not inspect withheld
+outputs/labels or development reference values. Distinguish reproducible checks
+from unresolved legacy source evidence and do not call the pool fully PW-PBE
+certified. Publish a concise report, machine-readable frame ledger, reproducible
+read-only audit script and SHA256 list. Continue to the V17 iteration review only
+after A publishes the frozen model and development-only score.
+
 ## Rolling cumulative review V9 through each finished Vn
 
 After V17 completes, update V9–V17 synthesis to guide V18; after V18, V9–V18
