@@ -98,7 +98,7 @@
     "v17_element_reference_anchor_recovery_audit": "completed; SCF iteration 1; updated 2026-10-07T11:27:04.228635+00:00",
     "v17_certified_core_rank_recovery_analysis": "completed; SCF iteration 1; updated 2026-10-07T13:13:20.236880+00:00",
     "v17_dataset_integration_recipe": "completed; SCF iteration 1; updated 2026-10-07T13:14:18.709041+00:00",
-    "v17_parallel_archive_manifest_reconciliation": "running; SCF iteration 0; updated 2026-10-07T13:47:07.987692+00:00",
+    "v17_parallel_archive_manifest_reconciliation": "completed; SCF iteration 1; updated 2026-10-07T13:47:11.946615+00:00",
     "v17_rank_recovery_frame0_DFT": "queued; A approved exact source-frame relabel of V16 train frame0 Ti_gap_2p3, 32 atoms, under fixed V17 PW-PBE500/Gamma/0.1 settings.",
     "v17_iteration_review": "queued until A publishes selected V17 model and three-dev scoring; then compare V9-V17 history and recommend the next controlled change.",
     "v17_provisional_dataset_independent_audit": "queued; after the fixed frame0 relabel, independently verify the committed provisional V17 training dataset and provenance without reading development labels or withheld outputs."
@@ -107,7 +107,7 @@
   "status": "running",
   "next_action": "Start v17_parallel_archive_manifest_reconciliation now (no DFT): revalidate existing four B-owned V17 label folders and publish complete archive_manifest.json. Then start v17_rank_recovery_frame0_DFT exactly as assigned. After it verifies, run v17_provisional_dataset_independent_audit as a read-only independent check of the built training pool (no dev reference values or withheld outputs). Once A publishes the frozen V17 model and three-dev score, start v17_iteration_review and extend the rolling V9-V17 review. Do not wait for per-task user commands.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-07T13:47:10.290739+00:00",
+  "updated_utc": "2026-10-07T13:47:11.946615+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -128,11 +128,11 @@
     "task_id": "window-b",
     "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
     "job": "v17_parallel_archive_manifest_reconciliation",
-    "state": "running",
-    "iteration": 0,
+    "state": "completed",
+    "iteration": 1,
     "elapsed_s": null,
-    "note": "No GPAW/MPI active; rebuilding aggregate manifest from four existing verified archives, no rerun.",
-    "updated_utc": "2026-10-07T13:47:07.987692+00:00"
+    "note": "Aggregate manifest complete=true with four verified records and no missing labels; all recorded hashes pass, no calculations rerun.",
+    "updated_utc": "2026-10-07T13:47:11.946615+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
   "current_stage": "A is running the fixed-recipe four-thread V17 provisional training on 43 train/3 development-validation frames; no test split or withheld label has been opened. B next reconciles its stale four-label aggregate, runs one approved exact-geometry rank-lifting DFT relabel, independently audits the committed train dataset read-only, and then completes the V9-V17 review after A publishes the development-only score.",
