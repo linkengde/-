@@ -1,0 +1,5 @@
+--------------------------------------------------------------------------
+prterun noticed that process rank 0 with PID 54974 on node a98e592ae054 exited on
+signal 15 (Terminated).
+--------------------------------------------------------------------------
+A execution note (2026-10-07 UTC): GPAW reached SCF convergence at iteration 58. summary.json and the labeled extxyz had already been written and remained stable. The MPI process then remained in the final state.gpw write for about 20 minutes; the source script called the collective calc.write only on rank 0. The ranks were stopped after preserving the compact outputs. No SCF restart or duplicate calculation was performed. The partial/local state.gpw is not part of the compact archive.

@@ -92,10 +92,18 @@ for LABEL in "${LABELS[@]}"; do
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --archive-root "$ARCHIVE_ROOT" --authorization "$AUTHORIZATION" \
     --owner "$OWNER" --labels "$LABEL"
+  LAUNCH_LOG="$RUN_ROOT/$LABEL.launcher.log"
+  {
+    printf 'started_utc='
+    date -u +%Y-%m-%dT%H:%M:%SZ
+    printf 'label=%s\n' "$LABEL"
+    printf 'command=mpirun --bind-to core --map-by core -n 4 %s python %s/dft_single_point.py\n' "$GPAW_CLI" "$PACK_ROOT"
+  } > "$LAUNCH_LOG"
   mpirun --bind-to core --map-by core -n 4 "$GPAW_CLI" python "$PACK_ROOT/dft_single_point.py" -- \
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --authorization "$AUTHORIZATION" --owner "$OWNER" --label "$LABEL" \
-    >"$RUN_ROOT/$LABEL.launcher.log" 2>&1
+    >>"$LAUNCH_LOG" 2>&1
+  printf 'mpirun_exit=0\n' >> "$LAUNCH_LOG"
   python3 "$PACK_ROOT/archive_verify.py" \
     --workspace-root "$WORKSPACE_ROOT" --pack-root "$PACK_ROOT" --input-root "$INPUT_ROOT" \
     --run-root "$RUN_ROOT" --archive-root "$ARCHIVE_ROOT" --authorization "$AUTHORIZATION" \

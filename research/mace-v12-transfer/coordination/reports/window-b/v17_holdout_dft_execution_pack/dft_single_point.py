@@ -202,7 +202,8 @@ if world.rank == 0:
         atoms.info["source_method"] = "GPAW 26.7.0 PW-PBE 500 eV Gamma fixed-geometry single point"
         atoms.arrays["PW_PBE_forces"] = forces.copy()
         write(out / f"{args.label}_PW_PBE.extxyz", atoms, format="extxyz")
-        calc.write(str(state_path), mode="all")
+        # The periodic SCF hook writes local checkpoints on every MPI rank.
+        # Do not call the collective calc.write() here from rank 0 only.
 world.barrier()
 if not converged["value"] or not finite:
     raise SystemExit(f"DFT did not produce a converged finite label: {args.label}")
