@@ -1,0 +1,146 @@
+LAMMPS (30 Sep 2026)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/impact_8hits_final_cool_0p20ps.data
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4313 atoms
+  reading velocities ...
+  4313 velocities
+  read_data CPU = 0.027 seconds
+include potentials/potential_stage69.inc
+# Stage69 collision-ready candidate potential; no physical run is implied.
+# Baseline: Ag EAM + Ti/Si/C TSCBOP + calibrated Ag-interface Morse.
+# ZBL is overlaid only in the 0.8-1.5 A short-range window.
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 0.8 1.5
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+pair_coeff 1 4 zbl 22 47
+pair_coeff 2 4 zbl 14 47
+pair_coeff 3 4 zbl 6 47
+pair_coeff 4 4 zbl 47 47
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_region block INF INF INF INF -10.0 5.0 units box
+region sink_region block INF INF INF INF 5.0 15.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group projectiles id 4306 4307 4308 4309 4310 4311 4312 4313
+8 atoms in group projectiles
+group fixed region fixed_region
+380 atoms in group fixed
+group sink region sink_region
+838 atoms in group sink
+group mobile subtract all fixed
+3933 atoms in group mobile
+group crater region crater_region
+492 atoms in group crater
+group freezone intersect mobile crater
+492 atoms in group freezone
+group free_substrate subtract freezone projectiles
+484 atoms in group free_substrate
+group anchored subtract mobile freezone
+3441 atoms in group anchored
+group bath subtract sink freezone
+808 atoms in group bath
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 441046 zero yes tally yes
+compute Tfree free_substrate temp
+compute Tmobile mobile temp
+timestep 0.0001
+thermo 100
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 100 dumps/impact_post_cool_0p05ps.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 500
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 22
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 13.85 | 13.85 | 13.85 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4313   3928.4412      657.45207     -25702.05       334.17067     -25367.879     -0            
+       100   0.01                4313   3892.7005      567.42944     -25648.617      288.41659     -25360.2       -3.9968322    
+       200   0.02                4313   3803.1862      605.57751     -25659.227      307.80538     -25351.422     -8.7946037    
+       300   0.03                4313   3575.5573      582.00318     -25640.109      295.82371     -25344.285     -11.633807    
+       400   0.04                4313   3599.6546      579.49522     -25632.629      294.54904     -25338.08      -13.223044    
+       500   0.05                4313   3556.6399      569.06243     -25618.941      289.24656     -25329.695     -16.653357    
+Loop time of 14.0266 on 1 procs for 500 steps with 4313 atoms
+
+Performance: 0.308 ns/day, 77.926 hours/ns, 35.647 timesteps/s, 153.744 katom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 13.826     | 13.826     | 13.826     |   0.0 | 98.57
+Neigh   | 0.050713   | 0.050713   | 0.050713   |   0.0 |  0.36
+Comm    | 0.020417   | 0.020417   | 0.020417   |   0.0 |  0.15
+Output  | 0.05511    | 0.05511    | 0.05511    |   0.0 |  0.39
+Modify  | 0.063406   | 0.063406   | 0.063406   |   0.0 |  0.45
+Other   |            | 0.01059    |            |       |  0.08
+
+Nlocal:           4313 ave        4313 max        4313 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7150 ave        7150 max        7150 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 2
+Dangerous builds = 0
+undump tr
+write_data structures/impact_post_cool_0p05ps.data
+System init for write_data ...
+write_restart restart/impact_post_cool_0p05ps.restart
+System init for write_restart ...
+Total wall time: 0:00:14

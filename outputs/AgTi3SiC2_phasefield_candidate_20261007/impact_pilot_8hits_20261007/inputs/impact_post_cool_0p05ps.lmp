@@ -1,0 +1,37 @@
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+read_data structures/impact_8hits_final_cool_0p20ps.data
+include potentials/potential_stage69.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_region block INF INF INF INF -10.0 5.0 units box
+region sink_region block INF INF INF INF 5.0 15.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group projectiles id 4306 4307 4308 4309 4310 4311 4312 4313
+group fixed region fixed_region
+group sink region sink_region
+group mobile subtract all fixed
+group crater region crater_region
+group freezone intersect mobile crater
+group free_substrate subtract freezone projectiles
+group anchored subtract mobile freezone
+group bath subtract sink freezone
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 441046 zero yes tally yes
+compute Tfree free_substrate temp
+compute Tmobile mobile temp
+timestep 0.0001
+thermo 100
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 100 dumps/impact_post_cool_0p05ps.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 500
+undump tr
+write_data structures/impact_post_cool_0p05ps.data
+write_restart restart/impact_post_cool_0p05ps.restart
