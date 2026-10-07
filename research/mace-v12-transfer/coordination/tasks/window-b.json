@@ -32,8 +32,9 @@
     "v16_matched_error_and_metadata_review",
     "v9_v16_cross_version_root_cause_review",
     "v17_paired_diagnostic_dft",
-    "v17_paired_response_analysis",
-    "v17_split_geometry_design"
+    "v17_split_geometry_design",
+    "v17_holdout_dft_execution_pack",
+    "v17_paired_response_analysis"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -78,13 +79,14 @@
     "AgTi_framework_neighbor_m_acq_v17_01": "running; SCF iteration 30; elapsed 2951s; updated 2026-10-06T15:49:54.323315+00:00",
     "v17_paired_response_analysis": "queued; SCF iteration 0; updated 2026-10-07T01:09:13.357300+00:00",
     "v17_split_geometry_design": "completed; SCF iteration 1; updated 2026-10-07T00:45:42.267915+00:00",
-    "v9_v16_cross_version_root_cause_review": "completed; SCF iteration 1; updated 2026-10-06T12:13:04.029784+00:00"
+    "v9_v16_cross_version_root_cause_review": "completed; SCF iteration 1; updated 2026-10-06T12:13:04.029784+00:00",
+    "v17_holdout_dft_execution_pack": "queued; prepare DFT input/runner/archive package for the 3 development-validation and 6 withheld-test proposals only; do not launch; pending A role review and owner assignment."
   },
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
   "status": "running",
-  "next_action": "Wait for A to publish verified AgSi_framework_neighbor_p_acq_v17_01 and AgTi_framework_neighbor_p_acq_v17_01; then perform v17_paired_response_analysis after all eight A/B V17 archives verify. A must review/freeze geometry roles before V17 training. Do not start DFT, model inference/training, MD or TTM under the geometry-design task.",
+  "next_action": "Start v17_holdout_dft_execution_pack now as preparation only; do not launch DFT pending A role review and owner assignment. After the pack is published, wait for A AgSi-framework and AgTi positive archives; once all eight diagnostic archives pass, run v17_paired_response_analysis.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-07T01:09:14.532567+00:00",
+  "updated_utc": "2026-10-07T01:11:29.558436+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -116,7 +118,7 @@
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
-  "task_boundary": "Matched analysis inference remains authorized; new DFT only B-owned V17 negative-sign acquisitions. No dataset/retraining/MD/TTM.",
+  "task_boundary": "Current assignment: prepare the nine-candidate validation/test DFT execution package only. No DFT launch, labels, MACE inference/training, MD or TTM until A explicitly reviews roles and assigns owners. Existing eight paired diagnostic labels retain their training-acquisition role.",
   "task_card_merge_note": "Preserved concurrent A assignment fields and latest B live progress; no owner change. Other scalar conflicts require manual review.",
   "recurring_version_review": {
     "trigger": "A publishes each completed model-version training/evaluation; A creates assigned vN_iteration_review job automatically",
@@ -130,5 +132,8 @@
     "outputs": "reports/window-b/vN_iteration_review/; report, compact CSV/JSON, script and SHA256",
     "boundary": "No new model selection/retraining/DFT or unseen-test label use unless separately assigned; retrospective scoring is not new blind validation",
     "history_policy": "After Vn publish v9_vN_cumulative_review with all earlier evidence linked/cached; new controlled common-geometry scores only when missing. No unnecessary repetition or causal claims from mixed tests."
+  },
+  "assigned_task_instructions": {
+    "v17_holdout_dft_execution_pack": "Prepare only under research/mace-v12-transfer/coordination/reports/window-b/v17_holdout_dft_execution_pack/. This is a preparation task that can run while A finishes the positive-sign V17 labels.\n\nUse the nine exact candidate extxyz files in reports/window-b/v17_split_geometry_design/final_set/geometries/: three development_validation and six withheld_test. Preserve bytes, atom IDs/order, cell and PBC; verify the published SHA256 inventory and confirm the input files have no energy/force labels. Do not redesign candidates or read any DFT output/reference labels.\n\nPrepare a role-aware input manifest, README, and runner/archive drafts for single-point GPAW PW-PBE using the already-pinned V17 settings: PBE, PW 500 eV, Gamma-only, FermiDirac 0.1 eV, existing convergence thresholds/mixer, native extrapolated energy plus separately recorded free energy, four MPI ranks and one BLAS/OpenMP thread per rank. The scripts must require explicit roots, refuse nonempty or active-job conflicts, verify source hashes and structural identity, finite energy/forces, SCF convergence and log evidence, and archive only compact outputs/logs/progress/summary/verification. Keep large state.gpw local. Drafted scripts must not execute or import GPAW in this preparation task.\n\nPropose, but do not claim, the owner split A=three development-validation points and B=six withheld-test points. Mark every launch blocked_pending_A_role_review_and_owner_assignment. No DFT, mpirun, MACE inference/training, MD or TTM. For withheld labels, specify that B must not analyze/model-score them and A records a frozen model/checkpoint selection before reading them.\n\nRecord the screening evidence and limitations: final geometry generator reproduction PASS and exact candidate bytes match; all candidates inherit current small-cluster motifs, so they do not establish morphology or thermal-state coverage. A must accept the roles and assign execution before any launch.\n\nDeliver compact role manifest, input hashes, exact proposed labels/owners, runner/archive drafts, readiness guards, and SHA256 list. Then publish completion and continue to the next task in queued_work_order; paired-response analysis remains blocked until all eight existing A/B V17 diagnostic archives are verified."
   }
 }
