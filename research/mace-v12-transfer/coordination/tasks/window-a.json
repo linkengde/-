@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-  "updated_utc": "2026-10-07T14:42:14.041246+00:00",
+  "updated_utc": "2026-10-07T14:50:53.981253+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V17 provisional dataset is 43 training/3 development-validation, exact composition rank4, hashes/provenance flags verified. The fixed four-thread training_provisional_02 has completed epochs 0-76 with finite logged metrics; fixed 80-epoch recipe continues. No test split or withheld labels have been opened. B completed archive reconciliation; its approved frame0 relabel remains queued but not started.",
+  "current_stage": "V17 provisional 43/3 dataset was refreshed to pin B’s complete aggregate archive; train/valid bytes stayed unchanged and preflight passes. Run training_provisional_02 completed all80 epochs but MACE exported validation-best epoch72, so it is ineligible under the frozen final-epoch79 rule and was not scored. Start corrected training_provisional_03 with every checkpoint retained and an epoch79 export guard. B’s frame0 DFT and independent dataset audit have passed; a clean-core builder draft is queued for B.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -36,9 +36,11 @@
     "AgSi_v17_dev_validation_01": "completed; SCF iteration 47; elapsed 7222s; updated 2026-10-07T09:41:59.439605+00:00",
     "AgTi_v17_dev_validation_01": "completed; SCF iteration 41; compact archive verification PASS; published at a5b1291.",
     "V16_development_validation_on_V17": "completed; SCF iteration 3; updated 2026-10-07T12:38:36.726242+00:00",
-    "V17_provisional_training": "running; SCF iteration 76; updated 2026-10-07T14:42:14.041246+00:00",
+    "V17_provisional_training": "run02 complete but not selected; corrected run03 is the active V17 training attempt.",
     "V17_provisional_dataset_build": "completed; 43 train/3 development-validation, exact composition rank4; no test file or withheld label opened.",
-    "v17_rank_recovery_frame0_DFT": "assigned to B; exact V16 train frame0 Ti_gap_2p3, fixed V17 screening protocol PW-PBE500/Gamma/0.1, no geometry change."
+    "v17_rank_recovery_frame0_DFT": "B completed; 50 SCF iterations, verification PASS, 4 MPI ranks; compact archive published. Gamma k-point convergence relative to source 1x4x2 remains unresolved; frame not yet integrated.",
+    "V17_provisional_training_run02": "completed 80 epochs; runner exited through final receipt, but only validation-best epoch72 checkpoint was saved; ineligible for the fixed-epoch79 V17 evaluation and no evaluate_v17_dev.py score was run.",
+    "V17_provisional_training_run03": "starting after training-entry fix; same 80-epoch recipe, four threads, save all checkpoints and verify exported epoch79 before scoring."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -91,7 +93,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Continue the fixed four-thread V17 training to epoch79 and verify successful completion/checkpoint. Freeze the model by the predeclared final-epoch rule, record hashes and selection evidence, then score only the three development-validation structures. Keep six withheld labels sealed. Review B’s new assignments on main; B is assigned archive reconciliation, one approved frame0 relabel, independent read-only dataset audit, then cumulative V9-V17 review after A publishes the frozen score.",
+  "next_action": "Run training_provisional_03 with the corrected runner, complete 80 epochs, require the exported checkpoint to be epoch79, then record its model/data/log hashes and selection evidence. Evaluate only the three development structures. Keep all six withheld labels sealed. B has completed archive reconciliation, the approved frame0 relabel and the 43-row dataset audit; B’s new clean-core builder draft precedes its V9-V17 iteration review after A publishes the fixed-epoch score.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",

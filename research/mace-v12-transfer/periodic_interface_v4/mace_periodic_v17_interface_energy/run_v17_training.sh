@@ -24,7 +24,8 @@ echo "CPU training threads: $THREADS"
  --train_file "$DATA/train.extxyz" --valid_file "$DATA/valid.extxyz" \
  --energy_key REF_energy --forces_key REF_forces --foundation_model "$FOUNDATION" --E0s estimated \
  --seed 45 --device cpu --batch_size 1 --max_num_epochs 80 --lr 0.0001 --weight_decay 5e-7 \
- --energy_weight 100 --forces_weight 1000 2>&1 | tee "$OUT/train.stdout"
+ --energy_weight 100 --forces_weight 1000 --save_all_checkpoints --keep_checkpoints 2>&1 | tee "$OUT/train.stdout"
 [[ -s "$OUT/checkpoints/MACE_periodic_v17_provisional_screening_run-45.model" ]] || { echo 'Expected selected checkpoint absent; preserve outputs.' >&2; exit 3; }
 [[ -s "$OUT/models/MACE_periodic_v17_provisional_screening.model" ]] || { echo 'Expected final model absent; preserve outputs.' >&2; exit 3; }
+grep -Eq 'Loaded Stage one model from epoch 79 for evaluation' "$OUT/train.stdout" || { echo 'Exported model is not the fixed final epoch 79; preserve outputs and do not evaluate.' >&2; exit 3; }
 echo 'Training process finished. Inspect all 80 epochs and final checkpoint before writing a frozen selection record. V17 remains provisional screening; no blind labels or test_file were used.'

@@ -212,11 +212,13 @@ def main() -> None:
     train.extend(additions)
     require(len(train) == 43, f"Expected 43 training frames, found {len(train)}")
 
-    # B's aggregate archive summary predates the fourth negative label. Each per-label
-    # verification above must pass; record this bookkeeping discrepancy transparently.
-    b_aggregate = load(repo / PROJECT / "pbe_interface_v17_parallel_targeted_acquisition" / "partial_archive_manifest.json")
-    b_aggregate_stale = b_aggregate.get("complete") is not True or bool(b_aggregate.get("missing_labels"))
-    sources[str((PROJECT / "pbe_interface_v17_parallel_targeted_acquisition" / "partial_archive_manifest.json"))] = sha(repo / PROJECT / "pbe_interface_v17_parallel_targeted_acquisition" / "partial_archive_manifest.json")
+    # B reconciled its aggregate archive after the original build. Pin the current
+    # complete manifest and require its records to match the individually verified set.
+    b_archive_path = repo / PROJECT / "pbe_interface_v17_parallel_targeted_acquisition" / "archive_manifest.json"
+    b_aggregate = load(b_archive_path)
+    require(b_aggregate.get("complete") is True and b_aggregate.get("missing_labels") == [], "B aggregate archive manifest is not complete")
+    require({row.get("label") for row in b_aggregate.get("records", [])} == EXPECTED_NEGATIVE and len(b_aggregate["records"]) == len(EXPECTED_NEGATIVE), "B aggregate archive records do not match the four verified training labels")
+    sources[str(b_archive_path.relative_to(repo))] = sha(b_archive_path)
 
     role_root = repo / "research/mace-v12-transfer/coordination/reports/window-b/v17_split_geometry_design/final_set"
     role_path = role_root / "role_manifest.json"
@@ -316,8 +318,9 @@ def main() -> None:
         "energy_policy": "Use the stored inherited REF_energy unchanged; map new verified GPAW native extrapolated energies to REF_energy; keep free energy separate in source archives.",
         "validation_policy": "Use the three frozen V17 development structures only. They have been scored against V16 and are not independent final blind tests.",
         "withheld_test_policy": "No V17 withheld output, label, summary, log, or model score was opened. No test split is passed to MACE.",
-        "B_aggregate_archive_manifest_was_stale": b_aggregate_stale,
-        "B_aggregate_missing_labels_as_recorded": b_aggregate.get("missing_labels", []),
+        "B_aggregate_archive_manifest_complete": True,
+        "B_aggregate_archive_manifest_missing_labels": b_aggregate.get("missing_labels", []),
+        "B_aggregate_archive_manifest_sha256": sha(b_archive_path),
         "per_label_archive_checks": "All eight signed diagnostic archives were independently checked for verification PASS, input/result identity, SHA256, SCF convergence, finite labels, summary energy, and common PW-PBE500/Gamma/0.1 eV settings.",
         "source_files_sha256": dict(sorted(sources.items())),
         "foundation_model_sha256": sha(repo / PROJECT / "mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model"),
@@ -327,7 +330,7 @@ def main() -> None:
     (data / "dataset_manifest.json").write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
     files = [data / "train.extxyz", data / "valid.extxyz", data / "dataset_manifest.json"]
     (data / "SHA256SUMS.txt").write_text("".join(f"{sha(path)}  {path.name}\n" for path in files))
-    print(json.dumps({"status": "PROVISIONAL_BUILD_PASS", "train": len(train), "development_validation": len(validation), "test": 0, "composition_rank_exact": rank, "B_aggregate_manifest_stale": b_aggregate_stale, "provenance_status_counts": frame_status_counts}, indent=2))
+    print(json.dumps({"status": "PROVISIONAL_BUILD_PASS", "train": len(train), "development_validation": len(validation), "test": 0, "composition_rank_exact": rank, "B_aggregate_archive_manifest_complete": True, "provenance_status_counts": frame_status_counts}, indent=2))
 
 
 if __name__ == "__main__":

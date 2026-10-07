@@ -1,0 +1,74 @@
+{
+  "run_id": "training_provisional_02",
+  "status": "TRAINING_COMPLETE_BUT_NOT_ELIGIBLE_FOR_SCORING",
+  "runner_completed_without_error": true,
+  "completed_epochs": 80,
+  "all_epoch_logs_present": true,
+  "MACE_exported_checkpoint_epoch": 72,
+  "required_fixed_epoch_for_this_screening": 79,
+  "model_used_for_selection": "not frozen; no selection_record.json created",
+  "eligible_for_evaluate_v17_dev": false,
+  "reason": "The runner omitted --save_all_checkpoints. MACE kept and exported its lowest-validation-loss checkpoint at epoch 72, while the predeclared V17 workflow and evaluate_v17_dev.py require the fixed final epoch 79. Do not score or use this model. A corrected run will preserve every epoch checkpoint and verify that MACE exports epoch 79.",
+  "test_file_passed_to_training": false,
+  "withheld_labels_opened": false,
+  "artifacts": [
+    {
+      "path": "train.stdout",
+      "size_bytes": 26449,
+      "sha256": "bac73c1be57a4a9c6952e52d99a6b783036cfdef9a71e173ebc3946828625926"
+    },
+    {
+      "path": "logs/MACE_periodic_v17_provisional_screening_run-45.log",
+      "size_bytes": 18714,
+      "sha256": "c1bd3255497ab87b5855bade20f6210411ef53723dd528f1f4980c50324ef750"
+    },
+    {
+      "path": "logs/MACE_periodic_v17_provisional_screening_run-45_debug.log",
+      "size_bytes": 45941,
+      "sha256": "8f540d5c3ab9dccc49399b30b4490da865005f583aa224313fbc41d416a86bf7"
+    },
+    {
+      "path": "checkpoints/MACE_periodic_v17_provisional_screening_run-45_epoch-72.pt",
+      "size_bytes": 33945860,
+      "sha256": "a9428b06e4aea7b578a06de48bcefdde6f18ae3f19a23031a0e404de71bfc6be"
+    },
+    {
+      "path": "checkpoints/MACE_periodic_v17_provisional_screening_run-45.model",
+      "size_bytes": 13762574,
+      "sha256": "df9310b866a8a33a1aad45f363f77c5eeaa6cc9ff1f764f1a0d9f1c68940f4a7"
+    },
+    {
+      "path": "models/MACE_periodic_v17_provisional_screening.model",
+      "size_bytes": 13761817,
+      "sha256": "d415a4e49eca95798949cbab0fa94d32e247f45b287eeceb1d7f8bd68cddf55c"
+    },
+    {
+      "path": "models/MACE_periodic_v17_provisional_screening_compiled.model",
+      "size_bytes": 13868403,
+      "sha256": "1605d7a8ab21ef39ae307e448b8591f22d14df73de01e55f527c123176a6fd62"
+    },
+    {
+      "path": "results/MACE_periodic_v17_provisional_screening_run-45_train.txt",
+      "size_bytes": 326352,
+      "sha256": "e10be08e46b01c6e0177a45a2565337c50c95bd6b2809d3e2729ffd7f79745b2"
+    }
+  ],
+  "repository_artifacts_committed": [
+    "train.stdout",
+    "logs/MACE_periodic_v17_provisional_screening_run-45.log",
+    "logs/MACE_periodic_v17_provisional_screening_run-45_debug.log",
+    "results/MACE_periodic_v17_provisional_screening_run-45_train.txt",
+    "attempt_status.json",
+    "SHA256SUMS_attempt.txt"
+  ],
+  "local_only_unselected_artifacts": [
+    "checkpoints/MACE_periodic_v17_provisional_screening_run-45_epoch-72.pt",
+    "checkpoints/MACE_periodic_v17_provisional_screening_run-45.model"
+  ],
+  "dataset_inputs": {
+    "train_extxyz_sha256": "b7488b37c628e8432baf0987037aa3c2f7196047185884ac40d78b441e1cd4d1",
+    "development_valid_extxyz_sha256": "985045431b3b69242ebbb9966393794a18a39fad37e029915e9d75f3b1e06f84",
+    "dataset_manifest_sha256_at_training_start": "05d06ea3872f9ed7193ea86915525a877ed88b3e0cf88b9e3e7eaeab1dd29699",
+    "post_run_refresh_note": "The dataset manifest was refreshed to pin the reconciled B archive and corrected training entry; train.extxyz and valid.extxyz bytes were verified unchanged."
+  }
+}

@@ -463,6 +463,29 @@ certified. Publish a concise report, machine-readable frame ledger, reproducible
 read-only audit script and SHA256 list. Continue to the V17 iteration review only
 after A publishes the frozen model and development-only score.
 
+## v17_clean_core_builder_draft
+
+The four-label archive reconciliation, the approved frame0 DFT, and the
+provisional43 independent audit are complete. Start this isolated data artifact
+while A completes the corrected V17 fixed-epoch training. Use the provenance
+ledger to select exactly the 21 directly archive-supported V16 frames, add the
+eight verified signed V17 diagnostic labels, and add the verified B-owned
+`Ti_gap_2p3` frame0 relabel. Write only under
+`coordination/reports/window-b/v17_clean_core_builder_draft/`; do not modify A's
+official dataset.
+
+Recheck source hashes, frame identity/order, geometry/cell/PBC, finite labels,
+role and method evidence, expected 30-row count, and exact rank4. Preserve the
+eight signed pair variants and identify their parent relationships. Mark the
+output `PROPOSAL_ONLY_NOT_INTEGRATED`. State that the source frame declared a
+1x4x2 k-point mesh while its new label uses Gamma; convergence is unresolved.
+Compare development geometry only for overlap and do not read development
+reference values or scores. Do not inspect withheld labels/outputs, run MACE,
+DFT, MD or TTM, or change A's train/valid files. Deliver a candidate extxyz,
+machine-readable manifest/row ledger, reproducible read-only builder/audit
+script, concise report and SHA256 list. Then continue to `v17_iteration_review`
+only after A freezes and publishes its valid epoch79 model and development score.
+
 ## Rolling cumulative review V9 through each finished Vn
 
 After V17 completes, update V9–V17 synthesis to guide V18; after V18, V9–V18
