@@ -1,33 +1,13 @@
 {
   "candidate": 1,
   "seed": 20261008,
-  "algorithm": "six spanning trunks with interior binary branch trees, then signed-distance threshold",
-  "branch_depth": 5,
-  "trunk_count": 6,
-  "branch_angle_deg_range": [
-    30.0,
-    52.0
+  "algorithm": "thresholded 3D correlated random field; geometry design only",
+  "field_correlation_sigma_voxels_XYZ": [
+    3.0,
+    4.0,
+    4.0
   ],
-  "trunk_anchor_fractions": [
-    0.22,
-    0.42,
-    0.62,
-    0.8
-  ],
-  "recursive_child_length_ratio_range": [
-    0.68,
-    0.8
-  ],
-  "initial_branch_length_fraction_of_remaining_trunk_range": [
-    0.58,
-    0.82
-  ],
-  "centerline_sampling_max_step_A": 0.8,
-  "generated_segment_count": 1118,
-  "generated_branchpoint_count": 667,
-  "centerline_length_A": 14771.397272729662,
-  "curve_amplitude_A": 3.0,
-  "boundary_handling": "nonperiodic box; branch segments clipped at box faces",
+  "boundary_handling": "nonperiodic box; Gaussian smoothing uses reflection at box faces",
   "box_A": {
     "X": 150.1,
     "Y": 300.0,
@@ -55,8 +35,11 @@
   "mass_fraction_actual_Ti3SiC2": 0.3999999556588452,
   "mass_fraction_actual_Ag": 0.6000000443411548,
   "porosity": 0.0,
-  "field_threshold_A": 18.340715408325195,
-  "boundary_roughness_rms_A": 0.18,
+  "geometry_score_threshold": 0.2981691360473633,
+  "preview_color_mapping": {
+    "Ti3SiC2": "blue #2563eb",
+    "Ag": "light gray #d2d4d8"
+  },
   "software_versions": {
     "python": "3.12.14",
     "numpy": "2.3.5",
@@ -64,9 +47,9 @@
     "matplotlib": "3.10.8"
   },
   "Ti3SiC2_connectivity_6": {
-    "component_count": 1,
-    "largest_component_voxels": 1038068,
-    "largest_component_fraction": 1.0,
+    "component_count": 5,
+    "largest_component_voxels": 1037887,
+    "largest_component_fraction": 0.9998256376268221,
     "largest_component_spans": {
       "X": true,
       "Y": true,
@@ -74,9 +57,9 @@
     }
   },
   "Ti3SiC2_connectivity_26": {
-    "component_count": 1,
-    "largest_component_voxels": 1038068,
-    "largest_component_fraction": 1.0,
+    "component_count": 5,
+    "largest_component_voxels": 1037887,
+    "largest_component_fraction": 0.9998256376268221,
     "largest_component_spans": {
       "X": true,
       "Y": true,
@@ -84,9 +67,9 @@
     }
   },
   "Ag_connectivity_6": {
-    "component_count": 76,
-    "largest_component_voxels": 671365,
-    "largest_component_fraction": 0.9991561646118953,
+    "component_count": 15,
+    "largest_component_voxels": 670404,
+    "largest_component_fraction": 0.9977259603650369,
     "largest_component_spans": {
       "X": true,
       "Y": true,
@@ -95,8 +78,8 @@
   },
   "Ag_connectivity_26": {
     "component_count": 13,
-    "largest_component_voxels": 671799,
-    "largest_component_fraction": 0.9998020633040248,
+    "largest_component_voxels": 670407,
+    "largest_component_fraction": 0.9977304251025402,
     "largest_component_spans": {
       "X": true,
       "Y": true,
@@ -105,19 +88,19 @@
   },
   "Ti3SiC2_branch_thickness_proxy": {
     "definition": "2x interior EDT at 3x3x3 local-radius maxima; geometric thickness proxy, Angstrom",
-    "ridge_samples": 2398,
-    "p10_A": 20.0,
-    "p50_A": 32.0,
-    "p90_A": 40.0,
-    "p95_A": 41.13906294508906
+    "ridge_samples": 6166,
+    "p10_A": 7.8999999999999995,
+    "p50_A": 15.799999999999999,
+    "p90_A": 25.01379619330101,
+    "p95_A": 28.108050448225683
   },
   "Ag_channel_thickness_proxy": {
     "definition": "2x interior EDT at 3x3x3 local-radius maxima; geometric thickness proxy, Angstrom",
-    "ridge_samples": 4696,
+    "ridge_samples": 6326,
     "p10_A": 3.9499999999999997,
-    "p50_A": 5.621610089645136,
-    "p90_A": 24.0,
-    "p95_A": 31.599999999999998
+    "p50_A": 11.85,
+    "p90_A": 19.910361624038877,
+    "p95_A": 23.109792296773243
   },
   "interpretation": "exploratory geometry only; not a calibrated phase-field or atomistic model"
 }

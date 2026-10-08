@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Generate reproducible, geometry-only branched two-phase candidates.
+"""Generate reproducible, geometry-only two-phase morphology candidates.
 
-This is an implicit-distance/branching construction, not a calibrated
-Cahn-Hilliard calculation and not an atomistic structure generator.
+The candidates come from thresholded correlated random fields. This is a
+geometric design method, not a calibrated Cahn-Hilliard calculation or an
+atomistic structure generator.
 """
 from __future__ import annotations
 
@@ -30,146 +31,16 @@ TARGET_TIC_VOL = (WT_TIC / RHO_TIC_A) / (
     (WT_TIC / RHO_TIC_A) + ((1.0 - WT_TIC) / RHO_AG)
 )
 SEEDS = [20261008, 20261009, 20261010]
-MAX_BRANCH_DEPTH = 5
-CURVE_AMPLITUDE_A = 3.0
-ROUGHNESS_RMS_A = 0.18
+FIELD_SIGMA_XYZ_VOXELS = (3.0, 4.0, 4.0)
 
 
-def clip_endpoint(start: np.ndarray, end: np.ndarray) -> np.ndarray:
-    """Clip a segment endpoint at the first box boundary it crosses."""
-    delta = end - start
-    t_exit = 1.0
-    for axis, length in enumerate(LENGTHS_A):
-        if delta[axis] > 0 and end[axis] > length:
-            t_exit = min(t_exit, (length - start[axis]) / delta[axis])
-        elif delta[axis] < 0 and end[axis] < 0:
-            t_exit = min(t_exit, (0.0 - start[axis]) / delta[axis])
-    return start + max(0.0, t_exit) * delta
-
-
-def branch_pair(direction: np.ndarray, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray]:
-    direction = direction / np.linalg.norm(direction)
-    side = rng.normal(size=3)
-    side -= np.dot(side, direction) * direction
-    norm = np.linalg.norm(side)
-    if norm < 1e-10:
-        side = np.cross(direction, np.array([1.0, 0.0, 0.0]))
-        if np.linalg.norm(side) < 1e-10:
-            side = np.cross(direction, np.array([0.0, 1.0, 0.0]))
-        norm = np.linalg.norm(side)
-    side /= norm
-    angle = np.deg2rad(rng.uniform(30.0, 52.0))
-    return (
-        np.cos(angle) * direction + np.sin(angle) * side,
-        np.cos(angle) * direction - np.sin(angle) * side,
-    )
-
-
-def curved_points(start: np.ndarray, end: np.ndarray, rng: np.random.Generator) -> np.ndarray:
-    vector = end - start
-    length = np.linalg.norm(vector)
-    if length < 1e-9:
-        return np.asarray([start])
-    direction = vector / length
-    wiggle = rng.normal(size=3)
-    wiggle -= np.dot(wiggle, direction) * direction
-    norm = np.linalg.norm(wiggle)
-    if norm > 1e-10:
-        wiggle /= norm
-    else:
-        wiggle[:] = 0.0
-    n = max(2, int(np.ceil(length / 0.8)) + 1)
-    t = np.linspace(0.0, 1.0, n)
-    amp = CURVE_AMPLITUDE_A * min(1.0, length / 30.0)
-    bow = amp * np.sin(np.pi * t)
-    points = start[None, :] + t[:, None] * vector[None, :] + bow[:, None] * wiggle[None, :]
-    return np.clip(points, 0.0, LENGTHS_A[None, :])
-
-
-def build_branch_network(seed: int) -> tuple[np.ndarray, dict]:
+def exact_volume_field(seed: int) -> tuple[np.ndarray, np.ndarray, float]:
+    """Threshold a smooth, seeded 3D random field to the target Ti fraction."""
     rng = np.random.default_rng(seed)
-    center = LENGTHS_A / 2.0
-    centerline = np.zeros(GRID, dtype=bool)
-    segments: list[tuple[np.ndarray, np.ndarray, int]] = []
-    branchpoints = 0
-    total_length = 0.0
-
-    def draw_segment(start: np.ndarray, end: np.ndarray, depth: int) -> float:
-        nonlocal total_length
-        actual_end = clip_endpoint(start, end)
-        actual_length = float(np.linalg.norm(actual_end - start))
-        if actual_length < 1e-6:
-            return 0.0
-        segments.append((start.copy(), actual_end.copy(), depth))
-        total_length += actual_length
-        points = curved_points(start, actual_end, rng)
-        indices = np.rint(points / SPACING_A[None, :] - 0.5).astype(np.int32)
-        indices = np.clip(indices, 0, np.asarray(GRID) - 1)
-        centerline[indices[:, 0], indices[:, 1], indices[:, 2]] = True
-        return actual_length
-
-    def add_tree(start: np.ndarray, direction: np.ndarray, length: float, depth: int) -> None:
-        nonlocal branchpoints
-        direction = direction / np.linalg.norm(direction)
-        nominal_end = start + direction * length
-        end = clip_endpoint(start, nominal_end)
-        actual_length = draw_segment(start, end, depth)
-        if actual_length < 4.0:
-            return
-        if depth >= MAX_BRANCH_DEPTH:
-            return
-        child_directions = branch_pair(direction, rng)
-        branchpoints += 1
-        for child_direction in child_directions:
-            child_length = actual_length * rng.uniform(0.68, 0.80)
-            add_tree(end, child_direction, child_length, depth + 1)
-
-    # Six outward trunks meet at the center and span every axis. Branch trees
-    # attach at several interior points, so they grow into the box rather than
-    # immediately being clipped when rooted at a face.
-    for axis in range(3):
-        for sign in (-1.0, 1.0):
-            direction = np.zeros(3)
-            direction[axis] = sign
-            arm_length = LENGTHS_A[axis] / 2.0
-            endpoint = center + direction * arm_length
-            draw_segment(center, endpoint, -1)
-            for fraction in (0.22, 0.42, 0.62, 0.80):
-                anchor = center + direction * arm_length * fraction
-                branchpoints += 1
-                branch_directions = branch_pair(direction, rng)
-                remaining = arm_length * (1.0 - fraction)
-                for child_direction in branch_directions:
-                    first_length = remaining * rng.uniform(0.58, 0.82)
-                    add_tree(anchor, child_direction, first_length, 0)
-
-    meta = {
-        "seed": seed,
-        "algorithm": "six spanning trunks with interior binary branch trees, then signed-distance threshold",
-        "branch_depth": MAX_BRANCH_DEPTH,
-        "trunk_count": 6,
-        "branch_angle_deg_range": [30.0, 52.0],
-        "trunk_anchor_fractions": [0.22, 0.42, 0.62, 0.80],
-        "recursive_child_length_ratio_range": [0.68, 0.80],
-        "initial_branch_length_fraction_of_remaining_trunk_range": [0.58, 0.82],
-        "centerline_sampling_max_step_A": 0.8,
-        "generated_segment_count": len(segments),
-        "generated_branchpoint_count": branchpoints,
-        "centerline_length_A": total_length,
-        "curve_amplitude_A": CURVE_AMPLITUDE_A,
-        "boundary_handling": "nonperiodic box; branch segments clipped at box faces",
-    }
-    return centerline, meta
-
-
-def exact_volume_field(centerline: np.ndarray, seed: int) -> tuple[np.ndarray, np.ndarray, float]:
-    # EDT gives physical distance in Angstroms using the anisotropic voxel size.
-    distance = ndi.distance_transform_edt(~centerline, sampling=SPACING_A).astype(np.float32)
-    rng = np.random.default_rng(seed ^ 0x5A17C3)
-    roughness = rng.standard_normal(GRID, dtype=np.float32)
-    roughness = ndi.gaussian_filter(roughness, sigma=(1.2, 1.6, 1.6), mode="reflect")
-    roughness /= max(float(roughness.std()), 1e-8)
-    score = distance - np.float32(ROUGHNESS_RMS_A) * roughness
+    noise = rng.standard_normal(GRID, dtype=np.float32)
+    smooth = ndi.gaussian_filter(noise, sigma=FIELD_SIGMA_XYZ_VOXELS, mode="reflect")
+    smooth /= max(float(smooth.std()), 1e-8)
+    score = -smooth  # Lowest scores are assigned to the Ti3SiC2 phase.
 
     n_total = score.size
     n_tic = int(round(TARGET_TIC_VOL * n_total))
@@ -237,7 +108,7 @@ def thickness_stats(mask: np.ndarray) -> dict:
 
 
 def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, seed: int) -> None:
-    colors = ListedColormap(["#1d7d91", "#ef8a3b"])  # Ag, Ti3SiC2
+    colors = ListedColormap(["#d2d4d8", "#2563eb"])  # Ag, Ti3SiC2
     fig = plt.figure(figsize=(15, 10), constrained_layout=True)
     ax3 = fig.add_subplot(2, 2, 1, projection="3d")
     surface = mask & ~ndi.binary_erosion(
@@ -249,7 +120,7 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     ax3.scatter((ix + 0.5) * SPACING_A[0] * step,
                 (iy + 0.5) * SPACING_A[1] * step,
                 (iz + 0.5) * SPACING_A[2] * step,
-                c="#e88436", s=1.8, alpha=0.7, linewidths=0, depthshade=False)
+                c="#2563eb", s=1.8, alpha=0.7, linewidths=0, depthshade=False)
     ax3.set_xlim(0, LENGTHS_A[0])
     ax3.set_ylim(0, LENGTHS_A[1])
     ax3.set_zlim(0, LENGTHS_A[2])
@@ -258,7 +129,7 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     ax3.set_ylabel("Y (Å)")
     ax3.set_zlabel("Z (Å)")
     ax3.view_init(elev=22, azim=35)
-    ax3.set_title("3D Ti₃SiC₂ branched network")
+    ax3.set_title("3D Ti₃SiC₂ connected morphology")
 
     mx, my, mz = np.asarray(GRID) // 2
     panels = [
@@ -274,16 +145,25 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
         ax.set_ylabel(ylabel)
         ax.set_title(title)
         ax.ticklabel_format(style="plain", useOffset=False)
-    fig.suptitle(f"Candidate {candidate_no:02d} | seed={seed} | orange: Ti₃SiC₂, blue: Ag")
+    fig.suptitle(f"Candidate {candidate_no:02d} | seed={seed} | blue: Ti₃SiC₂, gray: Ag")
     fig.savefig(candidate_dir / "geometry_preview.png", dpi=180)
     plt.close(fig)
+
+    # A clean square view for direct comparison with the user's reference.
+    # The YZ slice is 150 x 150 voxels (2 Å per pixel); nearest-neighbor
+    # enlargement gives a 300 x 300 image without smoothing phase boundaries.
+    mx = np.asarray(GRID)[0] // 2
+    slice_yz = np.repeat(np.repeat(mask[mx, :, :].T, 2, axis=0), 2, axis=1)
+    rgb = np.empty((*slice_yz.shape, 3), dtype=np.uint8)
+    rgb[~slice_yz] = (210, 212, 216)  # Ag, light gray
+    rgb[slice_yz] = (37, 99, 235)     # Ti3SiC2, blue
+    plt.imsave(candidate_dir / "morphology_reference_view_2d.png", rgb)
 
 
 def generate_candidate(candidate_no: int, seed: int) -> dict:
     candidate_dir = OUT / f"candidate_{candidate_no:02d}"
     candidate_dir.mkdir(parents=True, exist_ok=True)
-    centerline, network_meta = build_branch_network(seed)
-    field, tic_mask, threshold = exact_volume_field(centerline, seed)
+    field, tic_mask, threshold = exact_volume_field(seed)
     ag_mask = ~tic_mask
     n_voxels = tic_mask.size
     actual_phi = float(tic_mask.mean())
@@ -292,7 +172,10 @@ def generate_candidate(candidate_no: int, seed: int) -> dict:
     )
     stats = {
         "candidate": candidate_no,
-        **network_meta,
+        "seed": seed,
+        "algorithm": "thresholded 3D correlated random field; geometry design only",
+        "field_correlation_sigma_voxels_XYZ": list(FIELD_SIGMA_XYZ_VOXELS),
+        "boundary_handling": "nonperiodic box; Gaussian smoothing uses reflection at box faces",
         "box_A": {"X": float(LENGTHS_A[0]), "Y": float(LENGTHS_A[1]), "Z": float(LENGTHS_A[2])},
         "grid_shape_XYZ": list(GRID),
         "voxel_spacing_A_XYZ": [float(x) for x in SPACING_A],
@@ -305,8 +188,8 @@ def generate_candidate(candidate_no: int, seed: int) -> dict:
         "mass_fraction_actual_Ti3SiC2": actual_wt,
         "mass_fraction_actual_Ag": 1.0 - actual_wt,
         "porosity": 0.0,
-        "field_threshold_A": threshold,
-        "boundary_roughness_rms_A": ROUGHNESS_RMS_A,
+        "geometry_score_threshold": threshold,
+        "preview_color_mapping": {"Ti3SiC2": "blue #2563eb", "Ag": "light gray #d2d4d8"},
         "software_versions": {
             "python": platform.python_version(),
             "numpy": np.__version__,
@@ -323,10 +206,9 @@ def generate_candidate(candidate_no: int, seed: int) -> dict:
     }
     np.savez_compressed(
         candidate_dir / "phase_masks_and_field.npz",
-        signed_geometry_field_A=field,
+        signed_geometry_field=field,
         Ti3SiC2_mask=tic_mask.astype(np.uint8),
         Ag_mask=ag_mask.astype(np.uint8),
-        centerline_mask=centerline.astype(np.uint8),
         voxel_spacing_A=SPACING_A,
         box_lengths_A=LENGTHS_A,
     )
@@ -341,7 +223,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     stats = [generate_candidate(i + 1, seed) for i, seed in enumerate(SEEDS)]
     summary = {
-        "title": "Ag-Ti3SiC2 branched geometry candidates",
+        "title": "Ag-Ti3SiC2 morphology geometry candidates",
         "classification": "exploratory geometry design; uncalibrated; not a physical spinodal prediction",
         "seeds": SEEDS,
         "target_ti3sic2_vol_fraction": TARGET_TIC_VOL,
