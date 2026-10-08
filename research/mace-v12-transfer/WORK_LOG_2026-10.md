@@ -421,7 +421,7 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - B's `v17_iteration_review` is unblocked and prioritized to run first; the report-only certified30 core draft follows. A will use that review before freezing V18. No withheld labels were opened.
 
 
-### 2026-10-07 UTC: V18 clean30 controlled comparison integrated
+### 2026-10-08 UTC: V18 clean30 controlled comparison integrated
 
 - A read and SHA-verified B's V17 review and clean30 proposal (main16bbe99). Accepted the recommended fixed-recipe comparison before changing optimizer weights or adding coverage labels. V17 on the same three dev geometries improves all vector averages but remains FAIL; AgTi separation/max regression remains a target.
 - Integrated the proposal byte-for-byte into `mace_periodic_v18_clean_core/data/train.extxyz` and copied the same V17 dev bytes to valid.extxyz.30/3/0 frames, exact rank4, finite labels, source hashes and train/dev geometry isolation pass. All30 rows have direct archive support; coverage removal and Gamma-versus1x4x2 frame0 caveats prevent a sole-cause inference. No withheld labels opened.
@@ -433,3 +433,5 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - B V18 independent entry audit PASS (affae08); all source/count/rank/role/byte checks pass. A accepted the selection/data snapshot binding recommendation and strengthened the evaluator, and records actual OMP thread count in selection. Launcher status still derives from the intended successful set-e runner flow; standalone finalizer is not an independent exit receipt. Pair Cartesian projection is retained for these existing marked pairs, not generalized to arbitrary periodic pairs. B frozen V17 vector diagnosis started at37b3571.
 
 - A verified B frozen V17 diagnosis at196cbfd/88f7bb0 and accepted the signed-pair explanation: AgTi marked Ti projected force error worsens from-0.203264 to-0.232128 eV/A, while markedAg changes only-0.017617 to-0.018657; this explains separation-error regression despite reduced bulk vector RMSE, without identifying a sole training cause. AgC largest residual remains transverse Ti604600; AgSi markedSi/Ag differential projection remains high. B is now assigned label-free residual-direction candidate preparation during V18 training; new DFT requires A review and a separate owner assignment.
+
+- V18 epochs0–16 completed by00:10:18 UTC with finite metrics and about4 active CPU cores. About2.5GiB remains; remaining checkpoint footprint is covered. Added V18 artifact directory to A explicit publish scope. B geometry design is queued; no new DFT has been launched.
