@@ -1,0 +1,801 @@
+
+Large-scale Atomic/Molecular Massively Parallel Simulator - 30 Sep 2026
+Git info (release / patch_30Sep2026)
+
+Usage example: /workspace/.local/lammps-static-30Sep2026/lammps-static/bin/lmp -var t 300 -echo screen -in in.alloy
+
+List of command-line options supported by this LAMMPS executable:
+
+-echo none/screen/log/both  : echoing of input script (-e)
+-help                       : print this help message (-h)
+-in none/filename           : read input from file or stdin (default) (-i)
+-kokkos on/off ...          : turn KOKKOS mode on or off (-k)
+-log none/filename          : where to send log output (-l)
+-mdi '<mdi flags>'          : pass flags to the MolSSI Driver Interface
+-mpicolor color             : which exe in a multi-exe mpirun cmd (-m)
+-cite                       : select citation reminder style (-c)
+-nocite                     : disable citation reminder (-nc)
+-nonbuf                     : disable screen/logfile buffering (-nb)
+-package style ...          : invoke package command (-pk)
+-partition size1 size2 ...  : assign partition sizes (-p)
+-plog basename              : basename for partition logs (-pl)
+-pscreen basename           : basename for partition screens (-ps)
+-restart2data rfile dfile ... : convert restart to data file (-r2data)
+-restart2dump rfile dgroup dstyle dfile ...
+                            : convert restart to dump file (-r2dump)
+-restart2info rfile         : print info about restart rfile (-r2info)
+-reorder topology-specs     : processor reordering (-r)
+-screen none/filename       : where to send screen output (-sc)
+-skiprun                    : skip loops in run and minimize (-sr)
+-suffix gpu/intel/kk/opt/omp: style suffix to apply (-sf)
+-var varname value          : set index style variable (-v)
+
+OS: Linux "Debian GNU/Linux 13 (trixie)" 6.18.44 x86_64
+
+Compiler: GNU C++ 14.2.0 with OpenMP 4.5
+C++ standard: C++20
+Using fmt library emulation with std::format
+Embedded JSON class version: 3.12.0
+
+MPI v1.0: LAMMPS MPI STUBS for LAMMPS version 30 Sep 2026
+
+Accelerator configuration:
+
+KOKKOS package API: OpenMP Serial
+KOKKOS package precision: double
+KOKKOS package random numbers: device
+KOKKOS package view layout: legacy
+Kokkos library version: 5.2.1
+OPENMP package API: OpenMP
+OPENMP package precision: double
+OpenMP standard: OpenMP 4.5
+
+FFT information:
+
+FFT precision  = double
+FFT engine  = mpiFFT
+FFT library = KISS
+KOKKOS FFT engine  = mpiFFT
+KOKKOS FFT library = KISS
+
+Active compile time flags:
+
+-DLAMMPS_GZIP
+-DLAMMPS_PNG
+-DLAMMPS_JPEG
+-DLAMMPS_CURL
+-DLAMMPS_SMALLBIG
+sizeof(smallint): 32-bit
+sizeof(imageint): 32-bit
+sizeof(tagint):   32-bit
+sizeof(bigint):   64-bit
+
+Available compression formats:
+
+Extension: .gz     Command: gzip
+Extension: .bz2    Command: bzip2
+Extension: .zst    Command: zstd
+Extension: .xz     Command: xz
+Extension: .lzma   Command: xz
+
+
+Installed packages:
+
+AMOEBA APIP ASPHERE BOCS BODY BPM BROWNIAN CG-DNA CG-SPICA CLASS2 COLLOID
+COLVARS COMPRESS CORESHELL DIELECTRIC DIFFRACTION DIPOLE DPD-BASIC DPD-MESO
+DPD-REACT DPD-SMOOTH DRUDE EFF ELECTRODE EXTRA-COMMAND EXTRA-COMPUTE EXTRA-DUMP
+EXTRA-FIX EXTRA-MOLECULE EXTRA-PAIR FEP GRANSURF GRANULAR GRAPHICS INTERLAYER
+KOKKOS KSPACE LEPTON MACHDYN MANIFOLD MANYBODY MC MEAM MESONT MGPT MISC ML-IAP
+ML-PACE ML-POD ML-RUNNER ML-SNAP ML-UF3 MOFFF MOLECULE OPENMP OPT ORIENT PERI
+PHONON PLUGIN PTM QEQ QTB REACTION REAXFF REPLICA RHEO RIGID SHOCK SMTBQ SPH
+SPIN SRD TALLY UEF VORONOI YAFF
+
+Lists of individual styles included in this LAMMPS executable
+(a trailing * marks a style currently provided by a plugin)
+
+* Atom styles:
+amoeba     bond        dipole/kk     full       molecular/kk  sphere
+angle      bond/kk     dpd           full/kk    oxdna         sphere/kk
+angle/kk   bpm/sphere  dpd/kk        hybrid     peri          spin
+apip       charge      edpd          hybrid/kk  rheo          spin/kk
+atomic     charge/kk   electron      line       rheo/thermal  tdpd
+atomic/kk  dielectric  ellipsoid     mdpd       smd           template
+body       dipole      ellipsoid/kk  molecular  sph           tri
+
+
+* Body styles:
+nparticle  rounded/polygon  rounded/polyhedron
+
+
+* Integrate styles:
+respa  respa/omp  verlet  verlet/kk  verlet/split  verlet/split/rk
+
+
+* Minimize styles:
+cg     fire     fire/old  quickmin     sd     spin     spin/lbfgs
+cg/kk  fire/kk  hftn      quickmin/kk  sd/kk  spin/cg
+
+
+* Pair styles:
+adp                                   lj/cut/coul/debye/omp
+adp/kk                                lj/cut/coul/dsf
+adp/omp                               lj/cut/coul/dsf/kk
+agni                                  lj/cut/coul/dsf/omp
+agni/omp                              lj/cut/coul/esp
+aip/water/2dm                         lj/cut/coul/long
+aip/water/2dm/opt                     lj/cut/coul/long/cs
+airebo                                lj/cut/coul/long/cs/kk
+airebo/bc                             lj/cut/coul/long/cs/omp
+airebo/bc/omp                         lj/cut/coul/long/dielectric
+airebo/morse                          lj/cut/coul/long/dielectric/omp
+airebo/morse/omp                      lj/cut/coul/long/kk
+airebo/omp                            lj/cut/coul/long/omp
+amoeba                                lj/cut/coul/long/opt
+atm                                   lj/cut/coul/long/soft
+atm/omp                               lj/cut/coul/long/soft/kk
+awpmd/cut                             lj/cut/coul/long/soft/omp
+beck                                  lj/cut/coul/msm
+beck/kk                               lj/cut/coul/msm/dielectric
+beck/omp                              lj/cut/coul/msm/omp
+body/nparticle                        lj/cut/coul/wolf
+body/nparticle/omp                    lj/cut/coul/wolf/kk
+body/rounded/polygon                  lj/cut/coul/wolf/omp
+body/rounded/polygon/omp              lj/cut/dipole/cut
+body/rounded/polyhedron               lj/cut/dipole/cut/kk
+body/rounded/polyhedron/omp           lj/cut/dipole/cut/omp
+bondval                               lj/cut/dipole/long
+bondval/kk                            lj/cut/dipole/long/omp
+bondval/vec                           lj/cut/kk
+bondval/vec/kk                        lj/cut/omp
+bop                                   lj/cut/opt
+born                                  lj/cut/soft
+born/coul/dsf                         lj/cut/soft/gapsys
+born/coul/dsf/cs                      lj/cut/soft/kk
+born/coul/dsf/cs/kk                   lj/cut/soft/omp
+born/coul/dsf/cs/omp                  lj/cut/sphere
+born/coul/dsf/kk                      lj/cut/sphere/kk
+born/coul/dsf/omp                     lj/cut/sphere/omp
+born/coul/long                        lj/cut/thole/long
+born/coul/long/cs                     lj/cut/thole/long/omp
+born/coul/long/cs/kk                  lj/cut/tip4p/cut
+born/coul/long/cs/omp                 lj/cut/tip4p/cut/kk
+born/coul/long/kk                     lj/cut/tip4p/cut/omp
+born/coul/long/omp                    lj/cut/tip4p/long
+born/coul/msm                         lj/cut/tip4p/long/kk
+born/coul/msm/omp                     lj/cut/tip4p/long/omp
+born/coul/wolf                        lj/cut/tip4p/long/opt
+born/coul/wolf/cs                     lj/cut/tip4p/long/soft
+born/coul/wolf/cs/kk                  lj/cut/tip4p/long/soft/omp
+born/coul/wolf/cs/omp                 lj/expand
+born/coul/wolf/kk                     lj/expand/coul/long
+born/coul/wolf/omp                    lj/expand/coul/long/kk
+born/gauss                            lj/expand/coul/long/omp
+born/gauss/kk                         lj/expand/kk
+born/gauss/omp                        lj/expand/omp
+born/kk                               lj/expand/sphere
+born/omp                              lj/expand/sphere/kk
+bpm/peri                              lj/expand/sphere/omp
+bpm/spring                            lj/gromacs
+brownian                              lj/gromacs/coul/gromacs
+brownian/kk                           lj/gromacs/coul/gromacs/kk
+brownian/omp                          lj/gromacs/coul/gromacs/omp
+brownian/poly                         lj/gromacs/kk
+brownian/poly/omp                     lj/gromacs/omp
+buck                                  lj/long/coul/long
+buck/coul/cut                         lj/long/coul/long/dielectric
+buck/coul/cut/kk                      lj/long/coul/long/omp
+buck/coul/cut/omp                     lj/long/coul/long/opt
+buck/coul/long                        lj/long/dipole/long
+buck/coul/long/cs                     lj/long/tip4p/long
+buck/coul/long/cs/kk                  lj/long/tip4p/long/omp
+buck/coul/long/cs/omp                 lj/mdf
+buck/coul/long/kk                     lj/mdf/kk
+buck/coul/long/omp                    lj/mdf/omp
+buck/coul/msm                         lj/pirani
+buck/coul/msm/omp                     lj/pirani/kk
+buck/kk                               lj/pirani/omp
+buck/long/coul/long                   lj/relres
+buck/long/coul/long/omp               lj/relres/kk
+buck/mdf                              lj/relres/omp
+buck/mdf/kk                           lj/sdk
+buck/mdf/omp                          lj/sdk/coul/long
+buck/omp                              lj/sdk/coul/long/kk
+buck6d/coul/gauss/dsf                 lj/sdk/coul/long/omp
+buck6d/coul/gauss/dsf/kk              lj/sdk/coul/msm
+buck6d/coul/gauss/dsf/omp             lj/sdk/coul/msm/omp
+buck6d/coul/gauss/long                lj/sdk/kk
+buck6d/coul/gauss/long/kk             lj/sdk/omp
+buck6d/coul/gauss/long/omp            lj/sf
+colloid                               lj/sf/dipole/sf
+colloid/kk                            lj/sf/dipole/sf/omp
+colloid/omp                           lj/sf/kk
+comb                                  lj/sf/omp
+comb/omp                              lj/smooth
+comb3                                 lj/smooth/kk
+cosine/squared                        lj/smooth/linear
+cosine/squared/kk                     lj/smooth/linear/kk
+cosine/squared/omp                    lj/smooth/linear/omp
+coul/ctip                             lj/smooth/omp
+coul/cut                              lj/spica
+coul/cut/dielectric                   lj/spica/coul/long
+coul/cut/global                       lj/spica/coul/long/kk
+coul/cut/global/kk                    lj/spica/coul/long/omp
+coul/cut/global/omp                   lj/spica/coul/msm
+coul/cut/kk                           lj/spica/coul/msm/omp
+coul/cut/omp                          lj/spica/kk
+coul/cut/soft                         lj/spica/omp
+coul/cut/soft/gapsys                  lj/switch3/coulgauss/long
+coul/cut/soft/gapsys/omp              lj/switch3/coulgauss/long/kk
+coul/cut/soft/kk                      lj/switch3/coulgauss/long/omp
+coul/cut/soft/omp                     lj96/cut
+coul/debye                            lj96/cut/kk
+coul/debye/kk                         lj96/cut/omp
+coul/debye/omp                        local/density
+coul/diel                             local/density/omp
+coul/diel/kk                          lubricate
+coul/diel/omp                         lubricate/omp
+coul/dsf                              lubricate/poly
+coul/dsf/kk                           lubricate/poly/omp
+coul/dsf/omp                          lubricateU
+coul/esp                              lubricateU/poly
+coul/exclude                          mdpd
+coul/exclude/omp                      mdpd/rhosum
+coul/long                             meam
+coul/long/cs                          meam/c
+coul/long/cs/kk                       meam/kk
+coul/long/cs/omp                      meam/ms
+coul/long/dielectric                  meam/ms/kk
+coul/long/kk                          meam/spline
+coul/long/omp                         meam/spline/omp
+coul/long/soft                        meam/sw/spline
+coul/long/soft/kk                     mesocnt
+coul/long/soft/omp                    mesocnt/viscous
+coul/msm                              mesont/tpm
+coul/msm/omp                          mgpt
+coul/shield                           mie/cut
+coul/shield/kk                        mie/cut/kk
+coul/shield/omp                       mie/cut/omp
+coul/slater/cut                       mliap
+coul/slater/cut/kk                    mliap/kk
+coul/slater/cut/omp                   mm3/switch3/coulgauss/long
+coul/slater/long                      mm3/switch3/coulgauss/long/kk
+coul/slater/long/kk                   mm3/switch3/coulgauss/long/omp
+coul/slater/long/omp                  momb
+coul/streitz                          momb/kk
+coul/streitz/omp                      momb/omp
+coul/tt                               morse
+coul/wolf                             morse/kk
+coul/wolf/cs                          morse/omp
+coul/wolf/cs/kk                       morse/opt
+coul/wolf/cs/omp                      morse/smooth/linear
+coul/wolf/kk                          morse/smooth/linear/kk
+coul/wolf/omp                         morse/smooth/linear/omp
+dispersion/d3                         morse/soft
+dpd                                   morse/soft/kk
+dpd/coul/slater/long                  morse/soft/omp
+dpd/ext                               multi/lucy
+dpd/ext/kk                            multi/lucy/rx
+dpd/ext/omp                           multi/lucy/rx/kk
+dpd/ext/tstat                         nb3b/harmonic
+dpd/ext/tstat/kk                      nb3b/harmonic/omp
+dpd/ext/tstat/omp                     nb3b/screened
+dpd/fdt                               nm/cut
+dpd/fdt/energy                        nm/cut/coul/cut
+dpd/fdt/energy/kk                     nm/cut/coul/cut/kk
+dpd/kk                                nm/cut/coul/cut/omp
+dpd/omp                               nm/cut/coul/long
+dpd/tstat                             nm/cut/coul/long/kk
+dpd/tstat/kk                          nm/cut/coul/long/omp
+dpd/tstat/omp                         nm/cut/kk
+drip                                  nm/cut/omp
+drip/omp                              nm/cut/split
+dsmc                                  nm/cut/split/kk
+e3b                                   nm/cut/split/omp
+e3b/omp                               oxdna/coaxstk
+eam                                   oxdna/excv
+eam/alloy                             oxdna/hbond
+eam/alloy/kk                          oxdna/stk
+eam/alloy/omp                         oxdna/xstk
+eam/alloy/opt                         oxdna2/coaxstk
+eam/apip                              oxdna2/dh
+eam/cd                                oxdna2/excv
+eam/cd/old                            oxdna2/hbond
+eam/fs                                oxdna2/stk
+eam/fs/apip                           oxdna2/xstk
+eam/fs/kk                             oxdna3/coaxstk
+eam/fs/omp                            oxdna3/dh
+eam/fs/opt                            oxdna3/excv
+eam/he                                oxdna3/hbond
+eam/he/kk                             oxdna3/stk
+eam/he/omp                            oxdna3/xstk
+eam/he/opt                            oxrna2/coaxstk
+eam/kk                                oxrna2/dh
+eam/omp                               oxrna2/excv
+eam/opt                               oxrna2/hbond
+edip                                  oxrna2/stk
+edip/multi                            oxrna2/xstk
+edip/omp                              pace
+edpd                                  pace/apip
+eff/cut                               pace/extrapolation
+eim                                   pace/extrapolation/kk
+eim/omp                               pace/fast/apip
+exp6/rx                               pace/kk
+exp6/rx/kk                            pace/precise/apip
+extep                                 pedone
+extep/omp                             pedone/kk
+gauss                                 pedone/omp
+gauss/cut                             peri/eps
+gauss/cut/kk                          peri/lps
+gauss/cut/omp                         peri/lps/omp
+gauss/kk                              peri/pmb
+gauss/omp                             peri/pmb/omp
+gayberne                              peri/ves
+gayberne/omp                          pod
+gran/hertz/history                    pod/kk
+gran/hertz/history/kk                 polymorphic
+gran/hertz/history/omp                rann
+gran/hooke                            reax
+gran/hooke/history                    reax/c
+gran/hooke/history/kk                 reaxff
+gran/hooke/history/omp                reaxff/kk
+gran/hooke/kk                         reaxff/omp
+gran/hooke/omp                        rebo
+granular                              rebo/omp
+granular/superellipsoid               rebomos
+gw                                    rebomos/omp
+gw/omp                                resquared
+gw/zbl                                resquared/omp
+gw/zbl/omp                            rheo
+harmonic/cut                          rheo/solid
+harmonic/cut/kk                       runner
+harmonic/cut/omp                      saip/metal
+hbond/dreiding/lj                     saip/metal/opt
+hbond/dreiding/lj/angleoffset         saip/metal/tmd
+hbond/dreiding/lj/angleoffset/omp     saip/metal/tmd/opt
+hbond/dreiding/lj/omp                 sdpd/taitwater/isothermal
+hbond/dreiding/morse                  smatb
+hbond/dreiding/morse/angleoffset      smatb/single
+hbond/dreiding/morse/angleoffset/omp  smd/hertz
+hbond/dreiding/morse/omp              smd/tlsph
+hippo                                 smd/tri_surface
+hybrid                                smd/ulsph
+hybrid/kk                             smtbq
+hybrid/molecular                      snap
+hybrid/molecular/omp                  snap/kk
+hybrid/omp                            soft
+hybrid/overlay                        soft/kk
+hybrid/overlay/kk                     soft/omp
+hybrid/overlay/omp                    sph/heatconduction
+hybrid/scaled                         sph/idealgas
+hybrid/scaled/kk                      sph/lj
+hybrid/scaled/omp                     sph/rhosum
+ilp/graphene/hbn                      sph/taitwater
+ilp/graphene/hbn/opt                  sph/taitwater/morris
+ilp/tmd                               spin/dipole/cut
+ilp/tmd/opt                           spin/dipole/long
+kolmogorov/crespi/full                spin/dmi
+kolmogorov/crespi/z                   spin/exchange
+lambda/input/apip                     spin/exchange/biquadratic
+lambda/input/csp/apip                 spin/magelec
+lambda/zone/apip                      spin/neel
+lcbop                                 srp
+lcbop/omp                             srp/react
+ldd                                   surf/granular
+lebedeva/z                            sw
+lennard/mdf                           sw/angle/table
+lennard/mdf/kk                        sw/kk
+lennard/mdf/omp                       sw/mod
+lepton                                sw/mod/kk
+lepton/coul                           sw/mod/omp
+lepton/coul/omp                       sw/omp
+lepton/omp                            table
+lepton/sphere                         table/kk
+lepton/sphere/omp                     table/omp
+line/lj                               table/rx
+line/lj/omp                           table/rx/kk
+list                                  tdpd
+lj/charmm/coul/charmm                 tersoff
+lj/charmm/coul/charmm/implicit        tersoff/kk
+lj/charmm/coul/charmm/implicit/kk     tersoff/mod
+lj/charmm/coul/charmm/implicit/omp    tersoff/mod/c
+lj/charmm/coul/charmm/kk              tersoff/mod/c/kk
+lj/charmm/coul/charmm/omp             tersoff/mod/c/omp
+lj/charmm/coul/long                   tersoff/mod/kk
+lj/charmm/coul/long/kk                tersoff/mod/omp
+lj/charmm/coul/long/omp               tersoff/omp
+lj/charmm/coul/long/opt               tersoff/table
+lj/charmm/coul/long/soft              tersoff/table/omp
+lj/charmm/coul/long/soft/kk           tersoff/zbl
+lj/charmm/coul/long/soft/omp          tersoff/zbl/kk
+lj/charmm/coul/msm                    tersoff/zbl/omp
+lj/charmm/coul/msm/omp                thole
+lj/charmmfsw/coul/charmmfsh           threebody/table
+lj/charmmfsw/coul/charmmfsh/kk        threebody/table/omp
+lj/charmmfsw/coul/charmmfsh/omp       tip4p/cut
+lj/charmmfsw/coul/long                tip4p/cut/kk
+lj/charmmfsw/coul/long/kk             tip4p/cut/omp
+lj/charmmfsw/coul/long/omp            tip4p/long
+lj/class2                             tip4p/long/kk
+lj/class2/coul/cut                    tip4p/long/omp
+lj/class2/coul/cut/kk                 tip4p/long/soft
+lj/class2/coul/cut/omp                tip4p/long/soft/omp
+lj/class2/coul/cut/soft               tracker
+lj/class2/coul/cut/soft/omp           tri/lj
+lj/class2/coul/long                   tri/lj/omp
+lj/class2/coul/long/cs                uf3
+lj/class2/coul/long/cs/kk             uf3/kk
+lj/class2/coul/long/cs/omp            ufm
+lj/class2/coul/long/kk                ufm/kk
+lj/class2/coul/long/omp               ufm/omp
+lj/class2/coul/long/soft              ufm/opt
+lj/class2/coul/long/soft/omp          vashishta
+lj/class2/kk                          vashishta/kk
+lj/class2/omp                         vashishta/omp
+lj/class2/soft                        vashishta/table
+lj/class2/soft/kk                     vashishta/table/omp
+lj/class2/soft/omp                    wf/cut
+lj/cubic                              wf/cut/kk
+lj/cubic/kk                           wf/cut/omp
+lj/cubic/omp                          ylz
+lj/cut                                ylz/kk
+lj/cut/coul/cut                       ylz/omp
+lj/cut/coul/cut/dielectric            yukawa
+lj/cut/coul/cut/dielectric/omp        yukawa/colloid
+lj/cut/coul/cut/kk                    yukawa/colloid/kk
+lj/cut/coul/cut/omp                   yukawa/colloid/omp
+lj/cut/coul/cut/soft                  yukawa/kk
+lj/cut/coul/cut/soft/kk               yukawa/omp
+lj/cut/coul/cut/soft/omp              zbl
+lj/cut/coul/debye                     zbl/kk
+lj/cut/coul/debye/dielectric          zbl/omp
+lj/cut/coul/debye/dielectric/omp      zero
+lj/cut/coul/debye/kk                  zero/coul
+
+
+* Bond styles:
+bpm/peri            gromos/omp              morse/kk
+bpm/rotational      harmonic                morse/omp
+bpm/spring          harmonic/kk             nonlinear
+bpm/spring/plastic  harmonic/omp            nonlinear/kk
+bpm/zero            harmonic/restrain       nonlinear/omp
+class2              harmonic/restrain/kk    oxdna/fene
+class2/kk           harmonic/restrain/omp   oxdna2/fene
+class2/omp          harmonic/shift          oxdna3/fene
+fene                harmonic/shift/cut      oxrna2/fene
+fene/expand         harmonic/shift/cut/kk   quartic
+fene/expand/kk      harmonic/shift/cut/omp  quartic/exp
+fene/expand/omp     harmonic/shift/kk       quartic/exp/kk
+fene/kk             harmonic/shift/omp      quartic/kk
+fene/nm             hybrid                  quartic/omp
+fene/nm/kk          hybrid/kk               rheo/shell
+fene/nm/omp         lepton                  special
+fene/omp            lepton/omp              table
+gaussian            mesocnt                 table/kk
+gaussian/kk         mm3                     table/omp
+gaussian/omp        mm3/kk                  zero
+gromos              mm3/omp
+gromos/kk           morse
+
+
+* Angle styles:
+amoeba               cosine/shift/exp/kk            harmonic/kk
+charmm               cosine/shift/exp/omp           harmonic/omp
+charmm/kk            cosine/shift/kk                hybrid
+charmm/omp           cosine/shift/omp               hybrid/kk
+class2               cosine/squared                 lepton
+class2/kk            cosine/squared/kk              lepton/omp
+class2/omp           cosine/squared/omp             mesocnt
+class2/p6            cosine/squared/restricted      mm3
+class2/p6/kk         cosine/squared/restricted/kk   mm3/kk
+class2/p6/omp        cosine/squared/restricted/omp  mm3/omp
+class2xe             cross                          mwlc
+class2xe/kk          cross/kk                       mwlc/kk
+class2xe/omp         cross/omp                      mwlc/omp
+cosine               dipole                         quartic
+cosine/buck6d        dipole/kk                      quartic/kk
+cosine/buck6d/omp    dipole/omp                     quartic/omp
+cosine/delta         fourier                        sdk
+cosine/delta/kk      fourier/kk                     sdk/kk
+cosine/delta/omp     fourier/omp                    sdk/omp
+cosine/kk            fourier/simple                 spica
+cosine/omp           fourier/simple/kk              spica/kk
+cosine/periodic      fourier/simple/omp             spica/omp
+cosine/periodic/kk   gaussian                       table
+cosine/periodic/omp  gaussian/kk                    table/kk
+cosine/shift         gaussian/omp                   table/omp
+cosine/shift/exp     harmonic                       zero
+
+
+* Dihedral styles:
+charmm                         fourier             nharmonic/omp
+charmm/kk                      fourier/kk          opls
+charmm/omp                     fourier/omp         opls/kk
+charmmfsw                      harmonic            opls/omp
+charmmfsw/kk                   harmonic/kk         quadratic
+charmmfsw/omp                  harmonic/omp        quadratic/kk
+class2                         helix               quadratic/omp
+class2/kk                      helix/kk            spherical
+class2/omp                     helix/omp           spherical/kk
+class2xe                       hybrid              spherical/omp
+class2xe/kk                    hybrid/kk           table
+class2xe/omp                   lepton              table/cut
+cosine/shift/exp               lepton/omp          table/cut/kk
+cosine/shift/exp/kk            multi/harmonic      table/cut/omp
+cosine/shift/exp/omp           multi/harmonic/kk   table/kk
+cosine/squared/restricted      multi/harmonic/omp  table/omp
+cosine/squared/restricted/kk   nharmonic           zero
+cosine/squared/restricted/omp  nharmonic/kk
+
+
+* Improper styles:
+amoeba      cvff/kk       fourier       inversion/harmonic      sqdistharm/omp
+class2      cvff/omp      fourier/kk    inversion/harmonic/kk   umbrella
+class2/kk   distance      fourier/omp   inversion/harmonic/omp  umbrella/kk
+class2/omp  distance/kk   harmonic      ring                    umbrella/omp
+cossq       distance/omp  harmonic/kk   ring/kk                 zero
+cossq/kk    distharm      harmonic/omp  ring/omp
+cossq/omp   distharm/kk   hybrid        sqdistharm
+cvff        distharm/omp  hybrid/kk     sqdistharm/kk
+
+
+* KSpace styles:
+esp                msm/cg           pppm/dipole/spin      pppm/rk
+ewald              msm/cg/omp       pppm/disp             pppm/stagger
+ewald/dipole       msm/dielectric   pppm/disp/dielectric  pppm/tip4p
+ewald/dipole/spin  msm/omp          pppm/disp/omp         pppm/tip4p/kk
+ewald/disp         pppm             pppm/disp/tip4p       pppm/tip4p/omp
+ewald/disp/dipole  pppm/cg          pppm/disp/tip4p/omp   zero
+ewald/electrode    pppm/cg/omp      pppm/electrode
+ewald/omp          pppm/dielectric  pppm/kk
+msm                pppm/dipole      pppm/omp
+
+
+* Fix styles:
+accelerate/cos           manifoldforce           reax/c/bonds
+acks2/reax               meso/move               reax/c/species
+acks2/reax/kk            mol/swap                reaxff/bonds
+acks2/reaxff             momentum                reaxff/bonds/kk
+acks2/reaxff/kk          momentum/chunk          reaxff/species
+adapt                    momentum/kk             reaxff/species/kk
+adapt/fep                move                    recenter
+add/heat                 msst                    recenter/kk
+addforce                 mvv/dpd                 restrain
+addforce/kk              mvv/edpd                rheo
+addtorque                mvv/tdpd                rheo/oxidation
+addtorque/atom           neb                     rheo/pressure
+addtorque/atom/kk        neb/spin                rheo/thermal
+addtorque/group          neighbor/swap           rheo/viscosity
+addtorque/group/kk       nonaffine/displacement  rhok
+alchemy                  nph                     rigid
+align/self               nph/asphere             rigid/meso
+amoeba/bitorsion         nph/asphere/omp         rigid/nph
+amoeba/pitorsion         nph/body                rigid/nph/omp
+append/atoms             nph/eff                 rigid/nph/small
+atc                      nph/kk                  rigid/nph/small/kk
+atom/swap                nph/omp                 rigid/npt
+atom_weight/apip         nph/sphere              rigid/npt/omp
+ave/atom                 nph/sphere/kk           rigid/npt/small
+ave/chunk                nph/sphere/omp          rigid/npt/small/kk
+ave/correlate            nphug                   rigid/nve
+ave/correlate/long       npt                     rigid/nve/omp
+ave/grid                 npt/asphere             rigid/nve/small
+ave/histo                npt/asphere/omp         rigid/nve/small/kk
+ave/histo/weight         npt/body                rigid/nvt
+ave/moments              npt/cauchy              rigid/nvt/omp
+ave/spatial              npt/eff                 rigid/nvt/small
+ave/spatial/sphere       npt/kk                  rigid/nvt/small/kk
+ave/time                 npt/omp                 rigid/omp
+aveforce                 npt/sphere              rigid/small
+aveforce/kk              npt/sphere/kk           rigid/small/kk
+balance                  npt/sphere/omp          rigid/small/omp
+baoab                    npt/uef                 rx
+baoab/kk                 numdiff                 rx/kk
+bocs                     numdiff/virial          saed/vtk
+bond/break               nve                     set
+bond/create              nve/asphere             setforce
+bond/create/angle        nve/asphere/kk          setforce/kk
+bond/react               nve/asphere/noforce     setforce/spin
+bond/swap                nve/asphere/noforce/kk  settorque/atom
+box/relax                nve/awpmd               settorque/atom/kk
+brownian                 nve/body                sgcmc
+brownian/asphere         nve/bpm/sphere          shake
+brownian/kk              nve/dot                 shake/kk
+brownian/sphere          nve/dotc/langevin       shardlow
+charge/regulation        nve/eff                 shardlow/kk
+cmap                     nve/kk                  smd
+cmap/kk                  nve/limit               smd/adjust_dt
+colvars                  nve/limit/kk            smd/integrate_tlsph
+colvars/kk               nve/line                smd/integrate_ulsph
+controller               nve/manifold/rattle     smd/move_tri_surf
+damping/cundall          nve/noforce             smd/setvel
+damping/cundall/kk       nve/noforce/kk          smd/wall_surface
+deform                   nve/omp                 sph
+deform/kk                nve/sphere              sph/stationary
+deform/pressure          nve/sphere/kk           spring
+deposit                  nve/sphere/omp          spring/chunk
+dpd/energy               nve/spin                spring/kk
+dpd/energy/kk            nve/tri                 spring/rg
+drag                     nvk                     spring/rg/kk
+drag/kk                  nvk/kk                  spring/self
+drude                    nvt                     spring/self/kk
+drude/transform/direct   nvt/asphere             srd
+drude/transform/inverse  nvt/asphere/omp         store/force
+dt/reset                 nvt/body                store/force/kk
+dt/reset/kk              nvt/eff                 store/state
+edpd/source              nvt/kk                  surface/global
+efield                   nvt/manifold/rattle     surface/local
+efield/kk                nvt/omp                 tdpd/source
+efield/lepton            nvt/sllod               temp/berendsen
+efield/tip4p             nvt/sllod/eff           temp/berendsen/kk
+ehex                     nvt/sllod/kk            temp/csld
+electrode/conp           nvt/sllod/omp           temp/csld/kk
+electrode/conq           nvt/sphere              temp/csvr
+electrode/thermo         nvt/sphere/kk           temp/csvr/kk
+electron/stopping        nvt/sphere/omp          temp/rescale
+electron/stopping/fit    nvt/uef                 temp/rescale/eff
+electron/stopping/kk     oneway                  temp/rescale/kk
+enforce2d                oneway/kk               tfmc
+enforce2d/kk             orient/bcc              tgnpt/drude
+eos/cv                   orient/bcc/omp          tgnvt/drude
+eos/table                orient/eco              thermal/conductivity
+eos/table/rx             orient/eco/omp          ti/spring
+eos/table/rx/kk          orient/fcc              ti/spring/kk
+evaporate                orient/fcc/omp          tmd
+external                 pafi                    ttm
+external/kk              pair                    ttm/cascade
+ffl                      phonon                  ttm/grid
+filter/corotate          pimd                    ttm/mod
+flow/gauss               pimd/langevin           ttm/thermal
+flow/gauss/kk            pimd/langevin/bosonic   tune/kspace
+freeze                   pimd/nvt                vector
+freeze/kk                pimd/nvt/bosonic        viscosity
+gcmc                     planeforce              viscous
+gemc                     planeforce/kk           viscous/kk
+gjf                      poems                   viscous/nonlinear
+gjf/kk                   polarize/bem/gmres      viscous/nonlinear/kk
+gld                      polarize/bem/icc        viscous/sphere
+gle                      polarize/functional     viscous/sphere/kk
+graphics/arrows          pour                    wall/body/polygon
+graphics/chunk           precession/spin         wall/body/polyhedron
+graphics/isosurface      press/berendsen         wall/colloid
+graphics/labels          press/berendsen/kk      wall/ees
+graphics/lines           press/langevin          wall/flow
+graphics/objects         press/langevin/kk       wall/flow/kk
+graphics/periodic        print                   wall/gran
+graphics/replica         propel/self             wall/gran/kk
+gravity                  propel/self/kk          wall/gran/region
+gravity/kk               property/atom           wall/harmonic
+gravity/omp              property/atom/kk        wall/harmonic/kk
+grem                     qbmsst                  wall/harmonic/outside
+halt                     qeq/comb                wall/harmonic/outside/kk
+halt/kk                  qeq/comb/omp            wall/harmonic/returned
+heat                     qeq/ctip                wall/lepton
+heat/flow                qeq/ctip/omp            wall/lj1043
+heat/kk                  qeq/dynamic             wall/lj1043/kk
+hmc                      qeq/dynamic/omp         wall/lj126
+hyper/global             qeq/fire                wall/lj126/kk
+hyper/local              qeq/fire/omp            wall/lj93
+ilves                    qeq/point               wall/lj93/kk
+imd                      qeq/point/omp           wall/morse
+indent                   qeq/reax                wall/morse/kk
+ipi                      qeq/reax/kk             wall/piston
+lambda/apip              qeq/reax/omp            wall/piston/kk
+lambda/la/csp/apip       qeq/reaxff              wall/reflect
+lambda_thermostat/apip   qeq/reaxff/kk           wall/reflect/kk
+langevin                 qeq/reaxff/omp          wall/reflect/stochastic
+langevin/drude           qeq/rel/reaxff          wall/region
+langevin/eff             qeq/shielded            wall/region/ees
+langevin/kk              qeq/shielded/omp        wall/region/kk
+langevin/spin            qeq/slater              wall/srd
+lb/pc                    qeq/slater/omp          wall/table
+lb/rigid/pc/sphere       qtb                     widom
+lineforce                qtpie/reaxff
+lineforce/kk             rattle
+
+
+* Compute styles:
+ackland/atom             gyration                smd/internal/energy
+ackland/atom/omp         gyration/chunk          smd/plastic/strain
+adf                      gyration/kk             smd/plastic/strain/rate
+aggregate/atom           gyration/shape          smd/rho
+angle                    gyration/shape/chunk    smd/tlsph/defgrad
+angle/local              hbond/local             smd/tlsph/dt
+angmom/chunk             heat/flux               smd/tlsph/num/neighs
+ave/sphere/atom          heat/flux/tally         smd/tlsph/shape
+ave/sphere/atom/kk       heat/flux/virial/tally  smd/tlsph/strain
+ave/sphere/atom/omp      hexorder/atom           smd/tlsph/strain/rate
+basal/atom               hexorder/atom/kk        smd/tlsph/stress
+body/local               hexorder/atom/omp       smd/triangle/vertices
+bond                     hma                     smd/ulsph/effm
+bond/local               improper                smd/ulsph/num/neighs
+born/matrix              improper/local          smd/ulsph/strain
+centro/atom              inertia                 smd/ulsph/strain/rate
+centro/atom/kk           inertia/chunk           smd/ulsph/stress
+centro/atom/omp          inertia/kk              smd/vol
+centroid/stress/atom     ke                      sna/atom
+chunk/atom               ke/atom                 sna/grid
+chunk/spread/atom        ke/atom/eff             sna/grid/kk
+cluster/atom             ke/atom/kk              sna/grid/local
+cna/atom                 ke/atom/omp             sna/grid/local/kk
+cna/atom/omp             ke/eff                  snad/atom
+cnp/atom                 ke/kk                   snap
+cnp/atom/omp             ke/rigid                snav/atom
+com                      mesont                  sph/e/atom
+com/chunk                mliap                   sph/rho/atom
+com/kk                   momentum                sph/t/atom
+composition/atom         msd                     spin
+composition/atom/kk      msd/chunk               stress/atom
+composition/atom/omp     msd/nongauss            stress/cartesian
+contact/atom             nbond/atom              stress/cylinder
+contact/atom/omp         omega/chunk             stress/mop
+coord/atom               orientorder/atom        stress/mop/profile
+coord/atom/kk            orientorder/atom/kk     stress/spherical
+coord/atom/omp           orientorder/atom/omp    stress/tally
+count/type               pace                    tdpd/cc/atom
+damage/atom              pair                    temp
+dihedral                 pair/local              temp/asphere
+dihedral/local           pe                      temp/body
+dilatation/atom          pe/atom                 temp/chunk
+dipole                   pe/mol/tally            temp/com
+dipole/chunk             pe/tally                temp/com/kk
+dipole/tip4p             plasticity/atom         temp/cs
+dipole/tip4p/chunk       pod/atom                temp/deform
+displace/atom            pod/global              temp/deform/eff
+dpd                      pod/local               temp/deform/kk
+dpd/atom                 podd/atom               temp/drude
+edpd/temp/atom           pressure                temp/eff
+efield/atom              pressure/alchemy        temp/kk
+efield/wolf/atom         pressure/cylinder       temp/partial
+entropy/atom             pressure/uef            temp/partial/kk
+entropy/atom/kk          property/atom           temp/profile
+entropy/atom/omp         property/chunk          temp/profile/kk
+erotate/asphere          property/grid           temp/ramp
+erotate/asphere/kk       property/local          temp/ramp/kk
+erotate/rigid            ptm/atom                temp/region
+erotate/sphere           rattlers/atom           temp/region/eff
+erotate/sphere/atom      rdf                     temp/region/kk
+erotate/sphere/atom/kk   rdf/omp                 temp/rotate
+erotate/sphere/atom/omp  reaxff/atom             temp/sphere
+erotate/sphere/kk        reaxff/atom/kk          temp/sphere/kk
+event/displace           reduce                  temp/uef
+fabric                   reduce/chunk            ti
+fep                      reduce/region           torque/chunk
+fep/ta                   rheo/property/atom      vacf
+force/tally              rigid/local             vacf/chunk
+fragment/atom            saed                    vcm/chunk
+frenkel                  slcsa/atom              viscosity/cos
+gaussian/grid/local      slice                   voronoi/atom
+gaussian/grid/local/kk   smd/contact/radius      xrd
+global/atom              smd/damage
+group/group              smd/hourglass/error
+
+
+* Region styles:
+block     cone/kk      ellipsoid     plane     prism/kk   union
+block/kk  cylinder     ellipsoid/kk  plane/kk  sphere
+cone      cylinder/kk  intersect     prism     sphere/kk
+
+
+* Dump styles:
+atom        cfg/gz     custom/gz     grid      local/zstd  xyz/gz
+atom/gz     cfg/mpiio  custom/mpiio  grid/vtk  movie       xyz/mpiio
+atom/mpiio  cfg/uef    custom/zstd   image     vtk         xyz/zstd
+atom/zstd   cfg/zstd   dcd           local     xtc         yaml
+cfg         custom     extxyz        local/gz  xyz
+
+
+* Command styles
+angle_write          geturl            plugin          tad
+balance              group2ndx         prd             temper
+box                  hyper             read_data       temper/grem
+change_box           info              read_dump       temper/npt
+create_atoms         kim_init          read_restart    third_order
+create_bonds         kim_interactions  region2vmd      third_order/kk
+create_box           kim_param         replicate       velocity
+delete_atoms         kim_property      rerun           write_coeff
+delete_bonds         kim_query         reset_atom_ids  write_data
+dihedral_write       message           reset_ids       write_dump
+displace_atoms       minimize          reset_mol_ids   write_molecule
+dynamical_matrix     ndx2group         run             write_restart
+dynamical_matrix/kk  neb               server
+fitpod               neb/spin          set
