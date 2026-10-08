@@ -2,7 +2,7 @@
 
 ## 结果范围
 
-已按用户给出的参考图生成 3 个可复现的几何候选：蓝色代表 Ti₃SiC₂，浅灰色代表 Ag；本轮调整为枝条更细、分枝更密的互穿枝状/迷宫状形貌，同时保留连通主网络。候选采用相关随机场阈值法生成，**仅用于探索形貌**，不是经校准的 Cahn–Hilliard 相场计算，也不是 Ag–Ti₃SiC₂ 真实旋节分解预测。
+已按用户给出的参考图生成 3 个可复现的几何候选：蓝色代表 Ti₃SiC₂，浅灰色代表 Ag；本轮调整为枝条更细、分枝更密的互穿枝状/迷宫状形貌，同时保留连通主网络。用户已选定候选 02。候选采用相关随机场阈值法生成，**仅用于探索形貌**，不是经校准的 Cahn–Hilliard 相场计算，也不是 Ag–Ti₃SiC₂ 真实旋节分解预测。
 
 没有读取或复制旧模型坐标。此次只交付连续体素几何，不创建原子坐标或 LAMMPS data，也没有运行 MD/LAMMPS。
 
@@ -20,7 +20,7 @@
 
 使用固定随机种子生成三维标准正态噪声，经高斯平滑（σ=1.7、2.7、2.7 个体素，约 3.36、5.4、5.4 Å）后，按排序阈值选取目标数量的 Ti₃SiC₂ 体素。σ 是几何尺度控制参数，不代表材料参数。边界采用反射平滑，模型不是周期边界。脚本可复现随机场与图像。
 
-`morphology_reference_view_2d.png` 为中央 YZ 切片，最近邻放大为 300×300 像素；蓝色 `#2563eb` 是 Ti₃SiC₂，浅灰 `#d2d4d8` 是 Ag。`geometry_preview.png` 另含三维相区表面点渲染及三个正交中心切片。
+`morphology_reference_view_2d.png` 为中央 YZ 切片，最近邻放大为 300×300 像素；蓝色 `#2563eb` 是 Ti₃SiC₂，浅灰 `#d2d4d8` 是 Ag。`geometry_3d_view.png` 是单独的 Ti₃SiC₂ 三维表面视图；`geometry_preview.png` 另含三维渲染及三个正交中心切片。
 
 ## 候选统计
 
@@ -37,7 +37,8 @@
 ## 文件与限制
 
 - `generate_geometry.py`：候选生成和图像导出脚本。
-- 每个 `candidate_NN` 中：`morphology_reference_view_2d.png`、`geometry_preview.png`、`phase_masks_and_field.npz`、`geometry_stats.json`。NPZ 保存有符号几何场、两相掩膜、体素间距和盒长。
+- 每个 `candidate_NN` 中：`geometry_3d_view.png`、`morphology_reference_view_2d.png`、`geometry_preview.png`、`phase_masks_and_field.npz`、`geometry_stats.json`。NPZ 保存有符号几何场、两相掩膜、体素间距和盒长。
+- `selected_candidate.json`：记录用户选定的候选 02 及文件路径。
 - `candidate_comparison.json`：机器可读汇总。
 
 此交付不含晶格、原子坐标、界面注册或经验证的势函数，因此不能直接用于原子模拟，也不支持关于真实熔化、旋节分解或熔坑演化的结论。

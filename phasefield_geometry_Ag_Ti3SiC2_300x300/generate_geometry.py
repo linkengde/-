@@ -149,6 +149,26 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     fig.savefig(candidate_dir / "geometry_preview.png", dpi=180)
     plt.close(fig)
 
+    # Standalone 3D view for easier inspection than the four-panel summary.
+    fig3 = plt.figure(figsize=(10, 8), constrained_layout=True)
+    ax3 = fig3.add_subplot(1, 1, 1, projection="3d")
+    ax3.scatter((ix + 0.5) * SPACING_A[0] * step,
+                (iy + 0.5) * SPACING_A[1] * step,
+                (iz + 0.5) * SPACING_A[2] * step,
+                c="#2563eb", s=2.2, alpha=0.62, linewidths=0, depthshade=False)
+    ax3.set_xlim(0, LENGTHS_A[0])
+    ax3.set_ylim(0, LENGTHS_A[1])
+    ax3.set_zlim(0, LENGTHS_A[2])
+    ax3.set_box_aspect(LENGTHS_A.copy())
+    ax3.set_xlabel("X (Å)")
+    ax3.set_ylabel("Y (Å)")
+    ax3.set_zlabel("Z (Å)")
+    ax3.view_init(elev=22, azim=35)
+    ax3.set_title("Ti₃SiC₂ connected phase surface")
+    fig3.suptitle(f"Candidate {candidate_no:02d} | seed={seed} | blue: Ti₃SiC₂")
+    fig3.savefig(candidate_dir / "geometry_3d_view.png", dpi=180)
+    plt.close(fig3)
+
     # A clean square view for direct comparison with the user's reference.
     # The YZ slice is 150 x 150 voxels (2 Å per pixel); nearest-neighbor
     # enlargement gives a 300 x 300 image without smoothing phase boundaries.
