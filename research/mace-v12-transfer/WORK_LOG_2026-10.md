@@ -474,3 +474,6 @@ A reran archive verifiers and every compact archive SHA256 for all six labels: a
 
 ### V19 training36 candidate prepared
 Reviewed B signed-response report and four file hashes: PASS. Preserved V18 base30 byte prefix and added all six verified signed acquisitions exactly once, with17-digit coordinates/forces/energy serialized and read-back exact equality. Builder and --check passed; exact composition rank4. Source method/lineage and native/free energies retained. No valid/test or training entry authorized; independent development design/labeling remains dependency. Added B read-only candidate integrity audit after independent geometry design.
+
+### V19 gated training-entry preparation
+Added preflight_v19.py and run_v19_training.sh draft. Fixed V18 recipe retained; official independent-dev source/role/isolation and B/A approval required. bash syntax PASS; actual read-only preflight verifies training36 then returns BLOCKED because independent development data not integrated, as expected. No training executed. Explicit completion receipt avoids inferred historical launcher exit. B latest remote still signed-response complete; independent design not yet reported running, next_action clarified without falsifying B state.
