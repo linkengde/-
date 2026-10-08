@@ -31,7 +31,7 @@ TARGET_TIC_VOL = (WT_TIC / RHO_TIC_A) / (
     (WT_TIC / RHO_TIC_A) + ((1.0 - WT_TIC) / RHO_AG)
 )
 SEEDS = [20261008, 20261009, 20261010]
-FIELD_SIGMA_XYZ_VOXELS = (3.0, 4.0, 4.0)
+FIELD_SIGMA_XYZ_VOXELS = (2.5, 3.5, 3.5)
 
 
 def exact_volume_field(seed: int) -> tuple[np.ndarray, np.ndarray, float]:
