@@ -2,7 +2,7 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-08T15:09:53.229672+00:00",
+  "updated_utc": "2026-10-08T15:15:16.593385+00:00",
   "auto_complete_after_labels": false,
   "current_stage": "Controlled width0.05 pilot registered; old width0.1 archives preserved",
   "current_jobs": {
@@ -55,7 +55,8 @@
     "AgSi_COD9009647_pilot_k3x3": "completed; SCF iteration 51; updated 2026-10-08T10:50:41.089487+00:00",
     "environment_restart_handover": "ready; all four pilot archives independently reverified by A",
     "AgSi_COD9009647_pilot_k5x5": "completed; SCF iteration 43; updated 2026-10-08T13:16:10.863332+00:00",
-    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "running; SCF iteration 0; updated 2026-10-08T15:09:53.229672+00:00"
+    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "running; SCF iteration 0; updated 2026-10-08T15:09:53.229672+00:00",
+    "AgSi_COD9009647_pilot_k5x5_sigma0p20": "queued_after_verified_sigma005; overnight controlled width0.20"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -86,7 +87,8 @@
     "AgSi_COD9009647_pilot_gamma": "completed",
     "AgSi_COD9009647_pilot_k3x3": "completed",
     "AgSi_COD9009647_pilot_k5x5": "completed",
-    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "queued"
+    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "queued",
+    "AgSi_COD9009647_pilot_k5x5_sigma0p20": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -115,11 +117,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing020_pilot"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Run only: python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot/run_queue.py window-a AgSi_COD9009647_pilot_k5x5_sigma0p05. Verify/publish compact archive, compare own fixed-mesh width0.1 baseline and new5/6 pair. No old mesh restart/training/sealed access.",
+  "next_action": "Continue current sigma0.05 exact job; after verified compact publication run python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing020_pilot/run_queue.py window-a AgSi_COD9009647_pilot_k5x5_sigma0p20. One job per machine; predecessor and active-run guards enforced. Then compare0.05/0.10/0.20 widths and new5/6; no old rerun/training/sealed reads.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -138,7 +141,8 @@
     "AgSi_registry_holdout_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts",
     "AgTi_registry_holdout_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_registry_holdouts",
     "AgSi_COD9009647_pilot_k5x5": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot",
-    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot"
+    "AgSi_COD9009647_pilot_k5x5_sigma0p05": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot",
+    "AgSi_COD9009647_pilot_k5x5_sigma0p20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing020_pilot"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [

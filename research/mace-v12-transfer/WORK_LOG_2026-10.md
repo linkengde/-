@@ -521,3 +521,7 @@ All three verified comparisons pass energy and pair gates but fail the unchanged
 ### Controlled width0.05 follow-up registered
 
 User continued after launch-disabled smearing proposal and requested9h sustained work. Separate pbe_interface_v19_cif_smearing_pilot preserves original archives and exact frozen52atom input. A5x5/B6x6 new owner-bound labels; only Fermi width changes0.1->0.05. Calculator reads manifest width; verifier checks full method; queue/direct runner verify pinned entry inventory. Disabled-launch and synthetic method/wrong-width/missing-result guards passed; synthetic fixture is not DFT validation. Registration publication precedes A launch; B executes only own label. No vacuum until numerical evidence supports it, no training or sealed access.
+
+### Additional overnight controlled width scan
+
+User authorized additional overnight tasks. Separate sigma0.20 same-input A5/B6 records extend the0.05/0.10/0.20 sensitivity scan. Both queue and direct calculator require verified assigned0.05 predecessor before launch; same one-job/machine and source/method/inventory/resource guards. Historical results remain unchanged. Width scan is not evidence that larger smearing fixes the physical target. No blind labels, training or vacuum launched.
