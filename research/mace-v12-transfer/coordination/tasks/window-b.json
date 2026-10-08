@@ -137,13 +137,13 @@
     "v19_uploaded_CIF_rebuild_review": "completed; SCF iteration 1; updated 2026-10-08T08:55:49.814460+00:00",
     "v19_cif_convergence_pilot_entry_review": "completed; SCF iteration 1; updated 2026-10-08T09:03:39.581047+00:00",
     "AgSi_COD9009647_pilot_k2x2": "completed; SCF iteration 41; updated 2026-10-08T10:08:39.057153+00:00",
-    "v19_cif_kmesh_pilot_DFT": "ready; A approved fixed-ion source/registry and corrected entry"
+    "v19_cif_kmesh_pilot_DFT": "completed; SCF iteration 41; updated 2026-10-08T10:11:09.644801+00:00"
   },
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
   "status": "running",
-  "next_action": "Run python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/run_queue.py window-b now. Only registered pilot label; no other DFT or training. Publish compact verified archive, then compare paired mesh metrics once both arrive.",
+  "next_action": "Wait for A's AgSi_COD9009647_pilot_k3x3 archive; then compare 2x2x1 versus 3x3x1 and update the mesh report. Keep all mesh pilots numerical-only. v19_dataset_entry_independent_audit remains blocked until A publishes the official dataset/entry.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-08T10:10:50.755901+00:00",
+  "updated_utc": "2026-10-08T10:11:09.644801+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -167,15 +167,15 @@
   "live_progress": {
     "task_id": "window-b",
     "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-    "job": "AgSi_COD9009647_pilot_k2x2",
+    "job": "v19_cif_kmesh_pilot_DFT",
     "state": "completed",
     "iteration": 41,
     "elapsed_s": null,
-    "note": "Verified finite PW-PBE label and compact archive published; checkpoint retained locally",
-    "updated_utc": "2026-10-08T10:08:39.057153+00:00"
+    "note": "B 2x2 archive PASS at SCF41; Gamma->2x2: +45.19 meV/atom, vector RMSE 1.333, pair projection +1.169 eV/A; all provisional limits exceeded. Await A 3x3; no data integration.",
+    "updated_utc": "2026-10-08T10:11:09.644801+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "V19 CIF matched-kmesh numerical pilot authorized; A Gamma/B2x2, one assigned job each",
+  "current_stage": "B 2x2x1 converged in SCF41 and archive verification passed; Gamma-to-2x2 sensitivity exceeds all provisional budgets. A 3x3 remains in progress.",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
