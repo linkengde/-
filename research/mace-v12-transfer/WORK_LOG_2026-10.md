@@ -513,3 +513,7 @@ Four-rank PW-PBE converged in 43 steps; exact fixed geometry, finite energy/forc
 ### Verified 4/5/6 mesh comparison
 
 MESH_SENSITIVITY_EXCEEDS_PROVISIONAL_BUDGET. Both new compact pilot archives independently verified; 4/5,4/6,5/6 comparisons published with unchanged budgets. No global convergence, MACE accuracy or independent-validation claim. See new_owner_k4_k5_k6_assessment.json; further physical-setting checks not launched.
+
+### A reviews completed 4/5/6 mesh ladder
+
+All three verified comparisons pass energy and pair gates but fail the unchanged0.01eV/A force-vector gate:4/5=0.021587787,4/6=0.010490677,5/6=0.018921803. No rounding to pass or general convergence claim. Published per-element/top-atom force diagnosis and launch-disabled matched5/6 sigma0.05 proposal; current data cannot identify smearing causality. Existing runner hardcodes sigma0.1, so per-record method guards and separate execution preparation are required before any new registration/launch. Vacuum/development-label work and V19 training remain downstream.
