@@ -1,0 +1,148 @@
+{
+  "audit": "v19_cif_convergence_pilot_entry_review",
+  "created_utc": "2026-10-08T09:03:09.046596+00:00",
+  "runtime_identity": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
+  "registered_window_b_owner": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
+  "pilot_launch_enabled": false,
+  "checks": {
+    "pilot_inventory": {
+      "README.md": {
+        "expected": "c0a67d483d13c0c4eed6e0db8afc9953bdd70e938014664bad3f9aac99b1d0b1",
+        "observed": "c0a67d483d13c0c4eed6e0db8afc9953bdd70e938014664bad3f9aac99b1d0b1",
+        "pass": true
+      },
+      "compare_mesh_results.py": {
+        "expected": "9ee4ab7282818a0e5b4aaca1529ecbf9706aaf75db90acb79be657555c9eaf63",
+        "observed": "9ee4ab7282818a0e5b4aaca1529ecbf9706aaf75db90acb79be657555c9eaf63",
+        "pass": true
+      },
+      "input_manifest.json": {
+        "expected": "4a3b6e05ce2c92537ce9b9094183553a0f9293bac0bc1b5784c157836464253b",
+        "observed": "4a3b6e05ce2c92537ce9b9094183553a0f9293bac0bc1b5784c157836464253b",
+        "pass": true
+      },
+      "inputs/AgSi_cod9009647_slab_v19_dev_proposal.extxyz": {
+        "expected": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+        "observed": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+        "pass": true
+      },
+      "run_pw_reference.py": {
+        "expected": "59f38be738155d68fc469087fb264b04baaa8fea9b9e17cc39c922b3937b7a9c",
+        "observed": "59f38be738155d68fc469087fb264b04baaa8fea9b9e17cc39c922b3937b7a9c",
+        "pass": true
+      },
+      "run_queue.py": {
+        "expected": "52abe5ed9a9b6e66d4a2b8434542f0770d1a7f2de9fa823d231a5483bda20fd1",
+        "observed": "52abe5ed9a9b6e66d4a2b8434542f0770d1a7f2de9fa823d231a5483bda20fd1",
+        "pass": true
+      },
+      "verify_result.py": {
+        "expected": "95e6f4a43383f4af687fd4c9e30a308f265855853d11cf7f4b577b7d15969e2f",
+        "observed": "95e6f4a43383f4af687fd4c9e30a308f265855853d11cf7f4b577b7d15969e2f",
+        "pass": true
+      }
+    },
+    "source_manifest_hash": {
+      "declared": "f543091f67ed1a85bf005869d95d5a9931ebf524defd0c3e3e81d93dde7f2342",
+      "observed": "f543091f67ed1a85bf005869d95d5a9931ebf524defd0c3e3e81d93dde7f2342",
+      "pass": true
+    },
+    "owner_and_input_records": {
+      "window-a": {
+        "label": "AgSi_COD9009647_pilot_gamma",
+        "owner_instance_matches_task_card": true,
+        "owner_instance_matches_this_runtime": false,
+        "label_registered_with_owner_task": false,
+        "input_hash_matches_record": true,
+        "input_hash_matches_CIF_AgSi_proposal": true,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "blocked_state": "BLOCKED_PENDING_B_SOURCE_REVIEW_AND_A_REGISTRATION"
+      },
+      "window-b": {
+        "label": "AgSi_COD9009647_pilot_k2x2",
+        "owner_instance_matches_task_card": true,
+        "owner_instance_matches_this_runtime": true,
+        "label_registered_with_owner_task": false,
+        "input_hash_matches_record": true,
+        "input_hash_matches_CIF_AgSi_proposal": true,
+        "kpts": [
+          2,
+          2,
+          1
+        ],
+        "blocked_state": "BLOCKED_PENDING_B_SOURCE_REVIEW_AND_A_REGISTRATION"
+      }
+    },
+    "launch_disabled": true,
+    "pilot_method_and_geometry_control": {
+      "cutoff_eV": 500,
+      "fermi_smearing_eV": 0.1,
+      "MPI_ranks": 4,
+      "matched_geometry": true,
+      "pilot_only": true,
+      "same_input_hash_for_both_meshes": true
+    },
+    "python_syntax": {
+      "run_queue.py": true,
+      "run_pw_reference.py": true,
+      "verify_result.py": true,
+      "compare_mesh_results.py": true
+    },
+    "calculator_disabled_guard_precedes_GPAW_import": {
+      "pass": true,
+      "evidence": "run_pw_reference.py checks launch_enabled before importing gpaw_data/GPAW"
+    },
+    "queue_checks_disabled_before_claim": {
+      "pass": false,
+      "observed_order": [
+        "sync.claim(TASK)",
+        "load manifest",
+        "assert launch_enabled"
+      ],
+      "impact": "A disabled queue invocation mutates/claims the task card before refusing launch."
+    },
+    "queue_checks_current_owner": true,
+    "direct_calculator_checks_current_owner": false,
+    "record_bound_kpoints_in_calculator": true,
+    "verifier_checks_recorded_kpoints": true,
+    "archive_inventory_validated_before_rewrite": false,
+    "stale_output_refused_when_archive_exists": false,
+    "checkpoint_comment_matches_path": {
+      "pass": false,
+      "observed_path": "OUT/state.gpw",
+      "observed_comment": "kept in /tmp; do not archive this large checkpoint"
+    },
+    "runtime_disk_monitor_present": false,
+    "comparison_reports_required_metrics": {
+      "native_energy_delta_meV_atom": true,
+      "free_energy_delta_meV_atom": true,
+      "force_vector_difference_RMSE_eV_A": true,
+      "maximum_atom_force_difference_eV_A": true,
+      "pair_signed_projection_delta_eV_A": true
+    },
+    "workspace_and_old_run_snapshot": {
+      "free_bytes": 6235430912,
+      "B_run_output_exists": false,
+      "B_archive_exists": false,
+      "persistent_lock_file_exists": true,
+      "persistent_lock_file_bytes": 0,
+      "persistent_lock_file_held_entries": [],
+      "matching_DFT_processes": []
+    },
+    "disk_estimate_only": {
+      "cell_volume_A3": 1107.7054125929697,
+      "estimated_plane_waves_per_kpoint_at_declared_cutoff": 28121.84970516884,
+      "raw_complex128_wavefunction_coefficients_MiB_at_4_kpoints_for_band_count": {
+        "118": 202.5377359136916,
+        "260": 446.2695876064391
+      },
+      "caveat": "Coefficient payload estimate only; excludes GPAW metadata, densities, restart/write overhead and filesystem headroom. Band count is a bracket, not measured from a GPAW run."
+    }
+  },
+  "decision": "BLOCKED_PENDING_A_REVIEW_AND_JOB_REGISTRATION",
+  "calculations_launched": false
+}
