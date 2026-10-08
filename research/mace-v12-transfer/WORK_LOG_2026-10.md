@@ -441,3 +441,12 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - V18 epochs0–25 completed by00:14:44 UTC; metrics finite,4 CPU threads. Successful completion pipeline now includes curated ordinary-Git publication with owner/clean-index guards; only final epoch79 checkpoint is pushed. Intermediate checkpoint hashes are explicitly marked local-only. B residual-direction geometry design remains ready pending its start heartbeat.
 
 - V18 training log now confirms all80 epochs, Training complete/Done and epoch79 export (00:44:21 UTC). Original tool process/launcher exit receipt is no longer available; no selection/evaluation/summary had been generated, so automatic completion was not confirmed. Recover without retraining: require exact exported-model/epoch79-checkpoint tensor equality and complete logs/data hashes, explicitly record original training_exit_code=null, then score only the same3 development frames. No metric gates or split policy changed.
+
+
+### V18 completed controlled screening (UTC 2026-10-08T01:11:29.366489+00:00)
+
+- Clean30 fixed-recipe run completed80 epochs; selected/exported epoch79 verified. Frozen same3 development screen: FAIL. No withheld labels opened.
+- AgC: energy 5.522354 meV/atom; vector RMSE 0.135904 eV/A; separation error 0.213996 eV/A.
+- AgSi: energy 0.096705 meV/atom; vector RMSE 0.057137 eV/A; separation error 0.190539 eV/A.
+- AgTi: energy 3.146385 meV/atom; vector RMSE 0.095893 eV/A; separation error 0.228859 eV/A.
+- Final model/checkpoint, selection, full logs, artifact hash manifest and per-atom evaluation saved; only selected checkpoint is published. B V18 review dependency satisfied. This remains a reused-development/provisional comparison with coverage and frame0 mesh confounds.
