@@ -525,3 +525,7 @@ User continued after launch-disabled smearing proposal and requested9h sustained
 ### Additional overnight controlled width scan
 
 User authorized additional overnight tasks. Separate sigma0.20 same-input A5/B6 records extend the0.05/0.10/0.20 sensitivity scan. Both queue and direct calculator require verified assigned0.05 predecessor before launch; same one-job/machine and source/method/inventory/resource guards. Historical results remain unchanged. Width scan is not evidence that larger smearing fixes the physical target. No blind labels, training or vacuum launched.
+
+### Overnight serial driver provided
+
+User requested B continuous workflow. run_overnight_width_scan.py waits for live queues, verifies/publishes0.05, runs only registered0.20 after predecessor verification, publishes own fixed-mesh width comparisons and then new5/6 comparison once both archives arrive. Local driver lock and owner guard prevent duplicate/wrong-instance execution. Missing0.05 predecessor rejected direct0.20 launch before computation; wrong-owner driver check PASS.9h waiting/new-launch bound does not kill active jobs. Instructions in OVERNIGHT_WIDTH_SCAN.md; no terminal or task relay needed for registered stages.
