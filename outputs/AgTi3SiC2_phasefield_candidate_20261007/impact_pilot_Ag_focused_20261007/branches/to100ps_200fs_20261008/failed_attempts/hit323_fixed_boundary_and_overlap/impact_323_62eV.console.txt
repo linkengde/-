@@ -1,0 +1,91 @@
+LAMMPS (30 Sep 2026)
+  using 5 OpenMP thread(s) per MPI task
+using multi-threaded neighbor list subroutines
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4627 atoms
+  reading velocities ...
+  4627 velocities
+  read_data CPU = 0.031 seconds
+Created 1 atoms
+  using box units in triclinic box = (0 0 -10) to (37.285975 32.290601 100) with tilt (-18.642987 0 0)
+  create_atoms CPU = 0.000 seconds
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+322 atoms in group projectiles
+1 atoms in group new_projectile
+323 atoms in group all_projectiles
+90 atoms in group fixed_part_01
+90 atoms in group fixed_part_02
+90 atoms in group fixed_part_03
+90 atoms in group fixed_part_04
+90 atoms in group fixed_part_05
+90 atoms in group fixed_part_06
+90 atoms in group fixed_part_07
+3 atoms in group fixed_part_08
+633 atoms in group fixed
+944 atoms in group sink
+3995 atoms in group mobile
+421 atoms in group crater
+421 atoms in group freezone
+234 atoms in group free_substrate
+3574 atoms in group anchored
+832 atoms in group bath
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 22
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/tri/omp
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 5e-05
+WARNING: A per-atom density exceeded rhomax of EAM potential table - a linear extrapolation to the energy was made (src/OPENMP/pair_eam_omp.cpp:116)
+Per MPI rank memory allocation (min/avg/max) = 23.89 | 23.89 | 23.89 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4628   3651.1428      1510.6416     -26069.439      779.89141     -25289.547     -0            
+       200   0.01                4628   3351.8678      8487.1198     -29678.432      4381.6031     -25296.829     -3.4892627    
+       400   0.02                4628   3247.8731      8398.8873     -29628.63       4336.0517     -25292.578     -7.7420375    
+       600   0.03                4628   49233.694      8663.4569     -29761.613      4472.6397     -25288.973     -11.352005    
+       800   0.04                4628   38876.846      8275.0034     -29558.752      4272.0948     -25286.657     -13.825928    
+      1000   0.05                4628   23096.723      7136.3331     -28968.089      3684.2392     -25283.849     -16.474596    
+      1200   0.06                4628   20142.666      7169.1814     -28981.77       3701.1976     -25280.573     -19.778852    
+      1400   0.07                4628   18955.509      7802.3539     -29307.515      4028.0824     -25279.432     -20.901917    
+ERROR: Lost atoms: original 4628 current 4627
+For more information see https://docs.lammps.org/err0008 (src/thermo.cpp:550)

@@ -1,0 +1,134 @@
+LAMMPS (30 Sep 2026)
+  using 5 OpenMP thread(s) per MPI task
+using multi-threaded neighbor list subroutines
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 101.45139) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4684 atoms
+  reading velocities ...
+  4684 velocities
+  read_data CPU = 0.031 seconds
+Created 1 atoms
+  using box units in triclinic box = (0 0 -10) to (37.285975 32.290601 101.45139) with tilt (-18.642987 0 0)
+  create_atoms CPU = 0.000 seconds
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+379 atoms in group projectiles
+1 atoms in group new_projectile
+380 atoms in group all_projectiles
+90 atoms in group fixed_part_01
+90 atoms in group fixed_part_02
+90 atoms in group fixed_part_03
+90 atoms in group fixed_part_04
+90 atoms in group fixed_part_05
+90 atoms in group fixed_part_06
+90 atoms in group fixed_part_07
+3 atoms in group fixed_part_08
+633 atoms in group fixed
+945 atoms in group sink
+4052 atoms in group mobile
+397 atoms in group crater
+397 atoms in group freezone
+216 atoms in group free_substrate
+3655 atoms in group anchored
+832 atoms in group bath
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 23
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/tri/omp
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 5e-05
+Per MPI rank memory allocation (min/avg/max) = 23.9 | 23.9 | 23.9 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4685   4479.5907      1652.8952     -30151.287      865.5102      -29285.776     -0            
+       200   0.01                4685   4232.4716      1097.0085     -29856.5        574.42967     -29282.071     -3.7040621    
+       400   0.02                4685   4089.3597      985.29646     -29793.077      515.93359     -29277.143     -8.630092     
+       600   0.03                4685   3895.1914      1475.208      -30046.228      772.46738     -29273.76      -12.014208    
+       800   0.04                4685   3853.2345      1273.3977     -29937.714      666.79288     -29270.921     -14.852065    
+      1000   0.05                4685   3976.7008      878.47695     -29729.575      459.99939     -29269.576     -16.195848    
+      1200   0.06                4685   3838.8311      1376.1505     -29987.672      720.59758     -29267.074     -18.699183    
+      1400   0.07                4685   3875.9356      1392.1125     -29996.185      728.95583     -29267.229     -18.544873    
+      1600   0.08                4685   3972.2906      968.80118     -29772.799      507.29612     -29265.503     -20.270586    
+      1800   0.09                4685   3863.8448      1172.5747     -29881.042      613.99863     -29267.044     -18.729601    
+      2000   0.1                 4685   3797.6987      1529.3298     -30067.21       800.8073      -29266.403     -19.373457    
+      2200   0.11                4685   3805.4262      1059.2521     -29820.208      554.65921     -29265.549     -20.224481    
+      2400   0.12                4685   3934.4794      1026.5493     -29803.101      537.53493     -29265.566     -20.2082      
+      2600   0.13                4685   3897.3161      1470.9431     -30036.246      770.23415     -29266.011     -19.764986    
+      2800   0.14                4685   3687.0406      1265.4334     -29928.433      662.62252     -29265.81      -19.967913    
+      3000   0.15                4685   4014.9645      928.52058     -29751.033      486.20388     -29264.829     -20.948347    
+      3200   0.16                4685   4114.6798      1320.1601     -29956.411      691.27918     -29265.132     -20.647013    
+      3400   0.17                4685   3758.206       1347.0475     -29970.29       705.35831     -29264.932     -20.846068    
+      3600   0.18                4685   3604.7584      885.11281     -29728.53       463.47414     -29265.056     -20.722352    
+      3800   0.19                4685   3684.5363      1097.6488     -29838.81       574.76494     -29264.045     -21.734863    
+      4000   0.2                 4685   3638.2071      1456.4034     -30026.682      762.62068     -29264.061     -21.720102    
+Loop time of 40.2257 on 5 procs for 4000 steps with 4685 atoms
+
+Performance: 0.430 ns/day, 55.869 hours/ns, 99.439 timesteps/s, 465.871 katom-step/s
+399.7% CPU use with 1 MPI tasks x 5 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 38.069     | 38.069     | 38.069     |   0.0 | 94.64
+Neigh   | 0.20653    | 0.20653    | 0.20653    |   0.0 |  0.51
+Comm    | 0.47107    | 0.47107    | 0.47107    |   0.0 |  1.17
+Output  | 0.014437   | 0.014437   | 0.014437   |   0.0 |  0.04
+Modify  | 1.3867     | 1.3867     | 1.3867     |   0.0 |  3.45
+Other   |            | 0.07776    |            |       |  0.19
+
+Nlocal:           4685 ave        4685 max        4685 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7583 ave        7583 max        7583 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 16
+Dangerous builds = 0
+System init for write_data ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+System init for write_restart ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Total wall time: 0:00:40
