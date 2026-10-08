@@ -529,3 +529,7 @@ User authorized additional overnight tasks. Separate sigma0.20 same-input A5/B6 
 ### Overnight serial driver provided
 
 User requested B continuous workflow. run_overnight_width_scan.py waits for live queues, verifies/publishes0.05, runs only registered0.20 after predecessor verification, publishes own fixed-mesh width comparisons and then new5/6 comparison once both archives arrive. Local driver lock and owner guard prevent duplicate/wrong-instance execution. Missing0.05 predecessor rejected direct0.20 launch before computation; wrong-owner driver check PASS.9h waiting/new-launch bound does not kill active jobs. Instructions in OVERNIGHT_WIDTH_SCAN.md; no terminal or task relay needed for registered stages.
+
+### B next-work assignment and A fallback policy
+
+User authorized assigning B tasks and A proceeding if B does not respond. B has actual published sigma0.05 iteration10, so currently active, not assumed absent. Registered overnight width driver plus next training-target coverage/independent-family audit, with exact deliverables and sealed-data/source limitations. A own numeric stages do not wait for B. Read-only work can fall back to A; live remote computation is not duplicated merely on a missing chat reply. Any numerical reassignment preserves recorded ownership and active-run guards.
