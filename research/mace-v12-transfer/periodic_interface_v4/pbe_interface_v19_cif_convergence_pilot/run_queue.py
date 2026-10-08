@@ -5,11 +5,12 @@ ROOT=Path(__file__).resolve().parent
 REPO=ROOT.parents[3]
 COORD=REPO/'research/mace-v12-transfer/coordination'
 sys.path.insert(0,str(COORD));import sync_tasks as sync
-TASK=sys.argv[1] if len(sys.argv)==2 else ''
-if TASK not in ('window-a','window-b'):raise SystemExit('usage: run_queue.py window-a|window-b')
+TASK=sys.argv[1] if len(sys.argv) in (2,3) else ''
+if TASK not in ('window-a','window-b'):raise SystemExit('usage: run_queue.py window-a|window-b [EXACT_REGISTERED_LABEL]')
 task=sync.load_task(TASK);sync.ensure_owner(TASK,task)
 manifest=json.loads((ROOT/'input_manifest.json').read_text());records=[r for r in manifest['records'] if r['owner_task']==TASK]
-assert len(records)==1 and manifest['launch_enabled'] is True
+if len(sys.argv)==3:records=[r for r in records if r['label']==sys.argv[2]]
+assert len(records)==1 and manifest['launch_enabled'] is True, 'Choose one exact registered label; never restart the completed Gamma run'
 for r in records:assert r['owner_instance']==sync.identity() and r['label'] in task['labels'] and hashlib.sha256((ROOT/r['input']).read_bytes()).hexdigest()==r['input_sha256']
 sync.claim(TASK)
 lock=open('/workspace/.mace-v19-dft.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)

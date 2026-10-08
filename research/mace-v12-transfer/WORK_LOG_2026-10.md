@@ -492,3 +492,6 @@ B source-derived geometry review registered running. A prepared separate pbe_int
 
 ### CIF pilot approved and registered
 B CIF/source/geometry and entry reports hash-verified. A approved exact source-derived AgSi registry as fixed-ion numerical probe, corrected launch-before-claim/direct owner/full immutable inventory/method/version/progress/force summary guards and checkpoint path. Synthetic integrity fixture passes/rejects tamper and wrongmesh, not a scientific label. Startup3GiB and runtime1.5GiB disk guard. User-authorized deletion of3 completed local V19 state.gpw freed4.378762GiB after compact archive/hash verification, all key data retained on main. Registered A Gamma and B2x2 onejob each, enabled pilot; labels excluded from training/development integration. B reported prior inadvertent V17 test-geometry access without labels: geometry-exposure record added and strict untouched-geometry claims withdrawn.
+
+### Mesh ladder continuation
+A Gamma pilot51 converged and verified; B2x2 latest remote iteration10 active. Registered additional A3x3 same-input hash/geometry pilot to assess neighboring-grid sensitivity. Queue explicit label selection prevents completed Gamma restart; pair comparison generalized to two chosen registered meshes and separate output names. No training/development integration or MACE inference.

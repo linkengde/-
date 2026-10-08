@@ -5,7 +5,10 @@ import numpy as np
 from ase.io import read
 from ase.geometry import find_mic
 ROOT=Path(__file__).resolve().parent
-records=json.loads((ROOT/'input_manifest.json').read_text())['records'];loaded=[]
+all_records=json.loads((ROOT/'input_manifest.json').read_text())['records']
+selected=sys.argv[1:] or ['AgSi_COD9009647_pilot_gamma','AgSi_COD9009647_pilot_k2x2']
+assert len(selected)==2 and selected[0]!=selected[1]
+records=[next(r for r in all_records if r['label']==name) for name in selected];loaded=[]
 for r in records:
  d=ROOT/'calculations'/r['label']
  if not (d/'summary.json').exists():raise SystemExit('BLOCKED: both verified mesh results are required')
@@ -16,5 +19,5 @@ assert np.array_equal(a0.positions,a1.positions) and np.array_equal(a0.cell,a1.c
 f0=a0.arrays['PW_PBE_forces'];f1=a1.arrays['PW_PBE_forces'];err=f1-f0;symbols=np.array(a0.get_chemical_symbols());marked=a0.arrays['central_pair'].astype(bool);ia=np.flatnonzero(marked&(symbols=='Ag'));ix=np.flatnonzero(marked&(symbols=='Si'));assert len(ia)==len(ix)==1;ia,ix=int(ia[0]),int(ix[0]);v=find_mic(a0.positions[ix]-a0.positions[ia],a0.cell,a0.pbc)[0];unit=v/np.linalg.norm(v)
 metrics={'native_energy_delta_meV_atom':(s1['energy_eV_cell']-s0['energy_eV_cell'])*1000/len(a0),'free_energy_delta_meV_atom':(s1['free_energy_eV_cell']-s0['free_energy_eV_cell'])*1000/len(a0),'force_vector_difference_RMSE_eV_A':float(np.sqrt(np.mean(np.sum(err**2,axis=1)))),'maximum_atom_force_difference_eV_A':float(np.linalg.norm(err,axis=1).max()),'pair_signed_projection_delta_eV_A':float(np.dot(err[ix]-err[ia],unit))}
 passes={'energy':abs(metrics['native_energy_delta_meV_atom'])<=2,'vector':metrics['force_vector_difference_RMSE_eV_A']<=.01,'pair':abs(metrics['pair_signed_projection_delta_eV_A'])<=.02}
-result={'status':'PILOT_WITHIN_PROVISIONAL_BUDGET' if all(passes.values()) else 'PILOT_MESH_SENSITIVITY_EXCEEDS_BUDGET','metrics':metrics,'checks':passes,'input_sha256':records[0]['input_sha256'],'result_files_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for r in records for p in (ROOT/'calculations'/r['label']).iterdir() if p.is_file() and p.suffix!='.gpw'},'limitations':['Two mesh points do not establish mesh convergence.','Vacuum/dipole/slab/coherent-strain checks remain separate.','No MACE error conclusion or dataset label integration from numerical pilots.']}
-(ROOT/'mesh_comparison.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
+result={'meshes':[r['kpts'] for r in records],'labels':selected,'status':'PILOT_WITHIN_PROVISIONAL_BUDGET' if all(passes.values()) else 'PILOT_MESH_SENSITIVITY_EXCEEDS_BUDGET','metrics':metrics,'checks':passes,'input_sha256':records[0]['input_sha256'],'result_files_sha256':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for r in records for p in (ROOT/'calculations'/r['label']).iterdir() if p.is_file() and p.suffix!='.gpw'},'limitations':['Two mesh points do not establish mesh convergence.','Vacuum/dipole/slab/coherent-strain checks remain separate.','No MACE error conclusion or dataset label integration from numerical pilots.']}
+(ROOT/('mesh_comparison_'+selected[0]+'__'+selected[1]+'.json')).write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
