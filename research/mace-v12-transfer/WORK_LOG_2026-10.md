@@ -456,3 +456,6 @@ Independently verified six recommended candidate hashes, finite label-free geome
 
 ### A accepts B V9–V18 cumulative review
 Reviewed v18_iteration_review/report.md and verified all four SHA256 entries. Matched V17/V18 scores and per-pair contributions agree with published development results; B independently verified all 99 frozen epoch79 state tensors. Coverage removal and Gamma frame0 addition confound attribution: source certainty alone is not a force-error mechanism. V19 will prioritize AgC transverse Ti and AgTi Ti/framework differential response, preserve existing recipe/gates, and prepare independent validation before fitting. B v19_dft_execution_pack is ready now; completed review must not be repeated. Actual DFT remains unstarted pending execution-pack verification and owner registration.
+
+### V19 A input staging and storage blocker
+Prepared three positive-sign geometry-reviewed candidates byte-identically in pbe_interface_v19_main_residual_acquisition/inputs with SHA256 manifest. B execution pack is registered running (design-only). No DFT started. Disk has only369MB available; previous runner writes full state.gpw. A identified untracked, unselected V17/V18 epoch0–78 checkpoint files as a concrete cleanup proposal, preserving selected79/models/logs/all tracked artifacts. No files deleted; deletion requires user approval.
