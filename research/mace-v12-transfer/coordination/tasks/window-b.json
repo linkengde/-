@@ -143,13 +143,14 @@
     "AgSi_COD9009647_pilot_k4x4": "completed; SCF iteration 41; updated 2026-10-08T11:02:40.238345+00:00",
     "v19_cif_k4x4_pilot_DFT": "ready;2x2 done and mesh sensitivity failure independently reproduced by A",
     "v19_cif_mesh_ladder_assessment": "completed; SCF iteration 1; updated 2026-10-08T11:05:24.814567+00:00",
-    "environment_restart_handover": "ready; all four pilot archives independently reverified by A"
+    "environment_restart_handover": "ready; all four pilot archives independently reverified by A",
+    "AgSi_COD9009647_pilot_k6x6": "registered_queued; same-geometry numerical-only mesh pilot"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "claimed",
-  "next_action": "Read coordination/RESTART_V19_NEXT_STEPS.md. Verify environment first. New A prepares owner-bound5x5 and6x6 entries after both new IDs registered; A runs5x5, B runs6x6. No Gamma/2x2/3x3/4x4 repetition; training remains blocked.",
+  "next_action": "After environment verification run exact label: python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/run_queue.py window-b AgSi_COD9009647_pilot_k6x6. Verify and publish compact archive; no training integration.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-08T11:54:10.748589+00:00",
+  "updated_utc": "2026-10-08T12:01:02.421184+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -169,11 +170,12 @@
     "AgSi_residual_mode_m_03_v19_acq": "completed",
     "AgTi_residual_mode_m_03_v19_acq": "completed",
     "AgSi_COD9009647_pilot_k2x2": "completed",
-    "AgSi_COD9009647_pilot_k4x4": "completed"
+    "AgSi_COD9009647_pilot_k4x4": "completed",
+    "AgSi_COD9009647_pilot_k6x6": "queued"
   },
   "live_progress": null,
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "New cloud instance claimed after completed/published four-mesh handover; no job launched",
+  "current_stage": "Registered new-owner 6x6x1 matched-geometry pilot; no old mesh restart",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -232,5 +234,8 @@
       "reason": "User requested two fresh environments after both owners finished/published mesh pilots"
     }
   ],
-  "handover_consumed": "v19_four_meshes_completed_20261008"
+  "handover_consumed": "v19_four_meshes_completed_20261008",
+  "label_result_directories": {
+    "AgSi_COD9009647_pilot_k6x6": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot"
+  }
 }

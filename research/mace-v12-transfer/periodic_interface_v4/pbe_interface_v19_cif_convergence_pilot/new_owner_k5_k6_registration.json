@@ -1,0 +1,79 @@
+{
+  "status": "REGISTERED_NOT_YET_LAUNCHED",
+  "registered_utc": "2026-10-08T12:01:02.422390+00:00",
+  "handover_id": "v19_four_meshes_completed_20261008",
+  "prior_manifest_sha256": "de1090180efcecdfc113d75b101e0ec3e243aeee07271ba8ee31a3d421b1a953",
+  "input_manifest_sha256": "6c4d2d4c5e0d381c21179d9d4ff7c59e0d752547b30a3226993e8d6a0c6373ce",
+  "new_records": [
+    {
+      "label": "AgSi_COD9009647_pilot_k5x5",
+      "input": "inputs/AgSi_cod9009647_slab_v19_dev_proposal.extxyz",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "kpts": [
+        5,
+        5,
+        1
+      ],
+      "role": "numerical_convergence_pilot_not_training_or_validation_label",
+      "owner_task": "window-a",
+      "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
+      "state": "registered_queued"
+    },
+    {
+      "label": "AgSi_COD9009647_pilot_k6x6",
+      "input": "inputs/AgSi_cod9009647_slab_v19_dev_proposal.extxyz",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "role": "numerical_convergence_pilot_not_training_or_validation_label",
+      "owner_task": "window-b",
+      "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
+      "state": "registered_queued"
+    }
+  ],
+  "historical_records_preserved": true,
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "parallel": {
+      "sl_auto": true
+    },
+    "scf_thresholds": "energy/density/eigenstates 1e-5",
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "GPAW_version": "26.7.0"
+  },
+  "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+  "disk_budget": {
+    "minimum_start_bytes": 3221225472,
+    "minimum_before_checkpoint_bytes": 1610612736,
+    "meaning": "Conservative reserve, not measured checkpoint size; fail before checkpoint if depleted"
+  },
+  "MPI_ranks": 4,
+  "threads_per_rank": 1,
+  "immutable_execution_files_sha256": {
+    "run_pw_reference.py": "ee919697655402dc5d0e394fe8a754fb032baaa67387d240c8e6ed172c891fce",
+    "run_queue.py": "cf31055b6026bb91983ec0a8041b037d119112f6d2ae63e077953a33ffbfd10a",
+    "verify_result.py": "3990bc0df6dbf2563b78accff72da956a3894634cf40b31a4f324f60b05ed40f",
+    "compare_mesh_results.py": "2bab91a9f25a6bf9f1115f228e4551de24d60f715eba1a50c347ba65831beea3"
+  },
+  "comparison_pairs": [
+    [
+      4,
+      5
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      5,
+      6
+    ]
+  ],
+  "no_training_or_validation_integration": true
+}
