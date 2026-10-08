@@ -437,3 +437,5 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - V18 epochs0–16 completed by00:10:18 UTC with finite metrics and about4 active CPU cores. About2.5GiB remains; remaining checkpoint footprint is covered. Added V18 artifact directory to A explicit publish scope. B geometry design is queued; no new DFT has been launched.
 
 - Extended this V18 finalizer to publish curated completed artifacts and update A status/worklog after fixed79/model/data/evaluation checks. It refuses unrelated local/index changes, verifies owner, uses explicit files (not all80 checkpoints), and stops on ordinary push/rebase failure without reset/force. This makes the current training+scoring+publication stage self-contained; later scientific recipe decisions still require A/B review.
+
+- V18 epochs0–25 completed by00:14:44 UTC; metrics finite,4 CPU threads. Successful completion pipeline now includes curated ordinary-Git publication with owner/clean-index guards; only final epoch79 checkpoint is pushed. Intermediate checkpoint hashes are explicitly marked local-only. B residual-direction geometry design remains ready pending its start heartbeat.
