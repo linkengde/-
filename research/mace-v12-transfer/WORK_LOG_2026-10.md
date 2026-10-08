@@ -509,3 +509,7 @@ Both new owners are published: A 9c31b999-b2fe-4f0a-86f0-52c605d705ad; B 5f18275
 ### Fresh A 5x5 numerical pilot completed
 
 Four-rank PW-PBE converged in 43 steps; exact fixed geometry, finite energy/forces, method and compact inventory verified PASS. Original queue confirmed completion and archive publication. No model training, old-mesh rerun, or sealed-label access.
+
+### Verified 4/5/6 mesh comparison
+
+MESH_SENSITIVITY_EXCEEDS_PROVISIONAL_BUDGET. Both new compact pilot archives independently verified; 4/5,4/6,5/6 comparisons published with unchanged budgets. No global convergence, MACE accuracy or independent-validation claim. See new_owner_k4_k5_k6_assessment.json; further physical-setting checks not launched.
