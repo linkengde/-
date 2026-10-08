@@ -2,6 +2,8 @@
 
 User requested restart only after both owners finished and uploaded. That condition is satisfied for Gamma/2x2/3x3/4x4; all compact archives and B ladder assessment were independently verified by A. No additional DFT is to start in the old environments. Live processes and virtual environments do not migrate through Git.
 
+Primary read-only results entry: [V19 CIF convergence bundle](reports/window-b/v19_cif_convergence_bundle/README.md), published e4a65a2. A independently verified all44 root checksum entries. The bundle duplicates source archives without removing originals; no launch scripts are included.
+
 ## Completed; do not repeat
 
 Six signed residual labels, training36 candidate/rank4 audit, uploaded COD9009647 CIF and source-derived52atom slabs, Gamma51/2x2SCF41/3x3SCF51/4x4SCF41 pilots and their verified compact archives are on main. V18 fixed model/checkpoint/logs/selection/evaluation are on main; V19 model is NOT trained. Do not read sealed reference labels. V17 test geometry exposure is documented in coordination/V17_TEST_GEOMETRY_EXPOSURE.json; these inputs are not strictly untouched geometry evidence.
