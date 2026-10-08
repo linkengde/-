@@ -13,4 +13,4 @@ XDG_CACHE_HOME=/workspace/.cache MPLCONFIGDIR=/workspace/.cache/matplotlib FONTC
   /workspace/.venvs/phasefield/bin/python generate_geometry.py
 ```
 
-Each `candidate_NN` directory includes `geometry_3d_view.png` (standalone 3D Ti₃SiC₂ surface), `morphology_reference_view_2d.png` (300 × 300 px, central YZ section), `geometry_preview.png` (3D view and three sections), `phase_masks_and_field.npz`, and `geometry_stats.json`. The masks define the phases; PNG colors are for visual review. `geometry_audit.md` records assumptions, volume conversion, connectivity, thickness proxies, and limitations.
+Each `candidate_NN` directory includes `geometry_3d_view.png` (standalone 3D view of both phase surfaces), `morphology_reference_view_2d.png` (300 × 300 px, central YZ section), `geometry_preview.png` (3D view and three sections), `phase_masks_and_field.npz`, and `geometry_stats.json`. The masks define the phases; PNG colors are for visual review. `geometry_audit.md` records assumptions, volume conversion, connectivity, thickness proxies, and limitations.

@@ -20,7 +20,7 @@
 
 使用固定随机种子生成三维标准正态噪声，经高斯平滑（σ=1.7、2.7、2.7 个体素，约 3.36、5.4、5.4 Å）后，按排序阈值选取目标数量的 Ti₃SiC₂ 体素。σ 是几何尺度控制参数，不代表材料参数。边界采用反射平滑，模型不是周期边界。脚本可复现随机场与图像。
 
-`morphology_reference_view_2d.png` 为中央 YZ 切片，最近邻放大为 300×300 像素；蓝色 `#2563eb` 是 Ti₃SiC₂，浅灰 `#d2d4d8` 是 Ag。`geometry_3d_view.png` 是单独的 Ti₃SiC₂ 三维表面视图；`geometry_preview.png` 另含三维渲染及三个正交中心切片。
+`morphology_reference_view_2d.png` 为中央 YZ 切片，最近邻放大为 300×300 像素；蓝色 `#2563eb` 是 Ti₃SiC₂，浅灰 `#d2d4d8` 是 Ag。`geometry_3d_view.png` 和 `geometry_preview.png` 均绘出两个相区的表面采样点（Ti₃SiC₂ 蓝色 `#2563eb`，Ag 灰色 `#8f97a3`）；总览图还包含三个正交中心切片。
 
 ## 候选统计
 

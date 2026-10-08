@@ -14,6 +14,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib.colors import ListedColormap
 import numpy as np
 import scipy
@@ -111,16 +112,24 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     colors = ListedColormap(["#d2d4d8", "#2563eb"])  # Ag, Ti3SiC2
     fig = plt.figure(figsize=(15, 10), constrained_layout=True)
     ax3 = fig.add_subplot(2, 2, 1, projection="3d")
-    surface = mask & ~ndi.binary_erosion(
-        mask, structure=ndi.generate_binary_structure(3, 1), border_value=0
-    )
     step = 2
-    sampled = surface[::step, ::step, ::step]
-    ix, iy, iz = np.nonzero(sampled)
-    ax3.scatter((ix + 0.5) * SPACING_A[0] * step,
-                (iy + 0.5) * SPACING_A[1] * step,
-                (iz + 0.5) * SPACING_A[2] * step,
-                c="#2563eb", s=1.8, alpha=0.7, linewidths=0, depthshade=False)
+    surface_structure = ndi.generate_binary_structure(3, 1)
+    tic_surface = mask & ~ndi.binary_erosion(mask, structure=surface_structure, border_value=0)
+    ag_mask = ~mask
+    ag_surface = ag_mask & ~ndi.binary_erosion(ag_mask, structure=surface_structure, border_value=0)
+    tic_ix, tic_iy, tic_iz = np.nonzero(tic_surface[::step, ::step, ::step])
+    ag_ix, ag_iy, ag_iz = np.nonzero(ag_surface[::step, ::step, ::step])
+
+    def scatter_phase_surface(ax, ix, iy, iz, color, size, alpha):
+        ax.scatter((ix + 0.5) * SPACING_A[0] * step,
+                   (iy + 0.5) * SPACING_A[1] * step,
+                   (iz + 0.5) * SPACING_A[2] * step,
+                   c=color, s=size, alpha=alpha, linewidths=0, depthshade=False)
+
+    # Draw Ti first and the more opaque gray Ag points last so both
+    # complementary phase boundaries remain legible in the static view.
+    scatter_phase_surface(ax3, tic_ix, tic_iy, tic_iz, "#2563eb", 1.8, 0.68)
+    scatter_phase_surface(ax3, ag_ix, ag_iy, ag_iz, "#8f97a3", 1.8, 0.62)
     ax3.set_xlim(0, LENGTHS_A[0])
     ax3.set_ylim(0, LENGTHS_A[1])
     ax3.set_zlim(0, LENGTHS_A[2])
@@ -129,7 +138,7 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     ax3.set_ylabel("Y (Å)")
     ax3.set_zlabel("Z (Å)")
     ax3.view_init(elev=22, azim=35)
-    ax3.set_title("3D Ti₃SiC₂ connected morphology")
+    ax3.set_title("3D two-phase connected morphology")
 
     mx, my, mz = np.asarray(GRID) // 2
     panels = [
@@ -152,10 +161,8 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     # Standalone 3D view for easier inspection than the four-panel summary.
     fig3 = plt.figure(figsize=(10, 8), constrained_layout=True)
     ax3 = fig3.add_subplot(1, 1, 1, projection="3d")
-    ax3.scatter((ix + 0.5) * SPACING_A[0] * step,
-                (iy + 0.5) * SPACING_A[1] * step,
-                (iz + 0.5) * SPACING_A[2] * step,
-                c="#2563eb", s=2.2, alpha=0.62, linewidths=0, depthshade=False)
+    scatter_phase_surface(ax3, tic_ix, tic_iy, tic_iz, "#2563eb", 2.0, 0.68)
+    scatter_phase_surface(ax3, ag_ix, ag_iy, ag_iz, "#8f97a3", 2.0, 0.62)
     ax3.set_xlim(0, LENGTHS_A[0])
     ax3.set_ylim(0, LENGTHS_A[1])
     ax3.set_zlim(0, LENGTHS_A[2])
@@ -164,8 +171,12 @@ def render_candidate(mask: np.ndarray, candidate_dir: Path, candidate_no: int, s
     ax3.set_ylabel("Y (Å)")
     ax3.set_zlabel("Z (Å)")
     ax3.view_init(elev=22, azim=35)
-    ax3.set_title("Ti₃SiC₂ connected phase surface")
-    fig3.suptitle(f"Candidate {candidate_no:02d} | seed={seed} | blue: Ti₃SiC₂")
+    ax3.set_title("Connected two-phase surface points")
+    ax3.legend(handles=[
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#2563eb", markersize=7, label="Ti₃SiC₂"),
+        Line2D([0], [0], marker="o", color="w", markerfacecolor="#8f97a3", markersize=7, label="Ag"),
+    ], loc="upper left")
+    fig3.suptitle(f"Candidate {candidate_no:02d} | seed={seed} | blue: Ti₃SiC₂, gray: Ag")
     fig3.savefig(candidate_dir / "geometry_3d_view.png", dpi=180)
     plt.close(fig3)
 
