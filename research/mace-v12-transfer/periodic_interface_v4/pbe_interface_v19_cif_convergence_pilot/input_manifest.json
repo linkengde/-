@@ -1,5 +1,5 @@
 {
-  "launch_enabled": false,
+  "launch_enabled": true,
   "source_manifest_sha256": "f543091f67ed1a85bf005869d95d5a9931ebf524defd0c3e3e81d93dde7f2342",
   "source_cif_sha256": "6abbf0a40208c5985cacc3b9ac3564a944702203ad57e961010a674f30d598c3",
   "records": [
@@ -15,7 +15,7 @@
       "role": "numerical_convergence_pilot_not_training_or_validation_label",
       "owner_task": "window-a",
       "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
-      "state": "BLOCKED_PENDING_B_SOURCE_REVIEW_AND_A_REGISTRATION"
+      "state": "registered_queued"
     },
     {
       "label": "AgSi_COD9009647_pilot_k2x2",
@@ -29,12 +29,31 @@
       "role": "numerical_convergence_pilot_not_training_or_validation_label",
       "owner_task": "window-b",
       "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-      "state": "BLOCKED_PENDING_B_SOURCE_REVIEW_AND_A_REGISTRATION"
+      "state": "registered_queued"
     }
   ],
   "cutoff_eV": 500,
   "fermi_smearing_eV": 0.1,
   "matched_geometry": true,
   "MPI_ranks": 4,
-  "pilot_only": true
+  "pilot_only": true,
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "parallel": {
+      "sl_auto": true
+    },
+    "scf_thresholds": "energy/density/eigenstates 1e-5",
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "GPAW_version": "26.7.0"
+  },
+  "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+  "disk_budget": {
+    "minimum_start_bytes": 3221225472,
+    "minimum_before_checkpoint_bytes": 1610612736,
+    "meaning": "Conservative reserve, not measured checkpoint size; fail before checkpoint if depleted"
+  },
+  "A_approval": "Approved only for fixed-ion matched numerical mesh-sensitivity pilot after CIF/source/registry review and correction of B entry findings"
 }

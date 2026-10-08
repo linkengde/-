@@ -24,6 +24,16 @@ if record is None or sha256(SOURCE.read_bytes()).hexdigest() != record["input_sh
 
 if not manifest["launch_enabled"]:
     raise SystemExit("Pilot not approved: source review/owner registration pending")
+# Enforce exact registered ownership even if calculator is called directly.
+COORD=ROOT.parents[1]/"coordination"
+sys.path.insert(0,str(COORD))
+import sync_tasks as sync
+sync.ensure_owner(record["owner_task"],sync.load_task(record["owner_task"]))
+if record["owner_instance"]!=sync.identity() or LABEL not in sync.load_task(record["owner_task"])["labels"]:
+    raise SystemExit("Unregistered/wrong-owner pilot job")
+if shutil.disk_usage(OUT.parent if OUT.parent.exists() else ROOT).free < manifest["disk_budget"]["minimum_start_bytes"]:
+    raise SystemExit("Insufficient starting disk reserve")
+
 import gpaw_data
 os.environ["GPAW_SETUP_PATH"] = str(gpaw_data.datapath())
 from gpaw import GPAW, PW
@@ -46,7 +56,7 @@ if any(k in atoms.arrays for k in ("REF_forces", "PW_PBE_forces", "forces")):
     raise SystemExit("Unexpected force label in blind input")
 started = time.time()
 progress_path = OUT / "progress.json"
-state_path = OUT / "state.gpw"  # kept in /tmp; do not archive this large checkpoint
+state_path = OUT / "state.gpw"  # retained in local workspace run; never archive the large checkpoint
 if world.rank == 0:
     progress_path.write_text(json.dumps({
         "label": LABEL, "status": "running", "iteration": 0,
@@ -70,6 +80,8 @@ def checkpoint(ctx):
             "source_sha256": record["input_sha256"], "mpi_ranks": world.size,
             "elapsed_s": time.time() - started,
         }, indent=2) + "\n")
+    if shutil.disk_usage(OUT).free < manifest["disk_budget"]["minimum_before_checkpoint_bytes"]:
+        raise SystemExit("Disk reserve depleted during SCF; preserve same run, no new checkpoint write")
     if niter % 20 == 0:
         calc.write(str(state_path), mode="all")
 

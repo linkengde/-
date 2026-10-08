@@ -7,10 +7,11 @@ COORD=REPO/'research/mace-v12-transfer/coordination'
 sys.path.insert(0,str(COORD));import sync_tasks as sync
 TASK=sys.argv[1] if len(sys.argv)==2 else ''
 if TASK not in ('window-a','window-b'):raise SystemExit('usage: run_queue.py window-a|window-b')
-sync.claim(TASK);task=sync.load_task(TASK);sync.ensure_owner(TASK,task)
+task=sync.load_task(TASK);sync.ensure_owner(TASK,task)
 manifest=json.loads((ROOT/'input_manifest.json').read_text());records=[r for r in manifest['records'] if r['owner_task']==TASK]
 assert len(records)==1 and manifest['launch_enabled'] is True
 for r in records:assert r['owner_instance']==sync.identity() and r['label'] in task['labels'] and hashlib.sha256((ROOT/r['input']).read_bytes()).hexdigest()==r['input_sha256']
+sync.claim(TASK)
 lock=open('/workspace/.mace-v19-dft.lock','a');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
 PYTHON=os.environ.get('GPAW_PYTHON','/workspace/.venvs/gpaw-mpi/bin/python')
 env=os.environ.copy();env.update(GPAW_MPI_BACKEND='cgpaw',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1',NUMEXPR_NUM_THREADS='1',OMPI_ALLOW_RUN_AS_ROOT='1',OMPI_ALLOW_RUN_AS_ROOT_CONFIRM='1')
@@ -34,10 +35,13 @@ def progress(label,state,iteration,note):
 def verify(label,folder):return subprocess.check_output([PYTHON,str(ROOT/'verify_result.py'),label,str(folder)],env=env,text=True)
 for r in records:
  label=r['label'];archive=ROOT/'calculations'/label;out=runs/label
- if archive.exists():verification=verify(label,archive)
+ if archive.exists():
+  if out.exists():raise SystemExit("Archive and local run coexist; inspect same completed job before queue reuse")
+  verify(label,archive)
+  continue
  else:
   if out.exists():raise SystemExit(f'Unarchived run exists: {out}; inspect/recover SAME job before proceeding')
-  if shutil.disk_usage('/workspace').free<500*1024**2:raise SystemExit('Less than500MiB free; preserve checkpoints and resolve storage before next label')
+  if shutil.disk_usage('/workspace').free<manifest["disk_budget"]["minimum_start_bytes"]:raise SystemExit('Insufficient conservative disk reserve; preserve checkpoints and resolve storage before next label')
   progress(label,'running',0,'V19 four-rank PW-PBE starting; fixed geometry, one BLAS thread/rank')
   launcher=ROOT/'calculations'/f'{label}.launcher.log';launcher.parent.mkdir(exist_ok=True)
   with launcher.open('w') as log:
