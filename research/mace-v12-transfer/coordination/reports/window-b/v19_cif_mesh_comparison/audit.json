@@ -1,0 +1,106 @@
+{
+  "status": "PILOT_MESH_SENSITIVITY_EXCEEDS_BUDGET",
+  "role": "fixed-ion numerical mesh sensitivity only; no training/validation integration",
+  "labels": [
+    "AgSi_COD9009647_pilot_gamma",
+    "AgSi_COD9009647_pilot_k2x2"
+  ],
+  "meshes": [
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      2,
+      2,
+      1
+    ]
+  ],
+  "archives": {
+    "AgSi_COD9009647_pilot_gamma": {
+      "verification_status": "PASS",
+      "inventory_sha256": "5b0d1e8a83eaaa9065fd8833d8b851a767ff5632d3be03187f33239650c64b71",
+      "summary_sha256": "d9fa197046d8712637df610fcb9cf9496481a44e60c165c02bd12aaf29d79d28",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "atoms": 52,
+      "formula": "C16Ag4Si8Ti24",
+      "scf_iterations": 51,
+      "mpi_ranks": 4,
+      "energy_eV_cell": -392.1041689830476,
+      "free_energy_eV_cell": -392.76091722679837,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "GPAW_version": "26.7.0"
+      }
+    },
+    "AgSi_COD9009647_pilot_k2x2": {
+      "verification_status": "PASS",
+      "inventory_sha256": "eef9c98c48edb2d5c1172bd785d5b3ff41e769ba0a0d0eb631f095833f0a294b",
+      "summary_sha256": "a75a145ff16937334bd992070c209c232bd3a161c88bc21ee6381b597a20c864",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "atoms": 52,
+      "formula": "C16Ag4Si8Ti24",
+      "scf_iterations": 41,
+      "mpi_ranks": 4,
+      "energy_eV_cell": -389.75422846120836,
+      "free_energy_eV_cell": -390.2552228713077,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          2,
+          2,
+          1
+        ],
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "GPAW_version": "26.7.0"
+      }
+    }
+  },
+  "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+  "metrics": {
+    "native_energy_delta_meV_atom": 45.19116388152392,
+    "free_energy_delta_meV_atom": 48.18642991328222,
+    "force_vector_difference_RMSE_eV_A": 1.3327920704416831,
+    "maximum_atom_force_difference_eV_A": 2.6405832825864746,
+    "pair_signed_projection_delta_eV_A": 1.1688255509835546
+  },
+  "provisional_budgets": {
+    "native_energy_meV_atom": 2.0,
+    "force_vector_RMSE_eV_A": 0.01,
+    "marked_pair_signed_projection_eV_A": 0.02
+  },
+  "checks": {
+    "energy": false,
+    "vector": false,
+    "pair": false
+  },
+  "canonical_comparison_sha256": "742a9a6e4e86d32a7ebead2733e69f933faaa6caf93ce2514d689ccc1bc2dc1e",
+  "comparison_script_sha256": "2bab91a9f25a6bf9f1115f228e4551de24d60f715eba1a50c347ba65831beea3",
+  "limitations": [
+    "Two mesh points do not establish mesh convergence.",
+    "Vacuum/dipole/slab/coherent-strain checks remain separate.",
+    "No MACE error conclusion or dataset label integration from numerical pilots."
+  ],
+  "next_dependency": "A-owned AgSi_COD9009647_pilot_k3x3 must be archived and verified before assessing 2x2x1 against 3x3x1."
+}
