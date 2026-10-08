@@ -7,3 +7,5 @@ Queue checks launch/owner/input before claiming; direct calculator also enforces
 Compare native/free energy, all-atom force differences and marked-pair projection. Two meshes do not establish full convergence. Vacuum/dipole/thickness/Ag-strain effects and common-target consistency remain follow-ups. Fixed-ion stress probes are not equilibrium surface evidence or MACE accuracy evidence.
 
 A additional3x3x1 pilot is registered for the same frozen geometry. When more than one owner record exists, specify exact label to run_queue.py; the completed Gamma job is not relaunched. compare_mesh_results.py accepts two exact label arguments and writes a separate pairwise file. CompareGamma/2x2 and2x2/3x3; vacuum/dipole convergence remains separate.
+
+Gamma-to2x2 pilot exceeds all provisional budgets. B4x4 follow-up is registered; compare2x2/4x4 and3x3/4x4 to distinguish grid-density and even/odd sampling sensitivity. These comparisons establish only this one geometry/settings case; no transfer of convergence claim to other surfaces or compact training frames.

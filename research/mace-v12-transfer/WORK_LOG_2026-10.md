@@ -495,3 +495,6 @@ B CIF/source/geometry and entry reports hash-verified. A approved exact source-d
 
 ### Mesh ladder continuation
 A Gamma pilot51 converged and verified; B2x2 latest remote iteration10 active. Registered additional A3x3 same-input hash/geometry pilot to assess neighboring-grid sensitivity. Queue explicit label selection prevents completed Gamma restart; pair comparison generalized to two chosen registered meshes and separate output names. No training/development integration or MACE inference.
+
+### CIF mesh sensitivity exceeds budget; ladder extended
+A independently reverified both compact pilot archives and reproducedGamma->2x2 native45.191164meV/atom, forcevector difference1.332792eV/A, markedpair1.168826eV/A. All provisional budgets fail for this new periodic slab only; old isolated-cluster labels not declared invalid from this result. A3x3 log22 active. Registered B4x4 same-input numerical follow-up and dependency-gated four-mesh analysis. No new model/label integration/training.
