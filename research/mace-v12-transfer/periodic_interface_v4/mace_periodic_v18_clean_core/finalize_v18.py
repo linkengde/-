@@ -69,6 +69,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--repo-root', type=Path, required=True)
     parser.add_argument('--run-dir', type=Path, required=True)
+    parser.add_argument('--recover-from-completion', action='store_true', help='Original launcher exit receipt unavailable; independently verify final checkpoint/model state')
     args = parser.parse_args()
     repo = args.repo_root.resolve()
     run = args.run_dir.resolve()
@@ -83,17 +84,26 @@ def main():
     for marker in ['INFO: Training complete', 'INFO: Done', 'Loaded Stage one model from epoch 79 for evaluation']:
         if marker not in text:
             raise ValueError(f'Missing completion evidence: {marker}')
+    recovery = None
+    if args.recover_from_completion:
+        import torch
+        checkpoint = run / 'checkpoints/MACE_periodic_v18_clean_core_run-45_epoch-79.pt'
+        weights = torch.load(checkpoint, map_location='cpu', weights_only=False)['model']
+        exported = torch.load(model, map_location='cpu', weights_only=False).state_dict()
+        if set(weights) != set(exported) or any(not torch.equal(weights[k], exported[k]) for k in weights):
+            raise ValueError('Exported model does not exactly match epoch79 checkpoint state')
+        recovery = {'checkpoint_path': str(checkpoint.relative_to(repo)), 'checkpoint_sha256': sha(checkpoint), 'exported_state_equals_epoch79': True, 'state_tensor_count': len(weights), 'original_launcher_exit_receipt': 'UNAVAILABLE'}
     record = {
         'model_path': str(model.relative_to(repo)),
         'model_sha256': sha(model),
         'training_stdout': {'path': str(log.relative_to(repo)), 'sha256': sha(log)},
-        'training_exit_code': 0, 'completed_epochs': 80, 'selected_epoch': 79,
+        'training_exit_code': None if args.recover_from_completion else 0, 'recovery_verification': recovery, 'completed_epochs': 80, 'selected_epoch': 79,
         'selection_uses_only_training_validation': True,
         'blind_labels_used_for_selection': False,
         'test_file_passed_to_training': False,
         'reviewed_by': 'window-a',
         'actual_cpu_threads': int(os.environ['OMP_NUM_THREADS']),
-        'completion_evidence': 'Invoked by set-euo-pipefail training runner after successful train/export guards; no standalone launcher exit receipt.',
+        'completion_evidence': 'Recovered from complete80-epoch/Done log and exact exported-model/epoch79-state equality; original exit receipt unavailable.' if args.recover_from_completion else 'Invoked by set-euo-pipefail training runner after successful train/export guards.',
         'selection_reason': 'Predeclared fixed final epoch79 for clean30-versus-provisional43 comparison; runner verified the complete training process and exact exported epoch.',
         'dataset_manifest_sha256': sha(entry / 'data/dataset_manifest.json'),
         'training_input_sha256': sha(entry / 'data/train.extxyz'),

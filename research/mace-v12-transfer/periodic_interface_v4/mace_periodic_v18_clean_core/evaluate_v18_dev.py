@@ -47,7 +47,11 @@ def main():
     require(selection.get("dataset_manifest_sha256") == sha(entry / "data/dataset_manifest.json"), "Selection/dataset manifest snapshot mismatch")
     require(selection.get("training_input_sha256") == sha(entry / "data/train.extxyz") and selection.get("development_validation_input_sha256") == sha(entry / "data/valid.extxyz"), "Selection/data snapshot mismatch")
     require(selection.get("model_sha256") == model_hash and Path(selection.get("model_path", "")).resolve() == model, "Selection/model hash mismatch")
-    require(selection.get("training_exit_code") == 0 and selection.get("completed_epochs") == 80 and selection.get("selected_epoch") == 79, "A must verify complete fixed 80-epoch run and final epoch selection")
+    recovery = selection.get("recovery_verification") or {}
+    recovered = recovery.get("exported_state_equals_epoch79") is True and recovery.get("original_launcher_exit_receipt") == "UNAVAILABLE" and recovery.get("state_tensor_count", 0) > 0
+    if recovered:
+        require(sha(Path(recovery["checkpoint_path"]).resolve()) == recovery["checkpoint_sha256"], "Recovery checkpoint changed")
+    require((selection.get("training_exit_code") == 0 or recovered) and selection.get("completed_epochs") == 80 and selection.get("selected_epoch") == 79, "A must verify complete fixed80-epoch run and final epoch selection")
     require(selection.get("selection_uses_only_training_validation") is True and selection.get("blind_labels_used_for_selection") is False and selection.get("test_file_passed_to_training") is False, "Invalid split/selection policy")
     require(selection.get("reviewed_by") == "window-a" and selection.get("selection_reason"), "A selection record required")
     train_log = Path(selection["training_stdout"]["path"]).resolve()
