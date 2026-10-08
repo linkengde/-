@@ -13,3 +13,5 @@ From the repository root:
 bash research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/run_v18_training.sh --repo-root "$PWD" --output-dir research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01
 ```
 The runner automatically freezes epoch79 and scores the three development frames on successful completion; it saves per-atom vectors for B's diagnosis. V18 remains a provisional numerical screen.
+
+The successful finalizer also publishes only the selected model/epoch79 checkpoint, complete logs and development/per-atom evidence to main using ordinary Git and owner checks. Unrelated local changes, artifact checks or publication conflicts stop publication with results preserved. It does not launch another version or awaken an inactive B session.
