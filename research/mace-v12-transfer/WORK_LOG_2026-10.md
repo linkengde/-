@@ -505,3 +505,7 @@ B4x4 SCF41 published ed43e9d; A3x3 SCF51 previously published f44d97c. All4 mesh
 ### Fresh A/B same-geometry 5x5/6x6 registered
 
 Both new owners are published: A 9c31b999-b2fe-4f0a-86f0-52c605d705ad; B 5f182750-e2d3-428b-bddc-5ab37bf09e5e. User explicitly authorized A5x5/B6x6 continuation. Historical four records, fixed52atom input, source/method/energy convention and execution scripts preserved. New records bind exact labels to new owners; full root inventory refreshed and registration pins unchanged execution hashes. A4-rank PW-PBE smoke PASS after missing-only environment setup. Production launch follows registration publication; numerical-only, no old-mesh repeat or V19 training. Compare4/5,4/6,5/6 after both compact archives verify.
+
+### Fresh A 5x5 numerical pilot completed
+
+Four-rank PW-PBE converged in 43 steps; exact fixed geometry, finite energy/forces, method and compact inventory verified PASS. Original queue confirmed completion and archive publication. No model training, old-mesh rerun, or sealed-label access.
