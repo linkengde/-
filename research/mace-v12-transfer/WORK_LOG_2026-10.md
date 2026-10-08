@@ -429,3 +429,5 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - B is assigned an independent V18 entry audit, then frozen V17 vector diagnosis with explicitly limited already-scored development inference, then V9-V18 review when the new model/results are published. No repeated user task forwarding is required for an active B session.
 
 - V18 training_clean_core_01 launched at 2026-10-08T00:01:40.972560+00:00; preflight and initial disk guard PASS,4 CPU threads. This event is a real process launch; epoch progress will be recorded separately.
+
+- B V18 independent entry audit PASS (affae08); all source/count/rank/role/byte checks pass. A accepted the selection/data snapshot binding recommendation and strengthened the evaluator, and records actual OMP thread count in selection. Launcher status still derives from the intended successful set-e runner flow; standalone finalizer is not an independent exit receipt. Pair Cartesian projection is retained for these existing marked pairs, not generalized to arbitrary periodic pairs. B frozen V17 vector diagnosis started at37b3571.

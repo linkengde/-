@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -41,6 +42,8 @@ def main():
         'blind_labels_used_for_selection': False,
         'test_file_passed_to_training': False,
         'reviewed_by': 'window-a',
+        'actual_cpu_threads': int(os.environ['OMP_NUM_THREADS']),
+        'completion_evidence': 'Invoked by set-euo-pipefail training runner after successful train/export guards; no standalone launcher exit receipt.',
         'selection_reason': 'Predeclared fixed final epoch79 for clean30-versus-provisional43 comparison; runner verified the complete training process and exact exported epoch.',
         'dataset_manifest_sha256': sha(entry / 'data/dataset_manifest.json'),
         'training_input_sha256': sha(entry / 'data/train.extxyz'),

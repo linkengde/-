@@ -44,6 +44,8 @@ def main():
     selection_bytes = selection_path.read_bytes()
     selection = json.loads(selection_bytes)
     model_hash = sha(model)
+    require(selection.get("dataset_manifest_sha256") == sha(entry / "data/dataset_manifest.json"), "Selection/dataset manifest snapshot mismatch")
+    require(selection.get("training_input_sha256") == sha(entry / "data/train.extxyz") and selection.get("development_validation_input_sha256") == sha(entry / "data/valid.extxyz"), "Selection/data snapshot mismatch")
     require(selection.get("model_sha256") == model_hash and Path(selection.get("model_path", "")).resolve() == model, "Selection/model hash mismatch")
     require(selection.get("training_exit_code") == 0 and selection.get("completed_epochs") == 80 and selection.get("selected_epoch") == 79, "A must verify complete fixed 80-epoch run and final epoch selection")
     require(selection.get("selection_uses_only_training_validation") is True and selection.get("blind_labels_used_for_selection") is False and selection.get("test_file_passed_to_training") is False, "Invalid split/selection policy")
