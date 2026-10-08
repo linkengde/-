@@ -1,0 +1,70 @@
+{
+  "status": "PLAN_ONLY_BLOCKED_PENDING_EXTERNAL_CRYSTAL_SOURCE",
+  "prototype_manifest_sha256": "55793a89fe095a4ce5392ba53d0f355fb7f626c15946e19f52363392f1269604",
+  "source_requirements": {
+    "spacegroup_and_sites": "External crystallographic database record or original structure table, including occupied Wyckoff coordinates and origin convention",
+    "a_c_internal_z": "Record reported lattice/internal parameters and modeling deviations; do not silently equate assumed and measured values"
+  },
+  "network_observation": {
+    "COD": "HTTPS proxy tunnel403, including escalated retry",
+    "Crossref": "B reports HTTPS proxy tunnel403",
+    "required_domain_additions": [
+      "www.crystallography.net",
+      "api.crossref.org"
+    ],
+    "existing_allowed_domain_list": "UNKNOWN; do not replace existing list"
+  },
+  "frozen_pilot_candidate": "AgSi_new_hex_slab_parent_v19_proposal",
+  "rationale": "Periodic plane-wave/kmesh sensitivity first, before3 development labels; fixed unrelaxed stress-probe geometry, not equilibrium surface assertion",
+  "base_recipe": {
+    "xc": "PBE",
+    "PW_cutoff_eV": 500,
+    "fermi_smearing_eV": 0.1,
+    "SCF_thresholds": "energy/density/eigenstates1e-5",
+    "MPI_ranks": 4,
+    "BLAS_threads_per_rank": 1,
+    "energies": "native extrapolated and free energy retained separately"
+  },
+  "sequence": [
+    {
+      "phase": "source_and_surface_role_review",
+      "required_before_any_DFT": true,
+      "role": "development-only ideal cleaved slab probes, shared bulk prototype, no independent physical morphology claim"
+    },
+    {
+      "phase": "matched_kmesh_pair",
+      "jobs": [
+        "Gamma1x1x1",
+        "2x2x1"
+      ],
+      "geometry": "identical approved AgSi prototype; all coordinates/IDs/cell/ordering fixed",
+      "metrics": [
+        "energy_delta_meV_atom",
+        "force_vector_difference_RMSE_eV_A",
+        "maximum_atom_force_difference_eV_A",
+        "signed_pair_projection_difference_eV_A"
+      ]
+    },
+    {
+      "phase": "conditional_kmesh_extension",
+      "job": "3x3x1 if2x2-vs-Gamma sensitivity exceeds budgets; convergence not proven from one comparison"
+    },
+    {
+      "phase": "vacuum_and_dipole_assessment",
+      "geometry": "same relative ion positions at expanded vacuum (20A) for pilot; finite slab asymmetry assessed",
+      "implementation": "Verify GPAW26.7 PW-compatible correction in official documentation before selecting; no guessed API or switch"
+    },
+    {
+      "phase": "approve_development_labels",
+      "gate": "Source, topology/isolation and numerical sensitivity reviewed; then freeze owner jobs and chosen target settings before labeling3 surfaces"
+    }
+  ],
+  "provisional_numerical_difference_budgets": {
+    "energy_meV_atom": 2,
+    "force_vector_RMSE_eV_A": 0.01,
+    "pair_projection_eV_A": 0.02,
+    "meaning": "DFT sensitivity budgets distinct from MACE acceptance thresholds; review required, not evidence of achieved convergence"
+  },
+  "method_consistency_gate": "If Gamma sensitivity is significant, do not silently compare Gamma-trained targets against more converged reference and attribute all mismatch to MACE. Explicit common-target/relabel plan required.",
+  "DFT_launched": false
+}
