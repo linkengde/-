@@ -78,7 +78,7 @@ try:
         while active():
             wait()
         # Let A's already-running 0.05 completion worker finish its publication.
-        if TASK == 'window-a' and width == '020':
+        if TASK == 'window-a':
             previous = Path('/workspace/.setup/v19-smearing-followup-state.json')
             while previous.exists():
                 record = json.loads(previous.read_text())
