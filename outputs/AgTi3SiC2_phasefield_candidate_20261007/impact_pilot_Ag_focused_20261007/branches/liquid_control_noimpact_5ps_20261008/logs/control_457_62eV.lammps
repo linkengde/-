@@ -1,0 +1,189 @@
+LAMMPS (30 Sep 2026)
+  using 5 OpenMP thread(s) per MPI task
+package omp 5
+using multi-threaded neighbor list subroutines
+units metal
+dimension 3
+atom_style atomic
+boundary p p m
+read_data structures/state_current.data
+Reading data file ...
+  triclinic box = (0 0 -10) to (37.285975 32.290601 102.73301) with tilt (-18.642987 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4751 atoms
+  reading velocities ...
+  4751 velocities
+  read_data CPU = 0.032 seconds
+include potentials/potential_stage69.inc
+# Stage69 collision-ready candidate potential; no physical run is implied.
+# Baseline: Ag EAM + Ti/Si/C TSCBOP + calibrated Ag-interface Morse.
+# ZBL is overlaid only in the 0.8-1.5 A short-range window.
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 0.8 1.5
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+pair_coeff 1 4 zbl 22 47
+pair_coeff 2 4 zbl 14 47
+pair_coeff 3 4 zbl 6 47
+pair_coeff 4 4 zbl 47 47
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region sink_region block INF INF INF INF 8.0 18.0 units box
+region crater_region cylinder z 9.9573898076 24.2578814220 8.0 12.0 100.0 units box
+group projectiles id 4306:4751
+446 atoms in group projectiles
+group new_projectile id 4752
+0 atoms in group new_projectile
+group all_projectiles union projectiles new_projectile
+446 atoms in group all_projectiles
+group fixed_part_01 id 2 3 9 90 2969 3032 81 82 2909 2910 2914 2975 170 250 251 255 256 257 351 356 2921 341 342 352 444 445 516 2924 2933 2992 2998 3003 436 511 517 596 603 604 2934 2939 3006 597 693 698 699 777 2948 3010 3018 3019 766 849 850 859 2953 2954 2955 2958 3022 3024 851 952 953 2963 24 3033 16 17 25 96 97 104 105 106 189 184 190 260 261 269 270 2915 2916 2983 2989 262 357 358 364 2925
+90 atoms in group fixed_part_01
+group fixed_part_02 id 2926 2993 453 454 523 530 537 626 2935 2999 524 610 611 617 618 708 715 792 2941 2942 778 783 784 785 875 876 882 2949 867 868 869 877 963 970 971 972 2964 23 964 119 120 127 2970 2971 111 112 113 121 203 285 2917 2976 2985 277 286 372 373 380 381 389 475 2984 374 466 470 545 550 2927 2928 2937 538 627 637 638 639 644 2936 3007 628 725 901 2943 2950 3011 3012 3020 883 884 892 893
+90 atoms in group fixed_part_02
+group fixed_part_03 id 984 985 2956 38 986 2965 3025 3035 39 44 2972 40 128 135 136 2911 2918 2977 2978 210 294 295 299 300 396 406 2986 2987 390 397 398 486 2929 2930 556 557 558 654 655 2938 645 646 656 728 818 2944 2951 3013 3014 729 805 806 807 902 912 913 914 922 2957 3021 43 903 991 2959 2966 3026 3027 60 53 54 61 146 150 151 2913 2973 2980 222 223 224 229 315 316 2912 2920 2979 2991 308 309 407
+90 atoms in group fixed_part_03
+group fixed_part_04 id 497 2922 2990 2995 408 562 563 573 574 575 2931 2932 3001 564 659 660 667 2945 3008 3009 742 743 750 819 826 827 828 2952 3015 3016 923 924 930 931 932 999 1000 2960 2967 3028 1001 71 75 76 80 163 2974 3036 3037 156 157 158 164 236 2919 2981 2982 237 325 326 327 334 340 431 432 2997 424 425 433 498 504 505 587 2923 3002 499 580 581 582 588 589 675 681 682 692 2940 3005 756 760 765
+90 atoms in group fixed_part_04
+group fixed_part_05 id 841 842 2946 2947 835 836 837 843 939 946 2962 3023 3031 1 74 1015 2961 2968 3030 4 5 12 91 3105 83 85 94 171 177 181 3110 175 252 254 258 3044 3049 343 346 449 515 518 520 605 607 3063 700 3074 3075 3082 767 769 775 852 863 949 856 954 960 3099 26 3101 98 100 107 3039 3100 3106 185 188 3038 3045 3046 368 459 2994 3050 3051 457 463 531 535 3000 3004 3052 527 619 716 3068 3069
+90 atoms in group fixed_part_05
+group fixed_part_06 id 710 779 780 786 3076 3083 870 872 965 974 3087 3093 32 35 36 122 3034 3102 114 117 123 206 287 3040 291 375 382 3047 3054 377 467 469 471 472 546 3053 539 540 629 3064 3065 3070 3071 632 721 726 793 802 3077 796 885 894 897 987 3088 3089 3095 989 3094 41 45 3103 129 137 141 3041 3107 298 304 399 3048 391 402 3055 3059 551 554 559 560 3058 3066 3072 647 658 736 740 3078 811 817 904
+90 atoms in group fixed_part_06
+group fixed_part_07 id 915 918 3090 3096 62 55 59 66 147 152 3108 148 225 226 231 317 3042 310 312 321 409 413 421 2996 3056 487 488 565 576 577 3060 568 668 672 3017 3073 747 820 830 933 3079 3084 823 925 926 3029 3091 3092 3097 1002 1004 72 73 77 3104 3109 166 247 2988 3043 328 331 335 338 434 426 428 500 3057 3061 3062 583 593 676 683 687 3067 679 757 761 844 3080 3081 838 943 947 951 3085 3086 1016
+90 atoms in group fixed_part_07
+group fixed_part_08 id 1020 1025 3098
+3 atoms in group fixed_part_08
+group fixed union fixed_part_01 fixed_part_02 fixed_part_03 fixed_part_04 fixed_part_05 fixed_part_06 fixed_part_07 fixed_part_08
+633 atoms in group fixed
+group sink region sink_region
+945 atoms in group sink
+group mobile subtract all fixed
+4118 atoms in group mobile
+group crater region crater_region
+385 atoms in group crater
+group freezone intersect mobile crater
+385 atoms in group freezone
+group free_substrate subtract freezone all_projectiles
+202 atoms in group free_substrate
+group anchored subtract mobile freezone
+3733 atoms in group anchored
+group bath subtract sink freezone
+836 atoms in group bath
+fix hold fixed setforce 0.0 0.0 0.0
+fix integrate all nve
+fix anchor anchored spring/self 100.0
+fix_modify anchor energy yes
+fix bathfix bath langevin 300.0 300.0 0.05 624157 zero yes tally yes
+compute Tfree free_substrate temp
+compute Tmobile mobile temp
+timestep 0.00005
+thermo 200
+thermo_style custom step time atoms c_Tfree c_Tmobile pe ke etotal f_bathfix
+thermo_modify flush yes
+dump tr all custom 100 dumps/control_457_62eV.dump id type x y z xu yu zu vx vy vz fx fy fz
+dump_modify tr sort id
+run 4000
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 12 7 23
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/tri/omp
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 24.67 | 24.67 | 24.67 Mbytes
+   Step          Time         Atoms       c_Tfree       c_Tmobile        PotEng         KinEng         TotEng       f_bathfix   
+         0   0                   4751   2089.6856      1102.8432     -30704.658      586.89348     -30117.764     -0            
+       200   0.01                4751   2034.8924      576.47602     -30420.302      306.77979     -30113.522     -4.2393884    
+       400   0.02                4751   1927.8882      450.24267     -30346.753      239.60295     -30107.15      -10.612559    
+       600   0.03                4751   1685.8679      998.622       -30636.149      531.43069     -30104.718     -13.045231    
+       800   0.04                4751   1731.9231      814.73759     -30535.816      433.57403     -30102.242     -15.520484    
+      1000   0.05                4751   1765.5499      368.07138     -30294.607      195.87435     -30098.733     -19.030323    
+      1200   0.06                4751   1748.9929      856.41201     -30552.504      455.75165     -30096.752     -21.011551    
+      1400   0.07                4751   1634.8881      962.35493     -30608.143      512.13066     -30096.013     -21.75109     
+      1600   0.08                4751   1706.8984      437.87253     -30326.732      233.02        -30093.712     -24.049591    
+      1800   0.09                4751   1754.1286      637.68363     -30433.212      339.35228     -30093.86      -23.903503    
+      2000   0.1                 4751   1742.3658      1066.6242     -30659.942      567.61901     -30092.323     -25.441677    
+      2200   0.11                4751   1810.7298      588.75133     -30405.686      313.31227     -30092.374     -25.388896    
+      2400   0.12                4751   1754.1008      467.01768     -30340.973      248.53        -30092.443     -25.319519    
+      2600   0.13                4751   1787.3018      1008.3723     -30627.233      536.61947     -30090.614     -27.150086    
+      2800   0.14                4751   1883.7755      814.44584     -30524.104      433.41877     -30090.685     -27.078758    
+      3000   0.15                4751   1799.3007      391.21211     -30298.688      208.18901     -30090.499     -27.264047    
+      3200   0.16                4751   1695.8501      874.25582     -30556.126      465.24749     -30090.879     -26.885038    
+      3400   0.17                4751   1671.3275      981.57115     -30614.345      522.35684     -30091.988     -25.775884    
+      3600   0.18                4751   1835.6422      439.70107     -30325.221      233.99309     -30091.228     -26.53587     
+      3800   0.19                4751   1929.1035      669.76326     -30446.814      356.42391     -30090.39      -27.373301    
+      4000   0.2                 4751   1796.066       1082.0708     -30665.969      575.83914     -30090.13      -27.633828    
+Loop time of 43.528 on 5 procs for 4000 steps with 4751 atoms
+
+Performance: 0.397 ns/day, 60.456 hours/ns, 91.895 timesteps/s, 436.593 katom-step/s
+399.1% CPU use with 1 MPI tasks x 5 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 41.226     | 41.226     | 41.226     |   0.0 | 94.71
+Neigh   | 0.061406   | 0.061406   | 0.061406   |   0.0 |  0.14
+Comm    | 0.39037    | 0.39037    | 0.39037    |   0.0 |  0.90
+Output  | 0.61536    | 0.61536    | 0.61536    |   0.0 |  1.41
+Modify  | 1.1525     | 1.1525     | 1.1525     |   0.0 |  2.65
+Other   |            | 0.08205    |            |       |  0.19
+
+Nlocal:           4751 ave        4751 max        4751 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           7710 ave        7710 max        7710 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 5
+Dangerous builds = 0
+undump tr
+write_data structures/control_457_62eV.data
+System init for write_data ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+write_restart restart/control_457_62eV.restart
+System init for write_restart ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+
+
+Total wall time: 0:00:43
