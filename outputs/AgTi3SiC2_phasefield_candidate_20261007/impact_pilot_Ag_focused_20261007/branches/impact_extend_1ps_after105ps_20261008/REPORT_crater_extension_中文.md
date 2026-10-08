@@ -8,7 +8,9 @@
 
 坑形已经满足“明显几何凹坑”的观察目标，因此本轮在 106 ps 停止。此结论只针对形貌：不能由碗形表面本身推出 Ag 已形成稳定液态熔池。
 
-![106 ps 三维表面坑形、Ag/Ti₃SiC₂ 原子截面，以及 105 ps/106 ps 对照轮廓](images/crater_3d_comparison_105_106ps.png)
+![双色相图：Ti₃SiC₂ 骨架统一紫色、Ag 统一金黄色](images/crater_3d_two_phase_colors_106ps.png)
+
+图中 Ti、Si、C 都用同一种紫色表示 Ti₃SiC₂ 骨架，Ag 用金黄色表示；高度网格仍按 z 高度着色。原按元素区分颜色的版本保留在 `images/crater_3d_comparison_105_106ps.png`。
 
 ## 起始状态和运行检查
 
@@ -45,7 +47,8 @@
 
 ## 文件
 
-- 3D 图：`images/crater_3d_comparison_105_106ps.png`
+- 双色 3D 图：`images/crater_3d_two_phase_colors_106ps.png`
+- 按元素分别着色的对照版：`images/crater_3d_comparison_105_106ps.png`
 - 轰击轨迹局部指标：`analysis_summary.json`、`analysis_local_order.csv`、`analysis_msd.csv`、`analysis_local_temperature.csv`
 - 近邻保留对比：`analysis_neighbor_survival_extension.json`、`analysis_neighbor_survival_extension.csv`
 - 分段日志、结构、restart 和压缩 dump：本分支 `logs/`、`structures/`、`restart/`、`dumps/`
