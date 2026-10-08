@@ -471,3 +471,6 @@ A independently reran result checker and SHA256 checks for three available archi
 
 ### V19 acquisition complete6/6
 A reran archive verifiers and every compact archive SHA256 for all six labels: all PASS. SCF counts AgC negative/positive58/58, AgSi48/47, AgTi40/40. A queue completed; B labels published. B signed-response analysis dependency released. No V19 training/model produced yet; independent development geometry/labels and dataset review still required.
+
+### V19 training36 candidate prepared
+Reviewed B signed-response report and four file hashes: PASS. Preserved V18 base30 byte prefix and added all six verified signed acquisitions exactly once, with17-digit coordinates/forces/energy serialized and read-back exact equality. Builder and --check passed; exact composition rank4. Source method/lineage and native/free energies retained. No valid/test or training entry authorized; independent development design/labeling remains dependency. Added B read-only candidate integrity audit after independent geometry design.
