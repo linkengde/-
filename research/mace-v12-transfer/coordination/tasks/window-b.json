@@ -1,5 +1,5 @@
 {
-  "claimed_utc": "2026-10-04T15:21:24.205586+00:00",
+  "claimed_utc": "2026-10-08T11:56:11.925941+00:00",
   "models": {
     "v13": "independent screening FAIL_SCREENING; residual localization assigned to window-b.",
     "v14": "One 80-epoch training/evaluation cycle completed; SCREEN_FAIL. Holdout force-vector RMSE fails all three interfaces; see v14_validation_assessment.json.",
@@ -145,9 +145,9 @@
     "v19_cif_mesh_ladder_assessment": "completed; SCF iteration 1; updated 2026-10-08T11:05:24.814567+00:00",
     "environment_restart_handover": "ready; all four pilot archives independently reverified by A"
   },
-  "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-  "status": "running",
-  "next_action": "Old instance: no additional DFT. New independent cloud instance: read coordination/RESTART_V19_NEXT_STEPS.md and run claim_restarted_window.py for your role; preserve history and register both new IDs before A prepares5x5/B6x6.",
+  "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
+  "status": "claimed",
+  "next_action": "Read coordination/RESTART_V19_NEXT_STEPS.md. Verify environment first. New A prepares owner-bound5x5 and6x6 entries after both new IDs registered; A runs5x5, B runs6x6. No Gamma/2x2/3x3/4x4 repetition; training remains blocked.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-08T11:54:10.748589+00:00",
   "labels": {
@@ -171,18 +171,9 @@
     "AgSi_COD9009647_pilot_k2x2": "completed",
     "AgSi_COD9009647_pilot_k4x4": "completed"
   },
-  "live_progress": {
-    "task_id": "window-b",
-    "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
-    "job": "v19_dataset_entry_independent_audit",
-    "state": "queued",
-    "iteration": 0,
-    "elapsed_s": null,
-    "note": "Waiting on A to publish the official V19 dataset/entry; assigned audit is not yet unblocked. Do not inspect withheld labels or candidate model inputs.",
-    "updated_utc": "2026-10-08T11:05:58.016618+00:00"
-  },
+  "live_progress": null,
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "HANDOVER_READY: completed mesh pilots archived; user requested new independent A/B environments before further DFT",
+  "current_stage": "New cloud instance claimed after completed/published four-mesh handover; no job launched",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -232,5 +223,14 @@
     "v19_cif_k4x4_pilot_DFT": "Start now: python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/run_queue.py window-b AgSi_COD9009647_pilot_k4x4 . Only this exact assigned4x4 job, input geometry unchanged. No repeat2x2. Require4MPI/ScaLAPACK,3GiB starting free space and1.5GiB runtime reserve. If disk insufficient, user authorized cleanup of useless old files: may remove only local COMPLETED checkpoint state.gpw after verifying corresponding compact archive and all SHA256 inventory; preserve input/logs/models/selected checkpoints and active/unfinished states, write cleanup record. Verify/publish compact archive then continue mesh ladder assessment. No fitting/inference/training/MD/TTM or dataset integration.",
     "v19_cif_mesh_ladder_assessment": "After all four same-input mesh pilot archives published, immediately write coordination/reports/window-b/v19_cif_mesh_ladder_assessment/. Verify inventories/settings/geometry; use compare_mesh_results.py forGamma/2x2,2x2/3x3,2x2/4x4,3x3/4x4 and report energy, force-vector/max and signed-pair changes. Distinguish even/odd grids and smearing sensitivity from true density convergence; no monotonicity assumed. Keep unchanged numerical budgets and model gates, identify residual uncertainty and smallest follow-up if not converged. Do not attribute this newslab Gamma failure to all historical isolated-cluster labels. Recommend exact mesh/vacuum pilot or compact-frame0 target consistency check without running unassigned DFT. No model inference/fitting/training/sealed access/MD/TTM/dataset edits. Publish report/CSV/JSON/SHA256 and continue ready queue."
   },
-  "handover_ready": "v19_four_meshes_completed_20261008"
+  "handover_ready": "v19_four_meshes_completed_20261008",
+  "owner_history": [
+    {
+      "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
+      "handover_id": "v19_four_meshes_completed_20261008",
+      "transferred_utc": "2026-10-08T11:56:11.925934+00:00",
+      "reason": "User requested two fresh environments after both owners finished/published mesh pilots"
+    }
+  ],
+  "handover_consumed": "v19_four_meshes_completed_20261008"
 }
