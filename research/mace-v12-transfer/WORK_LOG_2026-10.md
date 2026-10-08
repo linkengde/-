@@ -465,3 +465,6 @@ User-approved deletion completed for158 untracked nonselected V17/V18 epoch chec
 
 ### V19 active queue follow-up
 A first AgC positive acquisition has four live MPI ranks (about100% CPU each); initialization active, no SCF iteration or error yet. B negative queue assigned but latest remote progress still execution-pack completed, so B launch not asserted. Added dependency-gated six-label signed-response analysis then independent V19 dataset-entry audit to B rolling queue. Previously scored V17 development parents are now acquisition families and must not serve as fresh V19 validation; independent validation remains required before fitting/selection claims.
+
+### V19 mid-queue archive review
+A independently reran result checker and SHA256 checks for three available archives: AgC negative58, AgC positive58 and AgSi negative48 SCF iterations, all PASS. A AgSi positive active at log iteration2; B latest published AgTi negative iteration10. Thus verified3/6, no fitting started. Added B independent development geometry design after negative queue completion, runnable if paired-response review waits on A. Excludes reused V17 development parents; sealed geometry/labels remain unread, no design task authorizes DFT.
