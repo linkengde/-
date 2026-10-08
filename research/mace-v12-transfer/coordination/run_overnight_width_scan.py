@@ -77,15 +77,8 @@ try:
         state('WAITING_FOR_EXISTING_JOB_OR_VERIFIED_ARCHIVE', label=label)
         while active():
             wait()
-        # Let A's already-running 0.05 completion worker finish its publication.
-        if TASK == 'window-a':
-            previous = Path('/workspace/.setup/v19-smearing-followup-state.json')
-            while previous.exists():
-                record = json.loads(previous.read_text())
-                if record['stage'] == 'COMPARISONS_VERIFIED_PUBLISHED':
-                    break
-                assert record['stage'] not in ('STOPPED_REQUIRES_DIAGNOSIS', 'WINDOW_ENDED_WAITING_FOR_B'), 'Previous completion worker needs diagnosis'
-                wait()
+        # Continue after our own archive verifies; another owner is not a
+        # prerequisite for the next already-registered fixed-mesh width job.
         synchronize()
         if not (root / 'calculations' / label / 'summary.json').exists():
             local = Path('/workspace') / ('mace_v19_cif_smearing_' + TASK) / label
@@ -99,7 +92,9 @@ try:
         state('VERIFIED_PUBLISHED', label=label)
 
     root = ROOTS['020']
-    pairs = [(f'AgSi_COD9009647_pilot_k{k}x{k}', labels['020']), (labels['005'], labels['020'])]
+    pairs = [(f'AgSi_COD9009647_pilot_k{k}x{k}', labels['005']),
+             (f'AgSi_COD9009647_pilot_k{k}x{k}', labels['020']),
+             (labels['005'], labels['020'])]
     comparisons = []
     for first, second in pairs:
         comparisons.append(json.loads(run(PY, str(root / 'compare_mesh_results.py'), first, second)))
@@ -114,6 +109,7 @@ try:
         state('WAITING_FOR_OTHER_OWNER_SIGMA020')
         wait()
     verify(root, other)
+    comparisons.append(json.loads(run(PY, str(root / 'compare_mesh_results.py'), 'AgSi_COD9009647_pilot_k5x5_sigma0p05', 'AgSi_COD9009647_pilot_k6x6_sigma0p05')))
     comparisons.append(json.loads(run(PY, str(root / 'compare_mesh_results.py'), 'AgSi_COD9009647_pilot_k5x5_sigma0p20', 'AgSi_COD9009647_pilot_k6x6_sigma0p20')))
     report_dir = sync.HERE / 'reports' / TASK / 'v19_overnight_width_scan'
     report_dir.mkdir(parents=True, exist_ok=True)

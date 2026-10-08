@@ -10,7 +10,7 @@ mkdir -p /workspace/.setup
 nohup python3 -u research/mace-v12-transfer/coordination/run_overnight_width_scan.py window-b --hours 9 > /workspace/.setup/v19-overnight-window-b.log 2>&1 < /dev/null &
 ```
 
-Run the entry once; a local driver lock rejects duplicates. No terminal must remain open. A uses `window-a`; A's entry also waits for its existing 0.05 completion worker to finish publication before starting its 0.20 job.
+Run the entry once; a local driver lock rejects duplicates. No terminal must remain open. A uses `window-a`. Each owner advances from its own verified 0.05 result to its own registered 0.20 job without waiting for the other owner. A's previous completion controller was replaced while its live DFT queue and MPI ranks were preserved.
 
 1. Verify ownership and synchronize ordinary `main` without reset/force push.
 2. Wait for the existing 0.05 job; start it only if neither run nor archive exists. Verify the complete archive and mark its task label complete.
