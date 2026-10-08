@@ -62,3 +62,9 @@
 - 对照 JSON：[`comparison_impact_control.json`](comparison_impact_control.json)。
 - 主要脚本：[`run_liquid_diagnostic.py`](run_liquid_diagnostic.py)、[`analyze_liquid_diagnostic.py`](analyze_liquid_diagnostic.py)、[`compare_impact_control.py`](compare_impact_control.py)。
 - 两支路各自的 `SHA256SUMS.txt` 用于文件完整性复核。
+
+## 第466发碰撞的后续时间步复核
+
+后续从相同第465发初态，用同一入射位置/速度和热浴随机种子，将第466发时间步由0.05 fs减半到0.025 fs，仍运行0.2 ps。ID 4771是入射Ag，ID 4508是目标基体Ag。在两支路共同采样点103.905 ps，两原子距离和力几乎完全重合；细采样另发现103.9025 ps存在1.3168 Å的更近瞬间，说明原5 fs轨迹漏采到了碰撞峰值。此高力事件应解释为Ag入射原子与基体Ag的直接撞击，Ag–Ag势含ZBL短程项；减半时间步后事件仍复现，因此不是原步长单独造成的基体重叠。详细结果见 [`时间步复核报告`](../liquid_dt_sensitivity_hit466_halfstep_20261008/REPORT_dt_sensitivity_中文.md)。
+
+这一发的减半步长复核只检验碰撞是否由积分步造成，并未系统地收敛最大瞬时力，也未验证Ag–Ti₃SiC₂交叉势或熔池相态。
