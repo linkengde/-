@@ -450,3 +450,6 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - AgSi: energy 0.096705 meV/atom; vector RMSE 0.057137 eV/A; separation error 0.190539 eV/A.
 - AgTi: energy 3.146385 meV/atom; vector RMSE 0.095893 eV/A; separation error 0.228859 eV/A.
 - Final model/checkpoint, selection, full logs, artifact hash manifest and per-atom evaluation saved; only selected checkpoint is published. B V18 review dependency satisfied. This remains a reused-development/provisional comparison with coverage and frame0 mesh confounds.
+
+### A review: V19 six residual-direction proposals
+Independently verified six recommended candidate hashes, finite label-free geometry, element/ID/pair identity, cell/PBC, exact moved-atom displacement and species-pair minima (coordinate serialization tolerance 3e-8 A). Optional lammps_type is absent; no types invented. Geometry screening PASS does not establish physical transferability or independent validation; parents are already-scored development families. DFT not started. Reproducible review at mace_periodic_v18_clean_core/review_v19_candidates.py and .json. B V18 review is unblocked by published frozen model/results; next queued task is a launch-disabled six-label execution pack, planned A positive/B negative signs (3 each), pending official owner registration.
