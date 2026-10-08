@@ -116,7 +116,9 @@ def main():
     files += sorted((run / 'checkpoints').glob('*.pt'))
     files += sorted((run / 'logs').glob('*.log'))
     files += sorted((run / 'results').glob('*.txt'))
-    (run / 'artifact_manifest.json').write_text(json.dumps({'files': [{'path': str(p.relative_to(repo)), 'bytes': p.stat().st_size, 'sha256': sha(p)} for p in files]}, indent=2) + '\n')
+    files += sorted(p for p in out.iterdir() if p.is_file())
+    files += [entry / n for n in ['run_v18_training.sh', 'build_v18_dataset.py', 'evaluate_v18_dev.py', 'finalize_v18.py', 'data/train.extxyz', 'data/valid.extxyz', 'data/dataset_manifest.json']]
+    (run / 'artifact_manifest.json').write_text(json.dumps({'checkpoint_policy': 'Intermediate checkpoints remain local; only epoch79 is published.', 'files': [{'path': str(p.relative_to(repo)), 'bytes': p.stat().st_size, 'sha256': sha(p), 'published': p.parent != run / 'checkpoints' or p.name.endswith('_epoch-79.pt')} for p in files]}, indent=2) + '\n')
     publish_completed(repo, entry, run, out, summary)
     print(json.dumps(summary, indent=2))
 
