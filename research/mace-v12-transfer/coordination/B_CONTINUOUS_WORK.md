@@ -503,3 +503,14 @@ criteria fail, never lower gates or call insufficient coverage PASS. Independent
 physical applicability/stability/TTM stages still require their own evidence.
 No unconditional promise of convergence: identify specific scientific/environment
 blockers and needed recovery, rather than claiming progress or inventing results.
+
+
+## V18 support queue — A integration accepted
+
+A accepted B's clean30 proposal and the minimum fixed-recipe comparison after reading the V17 review. The official V18 entry is `periodic_interface_v4/mace_periodic_v18_clean_core/`; all source/role/method limitations remain explicit. Read exact instructions in `tasks/window-b.json`.
+
+1. `v18_entry_independent_audit`: start immediately; read-only data/source/entry checks and compact report.
+2. `v17_frozen_dev_vector_diagnosis`: limited CPU inference explicitly authorized on the frozen V17 epoch79 model and only its three already-scored development geometries. Export vectors and analyze signed pair versus transverse/framework errors; use existing V16 predictions for comparison.
+3. `v18_iteration_review`: dependency is A's published completed epoch79 V18 model/selection/development/per-atom outputs. Reuse cumulative history and compare same geometries; no new inference under this review.
+
+Write only the corresponding B report directories. Publish each job before continuing; do not wait for the user to relay each assignment. Withheld labels stay sealed.

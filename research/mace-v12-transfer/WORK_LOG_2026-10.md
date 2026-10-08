@@ -419,3 +419,11 @@ Both assigned lateral-registry v13 PW-PBE holdouts passed the archive checks and
 - Frozen development evaluation (`evaluation_dev_01`) is **FAIL** under the unchanged gates. AgC: energy 2.755 meV/atom, force RMSE 0.1283 eV/Å, separation error 0.0948 eV/Å. AgSi: 1.771, 0.0613, 0.1909. AgTi: 1.221, 0.0942, 0.2135. Energy passes all; force fails all; separation passes AgC only. These three previously used dev structures are not fresh blind tests.
 - The selection record, selected model, epoch79 checkpoint, full training logs/metrics, development CSV/JSON and SHA256 inventories are saved. V17 remains screening-only; no production MD/TTM.
 - B's `v17_iteration_review` is unblocked and prioritized to run first; the report-only certified30 core draft follows. A will use that review before freezing V18. No withheld labels were opened.
+
+
+### 2026-10-07 UTC: V18 clean30 controlled comparison integrated
+
+- A read and SHA-verified B's V17 review and clean30 proposal (main16bbe99). Accepted the recommended fixed-recipe comparison before changing optimizer weights or adding coverage labels. V17 on the same three dev geometries improves all vector averages but remains FAIL; AgTi separation/max regression remains a target.
+- Integrated the proposal byte-for-byte into `mace_periodic_v18_clean_core/data/train.extxyz` and copied the same V17 dev bytes to valid.extxyz.30/3/0 frames, exact rank4, finite labels, source hashes and train/dev geometry isolation pass. All30 rows have direct archive support; coverage removal and Gamma-versus1x4x2 frame0 caveats prevent a sole-cause inference. No withheld labels opened.
+- Prepared the same seed45/medium/batch1/lr1e-4/wd5e-7/energy100/force1000/80epoch/final79/four-thread training recipe. The runner guards final epoch and automatically writes a frozen selection plus dev/per-atom diagnostics after successful training. Disk guard protects against incomplete checkpoint storage.
+- B is assigned an independent V18 entry audit, then frozen V17 vector diagnosis with explicitly limited already-scored development inference, then V9-V18 review when the new model/results are published. No repeated user task forwarding is required for an active B session.
