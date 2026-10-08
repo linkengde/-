@@ -514,3 +514,8 @@ A accepted B's clean30 proposal and the minimum fixed-recipe comparison after re
 3. `v18_iteration_review`: dependency is A's published completed epoch79 V18 model/selection/development/per-atom outputs. Reuse cumulative history and compare same geometries; no new inference under this review.
 
 Write only the corresponding B report directories. Publish each job before continuing; do not wait for the user to relay each assignment. Withheld labels stay sealed.
+
+
+## Residual direction preparation while V18 trains
+
+B's entry audit and frozen V17 vector diagnosis are complete and A verified all reported hashes. The next unblocked task is `v19_residual_direction_geometry_design` before the dependent V18 review. Reuse the existing diagnosis to propose signed0.03/0.06/0.10 A perturbations in three evidence-backed modes; at most18 label-free proposals and six recommended acquisitions. Exact task boundaries are in window-b.json. These reuse development parents and are future training-acquisition proposals, not independent validation. No DFT/training or sealed-label access is authorized by this design task.
