@@ -462,3 +462,6 @@ Prepared three positive-sign geometry-reviewed candidates byte-identically in pb
 
 ### V19 execution integration
 User-approved deletion completed for158 untracked nonselected V17/V18 epoch checkpoints (~4.99GiB); selected79/models/logs/tracked files retained. Free disk5.4GiB. Verified B execution-pack SHA256 entries and integrated separate production pbe_interface_v19_residual_acquisition; report drafts remain disabled. Explicit A positive/B negative owner registration, four-rank MPI/ScaLAPACK and actualCPU checks, no-active-run guard, same-state unfinished-run stop, exact geometry/hash/finite/convergence archive verification and compact per-label publication. Training and withheld labels remain untouched.
+
+### V19 active queue follow-up
+A first AgC positive acquisition has four live MPI ranks (about100% CPU each); initialization active, no SCF iteration or error yet. B negative queue assigned but latest remote progress still execution-pack completed, so B launch not asserted. Added dependency-gated six-label signed-response analysis then independent V19 dataset-entry audit to B rolling queue. Previously scored V17 development parents are now acquisition families and must not serve as fresh V19 validation; independent validation remains required before fitting/selection claims.
