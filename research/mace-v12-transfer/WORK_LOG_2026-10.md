@@ -468,3 +468,6 @@ A first AgC positive acquisition has four live MPI ranks (about100% CPU each); i
 
 ### V19 mid-queue archive review
 A independently reran result checker and SHA256 checks for three available archives: AgC negative58, AgC positive58 and AgSi negative48 SCF iterations, all PASS. A AgSi positive active at log iteration2; B latest published AgTi negative iteration10. Thus verified3/6, no fitting started. Added B independent development geometry design after negative queue completion, runnable if paired-response review waits on A. Excludes reused V17 development parents; sealed geometry/labels remain unread, no design task authorizes DFT.
+
+### V19 acquisition complete6/6
+A reran archive verifiers and every compact archive SHA256 for all six labels: all PASS. SCF counts AgC negative/positive58/58, AgSi48/47, AgTi40/40. A queue completed; B labels published. B signed-response analysis dependency released. No V19 training/model produced yet; independent development geometry/labels and dataset review still required.
