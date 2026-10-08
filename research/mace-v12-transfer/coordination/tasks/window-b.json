@@ -14,7 +14,8 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_parallel_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v16_blind_holdouts",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_rank_recovery_parallel"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_rank_recovery_parallel",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition"
   ],
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
   "queued_work_order": [
@@ -51,7 +52,8 @@
     "v17_frozen_dev_vector_diagnosis",
     "v19_residual_direction_geometry_design",
     "v18_iteration_review",
-    "v19_dft_execution_pack"
+    "v19_dft_execution_pack",
+    "v19_negative_residual_dft"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -113,11 +115,15 @@
     "v17_frozen_dev_vector_diagnosis": "completed; SCF iteration 1; updated 2026-10-08T00:04:18.851235+00:00",
     "v18_iteration_review": "completed; SCF iteration 1; updated 2026-10-08T01:18:14.973562+00:00",
     "v19_residual_direction_geometry_design": "completed; SCF iteration 1; updated 2026-10-08T01:10:23.081201+00:00",
-    "v19_dft_execution_pack": "completed; SCF iteration 1; updated 2026-10-08T01:22:31.813878+00:00"
+    "v19_dft_execution_pack": "completed; SCF iteration 1; updated 2026-10-08T01:22:31.813878+00:00",
+    "AgC_residual_mode_m_06_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered",
+    "AgSi_residual_mode_m_03_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered",
+    "AgTi_residual_mode_m_03_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered",
+    "v19_negative_residual_dft": "ready; owner registered and production pack integrated"
   },
   "owner_instance": "c5035b48-f43b-4da0-b8e4-e2862817f86a",
   "status": "running",
-  "next_action": "Await A review/integration and explicit owner job registration; continue next assigned unblocked task. Never enable report draft or infer DFT authorization from candidate review.",
+  "next_action": "Execute python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/run_queue.py window-b. Three assigned labels only; verify/archive/publish each before next. Existing unfinished run stops for same-checkpoint review; do not restart in a new directory.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-08T01:22:34.154639+00:00",
   "labels": {
@@ -134,7 +140,10 @@
     "AgC_framework_neighbor_m_acq_v17_01": "completed",
     "AgSi_transverse_Ag_m_acq_v17_01": "completed",
     "AgSi_framework_neighbor_m_acq_v17_01": "completed",
-    "AgTi_framework_neighbor_m_acq_v17_01": "completed"
+    "AgTi_framework_neighbor_m_acq_v17_01": "completed",
+    "AgC_residual_mode_m_06_v19_acq": "queued",
+    "AgSi_residual_mode_m_03_v19_acq": "queued",
+    "AgTi_residual_mode_m_03_v19_acq": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -147,7 +156,7 @@
     "updated_utc": "2026-10-08T01:22:31.813878+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "V19 execution pack published: six exact reviewed inputs, positiveA/negativeB owner proposal, launch-disabled runner/queue and exact compact archive verifier. No DFT. Runtime/checkpoint recovery and owner guards require A production integration.",
+  "current_stage": "V19 residual-direction DFT assigned three labels; launch pending local environment/no-duplicate checks",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -184,6 +193,7 @@
     "v17_frozen_dev_vector_diagnosis": "After V18 entry audit, start without waiting for A training. CPU inference is explicitly authorized ONLY on the frozen training_provisional_03 V17 selected model (SHA559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3) and the SAME THREE already-scored V17 development structures in data/valid.extxyz. Verify model/selection/reference hashes and reproduce published evaluation_dev_01 metrics. Export per-atom predicted/reference/error vectors, preserved lammps_id/species/positions, marked-pair signed longitudinal contributions and transverse norms, species and contact4.5A/outside error, maxima and species-aware local neighbors. Compare V16 using its existing development per-atom/localization artifacts; no unchanged old inference or blind references. Explain AgTi separation worsening and aggregate-force improvement, distinguish pair cancellation/projection versus transverse/framework coverage, and supply evidence-ranked candidate perturbation directions for a later acquisition. This authorizes read-only frozen inference, not fitting/tuning/training/DFT/MD/TTM. Write only coordination/reports/window-b/v17_frozen_dev_vector_diagnosis/, publish script/CSV/JSON/report/SHA256, then take the next unblocked job.",
     "v18_iteration_review": "A has published V18 epoch79 selected model, selection record, completed log and development/per-atom results. Start now; explicitly review exact state-match recovery and unavailable original exit receipt. Then write only coordination/reports/window-b/v18_iteration_review/. Reuse V9-V17 cumulative ledgers and compare V17/V18 on the same three dev geometries. Verify fixed recipe and changed data membership, roles and hashes; report energy/vector/max/separation and spatial/longitudinal/transverse deltas. Clean30 removes coverage and adds a Gamma frame0 relabel, so avoid attributing a sole cause to provenance. Use published per-atom vectors rather than new inference; no withheld outputs, fitting/DFT/MD/TTM. Give one minimal evidence-driven V19 follow-up with unchanged gates and preserve independent validation. Publish report/JSON/CSV/SHA256 and continue the rolling review queue.",
     "v19_residual_direction_geometry_design": "Start after completed frozen V17 vector diagnosis, while A runs V18. Write only coordination/reports/window-b/v19_residual_direction_geometry_design/. Reuse your frozen vector CSV and existing geometry designs; do not repeat inference or completed audits. Prepare label-free training-acquisition candidates derived from the THREE ALREADY-SCORED V17 development parents, with explicit reused-development-family lineage (not independent holdouts). Prioritize AgTi marked Ti479027/nearby C480805 pair-axis or framework-relative response, AgC Ti604600 transverse contact-shell response, and AgSi marked Si366934 versus Ag685172 differential projection. Choose one evidence-backed displacement mode per interface; generate opposite signs at0.03/0.06/0.10 A nominal mode amplitude (at most18 proposals). Precisely state normalization and every moved atom/vector; preserve IDs/order/cell/PBC and remove all calculator/energy/force labels. Use species-aware periodic contact and boundary checks against parent/source ranges, not a uniform1.75A all-pair cutoff. Screen exact/near duplication against existing training/dev/historical acquisition and prior candidate GEOMETRIES; use sealed role digests for exact overlap only and record that near-overlap against sealed geometries was not evaluated. Do not inspect sealed inputs/outputs/labels or reclassify candidates as blind. Recommend at most6 distinct passing inputs (normally one signed pair per interface) with amplitude tradeoffs, max force-residual targeting and source/candidate hashes; reserve wider amplitudes if contact checks pass. Deliver reproducible geometry script, candidate files, displacement ledger, report/manifest/SHA256. This is design-only: no new inference/DFT/training/MD/TTM, no official data edits; A review and explicit DFT owner assignment precede labeling. Publish and continue to V18 review only when A frozen results are released.",
-    "v19_dft_execution_pack": "After publishing v18_iteration_review, proceed automatically. Write only coordination/reports/window-b/v19_dft_execution_pack/. Use exactly the six recommended candidates in v19_residual_direction_geometry_design/manifest.json, independently reviewed by A in mace_periodic_v18_clean_core/review_v19_candidates.json. Prepare reproducible six-input execution and archive draft, source hashes and owner split A positive signs (3), B negative signs (3). Preserve geometry, IDs/order, cell/PBC and pair markers; absent lammps_type is optional metadata, do not invent it. Use existing validated GPAW runners with PW-PBE500 eV/Gamma/Fermi0.1 eV, native extrapolated energy and separately free energy, four MPI ranks and one BLAS thread/rank. Provide resumable queue/progress and converged finite energy/forces plus exact input/output identity and hash verification. Launch must remain DISABLED pending A review/integration and explicit owner job registration. No DFT, inference, training, official dataset edits, sealed input/output/label inspection, MD or TTM. Inputs are reused-development-family training acquisitions, never independent validation. Do not publish large gpw files. Deliver scripts, manifest, README and SHA256SUMS. Publish and continue any ready assigned queue without requiring user relay."
+    "v19_dft_execution_pack": "After publishing v18_iteration_review, proceed automatically. Write only coordination/reports/window-b/v19_dft_execution_pack/. Use exactly the six recommended candidates in v19_residual_direction_geometry_design/manifest.json, independently reviewed by A in mace_periodic_v18_clean_core/review_v19_candidates.json. Prepare reproducible six-input execution and archive draft, source hashes and owner split A positive signs (3), B negative signs (3). Preserve geometry, IDs/order, cell/PBC and pair markers; absent lammps_type is optional metadata, do not invent it. Use existing validated GPAW runners with PW-PBE500 eV/Gamma/Fermi0.1 eV, native extrapolated energy and separately free energy, four MPI ranks and one BLAS thread/rank. Provide resumable queue/progress and converged finite energy/forces plus exact input/output identity and hash verification. Launch must remain DISABLED pending A review/integration and explicit owner job registration. No DFT, inference, training, official dataset edits, sealed input/output/label inspection, MD or TTM. Inputs are reused-development-family training acquisitions, never independent validation. Do not publish large gpw files. Deliver scripts, manifest, README and SHA256SUMS. Publish and continue any ready assigned queue without requiring user relay.",
+    "v19_negative_residual_dft": "Execute python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/run_queue.py window-b. Three assigned labels only; verify/archive/publish each before next. Existing unfinished run stops for same-checkpoint review; do not restart in a new directory. No model training, withheld labels, MD or TTM."
   }
 }

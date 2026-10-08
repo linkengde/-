@@ -4,7 +4,7 @@
   "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",
   "updated_utc": "2026-10-08T01:11:31.630637+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V18 clean30 completed80 epochs and frozen epoch79; development screen FAIL. Final model/checkpoint, full logs and per-atom metrics published. Withheld labels unopened; B V18 review is unblocked.",
+  "current_stage": "V19 residual-direction DFT assigned three labels; launch pending local environment/no-duplicate checks",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -44,7 +44,10 @@
     "V17_development_evaluation_run03": "completed; evaluation_dev_01 status FAIL; all energy gates pass; all force-vector gates fail; only AgC separation passes; withheld labels not opened.",
     "V18_clean_core_dataset": "completed; SCF iteration 30; updated 2026-10-08T00:01:14.031895+00:00",
     "V18_clean_core_training": "completed; SCF iteration 80; updated 2026-10-08T01:11:31.630637+00:00",
-    "V18_development_evaluation": "completed; FAIL; same3 reused development structures; no test/withheld labels."
+    "V18_development_evaluation": "completed; FAIL; same3 reused development structures; no test/withheld labels.",
+    "AgC_residual_mode_p_06_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered",
+    "AgSi_residual_mode_p_03_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered",
+    "AgTi_residual_mode_p_03_v19_acq": "queued; V19 exact-byte residual-direction acquisition, owner registered"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -68,7 +71,10 @@
     "AgC_framework_neighbor_p_acq_v17_01": "completed",
     "AgSi_transverse_Ag_p_acq_v17_01": "completed",
     "AgSi_framework_neighbor_p_acq_v17_01": "completed",
-    "AgTi_framework_neighbor_p_acq_v17_01": "completed"
+    "AgTi_framework_neighbor_p_acq_v17_01": "completed",
+    "AgC_residual_mode_p_06_v19_acq": "queued",
+    "AgSi_residual_mode_p_03_v19_acq": "queued",
+    "AgTi_residual_mode_p_03_v19_acq": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -94,11 +100,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_rank_recovery_parallel",
     "research/mace-v12-transfer/periodic_interface_v4/V17_REVIEW_DECISION.json",
-    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core"
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Read B V18 matched/cumulative review and targeted proposals before freezing the next dataset/recipe. Preserve gates and independent withheld labels; no production MD/TTM from provisional screening.",
+  "next_action": "Execute python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/run_queue.py window-a. Three assigned labels only; verify/archive/publish each before next. Existing unfinished run stops for same-checkpoint review; do not restart in a new directory.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "40f189e9-44af-4d33-8992-e3b7b44dbf3b",

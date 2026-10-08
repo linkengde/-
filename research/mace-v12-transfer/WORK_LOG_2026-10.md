@@ -459,3 +459,6 @@ Reviewed v18_iteration_review/report.md and verified all four SHA256 entries. Ma
 
 ### V19 A input staging and storage blocker
 Prepared three positive-sign geometry-reviewed candidates byte-identically in pbe_interface_v19_main_residual_acquisition/inputs with SHA256 manifest. B execution pack is registered running (design-only). No DFT started. Disk has only369MB available; previous runner writes full state.gpw. A identified untracked, unselected V17/V18 epoch0–78 checkpoint files as a concrete cleanup proposal, preserving selected79/models/logs/all tracked artifacts. No files deleted; deletion requires user approval.
+
+### V19 execution integration
+User-approved deletion completed for158 untracked nonselected V17/V18 epoch checkpoints (~4.99GiB); selected79/models/logs/tracked files retained. Free disk5.4GiB. Verified B execution-pack SHA256 entries and integrated separate production pbe_interface_v19_residual_acquisition; report drafts remain disabled. Explicit A positive/B negative owner registration, four-rank MPI/ScaLAPACK and actualCPU checks, no-active-run guard, same-state unfinished-run stop, exact geometry/hash/finite/convergence archive verification and compact per-label publication. Training and withheld labels remain untouched.
