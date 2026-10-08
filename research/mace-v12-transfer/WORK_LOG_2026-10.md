@@ -517,3 +517,7 @@ MESH_SENSITIVITY_EXCEEDS_PROVISIONAL_BUDGET. Both new compact pilot archives ind
 ### A reviews completed 4/5/6 mesh ladder
 
 All three verified comparisons pass energy and pair gates but fail the unchanged0.01eV/A force-vector gate:4/5=0.021587787,4/6=0.010490677,5/6=0.018921803. No rounding to pass or general convergence claim. Published per-element/top-atom force diagnosis and launch-disabled matched5/6 sigma0.05 proposal; current data cannot identify smearing causality. Existing runner hardcodes sigma0.1, so per-record method guards and separate execution preparation are required before any new registration/launch. Vacuum/development-label work and V19 training remain downstream.
+
+### Controlled width0.05 follow-up registered
+
+User continued after launch-disabled smearing proposal and requested9h sustained work. Separate pbe_interface_v19_cif_smearing_pilot preserves original archives and exact frozen52atom input. A5x5/B6x6 new owner-bound labels; only Fermi width changes0.1->0.05. Calculator reads manifest width; verifier checks full method; queue/direct runner verify pinned entry inventory. Disabled-launch and synthetic method/wrong-width/missing-result guards passed; synthetic fixture is not DFT validation. Registration publication precedes A launch; B executes only own label. No vacuum until numerical evidence supports it, no training or sealed access.

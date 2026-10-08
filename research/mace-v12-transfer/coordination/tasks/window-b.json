@@ -16,7 +16,8 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_rank_recovery_parallel",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot"
   ],
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
   "queued_work_order": [
@@ -144,13 +145,14 @@
     "v19_cif_k4x4_pilot_DFT": "ready;2x2 done and mesh sensitivity failure independently reproduced by A",
     "v19_cif_mesh_ladder_assessment": "completed; SCF iteration 1; updated 2026-10-08T11:05:24.814567+00:00",
     "environment_restart_handover": "ready; all four pilot archives independently reverified by A",
-    "AgSi_COD9009647_pilot_k6x6": "completed; SCF iteration 43; updated 2026-10-08T13:07:40.683506+00:00"
+    "AgSi_COD9009647_pilot_k6x6": "completed; SCF iteration 43; updated 2026-10-08T13:07:40.683506+00:00",
+    "AgSi_COD9009647_pilot_k6x6_sigma0p05": "registered_queued; numerical-only sigma0.05 same-geometry/mesh control"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "After environment verification run exact label: python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/run_queue.py window-b AgSi_COD9009647_pilot_k6x6. Verify and publish compact archive; no training integration.",
+  "next_action": "Run only: python3 research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot/run_queue.py window-b AgSi_COD9009647_pilot_k6x6_sigma0p05. Verify/publish compact archive, compare own fixed-mesh width0.1 baseline and new5/6 pair. No old mesh restart/training/sealed access.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-08T15:07:50.220252+00:00",
+  "updated_utc": "2026-10-08T15:08:26.751982+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -171,7 +173,8 @@
     "AgTi_residual_mode_m_03_v19_acq": "completed",
     "AgSi_COD9009647_pilot_k2x2": "completed",
     "AgSi_COD9009647_pilot_k4x4": "completed",
-    "AgSi_COD9009647_pilot_k6x6": "queued"
+    "AgSi_COD9009647_pilot_k6x6": "queued",
+    "AgSi_COD9009647_pilot_k6x6_sigma0p05": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -184,7 +187,7 @@
     "updated_utc": "2026-10-08T13:07:40.683506+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "Registered new-owner 6x6x1 matched-geometry pilot; no old mesh restart",
+  "current_stage": "Controlled width0.05 pilot registered; old width0.1 archives preserved",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -245,6 +248,7 @@
   ],
   "handover_consumed": "v19_four_meshes_completed_20261008",
   "label_result_directories": {
-    "AgSi_COD9009647_pilot_k6x6": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot"
+    "AgSi_COD9009647_pilot_k6x6": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot",
+    "AgSi_COD9009647_pilot_k6x6_sigma0p05": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot"
   }
 }
