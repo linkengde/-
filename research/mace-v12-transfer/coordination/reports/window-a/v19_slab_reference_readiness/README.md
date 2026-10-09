@@ -14,7 +14,7 @@ Pass budgets used for these *numerical sensitivity controls*: absolute native/fr
 
 ## What these checks support
 
-The published controls support using 6×6×1 and σ=0.10 as the next practical slab reference settings and show small separate vacuum-size and dipole sensitivities on this one AgSi geometry. The directly relevant gap-scan parent has **26.0003 Å geometric empty length, PBC=(T,T,F), and dipolelayer=xy**, so its exact combined method still needs its own parent label. The current 26 Å periodic/no-dipole archive and 16 Å dipole toggle are not an exact substitute for that label.
+The published controls provide a provisional starting recipe of 6×6×1 and σ=0.10 and show small separate vacuum-size and dipole sensitivities on this one AgSi geometry. They do not establish mesh or smearing convergence for the nonperiodic-z slab: the mesh and smearing ladders use fully periodic z. The directly relevant parent has **26.0003 Å geometric empty length, PBC=(T,T,F), and dipolelayer=xy**; its current DFT run is a provisional reference point, not a convergence result.
 
 The reference geometry has a maximum force near 0.95 eV/Å. These are fixed-ion numerical comparisons, not relaxed-interface stability tests. They do not measure candidate-potential errors, do not establish independent validation, and do not establish AgC/AgTi accuracy. All three terminations derive from the same CIF family.
 
@@ -22,7 +22,7 @@ The reference geometry has a maximum force near 0.95 eV/Å. These are fixed-ion 
 
 Run only `AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19`, owned by window A, as the exact 26 Å / dipole-on boundary reference. Keep the other eight rigid-separation records disabled. After archive verification, assess the exact-method force response and decide whether to run a same-vacuum dipole-off contrast or the 36 Å dipole-on control before enabling any ±0.20 Å separation labels. Do not interpret the parent result as a force-error pass for the candidate potential.
 
-The 26 Å dipole-off and 36 Å dipole-on proposals remain geometry-only, unlabelled controls. The 36 Å calculation is conditional: run it if the parent result or a matched 26 Å dipole contrast indicates a material boundary effect.
+The 26 Å dipole-off and 36 Å dipole-on proposals remain geometry-only, unlabelled controls. Before enabling any ±0.20 Å gap point, run a target-slab 4×4×1/6×6×1/8×8×1 mesh ladder and σ=0.05/0.10/0.20 controls at fixed geometry and boundary settings, then compare 26 Å and 36 Å with one fixed dipole setting. The existing 26 Å dipole-OFF and 36 Å dipole-ON proposals change two variables and cannot isolate vacuum sensitivity. A full vacuum-by-dipole matrix is needed to quantify their interaction.
 
 ## Reproducibility
 
