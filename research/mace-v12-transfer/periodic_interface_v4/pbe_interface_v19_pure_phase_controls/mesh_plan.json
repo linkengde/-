@@ -195,5 +195,24 @@
   ],
   "acceptance": "Budgets proposed2meV/atom,0.01eV/A vector; pair gate inapplicable. Consecutive meshes plus displaced/strained controls and width/cutoff checks required before convergence claim.",
   "equilibrium_caveat": "Symmetry can make bulk forces zero at every mesh; baseline force pass is not displaced/strain force accuracy.",
-  "roles": "Pure-phase perturbations share parents; numerical controls only, not independent interface validation."
+  "roles": "Pure-phase perturbations share parents; numerical controls only, not independent interface validation.",
+  "follow_up_control": {
+    "label": "Ti3SiC2_baseline_k10x10x2_v19",
+    "phase": "Ti3SiC2",
+    "kpts": [
+      10,
+      10,
+      2
+    ],
+    "fixed_variable": "kz held at 2; same frozen 48-atom geometry, source hash, PBE/PW 500 eV, 0.1 eV smearing, and other method settings",
+    "in_plane_axis_spacing_invA": [
+      0.11864591098833802,
+      0.11864591098833802
+    ],
+    "z_axis_spacing_invA": 0.1782615628898796,
+    "raw_kpoints_upper_bound": 200,
+    "raw_work_ratio_vs_8x8x2": 1.5625,
+    "reason": "The verified 6x6x2→8x8x2 and 6x6x4→8x8x4 force-vector RMS values exceed the 0.01 eV/A budget while kz-only increments pass. This control isolates further in-plane refinement at kz=2.",
+    "status": "registered_ready"
+  }
 }

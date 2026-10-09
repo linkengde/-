@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-09T16:02:45.793559+00:00",
+  "updated_utc": "2026-10-09T16:10:26.212359+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "Ti3SiC2 6x6x2 vs 8x8x4 force budget failed; registered 8x8x2 in-plane isolation control",
+  "current_stage": "Ti3SiC2 2x2 factorial complete; in-plane force-vector RMS exceeds 0.01 eV/A, registering 10x10x2 at fixed kz=2",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -60,10 +60,11 @@
     "AgSi_COD9009647_pilot_k8x8": "completed; SCF iteration 41; updated 2026-10-09T02:53:59.751590+00:00",
     "AgSi_COD9009647_vacuum26_k6x6_sigma0p10": "completed; SCF iteration 51; updated 2026-10-09T05:49:43.731088+00:00",
     "AgSi_originalvac_slab_dipole_off_v19": "running; SCF iteration 40; updated 2026-10-09T07:22:21.341544+00:00",
-    "Ti3SiC2_baseline_k4x4x2_v19": "running; SCF iteration 40; updated 2026-10-09T08:00:36.585259+00:00",
-    "Ti3SiC2_baseline_k6x6x2_v19": "running; SCF iteration 40; updated 2026-10-09T09:12:52.165461+00:00",
-    "Ti3SiC2_baseline_k8x8x4_v19": "completed; SCF iteration 40; elapsed 15229s; archive verification PASS; mesh comparison force gate FAIL",
-    "Ti3SiC2_baseline_k8x8x2_v19": "running; SCF iteration 30; updated 2026-10-09T15:35:51.757006+00:00"
+    "Ti3SiC2_baseline_k4x4x2_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
+    "Ti3SiC2_baseline_k6x6x2_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
+    "Ti3SiC2_baseline_k8x8x4_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
+    "Ti3SiC2_baseline_k8x8x2_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
+    "Ti3SiC2_baseline_k10x10x2_v19": "queued; registered fixed-kz in-plane follow-up after 8x8 force comparison exceeded force budget"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -102,7 +103,8 @@
     "Ti3SiC2_baseline_k4x4x2_v19": "completed",
     "Ti3SiC2_baseline_k6x6x2_v19": "completed",
     "Ti3SiC2_baseline_k8x8x4_v19": "completed",
-    "Ti3SiC2_baseline_k8x8x2_v19": "completed"
+    "Ti3SiC2_baseline_k8x8x2_v19": "completed",
+    "Ti3SiC2_baseline_k10x10x2_v19": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -144,7 +146,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Run Ti3SiC2_baseline_k8x8x2_v19 and compare with the verified 6x6x2 baseline at fixed kz=2; then decide the bulk in-plane mesh. Keep the nine-point interface scan disabled until 26A vacuum/dipole controls are checked.",
+  "next_action": "Run Ti3SiC2_baseline_k10x10x2_v19, verify and publish the archive, then compare 8x8x2→10x10x2 against the same 2 meV/atom energy and 0.01 eV/A force-vector RMS budgets; do not claim broad convergence from one frozen geometry.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -171,7 +173,8 @@
     "Ti3SiC2_baseline_k4x4x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ti3SiC2_baseline_k6x6x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ti3SiC2_baseline_k8x8x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ti3SiC2_baseline_k8x8x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ti3SiC2_baseline_k8x8x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ti3SiC2_baseline_k10x10x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
