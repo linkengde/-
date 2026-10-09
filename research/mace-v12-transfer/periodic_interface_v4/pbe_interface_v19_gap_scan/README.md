@@ -1,0 +1,7 @@
+# CIF-parent Ag-layer separation controls (disabled)
+
+Nine same-composition, same-cell candidates cover three terminations and rigid Ag-layer z shifts −0.20, 0, +0.20 Å. Inputs come from the audited COD9009647 parents, expand the z cell to 44.2058765 Å and translate all ions +5 Å, then set slab PBC TTF and dipolelayer xy. Species, order, original IDs and marked pair are retained. The launch manifest is disabled while A completes Ti3SiC2 k8 mesh and reviews the PW boundary/reference target.
+
+A owns the three AgSi points; B owns the three AgC and three AgTi points. All come from one CIF parent and are training/numerical diagnostics, not independent validation. Method: PBE PW500, 6x6x1, Fermi smearing0.10 eV, GPAW26.7/ASE3.29/PAW1.2.1, dipole correction xy, four ranks and one BLAS thread. Keep native extrapolated energy and free energy separate. Fixed nuclei only.
+
+The queue accepts only an exact registered label and checks full root/source/input hashes, transformations, geometry, IDs, method, dipole/PBC, owner, CPU/disk and output absence. It verifies and publishes compact archives; large .gpw remains local. No queue entry is enabled until target review. Relative gap energies are meaningful only within each exact parent. Do not compare raw energies across a different stoichiometry/cell. A three-point rigid scan does not establish an absolute interface energy, independent accuracy, relaxed bonding, thermal stability or Stage69 provenance.

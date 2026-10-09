@@ -20,7 +20,8 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing_pilot",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing020_pilot",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   ],
   "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
   "queued_work_order": [
@@ -187,11 +188,20 @@
     "Ag_shear_p005_k6x6x6_v19": "completed; SCF iteration 13; elapsed 2021s; updated 2026-10-09T10:12:50.941571+00:00",
     "Ag_shear_m005_k8x8x8_v19": "running; SCF iteration 10; updated 2026-10-09T11:18:42.526468+00:00",
     "Ag_shear_p005_k8x8x8_v19": "completed; SCF iteration 13; elapsed 4374s; updated 2026-10-09T12:41:28.106822+00:00",
-    "v19_interface_normal_separation_entry_preparation": "running; SCF iteration 4; updated 2026-10-09T13:08:21.647297+00:00"
+    "v19_interface_normal_separation_entry_preparation": "running; SCF iteration 4; updated 2026-10-09T13:08:21.647297+00:00",
+    "AgC_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgC_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgC_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Start v19_interface_normal_separation_entry_preparation now; prepare minimal verified gap controls and existing-label reuse ledger; no physical launches until A registers.",
+  "next_action": "Gap scan entries are registered but disabled. Wait for A to publish Ti3SiC2 k8 mesh and fix target; then run B-owned AgC/AgTi labels only after manifest enablement.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-09T13:08:21.647297+00:00",
   "labels": {
@@ -232,7 +242,16 @@
     "Ag_shear_m005_k6x6x6_v19": "completed",
     "Ag_shear_p005_k6x6x6_v19": "completed",
     "Ag_shear_m005_k8x8x8_v19": "completed",
-    "Ag_shear_p005_k8x8x8_v19": "completed"
+    "Ag_shear_p005_k8x8x8_v19": "completed",
+    "AgC_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgC_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgC_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
+    "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -307,7 +326,8 @@
     "v19_Ag_k8_baseline_and_volume_curve": "Run only Ag_baseline_k8x8x8_v19 now, production run_queue.py EXACT_LABEL; publish started, verify/archive/publish. Do not repeat completed volume k8 or baseline k6. Compare baseline k6/k8 with unchanged 2meV/atom and0.01eV/A numerical budgets, free energy separately. Then assemble all-k8 baseline-subtracted +/-2% volume curve using already-verified k8 archives; record native/free ordering/deltas and input/PAW/method identities. Compare same-geometry EAM volume deltas from A candidate02_Ag_EAM_pure_phase_check/report.json, reference hashes and differences; do not compare raw energy zeros or claim optimized lattice/thermal stability. All three points share a parent and are not independent interface validation. No parameter fitting/adoption, MD/heating, training, sealed access or additional unregistered launch; stop on failure preserving output, stop after publication.",
     "v19_Ag_shear_response_controls": "Prerequisite: finish/verify/publish Ag_baseline_k8x8x8_v19 and its assigned baseline k6/k8 plus matched-volume report; do not skip/repeat it. Then run Ag_shear_m005_k6x6x6_v19, Ag_shear_p005_k6x6x6_v19 sequentially with production run_queue.py EXACT_LABEL, four MPI ranks/one thread and no other local DFT. Inputs reuse existing reviewed +/-0.005 shear geometry bytes; k6 target remains proposed for shear, not separately certified by displacement/volume checks. Publish starting status per job, converge, verify/archive/publish before next. Failure stops queue preserving existing output/checkpoint. Analyze matched shear +/- energy symmetry and baseline-subtracted native/free energy per atom using completed k6 baseline; record forces and source/method hashes. No stress validation: runner does not export stress. No minimum/optimized lattice, elastic constants or300K stability claim from two static points. Prepare same-geometry EAM input list; A will compare actual EAM. No training, parameter adoption, MD/TTM, sealed access or other unregistered launch. If baseline k8 is already completed, start shear now after verifying publication. Stop after report, await A review for shear mesh sensitivity.",
     "v19_Ag_shear_k6_k8_controls": "Run Ag_shear_m005_k8x8x8_v19, Ag_shear_p005_k8x8x8_v19 sequentially using production run_queue.py EXACT_LABEL. Identical reviewed shear +/-0.005 inputs to completed k6; only mesh changes. First publish start, then converge/verify/archive/publish before next; four MPI ranks/one thread, local exclusive lock. Stop failure/preserve outputs, never repeat k6 or other completed jobs. Compare respective k6/k8 native/free energy per atom and all-atom vector RMS/max; unchanged numerical budgets2meV/atom and0.01eV/A vector. Compare within-k8 shear energies relative to completed Ag_baseline_k8x8x8_v19, preserve energy convention and method/input/source hashes. Small symmetric forces and +/- symmetry are not elastic constants, broad thermal stability or independent interface validation; no stress exported. Prepare completed EAM static input list. No parameter adoption/fitting, MD/heating, training, sealed access or other unregistered launch. Publish final report and stop.",
-    "v19_interface_normal_separation_entry_preparation": "Start now under coordination/reports/window-b/v19_interface_normal_separation_entry_preparation/. Publish starting status. Reuse existing reviewed uploaded-CIF-derived AgC/AgSi/AgTi label-free geometries and parent/source hashes; locate exact published files, verify inventories. Do not invent Stage69 or independent-validation provenance. Prepare a minimal controlled normal-separation proposal for each termination: parent gap and rigid Ag-subsystem normal translations -0.20A and +0.20A (proposals only; reject unsafe overlaps with species-aware periodic distances). Preserve framework, lateral registry, cell/PBC, atom order and IDs exactly; identify Ag subsystem and physical surface normal from geometry rather than moving only the marked atom. Document pair distance, actual slab gap, source and parent hashes, overlap screening and translation vector. If existing reviewed geometry does not define a meaningful Ag-layer separation, stop that proposal with evidence instead of inventing one. Compare exact source geometry hashes/input bytes against permitted already-published training/numerical DFT input manifests (exclude sealed files) to avoid duplicate baselines or displacements; identify existing reusable labels with their numeric-method limitations. Do not claim 486 classical points are DFT. Mark all proposals train_or_numerical_diagnostic_only, launch_enabled=false, owner=null; common numerical target pending A mesh/boundary/energy review. This does not create independent validation because all three terminations share CIF parent. Prepare joint energy/force analysis specification: native/free separate, matched rigid separation energy differences, projected net Ag-subsystem force and marked pair plus allatom vectors, finite-step consistency and separation-reference/interface-area definitions. Absolute interface energy requires matched separated-phase references, not raw purephase totals; explain finite-smearing force consistency. Deliver generator, verified input manifest/geometries, per-parent duplicate/reuse ledger, README and SHA256. No DFT/mpirun, model inference/training, official dataset/production edits, MD/heating, potential changes or sealed geometry/label access. Publish each stage then completion, wait A registration."
+    "v19_interface_normal_separation_entry_preparation": "Start now under coordination/reports/window-b/v19_interface_normal_separation_entry_preparation/. Publish starting status. Reuse existing reviewed uploaded-CIF-derived AgC/AgSi/AgTi label-free geometries and parent/source hashes; locate exact published files, verify inventories. Do not invent Stage69 or independent-validation provenance. Prepare a minimal controlled normal-separation proposal for each termination: parent gap and rigid Ag-subsystem normal translations -0.20A and +0.20A (proposals only; reject unsafe overlaps with species-aware periodic distances). Preserve framework, lateral registry, cell/PBC, atom order and IDs exactly; identify Ag subsystem and physical surface normal from geometry rather than moving only the marked atom. Document pair distance, actual slab gap, source and parent hashes, overlap screening and translation vector. If existing reviewed geometry does not define a meaningful Ag-layer separation, stop that proposal with evidence instead of inventing one. Compare exact source geometry hashes/input bytes against permitted already-published training/numerical DFT input manifests (exclude sealed files) to avoid duplicate baselines or displacements; identify existing reusable labels with their numeric-method limitations. Do not claim 486 classical points are DFT. Mark all proposals train_or_numerical_diagnostic_only, launch_enabled=false, owner=null; common numerical target pending A mesh/boundary/energy review. This does not create independent validation because all three terminations share CIF parent. Prepare joint energy/force analysis specification: native/free separate, matched rigid separation energy differences, projected net Ag-subsystem force and marked pair plus allatom vectors, finite-step consistency and separation-reference/interface-area definitions. Absolute interface energy requires matched separated-phase references, not raw purephase totals; explain finite-smearing force consistency. Deliver generator, verified input manifest/geometries, per-parent duplicate/reuse ledger, README and SHA256. No DFT/mpirun, model inference/training, official dataset/production edits, MD/heating, potential changes or sealed geometry/label access. Publish each stage then completion, wait A registration.",
+    "v19_registered_gap_scan": "Registered gap scan lives at research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan. Launch is disabled pending A decision. B owns the AgC and AgTi parent/±0.20A points; after A enables and publishes target, run only B-owned labels sequentially, verify/archive/publish each. Four ranks/one thread. Report native/free gap energy, net Ag-layer normal force, marked pair projection and all-atom forces. Same CIF parent; never call independent validation."
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
@@ -338,6 +358,15 @@
     "Ag_shear_m005_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_shear_p005_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_shear_m005_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ag_shear_p005_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ag_shear_p005_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "AgC_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgC_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgC_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
+    "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   }
 }
