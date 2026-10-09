@@ -1,0 +1,1605 @@
+{
+  "candidate": {
+    "candidate_id": "V18 clean-core selected final model",
+    "checkpoint_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/checkpoints/MACE_periodic_v18_clean_core_run-45_epoch-79.pt",
+    "lineage_checks": {
+      "dataset_manifest_training_hash_matches": true,
+      "epoch79_is_published_in_artifact_manifest": true,
+      "model_is_published_in_artifact_manifest": true,
+      "selection_dataset_manifest_hash_matches": true,
+      "selection_epoch79_checkpoint_hash_matches": true,
+      "selection_model_hash_matches": true,
+      "selection_training_hash_matches": true
+    },
+    "lineage_hashes": {
+      "artifact_manifest_sha256": "a14de2802f9aa7921029dc3ed03f04183839c6018bd4c7245ef5abc552ca3b81",
+      "dataset_manifest_sha256": "36fb89632293cd5fcd494a4ad7665aeabb575ee1f6cc7633fa913ff7a1f1bdec",
+      "epoch79_checkpoint_sha256": "d9faab45f32df7366b32f44a9f91c1aab9c72f2df422f24c9996fa3243b2c137",
+      "model_sha256": "757586671174db85acbf7971ccfe92de19cc58378ee2431a797efa6d6163cb62",
+      "selection_record_sha256": "d4245492e7d79659a39377cc369f5b43123d876b553eff13043d5e7a534adfe4",
+      "training_input_sha256": "20279d8aae53baf186546eb4a4dc396bb71e92de9d1c874d1c6fa0022313c045"
+    },
+    "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/models/MACE_periodic_v18_clean_core.model",
+    "newer_v19_candidate": {
+      "executable_model_files": [],
+      "manifest_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response/training_candidate/manifest.json",
+      "manifest_sha256": "d3dc4e94d12b941c6bb5b24cec52c96d4e0e14694ada7e51051bd8c5ede9351d",
+      "status": "TRAINING_CANDIDATE_ONLY_BLOCKED_PENDING_INDEPENDENT_DEVELOPMENT",
+      "training_authorized": false
+    },
+    "runtime": {
+      "inference_runtime_available": false,
+      "mace_module_available": false,
+      "mace_torch_version": null,
+      "python_executable": "/workspace/.venvs/gpaw-mpi/bin/python",
+      "python_version": "3.12.14",
+      "torch_module_available": false,
+      "torch_version": null
+    },
+    "selection": {
+      "blind_labels_used_for_selection": false,
+      "completed_epochs": 80,
+      "exported_state_equals_epoch79": true,
+      "original_launcher_exit_receipt": "UNAVAILABLE",
+      "reviewed_by": "window-a",
+      "selected_epoch": 79,
+      "selection_uses_only_training_validation": true,
+      "test_file_passed_to_training": false,
+      "training_exit_code": null
+    },
+    "training_data": {
+      "development_or_test_file_contents_read": false,
+      "limitations": [
+        "Removing 14 partial-source rows also removes coverage; adding frame0 changes membership and its declared mesh.",
+        "Archive support does not establish method uniformity or k-point convergence.",
+        "Development structures are reused; this comparison is not fresh blind validation."
+      ],
+      "manifest_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/data/dataset_manifest.json",
+      "manifest_status": "PROVISIONAL_CLEAN30_CONTROLLED_SCREENING",
+      "roles_from_manifest": {
+        "development_validation": 3,
+        "test": 0,
+        "train": 30
+      },
+      "train_frame_count": 30,
+      "train_input_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/data/train.extxyz",
+      "train_input_sha256": "20279d8aae53baf186546eb4a4dc396bb71e92de9d1c874d1c6fa0022313c045",
+      "withheld_labels_opened": false
+    }
+  },
+  "decision": {
+    "eligible_to_run_inference_in_this_environment": false,
+    "frozen_v18_candidate_hash_lineage_passes": true,
+    "global_training_geometry_overlap_found": false,
+    "interpretation": "The pinned V18 model can only support a non-independent one-family diagnostic after an approved existing MACE runtime is available. The local Ag-Si contact motif overlaps training; do not report this as independent validation or a production pass.",
+    "local_ag_si_contact_overlap_found": true,
+    "v18_candidate_is_only_a_provisional_numerical_screen": true,
+    "v19_candidate_has_executable_model": false
+  },
+  "inference": {
+    "Ag_layer_normal_force_metrics": null,
+    "force_vector_metrics": null,
+    "gates_evaluated": false,
+    "marked_pair_separation_metrics": null,
+    "per_species_force_metrics": null,
+    "performed": false,
+    "reason": "Neither PyTorch nor mace-torch is installed in the only available Python environments. This task forbids package installation.",
+    "status": "NOT_RUN_RUNTIME_MISSING"
+  },
+  "provisional_gates": {
+    "force_vector_RMSE_eV_A": 0.05,
+    "separating_force_abs_error_eV_A": 0.1
+  },
+  "reference_archives": [
+    {
+      "atom_count": 52,
+      "cell_A": [
+        [
+          6.115,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0574999999999988,
+          5.295745344141843,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.2058765
+        ]
+      ],
+      "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+      "energy_eV_cell": -390.44395403993826,
+      "formula": "C16Ag4Si8Ti24",
+      "free_energy_eV_cell": -390.8344924416025,
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_COD9009647_pilot_k6x6",
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "relative_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/calculations/AgSi_COD9009647_pilot_k6x6",
+      "result_sha256": "e96af31eaad63d66b821391c492bee5687333e9c395d686f653ffd37debabf45",
+      "scf_converged": true,
+      "sha256_inventory": {
+        "files": [
+          {
+            "actual": "e96af31eaad63d66b821391c492bee5687333e9c395d686f653ffd37debabf45",
+            "expected": "e96af31eaad63d66b821391c492bee5687333e9c395d686f653ffd37debabf45",
+            "file": "AgSi_COD9009647_pilot_k6x6_PW_PBE.extxyz",
+            "pass": true
+          },
+          {
+            "actual": "df7f11fa0817a60226dabae8a8c1960e42dd542f4957cbfbe34dfbc6047abff1",
+            "expected": "df7f11fa0817a60226dabae8a8c1960e42dd542f4957cbfbe34dfbc6047abff1",
+            "file": "gpaw.log",
+            "pass": true
+          },
+          {
+            "actual": "b7069a5228dd33b8079f80891b38340d36ae1307bc73e27dfa8bb8a3ca11c203",
+            "expected": "b7069a5228dd33b8079f80891b38340d36ae1307bc73e27dfa8bb8a3ca11c203",
+            "file": "progress.json",
+            "pass": true
+          },
+          {
+            "actual": "164a67288caf43bba6b39a50cadaaa7d3b47e744bdb910355f512df4ad78e61d",
+            "expected": "164a67288caf43bba6b39a50cadaaa7d3b47e744bdb910355f512df4ad78e61d",
+            "file": "summary.json",
+            "pass": true
+          },
+          {
+            "actual": "78da8d9341dff315a844ab95e28722881f8cec703001a368a0cadada94729038",
+            "expected": "78da8d9341dff315a844ab95e28722881f8cec703001a368a0cadada94729038",
+            "file": "verification.json",
+            "pass": true
+          }
+        ],
+        "files_checked": 5,
+        "status": "PASS"
+      },
+      "smearing_eV": 0.1,
+      "source_hash_verified": true,
+      "source_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "verification_checks_passed": 16,
+      "verification_status": "PASS"
+    },
+    {
+      "atom_count": 52,
+      "cell_A": [
+        [
+          6.115,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0574999999999988,
+          5.295745344141843,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          44.2058765
+        ]
+      ],
+      "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+      "energy_eV_cell": -390.4447043038235,
+      "formula": "C16Ag4Si8Ti24",
+      "free_energy_eV_cell": -390.8352335129109,
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_COD9009647_vacuum26_k6x6_sigma0p10",
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "relative_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_vacuum_pilot/calculations/AgSi_COD9009647_vacuum26_k6x6_sigma0p10",
+      "result_sha256": "6d0961999eb3e2c92f878f5c7551df2bfded797b61e9e7e746a2a1de57a4e719",
+      "scf_converged": true,
+      "sha256_inventory": {
+        "files": [
+          {
+            "actual": "6d0961999eb3e2c92f878f5c7551df2bfded797b61e9e7e746a2a1de57a4e719",
+            "expected": "6d0961999eb3e2c92f878f5c7551df2bfded797b61e9e7e746a2a1de57a4e719",
+            "file": "AgSi_COD9009647_vacuum26_k6x6_sigma0p10_PW_PBE.extxyz",
+            "pass": true
+          },
+          {
+            "actual": "fe196252889eb230b4dc6e2b825202c4c8b5d776953a5eff52a429016a7b5ca5",
+            "expected": "fe196252889eb230b4dc6e2b825202c4c8b5d776953a5eff52a429016a7b5ca5",
+            "file": "gpaw.log",
+            "pass": true
+          },
+          {
+            "actual": "897f1980fdc0635da4e25858a16d6521da2eb6963d28326c7b862deaeebb9c23",
+            "expected": "897f1980fdc0635da4e25858a16d6521da2eb6963d28326c7b862deaeebb9c23",
+            "file": "progress.json",
+            "pass": true
+          },
+          {
+            "actual": "cba4a8205fc65bbe48483dfb650bff0916c094a4eb5133926f761b2664844a0b",
+            "expected": "cba4a8205fc65bbe48483dfb650bff0916c094a4eb5133926f761b2664844a0b",
+            "file": "summary.json",
+            "pass": true
+          },
+          {
+            "actual": "7128da490cbdd802095774050ffa12552750a94c424cdd49991912dda59b953c",
+            "expected": "7128da490cbdd802095774050ffa12552750a94c424cdd49991912dda59b953c",
+            "file": "verification.json",
+            "pass": true
+          }
+        ],
+        "files_checked": 5,
+        "status": "PASS"
+      },
+      "smearing_eV": 0.1,
+      "source_hash_verified": true,
+      "source_sha256": "81e73a08a241634fc751ed51323177576f502391049ff9476c4c7acf5665f46d",
+      "verification_checks_passed": 16,
+      "verification_status": "PASS"
+    }
+  ],
+  "scope": "Read-only model lineage, non-sealed training overlap, and public reference archive audit. No model inference, training, DFT/MPI, install, or sealed-label access.",
+  "status": "INFERENCE_BLOCKED_RUNTIME_MISSING",
+  "task": "v19_existing_AgSi_candidate_force_error_screen_window_b",
+  "training_overlap": {
+    "no_development_or_test_extxyz_read": true,
+    "references": [
+      {
+        "closest_training_AgSi_marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.7999999902467154,
+          "frame_index": 1
+        },
+        "exact_full_geometry_matches": [],
+        "global_near_geometry_rmsd_evaluated": false,
+        "interpretation": "No exact/global same-composition training frame; the marked Ag-X contact distance has a close local analogue and is not independent validation.",
+        "label": "AgSi_COD9009647_pilot_k6x6",
+        "local_contact_distance_overlap": true,
+        "marked_pair": {
+          "Ag_id": 19101048,
+          "Ag_index_zero_based": 48,
+          "X_id": 19101007,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.7795107544967093
+        },
+        "reference_geometry_sha256": "a0491798fce620580c41f2746edb46962ead490eff977f502550305e91765dd2",
+        "reference_source_hash_in_nonsealed_training_manifest": false,
+        "same_composition_atom_count_and_pbc_candidate_frames": [],
+        "same_composition_candidate_count": 0
+      },
+      {
+        "closest_training_AgSi_marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.7999999902467154,
+          "frame_index": 1
+        },
+        "exact_full_geometry_matches": [],
+        "global_near_geometry_rmsd_evaluated": false,
+        "interpretation": "No exact/global same-composition training frame; the marked Ag-X contact distance has a close local analogue and is not independent validation.",
+        "label": "AgSi_COD9009647_vacuum26_k6x6_sigma0p10",
+        "local_contact_distance_overlap": true,
+        "marked_pair": {
+          "Ag_id": 19101048,
+          "Ag_index_zero_based": 48,
+          "X_id": 19101007,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.7795107544967093
+        },
+        "reference_geometry_sha256": "9ed4411ec03347c4010533a5a654ac3ddb303f7ddfb39e6ce804ecbabd3aefcd",
+        "reference_source_hash_in_nonsealed_training_manifest": false,
+        "same_composition_atom_count_and_pbc_candidate_frames": [],
+        "same_composition_candidate_count": 0
+      }
+    ],
+    "summary": "Exact global duplicate search is clear for the two reference geometries. Full near-geometry RMSD was not computed because the V18 training set has no frame matching either target's atom count, composition, and PBC. Local Ag-Si contact geometry overlaps: the reference marked distance is about 2.7795 A and a clean30 AgSi training frame is about 2.8000 A.",
+    "training_file_read": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/data/train.extxyz",
+    "training_frames": [
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_d2p2_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 0,
+        "geometry_sha256": "2d3b2252b4524391b30bb1898bd4d61995a98c7290aad580be78473eb4159010",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.199999999710254
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_d2p8_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 1,
+        "geometry_sha256": "afaa1b422e0822db3879a23a4bd8972a2b37c64f3d19c2b4d671d14ec3bfddc2",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.7999999902467154
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_d2p0_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 2,
+        "geometry_sha256": "9b55b1e12af3b67c95a4fc8aa91662005b8649ad3b49846005ceb426f1090302",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 1.9999999990042783
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_d2p4_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 3,
+        "geometry_sha256": "45cc5b28462295c9115ebb172e57a3250c50c733d09bab220224e136c478bf42",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.4000000000230095
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_validation_d2p30_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 4,
+        "geometry_sha256": "d7f3b95dd49aff6d68a0c74d0963be7ce41e193498d691574322e049eff96c50",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.2999999936366904
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_validation_d2p60_periodic_PW_PBE_energy_force",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 5,
+        "geometry_sha256": "8507561a293c39463b8433b5464e013f3d33e2ab7a1d3f4a995f8157331231e6",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.600000003474848
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_validation_d2p60_periodic_PW_PBE_energy_force",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 6,
+        "geometry_sha256": "775a1f4a7c97b9b01beff6803a60d47916bdfac15905f5513a4b4cec014422d6",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.600000000616813
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 7,
+        "geometry_sha256": "eaecf8541d87e7aa9a8197c3e80e6f77441c4823c69edac06dcaab414e42bd0a",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.223900153947234
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 8,
+        "geometry_sha256": "8ca22d31316863b3add770ed41ec278e2bcedc3526f25e2d19dc46980a5008ac",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.4632442259130634
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 9,
+        "geometry_sha256": "96227976fc29eeabbca7e8c05cd8dcdc7379ecfe5bfabc20f95339ccf47b6644",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.5879870375495697
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 10,
+        "geometry_sha256": "89a52a1a4e12d6a9eb8f77537681669a57c41568ed30277407cbe74a23dcad71",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.2599629638032552
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 11,
+        "geometry_sha256": "8efa561ce41e4d5ee4e40310e1bef81cca2af08e069eea632ff22336ccecbeb4",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.44009398913327
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 12,
+        "geometry_sha256": "0f03a342e4bf72a3f83a20c0d366960c1f76b9e3e62e98c209b2dbaf65eae3df",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.2570623504740914
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 13,
+        "geometry_sha256": "17472b42e2dc456da9000b1428d5998235093cc00c4d377ae0ac287a2c8714b5",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.4505464981599925
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 14,
+        "geometry_sha256": "f2020889e880c90453c3ba0570dcc756bce98d4628fa170a84ce6546bfe7d639",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.6010311748957617
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 15,
+        "geometry_sha256": "ad1e33a1fd71938f17853a3c4f67df73ff8d5eaca9433dd05b9b238f9a5e064d",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.3043290969320154
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 16,
+        "geometry_sha256": "5f8a96b9ac458a77e30fead80aa63bcb91746bd2e393b845e6acd71148bd101a",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.4584667356823218
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 17,
+        "geometry_sha256": "01cbdbe84fc86f5ba7ca8fa346205e60052d83a28f5ee4babc5f87f5f9a34f0f",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.626818784063684
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 18,
+        "geometry_sha256": "a0c13375899c24a3559ef8845f0fc226aeb3c43e155b7ac5880de494c95003e4",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.6099629668318904
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 19,
+        "geometry_sha256": "21ccc932e344d142a15267a00bee3e88342784b47c5c478495f34bb373800cf1",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.9400939898518934
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 20,
+        "geometry_sha256": "e83807b9cc509f3033a4ed694e79c5696fde9713cdefc476e7bb880ba928dc41",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.9379870355304165
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_framework_neighbor_p_acq_v17_01",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 21,
+        "geometry_sha256": "6382e35765749d25489570d0b88f06e786e8b14bd32194928fc2c1ccb0e14e35",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.220253256225198
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_transverse_Ag_p_acq_v17_01",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 22,
+        "geometry_sha256": "babbe4977d92372284f5188794ba5c40eb67cc0e72a79f0e2568d9480f305cc2",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.444700116624624
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_framework_neighbor_p_acq_v17_01",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 23,
+        "geometry_sha256": "54ecdd194e69da2e4841f5fd13375b45830c46bf09cb09ade56196c0eddaf01c",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.448409623957272
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_framework_neighbor_p_acq_v17_01",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 24,
+        "geometry_sha256": "a54af8c2f15496dc0f31e36fce0c23e7da136f06c4e7c8b0eab53a7b64d3edfb",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.553771602372663
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 48,
+        "cell_lengths_A": [
+          28.139999999999997,
+          28.139999999999997,
+          28.139999999999997
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            2
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            10
+          ],
+          [
+            "Ti",
+            23
+          ]
+        ],
+        "config_type": "AgC_framework_neighbor_m_acq_v17_01",
+        "formula": "C13Ag2Si10Ti23",
+        "frame_index": 25,
+        "geometry_sha256": "c07d63c0f4b344fd1c292f54600064995f918fccce391e2248e2e8281f908840",
+        "marked_pair": {
+          "Ag_id": 688433,
+          "Ag_index_zero_based": 46,
+          "X_id": 604804,
+          "X_index_zero_based": 40,
+          "X_species": "C",
+          "distance_A": 2.299682733328507
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_transverse_Ag_m_acq_v17_01",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 26,
+        "geometry_sha256": "e3b9dcdbfafd9b7a8d031683e152c6fc6f4a88de102891431286c916dea92682",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.444700122643768
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 51,
+        "cell_lengths_A": [
+          27.86,
+          27.86,
+          27.86
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            17
+          ],
+          [
+            "C",
+            13
+          ],
+          [
+            "Si",
+            8
+          ],
+          [
+            "Ti",
+            13
+          ]
+        ],
+        "config_type": "AgSi_framework_neighbor_m_acq_v17_01",
+        "formula": "C13Ag17Si8Ti13",
+        "frame_index": 27,
+        "geometry_sha256": "fa24ea34d18b03894168b03ba0c7ba2ae700cdb8674ba385eca01b787bcb6772",
+        "marked_pair": {
+          "Ag_id": 683609,
+          "Ag_index_zero_based": 34,
+          "X_id": 366934,
+          "X_index_zero_based": 7,
+          "X_species": "Si",
+          "distance_A": 2.4324077916626874
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 49,
+        "cell_lengths_A": [
+          28.0,
+          28.0,
+          28.0
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            28
+          ],
+          [
+            "C",
+            11
+          ],
+          [
+            "Si",
+            1
+          ],
+          [
+            "Ti",
+            9
+          ]
+        ],
+        "config_type": "AgTi_framework_neighbor_m_acq_v17_01",
+        "formula": "C11Ag28SiTi9",
+        "frame_index": 28,
+        "geometry_sha256": "81385e80e6492e3fe42d1a335f4726d2cacc4f755e4cb29448585a8ef31e066d",
+        "marked_pair": {
+          "Ag_id": 687247,
+          "Ag_index_zero_based": 30,
+          "X_id": 479027,
+          "X_index_zero_based": 5,
+          "X_species": "Ti",
+          "distance_A": 2.6223661864287333
+        },
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      },
+      {
+        "atom_count": 32,
+        "cell_lengths_A": [
+          28.373468637371094,
+          3.077765785565338,
+          5.332601480612674
+        ],
+        "composition_key": [
+          [
+            "Ag",
+            10
+          ],
+          [
+            "C",
+            8
+          ],
+          [
+            "Si",
+            2
+          ],
+          [
+            "Ti",
+            12
+          ]
+        ],
+        "config_type": "Ti_gap_2p3_rank_recovery_v17_01",
+        "formula": "C8Ag10Si2Ti12",
+        "frame_index": 29,
+        "geometry_sha256": "41ccc4120d9930d94f7e2a66beba7ac519f8a73212e19f585bfcdb74ecfb676b",
+        "marked_pair": null,
+        "pbc": [
+          true,
+          true,
+          true
+        ]
+      }
+    ],
+    "training_frames_read": 30
+  }
+}

@@ -213,9 +213,9 @@
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Complete and publish the read-only slab-reference settings audit. Then execute v19_existing_AgSi_candidate_force_error_screen_window_b: audit candidate checkpoint and non-sealed training overlap, and run inference-only force/separation screening on public AgSi archives if eligible and MACE is already installed. No DFT/MPI, training, sealed labels, or A-task edits.",
+  "next_action": "Await the next B assignment. A future inference task requires an existing authorized MACE runtime; do not install packages under this completed screening task.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:26:27.821048+00:00",
+  "updated_utc": "2026-10-09T23:27:25.143812+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -279,7 +279,7 @@
     "updated_utc": "2026-10-09T23:26:27.821048+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "AgSi candidate force-error screen eligibility audit started; checking installed runtime and public model/data lineage",
+  "current_stage": "AgSi candidate eligibility audit complete; inference not run because MACE runtime is unavailable",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -427,7 +427,7 @@
       ]
     },
     "v19_existing_AgSi_candidate_force_error_screen_window_b": {
-      "status": "running",
+      "status": "completed_inference_blocked_runtime_missing",
       "assigned_utc": "2026-10-09T23:17:49.877905+00:00",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b",
       "mode": "read-only model/data eligibility audit; inference-only if an eligible non-overlapping candidate and installed MACE runtime are confirmed; no DFT/MPI/training",
@@ -452,7 +452,18 @@
         "Confirm exact model checkpoint hashes and input-to-training geometry non-overlap before inference.",
         "Keep native and free-energy conventions separate; report vector RMS and signed separation metrics separately."
       ],
-      "started_utc": "2026-10-09T23:23:03.151091+00:00"
+      "started_utc": "2026-10-09T23:23:03.151091+00:00",
+      "completed_utc": "2026-10-09T23:27:25.108872+00:00",
+      "inference_status": "NOT_RUN_RUNTIME_MISSING",
+      "lineage_and_overlap_audit": "V18 selected model/checkpoint/data hashes match; no exact or same-composition global train geometry match; local Ag-Si contact distance overlaps clean30.",
+      "evidence": "Two public DFT references passed archive checksum and verification; V19 candidate manifest has no executable model and training is unauthorized.",
+      "blocker": "PyTorch and mace-torch are absent in available interpreters; task guardrails prohibit installing packages.",
+      "published_outputs": [
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/README.md",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/eligibility.json",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/audit_candidate_eligibility.py",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/SHA256SUMS.txt"
+      ]
     }
   },
   "independent_mesh_reaudit": {
