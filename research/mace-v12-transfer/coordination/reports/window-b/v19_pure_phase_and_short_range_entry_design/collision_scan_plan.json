@@ -1,0 +1,80 @@
+{
+  "launch_enabled": false,
+  "owner_instance": null,
+  "pairs": [
+    "Ag-Ag",
+    "Ag-Ti",
+    "Ag-Si",
+    "Ag-C"
+  ],
+  "distance_grid_A": [
+    0.8,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.5,
+    3.0,
+    4.0,
+    5.0
+  ],
+  "finite_difference_step_A": 0.005,
+  "no_collision_inputs_generated": true,
+  "isolated_pair_boundary_proposal": "nonperiodic neutral two-atom cell with vacuum>=10A each side, spin/PAW/cutoff convergence reviewed; do not transfer metallic slab mesh blindly",
+  "embedded_environment_proposal": "TRAIN-only reviewed pure/surface parent, move one local Ag relative to target Ti/Si/C or Ag; fixed surrounding ions; all other species-pair distances screened; exclude development/test groups",
+  "metrics": {
+    "repulsive_force": "rhat points i->j, separating_force=dot(Fj-Fi,rhat)/2; positive for repulsion",
+    "energy_force": "separating_force compared with -(E(r+h)-E(r-h))/(2h) for symmetric pair displacement; compare native/free conventions separately and use force-consistent target for finite-width derivative",
+    "continuity": "finite E/F and smooth adjacent values/slopes; central differences plus h/2 spot checks, no arbitrary smoothness pass threshold before physical review",
+    "far_separation": "consistent asymptote after interaction isolation/boundary convergence"
+  },
+  "references_and_limits": [
+    "MACE multi-element model and current mixed potential must each declare species coverage, hybrid pair mapping, cutoff/units and any ZBL splice before comparable curves; current mixed-potential files are not established by this pack",
+    "ZBL assumes screened nuclear Coulomb repulsion with atomic numbers and screening; is a high-energy short-range asymptotic comparison, not an equilibrium chemical label",
+    "Sub-Angstrom PAW calculations may violate frozen-core/setup validity. Short grid points are design candidates only, not approved DFT or production inputs; hard-core subset requires reference/setup review",
+    "Pair scans do not demonstrate many-body or impact stability; embedded environments and pure-phase controls address different gaps"
+  ],
+  "grid_point_status": [
+    {
+      "r_A": 0.8,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 1.0,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 1.25,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 1.5,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 1.75,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 2.0,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 2.5,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 3.0,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 4.0,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    },
+    {
+      "r_A": 5.0,
+      "status": "REVIEW_REQUIRED_NO_INPUT_NO_LAUNCH"
+    }
+  ]
+}
