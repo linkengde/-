@@ -1,0 +1,63 @@
+{
+  "launch_enabled": true,
+  "source_manifest_sha256": "f543091f67ed1a85bf005869d95d5a9931ebf524defd0c3e3e81d93dde7f2342",
+  "source_cif_sha256": "6abbf0a40208c5985cacc3b9ac3564a944702203ad57e961010a674f30d598c3",
+  "records": [
+    {
+      "label": "AgSi_COD9009647_pilot_k5x5_sigma0p05",
+      "input": "inputs/AgSi_cod9009647_slab_v19_dev_proposal.extxyz",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "kpts": [
+        5,
+        5,
+        1
+      ],
+      "role": "numerical_convergence_pilot_not_training_or_validation_label",
+      "owner_task": "window-a",
+      "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
+      "state": "registered_queued",
+      "baseline_label": "AgSi_COD9009647_pilot_k5x5"
+    },
+    {
+      "label": "AgSi_COD9009647_pilot_k6x6_sigma0p05",
+      "input": "inputs/AgSi_cod9009647_slab_v19_dev_proposal.extxyz",
+      "input_sha256": "8fe44bee35e17ebfc433e059925a7a85f0dbb4e775090a75ae1883b3eaa6c36c",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "role": "numerical_convergence_pilot_not_training_or_validation_label",
+      "owner_task": "window-b",
+      "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
+      "state": "registered_queued",
+      "baseline_label": "AgSi_COD9009647_pilot_k6x6"
+    }
+  ],
+  "cutoff_eV": 500,
+  "fermi_smearing_eV": 0.05,
+  "matched_geometry": true,
+  "MPI_ranks": 4,
+  "pilot_only": true,
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.05,
+    "parallel": {
+      "sl_auto": true
+    },
+    "scf_thresholds": "energy/density/eigenstates 1e-5",
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "GPAW_version": "26.7.0"
+  },
+  "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+  "disk_budget": {
+    "minimum_start_bytes": 3221225472,
+    "minimum_before_checkpoint_bytes": 1610612736,
+    "meaning": "Conservative reserve, not measured checkpoint size; fail before checkpoint if depleted"
+  },
+  "A_approval": "User continued after published controlled-smearing proposal; A5x5/B6x6 same input at width0.05; only numerical sensitivity, no training",
+  "baseline_manifest": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_convergence_pilot/input_manifest.json",
+  "baseline_manifest_sha256": "6c4d2d4c5e0d381c21179d9d4ff7c59e0d752547b30a3226993e8d6a0c6373ce"
+}
