@@ -14,3 +14,7 @@ Run the second only after the first verifies and publishes successfully. Existin
 ## k6 follow-up registration
 
 k2/k4 completed but energy budget failed. B is now assigned `Ag_baseline_k6x6x6_v19`; run production queue with this exact label, verify/publish then compare k4/k6. k8 remains disabled. This adds no new structure or target convention.
+
+## Displaced-force mesh control
+
+Baseline k4/k6 locally passes. B now runs Ag_displacement_p01_k4x4x4_v19 then Ag_displacement_p01_k6x6x6_v19 on identical +0.01Å x input. Verify and publish each, compare forces and within-mesh displacement response. Not stability or independent model validation. All other entries stay as previously registered/disabled.
