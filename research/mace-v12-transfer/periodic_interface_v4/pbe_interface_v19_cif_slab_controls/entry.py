@@ -44,6 +44,11 @@ def load(label,launch=False):
   task=sync.load_task(r['owner_task']);sync.ensure_owner(r['owner_task'],task)
   assert r['owner_instance']==sync.identity() and label in task['labels']
   quota=Path('/sys/fs/cgroup/cpu.max').read_text().split();cores=len(os.sched_getaffinity(0))
+  # MPI launch binds each rank to one core; validate the shared allocation.
+  if int(os.environ.get('OMPI_COMM_WORLD_SIZE','1')) > 1:
+   assert int(os.environ['OMPI_COMM_WORLD_SIZE']) == 4, 'Expected four MPI ranks'
+   cpus=Path('/sys/fs/cgroup/cpuset.cpus.effective').read_text().strip()
+   cores=sum((int(part.split('-')[1])-int(part.split('-')[0])+1) if '-' in part else 1 for part in cpus.split(','))
   if quota[0]!='max':cores=min(cores,int(quota[0])//int(quota[1]))
   assert cores>=4 and shutil.disk_usage(ROOT).free>=m['disk_budget']['minimum_start_bytes']
   import importlib.metadata as meta, gpaw_data
