@@ -213,13 +213,13 @@
     "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00",
-    "v19_AgSi_force_error_localization_window_b": "queued; localize large V18 force/separation residuals on two public AgSi references"
+    "v19_AgSi_force_error_localization_window_b": "running; SCF iteration 0; elapsed 0s; updated 2026-10-09T23:46:36.122903+00:00"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
   "next_action": "Run v19_AgSi_force_error_localization_window_b with the installed MACE CPU environment. Localize per-atom/species force residuals and Ag–Si separation-force errors on the two public archives, then prepare only disabled diagnostic sampling suggestions. Do not run DFT/MPI or training.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:40:02.451406+00:00",
+  "updated_utc": "2026-10-09T23:46:36.122903+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -275,12 +275,12 @@
   "live_progress": {
     "task_id": "window-b",
     "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
-    "job": "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b",
-    "state": "completed",
+    "job": "v19_AgSi_force_error_localization_window_b",
+    "state": "running",
     "iteration": 0,
-    "elapsed_s": 369.0,
-    "note": "Task complete; pinned MACE CPU runtime installed only in /workspace/.venvs/mace-cpu. Both public-reference inferences finished and fail force/separation gates. Report published at afac3ff.",
-    "updated_utc": "2026-10-09T23:36:33.925354+00:00"
+    "elapsed_s": 0.0,
+    "note": "Started registered CPU-only force-error localization using the completed V18 public-reference inference. Use only two named public AgSi archives and V18 train.extxyz; no DFT/MPI, training, dev/test/sealed labels, or gap-scan changes. A pare",
+    "updated_utc": "2026-10-09T23:46:36.122903+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
   "current_stage": "V18 public AgSi inference completed and fails force/separation gates by large margins; local residual localization queued.",
@@ -534,8 +534,9 @@
       ]
     },
     "v19_AgSi_force_error_localization_window_b": {
-      "status": "queued",
+      "status": "running",
       "assigned_utc": "2026-10-09T23:40:02.451406+00:00",
+      "started_utc": "2026-10-09T23:46:20+00:00",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b",
       "mode": "MACE CPU inference diagnostics and read-only force-error localization on public AgSi references; no DFT/MPI or training.",
       "required_sources": [
