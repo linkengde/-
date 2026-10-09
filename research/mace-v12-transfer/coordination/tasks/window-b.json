@@ -87,7 +87,8 @@
     "v19_interface_normal_separation_entry_preparation",
     "v19_Ti3SiC2_bulk_mesh_comparison_independent_review_window_b",
     "v19_existing_AgSi_candidate_force_error_screen_window_b",
-    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b"
+    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b",
+    "v19_AgSi_force_error_localization_window_b"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -211,13 +212,14 @@
     "Ti3SiC2_baseline_k10x10x4_v19": "completed; SCF iteration 34; elapsed 11722s; updated 2026-10-09T23:05:35.197289+00:00",
     "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
-    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00"
+    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00",
+    "v19_AgSi_force_error_localization_window_b": "queued; localize large V18 force/separation residuals on two public AgSi references"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Run v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b. Install only missing PyTorch 2.5.1 CPU, mace-torch 0.3.16, and ASE 3.29.0 if missing in a dedicated Python 3.12 environment; preserve GPAW. Then run inference-only diagnostic with the published V18 candidate on public AgSi archives. No DFT/MPI, training, sealed labels, or A-task edits.",
+  "next_action": "Run v19_AgSi_force_error_localization_window_b with the installed MACE CPU environment. Localize per-atom/species force residuals and Ag–Si separation-force errors on the two public archives, then prepare only disabled diagnostic sampling suggestions. Do not run DFT/MPI or training.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:36:33.925354+00:00",
+  "updated_utc": "2026-10-09T23:40:02.451406+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -281,7 +283,7 @@
     "updated_utc": "2026-10-09T23:36:33.925354+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "AgSi candidate eligibility audit complete; follow-up MACE CPU runtime installation and public-reference inference diagnostic assigned.",
+  "current_stage": "V18 public AgSi inference completed and fails force/separation gates by large margins; local residual localization queued.",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -529,6 +531,35 @@
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/metrics.json",
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/environment.json",
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/SHA256SUMS.txt"
+      ]
+    },
+    "v19_AgSi_force_error_localization_window_b": {
+      "status": "queued",
+      "assigned_utc": "2026-10-09T23:40:02.451406+00:00",
+      "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b",
+      "mode": "MACE CPU inference diagnostics and read-only force-error localization on public AgSi references; no DFT/MPI or training.",
+      "required_sources": [
+        "completed AgSi V18 inference report and exact selected model/checkpoint hashes",
+        "the two archive-verified public AgSi DFT references used in that report",
+        "V18 train.extxyz only, for local distance/contact coverage comparison; do not open dev/test files"
+      ],
+      "required_outputs": [
+        "README.md describing metrics and the diagnostic-only limitation",
+        "reproducible script using /workspace/.venvs/mace-cpu",
+        "per-atom CSV with ID, species, DFT/model forces and vector error",
+        "species and marked-pair / Ag-layer force-error breakdown",
+        "local Ag-X coordination/distance summary around the largest-error atoms",
+        "targeted, disabled geometry-only suggestions for later DFT acquisition if supported by the localized residuals",
+        "SHA256SUMS.txt"
+      ],
+      "decision": "Identify where V18 fails on the public AgSi CIF geometry and whether its force/separation residuals are concentrated on Ag or framework atoms. Use the published gates unchanged: force-vector RMSE <=0.05 eV/A and absolute marked-pair separation-force error <=0.10 eV/A. Do not claim independent validation or model readiness.",
+      "guardrails": [
+        "Use the already installed /workspace/.venvs/mace-cpu environment and exact V18 selected model; do not install more packages or alter model weights.",
+        "Use only the two public archive-verified AgSi references and train.extxyz for overlap analysis; no sealed holdout/test/dev inputs or labels.",
+        "No DFT/MPI, training, dataset integration, production edits, or A-owned task/input changes.",
+        "Preserve atom IDs and exact reference order; report eV and eV/A units and signed separation-force convention.",
+        "Any geometry suggestions remain unowned, launch-disabled, diagnostic-only and do not change the registered gap scan.",
+        "The two references share one CIF family and local contact distances overlap training coverage; this is a single-system diagnostic."
       ]
     }
   },
