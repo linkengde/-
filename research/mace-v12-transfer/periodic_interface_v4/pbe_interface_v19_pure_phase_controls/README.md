@@ -55,3 +55,7 @@ A completed the same-geometry 6×6×2 / 8×8×4 comparison: energy budgets pass,
 A completed the verified 6×6×2 / 8×8×4 comparison. Energy budgets pass; force-vector RMS is 0.01359 eV/Å and fails the 0.01 eV/Å budget. A registered the same baseline at 8×8×2 to isolate the in-plane increment at fixed kz=2. The nine interface gap-scan records remain disabled pending slab vacuum/dipole controls and reference-target review.
 
 The 8×8×4 local `state.gpw` restart file (7,361,378,540 bytes) was removed only after both compact archives passed `verify_result.py` and no GPAW process was active. Its path and SHA256 are recorded in the A mesh-comparison report. Compact archives remain on main; 8×8×2 is ready to launch.
+
+## Ti3SiC2 reciprocal-z isolation control
+
+B is assigned one 6×6×4 calculation on the same 48-atom baseline input used by A’s 8×8×2 job. Compared with the archived 6×6×2 baseline, this fixes the in-plane mesh and raises only kz; it complements A’s fixed-kz in-plane test. Compare native and free energies separately and all-atom force-vector RMS/max, with the unchanged gates of 2 meV/atom and 0.01 eV/Å. This is a static numerical control, not validation or thermal stability. Run only after verifying the B registration and no active B DFT job.
