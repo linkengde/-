@@ -208,13 +208,14 @@
     "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b": "full 2x2 report ready; A executed B-prepared script and independently recomputed; B independent review requested; no DFT/MPI",
     "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "deferred; user redirected B to the registered 10x10x4 Ti3SiC2 calculation",
     "Ti3SiC2_baseline_k10x10x4_v19": "completed; SCF iteration 34; elapsed 11722s; updated 2026-10-09T23:05:35.197289+00:00",
-    "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00"
+    "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00",
+    "v19_existing_AgSi_candidate_force_error_screen_window_b": "running; SCF iteration 0; elapsed 0s; updated 2026-10-09T23:23:03.194832+00:00"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
   "next_action": "Complete and publish the read-only slab-reference settings audit. Then execute v19_existing_AgSi_candidate_force_error_screen_window_b: audit candidate checkpoint and non-sealed training overlap, and run inference-only force/separation screening on public AgSi archives if eligible and MACE is already installed. No DFT/MPI, training, sealed labels, or A-task edits.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:22:47.388839+00:00",
+  "updated_utc": "2026-10-09T23:23:03.194832+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -270,15 +271,15 @@
   "live_progress": {
     "task_id": "window-b",
     "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
-    "job": "v19_slab_reference_method_readiness_review_window_b",
-    "state": "completed",
-    "iteration": 6,
+    "job": "v19_existing_AgSi_candidate_force_error_screen_window_b",
+    "state": "running",
+    "iteration": 0,
     "elapsed_s": 0.0,
-    "note": "Read-only audit complete; 13 archives, proposals and bulk report verified; reproducible report published at 431d024. No DFT/MPI.",
-    "updated_utc": "2026-10-09T23:22:47.388839+00:00"
+    "note": "Starting read-only eligibility audit; check MACE runtime, public candidate checkpoint hashes and non-sealed data overlap before any inference.",
+    "updated_utc": "2026-10-09T23:23:03.194832+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "AgSi slab reference method audit complete; next registered B task is candidate force/separation screening eligibility audit",
+  "current_stage": "AgSi candidate force-error screen eligibility audit started; checking installed runtime and public model/data lineage",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -426,7 +427,7 @@
       ]
     },
     "v19_existing_AgSi_candidate_force_error_screen_window_b": {
-      "status": "queued_after_current_slab_reference_readiness_review",
+      "status": "running",
       "assigned_utc": "2026-10-09T23:17:49.877905+00:00",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b",
       "mode": "read-only model/data eligibility audit; inference-only if an eligible non-overlapping candidate and installed MACE runtime are confirmed; no DFT/MPI/training",
@@ -450,7 +451,8 @@
         "Do not train, change a model, launch DFT/MPI, or modify A-owned inputs/tasks.",
         "Confirm exact model checkpoint hashes and input-to-training geometry non-overlap before inference.",
         "Keep native and free-energy conventions separate; report vector RMS and signed separation metrics separately."
-      ]
+      ],
+      "started_utc": "2026-10-09T23:23:03.151091+00:00"
     }
   },
   "independent_mesh_reaudit": {
