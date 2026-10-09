@@ -23,7 +23,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   ],
-  "coordination_duties": "A owns active DFT and production integration. B independently audits GPAW26.7 plane-wave slab/dipole semantics from source and existing verified AgSi controls, then publishes evidence and a minimal-control recommendation; no new calculation.",
+  "coordination_duties": "A owns active DFT and integration. B prepares immutable-identity, hash-verified AgSi same-cell dipole-OFF and larger-vacuum dipole-ON input proposals only; no calculation.",
   "queued_work_order": [
     "v15_training_evaluation_entry_draft",
     "v15_acquisition_batch_priority",
@@ -198,11 +198,12 @@
     "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
     "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
     "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
-    "v19_pw_dipole_backend_semantics_review_window_b": "completed; SCF iteration 3; updated 2026-10-09T13:32:39.758882+00:00"
+    "v19_pw_dipole_backend_semantics_review_window_b": "completed; SCF iteration 3; updated 2026-10-09T13:32:39.758882+00:00",
+    "v19_gap_scan_dipole_vacuum_control_proposals_window_b": "assigned; create two hash-verified, label-free AgSi parent control proposals; no calculator, DFT, MPI, or manifest edits"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Audit the exact GPAW26.7.0 implementation and documentation for plane-wave slab electrostatics: determine what pbc=[True,True,False] changes in PW mode, whether poissonsolver={dipolelayer:xy} is applied, and how the existing original-vacuum dipole off/on results should be interpreted. Recommend the minimum matched control for the 26A-vacuum gap scan. Use existing archives only; do not run DFT, enable/modify the gap manifest, or touch A-owned inputs/results. Publish a concise evidence report with source file hashes/line references and limitations.",
+  "next_action": "Prepare two label-free proposals derived from the registered 26A AgSi parent gap-scan input: (1) an exact same-geometry/same-cell dipole-OFF control (no poissonsolver dipolelayer parameter), and (2) a 36A-vacuum dipole-ON control, expanding cell z by 10.0 A and shifting all atoms +5.0 A so the slab has the same relative position in the vacuum convention. Preserve in-plane cell, composition, atom order/IDs, pair markers, PBC [T,T,F], and every other method field. Include source/proposal hashes, geometry checks, and purpose; leave both launch-disabled and owner null. Do not run DFT/MPI, edit the registered gap-scan manifest, or touch A-owned calculations.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-09T13:32:39.758882+00:00",
   "labels": {
@@ -265,11 +266,11 @@
     "updated_utc": "2026-10-09T13:32:39.758882+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "GPAW26.7 plane-wave slab electrostatics semantics review; no DFT",
+  "current_stage": "Prepare label-free 26A dipole-off and 36A dipole-on controls; geometry only",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
-  "task_boundary": "Current assignment is a source/documentation and existing-archive audit only: no DFT calculator, MPI, training, inference, dataset edits, MD/TTM, or changes to A-owned calculations and gap-scan inputs. Keep all gap-scan entries disabled and leave their method unchanged.",
+  "task_boundary": "Geometry-only preparation for two AgSi numerical-control proposals. No calculator, DFT, MPI, training, inference, dataset-label access, MD/TTM, gap-manifest modification, or changes to A-owned calculations. Proposals stay disabled and unowned pending A registration.",
   "task_card_merge_note": "Preserved concurrent A assignment fields and latest B live progress; no owner change. Other scalar conflicts require manual review.",
   "recurring_version_review": {
     "trigger": "A publishes each completed model-version training/evaluation; A creates assigned vN_iteration_review job automatically",
