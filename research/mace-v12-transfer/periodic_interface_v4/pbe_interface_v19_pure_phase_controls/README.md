@@ -10,3 +10,7 @@ Run sequentially from repository root:
 ```
 
 Run the second only after the first verifies and publishes successfully. Existing outputs block repeated launches. Each queue publishes status, runs four MPI ranks with one thread each and automatically verifies compact archives before publishing; state.gpw stays local. Read mesh_plan.json for spacing and limitations. Equilibrium forces do not certify displaced/strained forces. Native extrapolated and free energies remain separate. Do not rerun disabled-fixture tests on this enabled production manifest; their preserved validation describes pre-enablement tests, not physical DFT readiness. No Ag DFT has been started by A.
+
+## k6 follow-up registration
+
+k2/k4 completed but energy budget failed. B is now assigned `Ag_baseline_k6x6x6_v19`; run production queue with this exact label, verify/publish then compare k4/k6. k8 remains disabled. This adds no new structure or target convention.
