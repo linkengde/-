@@ -1,16 +1,15 @@
 {
   "task": "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b",
-  "status": "pending_missing_point",
+  "status": "complete",
   "scope": "Frozen 48-atom Ti3SiC2 pure-phase numerical control only; no validation, stability, or interface claim.",
   "grid": {
     "verified_points": {
       "6x6x2": "Ti3SiC2_baseline_k6x6x2_v19",
       "6x6x4": "Ti3SiC2_baseline_k6x6x4_v19",
+      "8x8x2": "Ti3SiC2_baseline_k8x8x2_v19",
       "8x8x4": "Ti3SiC2_baseline_k8x8x4_v19"
     },
-    "missing_points": [
-      "Ti3SiC2_baseline_k8x8x2_v19"
-    ],
+    "missing_points": [],
     "missing_values_inferred": false
   },
   "identity_checks": {
@@ -49,6 +48,21 @@
         "Ti3SiC2_baseline_k6x6x4_v19_PW_PBE.extxyz": "29e9ac254984b4a4ab6a22cbac7043c2cf9a826eb498422f1860a5798e72cee4",
         "progress.json": "6ce61588759f04cc9427990566d85c92e573ae4ed421fc4fe38f76b9cd4fc088",
         "mesh_comparison_k6x6x2.json": "c4dba9f58391450120ade9fa7f942d85945df579741c92f060b122bdb2a37b1e"
+      }
+    },
+    "8x8x2": {
+      "label": "Ti3SiC2_baseline_k8x8x2_v19",
+      "native_energy_eV_cell": -389.82556440417676,
+      "free_energy_eV_cell": -390.06968670657324,
+      "scf_iterations": 43,
+      "elapsed_s": 7475.8540008068085,
+      "archive_verified": true,
+      "archive_sha256": {
+        "Ti3SiC2_baseline_k8x8x2_v19_PW_PBE.extxyz": "87c6cc52d3dfa22449a15f045d51d055263f4f6da4e4a428405055b49d9020aa",
+        "gpaw.log": "49199efd49066033b5cc3e6e883f6150320a0cc579a6ef4f5c1b9e00828e5eda",
+        "progress.json": "77e9c54af0b0d366417e9467546b6677d2258a68b1fac44fe72303af8b617ff0",
+        "summary.json": "172aeb667f6bb2bdf0e098c0e540f6c11e2eb39035d01f0cc5d80c4642e59e81",
+        "verification.json": "20288f49d95c911971982a0b34e0ad2666f1766202fa1060e168cfb0f6943409"
       }
     },
     "8x8x4": {
@@ -143,6 +157,79 @@
     },
     {
       "from": "Ti3SiC2_baseline_k6x6x2_v19",
+      "to": "Ti3SiC2_baseline_k8x8x2_v19",
+      "delta_direction": "to minus from",
+      "native_energy_delta_meV_atom": -0.16334630735907277,
+      "free_energy_delta_meV_atom": -0.11467137823354771,
+      "force": {
+        "force_vector_rms_eV_A": 0.014435928225954868,
+        "maximum_atom_force_vector_difference_eV_A": 0.022318981284260322,
+        "force_component_rms_eV_A_xyz": [
+          0.008206145052458367,
+          0.004737165321897577,
+          0.010891027124929243
+        ],
+        "force_component_max_abs_eV_A_xyz": [
+          0.012051150636855138,
+          0.006957858564899489,
+          0.017449782178860132
+        ],
+        "species": {
+          "C": {
+            "atom_count": 16,
+            "force_vector_rms_eV_A": 0.010443735206118777,
+            "maximum_atom_force_vector_difference_eV_A": 0.010453768399194627,
+            "force_component_rms_eV_A_xyz": [
+              0.006520630683727681,
+              0.0037632493626795663,
+              0.007238158244764048
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.006520668648945923,
+              0.003763460267560589,
+              0.007252552026172254
+            ]
+          },
+          "Si": {
+            "atom_count": 8,
+            "force_vector_rms_eV_A": 0.006174293576607841,
+            "maximum_atom_force_vector_difference_eV_A": 0.006174293590386589,
+            "force_component_rms_eV_A_xyz": [
+              0.005347271498282507,
+              0.0030868402709008386,
+              2.415727887561031e-06
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.005347271515122062,
+              0.0030868402725746915,
+              2.415750937339064e-06
+            ]
+          },
+          "Ti": {
+            "atom_count": 24,
+            "force_vector_rms_eV_A": 0.018203580519486933,
+            "maximum_atom_force_vector_difference_eV_A": 0.022318981284260322,
+            "force_component_rms_eV_A_xyz": [
+              0.009838941986284828,
+              0.0056801331361293035,
+              0.014223278520643949
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.012051150636855138,
+              0.006957858564899489,
+              0.017449782178860132
+            ]
+          }
+        }
+      },
+      "threshold_checks": {
+        "native_energy": true,
+        "free_energy": true,
+        "force_vector_rms": false
+      }
+    },
+    {
+      "from": "Ti3SiC2_baseline_k6x6x2_v19",
       "to": "Ti3SiC2_baseline_k8x8x4_v19",
       "delta_direction": "to minus from",
       "native_energy_delta_meV_atom": 0.21180680865976834,
@@ -204,6 +291,79 @@
               0.01076415068989809,
               0.00621606516206934,
               0.017329381323114887
+            ]
+          }
+        }
+      },
+      "threshold_checks": {
+        "native_energy": true,
+        "free_energy": true,
+        "force_vector_rms": false
+      }
+    },
+    {
+      "from": "Ti3SiC2_baseline_k6x6x4_v19",
+      "to": "Ti3SiC2_baseline_k8x8x2_v19",
+      "delta_direction": "to minus from",
+      "native_energy_delta_meV_atom": -0.48168269842463474,
+      "free_energy_delta_meV_atom": -0.272526317764014,
+      "force": {
+        "force_vector_rms_eV_A": 0.011743188884984346,
+        "maximum_atom_force_vector_difference_eV_A": 0.017843302037535,
+        "force_component_rms_eV_A_xyz": [
+          0.007201824540645956,
+          0.004157253383370265,
+          0.008291770183780179
+        ],
+        "force_component_max_abs_eV_A_xyz": [
+          0.010507807617362669,
+          0.006069034342069708,
+          0.013090037379084242
+        ],
+        "species": {
+          "C": {
+            "atom_count": 16,
+            "force_vector_rms_eV_A": 0.009154806400028513,
+            "maximum_atom_force_vector_difference_eV_A": 0.009157802916816829,
+            "force_component_rms_eV_A_xyz": [
+              0.005906063587178991,
+              0.0034083200542636897,
+              0.006108375195901561
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0059079416521096075,
+              0.0034103888634206374,
+              0.006115833167383164
+            ]
+          },
+          "Si": {
+            "atom_count": 8,
+            "force_vector_rms_eV_A": 0.005255130887301062,
+            "maximum_atom_force_vector_difference_eV_A": 0.005255130914703296,
+            "force_component_rms_eV_A_xyz": [
+              0.004551347490916617,
+              0.002627055454392474,
+              1.4707111865042786e-05
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0045513475055266785,
+              0.0026270554838583263,
+              1.470711867230753e-05
+            ]
+          },
+          "Ti": {
+            "atom_count": 24,
+            "force_vector_rms_eV_A": 0.014516399347448933,
+            "maximum_atom_force_vector_difference_eV_A": 0.017843302037535,
+            "force_component_rms_eV_A_xyz": [
+              0.008577484520744333,
+              0.004951828706522328,
+              0.010612822516760967
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.010507807617362669,
+              0.006069034342069708,
+              0.013090037379084242
             ]
           }
         }
@@ -286,6 +446,79 @@
         "free_energy": true,
         "force_vector_rms": false
       }
+    },
+    {
+      "from": "Ti3SiC2_baseline_k8x8x2_v19",
+      "to": "Ti3SiC2_baseline_k8x8x4_v19",
+      "delta_direction": "to minus from",
+      "native_energy_delta_meV_atom": 0.3751531160188411,
+      "free_energy_delta_meV_atom": 0.18119671018605268,
+      "force": {
+        "force_vector_rms_eV_A": 0.0011418445577398662,
+        "maximum_atom_force_vector_difference_eV_A": 0.0015039448634319762,
+        "force_component_rms_eV_A_xyz": [
+          0.0008590990516529544,
+          0.00049562831423963,
+          0.0005657829863234906
+        ],
+        "force_component_max_abs_eV_A_xyz": [
+          0.0012902119230598515,
+          0.0007470456599503292,
+          0.000972242500001913
+        ],
+        "species": {
+          "C": {
+            "atom_count": 16,
+            "force_vector_rms_eV_A": 0.001187539030059172,
+            "maximum_atom_force_vector_difference_eV_A": 0.001191627352092635,
+            "force_component_rms_eV_A_xyz": [
+              0.0005956749450197224,
+              0.00034264814586078333,
+              0.0009685104831274657
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0005968569857173764,
+              0.00034421235331609035,
+              0.000972242500001913
+            ]
+          },
+          "Si": {
+            "atom_count": 8,
+            "force_vector_rms_eV_A": 0.0007338432280170572,
+            "maximum_atom_force_vector_difference_eV_A": 0.0007338433016405067,
+            "force_component_rms_eV_A_xyz": [
+              0.0006344736153733615,
+              0.0003662316850146711,
+              4.2935621491541825e-05
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0006344736385801737,
+              0.0003662318616657657,
+              4.293571506106082e-05
+            ]
+          },
+          "Ti": {
+            "atom_count": 24,
+            "force_vector_rms_eV_A": 0.001219812852463668,
+            "maximum_atom_force_vector_difference_eV_A": 0.0015039448634319762,
+            "force_component_rms_eV_A_xyz": [
+              0.001051363088955253,
+              0.0006068891728654016,
+              0.00011943442584434366
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0012902119230598515,
+              0.0007470456599503292,
+              0.00019780354293748997
+            ]
+          }
+        }
+      },
+      "threshold_checks": {
+        "native_energy": true,
+        "free_energy": true,
+        "force_vector_rms": true
+      }
     }
   ],
   "thresholds": {
@@ -293,6 +526,368 @@
     "absolute_free_energy_delta_meV_atom": 2.0,
     "force_vector_rms_eV_A": 0.01
   },
-  "factorial_decomposition": null,
-  "interpretation": "The fourth point is missing; only available pairwise comparisons are reported. The in-plane, c-axis, and interaction decomposition is withheld until all four archives are verified."
+  "factorial_decomposition": {
+    "directional_contrasts": {
+      "in_plane_6_to_8_at_kz2": {
+        "from": "Ti3SiC2_baseline_k6x6x2_v19",
+        "to": "Ti3SiC2_baseline_k8x8x2_v19",
+        "delta_direction": "to minus from",
+        "native_energy_delta_meV_atom": -0.16334630735907277,
+        "free_energy_delta_meV_atom": -0.11467137823354771,
+        "force": {
+          "force_vector_rms_eV_A": 0.014435928225954868,
+          "maximum_atom_force_vector_difference_eV_A": 0.022318981284260322,
+          "force_component_rms_eV_A_xyz": [
+            0.008206145052458367,
+            0.004737165321897577,
+            0.010891027124929243
+          ],
+          "force_component_max_abs_eV_A_xyz": [
+            0.012051150636855138,
+            0.006957858564899489,
+            0.017449782178860132
+          ],
+          "species": {
+            "C": {
+              "atom_count": 16,
+              "force_vector_rms_eV_A": 0.010443735206118777,
+              "maximum_atom_force_vector_difference_eV_A": 0.010453768399194627,
+              "force_component_rms_eV_A_xyz": [
+                0.006520630683727681,
+                0.0037632493626795663,
+                0.007238158244764048
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.006520668648945923,
+                0.003763460267560589,
+                0.007252552026172254
+              ]
+            },
+            "Si": {
+              "atom_count": 8,
+              "force_vector_rms_eV_A": 0.006174293576607841,
+              "maximum_atom_force_vector_difference_eV_A": 0.006174293590386589,
+              "force_component_rms_eV_A_xyz": [
+                0.005347271498282507,
+                0.0030868402709008386,
+                2.415727887561031e-06
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.005347271515122062,
+                0.0030868402725746915,
+                2.415750937339064e-06
+              ]
+            },
+            "Ti": {
+              "atom_count": 24,
+              "force_vector_rms_eV_A": 0.018203580519486933,
+              "maximum_atom_force_vector_difference_eV_A": 0.022318981284260322,
+              "force_component_rms_eV_A_xyz": [
+                0.009838941986284828,
+                0.0056801331361293035,
+                0.014223278520643949
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.012051150636855138,
+                0.006957858564899489,
+                0.017449782178860132
+              ]
+            }
+          }
+        },
+        "threshold_checks": {
+          "native_energy": true,
+          "free_energy": true,
+          "force_vector_rms": false
+        }
+      },
+      "in_plane_6_to_8_at_kz4": {
+        "from": "Ti3SiC2_baseline_k6x6x4_v19",
+        "to": "Ti3SiC2_baseline_k8x8x4_v19",
+        "delta_direction": "to minus from",
+        "native_energy_delta_meV_atom": -0.10652958240579362,
+        "free_energy_delta_meV_atom": -0.09132960757796127,
+        "force": {
+          "force_vector_rms_eV_A": 0.010849743752671287,
+          "maximum_atom_force_vector_difference_eV_A": 0.016823879022477225,
+          "force_component_rms_eV_A_xyz": [
+            0.0063465209550767196,
+            0.0036638713494972584,
+            0.008000916072534121
+          ],
+          "force_component_max_abs_eV_A_xyz": [
+            0.009217595738500452,
+            0.005321989283216807,
+            0.01302947731558797
+          ],
+          "species": {
+            "C": {
+              "atom_count": 16,
+              "force_vector_rms_eV_A": 0.00800106005758604,
+              "maximum_atom_force_vector_difference_eV_A": 0.008007599694900117,
+              "force_component_rms_eV_A_xyz": [
+                0.005310389564082631,
+                0.003065674907455408,
+                0.00513987957880136
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.005311084684600392,
+                0.0030661767263126306,
+                0.005151069071269249
+              ]
+            },
+            "Si": {
+              "atom_count": 8,
+              "force_vector_rms_eV_A": 0.00452289152620378,
+              "maximum_atom_force_vector_difference_eV_A": 0.00452289162075338,
+              "force_component_rms_eV_A_xyz": [
+                0.003916873875543256,
+                0.0022608237693778543,
+                5.7642733356546505e-05
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.003916873884206433,
+                0.0022608239754185917,
+                5.7642820158019205e-05
+              ]
+            },
+            "Ti": {
+              "atom_count": 24,
+              "force_vector_rms_eV_A": 0.01363587382780894,
+              "maximum_atom_force_vector_difference_eV_A": 0.016823879022477225,
+              "force_component_rms_eV_A_xyz": [
+                0.007526123256095372,
+                0.004344946114027722,
+                0.010507900220699688
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.009217595738500452,
+                0.005321989283216807,
+                0.01302947731558797
+              ]
+            }
+          }
+        },
+        "threshold_checks": {
+          "native_energy": true,
+          "free_energy": true,
+          "force_vector_rms": false
+        }
+      },
+      "kz_2_to_4_at_in_plane6": {
+        "from": "Ti3SiC2_baseline_k6x6x2_v19",
+        "to": "Ti3SiC2_baseline_k6x6x4_v19",
+        "delta_direction": "to minus from",
+        "native_energy_delta_meV_atom": 0.31833639106556194,
+        "free_energy_delta_meV_atom": 0.15785493953046625,
+        "force": {
+          "force_vector_rms_eV_A": 0.0028842302803469364,
+          "maximum_atom_force_vector_difference_eV_A": 0.004881001864503346,
+          "force_component_rms_eV_A_xyz": [
+            0.0010134693156158927,
+            0.0005851875302689564,
+            0.002636137289822543
+          ],
+          "force_component_max_abs_eV_A_xyz": [
+            0.001546584671958678,
+            0.0008951528213172783,
+            0.004544476031479026
+          ],
+          "species": {
+            "C": {
+              "atom_count": 16,
+              "force_vector_rms_eV_A": 0.0013343692970468942,
+              "maximum_atom_force_vector_difference_eV_A": 0.001351400852502305,
+              "force_component_rms_eV_A_xyz": [
+                0.000614570382800977,
+                0.0003549347966224451,
+                0.0011299849360198863
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.000616483715315586,
+                0.0003567884547422077,
+                0.0011516438269280616
+              ]
+            },
+            "Si": {
+              "atom_count": 8,
+              "force_vector_rms_eV_A": 0.0009192650222395581,
+              "maximum_atom_force_vector_difference_eV_A": 0.0009192650360068499,
+              "force_component_rms_eV_A_xyz": [
+                0.0007959240073658906,
+                0.0004597848165083663,
+                1.2291383977600265e-05
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.000795924009682706,
+                0.00045978484757214504,
+                1.2291400240570438e-05
+              ]
+            },
+            "Ti": {
+              "atom_count": 24,
+              "force_vector_rms_eV_A": 0.0038947218487548445,
+              "maximum_atom_force_vector_difference_eV_A": 0.004881001864503346,
+              "force_component_rms_eV_A_xyz": [
+                0.00126145838692576,
+                0.0007283101849018315,
+                0.003612083234338776
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.001546584671958678,
+                0.0008951528213172783,
+                0.004544476031479026
+              ]
+            }
+          }
+        },
+        "threshold_checks": {
+          "native_energy": true,
+          "free_energy": true,
+          "force_vector_rms": true
+        }
+      },
+      "kz_2_to_4_at_in_plane8": {
+        "from": "Ti3SiC2_baseline_k8x8x2_v19",
+        "to": "Ti3SiC2_baseline_k8x8x4_v19",
+        "delta_direction": "to minus from",
+        "native_energy_delta_meV_atom": 0.3751531160188411,
+        "free_energy_delta_meV_atom": 0.18119671018605268,
+        "force": {
+          "force_vector_rms_eV_A": 0.0011418445577398662,
+          "maximum_atom_force_vector_difference_eV_A": 0.0015039448634319762,
+          "force_component_rms_eV_A_xyz": [
+            0.0008590990516529544,
+            0.00049562831423963,
+            0.0005657829863234906
+          ],
+          "force_component_max_abs_eV_A_xyz": [
+            0.0012902119230598515,
+            0.0007470456599503292,
+            0.000972242500001913
+          ],
+          "species": {
+            "C": {
+              "atom_count": 16,
+              "force_vector_rms_eV_A": 0.001187539030059172,
+              "maximum_atom_force_vector_difference_eV_A": 0.001191627352092635,
+              "force_component_rms_eV_A_xyz": [
+                0.0005956749450197224,
+                0.00034264814586078333,
+                0.0009685104831274657
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.0005968569857173764,
+                0.00034421235331609035,
+                0.000972242500001913
+              ]
+            },
+            "Si": {
+              "atom_count": 8,
+              "force_vector_rms_eV_A": 0.0007338432280170572,
+              "maximum_atom_force_vector_difference_eV_A": 0.0007338433016405067,
+              "force_component_rms_eV_A_xyz": [
+                0.0006344736153733615,
+                0.0003662316850146711,
+                4.2935621491541825e-05
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.0006344736385801737,
+                0.0003662318616657657,
+                4.293571506106082e-05
+              ]
+            },
+            "Ti": {
+              "atom_count": 24,
+              "force_vector_rms_eV_A": 0.001219812852463668,
+              "maximum_atom_force_vector_difference_eV_A": 0.0015039448634319762,
+              "force_component_rms_eV_A_xyz": [
+                0.001051363088955253,
+                0.0006068891728654016,
+                0.00011943442584434366
+              ],
+              "force_component_max_abs_eV_A_xyz": [
+                0.0012902119230598515,
+                0.0007470456599503292,
+                0.00019780354293748997
+              ]
+            }
+          }
+        },
+        "threshold_checks": {
+          "native_energy": true,
+          "free_energy": true,
+          "force_vector_rms": true
+        }
+      }
+    },
+    "difference_in_differences_interaction": {
+      "definition": "(in-plane 6->8 at kz=4) - (in-plane 6->8 at kz=2); equivalently (kz 2->4 at 8x8) - (kz 2->4 at 6x6)",
+      "native_energy_meV_atom": 0.05681672495327916,
+      "free_energy_meV_atom": 0.02334177065558643,
+      "force": {
+        "force_vector_rms_eV_A": 0.0036133836367876096,
+        "maximum_atom_force_vector_difference_eV_A": 0.005761450961498861,
+        "force_component_rms_eV_A_xyz": [
+          0.001871843946928692,
+          0.0010804086586603842,
+          0.00289576564577359
+        ],
+        "force_component_max_abs_eV_A_xyz": [
+          0.002833554952741645,
+          0.0016358698092689182,
+          0.004742279441705945
+        ],
+        "species": {
+          "C": {
+            "atom_count": 16,
+            "force_vector_rms_eV_A": 0.0025208559524723547,
+            "maximum_atom_force_vector_difference_eV_A": 0.002541654426369646,
+            "force_component_rms_eV_A_xyz": [
+              0.0012102413870740973,
+              0.0006975745510047196,
+              0.002098432811390165
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0012109743064218882,
+              0.0006978654220543116,
+              0.002123886294668212
+            ]
+          },
+          "Si": {
+            "atom_count": 8,
+            "force_vector_rms_eV_A": 0.0016526919380391255,
+            "maximum_atom_force_vector_difference_eV_A": 0.0016526920235089813,
+            "force_component_rms_eV_A_xyz": [
+              0.001430397622739252,
+              0.00082601650152302,
+              5.5227005469138575e-05
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.0014303976482628797,
+              0.0008260167091465001,
+              5.52271152433211e-05
+            ]
+          },
+          "Ti": {
+            "atom_count": 24,
+            "force_vector_rms_eV_A": 0.004578880057078607,
+            "maximum_atom_force_vector_difference_eV_A": 0.005761450961498861,
+            "force_component_rms_eV_A_xyz": [
+              0.0023128188270888066,
+              0.0013351870591846902,
+              0.003719447158807541
+            ],
+            "force_component_max_abs_eV_A_xyz": [
+              0.002833554952741645,
+              0.0016358698092689182,
+              0.004742279441705945
+            ]
+          }
+        }
+      },
+      "thresholds_are_not_defined_for_interaction": true
+    }
+  },
+  "interpretation": "All four archives passed identity checks; directional effects and the interaction are reported for this frozen geometry only."
 }

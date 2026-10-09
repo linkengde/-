@@ -1,33 +1,24 @@
-# B assignment: Ti₃SiC₂ four-point k-mesh decomposition
+# Ti₃SiC₂ 2×2 k-mesh matrix
 
-**Status: analysis in progress. Analysis only; no DFT or MPI launch.**
+**All four points are archived and verified.** B prepared the matrix analysis script; A ran it after the 8×8×2 archive passed verification and independently recomputed the directional contrasts. B's independent review is still requested. No DFT was launched for this analysis.
 
-B should start by auditing the three published points: 6×6×2, 6×6×4, and 8×8×4. Verify their manifests and archive records, confirm the same frozen geometry and method, and independently recompute the available pairwise metrics. Prepare a reproducible script for the complete 2×2 mesh grid.
+The matrix uses the same frozen 48-atom structure, source hash, PBE/PW 500 eV settings, and smearing; only k-points differ. Energy gates are 2 meV/atom for native and free energies. The force gate is 0.01 eV/Å for vector RMS.
 
-The fourth point, **8×8×2**, is running under A. It remains missing until its compact archive appears on `main` and passes verification. The current [`report.json`](report.json) records only verified available points and does not infer missing values. The independent audit found:
+| Directional change | Native Δ (meV/atom) | Free Δ (meV/atom) | Force-vector RMS (eV/Å) | Max atom ΔF (eV/Å) | Result |
+|---|---:|---:|---:|---:|---|
+| 6×6×2 → 8×8×2 (in-plane, kz=2) | −0.16335 | −0.11467 | 0.014436 | 0.022319 | Energy pass; force fail |
+| 6×6×4 → 8×8×4 (in-plane, kz=4) | −0.10653 | −0.09133 | 0.010850 | 0.016824 | Energy pass; force fail |
+| 6×6×2 → 6×6×4 (kz, in-plane 6×6) | +0.31834 | +0.15785 | 0.002884 | 0.004881 | All pass |
+| 8×8×2 → 8×8×4 (kz, in-plane 8×8) | +0.37515 | +0.18120 | 0.001142 | 0.001504 | All pass |
 
-| Contrast (second minus first) | Native ΔE (meV/atom) | Free ΔE (meV/atom) | Force-vector RMS (eV/Å) | Result |
-| --- | ---: | ---: | ---: | --- |
-| 6×6×2 → 6×6×4 | +0.3183 | +0.1579 | 0.002884 | All stated budgets pass |
-| 6×6×2 → 8×8×4 (mixed directions) | +0.2118 | +0.0665 | 0.013593 | Energy passes; force RMS fails |
-| 6×6×4 → 8×8×4 | −0.1065 | −0.0913 | 0.010850 | Energy passes; force RMS fails |
+The energy difference-in-differences is +0.05682 meV/atom native and +0.02334 meV/atom free. The corresponding force-vector interaction RMS is 0.003613 eV/Å; no separate threshold is defined for this interaction term.
 
-The mixed 6×6×2 → 8×8×4 contrast cannot isolate either mesh direction. The force differences in the two same-axis contrasts exceed the 0.01 eV/Å budget for 6×6 → 8×8 at kz=4, but the direction-specific in-plane and interaction conclusions remain pending 8×8×2.
+For this frozen structure, the tested kz increment passes at both in-plane meshes, while the 6×6→8×8 in-plane increment exceeds the force budget at both kz values. Thus the force sensitivity is mainly associated with in-plane sampling in this matrix. This does **not** establish convergence beyond 8×8, physical stability, or model accuracy. A denser in-plane point, such as 10×10×2, is the next targeted check before selecting a reference mesh.
 
-The reproducible script verifies archive checksums, result-verifier status, source and method identity, and frozen geometry before calculating pairwise and factorial contrasts:
+The full pairwise results, species/component breakdowns, interactions, archive hashes, and identity checks are in [`report.json`](report.json). Reproduce the matrix with:
 
 ```bash
-/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_2x2_mesh_factorial_review_window_b/analyze_mesh_matrix.py
+/workspace/.venvs/gpaw-mpi/bin/python analyze_mesh_matrix.py --output /tmp/ti3sic2_mesh_matrix_reproduced.json
 ```
 
-After A publishes the verified fourth point, rerun the same command. It will replace the partial report with the full four-point decomposition:
-
-- in-plane changes 6×6→8×8 at kz=2 and kz=4;
-- c-axis changes kz=2→4 at 6×6 and 8×8;
-- the difference-in-differences interaction for native energy, free energy, and per-atom force vectors;
-- force RMS, maximum per-atom difference, Cartesian component and species breakdowns;
-- pass/fail against 2 meV/atom energy budgets and 0.01 eV/Å force-vector RMS.
-
-Keep conclusions limited to this frozen pure-phase numerical control. Do not launch another DFT job, training, gap scan, or dynamics, and do not change A's ownership. Keep the gap scan disabled. Publish a brief status before starting and hash-verify each report update.
-
-The exact assignment is in [`assignment.json`](assignment.json).
+The report was generated from four verified archives; the large GPAW checkpoints were not part of the archives.
