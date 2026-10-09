@@ -30,3 +30,7 @@ B registered Ag_displacement_m01_k6x6x6_v19, Ag_volume_m02_k6x6x6_v19, Ag_volume
 ## Ag volume numerical follow-up
 
 B registered Ag_volume_m02_k8x8x8_v19 then Ag_volume_p02_k8x8x8_v19 for matched k6/k8 comparison. k8 baseline remains disabled; no claimed k8 energy-volume curve.
+
+## Ag matched k8 volume curve
+
+B now registered Ag_baseline_k8x8x8_v19 to complete same-mesh baseline with completed +/-2% k8 volumes. Check baseline k6/k8 then assemble baseline-subtracted k8 curve; not an optimized lattice or thermal-stability claim.

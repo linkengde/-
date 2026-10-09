@@ -78,7 +78,8 @@
     "v19_Ag_bulk_mesh_DFT",
     "v19_Ag_displaced_force_mesh_DFT",
     "v19_Ag_symmetric_displacement_volume_controls",
-    "v19_Ag_volume_k6_k8_controls"
+    "v19_Ag_volume_k6_k8_controls",
+    "v19_Ag_k8_baseline_and_volume_curve"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -177,11 +178,12 @@
     "Ag_volume_m02_k6x6x6_v19": "running; SCF iteration 10; updated 2026-10-09T07:59:58.021746+00:00",
     "Ag_volume_p02_k6x6x6_v19": "completed; SCF iteration 18; elapsed 469s; updated 2026-10-09T08:08:27.959109+00:00",
     "Ag_volume_m02_k8x8x8_v19": "running; SCF iteration 10; updated 2026-10-09T08:24:32.021609+00:00",
-    "Ag_volume_p02_k8x8x8_v19": "completed; SCF iteration 15; elapsed 710s; updated 2026-10-09T08:38:16.140718+00:00"
+    "Ag_volume_p02_k8x8x8_v19": "completed; SCF iteration 15; elapsed 710s; updated 2026-10-09T08:38:16.140718+00:00",
+    "Ag_baseline_k8x8x8_v19": "registered; complete matched k8 volume curve"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Start registered Ag +/-2% volume k8 controls; verify/publish each then compare respective k6/k8 pairs. Investigate provisional EAM/DFT volume-response disagreement before adopting any fit.",
+  "next_action": "Start Ag_baseline_k8x8x8_v19 now, verify/publish then compare k6/k8 and assemble matched k8 three-volume curve. No other physical job authorized.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-09T08:38:19.363939+00:00",
   "labels": {
@@ -217,7 +219,8 @@
     "Ag_volume_m02_k6x6x6_v19": "completed",
     "Ag_volume_p02_k6x6x6_v19": "completed",
     "Ag_volume_m02_k8x8x8_v19": "completed",
-    "Ag_volume_p02_k8x8x8_v19": "completed"
+    "Ag_volume_p02_k8x8x8_v19": "completed",
+    "Ag_baseline_k8x8x8_v19": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -288,7 +291,8 @@
     "v19_Ag_bulk_mesh_DFT": "Run the two explicitly enabled Ag bulk baseline numerical controls sequentially: Ag_baseline_k2x2x2_v19, Ag_baseline_k4x4x4_v19. Use the production run_queue.py EXACT_LABEL; publish starting status before each calculation and verify/archive/publish after success. Check existing MPI runtime missing-only. Four ranks/one thread, one local DFT job only. Stop on failure and preserve checkpoint; do not relaunch same output. All denser meshes, displaced/strained controls and Ti3SiC2 records remain disabled; do not run draft labels or old completed jobs. After both outputs publish an exact-geometry mesh comparison of native/free energy per atom and force-vector RMS/max (2meV/atom and0.01eV/A numeric budgets). Baseline symmetry can make forces small: this is not displaced-force or independent-interface/model validation. Await A review before denser meshes. No MACE/MD/sealed access.\nA follow-up registration: k2 and k4 completed, energy comparison fails. Run only Ag_baseline_k6x6x6_v19 next with identical input/method except mesh; verify/publish and report k4/k6 native/free energy per atom and vector RMS/max. Freeze all existing archives. k8 and perturbation/other-phase jobs remain disabled. Publish starting status; preserve failed outputs; never duplicate a running job.",
     "v19_Ag_displaced_force_mesh_DFT": "Run Ag_displacement_p01_k4x4x4_v19 then Ag_displacement_p01_k6x6x6_v19 sequentially with production run_queue.py EXACT_LABEL; each must verify/archive/publish before next. Same 32-atom Ag input (one atom +0.01A x) bytes, same method except mesh, numerical-control role only. Compare native/free energy delta per atom and all-atom force-vector RMS/max using existing 2meV/atom and0.01eV/A budgets. Also compare displacement-minus-baseline energy and changed-atom/neighbour force response within each mesh; do not treat a single positive displacement as central finite difference or stability proof. Publish start and completion. No optimization, MD, fitted parameters, training, sealed access, old job repeat or other unregistered launch. Stop/preserve failed output. k8 and all Ti3SiC2 still disabled.",
     "v19_Ag_symmetric_displacement_volume_controls": "Run sequentially Ag_displacement_m01_k6x6x6_v19, Ag_volume_m02_k6x6x6_v19, Ag_volume_p02_k6x6x6_v19. Exact production run_queue.py LABEL, four MPI ranks, one thread, owner/input/method guards and local lock. Each job must converge, verify/archive and publish before the next. Stop on failure and preserve outputs. Reuse existing +0.01A and baseline k6; do not rerun. Publish started status and completion per stage. Analyze matched +/- displacement energy symmetry, central free-energy secant vs mean displaced-atom x force with explicit sign and finite-step limitations; native energy separately. Compare volume +/-2% energies with same-cell composition/target and record sampled-volume ordering, not optimized lattice or proof of 300K stability. Previous k4/k6 checks covered baseline/+displacement only; volume meshes are provisional and may require denser control before training. After DFT, prepare pure-Ag EAM static prediction/comparison input list for A using supplied candidate02 EAM file; no MD, minimization, heating, training, new potential adoption or sealed data. These related controls are not independent interface validation. All other unregistered records remain disabled.",
-    "v19_Ag_volume_k6_k8_controls": "Run Ag_volume_m02_k8x8x8_v19, Ag_volume_p02_k8x8x8_v19 sequentially using production run_queue.py EXACT_LABEL. Same +/-2% input as completed k6; only mesh changes. Publish start, verify/archive/publish before next; preserve failures/no retries on existing outputs. Compare native/free energy delta per atom and vector RMS/max for each k6/k8 pair with unchanged 2meV/atom and0.01eV/A numeric budgets. k8 baseline is still disabled, so do not create baseline-subtracted k8 energy curves without registration. Explain volume comparison does not prove optimized lattice or thermal/interface/model stability. No old k6 repeats, MD, training, parameters changes or sealed access. Stop after published comparison."
+    "v19_Ag_volume_k6_k8_controls": "Run Ag_volume_m02_k8x8x8_v19, Ag_volume_p02_k8x8x8_v19 sequentially using production run_queue.py EXACT_LABEL. Same +/-2% input as completed k6; only mesh changes. Publish start, verify/archive/publish before next; preserve failures/no retries on existing outputs. Compare native/free energy delta per atom and vector RMS/max for each k6/k8 pair with unchanged 2meV/atom and0.01eV/A numeric budgets. k8 baseline is still disabled, so do not create baseline-subtracted k8 energy curves without registration. Explain volume comparison does not prove optimized lattice or thermal/interface/model stability. No old k6 repeats, MD, training, parameters changes or sealed access. Stop after published comparison.",
+    "v19_Ag_k8_baseline_and_volume_curve": "Run only Ag_baseline_k8x8x8_v19 now, production run_queue.py EXACT_LABEL; publish started, verify/archive/publish. Do not repeat completed volume k8 or baseline k6. Compare baseline k6/k8 with unchanged 2meV/atom and0.01eV/A numerical budgets, free energy separately. Then assemble all-k8 baseline-subtracted +/-2% volume curve using already-verified k8 archives; record native/free ordering/deltas and input/PAW/method identities. Compare same-geometry EAM volume deltas from A candidate02_Ag_EAM_pure_phase_check/report.json, reference hashes and differences; do not compare raw energy zeros or claim optimized lattice/thermal stability. All three points share a parent and are not independent interface validation. No parameter fitting/adoption, MD/heating, training, sealed access or additional unregistered launch; stop on failure preserving output, stop after publication."
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
@@ -314,6 +318,7 @@
     "Ag_volume_m02_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_volume_p02_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_volume_m02_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ag_volume_p02_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ag_volume_p02_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ag_baseline_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   }
 }
