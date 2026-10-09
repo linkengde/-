@@ -1,0 +1,158 @@
+{
+  "status": "COMPARISON_VERIFIED",
+  "pairs": [
+    {
+      "labels": [
+        "Ag_shear_m005_k6x6x6_v19",
+        "Ag_shear_m005_k8x8x8_v19"
+      ],
+      "metrics": {
+        "native_energy_delta_meV_atom": 1.3546676860931584,
+        "free_energy_delta_meV_atom": 0.7904650003007774,
+        "force_vector_RMSE_eV_A": 3.5041561709372326e-05,
+        "maximum_atom_force_difference_eV_A": 5.231332310174877e-05
+      },
+      "checks": {
+        "native_energy": true,
+        "free_energy": true,
+        "force_RMSE": true,
+        "force_max": true
+      }
+    },
+    {
+      "labels": [
+        "Ag_shear_p005_k6x6x6_v19",
+        "Ag_shear_p005_k8x8x8_v19"
+      ],
+      "metrics": {
+        "native_energy_delta_meV_atom": 1.3546676854825357,
+        "free_energy_delta_meV_atom": 0.7904649996892665,
+        "force_vector_RMSE_eV_A": 3.504156285805612e-05,
+        "maximum_atom_force_difference_eV_A": 5.2313326753202775e-05
+      },
+      "checks": {
+        "native_energy": true,
+        "free_energy": true,
+        "force_RMSE": true,
+        "force_max": true
+      }
+    }
+  ],
+  "numeric_budgets": {
+    "energy_meV_atom": 2,
+    "force_eV_A": 0.01
+  },
+  "checks_pass": true,
+  "k8_shear_relative_to_baseline": [
+    {
+      "label": "Ag_shear_m005_k8x8x8_v19",
+      "native_delta_from_baseline8_meV_atom": 0.06797578547557137,
+      "free_delta_from_baseline8_meV_atom": 0.07043912813609055,
+      "input_sha256": "7fa523344eda2e4acac6a6240224d090b20ca4d713b15773c9d316e44298e9b6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "kpts": [
+          8,
+          8,
+          8
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "summary_sha256": "95e41a264845cbf1b68f139bc8d238d80dead6c437180483e66ce36b3c4996c9"
+    },
+    {
+      "label": "Ag_shear_p005_k8x8x8_v19",
+      "native_delta_from_baseline8_meV_atom": 0.06797578503769941,
+      "free_delta_from_baseline8_meV_atom": 0.0704391276977745,
+      "input_sha256": "694f6677dc431f58bd589db49d37cdc45faf61fe2427f595ce1d3d33cb104372",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "kpts": [
+          8,
+          8,
+          8
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "summary_sha256": "e690c0f160edfc82429cfcda50db2638141fc1ae521c8b57418ef073e9cd5f20"
+    }
+  ],
+  "plus_minus_native_energy_asymmetry_meV_atom": -4.3787196091216174e-10,
+  "plus_minus_free_energy_asymmetry_meV_atom": -4.383160501220118e-10,
+  "EAM_static_input_list": [
+    {
+      "label": "Ag_baseline_k8x8x8_v19",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ag_baseline_k8x8x8_v19/Ag_baseline_k8x8x8_v19_PW_PBE.extxyz",
+      "sha256": "5a5df757d11e85988d22d97c7f6b2d2700803494215a2a1b40ebc3aa8ba5019d"
+    },
+    {
+      "label": "Ag_shear_m005_k8x8x8_v19",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ag_shear_m005_k8x8x8_v19/Ag_shear_m005_k8x8x8_v19_PW_PBE.extxyz",
+      "sha256": "079c9f0dfc7aab65d1119f47cb1ef9420f2938af2fca2d997a86dfa4a33df882"
+    },
+    {
+      "label": "Ag_shear_p005_k8x8x8_v19",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ag_shear_p005_k8x8x8_v19/Ag_shear_p005_k8x8x8_v19_PW_PBE.extxyz",
+      "sha256": "8adcd40f780ff367fef11243d1985d7b6972814f2649f94157a4b962a862cb93"
+    }
+  ],
+  "limits": [
+    "Shear control only; these comparisons do not establish stress accuracy or elastic constants.",
+    "Small/symmetric forces do not demonstrate broad thermal stability or independent interface validation.",
+    "No MD, heating, training or parameter adoption."
+  ]
+}
