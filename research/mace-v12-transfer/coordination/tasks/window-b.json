@@ -205,13 +205,14 @@
     "v19_Ti3SiC2_bulk_mesh_comparison_independent_review_window_b": "completed; SCF iteration 3; updated 2026-10-09T13:59:52.424667+00:00",
     "Ti3SiC2_baseline_k6x6x4_v19": "completed; SCF iteration 33; elapsed 4220s; updated 2026-10-09T15:25:24.108949+00:00",
     "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b": "full 2x2 report ready; A executed B-prepared script and independently recomputed; B independent review requested; no DFT/MPI",
-    "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "assigned; independent read-only re-audit of four verified Ti3SiC2 mesh archives and force/energy matrix; no DFT/MPI"
+    "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "deferred; user redirected B to the registered 10x10x4 Ti3SiC2 calculation",
+    "Ti3SiC2_baseline_k10x10x4_v19": "queued; exact registered 10x10x4 in-plane mesh refinement at fixed kz=4; four-rank preflight required"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Re-read the four verified mesh archives and their manifests, independently recompute directional native/free energy and all-atom force-vector RMS/max deltas from archived extxyz (do not call the existing matrix script as the sole calculation), verify the 2 meV/atom and 0.01 eV/A gates, inspect species/component contributions, and publish a concise reproducible report plus script and SHA256 inventory. No GPAW/MPI, training/inference, sealed labels, or interface scans.",
+  "next_action": "Run only Ti3SiC2_baseline_k10x10x4_v19 on B using its registered four-rank GPAW/PW-PBE entry, publish a running status before launching, pass preflight and archive verification, then compare against the verified 8x8x4 point using the 2 meV/atom energy and 0.01 eV/A force-vector RMS budgets. Do not run other labels.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T16:11:55.780076+00:00",
+  "updated_utc": "2026-10-09T16:12:35.599101+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -261,7 +262,8 @@
     "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
     "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "queued",
     "Ti3SiC2_baseline_k6x6x4_v19": "completed",
-    "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "assigned"
+    "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "deferred_by_user",
+    "Ti3SiC2_baseline_k10x10x4_v19": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -274,11 +276,11 @@
     "updated_utc": "2026-10-09T15:37:53.499198+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "Independent read-only re-audit assigned: verify the completed Ti3SiC2 2x2 mesh matrix and its force RMS interpretation",
+  "current_stage": "B assigned the Ti3SiC2 10x10x4 fixed-kz in-plane mesh refinement; independent matrix re-audit deferred",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
-  "task_boundary": "B is assigned only a read-only independent numerical re-audit of the verified Ti3SiC2 meshes 6x6x2, 6x6x4, 8x8x2, 8x8x4 and the published 2x2 report. Recompute the four directional pair contrasts from archive extxyz files with an independent implementation, validate source/method/geometry and archive hashes, assess the stated force and energy thresholds and elemental contributions, and publish the report, script, and SHA256 inventory under coordination/reports/window-b/v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b. Do not launch DFT/MPI, edit A-owned calculations or task entries, train/infer, access sealed labels, or run gap scans. A owns and runs the separate registered 10x10x2 calculation.",
+  "task_boundary": "B may run only Ti3SiC2_baseline_k10x10x4_v19 using the exact registered input/method, four MPI ranks and one thread/rank. Publish running status before launch, pass entry/resource preflight, verify and publish the compact archive. Compare its verified result with Ti3SiC2_baseline_k8x8x4_v19 after completion. Do not run other DFT labels, modify A-owned calculations/tasks, train/infer, access sealed labels, or run interface gap scans. The prior read-only mesh matrix re-audit is deferred by user.",
   "task_card_merge_note": "User authorized one complementary B-owned Ti3SiC2 kz-mesh DFT control; current B owner preserved, no gap-scan labels enabled, A job untouched.",
   "recurring_version_review": {
     "trigger": "A publishes each completed model-version training/evaluation; A creates assigned vN_iteration_review job automatically",
@@ -380,7 +382,8 @@
     "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
     "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
     "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
-    "Ti3SiC2_baseline_k6x6x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ti3SiC2_baseline_k6x6x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ti3SiC2_baseline_k10x10x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   },
   "analysis_assignments": {
     "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b": {
@@ -396,9 +399,23 @@
   "independent_mesh_reaudit": {
     "label": "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b",
     "assigned_utc": "2026-10-09T16:11:55.780064+00:00",
-    "status": "assigned",
+    "status": "deferred_by_user",
     "source_report": "research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_2x2_mesh_factorial_review_window_b/report.json",
     "output_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b",
-    "dft_or_mpi_authorized": false
+    "dft_or_mpi_authorized": false,
+    "deferred_utc": "2026-10-09T16:12:35.599088+00:00"
+  },
+  "assigned_mesh_followup": {
+    "label": "Ti3SiC2_baseline_k10x10x4_v19",
+    "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
+    "status": "queued",
+    "reference_label": "Ti3SiC2_baseline_k8x8x4_v19",
+    "kpts": [
+      10,
+      10,
+      4
+    ],
+    "registered_utc": "2026-10-09T16:12:35.599099+00:00",
+    "required_preflight": "four MPI ranks; GPAW 26.7.0; ScaLAPACK; disk reserve and method/input hashes"
   }
 }
