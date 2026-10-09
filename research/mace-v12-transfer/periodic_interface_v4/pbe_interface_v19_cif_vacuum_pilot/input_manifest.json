@@ -1,0 +1,52 @@
+{
+  "launch_enabled": true,
+  "source_manifest_sha256": "f543091f67ed1a85bf005869d95d5a9931ebf524defd0c3e3e81d93dde7f2342",
+  "source_cif_sha256": "6abbf0a40208c5985cacc3b9ac3564a944702203ad57e961010a674f30d598c3",
+  "records": [
+    {
+      "label": "AgSi_COD9009647_vacuum26_k6x6_sigma0p10",
+      "input": "inputs/AgSi_vacuum26_periodic.extxyz",
+      "input_sha256": "81e73a08a241634fc751ed51323177576f502391049ff9476c4c7acf5665f46d",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "role": "numerical_convergence_pilot_not_training_or_validation_label",
+      "owner_task": "window-a",
+      "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
+      "state": "registered_queued",
+      "baseline_label": "AgSi_COD9009647_pilot_k6x6",
+      "translation_z_A": 5.0,
+      "cell_height_delta_A": 10.0
+    }
+  ],
+  "cutoff_eV": 500,
+  "fermi_smearing_eV": 0.1,
+  "matched_geometry": true,
+  "MPI_ranks": 4,
+  "pilot_only": true,
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "parallel": {
+      "sl_auto": true
+    },
+    "scf_thresholds": "energy/density/eigenstates 1e-5",
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "GPAW_version": "26.7.0"
+  },
+  "energy_convention": "GPAW native extrapolated energy, force_consistent=False; free_energy recorded separately",
+  "disk_budget": {
+    "minimum_start_bytes": 8589934592,
+    "minimum_before_checkpoint_bytes": 3221225472,
+    "meaning": "Conservative reserve, not measured checkpoint size; fail before checkpoint if depleted"
+  },
+  "A_approval": "A accepts same-input6/8 sigma0.10 numerical comparison PASS; register one expanded-vacuum periodic6x6 sigma0.10 sensitivity job, no dipole/boundary change or training",
+  "baseline_manifest_sha256": "6c4d2d4c5e0d381c21179d9d4ff7c59e0d752547b30a3226993e8d6a0c6373ce",
+  "width005_manifest_sha256": "9688f4729d90706531bc52e8946e63a448836ed85cf34ff14d3c433efdfd1fe9",
+  "reference_decision": "Provisional fixed-width6x6x1/sigma0.10/PW500/PBE for this52atom geometry;6/8 checks all PASS; other geometries/energy convention remain separately reviewed",
+  "reference_comparison_sha256": "284f4c2d120059a7031465fc23c0ad8fb78374b02e5fd5247419843e66e2b701"
+}

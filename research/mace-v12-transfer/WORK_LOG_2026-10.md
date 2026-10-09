@@ -545,3 +545,7 @@ User requested continued B work. Added ready-now v19_numerical_target_and_vacuum
 ### Parallel pure-phase and short-range preparation
 
 A8x8 fixed-width numerical job remains active at SCF25. B completed source/coverage and vacuum-entry audits; registered ready-now launch-disabled pure Ag/sourced Ti3SiC2 static control input preparation and short-range continuity protocol. Actual DFT target/owner approval remains pending numerical decision; no phase stability/impact acceptance claim from static preparation.
+
+### Provisional numerical recipe and expanded vacuum registered
+
+6/8 sigma0.10 fixed52atom comparison: energy0.181234meV/atom, vector0.002767153eV/A, pair0.001466422eV/A all PASS. Retain6x6/sigma0.10/PW500/PBE as geometry-specific provisional sensitivity recipe; not zero-temperature/native-force-consistent or model acceptance claim. Expanded periodic vacuum input copied from B verified proposal; exact source/IDs/relative geometry/height+10/translation+5 checks PASS; disabled direct calculator rejected before output. Register one new A control with8/3GiB resource guards and unchanged method. B assigned launch-disabled actual-PBC/Poisson runner/verifier preparation for later slab-off/on controls, no new B calculation yet.
