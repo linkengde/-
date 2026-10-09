@@ -537,3 +537,7 @@ User authorized assigning B tasks and A proceeding if B does not respond. B has 
 ### Fixed-width even6/8 density control
 
 A0.05 and0.20 completed/verified;0.05 5/6 vector0.019478 fails numerical budget while energy/pair pass. Fixed5 width controls also fail force/pair; no causal cure claimed. User authorized continued work; registered A8x8x1 at original0.10 width to isolate even-grid density from width/odd-even confounds. All historical manifests untouched to preserve comparison pins. Increased startup/runtime reserves8/3GiB; four actual cores and available memory/disk checked before launch. B0.20 currently running; no duplicate B job.
+
+### B immediate follow-up after completed width scan
+
+User requested continued B work. Added ready-now v19_numerical_target_and_vacuum_entry_review before existing coverage audit. B independently reviews sigma0.20 local pass vs finite-width/cross-target limitations and prepares launch-disabled vacuum/dipole inputs with source/method/PW-API checks, without waiting for A8x8. Then audits training coverage/independent family split and actual Stage69 asset availability. No new B DFT or training authorized by these review tasks; numerical decision remains evidence-gated. Task start/result publication required.
