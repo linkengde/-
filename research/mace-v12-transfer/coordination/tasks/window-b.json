@@ -206,13 +206,14 @@
     "Ti3SiC2_baseline_k6x6x4_v19": "completed; SCF iteration 33; elapsed 4220s; updated 2026-10-09T15:25:24.108949+00:00",
     "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b": "full 2x2 report ready; A executed B-prepared script and independently recomputed; B independent review requested; no DFT/MPI",
     "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "deferred; user redirected B to the registered 10x10x4 Ti3SiC2 calculation",
-    "Ti3SiC2_baseline_k10x10x4_v19": "completed; SCF iteration 34; elapsed 11722s; updated 2026-10-09T23:05:35.197289+00:00"
+    "Ti3SiC2_baseline_k10x10x4_v19": "completed; SCF iteration 34; elapsed 11722s; updated 2026-10-09T23:05:35.197289+00:00",
+    "v19_slab_reference_method_readiness_review_window_b": "queued; read-only archive/method audit; no DFT or MPI authorized"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Do not start another B calculation under this assignment. Await a new main registration. The 10x10x4 archive and hash-verified k8x8x4 comparison report are published under pbe_interface_v19_pure_phase_controls/calculations/Ti3SiC2_baseline_k10x10x4_v19.",
+  "next_action": "Perform the registered read-only slab-reference method audit. Reverify existing AgSi CIF slab mesh/smearing and dipole on/off archives, inspect the 26A/36A vacuum proposals, recompute matched archive contrasts, and state which settings are supported versus still missing. Publish report, reproducible analysis, and SHA256 inventory. Do not launch DFT/MPI or enable gap scans.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:05:35.197289+00:00",
+  "updated_utc": "2026-10-09T23:07:11.780887+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -276,11 +277,11 @@
     "updated_utc": "2026-10-09T23:05:35.197289+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "B Ti3SiC2 10x10x4 run, archive verification, and k8x8x4 comparison complete; all three budgets pass",
+  "current_stage": "Ti3SiC2 10x10x4 control and matched mesh comparison complete; new read-only slab-reference settings audit assigned",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
-  "task_boundary": "B may run only Ti3SiC2_baseline_k10x10x4_v19 using the exact registered input/method, four MPI ranks and one thread/rank. Publish running status before launch, pass entry/resource preflight, verify and publish the compact archive. Compare its verified result with Ti3SiC2_baseline_k8x8x4_v19 after completion. Do not run other DFT labels, modify A-owned calculations/tasks, train/infer, access sealed labels, or run interface gap scans. The prior read-only mesh matrix re-audit is deferred by user.",
+  "task_boundary": "For this assignment, analyze published archives and input proposals only: no DFT, MPI, manifest/input mutation, label enabling, gap scans, training/inference, or sealed-label access. Revalidate archive checksums and exact geometry/method matching. Keep k-mesh, smearing, vacuum, PBC, and dipole effects separated; state that bulk Ti3SiC2 mesh convergence does not prove slab or interface convergence. Publish only under the assigned window-b report directory and task/progress records.",
   "task_card_merge_note": "User authorized one complementary B-owned Ti3SiC2 kz-mesh DFT control; current B owner preserved, no gap-scan labels enabled, A job untouched.",
   "recurring_version_review": {
     "trigger": "A publishes each completed model-version training/evaluation; A creates assigned vN_iteration_review job automatically",
@@ -394,6 +395,26 @@
       "assigned_utc": "2026-10-09T15:30:40.996438+00:00",
       "report_commit_pending": true,
       "note": "All four archives are verified. A ran the B-prepared script and independently recomputed contrasts; B independent review requested. No DFT/MPI."
+    },
+    "v19_slab_reference_method_readiness_review_window_b": {
+      "status": "queued",
+      "assigned_utc": "2026-10-09T23:07:11.780872+00:00",
+      "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_slab_reference_method_readiness_review_window_b",
+      "mode": "read-only; no DFT/MPI; no manifest/input changes",
+      "required_sources": [
+        "AgSi_COD9009647_pilot_gamma through k8x8x1 mesh archives",
+        "sigma0.05 and sigma0.20 matched mesh archives",
+        "AgSi_originalvac_slab_dipole_off_v19 and AgSi_originalvac_slab_dipole_on_v19",
+        "26A dipole-off and 36A dipole-on label-free proposals",
+        "A published Ti3SiC2 fixed-geometry mesh matrix"
+      ],
+      "required_outputs": [
+        "README.md",
+        "machine-readable metrics",
+        "reproducible analysis script",
+        "SHA256SUMS.txt"
+      ],
+      "decision": "Recommend the minimum defensible matched slab method and list remaining controls needed before enabling the gap scan."
     }
   },
   "independent_mesh_reaudit": {
