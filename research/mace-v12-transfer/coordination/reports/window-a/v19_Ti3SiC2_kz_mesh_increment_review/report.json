@@ -1,0 +1,96 @@
+{
+  "task": "v19_Ti3SiC2_kz_mesh_increment_review",
+  "status": "PASS",
+  "comparison": "same frozen 48-atom Ti3SiC2 baseline; k6x6x2 versus k6x6x4",
+  "delta_direction": "k6x6x4 minus k6x6x2",
+  "geometry_checks": {
+    "symbols_exact": true,
+    "positions_exact": true,
+    "cell_exact": true,
+    "pbc_exact": true,
+    "atom_ids_exact": true,
+    "source_and_input_hash_equal": true,
+    "both_archives_verified": true
+  },
+  "meshes": [
+    [
+      6,
+      6,
+      2
+    ],
+    [
+      6,
+      6,
+      4
+    ]
+  ],
+  "method_equal_except_kpts": true,
+  "source_input_sha256": "157c1dab02a28e6140dd5191187ccd914fe558950e2ac6c136866bcc7805c3e4",
+  "archive_sha256_manifests_verified": {
+    "Ti3SiC2_baseline_k6x6x2_v19": {
+      "Ti3SiC2_baseline_k6x6x2_v19_PW_PBE.extxyz": "fe7ec9ce8b17884aab37f45d2c1c494878c7536571ca41a41bbf8c584e309c8c",
+      "gpaw.log": "ad4a8b9ce2ff5f303fac1330cb4d699b33a94c55289982f595871a63fe93197a",
+      "progress.json": "82ea7a058aea611ae813cbe550f7fd88b025c57929af8ab925f84d5b2414477c",
+      "summary.json": "0caea4cfadd08989bc9570e0ebf775fd99245e495c51ceab7c4074e79c1b023f",
+      "verification.json": "74dc99d2a3a168945752cd6a389e03aece9db9fe12c2d490f0210980a5d440f5"
+    },
+    "Ti3SiC2_baseline_k6x6x4_v19": {
+      "Ti3SiC2_baseline_k6x6x4_v19_PW_PBE.extxyz": "29e9ac254984b4a4ab6a22cbac7043c2cf9a826eb498422f1860a5798e72cee4",
+      "gpaw.log": "2440103cb4ce19361258b2665e5eb516b8269cc69092ef97ad21699cb7233922",
+      "progress.json": "6ce61588759f04cc9427990566d85c92e573ae4ed421fc4fe38f76b9cd4fc088",
+      "summary.json": "08f6061fa96a3cddd2c81acec37623b3a719cdd1b50a9f1f8aed340c949a3ccc",
+      "verification.json": "27b0825206d562b5ec1a0c6821c57ad7232066356ab5db882d6792bdcae7315d"
+    }
+  },
+  "scf": {
+    "Ti3SiC2_baseline_k6x6x2_v19": {
+      "iterations": 41,
+      "elapsed_s": 4194.706858158112,
+      "converged": true
+    },
+    "Ti3SiC2_baseline_k6x6x4_v19": {
+      "iterations": 33,
+      "elapsed_s": 4219.684205293655,
+      "converged": true
+    }
+  },
+  "metrics": {
+    "native_energy_delta_meV_atom": 0.31833639106556194,
+    "free_energy_delta_meV_atom": 0.15785493953046625,
+    "force_vector_rms_eV_A": 0.0028842302803469364,
+    "maximum_atom_force_vector_difference_eV_A": 0.004881001864503346,
+    "force_component_rms_eV_A": [
+      0.0010134693156158927,
+      0.0005851875302689564,
+      0.002636137289822543
+    ],
+    "species_force_vector_rms_eV_A": {
+      "C": {
+        "atom_count": 16,
+        "force_vector_rms_eV_A": 0.0013343692970468942,
+        "max_atom_force_vector_difference_eV_A": 0.001351400852502305
+      },
+      "Si": {
+        "atom_count": 8,
+        "force_vector_rms_eV_A": 0.0009192650222395581,
+        "max_atom_force_vector_difference_eV_A": 0.0009192650360068499
+      },
+      "Ti": {
+        "atom_count": 24,
+        "force_vector_rms_eV_A": 0.0038947218487548445,
+        "max_atom_force_vector_difference_eV_A": 0.004881001864503346
+      }
+    }
+  },
+  "thresholds": {
+    "absolute_native_energy_delta_meV_atom": 2.0,
+    "absolute_free_energy_delta_meV_atom": 2.0,
+    "force_vector_rms_eV_A": 0.01
+  },
+  "checks": {
+    "native_energy": true,
+    "free_energy": true,
+    "force_vector": true
+  },
+  "interpretation": "At this fixed geometry and fixed 6x6 in-plane mesh, increasing kz from 2 to 4 passes the stated native-energy, free-energy, and force-vector RMS budgets. This is a numerical mesh control only; it does not establish general k-mesh convergence, material stability, or model accuracy. The registered 8x8x2 result is still needed to isolate in-plane sensitivity and complete the 2x2 mesh comparison."
+}
