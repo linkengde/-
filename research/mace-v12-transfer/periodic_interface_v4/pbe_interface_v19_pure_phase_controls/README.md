@@ -1,0 +1,12 @@
+# Registered pure-phase numerical controls
+
+A integrated the B draft, corrected production repository resolution and explicit unassigned-owner rejection; all 20 static tests passed before enabling. Only Ag_baseline_k2x2x2_v19 and Ag_baseline_k4x4x4_v19 are registered to new B. All remaining proposed records stay disabled and unassigned. Input bytes and method are unchanged. These are numerical controls, not independent validation or accepted training labels.
+
+Run sequentially from repository root:
+
+```bash
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/run_queue.py Ag_baseline_k2x2x2_v19
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/run_queue.py Ag_baseline_k4x4x4_v19
+```
+
+Run the second only after the first verifies and publishes successfully. Existing outputs block repeated launches. Each queue publishes status, runs four MPI ranks with one thread each and automatically verifies compact archives before publishing; state.gpw stays local. Read mesh_plan.json for spacing and limitations. Equilibrium forces do not certify displaced/strained forces. Native extrapolated and free energies remain separate. Do not rerun disabled-fixture tests on this enabled production manifest; their preserved validation describes pre-enablement tests, not physical DFT readiness. No Ag DFT has been started by A.
