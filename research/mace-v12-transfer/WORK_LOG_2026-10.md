@@ -549,3 +549,7 @@ A8x8 fixed-width numerical job remains active at SCF25. B completed source/cover
 ### Provisional numerical recipe and expanded vacuum registered
 
 6/8 sigma0.10 fixed52atom comparison: energy0.181234meV/atom, vector0.002767153eV/A, pair0.001466422eV/A all PASS. Retain6x6/sigma0.10/PW500/PBE as geometry-specific provisional sensitivity recipe; not zero-temperature/native-force-consistent or model acceptance claim. Expanded periodic vacuum input copied from B verified proposal; exact source/IDs/relative geometry/height+10/translation+5 checks PASS; disabled direct calculator rejected before output. Register one new A control with8/3GiB resource guards and unchanged method. B assigned launch-disabled actual-PBC/Poisson runner/verifier preparation for later slab-off/on controls, no new B calculation yet.
+
+### Slab off/on integrated and owner registered
+
+B draft accepted after11file inventory; moved to production pbe_interface_v19_cif_slab_controls, corrected repository-root resolution, eliminated nested gpaw-info subprocesses inside MPI ranks, integrated locked CLI progress/compact completion publication and45s monitoring.16 disabled/synthetic rejection tests rerun PASS, no physical fixture labels. Original16A vacuum TTF slab-off assigned A; same-cell TTF dipolelayerxy-on assigned B. Recipe6x6/PW500/PBE/sigma0.10 and PAW pins fixed. A waits for its expanded periodic vacuum run to finish; B may launch exact registered own label.6/2GiB resource guards, no duplicate baseline, no model training.

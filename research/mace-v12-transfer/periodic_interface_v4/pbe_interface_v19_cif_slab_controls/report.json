@@ -1,0 +1,52 @@
+{
+  "status": "DRAFT_VERIFIED_LAUNCH_DISABLED",
+  "DFT_executed": false,
+  "API_evidence_sha256": {
+    "old/pw/hamiltonian.py": "8976a854d0e3a448b307f31f7127b1f037415fe14a3aaa5db6dc0003671c1d8a",
+    "dipole_correction.py": "0dae44aa08f62e69f7079ece6eebc6a3be05cd665b9688d2204ced5534118b43",
+    "new/pw/builder.py": "efcbcfade1ae1e1eaddc405116506282eebe5479ef97899ba4d5a82e047be15a",
+    "new/pw/poisson.py": "d6f73e9306c8684c445fdc21e6c5ce2f892f1b5bd413752693f06e131fc9b77e",
+    "new/ase_interface.py": "570c92ca14dd54fa46cd8c7137f1a822cba66392271b1d97229a7c2090275f0f"
+  },
+  "validation": {
+    "status": "STATIC_REJECTION_TESTS_PASS",
+    "physical_calculations": 0,
+    "fixture_warning": "All synthetic energies/forces/logs are nonphysical, temporary and not archived as DFT.",
+    "checks": [
+      "disabled run_queue.py rejected",
+      "disabled run_pw_reference.py rejected",
+      "input pbc rejected",
+      "input poissonsolver rejected",
+      "input input_sha256 rejected",
+      "input ordered_ids rejected",
+      "nonphysical valid-shape fixture accepted: not physical evidence",
+      "result method rejected despite recomputed fixture inventory",
+      "result Poisson rejected despite recomputed fixture inventory",
+      "result PBC rejected despite recomputed fixture inventory",
+      "result source_hash rejected despite recomputed fixture inventory",
+      "result ids rejected despite recomputed fixture inventory",
+      "result unconverged rejected despite recomputed fixture inventory",
+      "result energy_convention rejected despite recomputed fixture inventory",
+      "result nonfinite rejected despite recomputed fixture inventory",
+      "extraneous archive file rejected"
+    ]
+  },
+  "entry_records": 2,
+  "provisional_target": "6x6x1/PBE500/Fermi0.10, original vacuum, pbcTTF, off/on dipolelayerxy",
+  "runtime_unverified": [
+    "actual slab SCF",
+    "runtime dipole forces and energy",
+    "A owner/job integration and compact publication"
+  ],
+  "A_integration_corrections": [
+    "move reviewed pack into production entry; preserve script-relative input paths and source path",
+    "register exact owner/labels then explicitly enable both launch flags and regenerate entry inventory",
+    "wire compact publication and task completion after verifier; existing draft queue returns verified archive",
+    "keep periodic vs slab-off boundary comparison distinct from slab-off/on dipole difference"
+  ],
+  "limitations": [
+    "static and nonphysical fixture checks do not establish physical readiness",
+    "native extrapolated energy is not finite-width force-consistent free energy",
+    "no baseline repeated, no DFT or model operations"
+  ]
+}
