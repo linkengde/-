@@ -38,3 +38,7 @@ B now registered Ag_baseline_k8x8x8_v19 to complete same-mesh baseline with comp
 ## Ag shear next task
 
 B registered Ag_shear_m005_k6x6x6_v19 then Ag_shear_p005_k6x6x6_v19, only after assigned k8 baseline and reports finish. Shear k6 convergence remains provisional. No stress/elastic or thermal validation is claimed.
+
+## Ti3SiC2 k8 follow-up
+
+A registered Ti3SiC2_baseline_k8x8x4_v19 after k4/k6 vector difference0.014596eV/Å exceeded0.01. Compare to completed k6, no old repeats.
