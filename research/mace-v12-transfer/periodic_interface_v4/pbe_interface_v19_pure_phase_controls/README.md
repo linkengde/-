@@ -22,3 +22,7 @@ Baseline k4/k6 locally passes. B now runs Ag_displacement_p01_k4x4x4_v19 then Ag
 ## Ti3SiC2 baseline registration
 
 A registered Ti3SiC2_baseline_k4x4x2_v19 and Ti3SiC2_baseline_k6x6x2_v19, sequentially after its active slab dipole-off job verifies/publishes. Fixed48-atom CIF bulk, all other method settings unchanged. Compare native/free energies and vector differences; baseline symmetry does not validate displaced forces.
+
+## Ag symmetric displacement/volume controls
+
+B registered Ag_displacement_m01_k6x6x6_v19, Ag_volume_m02_k6x6x6_v19, Ag_volume_p02_k6x6x6_v19 in that order. Existing positive/baseline reused. Volume k6 remains provisional: no broad convergence, optimized lattice or thermal stability claim.
