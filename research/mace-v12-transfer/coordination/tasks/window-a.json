@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-09T23:14:27.356235+00:00",
+  "updated_utc": "2026-10-09T23:15:33.522993+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "AgSi slab numerical-control audit complete: 6x6x1 mesh, 16-to-26A vacuum and 16A dipole toggle controls independently pass; exact 26A dipole-on parent still needs its label.",
+  "current_stage": "Slab controls reviewed and published; only the registered A-owned 26A dipole-on AgSi parent boundary reference is enabled.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -64,7 +64,8 @@
     "Ti3SiC2_baseline_k6x6x2_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
     "Ti3SiC2_baseline_k8x8x4_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
     "Ti3SiC2_baseline_k8x8x2_v19": "completed; SCF converged, archive verification PASS; included in mesh review",
-    "Ti3SiC2_baseline_k10x10x2_v19": "completed; archive verification PASS; independently compared with 8x8x2; native/free energy and all-atom force-vector RMS budgets PASS"
+    "Ti3SiC2_baseline_k10x10x2_v19": "completed; archive verification PASS; independently compared with 8x8x2; native/free energy and all-atom force-vector RMS budgets PASS",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued; exact 26A dipole-on AgSi parent boundary reference; only enabled gap-scan record"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -104,7 +105,8 @@
     "Ti3SiC2_baseline_k6x6x2_v19": "completed",
     "Ti3SiC2_baseline_k8x8x4_v19": "completed",
     "Ti3SiC2_baseline_k8x8x2_v19": "completed",
-    "Ti3SiC2_baseline_k10x10x2_v19": "completed"
+    "Ti3SiC2_baseline_k10x10x2_v19": "completed",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -143,11 +145,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "research/mace-v12-transfer/coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison",
-    "research/mace-v12-transfer/coordination/reports/window-a/v19_slab_reference_readiness"
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_slab_reference_readiness",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Register and run only the A-owned AgSi 26A dipole-on parent boundary-control label. Keep all +/-0.20A gap points disabled until its archived forces are checked against the existing 26A periodic and 16A dipole controls; then evaluate the candidate potential against interface DFT forces and separation-force projections.",
+  "next_action": "Run the exact registered AgSi 26A dipole-on parent reference, archive and verify it. Compare its force response with existing 26A periodic/no-dipole and 16A dipole controls; then decide if 36A or same-vacuum dipole contrast is required before enabling A-owned +/-0.20A AgSi separation labels. Do not enable AgC/AgTi labels in window-a.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -175,7 +178,8 @@
     "Ti3SiC2_baseline_k6x6x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ti3SiC2_baseline_k8x8x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ti3SiC2_baseline_k8x8x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ti3SiC2_baseline_k10x10x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ti3SiC2_baseline_k10x10x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
