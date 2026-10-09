@@ -1,0 +1,166 @@
+{
+  "task": "v19_pw_dipole_backend_semantics_review_window_b",
+  "scope": "Read-only GPAW 26.7.0 plane-wave slab/dipole source audit and interpretation of existing verified AgSi off/on archives. No DFT, calculator, MPI, gap-manifest, or input changes.",
+  "environment": {
+    "python": "3.12.14",
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1",
+    "mpi_enabled": true,
+    "openmpi": "5.0.7",
+    "scalapack_enabled": true,
+    "gpaw_info_checked": true
+  },
+  "installed_source_root": "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw",
+  "source_files": [
+    {
+      "path": "gpaw/new/pw/builder.py",
+      "sha256": "efcbcfade1ae1e1eaddc405116506282eebe5479ef97899ba4d5a82e047be15a",
+      "references": [
+        {
+          "lines": "51-70,133-146",
+          "finding": "Forwards Atoms.pbc to the uniform grid and passes configured Poisson parameters, including dipolelayer, to make_poisson_solver."
+        }
+      ]
+    },
+    {
+      "path": "gpaw/new/builder.py",
+      "sha256": "8f65bb722d6da927310ba6ba3037fe62b08a3c593aa118484eb96da3c3e8b266",
+      "references": [
+        {
+          "lines": "570-596",
+          "finding": "For mode='pw', realspace is false and zerobc is false on all axes; UGDesc still receives the pbc metadata."
+        }
+      ]
+    },
+    {
+      "path": "gpaw/core/plane_waves.py",
+      "sha256": "fdbbb11116141ff646649c41fc031f9370afa99a1629447a218552e2c7f551f8",
+      "references": [
+        {
+          "lines": "32-70",
+          "finding": "PWDesc initializes its Domain with (True, True, True), independent of Atoms.pbc."
+        }
+      ]
+    },
+    {
+      "path": "gpaw/new/pw/poisson.py",
+      "sha256": "d6f73e9306c8684c445fdc21e6c5ce2f892f1b5bd413752693f06e131fc9b77e",
+      "references": [
+        {
+          "lines": "20-36",
+          "finding": "Builds PWPoissonSolver and wraps it when dipolelayer is truthy; the 'xy' string is not decoded as an axis in this new PW path."
+        },
+        {
+          "lines": "39-83",
+          "finding": "Uses reciprocal-space PW kinetic energies as the periodic Coulomb kernel denominator and sets the G=0 potential component to zero."
+        },
+        {
+          "lines": "191-219",
+          "finding": "Requires exactly two periodic grid directions, infers the correction axis from the nonperiodic direction, and adds a sawtooth potential and dipole energy term."
+        }
+      ]
+    },
+    {
+      "path": "gpaw/dipole_correction.py",
+      "sha256": "0dae44aa08f62e69f7079ece6eebc6a3be05cd665b9688d2204ced5534118b43",
+      "references": [
+        {
+          "lines": "6-19,41-63",
+          "finding": "Legacy DipoleCorrection documents and parses plane strings such as 'xy', then requires a nonperiodic correction direction. This differs from the new PW wrapper's axis inference."
+        }
+      ]
+    },
+    {
+      "path": "gpaw/test/test_dipole.py",
+      "sha256": "2e584af5aaa924c8a796f98bfc2b004faeb3034ffa85ae7ac0795da675f94948",
+      "references": [
+        {
+          "lines": "28-64",
+          "finding": "The installed dipole test constructs GPAW with mode='lcao'; it does not establish coverage of the new plane-wave Poisson backend."
+        }
+      ]
+    }
+  ],
+  "archives": [
+    {
+      "label": "AgSi_originalvac_slab_dipole_off_v19",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_originalvac_slab_dipole_off_v19",
+      "archive_status": "PASS",
+      "input_sha256": "9e4fe1a59f8e9b7d8fd8aeb859448dae3af39dd6ce9574dc144233a78c7167f4",
+      "extxyz_sha256": "9fec9feccf9bff6e43cc151acc59d269200b56123bcf60d90e1fb1cfb2c7c7d6",
+      "sha256sums_file_sha256": "1ac4330ccc12a5a744086e187c2a177de5a1ee3f65b1a4a43aa3af7e06458f41",
+      "summary_sha256": "86a250ab68b643842f4d0fef575183c35b601a236b80d6349fa24303d0956f16",
+      "verification_sha256": "6fae65b69d4df318e91ef4adff55151d01ae090cf480a082273fa57a85f77dd1",
+      "poissonsolver": {},
+      "native_energy_eV_cell": -390.44395403993826,
+      "free_energy_eV_cell": -390.8344924416025,
+      "max_force_eV_A": 0.9480931956657335,
+      "rms_force_eV_A": 0.4463022079521119,
+      "scf_iterations": 43
+    },
+    {
+      "label": "AgSi_originalvac_slab_dipole_on_v19",
+      "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_originalvac_slab_dipole_on_v19",
+      "archive_status": "PASS",
+      "input_sha256": "9e4fe1a59f8e9b7d8fd8aeb859448dae3af39dd6ce9574dc144233a78c7167f4",
+      "extxyz_sha256": "dba46472a32d32c46c8bf10784dbe3bbbc50cfe0d5d7cd8e73804522b8761b32",
+      "sha256sums_file_sha256": "ed7881ed330cdd74a28f66de68c4062b20402d2cfbd54baa6d73b1f3daaf0dce",
+      "summary_sha256": "b8ecc142a42d33fcec9a7dae83c78e456aa3211fc4121431a395821f4aee9c2d",
+      "verification_sha256": "4ed05250c62916e84b9000cdafedf93aebe2071c3049c1f63088db00f6281f6d",
+      "poissonsolver": {
+        "dipolelayer": "xy"
+      },
+      "native_energy_eV_cell": -390.44386354806477,
+      "free_energy_eV_cell": -390.83440426614686,
+      "max_force_eV_A": 0.9486798789897014,
+      "rms_force_eV_A": 0.44644046639427026,
+      "scf_iterations": 78
+    }
+  ],
+  "matched_pair": {
+    "formula": "C16Ag4Si8Ti24",
+    "atom_count": 52,
+    "cell_lengths_A": [
+      6.115,
+      6.115,
+      34.2058765
+    ],
+    "pbc": [
+      true,
+      true,
+      false
+    ],
+    "positions_equal_exactly": true,
+    "cell_equal_exactly": true,
+    "atomic_numbers_equal_exactly": true,
+    "atom_ids_equal_exactly": true,
+    "central_pair_marker_equal_exactly": true,
+    "source_hashes_equal": true,
+    "input_hashes_equal": true,
+    "method_equal_after_removing_poissonsolver": true,
+    "native_energy_on_minus_off_eV_cell": 0.00009049187349319254,
+    "free_energy_on_minus_off_eV_cell": 0.00008817545563033491,
+    "native_energy_on_minus_off_meV_atom": 0.0017402283364075489,
+    "free_energy_on_minus_off_meV_atom": 0.001695681839044902,
+    "max_per_atom_force_vector_delta_eV_A": 0.003320991129962367,
+    "rms_per_atom_force_vector_delta_eV_A": 0.0012111103709865278,
+    "max_force_component_delta_eV_A": 0.0028651693541161816,
+    "force_difference_rms_definition": "sqrt(mean_i(sum_alpha((F_on[i,alpha]-F_off[i,alpha])^2)))"
+  },
+  "interpretation": [
+    "In the new PW path, slab pbc metadata does not create open-z or Coulomb-truncated electrostatics: the PW basis and reciprocal Poisson kernel remain three-dimensionally periodic; the dipole layer applies a correction along the inferred nonperiodic grid axis.",
+    "The original-vacuum AgSi off/on pair demonstrates a small correction delta for this exact fixed-ion geometry only; its large residual forces and different cell do not prove relaxed behavior or 26-A vacuum convergence."
+  ],
+  "minimum_control_recommendation": [
+    "Keep PBC and dipole setting fixed across the registered separation scan; record PBC, Poisson parameters, and native/free energy conventions on every point.",
+    "To isolate dipole-correction sensitivity at the exact 26-A geometry, compare a matched same-coordinate/same-cell OFF/ON pair; if the registered ON parent already exists, add only the same-cell OFF control after A authorizes it.",
+    "To test 26-A vacuum-size adequacy, compare the same slab geometry and same dipole setting at 26 A and one larger-z cell, changing only cell height. OFF/ON alone cannot establish vacuum convergence.",
+    "To separate both effects, use the 26-A ON parent, one same-cell OFF control, and one larger-cell ON control. Keep the registered entries disabled until A decides."
+  ],
+  "limitations": [
+    "No electronic-structure calculation or runtime solver test was performed in this audit.",
+    "The installed dipole test cited above uses LCAO and is not a PW-backend test.",
+    "The matched archive pair is one original-vacuum geometry, not a 26-A vacuum convergence study or a relaxed structure."
+  ]
+}
