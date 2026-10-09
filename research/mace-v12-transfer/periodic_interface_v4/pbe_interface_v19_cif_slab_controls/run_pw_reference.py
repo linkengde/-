@@ -18,6 +18,10 @@ SOURCE = Path(sys.argv[2]).resolve()
 OUT = Path(sys.argv[3]).resolve()
 ROOT = Path(__file__).resolve().parent
 from entry import load
+# Reject disabled entries before MPI setup; initialize MPI before ASE input reads.
+preflight=json.loads((ROOT/'input_manifest.json').read_text())
+assert preflight['launch_enabled'] and next(r for r in preflight['records'] if r['label']==LABEL)['launch_enabled'], 'Launch disabled'
+from gpaw.mpi import world
 manifest, record = load(LABEL, launch=True)
 assert SOURCE == (ROOT / record['input']).resolve(), 'Wrong input path'
 if OUT.exists(): raise SystemExit('Existing run: preserve it; no duplicate launch')
