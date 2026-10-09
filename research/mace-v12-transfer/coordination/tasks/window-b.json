@@ -217,7 +217,7 @@
   "status": "running",
   "next_action": "Run v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b. Install only missing PyTorch 2.5.1 CPU, mace-torch 0.3.16, and ASE 3.29.0 if missing in a dedicated Python 3.12 environment; preserve GPAW. Then run inference-only diagnostic with the published V18 candidate on public AgSi archives. No DFT/MPI, training, sealed labels, or A-task edits.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:36:06.799982+00:00",
+  "updated_utc": "2026-10-09T23:36:27.138593+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -468,8 +468,10 @@
       ]
     },
     "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": {
-      "status": "queued",
+      "status": "completed",
       "assigned_utc": "2026-10-09T23:28:00.609626+00:00",
+      "started_utc": "2026-10-09T23:30:02+00:00",
+      "completed_utc": "2026-10-09T23:36:11+00:00",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b",
       "mode": "Install only missing pinned MACE CPU packages in a dedicated Python 3.12 environment; inference-only public-data diagnostic using the selected V18 candidate; no DFT/MPI or training.",
       "required_sources": [
@@ -510,6 +512,23 @@
         "Use the existing selected V18 checkpoint exactly as published; verify its hashes and input geometry/data lineage before inference.",
         "Do not train, fine-tune, alter model weights, launch DFT/MPI, or edit A-owned tasks/calculations.",
         "Report native/free DFT energy conventions separately; compute forces from the exact matched atom order and report signed separation quantities."
+      ],
+      "inference_status": "DIAGNOSTIC_SCREEN_FAIL",
+      "runtime": {
+        "python": "3.12.14",
+        "torch": "2.5.1+cpu",
+        "mace_torch": "0.3.16",
+        "ase": "3.29.0",
+        "environment": "/workspace/.venvs/mace-cpu",
+        "gpaw_environment_unchanged": true
+      },
+      "evidence": "CPU inference smoke passed on both 52-atom public references. Both fail force-vector RMSE and marked-pair separation-force gates; checksums and lineage passed. Only the 30-frame non-sealed training extxyz and two named public references were read; development/test structures and sealed labels remained unopened.",
+      "published_outputs": [
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/README.md",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/infer_and_evaluate.py",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/metrics.json",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/environment.json",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b/SHA256SUMS.txt"
       ]
     }
   },
