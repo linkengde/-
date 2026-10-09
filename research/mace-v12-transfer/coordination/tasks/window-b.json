@@ -23,7 +23,7 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
   ],
-  "coordination_duties": "A owns active DFT and production integration. B traces inherited labels to original calculation evidence and prepares a missing-evidence remediation ledger.",
+  "coordination_duties": "A owns active DFT and production integration. B independently audits GPAW26.7 plane-wave slab/dipole semantics from source and existing verified AgSi controls, then publishes evidence and a minimal-control recommendation; no new calculation.",
   "queued_work_order": [
     "v15_training_evaluation_entry_draft",
     "v15_acquisition_batch_priority",
@@ -197,11 +197,12 @@
     "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
     "AgTi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
     "AgTi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
-    "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review"
+    "AgTi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "registered but disabled; await Ti3SiC2 k8 convergence and reference-target review",
+    "v19_pw_dipole_backend_semantics_review_window_b": "assigned; inspect GPAW26.7 PW Poisson/PBC/dipole implementation and existing AgSi controls; source-level audit only, no calculator/MPI"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Gap scan entries are registered but disabled. Wait for A to publish Ti3SiC2 k8 mesh and fix target; then run B-owned AgC/AgTi labels only after manifest enablement.",
+  "next_action": "Audit the exact GPAW26.7.0 implementation and documentation for plane-wave slab electrostatics: determine what pbc=[True,True,False] changes in PW mode, whether poissonsolver={dipolelayer:xy} is applied, and how the existing original-vacuum dipole off/on results should be interpreted. Recommend the minimum matched control for the 26A-vacuum gap scan. Use existing archives only; do not run DFT, enable/modify the gap manifest, or touch A-owned inputs/results. Publish a concise evidence report with source file hashes/line references and limitations.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-09T13:10:52.584253+00:00",
   "labels": {
@@ -264,11 +265,11 @@
     "updated_utc": "2026-10-09T13:10:52.584253+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "Controlled width0.05 pilot registered; old width0.1 archives preserved",
+  "current_stage": "GPAW26.7 plane-wave slab electrostatics semantics review; no DFT",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
-  "task_boundary": "Current assignment: no other DFT labels. B may reconcile its existing four V17 archives and execute only the A-approved fixed-geometry V16 train frame0 Ti_gap_2p3 relabel under v17_rank_recovery_frame0_DFT. No MACE, dataset edits, A development/withheld outputs, MD/TTM, or owner changes.",
+  "task_boundary": "Current assignment is a source/documentation and existing-archive audit only: no DFT calculator, MPI, training, inference, dataset edits, MD/TTM, or changes to A-owned calculations and gap-scan inputs. Keep all gap-scan entries disabled and leave their method unchanged.",
   "task_card_merge_note": "Preserved concurrent A assignment fields and latest B live progress; no owner change. Other scalar conflicts require manual review.",
   "recurring_version_review": {
     "trigger": "A publishes each completed model-version training/evaluation; A creates assigned vN_iteration_review job automatically",
