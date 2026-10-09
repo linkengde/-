@@ -34,3 +34,7 @@ B registered Ag_volume_m02_k8x8x8_v19 then Ag_volume_p02_k8x8x8_v19 for matched 
 ## Ag matched k8 volume curve
 
 B now registered Ag_baseline_k8x8x8_v19 to complete same-mesh baseline with completed +/-2% k8 volumes. Check baseline k6/k8 then assemble baseline-subtracted k8 curve; not an optimized lattice or thermal-stability claim.
+
+## Ag shear next task
+
+B registered Ag_shear_m005_k6x6x6_v19 then Ag_shear_p005_k6x6x6_v19, only after assigned k8 baseline and reports finish. Shear k6 convergence remains provisional. No stress/elastic or thermal validation is claimed.
