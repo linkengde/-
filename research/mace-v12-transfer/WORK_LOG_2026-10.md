@@ -533,3 +533,7 @@ User requested B continuous workflow. run_overnight_width_scan.py waits for live
 ### B next-work assignment and A fallback policy
 
 User authorized assigning B tasks and A proceeding if B does not respond. B has actual published sigma0.05 iteration10, so currently active, not assumed absent. Registered overnight width driver plus next training-target coverage/independent-family audit, with exact deliverables and sealed-data/source limitations. A own numeric stages do not wait for B. Read-only work can fall back to A; live remote computation is not duplicated merely on a missing chat reply. Any numerical reassignment preserves recorded ownership and active-run guards.
+
+### Fixed-width even6/8 density control
+
+A0.05 and0.20 completed/verified;0.05 5/6 vector0.019478 fails numerical budget while energy/pair pass. Fixed5 width controls also fail force/pair; no causal cure claimed. User authorized continued work; registered A8x8x1 at original0.10 width to isolate even-grid density from width/odd-even confounds. All historical manifests untouched to preserve comparison pins. Increased startup/runtime reserves8/3GiB; four actual cores and available memory/disk checked before launch. B0.20 currently running; no duplicate B job.

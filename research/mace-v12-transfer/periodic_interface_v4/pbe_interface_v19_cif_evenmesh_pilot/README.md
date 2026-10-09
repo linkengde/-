@@ -1,0 +1,3 @@
+# Fixed-width even-grid density check
+
+Exact original frozen52atom source at PW500/PBE/Fermi0.10eV; A8x8x1 is compared against verified6x6x1 at same width. No geometry, target convention, mixer or thresholds changed. Four MPI ranks/ScaLAPACK and one thread each. Available resources checked before launch;8GiB startup and3GiB runtime disk reserve for higher grid checkpoint growth. Numerical-only; no model integration or convergence claim before gates. Run exact label via run_queue.py window-a AgSi_COD9009647_pilot_k8x8. Compare using compare_mesh_results.py AgSi_COD9009647_pilot_k6x6 AgSi_COD9009647_pilot_k8x8.

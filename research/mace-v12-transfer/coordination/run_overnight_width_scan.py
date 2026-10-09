@@ -67,7 +67,20 @@ def verify(root, label):
 def synchronize():
     assert not sync.git('diff', '--name-only').stdout.strip(), 'Tracked changes require diagnosis'
     assert not sync.git('diff', '--cached', '--name-only').stdout.strip(), 'Index changes require diagnosis'
-    sync.git('fetch', 'origin', 'main')
+    # Retry only transient transport errors. Access and repository errors stop
+    # with the original diagnostic instead of being mistaken for absent B work.
+    for attempt in range(3):
+        fetched = sync.git('fetch', 'origin', 'main', check=False)
+        if fetched.returncode == 0:
+            break
+        diagnostic = fetched.stdout + fetched.stderr
+        transient = any(token in diagnostic.lower() for token in
+                        ('timed out', 'connection reset', 'could not resolve',
+                         '502', '503', '504', 'remote end hung up', 'connection closed'))
+        if not transient or attempt == 2:
+            raise RuntimeError('Git fetch failed; local results preserved: ' + diagnostic)
+        state('RETRYING_TRANSIENT_GIT_TRANSPORT', attempt=attempt + 1, diagnostic=diagnostic[-1000:])
+        wait()
     sync.git('merge', '--ff-only', 'origin/main')
     sync.ensure_owner(TASK, sync.load_task(TASK))
 
