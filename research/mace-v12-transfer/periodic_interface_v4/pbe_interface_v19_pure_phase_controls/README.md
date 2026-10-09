@@ -42,3 +42,7 @@ B registered Ag_shear_m005_k6x6x6_v19 then Ag_shear_p005_k6x6x6_v19, only after 
 ## Ti3SiC2 k8 follow-up
 
 A registered Ti3SiC2_baseline_k8x8x4_v19 after k4/k6 vector difference0.014596eV/Å exceeded0.01. Compare to completed k6, no old repeats.
+
+## Ag shear mesh follow-up
+
+B registered Ag_shear_m005_k8x8x8_v19 and Ag_shear_p005_k8x8x8_v19. Compare unchanged inputs against completed k6 and relative energies against existing k8 baseline. No elastic/thermal validation claim.

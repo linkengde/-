@@ -80,7 +80,8 @@
     "v19_Ag_symmetric_displacement_volume_controls",
     "v19_Ag_volume_k6_k8_controls",
     "v19_Ag_k8_baseline_and_volume_curve",
-    "v19_Ag_shear_response_controls"
+    "v19_Ag_shear_response_controls",
+    "v19_Ag_shear_k6_k8_controls"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -182,11 +183,13 @@
     "Ag_volume_p02_k8x8x8_v19": "completed; SCF iteration 15; elapsed 710s; updated 2026-10-09T08:38:16.140718+00:00",
     "Ag_baseline_k8x8x8_v19": "completed; SCF iteration 13; elapsed 703s; updated 2026-10-09T09:06:24.505906+00:00",
     "Ag_shear_m005_k6x6x6_v19": "running; SCF iteration 10; updated 2026-10-09T09:34:21.101363+00:00",
-    "Ag_shear_p005_k6x6x6_v19": "completed; SCF iteration 13; elapsed 2021s; updated 2026-10-09T10:12:50.941571+00:00"
+    "Ag_shear_p005_k6x6x6_v19": "completed; SCF iteration 13; elapsed 2021s; updated 2026-10-09T10:12:50.941571+00:00",
+    "Ag_shear_m005_k8x8x8_v19": "registered; shear-specific mesh control",
+    "Ag_shear_p005_k8x8x8_v19": "registered; shear-specific mesh control"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "First run/finish registered Ag_baseline_k8x8x8_v19 and publish its comparisons; next run registered Ag shear -0.005 then +0.005 at k6 sequentially. Check existing outputs and task labels before each; never repeat completed jobs.",
+  "next_action": "Start registered Ag_shear_m005_k8x8x8_v19 then Ag_shear_p005_k8x8x8_v19; verify/publish each and compare matched k6/k8 shear controls. Do not wait for A separate-machine job.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
   "updated_utc": "2026-10-09T10:12:53.144743+00:00",
   "labels": {
@@ -225,7 +228,9 @@
     "Ag_volume_p02_k8x8x8_v19": "completed",
     "Ag_baseline_k8x8x8_v19": "completed",
     "Ag_shear_m005_k6x6x6_v19": "completed",
-    "Ag_shear_p005_k6x6x6_v19": "completed"
+    "Ag_shear_p005_k6x6x6_v19": "completed",
+    "Ag_shear_m005_k8x8x8_v19": "queued",
+    "Ag_shear_p005_k8x8x8_v19": "queued"
   },
   "live_progress": {
     "task_id": "window-b",
@@ -298,7 +303,8 @@
     "v19_Ag_symmetric_displacement_volume_controls": "Run sequentially Ag_displacement_m01_k6x6x6_v19, Ag_volume_m02_k6x6x6_v19, Ag_volume_p02_k6x6x6_v19. Exact production run_queue.py LABEL, four MPI ranks, one thread, owner/input/method guards and local lock. Each job must converge, verify/archive and publish before the next. Stop on failure and preserve outputs. Reuse existing +0.01A and baseline k6; do not rerun. Publish started status and completion per stage. Analyze matched +/- displacement energy symmetry, central free-energy secant vs mean displaced-atom x force with explicit sign and finite-step limitations; native energy separately. Compare volume +/-2% energies with same-cell composition/target and record sampled-volume ordering, not optimized lattice or proof of 300K stability. Previous k4/k6 checks covered baseline/+displacement only; volume meshes are provisional and may require denser control before training. After DFT, prepare pure-Ag EAM static prediction/comparison input list for A using supplied candidate02 EAM file; no MD, minimization, heating, training, new potential adoption or sealed data. These related controls are not independent interface validation. All other unregistered records remain disabled.",
     "v19_Ag_volume_k6_k8_controls": "Run Ag_volume_m02_k8x8x8_v19, Ag_volume_p02_k8x8x8_v19 sequentially using production run_queue.py EXACT_LABEL. Same +/-2% input as completed k6; only mesh changes. Publish start, verify/archive/publish before next; preserve failures/no retries on existing outputs. Compare native/free energy delta per atom and vector RMS/max for each k6/k8 pair with unchanged 2meV/atom and0.01eV/A numeric budgets. k8 baseline is still disabled, so do not create baseline-subtracted k8 energy curves without registration. Explain volume comparison does not prove optimized lattice or thermal/interface/model stability. No old k6 repeats, MD, training, parameters changes or sealed access. Stop after published comparison.",
     "v19_Ag_k8_baseline_and_volume_curve": "Run only Ag_baseline_k8x8x8_v19 now, production run_queue.py EXACT_LABEL; publish started, verify/archive/publish. Do not repeat completed volume k8 or baseline k6. Compare baseline k6/k8 with unchanged 2meV/atom and0.01eV/A numerical budgets, free energy separately. Then assemble all-k8 baseline-subtracted +/-2% volume curve using already-verified k8 archives; record native/free ordering/deltas and input/PAW/method identities. Compare same-geometry EAM volume deltas from A candidate02_Ag_EAM_pure_phase_check/report.json, reference hashes and differences; do not compare raw energy zeros or claim optimized lattice/thermal stability. All three points share a parent and are not independent interface validation. No parameter fitting/adoption, MD/heating, training, sealed access or additional unregistered launch; stop on failure preserving output, stop after publication.",
-    "v19_Ag_shear_response_controls": "Prerequisite: finish/verify/publish Ag_baseline_k8x8x8_v19 and its assigned baseline k6/k8 plus matched-volume report; do not skip/repeat it. Then run Ag_shear_m005_k6x6x6_v19, Ag_shear_p005_k6x6x6_v19 sequentially with production run_queue.py EXACT_LABEL, four MPI ranks/one thread and no other local DFT. Inputs reuse existing reviewed +/-0.005 shear geometry bytes; k6 target remains proposed for shear, not separately certified by displacement/volume checks. Publish starting status per job, converge, verify/archive/publish before next. Failure stops queue preserving existing output/checkpoint. Analyze matched shear +/- energy symmetry and baseline-subtracted native/free energy per atom using completed k6 baseline; record forces and source/method hashes. No stress validation: runner does not export stress. No minimum/optimized lattice, elastic constants or300K stability claim from two static points. Prepare same-geometry EAM input list; A will compare actual EAM. No training, parameter adoption, MD/TTM, sealed access or other unregistered launch. If baseline k8 is already completed, start shear now after verifying publication. Stop after report, await A review for shear mesh sensitivity."
+    "v19_Ag_shear_response_controls": "Prerequisite: finish/verify/publish Ag_baseline_k8x8x8_v19 and its assigned baseline k6/k8 plus matched-volume report; do not skip/repeat it. Then run Ag_shear_m005_k6x6x6_v19, Ag_shear_p005_k6x6x6_v19 sequentially with production run_queue.py EXACT_LABEL, four MPI ranks/one thread and no other local DFT. Inputs reuse existing reviewed +/-0.005 shear geometry bytes; k6 target remains proposed for shear, not separately certified by displacement/volume checks. Publish starting status per job, converge, verify/archive/publish before next. Failure stops queue preserving existing output/checkpoint. Analyze matched shear +/- energy symmetry and baseline-subtracted native/free energy per atom using completed k6 baseline; record forces and source/method hashes. No stress validation: runner does not export stress. No minimum/optimized lattice, elastic constants or300K stability claim from two static points. Prepare same-geometry EAM input list; A will compare actual EAM. No training, parameter adoption, MD/TTM, sealed access or other unregistered launch. If baseline k8 is already completed, start shear now after verifying publication. Stop after report, await A review for shear mesh sensitivity.",
+    "v19_Ag_shear_k6_k8_controls": "Run Ag_shear_m005_k8x8x8_v19, Ag_shear_p005_k8x8x8_v19 sequentially using production run_queue.py EXACT_LABEL. Identical reviewed shear +/-0.005 inputs to completed k6; only mesh changes. First publish start, then converge/verify/archive/publish before next; four MPI ranks/one thread, local exclusive lock. Stop failure/preserve outputs, never repeat k6 or other completed jobs. Compare respective k6/k8 native/free energy per atom and all-atom vector RMS/max; unchanged numerical budgets2meV/atom and0.01eV/A vector. Compare within-k8 shear energies relative to completed Ag_baseline_k8x8x8_v19, preserve energy convention and method/input/source hashes. Small symmetric forces and +/- symmetry are not elastic constants, broad thermal stability or independent interface validation; no stress exported. Prepare completed EAM static input list. No parameter adoption/fitting, MD/heating, training, sealed access or other unregistered launch. Publish final report and stop."
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
@@ -327,6 +333,8 @@
     "Ag_volume_p02_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_baseline_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ag_shear_m005_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ag_shear_p005_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ag_shear_p005_k6x6x6_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ag_shear_m005_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ag_shear_p005_k8x8x8_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   }
 }
