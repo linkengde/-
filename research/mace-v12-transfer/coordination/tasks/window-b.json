@@ -86,7 +86,8 @@
     "v19_Ag_shear_k6_k8_controls",
     "v19_interface_normal_separation_entry_preparation",
     "v19_Ti3SiC2_bulk_mesh_comparison_independent_review_window_b",
-    "v19_existing_AgSi_candidate_force_error_screen_window_b"
+    "v19_existing_AgSi_candidate_force_error_screen_window_b",
+    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b"
   ],
   "current_jobs": {
     "v15_registry_candidate_design": "completed; 24 rigid translations screened against 26 extxyz files / 87 frames. Ag-Si and Ag-Ti pass; Ag-C rejected by source-inherited 1.7413 A non-Ag pair; report and label-free proposals published.",
@@ -209,13 +210,14 @@
     "v19_Ti3SiC2_mesh_matrix_independent_reaudit_window_b": "deferred; user redirected B to the registered 10x10x4 Ti3SiC2 calculation",
     "Ti3SiC2_baseline_k10x10x4_v19": "completed; SCF iteration 34; elapsed 11722s; updated 2026-10-09T23:05:35.197289+00:00",
     "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00",
-    "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00"
+    "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
+    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "queued; install missing pinned CPU MACE runtime in a separate venv, then run eligible public AgSi inference diagnostic"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Await the next B assignment. A future inference task requires an existing authorized MACE runtime; do not install packages under this completed screening task.",
+  "next_action": "Run v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b. Install only missing PyTorch 2.5.1 CPU, mace-torch 0.3.16, and ASE 3.29.0 if missing in a dedicated Python 3.12 environment; preserve GPAW. Then run inference-only diagnostic with the published V18 candidate on public AgSi archives. No DFT/MPI, training, sealed labels, or A-task edits.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:27:28.284893+00:00",
+  "updated_utc": "2026-10-09T23:28:00.609626+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -279,7 +281,7 @@
     "updated_utc": "2026-10-09T23:27:28.284893+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "AgSi candidate eligibility audit complete; inference not run because MACE runtime is unavailable",
+  "current_stage": "AgSi candidate eligibility audit complete; follow-up MACE CPU runtime installation and public-reference inference diagnostic assigned.",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -463,6 +465,51 @@
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/eligibility.json",
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/audit_candidate_eligibility.py",
         "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/SHA256SUMS.txt"
+      ]
+    },
+    "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": {
+      "status": "queued",
+      "assigned_utc": "2026-10-09T23:28:00.609626+00:00",
+      "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b",
+      "mode": "Install only missing pinned MACE CPU packages in a dedicated Python 3.12 environment; inference-only public-data diagnostic using the selected V18 candidate; no DFT/MPI or training.",
+      "required_sources": [
+        "completed eligibility audit at research/mace-v12-transfer/coordination/reports/window-b/v19_existing_AgSi_candidate_force_error_screen_window_b/",
+        "selected V18 checkpoint and model/data hash records under mace_periodic_v18_clean_core",
+        "archive-verified public non-sealed AgSi_COD9009647_pilot_k6x6 and AgSi_COD9009647_vacuum26_k6x6_sigma0p10 references",
+        "project evaluator definitions for force-vector and signed separation-force metrics"
+      ],
+      "required_outputs": [
+        "README.md stating the local AgSi overlap and diagnostic-only validity limit",
+        "reproducible inference/evaluation script",
+        "machine-readable model, checkpoint, input and reference hashes",
+        "all-atom force-vector RMSE/max and per-species metrics",
+        "marked-pair and net Ag-layer normal-force projections with signed errors",
+        "environment version record and CPU inference smoke summary",
+        "SHA256SUMS.txt"
+      ],
+      "decision": "Screen the selected V18 model against public CIF AgSi DFT references using provisional force-vector RMSE <=0.05 eV/A and absolute separation-force error <=0.10 eV/A. Because local Ag-Si contact environments overlap training coverage and all references share one CIF family, any score is diagnostic and cannot be called independent validation or a production pass.",
+      "allowed_installation": {
+        "python": "3.12 (use an existing interpreter; if unavailable, report the blocker)",
+        "packages": [
+          "torch==2.5.1+cpu",
+          "mace-torch==0.3.16"
+        ],
+        "also_install_if_missing": [
+          "ase==3.29.0"
+        ],
+        "environment": "Create or reuse /workspace/.venvs/mace-cpu. Keep all packages separate from the existing GPAW environment.",
+        "sources": "Official PyTorch CPU wheel index for PyTorch; PyPI for mace-torch and ASE. Keep TLS and normal package verification enabled.",
+        "scope": "Install only missing pinned packages; no sudo/system-wide installation and no unrelated upgrades."
+      },
+      "guardrails": [
+        "This is a follow-up to the completed eligibility audit; do not reopen its status or alter its report.",
+        "Inspect existing interpreters and installed package versions first, then install only missing authorized packages in the dedicated MACE environment.",
+        "Do not modify, upgrade, or replace the GPAW environment or its packages.",
+        "Keep package TLS and artifact verification enabled. If dependency resolution conflicts with the requested versions, report the exact conflict without changing pins.",
+        "Use only the two explicitly public, archive-verified AgSi references; do not open sealed holdouts or test labels.",
+        "Use the existing selected V18 checkpoint exactly as published; verify its hashes and input geometry/data lineage before inference.",
+        "Do not train, fine-tune, alter model weights, launch DFT/MPI, or edit A-owned tasks/calculations.",
+        "Report native/free DFT energy conventions separately; compute forces from the exact matched atom order and report signed separation quantities."
       ]
     }
   },
