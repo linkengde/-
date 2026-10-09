@@ -541,3 +541,7 @@ A0.05 and0.20 completed/verified;0.05 5/6 vector0.019478 fails numerical budget 
 ### B immediate follow-up after completed width scan
 
 User requested continued B work. Added ready-now v19_numerical_target_and_vacuum_entry_review before existing coverage audit. B independently reviews sigma0.20 local pass vs finite-width/cross-target limitations and prepares launch-disabled vacuum/dipole inputs with source/method/PW-API checks, without waiting for A8x8. Then audits training coverage/independent family split and actual Stage69 asset availability. No new B DFT or training authorized by these review tasks; numerical decision remains evidence-gated. Task start/result publication required.
+
+### Parallel pure-phase and short-range preparation
+
+A8x8 fixed-width numerical job remains active at SCF25. B completed source/coverage and vacuum-entry audits; registered ready-now launch-disabled pure Ag/sourced Ti3SiC2 static control input preparation and short-range continuity protocol. Actual DFT target/owner approval remains pending numerical decision; no phase stability/impact acceptance claim from static preparation.
