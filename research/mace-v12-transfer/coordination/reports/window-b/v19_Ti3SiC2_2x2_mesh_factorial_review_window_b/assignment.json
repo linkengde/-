@@ -1,0 +1,39 @@
+{
+  "task_id": "v19_Ti3SiC2_mesh_2x2_factorial_review_window_b",
+  "status": "assigned",
+  "owner_task": "window-b",
+  "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
+  "assigned_utc": "2026-10-09T15:30:40.996438+00:00",
+  "mode": "analysis-only; no DFT or MPI launch",
+  "purpose": "Independently audit the Ti3SiC2 four-point k-mesh matrix to separate in-plane, c-axis, and mesh-interaction effects.",
+  "work_now": [
+    "Verify the published archives and source/method/geometry identity for k6x6x2, k6x6x4, and k8x8x4; independently recalculate their available pairwise energy and force comparisons.",
+    "Prepare a deterministic analysis script for the full 2x2 matrix with meshes (6,6,2), (8,8,2), (6,6,4), and (8,8,4). Treat missing k8x8x2 as pending; do not infer its values.",
+    "Include in-plane contrasts at kz=2 and kz=4, c-axis contrasts at 6x6 and 8x8, and a difference-in-differences interaction for energies and atom-force vectors. Preserve native and free energies separately."
+  ],
+  "wait_for": "A publishes and verifies Ti3SiC2_baseline_k8x8x2_v19 in main.",
+  "after_waiting_for": [
+    "Independently verify the k8x8x2 archive and input identity.",
+    "Run the prepared 2x2 analysis and report each edge contrast, force RMS/max and species/component metrics, plus the interaction term.",
+    "State whether each stated numerical budget passes; restrict conclusions to this frozen pure-phase numerical control."
+  ],
+  "thresholds": {
+    "absolute_native_energy_delta_meV_atom": 2.0,
+    "absolute_free_energy_delta_meV_atom": 2.0,
+    "force_vector_rms_eV_A": 0.01
+  },
+  "constraints": [
+    "Do not launch or register another DFT job.",
+    "Do not launch training, gap scans, or dynamics.",
+    "Do not change ownership of A's running k8x8x2 job.",
+    "Keep the interface gap scan disabled."
+  ],
+  "inputs": [
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ti3SiC2_baseline_k6x6x2_v19",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ti3SiC2_baseline_k6x6x4_v19",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ti3SiC2_baseline_k8x8x4_v19",
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_Ti3SiC2_kz_mesh_increment_review",
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison"
+  ],
+  "expected_output": "research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_2x2_mesh_factorial_review_window_b"
+}
