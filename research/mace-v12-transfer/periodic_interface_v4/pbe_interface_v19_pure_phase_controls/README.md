@@ -46,3 +46,12 @@ A registered Ti3SiC2_baseline_k8x8x4_v19 after k4/k6 vector difference0.014596eV
 ## Ag shear mesh follow-up
 
 B registered Ag_shear_m005_k8x8x8_v19 and Ag_shear_p005_k8x8x8_v19. Compare unchanged inputs against completed k6 and relative energies against existing k8 baseline. No elastic/thermal validation claim.
+
+
+A completed the same-geometry 6×6×2 / 8×8×4 comparison: energy budgets pass, while force-vector RMS (0.01359 eV/Å) exceeds the 0.01 eV/Å budget. A has registered 8×8×2 to isolate the in-plane mesh increment against the 6×6×2 label; do not interpret the earlier mixed-mesh comparison as a direction-specific failure.
+
+## Current Ti3SiC2 in-plane mesh isolation
+
+A completed the verified 6×6×2 / 8×8×4 comparison. Energy budgets pass; force-vector RMS is 0.01359 eV/Å and fails the 0.01 eV/Å budget. A registered the same baseline at 8×8×2 to isolate the in-plane increment at fixed kz=2. The nine interface gap-scan records remain disabled pending slab vacuum/dipole controls and reference-target review.
+
+The 8×8×4 local `state.gpw` restart file (7,361,378,540 bytes) was removed only after both compact archives passed `verify_result.py` and no GPAW process was active. Its path and SHA256 are recorded in the A mesh-comparison report. Compact archives remain on main; 8×8×2 is ready to launch.

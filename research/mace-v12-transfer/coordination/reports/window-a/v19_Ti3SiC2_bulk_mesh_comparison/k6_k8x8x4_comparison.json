@@ -1,0 +1,106 @@
+{
+  "status": "FORCE_GATE_FAIL_ENERGY_GATES_PASS",
+  "labels": [
+    "Ti3SiC2_baseline_k6x6x2_v19",
+    "Ti3SiC2_baseline_k8x8x4_v19"
+  ],
+  "comparison": "same frozen Ti3SiC2 48-atom baseline; k6x6x2 versus k8x8x4; only k-mesh differs",
+  "geometry_checks": {
+    "symbols_equal": true,
+    "positions_exact": true,
+    "cell_exact": true,
+    "ids_exact": true,
+    "both_archives_verified": true
+  },
+  "meshes": [
+    [
+      6,
+      6,
+      2
+    ],
+    [
+      8,
+      8,
+      4
+    ]
+  ],
+  "metrics": {
+    "native_energy_delta_meV_atom": 0.21180680865976834,
+    "free_energy_delta_meV_atom": 0.06652533195250498,
+    "force_vector_rms_eV_A": 0.013593253107797122,
+    "maximum_atom_force_vector_difference_eV_A": 0.021326365257100882,
+    "force_component_rms_eV_A": [
+      0.007349438047467092,
+      0.004242963806216391,
+      0.010618829906266366
+    ],
+    "species_force_vector_rms_eV_A": {
+      "C": {
+        "atom_count": 16,
+        "force_vector_rms_eV_A": 0.00927977168438537,
+        "force_component_rms_eV_A": [
+          0.005924957039560745,
+          0.003420605066230192,
+          0.006269649717054408
+        ],
+        "max_atom_force_vector_difference_eV_A": 0.009285698200088984
+      },
+      "Si": {
+        "atom_count": 8,
+        "force_vector_rms_eV_A": 0.005441895966264075,
+        "force_component_rms_eV_A": [
+          0.004712797882909146,
+          0.002720608585886216,
+          4.535134937894651e-05
+        ],
+        "max_atom_force_vector_difference_eV_A": 0.005441896047732528
+      },
+      "Ti": {
+        "atom_count": 24,
+        "force_vector_rms_eV_A": 0.017385977334042648,
+        "force_component_rms_eV_A": [
+          0.008787581046661013,
+          0.005073252147269922,
+          0.014117816398382225
+        ],
+        "max_atom_force_vector_difference_eV_A": 0.021326365257100882
+      }
+    }
+  },
+  "thresholds": {
+    "absolute_native_energy_delta_meV_atom": 2.0,
+    "absolute_free_energy_delta_meV_atom": 2.0,
+    "force_vector_rms_eV_A": 0.01
+  },
+  "checks": {
+    "native_energy": true,
+    "free_energy": true,
+    "force_vector": false
+  },
+  "scf": {
+    "Ti3SiC2_baseline_k6x6x2_v19": {
+      "iterations": 41,
+      "elapsed_s": 4194.706858158112,
+      "converged": true
+    },
+    "Ti3SiC2_baseline_k8x8x4_v19": {
+      "iterations": 40,
+      "elapsed_s": 15228.557026386261,
+      "converged": true
+    }
+  },
+  "method_except_kmesh_identical": true,
+  "source_sha256": {
+    "Ti3SiC2_baseline_k6x6x2_v19": {
+      "Ti3SiC2_baseline_k6x6x2_v19_PW_PBE.extxyz": "fe7ec9ce8b17884aab37f45d2c1c494878c7536571ca41a41bbf8c584e309c8c",
+      "summary.json": "0caea4cfadd08989bc9570e0ebf775fd99245e495c51ceab7c4074e79c1b023f",
+      "verification.json": "74dc99d2a3a168945752cd6a389e03aece9db9fe12c2d490f0210980a5d440f5"
+    },
+    "Ti3SiC2_baseline_k8x8x4_v19": {
+      "Ti3SiC2_baseline_k8x8x4_v19_PW_PBE.extxyz": "8df4f873276ee1e22326c96b4c710b42a01c85c73337659a6bd25b48b3e45a99",
+      "summary.json": "7de561c52cff2ce1b7e40028c8e027a43d65d488d57a8659778ddf2aaf212c67",
+      "verification.json": "63412509d52a439c31eb882dfffa42b4fbe3ef37680fd8b9c73cbdd4321d79bb"
+    }
+  },
+  "interpretation": "Energy gates pass. Force-vector RMS is above 0.01 eV/A. The comparison changes both in-plane and c-axis sampling, so it does not identify which mesh direction dominates. Register k8x8x2 against k6x6x2 to isolate the in-plane increment before selecting the bulk reference. This fixed baseline is a numerical control only; it does not establish relaxed or thermal stability or independent model accuracy."
+}

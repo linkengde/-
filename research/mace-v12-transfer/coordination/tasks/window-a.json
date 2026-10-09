@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-09T13:45:49.475946+00:00",
+  "updated_utc": "2026-10-09T13:51:15+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "Controlled width0.05 pilot registered; old width0.1 archives preserved",
+  "current_stage": "Ti3SiC2 6x6x2 vs 8x8x4 force budget failed; registered 8x8x2 in-plane isolation control",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -62,7 +62,8 @@
     "AgSi_originalvac_slab_dipole_off_v19": "running; SCF iteration 40; updated 2026-10-09T07:22:21.341544+00:00",
     "Ti3SiC2_baseline_k4x4x2_v19": "running; SCF iteration 40; updated 2026-10-09T08:00:36.585259+00:00",
     "Ti3SiC2_baseline_k6x6x2_v19": "running; SCF iteration 40; updated 2026-10-09T09:12:52.165461+00:00",
-    "Ti3SiC2_baseline_k8x8x4_v19": "running; SCF iteration 40; updated 2026-10-09T13:44:16.772680+00:00"
+    "Ti3SiC2_baseline_k8x8x4_v19": "completed; SCF iteration 40; elapsed 15229s; archive verification PASS; mesh comparison force gate FAIL",
+    "Ti3SiC2_baseline_k8x8x2_v19": "queued; 8x8x2 fixed-baseline in-plane mesh isolation; run after registration publication"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -100,7 +101,8 @@
     "AgSi_originalvac_slab_dipole_off_v19": "completed",
     "Ti3SiC2_baseline_k4x4x2_v19": "completed",
     "Ti3SiC2_baseline_k6x6x2_v19": "completed",
-    "Ti3SiC2_baseline_k8x8x4_v19": "completed"
+    "Ti3SiC2_baseline_k8x8x4_v19": "completed",
+    "Ti3SiC2_baseline_k8x8x2_v19": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -137,11 +139,12 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_evenmesh_pilot",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_vacuum_pilot",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Finish the registered Ti3SiC2 k8x8x4 SCF, then publish and compare k6/k8; gap scan remains disabled pending that result and electrostatic target review.",
+  "next_action": "Run Ti3SiC2_baseline_k8x8x2_v19 and compare with the verified 6x6x2 baseline at fixed kz=2; then decide the bulk in-plane mesh. Keep the nine-point interface scan disabled until 26A vacuum/dipole controls are checked.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -167,7 +170,8 @@
     "AgSi_originalvac_slab_dipole_off_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls",
     "Ti3SiC2_baseline_k4x4x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
     "Ti3SiC2_baseline_k6x6x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
-    "Ti3SiC2_baseline_k8x8x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
+    "Ti3SiC2_baseline_k8x8x4_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ti3SiC2_baseline_k8x8x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
