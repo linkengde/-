@@ -1,0 +1,199 @@
+{
+  "phases": {
+    "Ag": {
+      "reciprocal_vectors_2pi_invA": [
+        [
+          0.7681155632248884,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.7681155632248884,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.7681155632248884
+        ]
+      ],
+      "reciprocal_vector_lengths_invA": [
+        0.7681155632248884,
+        0.7681155632248884,
+        0.7681155632248884
+      ],
+      "supercell_atoms": 32,
+      "steps": [
+        {
+          "target_max_spacing_invA": 0.4,
+          "kpts": [
+            2,
+            2,
+            2
+          ],
+          "actual_axis_spacing_invA": [
+            0.3840577816124442,
+            0.3840577816124442,
+            0.3840577816124442
+          ],
+          "raw_kpoints_upper_bound": 8,
+          "relative_raw_work": 1.0
+        },
+        {
+          "target_max_spacing_invA": 0.25,
+          "kpts": [
+            4,
+            4,
+            4
+          ],
+          "actual_axis_spacing_invA": [
+            0.1920288908062221,
+            0.1920288908062221,
+            0.1920288908062221
+          ],
+          "raw_kpoints_upper_bound": 64,
+          "relative_raw_work": 8.0
+        },
+        {
+          "target_max_spacing_invA": 0.16,
+          "kpts": [
+            6,
+            6,
+            6
+          ],
+          "actual_axis_spacing_invA": [
+            0.1280192605374814,
+            0.1280192605374814,
+            0.1280192605374814
+          ],
+          "raw_kpoints_upper_bound": 216,
+          "relative_raw_work": 27.0
+        },
+        {
+          "target_max_spacing_invA": 0.12,
+          "kpts": [
+            8,
+            8,
+            8
+          ],
+          "actual_axis_spacing_invA": [
+            0.09601444540311105,
+            0.09601444540311105,
+            0.09601444540311105
+          ],
+          "raw_kpoints_upper_bound": 512,
+          "relative_raw_work": 64.0
+        }
+      ],
+      "selected_proposed_control_mesh": [
+        4,
+        4,
+        4
+      ],
+      "cost_limit": "Raw kpoint count ratios only, not measured runtime; symmetry, bands, plane waves, SCF and checkpoint costs unknown."
+    },
+    "Ti3SiC2": {
+      "reciprocal_vectors_2pi_invA": [
+        [
+          1.02750372971048,
+          0.5932295549416899,
+          0.0
+        ],
+        [
+          0.0,
+          1.18645910988338,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.3565231257797592
+        ]
+      ],
+      "reciprocal_vector_lengths_invA": [
+        1.18645910988338,
+        1.18645910988338,
+        0.3565231257797592
+      ],
+      "supercell_atoms": 48,
+      "steps": [
+        {
+          "target_max_spacing_invA": 0.4,
+          "kpts": [
+            4,
+            4,
+            2
+          ],
+          "actual_axis_spacing_invA": [
+            0.296614777470845,
+            0.296614777470845,
+            0.1782615628898796
+          ],
+          "raw_kpoints_upper_bound": 32,
+          "relative_raw_work": 1.0
+        },
+        {
+          "target_max_spacing_invA": 0.25,
+          "kpts": [
+            6,
+            6,
+            2
+          ],
+          "actual_axis_spacing_invA": [
+            0.19774318498056334,
+            0.19774318498056334,
+            0.1782615628898796
+          ],
+          "raw_kpoints_upper_bound": 72,
+          "relative_raw_work": 2.25
+        },
+        {
+          "target_max_spacing_invA": 0.16,
+          "kpts": [
+            8,
+            8,
+            4
+          ],
+          "actual_axis_spacing_invA": [
+            0.1483073887354225,
+            0.1483073887354225,
+            0.0891307814449398
+          ],
+          "raw_kpoints_upper_bound": 256,
+          "relative_raw_work": 8.0
+        },
+        {
+          "target_max_spacing_invA": 0.12,
+          "kpts": [
+            10,
+            10,
+            4
+          ],
+          "actual_axis_spacing_invA": [
+            0.11864591098833802,
+            0.11864591098833802,
+            0.0891307814449398
+          ],
+          "raw_kpoints_upper_bound": 400,
+          "relative_raw_work": 12.5
+        }
+      ],
+      "selected_proposed_control_mesh": [
+        6,
+        6,
+        2
+      ],
+      "cost_limit": "Raw kpoint count ratios only, not measured runtime; symmetry, bands, plane waves, SCF and checkpoint costs unknown."
+    }
+  },
+  "convention": "reciprocal vectors include2pi; mesh ceil(norm/target) rounded up to even, fixed Monkhorst-Pack parity",
+  "comparisons": [
+    "native and free energy deltas/meV per atom",
+    "all-atom vector RMS and max force differences/eV per Angstrom",
+    "Optional stress only if explicitly implemented: ASE eV/A3, tension-positive, Voigt xx yy zz yz xz xy; no stress computed/exported by current draft"
+  ],
+  "acceptance": "Budgets proposed2meV/atom,0.01eV/A vector; pair gate inapplicable. Consecutive meshes plus displaced/strained controls and width/cutoff checks required before convergence claim.",
+  "equilibrium_caveat": "Symmetry can make bulk forces zero at every mesh; baseline force pass is not displaced/strain force accuracy.",
+  "roles": "Pure-phase perturbations share parents; numerical controls only, not independent interface validation."
+}
