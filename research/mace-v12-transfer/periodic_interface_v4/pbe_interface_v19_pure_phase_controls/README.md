@@ -18,3 +18,7 @@ k2/k4 completed but energy budget failed. B is now assigned `Ag_baseline_k6x6x6_
 ## Displaced-force mesh control
 
 Baseline k4/k6 locally passes. B now runs Ag_displacement_p01_k4x4x4_v19 then Ag_displacement_p01_k6x6x6_v19 on identical +0.01Å x input. Verify and publish each, compare forces and within-mesh displacement response. Not stability or independent model validation. All other entries stay as previously registered/disabled.
+
+## Ti3SiC2 baseline registration
+
+A registered Ti3SiC2_baseline_k4x4x2_v19 and Ti3SiC2_baseline_k6x6x2_v19, sequentially after its active slab dipole-off job verifies/publishes. Fixed48-atom CIF bulk, all other method settings unchanged. Compare native/free energies and vector differences; baseline symmetry does not validate displaced forces.

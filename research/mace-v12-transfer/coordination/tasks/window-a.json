@@ -59,7 +59,9 @@
     "AgSi_COD9009647_pilot_k5x5_sigma0p20": "completed; SCF iteration 49; updated 2026-10-08T17:55:51.535389+00:00",
     "AgSi_COD9009647_pilot_k8x8": "completed; SCF iteration 41; updated 2026-10-09T02:53:59.751590+00:00",
     "AgSi_COD9009647_vacuum26_k6x6_sigma0p10": "completed; SCF iteration 51; updated 2026-10-09T05:49:43.731088+00:00",
-    "AgSi_originalvac_slab_dipole_off_v19": "running; SCF iteration 30; updated 2026-10-09T07:06:33.584552+00:00"
+    "AgSi_originalvac_slab_dipole_off_v19": "running; SCF iteration 30; updated 2026-10-09T07:06:33.584552+00:00",
+    "Ti3SiC2_baseline_k4x4x2_v19": "registered; start only after dipole-off verifies/publishes; sequential four-rank jobs",
+    "Ti3SiC2_baseline_k6x6x2_v19": "registered; start only after dipole-off verifies/publishes; sequential four-rank jobs"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -94,7 +96,9 @@
     "AgSi_COD9009647_pilot_k5x5_sigma0p20": "completed",
     "AgSi_COD9009647_pilot_k8x8": "completed",
     "AgSi_COD9009647_vacuum26_k6x6_sigma0p10": "completed",
-    "AgSi_originalvac_slab_dipole_off_v19": "queued"
+    "AgSi_originalvac_slab_dipole_off_v19": "queued",
+    "Ti3SiC2_baseline_k4x4x2_v19": "queued",
+    "Ti3SiC2_baseline_k6x6x2_v19": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -135,7 +139,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "Do not calculate window-b assigned labels.",
-  "next_action": "Use /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/run_queue.py AgSi_originalvac_slab_dipole_off_v19. A must first finish/publish current expanded periodic vacuum job; one runner per machine.",
+  "next_action": "Finish and publish current dipole-off; then run registered Ti3SiC2_baseline_k4x4x2_v19 followed by Ti3SiC2_baseline_k6x6x2_v19 sequentially, each verified/published. Compare baseline meshes before perturbation/denser registration.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -158,7 +162,9 @@
     "AgSi_COD9009647_pilot_k5x5_sigma0p20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_smearing020_pilot",
     "AgSi_COD9009647_pilot_k8x8": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_evenmesh_pilot",
     "AgSi_COD9009647_vacuum26_k6x6_sigma0p10": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_vacuum_pilot",
-    "AgSi_originalvac_slab_dipole_off_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls"
+    "AgSi_originalvac_slab_dipole_off_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls",
+    "Ti3SiC2_baseline_k4x4x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls",
+    "Ti3SiC2_baseline_k6x6x2_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
