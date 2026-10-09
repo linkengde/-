@@ -26,3 +26,7 @@ A registered Ti3SiC2_baseline_k4x4x2_v19 and Ti3SiC2_baseline_k6x6x2_v19, sequen
 ## Ag symmetric displacement/volume controls
 
 B registered Ag_displacement_m01_k6x6x6_v19, Ag_volume_m02_k6x6x6_v19, Ag_volume_p02_k6x6x6_v19 in that order. Existing positive/baseline reused. Volume k6 remains provisional: no broad convergence, optimized lattice or thermal stability claim.
+
+## Ag volume numerical follow-up
+
+B registered Ag_volume_m02_k8x8x8_v19 then Ag_volume_p02_k8x8x8_v19 for matched k6/k8 comparison. k8 baseline remains disabled; no claimed k8 energy-volume curve.
