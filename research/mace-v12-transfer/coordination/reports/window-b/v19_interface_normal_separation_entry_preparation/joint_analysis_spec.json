@@ -1,0 +1,45 @@
+{
+  "status": "PROPOSED_ANALYSIS_METHOD_PENDING_A_REVIEW",
+  "source_family_count": 1,
+  "independent_validation": false,
+  "geometry_series": "parent s=0 and rigid Ag-subsystem translations s=-0.20,+0.20 A",
+  "method_control": [
+    "same fixed cell, PBC, k mesh, cutoff, smearing, PAW setups, SCF thresholds and boundary treatment within each termination",
+    "common DFT target pending A mesh/boundary/energy review",
+    "native extrapolated energy and force-consistent free energy reported separately"
+  ],
+  "energy": {
+    "native_delta": "E_native(s)-E_native(0)",
+    "free_delta": "F_free(s)-F_free(0)",
+    "normalization": "report per cell and divide once by projected contact area |a x b| in eV/A^2",
+    "absolute_interface_energy_requirement": "matched separated-framework and Ag references with identical atom counts, cell, PBC/vacuum and numerical method; never compare raw total-energy zeros"
+  },
+  "forces": {
+    "outward_normal": "unit normal from cross(a,b), oriented to have positive dot with cell c",
+    "rigid_Ag_generalized_force": "G_Ag(s)=sum_{i in all four Ag atoms} F_i dot n",
+    "marked_pair_diagnostic": "G_pair=0.5*(F_Ag-F_X) dot n for persistent marked Ag and termination atom",
+    "all_atom_vectors": "retain all force vectors in persistent atom-ID order; report matched-geometry RMS and maximum vector changes",
+    "force_energy_source": "GPAW forces are force-consistent with free energy at finite smearing; do not compare them to native-energy derivatives"
+  },
+  "finite_step_checks": {
+    "h_A": 0.2,
+    "free_energy_central_secant": "-[F_free(+h)-F_free(-h)]/(2h)",
+    "endpoint_force_comparison": "[G_Ag(+h)+G_Ag(-h)]/2",
+    "reported_residual": "central secant minus mean endpoint rigid-Ag force; finite-step O(h^2) truncation applies",
+    "symmetry": "report DeltaE(+h)-DeltaE(-h) separately for native and free energies; do not assume it vanishes"
+  },
+  "required_per_case": [
+    "parent and proposed input hashes, method and PAW hashes",
+    "actual interface gap and marked-pair distance",
+    "native/free energy per cell and per area",
+    "net Ag-subsystem outward force and marked-pair projected force",
+    "all-atom force vectors in stable ID order, plus RMS/max differences",
+    "SCF and archive verification evidence"
+  ],
+  "interpretation_limits": [
+    "Do not infer elastic constants without stress/strain response.",
+    "Do not infer equilibrium gap or interface strength from three unrelaxed static points.",
+    "Do not claim independent validation: AgC, AgSi and AgTi share one CIF bulk parent.",
+    "No DFT was run; all six geometries remain disabled until A review and explicit registration."
+  ]
+}
