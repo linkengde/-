@@ -30,9 +30,23 @@ def validate(manifest,record):
  assert a.get_chemical_symbols()==record['ordered_symbols']
  assert a.arrays['lammps_id'].tolist()==record['ordered_ids'] and a.arrays['central_pair'].tolist()==record['pair_markings']
  assert not any(k in a.info for k in ('REF_energy','energy','PW_PBE_energy_eV')) and not any(k in a.arrays for k in ('forces','REF_forces','PW_PBE_forces'))
- source=REPO/manifest['source_geometry_path'];assert sha(source)==manifest['source_geometry_sha256']
- parent=read(source);assert np.array_equal(a.positions,parent.positions) and np.array_equal(a.cell.array,parent.cell.array)
+ source_rel=record.get('source_geometry_path',manifest['source_geometry_path'])
+ source_hash=record.get('source_geometry_sha256',manifest['source_geometry_sha256'])
+ source=REPO/source_rel
+ assert source.resolve().is_relative_to(REPO.resolve()) and sha(source)==source_hash
+ parent=read(source);expected=parent.copy()
+ transform=record.get('geometry_transform','identity')
+ if transform=='expand_z_10A_translate_5A':
+  expected.cell[2,2]+=10.
+  expected.positions[:,2]+=5.
+  expected.set_pbc(record['pbc'])
+ else:
+  assert transform=='identity','Unknown registered geometry transform'
  assert a.get_chemical_symbols()==parent.get_chemical_symbols()
+ assert a.arrays['lammps_id'].tolist()==parent.arrays['lammps_id'].tolist()
+ assert a.arrays['central_pair'].tolist()==parent.arrays['central_pair'].tolist()
+ assert np.allclose(a.positions,expected.positions,rtol=0,atol=1e-12)
+ assert np.allclose(a.cell.array,expected.cell.array,rtol=0,atol=1e-12)
  return a
 def load(label,launch=False):
  m=json.loads((ROOT/'input_manifest.json').read_text());r=next(x for x in m['records'] if x['label']==label)
