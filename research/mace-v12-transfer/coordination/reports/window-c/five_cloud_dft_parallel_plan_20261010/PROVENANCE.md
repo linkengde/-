@@ -1,0 +1,13 @@
+# Provenance and scope
+
+- Repository: `linkengde/-`, branch `main` baseline fetched at `bcb51e5e05493e846ef3bf2cc86081dba8b11abe` on 2026-10-10 UTC.
+- Data-planning baseline requested by user: `3ef38c8af17ed975ea2ceb96baeadce804320eb1`.
+- C completion-state reference commit requested by user: `81e7a218312f187957538cda322bf49b7e9dceae`. Both commits are ancestors in the fetched main history; no checkout/reset to either historical commit was performed.
+- Reviewed predecessor report: `research/mace-v12-transfer/coordination/reports/window-c/unified_potential_independent_review_20261010/REPORT.md` and its `liquid_ag_pilot_plan.csv`, `minimum_dft_plan.csv`, and `full_phase_change_plan.csv`.
+- Existing pure-phase/role conclusion: 15 Ag and 10 Ti₃SiC₂ archived records correspond to 11 source geometry hashes (7 Ag, 4 Ti₃SiC₂); all retain their numerical-control role. No role is changed here.
+- Existing liquid conclusion: no verified liquid Ag coordinates or trajectory found in the reviewed published archive. The liquid Ag pilot rows are proposals only.
+- Density blocker: Ag melting point is commonly listed as 1234.93 K; the exact 1250 K liquid density source/table/equation was not independently retrieved. The proposed relative-density factors therefore do not determine a usable numeric cell volume.
+- Five-host access: no D/E/F/G/H host connector, SSH session, or per-host live metadata was exposed to C. Their independent-resource status is user-confirmed; hardware/software/job values remain `UNVERIFIED`. No D–H task cards were present in the `bcb51e5` main snapshot. Neither fact proves that no local jobs exist.
+- Current accessible C executor preflight (not a substitute for D–H): Python 3.12.14; Git 2.52.0; 5 logical/physical CPU cores as reported by the container; 33.3 GiB RAM total, 30.9 GiB available; 16 GB free in the work filesystem; Open MPI 5.0.7 executable present. At inspection time NumPy 2.3.5 and SciPy 1.17.0 were present; ASE, PyTorch, mace-torch, and GPAW were absent from the default Python environment. A repository-compatible CPU MACE environment was installed separately under `/tmp` and validated: PyTorch 2.5.1+cpu, mace-torch 0.3.16, ASE 3.29.0, NumPy 1.26.4, SciPy 1.17.1; `pip check` and `mace_run_train --help` passed. No model training/inference, GPAW installation, or DFT was performed.
+- Estimates are inherited from audited neighboring GPAW jobs and prior planning: liquid Ag 3–8 h/64-atom label, Ti₃SiC₂ 3–6 h/48–96 atoms, solid Ag 2–4 h/32–64 atoms, all at four MPI ranks. These are planning ranges, not benchmarks of D–H.
+- No coordinates, DFT inputs/results, holdout labels, or candidate sampler energies/forces were accessed or generated for this plan.
