@@ -1,0 +1,17 @@
+# 来源与边界
+
+main审查SHA 684e9a887547404d959e2a7b679c9596ea134a8a；handoff bb8ad7e4b725b634de2e2198d141df2bfe9d78b9；原data plan3ef38c8af17ed975ea2ceb96baeadce804320eb1；C完成状态81e7a218312f187957538cda322bf49b7e9dceae；旧独立审查bcb51e5e05493e846ef3bf2cc86081dba8b11abe。安全公开C报告/方法清单与MASTER_TASK_MATRIX已读取。
+
+本轮owner消息已提供D/E/F/G/H逐机反馈；未附已归档报告SHA、完整命令回执/时间戳。D报告自身snapshot f9544cd00046e7fd4be75fec4d6fe13e50e8cdab，G/H本地bcb。均保留作为owner证据，不假装远程验证。E的available内存超过所报限额，已标口径待核。F提供软件明细、setup/ABI/历史MPI回执和未设置工作根的状态。公开refs无D–H报告目录，此事实不表示它们未安装软件。
+
+公开checkpoint大小来源window-a/v19_Ti3SiC2_bulk_mesh_comparison/local_checkpoint_cleanup.json；只读历史metadata，不访问或清理live checkpoint。公开Ag32/TSC48日志用于bands/PW/IBZ/内存估算，数据角色未变。外部来源的固定URL/SHA/访问状态见专门sources文件；访问失败不转为已核验。
+
+本轮只有新C报告、只读核验和普通Git历史merge，科学计算计数全0；未读取/枚举封存结构和labels。未修改原模型、原数据、A/B实际工作区或旧C报告。日期沿用项目Asia/Shanghai报告命名。
+
+SHA256SUMS以新目录相对路径校验，覆盖所有交付文件除自身。最终Git SHA在用户回复给出，不在文件内自引用。source parent和旧TASK ID保留，当前不做role reassignment。
+
+## 发布前安全同步记录
+
+发布前fetch发现main已推进至284285cec6a7a5691ffc01fd9616d7760dc4dac4，新增B的公开归档/状态提交d359f702和284285c，未改C报告路径。C用普通merge d868badbee761afd3566c2d1c3fac150968f2e65 安全纳入，零冲突，保持这些公开文件与main一致；没有重写main或修改B工作区/数据角色。本轮不展开新增标签分析，原报告科学/资源证据快照仍为684e9a8加owner反馈。
+
+最新main相对共同祖先bcb51e5领先5个A/B提交；旧handoff bb8仍不属于main历史。本C分支包含最新已审查main和原handoff，main上的其他人结果完整保留。
