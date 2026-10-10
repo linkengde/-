@@ -68,5 +68,97 @@
     "No independent interface/model force pass",
     "Native/free energies separate; finite-smearing convention unchanged",
     "Periodic/slab-off equality is backend evidence only: do not infer isolated electrostatic boundary from ASE PBC metadata; PW Poisson implementation must be checked before broad boundary claims"
-  ]
+  ],
+  "matched_parent_dipole_and_vacuum_controls": {
+    "title": "AgSi fixed-geometry slab dipole and vacuum control comparison",
+    "status": "PASS_FOR_THESE_FIXED_GEOMETRY_COMPARISONS",
+    "analysis_only": true,
+    "dataset_role": "boundary numerical controls; not training data or independent validation",
+    "composition": "C16Ag4Si8Ti24",
+    "atom_count": 52,
+    "method_summary": {
+      "xc": "PBE",
+      "plane_wave_cutoff_eV": 500,
+      "kpoints": [
+        6,
+        6,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "pbc": [
+        true,
+        true,
+        false
+      ]
+    },
+    "force_comparison_definition": "RMS and maximum of per-atom Euclidean force-vector differences after matching the registered atom IDs.",
+    "energy_budget_meV_atom": 2.0,
+    "force_vector_rms_budget_eV_A": 0.01,
+    "archives": {
+      "26A_dipole_ON": {
+        "label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan/calculations/AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "verification": "PASS",
+        "input_sha256": "73eff17b1913b653017647e9af9c9681e340f0b8067936419f3377963a3bc02c"
+      },
+      "26A_dipole_OFF": {
+        "label": "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19",
+        "verification": "PASS",
+        "input_sha256": "73eff17b1913b653017647e9af9c9681e340f0b8067936419f3377963a3bc02c"
+      },
+      "36A_dipole_ON": {
+        "label": "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19",
+        "verification": "PASS",
+        "input_sha256": "a20543119de0683be769d92ebfc3381f4cc9b89d7c0994f6b0e686f3fbd96cbf"
+      }
+    },
+    "pairs": {
+      "26A_dipole_OFF_minus_ON": {
+        "reference_label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "candidate_label": "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19",
+        "reference_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan/calculations/AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "candidate_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19",
+        "reference_verification": "PASS",
+        "candidate_verification": "PASS",
+        "same_atom_ids_and_symbols": true,
+        "same_pbc": true,
+        "registered_translation_z_A": 0.0,
+        "cell_z_difference_A": 0.0,
+        "max_geometry_residual_after_alignment_A": 0.0,
+        "delta_native_energy_eV_cell": -3.830209453781208e-05,
+        "delta_native_energy_meV_atom": -0.0007365787411117708,
+        "delta_free_energy_eV_cell": -4.890832491355468e-05,
+        "delta_free_energy_meV_atom": -0.0009405447098760516,
+        "force_vector_rms_difference_eV_A": 0.0008447675937428927,
+        "force_vector_max_difference_eV_A": 0.002077708259244818,
+        "within_energy_budget_2meV_atom": true,
+        "within_force_vector_rms_budget_0p01eV_A": true
+      },
+      "36A_dipole_ON_minus_26A_dipole_ON": {
+        "reference_label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "candidate_label": "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19",
+        "reference_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan/calculations/AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+        "candidate_archive": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_cif_slab_controls/calculations/AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19",
+        "reference_verification": "PASS",
+        "candidate_verification": "PASS",
+        "same_atom_ids_and_symbols": true,
+        "same_pbc": true,
+        "registered_translation_z_A": 5.0,
+        "cell_z_difference_A": 10.0,
+        "max_geometry_residual_after_alignment_A": 3.552713678800501e-15,
+        "delta_native_energy_eV_cell": -0.00035162024448709417,
+        "delta_native_energy_meV_atom": -0.006761927778597965,
+        "delta_free_energy_eV_cell": -0.00034063780935866816,
+        "delta_free_energy_meV_atom": -0.0065507271030513115,
+        "force_vector_rms_difference_eV_A": 0.0010562411912799427,
+        "force_vector_max_difference_eV_A": 0.0020628406400325905,
+        "within_energy_budget_2meV_atom": true,
+        "within_force_vector_rms_budget_0p01eV_A": true
+      }
+    },
+    "interpretation": "Both paired comparisons are within the stated numerical budgets. The 26 A pair changes only the dipole correction; the 26-to-36 A pair keeps dipole correction enabled and changes the z cell by 10 A with a rigid +5 A translation. This supports the reference settings for the fixed AgSi parent geometry only and does not establish convergence for other interface geometries or thermally perturbed structures."
+  },
+  "follow_up_conclusion": "Both matched controls meet the 2 meV/atom and 0.01 eV/A force-vector RMS budgets for the exact frozen AgSi parent. This supports, but does not generalize beyond, the fixed parent geometry."
 }
