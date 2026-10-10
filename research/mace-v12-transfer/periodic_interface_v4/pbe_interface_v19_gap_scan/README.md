@@ -1,6 +1,6 @@
 # CIF-parent Ag-layer separation controls (disabled)
 
-Nine same-composition, same-cell candidates cover three terminations and rigid Ag-layer z shifts −0.20, 0, +0.20 Å. Inputs come from the audited COD9009647 parents, expand the z cell to 44.2058765 Å and translate all ions +5 Å, then set slab PBC TTF and dipolelayer xy. Species, order, original IDs and marked pair are retained. The launch manifest is disabled while A completes Ti3SiC2 k8 mesh and reviews the PW boundary/reference target.
+Nine same-composition, same-cell candidates cover three terminations and rigid Ag-layer z shifts −0.20, 0, +0.20 Å. Inputs come from the audited COD9009647 parents, expand the z cell to 44.2058765 Å and translate all ions +5 Å, then set slab PBC TTF and dipolelayer xy. Species, order, original IDs and marked pair are retained. The AgSi parent dipole/vacuum controls are now complete and pass the stated fixed-parent budgets. The AgSi -0.20 and +0.20 A endpoints are enabled for sequential A runs. The six AgC/AgTi entries remain disabled while B finishes its registered assignment and awaits separate target review.
 
 A owns the three AgSi points; B owns the three AgC and three AgTi points. All come from one CIF parent and are training/numerical diagnostics, not independent validation. Method: PBE PW500, 6x6x1, Fermi smearing0.10 eV, GPAW26.7/ASE3.29/PAW1.2.1, dipole correction xy, four ranks and one BLAS thread. Keep native extrapolated energy and free energy separate. Fixed nuclei only.
 
