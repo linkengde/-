@@ -213,13 +213,13 @@
     "v19_slab_reference_method_readiness_review_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:22:47.388839+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00",
-    "v19_AgSi_force_error_localization_window_b": "running; SCF iteration 0; elapsed 0s; updated 2026-10-09T23:59:56.650349+00:00"
+    "v19_AgSi_force_error_localization_window_b": "running; SCF iteration 0; elapsed 520s; updated 2026-10-10T00:01:53.603342+00:00"
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
   "next_action": "Run v19_AgSi_force_error_localization_window_b with the installed MACE CPU environment. Localize per-atom/species force residuals and Ag–Si separation-force errors on the two public archives, then prepare only disabled diagnostic sampling suggestions. Do not run DFT/MPI or training.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-09T23:59:56.650349+00:00",
+  "updated_utc": "2026-10-10T00:01:53.603342+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -278,9 +278,9 @@
     "job": "v19_AgSi_force_error_localization_window_b",
     "state": "running",
     "iteration": 0,
-    "elapsed_s": 0.0,
-    "note": "Finalizing report: added signed Ag-Si separation-force and Ag-layer normal-force comparisons; generating and verifying SHA256SUMS, then marking the assignment complete.",
-    "updated_utc": "2026-10-09T23:59:56.650349+00:00"
+    "elapsed_s": 520.0,
+    "note": "Report outputs, assignment record, SHA256 manifest, JSON syntax, and disabled unlabeled probes are verified. Publishing the completed report bundle to main now.",
+    "updated_utc": "2026-10-10T00:01:53.603342+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
   "current_stage": "V18 public AgSi inference completed and fails force/separation gates by large margins; local residual localization queued.",
@@ -534,9 +534,10 @@
       ]
     },
     "v19_AgSi_force_error_localization_window_b": {
-      "status": "running",
+      "status": "completed",
       "assigned_utc": "2026-10-09T23:40:02.451406+00:00",
       "started_utc": "2026-10-09T23:46:20+00:00",
+      "completed_utc": "2026-10-10T00:00:45+00:00",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b",
       "mode": "MACE CPU inference diagnostics and read-only force-error localization on public AgSi references; no DFT/MPI or training.",
       "required_sources": [
@@ -561,6 +562,20 @@
         "Preserve atom IDs and exact reference order; report eV and eV/A units and signed separation-force convention.",
         "Any geometry suggestions remain unowned, launch-disabled, diagnostic-only and do not change the registered gap scan.",
         "The two references share one CIF family and local contact distances overlap training coverage; this is a single-system diagnostic."
+      ],
+      "decision_result": "Both published force gates fail. All-atom force-vector RMSE is 2.63375 and 2.63351 eV/A; marked Ag-Si separation-force absolute error is 1.71714 and 1.71553 eV/A. Residuals are concentrated on z-directed Ti/C framework forces rather than Ag. This is a same-CIF-family diagnostic, not independent validation.",
+      "evidence": "Reproduced both archive-verified public references with the pinned V18 model/checkpoint. Per-atom and per-species errors, marked-pair and net Ag-layer signed projections, local Ag-X neighborhoods, and train-contact overlap are recorded. SHA256SUMS verifies all deliverables. The four 52-atom geometry proposals contain no force or energy labels and remain ownerless, launch-disabled, and training-ineligible. Only the 30-frame V18 train.extxyz and the two named public references were read; development/test and sealed labels stayed unopened. No DFT/MPI or training was run.",
+      "published_outputs": [
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/README.md",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/localize_forces.py",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/localization.json",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/per_atom_force_errors.csv",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/species_force_breakdown.csv",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/top_error_neighborhoods.csv",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/top_error_neighbor_pairs.csv",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/disabled_geometry_proposals.json",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/disabled_geometry_proposals.extxyz",
+        "research/mace-v12-transfer/coordination/reports/window-b/v19_AgSi_force_error_localization_window_b/SHA256SUMS.txt"
       ]
     }
   },
