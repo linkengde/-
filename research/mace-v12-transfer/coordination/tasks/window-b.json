@@ -217,14 +217,14 @@
     "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00",
     "v19_AgSi_force_error_localization_window_b": "completed; SCF iteration 0; elapsed 520s; updated 2026-10-10T00:03:06.983797+00:00",
-    "v19_V18_pure_phase_force_screen_independent_review_window_b": "running; SCF iteration 0; elapsed 330s; updated 2026-10-10T00:30:23.288729+00:00",
-    "v19_V18_Ti3SiC2_training_coverage_audit_window_b": "queued after the independent pure-phase reproduction; read-only V18 training coverage audit, no DFT/MPI/inference/training/holdout access."
+    "v19_V18_pure_phase_force_screen_independent_review_window_b": "completed; independent CPU reproduction PASS; archive/source/model lineage and all aggregate, species, Cartesian metrics match A within tolerance; report bundle published.",
+    "v19_V18_Ti3SiC2_training_coverage_audit_window_b": "queued; read-only V18 training coverage audit; no inference, DFT/MPI, training, or withheld-data access."
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
-  "next_action": "Independently reproduce A’s pure-phase inference report at research/mace-v12-transfer/coordination/reports/window-b/v19_V18_pure_phase_force_screen_independent_review_window_b. Verify the two archive checksums, result/source geometry identity and V18 model/checkpoint lineage. Using only the two named public pure-phase DFT archives, run CPU inference in /workspace/.venvs/mace-cpu, and compare all-atom, per-species, and Cartesian-component force errors against metrics.json. Do not open train.extxyz or any development/test/sealed structures or labels. Do not run DFT/MPI, training, or edit the model. Publish an independent audit with hashes and state clearly that this is a numerical-control diagnostic, not independent validation.",
+  "next_action": "Run only after the currently active v19_V18_pure_phase_force_screen_independent_review_window_b is completed. Perform a read-only coverage audit of the selected V18 clean-core training set to explain what Ti/C framework environments it actually contains relative to the failed Ti3SiC2 pure-phase diagnostic. Verify the selected train.extxyz hash against the selected-model record and dataset manifest, then inspect train.extxyz itself. Quantify frame/formula/species counts, Ti-C-Si co-occurrence and Ti3SiC2-like compositions, PBC/cell and geometry families, Ti/C local coordination and distance ranges, force component/species distributions, and whether bulk-like Ti3SiC2 environments or relevant z-directed Ti/C responses are present. Compare against the public Ag and Ti3SiC2 numerical-control geometries already screened by A, while keeping training coverage distinct from validation. Map training frames only to their own source records/archives; do not inspect dev, test, holdout, or sealed structures or labels. Do not perform MACE inference, training, DFT/MPI, dataset integration, label enabling, or edits to A-owned calculations. Give a data-backed diagnosis without claiming that coverage counts alone prove the cause of model error. Recommend a minimal next DFT coverage batch for Ti3SiC2 backbone response and independent Ag-Ti/Si/C interface validation, but leave all new structures ungenerated/unregistered/unlabeled. Publish README, machine-readable inventory, a reproducible audit script, and SHA256SUMS only under research/mace-v12-transfer/coordination/reports/window-b/v19_V18_Ti3SiC2_training_coverage_audit_window_b.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-10T00:30:23.288729+00:00",
+  "updated_utc": "2026-10-10T00:30:58.488321+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -288,7 +288,7 @@
     "updated_utc": "2026-10-10T00:30:23.288729+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "The AgSi V18 force-localization report is complete and published. Both AgSi references fail force and marked-pair separation gates; dominant residuals are remote Ti/C framework sites. A has now published a separate CPU-only V18 screen on verified pure-phase controls: fcc Ag passes, while Ti3SiC2 has force-vector RMSE 2.889 eV/A.",
+  "current_stage": "B independently reproduced A’s V18 pure-phase CPU screen on two public archive-verified numerical controls. All aggregate, species and Cartesian metrics match within tolerance; Ag passes and Ti3SiC2 fails the force gate. Next: read-only V18 train.extxyz coverage audit.",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -638,7 +638,7 @@
   "queued_followups": [
     {
       "task_id": "v19_V18_Ti3SiC2_training_coverage_audit_window_b",
-      "status": "queued_after_current_task",
+      "status": "queued",
       "starts_after": "v19_V18_pure_phase_force_screen_independent_review_window_b",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_V18_Ti3SiC2_training_coverage_audit_window_b",
       "assigned_utc": "2026-10-10T00:21:00.385963+00:00"

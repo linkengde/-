@@ -1,0 +1,255 @@
+{
+  "task": "v19_V18_pure_phase_force_screen_independent_review_window_b",
+  "status": "INDEPENDENT_REPRODUCTION_PASS",
+  "scope": "CPU-only force inference on the two named public pure-phase numerical controls. No train.extxyz, development/test/holdout structures or labels, DFT/MPI, or training was accessed or run.",
+  "interpretation_limit": "The Ag and Ti3SiC2 structures are numerical controls, not independent validation. A reproduction match confirms the published diagnostic arithmetic and lineage only.",
+  "model_lineage": {
+    "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/models/MACE_periodic_v18_clean_core.model",
+    "model_sha256": "757586671174db85acbf7971ccfe92de19cc58378ee2431a797efa6d6163cb62",
+    "checkpoint_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/checkpoints/MACE_periodic_v18_clean_core_run-45_epoch-79.pt",
+    "checkpoint_sha256": "d9faab45f32df7366b32f44a9f91c1aab9c72f2df422f24c9996fa3243b2c137",
+    "selection_record_sha256": "d4245492e7d79659a39377cc369f5b43123d876b553eff13043d5e7a534adfe4",
+    "artifact_manifest_sha256": "a14de2802f9aa7921029dc3ed03f04183839c6018bd4c7245ef5abc552ca3b81",
+    "selected_epoch": 79,
+    "checks": {
+      "selected_epoch_is_79": true,
+      "selected_model_hash_matches_selection": true,
+      "selected_checkpoint_hash_matches_selection": true,
+      "model_hash_matches_A_report": true,
+      "checkpoint_hash_matches_A_report": true,
+      "model_recorded_published": true,
+      "checkpoint_recorded_published": true
+    }
+  },
+  "reference_metrics_sha256": "8893533e6f85d073b24e3cd335f3573a449ba1d6d6e2e4fb324dc72af3f3f3e6",
+  "runtime": {
+    "python": "3.12.14",
+    "executable": "/workspace/.venvs/mace-cpu/bin/python",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "device": "cpu",
+    "torch_cuda_available": false,
+    "torch_num_threads": 1,
+    "packages": {
+      "torch": "2.5.1+cpu",
+      "mace-torch": "0.3.16",
+      "ase": "3.29.0",
+      "numpy": "2.5.3"
+    }
+  },
+  "force_gate_eV_A": 0.05,
+  "comparison_tolerance": {
+    "rtol": 1e-07,
+    "atol": 1e-08
+  },
+  "references": [
+    {
+      "label": "Ag_baseline_k8x8x8_v19",
+      "formula": "Ag32",
+      "atom_count": 32,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/inputs/Ag_baseline_PROPOSAL.extxyz",
+      "source_sha256": "21138a56bc3138106c102c4eb207ea76e2060bb5315f454a937f3ce26308318f",
+      "result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ag_baseline_k8x8x8_v19/Ag_baseline_k8x8x8_v19_PW_PBE.extxyz",
+      "result_sha256": "5a5df757d11e85988d22d97c7f6b2d2700803494215a2a1b40ebc3aa8ba5019d",
+      "result_geometry_sha256": "19acedf5cc56bbc0d78818d4f1d704f240c87134b3304af8fc9d20e8d07b21e7",
+      "archive_verification_status": "PASS",
+      "archive_checksum_count": 5,
+      "archive_sha256_all_pass": true,
+      "geometry_identity_checks": {
+        "atomic_numbers_and_order": true,
+        "positions_exact": true,
+        "cell_exact": true,
+        "pbc_exact": true,
+        "atom_ids_exact": true,
+        "formula_matches_summary": true,
+        "atom_count_matches_summary": true,
+        "geometry_hash_matches_A_report": true
+      },
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "kpts": [
+          8,
+          8,
+          8
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "scf_iterations": 13,
+      "DFT_force_vector_RMS_eV_A": 1.7277540280426972e-05,
+      "MACE_force_vector_RMS_eV_A": 1.7151862986517253e-16,
+      "all_atom_force_vector_RMSE_eV_A": 1.7277540280432474e-05,
+      "maximum_atom_vector_error_eV_A": 2.7038121652904978e-05,
+      "force_component_RMSE_eV_A": {
+        "x": 9.975192531832249e-06,
+        "y": 9.975192531803246e-06,
+        "z": 9.975192531891378e-06
+      },
+      "per_species": {
+        "Ag": {
+          "atom_count": 32,
+          "force_vector_RMSE_eV_A": 1.7277540280432474e-05,
+          "maximum_atom_vector_error_eV_A": 2.7038121652904978e-05,
+          "force_component_RMSE_eV_A": {
+            "x": 9.975192531832249e-06,
+            "y": 9.975192531803246e-06,
+            "z": 9.975192531891378e-06
+          }
+        }
+      },
+      "provisional_force_gate": {
+        "limit_eV_A": 0.05,
+        "pass": true
+      },
+      "matches_A_report_within_tolerance": {
+        "all_atom_force_vector_RMSE": true,
+        "maximum_atom_vector_error": true,
+        "DFT_force_vector_RMS": true,
+        "MACE_force_vector_RMS": true,
+        "all_cartesian_component_RMSE": true,
+        "per_species_force_vector_RMSE": true
+      }
+    },
+    {
+      "label": "Ti3SiC2_baseline_k10x10x2_v19",
+      "formula": "C16Si8Ti24",
+      "atom_count": 48,
+      "source_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/inputs/Ti3SiC2_baseline_PROPOSAL.extxyz",
+      "source_sha256": "157c1dab02a28e6140dd5191187ccd914fe558950e2ac6c136866bcc7805c3e4",
+      "result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/calculations/Ti3SiC2_baseline_k10x10x2_v19/Ti3SiC2_baseline_k10x10x2_v19_PW_PBE.extxyz",
+      "result_sha256": "198ea252ba9dc0bb22dc9b968977b18f7422445aa7e9ce37bb0aa8c4701f3916",
+      "result_geometry_sha256": "cc636932a6102c0f10db5b2eb9df30cc2ff63104af79aa9f78ccd00623eada5c",
+      "archive_verification_status": "PASS",
+      "archive_checksum_count": 5,
+      "archive_sha256_all_pass": true,
+      "geometry_identity_checks": {
+        "atomic_numbers_and_order": true,
+        "positions_exact": true,
+        "cell_exact": true,
+        "pbc_exact": true,
+        "atom_ids_exact": true,
+        "formula_matches_summary": true,
+        "atom_count_matches_summary": true,
+        "geometry_hash_matches_A_report": true
+      },
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "scf_iterations": 37,
+      "DFT_force_vector_RMS_eV_A": 0.05647788358494387,
+      "MACE_force_vector_RMS_eV_A": 2.937742946592921,
+      "all_atom_force_vector_RMSE_eV_A": 2.889433267893062,
+      "maximum_atom_vector_error_eV_A": 4.258188318648901,
+      "force_component_RMSE_eV_A": {
+        "x": 0.001247517477215869,
+        "y": 0.0008935108731788928,
+        "z": 2.8894328604322412
+      },
+      "per_species": {
+        "C": {
+          "atom_count": 16,
+          "force_vector_RMSE_eV_A": 2.6295878380989857,
+          "maximum_atom_vector_error_eV_A": 2.6295951051947815,
+          "force_component_RMSE_eV_A": {
+            "x": 0.0007944558728425909,
+            "y": 0.0007525702675183244,
+            "z": 2.629587610397485
+          }
+        },
+        "Si": {
+          "atom_count": 8,
+          "force_vector_RMSE_eV_A": 0.0013502745566728004,
+          "maximum_atom_vector_error_eV_A": 0.0013502794929249337,
+          "force_component_RMSE_eV_A": {
+            "x": 0.0011647755802504992,
+            "y": 0.0006830260302743823,
+            "z": 3.829884810141974e-06
+          }
+        },
+        "Ti": {
+          "atom_count": 24,
+          "force_vector_RMSE_eV_A": 3.4767552611520562,
+          "maximum_atom_vector_error_eV_A": 4.258188318648901,
+          "force_component_RMSE_eV_A": {
+            "x": 0.0014965267249666505,
+            "y": 0.0010313294833685723,
+            "z": 3.4767547861066874
+          }
+        }
+      },
+      "provisional_force_gate": {
+        "limit_eV_A": 0.05,
+        "pass": false
+      },
+      "matches_A_report_within_tolerance": {
+        "all_atom_force_vector_RMSE": true,
+        "maximum_atom_vector_error": true,
+        "DFT_force_vector_RMS": true,
+        "MACE_force_vector_RMS": true,
+        "all_cartesian_component_RMSE": true,
+        "per_species_force_vector_RMSE": true
+      }
+    }
+  ],
+  "train_extxyz_opened": false,
+  "development_or_test_files_read": false,
+  "withheld_labels_opened": false
+}
