@@ -1,0 +1,62 @@
+{
+  "task_id": "window-c",
+  "status": "queued",
+  "task_owner": "window-c",
+  "updated_utc": "2026-10-10T14:32:47Z",
+  "current_task": {
+    "task_id": "v19_controlled_repair_experiment_design",
+    "status": "ready_to_archive",
+    "report_directory": "research/mace-v12-transfer/coordination/reports/window-c/v19_controlled_repair_design_20261010",
+    "baseline_commit": "e455b71f6ef91a0955495001765e659aaee12174",
+    "execution_allowed": {
+      "mace_training": false,
+      "dft": false,
+      "md": false,
+      "lammps": false,
+      "ttm": false
+    }
+  },
+  "queued_followups": [
+    {
+      "task_id": "window_c_three_model_static_comparison",
+      "status": "queued",
+      "starts_after": "v19_controlled_repair_experiment_design",
+      "report_directory": "research/mace-v12-transfer/coordination/reports/window-c/three_model_static_comparison_20261010",
+      "models": [
+        "MACE-MP-0b3-medium",
+        "MACE-MATPES-PBE-0",
+        "frozen V18"
+      ],
+      "allowed_work": [
+        "official-source license and provenance review",
+        "frozen-model CPU inference on verified public, nonsealed DFT references",
+        "force/element/direction/atomic-error and response comparisons",
+        "append-only V19 repair-plan revision"
+      ],
+      "reference_classes": [
+        "solid Ag baseline, displacement, shear, and volume responses",
+        "Ti3SiC2 backbone and only completed/verified Ti/C z-displacements",
+        "Ag-Ti, Ag-Si, and Ag-C local interface structures",
+        "completed/verified Ag-Si slab references"
+      ],
+      "required_outputs": [
+        "three-model comparison report",
+        "per-element errors CSV",
+        "backbone response comparison",
+        "interface error comparison",
+        "candidate-model recommendation",
+        "SHA256SUMS.txt and source/provenance record",
+        "append-only V19 repair-plan revision"
+      ],
+      "hard_limits": [
+        "do not read sealed test labels",
+        "do not use pending or unverified A/B data",
+        "do not launch DFT, MACE training, MD, LAMMPS, or TTM",
+        "do not modify original data, model weights, frozen V18, or A/B tasks",
+        "do not compare absolute energy zeros across models",
+        "do not call development diagnostics independent tests or infer solidification validity from static forces",
+        "if MATPES licensing, download, or compatibility is blocked, record the blocker without bypass"
+      ]
+    }
+  ]
+}
