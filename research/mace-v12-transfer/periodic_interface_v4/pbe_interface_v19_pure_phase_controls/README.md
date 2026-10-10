@@ -59,3 +59,16 @@ The 8×8×4 local `state.gpw` restart file (7,361,378,540 bytes) was removed onl
 ## Ti3SiC2 reciprocal-z isolation control
 
 B is assigned one 6×6×4 calculation on the same 48-atom baseline input used by A’s 8×8×2 job. Compared with the archived 6×6×2 baseline, this fixes the in-plane mesh and raises only kz; it complements A’s fixed-kz in-plane test. Compare native and free energies separately and all-atom force-vector RMS/max, with the unchanged gates of 2 meV/atom and 0.01 eV/Å. This is a static numerical control, not validation or thermal stability. Run only after verifying the B registration and no active B DFT job.
+
+## Ti₃SiC₂ backbone force-response batch
+
+B registered four source-audited, 48-atom fixed-cell z-displacements against the completed `Ti3SiC2_baseline_k10x10x4_v19` method. The canonical method hash is `702df71e586a61cd5785afc62653d7135a707032c91b72842b035b62198fd709`; PBE, 500 eV PW, 0.10 eV Fermi–Dirac smearing, 10×10×4 k-points, PBC TTT, GPAW 26.7.0, ASE 3.29.0, and gpaw-data 1.2.1 are unchanged. Native extrapolated energy and free energy remain separate. These are candidate backbone response data, not independent validation or training labels.
+
+Inputs are copied byte-for-byte from the checked proposal report and owned by `window-b` / `5f182750-e2d3-428b-bddc-5ab37bf09e5e`. Run one label at a time in this order, verifying and publishing each archive before the next:
+
+- `Ti3SiC2_Ti4f_id0003_z_m020A_k10x10x4_v19` — `inputs/Ti3SiC2_Ti4f_id0003_z_m020A_PROPOSAL.extxyz` — SHA-256 `5529a040f0f35957f826b78754910970741bff741474e321dc1646a5c0c12bbf`
+- `Ti3SiC2_Ti4f_id0003_z_p020A_k10x10x4_v19` — `inputs/Ti3SiC2_Ti4f_id0003_z_p020A_PROPOSAL.extxyz` — SHA-256 `5829ebcbb9ae331f6cf1dd7dc5abca0787c07667a55778e3c1eea241938b227b`
+- `Ti3SiC2_C4f_id0009_z_m020A_k10x10x4_v19` — `inputs/Ti3SiC2_C4f_id0009_z_m020A_PROPOSAL.extxyz` — SHA-256 `19f1a4011620f5c7f245d0a8c893964aa8ebd1eb647f8a9b6f4547a75cac586f`
+- `Ti3SiC2_C4f_id0009_z_p020A_k10x10x4_v19` — `inputs/Ti3SiC2_C4f_id0009_z_p020A_PROPOSAL.extxyz` — SHA-256 `6308961f33ad5fae3f58930570a47044a236e062de243821c20577c78955ff72`
+
+Stop at the first failed or unconverged run and preserve its checkpoint. Do not run interface DFT; source verification and A’s slab method review remain pending.
