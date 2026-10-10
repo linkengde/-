@@ -217,14 +217,14 @@
     "v19_existing_AgSi_candidate_force_error_screen_window_b": "completed; SCF iteration 6; elapsed 0s; updated 2026-10-09T23:27:28.284893+00:00",
     "v19_existing_AgSi_candidate_force_error_screen_install_and_infer_window_b": "completed; SCF iteration 0; elapsed 369s; updated 2026-10-09T23:36:33.925354+00:00",
     "v19_AgSi_force_error_localization_window_b": "completed; SCF iteration 0; elapsed 520s; updated 2026-10-10T00:03:06.983797+00:00",
-    "v19_V18_pure_phase_force_screen_independent_review_window_b": "queued; independent CPU-only reproduction of A report bb81d59 on Ag k8x8x8 and Ti3SiC2 k10x10x2 verified pure-phase controls; no DFT/MPI or training.",
+    "v19_V18_pure_phase_force_screen_independent_review_window_b": "running; SCF iteration 0; elapsed 0s; updated 2026-10-10T00:23:03.911788+00:00",
     "v19_V18_Ti3SiC2_training_coverage_audit_window_b": "queued after the independent pure-phase reproduction; read-only V18 training coverage audit, no DFT/MPI/inference/training/holdout access."
   },
   "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
   "status": "running",
   "next_action": "Independently reproduce A’s pure-phase inference report at research/mace-v12-transfer/coordination/reports/window-b/v19_V18_pure_phase_force_screen_independent_review_window_b. Verify the two archive checksums, result/source geometry identity and V18 model/checkpoint lineage. Using only the two named public pure-phase DFT archives, run CPU inference in /workspace/.venvs/mace-cpu, and compare all-atom, per-species, and Cartesian-component force errors against metrics.json. Do not open train.extxyz or any development/test/sealed structures or labels. Do not run DFT/MPI, training, or edit the model. Publish an independent audit with hashes and state clearly that this is a numerical-control diagnostic, not independent validation.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-10T00:21:00.385963+00:00",
+  "updated_utc": "2026-10-10T00:23:03.911788+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -280,12 +280,12 @@
   "live_progress": {
     "task_id": "window-b",
     "owner_instance": "5f182750-e2d3-428b-bddc-5ab37bf09e5e",
-    "job": "v19_AgSi_force_error_localization_window_b",
-    "state": "completed",
+    "job": "v19_V18_pure_phase_force_screen_independent_review_window_b",
+    "state": "running",
     "iteration": 0,
-    "elapsed_s": 520.0,
-    "note": "Completed and published; remote assignment and all 10 report files are present on main (f576c99 bundle). SHA256 and no-label probe validations pass. Both force gates fail; no DFT/MPI or training.",
-    "updated_utc": "2026-10-10T00:03:06.983797+00:00"
+    "elapsed_s": 0.0,
+    "note": "Starting the currently assigned independent pure-phase V18 CPU reproduction. First verify archive/source/model lineage; use only the two named public Ag and Ti3SiC2 references. No train/dev/test/holdout access, DFT/MPI, or training. The que",
+    "updated_utc": "2026-10-10T00:23:03.911788+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
   "current_stage": "The AgSi V18 force-localization report is complete and published. Both AgSi references fail force and marked-pair separation gates; dominant residuals are remote Ti/C framework sites. A has now published a separate CPU-only V18 screen on verified pure-phase controls: fcc Ag passes, while Ti3SiC2 has force-vector RMSE 2.889 eV/A.",
