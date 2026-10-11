@@ -10,7 +10,7 @@ Base HEAD before this addendum: `202cae550a6592a75b7431066396a1d88ed448ef`
 - `WORKSPACE_WRITE_VERIFIED = YES`
 - `TASK_LOCAL_SPACE_READY = YES` (28,873,072,640 available bytes; 2,036,714 free inodes at capture)
 - `PERSISTENCE_VERIFIED = NO` (Codex Cloud task workspace is temporary by design)
-- `GITHUB_UPLOAD_DOWNLOAD_SHA_RESTORE = PENDING_TEST`
+- `GITHUB_UPLOAD_DOWNLOAD_SHA_RESTORE = YES` for the synthetic recovery fixture
 - `SAMPLER_ROOT_READY = NO`; `DFT_WORK_ROOT_READY = NO` (both absent and intentionally not created before C's signed path config)
 - `SAMPLING_STORAGE_READY = NO` pending C's Codex-specific signed release config and exact roots
 - `DFT_STORAGE_READY = NO`; DFT and full sampling continuation remain HOLD
@@ -21,6 +21,10 @@ Base HEAD before this addendum: `202cae550a6592a75b7431066396a1d88ed448ef`
 `/workspace` is a writable overlay with 33,770,192,896 total bytes and 28,873,072,640 bytes available (26.89 GiB). It has 2,036,714 available inodes. The checkout is `/workspace/-` (mode 0700); the managed write roots are `/workspace` and `/tmp`. A new report directory and a 16,415-byte deterministic non-science test file were successfully written under the checkout. The overlay does not provide evidence of persistence after task recreation. The owner sampling and DFT root candidates checked for this report are absent, and no root was created.
 
 The cgroup CPU quota is 4 CPUs (`400000 100000`); memory limit is 34,359,738,368 bytes, with 30,780,076,032 bytes of limit headroom at capture. No GPAW, LAMMPS, or MPI launcher process was present. These are task-time observations, not durable capacity guarantees.
+
+## GitHub branch round-trip
+
+The synthetic fixture was committed and pushed by a normal fast-forward to `cloud-f-b1-dft`. A fresh temporary Git repository then fetched the branch from GitHub at commit `afb1ec415df43dbf6a48212723237d8a999fd00a`, downloaded the fixture from that fetched commit, copied it into a separate restore path, and compared both copies with the source. All three SHA-256 values matched `24f3c1e665f4e0f74ea736d493704b7756871e238d2956761b001aff62921c6b`; byte count was 16,415. This verifies upload, remote fetch, content integrity, and byte restoration for the non-scientific fixture. It does not prove that scientific archive bytes are acceptable under the repository's visibility/data-handling policy or that task-local files persist.
 
 ## Ag64 warmup size and time estimate
 
