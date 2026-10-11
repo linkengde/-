@@ -1,0 +1,303 @@
+{
+  "status": "READY_FOR_DFT_REGISTRY_SCREENING",
+  "execution_authorized": false,
+  "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+  "source_directory": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation",
+  "source_manifest_sha256": "a194e13815271ce1c99b11d41019c6db0d08adfe28da621bfb6c5f4883c62724",
+  "source_manifest_status": "READY_FOR_DFT_SCREENING",
+  "source_dft_execution_authorized": false,
+  "source_data_role": "GEOMETRY_ONLY_NOT_ASSIGNED_TRAIN_DEV_TEST",
+  "independent_dev_family": false,
+  "source_family_note": "Substrate derives from COD 9009647/Kisi 1998, the same crystallographic parent family as prior scored Ag-Si geometries; do not treat these as independent DEV evidence.",
+  "engine": {
+    "name": "GPAW",
+    "version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "gpaw_data_version": "1.2.1",
+    "paw_type": "GPAW default PBE PAW setups",
+    "PAW_sha256_by_element": {
+      "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    }
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "plane_wave",
+    "cutoff_eV": 500,
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "max_scf_iterations": 160,
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "charge": 0,
+    "spin_polarized": false
+  },
+  "geometry": {
+    "calculation": "single_point_fixed_geometry",
+    "relax_atoms": false,
+    "relax_cell": false,
+    "coordinate_changes_allowed": false,
+    "cell_changes_allowed": false,
+    "source_pbc": [
+      true,
+      true,
+      false
+    ],
+    "periodic_slab": true,
+    "vacuum_threshold_A": 18.0,
+    "warning_rule": "warn only if either z-vacuum gap is < 18.0 A",
+    "z_vacuum_definition": "bottom=min(z); top=cell[2,2]-max(z)"
+  },
+  "kpoint_test_matrix": {
+    "convention": "GPAW default Monkhorst-Pack for integer kpts tuples; no explicit gamma override or extra offset is passed; slab kz=1",
+    "coarse": {
+      "mesh": [
+        6,
+        6,
+        1
+      ],
+      "status": "PREPARED_NOT_RUN",
+      "production_approved": false
+    },
+    "medium": {
+      "mesh": [
+        8,
+        8,
+        1
+      ],
+      "status": "PREPARED_NOT_RUN",
+      "production_approved": false
+    }
+  },
+  "requested_labels": {
+    "total_energy_eV": true,
+    "force_consistent_free_energy_eV": true,
+    "atomic_forces_eV_A": true,
+    "stress_tensor_eV_A3": true,
+    "stress_format": "full 3x3 Cartesian tensor",
+    "stress_sign": "ASE tensile-positive",
+    "stress_supervision_allowed": false,
+    "stress_note": "Slab stress uses full cell volume including vacuum; C approval required before stress is used as a bulk MACE target."
+  },
+  "release_gate": {
+    "requires_c_release_config": true,
+    "current_source_manifest_authorizes_execution": false,
+    "required_fields": [
+      "execution_authorized",
+      "C_approval.signed_by",
+      "C_approval.approval_id",
+      "registry_id",
+      "source_commit",
+      "structure_sha256",
+      "xc",
+      "cutoff_eV",
+      "smearing_eV",
+      "kpoint_mesh",
+      "fixed_geometry",
+      "relax_atoms",
+      "relax_cell",
+      "save_energy",
+      "save_forces",
+      "save_stress",
+      "mpi_ranks",
+      "kpoint_convention"
+    ],
+    "execution_now": false
+  },
+  "structures": [
+    {
+      "registry_id": "R1",
+      "registry_name": "top / OT-like",
+      "source_file": "Ag_Ti3SiC2_Si_R1.xyz",
+      "source_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+      "copied_input_file": "R1/structure.xyz",
+      "n_atoms": 20,
+      "formula": "C4Ag7Si3Ti6",
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "z_min_A": 18.0,
+      "z_max_A": 53.268266,
+      "z_vacuum_bottom_A": 18.0,
+      "z_vacuum_top_A": 18.000000000174282,
+      "z_vacuum_warning": false,
+      "source_family_status": "COD-9009647-derived; not an independent DEV family",
+      "data_role": "GEOMETRY_ONLY_NOT_ASSIGNED_TRAIN_DEV_TEST"
+    },
+    {
+      "registry_id": "R2",
+      "registry_name": "bridge / MT-like",
+      "source_file": "Ag_Ti3SiC2_Si_R2.xyz",
+      "source_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+      "copied_input_file": "R2/structure.xyz",
+      "n_atoms": 20,
+      "formula": "C4Ag7Si3Ti6",
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "z_min_A": 18.0,
+      "z_max_A": 53.268266,
+      "z_vacuum_bottom_A": 18.0,
+      "z_vacuum_top_A": 18.000000000174282,
+      "z_vacuum_warning": false,
+      "source_family_status": "COD-9009647-derived; not an independent DEV family",
+      "data_role": "GEOMETRY_ONLY_NOT_ASSIGNED_TRAIN_DEV_TEST"
+    },
+    {
+      "registry_id": "R3",
+      "registry_name": "threefold hollow / HCP-like",
+      "source_file": "Ag_Ti3SiC2_Si_R3.xyz",
+      "source_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+      "copied_input_file": "R3/structure.xyz",
+      "n_atoms": 20,
+      "formula": "C4Ag7Si3Ti6",
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "z_min_A": 18.0,
+      "z_max_A": 53.268266,
+      "z_vacuum_bottom_A": 18.0,
+      "z_vacuum_top_A": 18.000000000174282,
+      "z_vacuum_warning": false,
+      "source_family_status": "COD-9009647-derived; not an independent DEV family",
+      "data_role": "GEOMETRY_ONLY_NOT_ASSIGNED_TRAIN_DEV_TEST"
+    },
+    {
+      "registry_id": "R4",
+      "registry_name": "alternate threefold hollow / FCC-like",
+      "source_file": "Ag_Ti3SiC2_Si_R4.xyz",
+      "source_sha256": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c",
+      "copied_input_file": "R4/structure.xyz",
+      "n_atoms": 20,
+      "formula": "C4Ag7Si3Ti6",
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "z_min_A": 18.0,
+      "z_max_A": 53.268266,
+      "z_vacuum_bottom_A": 18.0,
+      "z_vacuum_top_A": 18.000000000174282,
+      "z_vacuum_warning": false,
+      "source_family_status": "COD-9009647-derived; not an independent DEV family",
+      "data_role": "GEOMETRY_ONLY_NOT_ASSIGNED_TRAIN_DEV_TEST"
+    }
+  ]
+}
