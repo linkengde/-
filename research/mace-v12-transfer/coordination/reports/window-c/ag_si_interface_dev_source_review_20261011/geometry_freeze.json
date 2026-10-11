@@ -1,0 +1,55 @@
+{
+  "review_id": "AG-SI_INTERFACE_DEV_SOURCE_REVIEW",
+  "decision": "NO_VALID_SOURCE",
+  "execution_authorized": false,
+  "source": {
+    "citation": "Zhang et al., Coatings 16 (2026) 995, DOI 10.3390/coatings16080995",
+    "local_private_pdf_sha256": "fb2a4ad4a659ce7840aa88bb0dcd7f251c02ce7a5fe80441d86309c7d9786ee6",
+    "license_note": "The private PDF is not included in the repository. No third-party structure file is copied."
+  },
+  "source_backed_model_features": {
+    "substrate_orientation": "Ti3SiC2(0001)",
+    "substrate_termination": "Si",
+    "metal_orientation": "Ag(111)",
+    "Ag_atomic_layers": 7,
+    "lateral_cell": {
+      "registry_size": "1x1 coherent hexagonal",
+      "a_A": 3.071,
+      "b_A": 3.071,
+      "gamma_deg": 120,
+      "Ag_strained_to_substrate": true
+    },
+    "published_registry_candidates": [
+      {"name": "OT", "definition": "terminal substrate surface atom directly above Ag"},
+      {"name": "MT", "definition": "bridge midpoint of adjacent Ag atoms"},
+      {"name": "HCP", "definition": "threefold hollow at center of three adjacent Ag atoms"}
+    ],
+    "published_Si_termination_relaxed_d0_A": {"OT": 2.0, "MT": 1.8, "HCP": 1.7},
+    "published_vacuum_A": 15,
+    "published_vacuum_comparison_A": 20,
+    "published_substrate_fixed_layers": 2
+  },
+  "project_scan_proposal": {
+    "status": "PLAN_ONLY_COORDINATES_NOT_RELEASED",
+    "distance_definition": "mean z of outermost Si termination plane to mean z of bottom Ag(111) plane",
+    "distance_offsets_from_published_registry_specific_d0_A": [-0.2, -0.1, 0.0, 0.1, 0.2],
+    "registry_count": 3,
+    "points_per_registry": 5,
+    "total_fixed_geometry_points": 15,
+    "base_vacuum_A": 18,
+    "vacuum_comparison_A": 22,
+    "pbc": [true, true, false],
+    "dipole_correction": "xy",
+    "atom_order_policy": "source substrate order sorted by layer bottom-to-top, fractional x then y then species; append Ag by layer bottom-to-top and fractional x then y; assign immutable consecutive local_new_id 1..N",
+    "DFT_started": false,
+    "MACE_training_started": false
+  },
+  "unresolved_source_fields": [
+    "Exact Ti3SiC2 substrate slab thickness and atom coordinates are not provided by the article or checked supplement.",
+    "Exact relaxed coordinates and registry fractional translations are not provided; only schematic high-symmetry definitions are given.",
+    "The article's interface d0 cannot be unambiguously mapped to the project's explicit mean-plane gap without coordinates.",
+    "Actual atom count and numeric atom-ID map cannot be frozen until source coordinates and substrate layer count are known.",
+    "The existing 52-atom COD/Kisi candidate is from an already-scored family and its (0.37,0.21) offsets are synthetic; it is not an independent DEV source."
+  ],
+  "release_status": "NO_VALID_SOURCE"
+}
