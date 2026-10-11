@@ -1,0 +1,4919 @@
+{
+  "candidate": {
+    "inference_device": "CPU",
+    "lineage_checks": {
+      "blind_labels_not_used_for_selection": true,
+      "checkpoint_recorded_as_published": true,
+      "dataset_manifest_hash_matches_selection": true,
+      "dataset_manifest_points_to_same_training_input": true,
+      "export_matches_epoch79": true,
+      "model_recorded_as_published": true,
+      "nonsealed_training_manifest": true,
+      "selected_epoch79_checkpoint_hash_matches": true,
+      "selected_epoch_is_79": true,
+      "selected_model_hash_matches": true,
+      "test_file_not_passed_to_training": true,
+      "training_input_hash_matches_selection": true
+    },
+    "lineage_hashes": {
+      "artifact_manifest_sha256": "a14de2802f9aa7921029dc3ed03f04183839c6018bd4c7245ef5abc552ca3b81",
+      "dataset_manifest_sha256": "36fb89632293cd5fcd494a4ad7665aeabb575ee1f6cc7633fa913ff7a1f1bdec",
+      "epoch79_checkpoint_sha256": "d9faab45f32df7366b32f44a9f91c1aab9c72f2df422f24c9996fa3243b2c137",
+      "model_sha256": "757586671174db85acbf7971ccfe92de19cc58378ee2431a797efa6d6163cb62",
+      "previous_eligibility_audit_sha256": "991b5298a313f551caf456442fb2807c9d806b012e927c8bf36f62cd614b0e82",
+      "selection_record_sha256": "d4245492e7d79659a39377cc369f5b43123d876b553eff13043d5e7a534adfe4",
+      "training_input_sha256": "20279d8aae53baf186546eb4a4dc396bb71e92de9d1c874d1c6fa0022313c045"
+    },
+    "model_path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/models/MACE_periodic_v18_clean_core.model",
+    "model_sha256": "757586671174db85acbf7971ccfe92de19cc58378ee2431a797efa6d6163cb62",
+    "name": "V18 clean-core epoch 79",
+    "runtime": {
+      "ase": "3.29.0",
+      "device": "CPU",
+      "mace-torch": "0.3.16",
+      "numpy": "2.5.3",
+      "python": "3.12.14",
+      "torch": "2.5.1+cpu",
+      "torch_num_threads": 4
+    }
+  },
+  "central_difference_generalized_force_eV_A": {
+    "dft_force_consistent_quantity": "free_energy; native extrapolated energy reported separately",
+    "dft_free_energy_Ag_layer_generalized_force_eV_A": -2.4711351672017656,
+    "dft_native_Ag_layer_generalized_force_eV_A": -2.492783275008037,
+    "mace_Ag_layer_generalized_force_eV_A": -4.643426700578459,
+    "mace_minus_dft_free_energy_force_eV_A": -2.1722915333766935
+  },
+  "energy_scan_deltas_from_parent_eV_cell": {
+    "dft_free_energy_eV_cell": {
+      "minus_0p20": -0.42180817261294123,
+      "plus_0p20": 0.566645894267765,
+      "plus_minus": 0.9884540668807063
+    },
+    "dft_native_energy_eV_cell": {
+      "minus_0p20": -0.4244425439766246,
+      "plus_0p20": 0.5726707660265902,
+      "plus_minus": 0.9971133100032148
+    },
+    "model_energy_eV_cell": {
+      "minus_0p20": -0.9437371681889317,
+      "plus_0p20": 0.9136335120424519,
+      "plus_minus": 1.8573706802313836
+    }
+  },
+  "gate_summary": {
+    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": {
+      "all_atom_force_vector_gate_pass": false,
+      "marked_pair_separation_gate_pass": false
+    },
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": {
+      "all_atom_force_vector_gate_pass": false,
+      "marked_pair_separation_gate_pass": false
+    },
+    "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": {
+      "all_atom_force_vector_gate_pass": false,
+      "marked_pair_separation_gate_pass": false
+    }
+  },
+  "interpretation": "Failures quantify this related-CIF force diagnostic. Do not call it an independent holdout; the common geometry family and V18's known local Ag-Si training overlap limit generalization claims.",
+  "methods": {
+    "all_atom_force_vector_RMSE": "sqrt(mean_i(sum_xyz((F_MACE-F_DFT)^2)))",
+    "dft": "PBE plane-wave 500 eV, 6x6x1, sigma 0.10 eV, pbc TTF, xy dipole, GPAW 26.7.0, four MPI ranks; fixed ion geometries",
+    "finite_difference": "minus central energy slope from +/-0.20 A endpoints; free_energy is force-consistent, native energy retained separately",
+    "gates": {
+      "all_atom_force_vector_RMSE_eV_A": 0.05,
+      "marked_pair_separation_force_abs_error_eV_A": 0.1
+    },
+    "legacy_pair_separation_force": "(F_contact-F_Ag) dot unit(Ag to contact); existing provisional gate 0.10 eV/A",
+    "whole_layer_generalized_force": "sum(F_Ag,z); direct derivative of rigid Ag-layer +z coordinate"
+  },
+  "per_structure": [
+    {
+      "all_atom_force_vector_RMSE_eV_A": 2.6346643153848786,
+      "all_atom_gate": {
+        "limit_eV_A": 0.05,
+        "pass": false
+      },
+      "atoms": 52,
+      "dft_archive_verification": "PASS",
+      "dft_free_energy_eV_cell": -391.25699277719895,
+      "dft_native_energy_eV_cell": -390.8691085457056,
+      "energy_model_minus_dft_eV_cell": {
+        "free_energy": -34.047640169084445,
+        "native": -34.435524400577776
+      },
+      "force_error_localization_by_nearest_Ag_distance": {
+        "Ag_mean_z_A": 31.0058765,
+        "bins": {
+          "0-3": {
+            "atom_count": 8,
+            "force_vector_RMSE_eV_A": 1.0202622889614335,
+            "species": {
+              "Ag": {
+                "force_vector_RMSE_eV_A": 0.7120082739592436,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.7012307485914201
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 1.2549559730792255,
+                "n": 4,
+                "z_component_RMSE_eV_A": 1.2496546305462113
+              }
+            },
+            "z_component_RMSE_eV_A": 1.0132525002228396
+          },
+          "3-5": {
+            "atom_count": 4,
+            "force_vector_RMSE_eV_A": 3.4650234749337963,
+            "species": {
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.4650234749337963,
+                "n": 4,
+                "z_component_RMSE_eV_A": 3.465016764051777
+              }
+            },
+            "z_component_RMSE_eV_A": 3.465016764051777
+          },
+          "5-7": {
+            "atom_count": 8,
+            "force_vector_RMSE_eV_A": 1.9907177367270996,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.8152752386948587,
+                "n": 4,
+                "z_component_RMSE_eV_A": 2.815273551299831
+              },
+              "Ti": {
+                "force_vector_RMSE_eV_A": 0.011812917985760413,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.004035975014818502
+              }
+            },
+            "z_component_RMSE_eV_A": 1.9907010646682595
+          },
+          ">7": {
+            "atom_count": 32,
+            "force_vector_RMSE_eV_A": 2.9202901512280515,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.695403111479205,
+                "n": 12,
+                "z_component_RMSE_eV_A": 2.695402003569329
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 0.14560951939842293,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.1456072616147294
+              },
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.406169424978067,
+                "n": 16,
+                "z_component_RMSE_eV_A": 3.4061692223207
+              }
+            },
+            "z_component_RMSE_eV_A": 2.9202896354965975
+          }
+        },
+        "bins_A": "[0,3), [3,5), [5,7), [7,infinity)",
+        "distance_definition": "minimum-image 3D distance to any Ag atom; z is non-periodic"
+      },
+      "formula": "C16Ag4Si8Ti24",
+      "inference_seconds": 2.5226654750003945,
+      "label": "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "marked_pair": {
+        "Ag_atom_id": 19101048,
+        "contact_atom_id": 19101007,
+        "contact_species": "Si",
+        "distance_A": 2.593391608369795,
+        "legacy_force_difference_definition_eV_A": {
+          "absolute_error": 1.8957233427047138,
+          "definition": "(F_contact - F_Ag) dot unit(Ag to contact)",
+          "dft": -0.8310636810604922,
+          "gate_eV_A": 0.1,
+          "model": -2.726787023765206,
+          "pass": false,
+          "signed_model_minus_dft": -1.8957233427047138
+        },
+        "symmetric_relative_coordinate_generalized_force_eV_A": {
+          "definition": "0.5 * legacy pair force difference; equal/opposite half-displacement convention",
+          "dft": -0.4155318405302461,
+          "model": -1.363393511882603,
+          "signed_model_minus_dft": -0.9478616713523569
+        }
+      },
+      "max_atom_force_vector_error_eV_A": 4.557966436523457,
+      "model_energy_eV_cell": -425.3046329462834,
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "per_atom": [
+        {
+          "atom_id": 19101000,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007586375749365794,
+            -0.0003996434136339281,
+            0.1597270401577766
+          ],
+          "error_norm_eV_A": 0.11502119734847126,
+          "error_vector_eV_A": [
+            -0.0007149117478289555,
+            0.00037312164260061814,
+            -0.11501837036277557
+          ],
+          "model_force_eV_A": [
+            4.372582710762389e-05,
+            -2.652177103330995e-05,
+            0.044708669795001044
+          ],
+          "nearest_Ag_distance_A": 15.648510813332619,
+          "position_A": [
+            0.0,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.617624999999999
+        },
+        {
+          "atom_id": 19101001,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007209700537481709,
+            -0.0014257278548626964,
+            -0.02499659289703475
+          ],
+          "error_norm_eV_A": 0.011812887447833527,
+          "error_vector_eV_A": [
+            0.00839102975361862,
+            0.007270031288197681,
+            0.004035043320423794
+          ],
+          "model_force_eV_A": [
+            0.00911199980736679,
+            0.0058443034333349846,
+            -0.020961549576610956
+          ],
+          "nearest_Ag_distance_A": 6.876453631777639,
+          "position_A": [
+            0.0,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -6.805875
+        },
+        {
+          "atom_id": 19101002,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022497929831602714,
+            -4.79694887875331e-05,
+            -0.2552029135190009
+          ],
+          "error_norm_eV_A": 4.557965549285491,
+          "error_vector_eV_A": [
+            -0.0002735161824837181,
+            9.105957443870797e-06,
+            -4.557965541069762
+          ],
+          "model_force_eV_A": [
+            -4.853688416769095e-05,
+            -3.88635313436623e-05,
+            -4.813168454588762
+          ],
+          "nearest_Ag_distance_A": 13.253162618422223,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.229640749999998
+        },
+        {
+          "atom_id": 19101003,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.013071242633254489,
+            0.009979495716950114,
+            -0.04891268281554763
+          ],
+          "error_norm_eV_A": 3.4650231193511747,
+          "error_vector_eV_A": [
+            -0.006480823789499788,
+            0.0021242969344567996,
+            -3.4650164074537493
+          ],
+          "model_force_eV_A": [
+            0.006590418843754701,
+            0.012103792651406913,
+            -3.513929090269297
+          ],
+          "nearest_Ag_distance_A": 4.651489418302727,
+          "position_A": [
+            0.0,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.417890749999998
+        },
+        {
+          "atom_id": 19101004,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -5.779535149151848e-05,
+            -0.001494917032134341,
+            0.016377202349961546
+          ],
+          "error_norm_eV_A": 4.444779678447387,
+          "error_vector_eV_A": [
+            0.00045517298574894823,
+            0.001987102055088415,
+            4.444779210959958
+          ],
+          "model_force_eV_A": [
+            0.00039737763425742975,
+            0.0004921850229540736,
+            4.46115641330992
+          ],
+          "nearest_Ag_distance_A": 9.227674043234313,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.19385925
+        },
+        {
+          "atom_id": 19101005,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000607853515890449,
+            -0.0005724710865697107,
+            0.5511771916497696
+          ],
+          "error_norm_eV_A": 2.421492614856149,
+          "error_vector_eV_A": [
+            -0.0005762497445196106,
+            0.0005543262816079837,
+            2.4214924828422397
+          ],
+          "model_force_eV_A": [
+            3.160377137083839e-05,
+            -1.8144804961726935e-05,
+            2.9726696744920096
+          ],
+          "nearest_Ag_distance_A": 18.06434743867568,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.00560925
+        },
+        {
+          "atom_id": 19101006,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009270725067836472,
+            -0.00029174119050968294,
+            0.07276605148590996
+          ],
+          "error_norm_eV_A": 0.1456089779190466,
+          "error_vector_eV_A": [
+            -0.0007167204542220016,
+            0.00038056685124984225,
+            0.14560671664209596
+          ],
+          "model_force_eV_A": [
+            0.00021035205256164562,
+            8.882566074015931e-05,
+            0.21837276812800593
+          ],
+          "nearest_Ag_distance_A": 11.254733141965778,
+          "position_A": [
+            0.0,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.211749999999999
+        },
+        {
+          "atom_id": 19101007,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            -0.044279597306335516,
+            -0.04083922531041824,
+            0.6033686885731726
+          ],
+          "error_norm_eV_A": 1.2549560011709182,
+          "error_vector_eV_A": [
+            0.09465454794446733,
+            0.06571312413003523,
+            1.2496546990050494
+          ],
+          "model_force_eV_A": [
+            0.05037495063813181,
+            0.02487389881961699,
+            1.853023387578222
+          ],
+          "nearest_Ag_distance_A": 2.593391608369795,
+          "position_A": [
+            0.0,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.3999999999999986
+        },
+        {
+          "atom_id": 19101008,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001369675061509473,
+            0.0008273567210642034,
+            0.17111456753081228
+          ],
+          "error_norm_eV_A": 2.903572549658065,
+          "error_vector_eV_A": [
+            0.00135486414929463,
+            -0.000820921715615811,
+            2.9035721175060405
+          ],
+          "model_force_eV_A": [
+            -1.481091221484304e-05,
+            6.435005448392336e-06,
+            3.074686685036853
+          ],
+          "nearest_Ag_distance_A": 14.418865596567985,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.3452083
+        },
+        {
+          "atom_id": 19101009,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.004423791714828336,
+            -0.0038075988831429465,
+            0.09224392051998348
+          ],
+          "error_norm_eV_A": 2.8152753475567853,
+          "error_vector_eV_A": [
+            0.0009532085120717371,
+            0.0029303061416542523,
+            2.8152736611669615
+          ],
+          "model_force_eV_A": [
+            -0.003470583202756599,
+            -0.0008772927414886942,
+            2.907517581686945
+          ],
+          "nearest_Ag_distance_A": 5.589461610674918,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.5334582999999995
+        },
+        {
+          "atom_id": 19101010,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.000594082600813206,
+            0.0024994862827271433,
+            -0.09895605537787827
+          ],
+          "error_norm_eV_A": 2.808612077254638,
+          "error_vector_eV_A": [
+            -0.0010621427526753733,
+            -0.003702978717018515,
+            -2.808609435343762
+          ],
+          "model_force_eV_A": [
+            -0.0016562253534885794,
+            -0.0012034924342913715,
+            -2.90756549072164
+          ],
+          "nearest_Ag_distance_A": 8.208373280981778,
+          "position_A": [
+            0.0,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.078291699999998
+        },
+        {
+          "atom_id": 19101011,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007040108050550766,
+            0.00048416229501930635,
+            -0.8959152705691605
+          ],
+          "error_norm_eV_A": 2.3402019028769554,
+          "error_vector_eV_A": [
+            0.0006181950066609833,
+            -0.00043467352954242093,
+            -2.3402017808562534
+          ],
+          "model_force_eV_A": [
+            -8.581579839409331e-05,
+            4.9488765476885435e-05,
+            -3.236117051425414
+          ],
+          "nearest_Ag_distance_A": 16.90847224452944,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -16.890041699999998
+        },
+        {
+          "atom_id": 19101012,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007585735994691558,
+            -0.0003990656664995819,
+            0.15972965643209064
+          ],
+          "error_norm_eV_A": 0.11502385759649604,
+          "error_vector_eV_A": [
+            -0.0007148477730091441,
+            0.0003725692229622596,
+            -0.11502103286449189
+          ],
+          "model_force_eV_A": [
+            4.372582646001164e-05,
+            -2.6496443537322306e-05,
+            0.04470862356759875
+          ],
+          "nearest_Ag_distance_A": 15.648510813332619,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.617624999999999
+        },
+        {
+          "atom_id": 19101013,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007213424219604908,
+            -0.0014252155846251476,
+            -0.024998287619867776
+          ],
+          "error_norm_eV_A": 0.011812898272087627,
+          "error_vector_eV_A": [
+            0.008390657385221108,
+            0.007269536567609982,
+            0.0040367403090496926
+          ],
+          "model_force_eV_A": [
+            0.009111999807181598,
+            0.005844320982984834,
+            -0.020961547310818084
+          ],
+          "nearest_Ag_distance_A": 6.876453631777639,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -6.805875
+        },
+        {
+          "atom_id": 19101014,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022414610134539152,
+            -4.7286870512973576e-05,
+            -0.25520353637562365
+          ],
+          "error_norm_eV_A": 4.557964902444452,
+          "error_vector_eV_A": [
+            -0.0002726829817624746,
+            8.471824023025088e-06,
+            -4.557964894279867
+          ],
+          "model_force_eV_A": [
+            -4.853688041708305e-05,
+            -3.881504648994849e-05,
+            -4.813168430655491
+          ],
+          "nearest_Ag_distance_A": 13.253162618422223,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.229640749999998
+        },
+        {
+          "atom_id": 19101015,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.013070386137132295,
+            0.009978328330949872,
+            -0.04891180146933892
+          ],
+          "error_norm_eV_A": 3.4650239966305105,
+          "error_vector_eV_A": [
+            -0.006479967308661009,
+            0.0021254834235750735,
+            -3.4650172856090014
+          ],
+          "model_force_eV_A": [
+            0.006590418828471286,
+            0.012103811754524945,
+            -3.51392908707834
+          ],
+          "nearest_Ag_distance_A": 4.651489418302727,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.417890749999998
+        },
+        {
+          "atom_id": 19101016,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -5.804912674346106e-05,
+            -0.0014946012917790882,
+            0.0163765900380564
+          ],
+          "error_norm_eV_A": 4.444780298641722,
+          "error_vector_eV_A": [
+            0.0004554267577153408,
+            0.0019868105270839554,
+            4.4447798312586855
+          ],
+          "model_force_eV_A": [
+            0.00039737763097187975,
+            0.0004922092353048671,
+            4.461156421296742
+          ],
+          "nearest_Ag_distance_A": 9.227674043234313,
+          "position_A": [
+            0.0,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.19385925
+        },
+        {
+          "atom_id": 19101017,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006089759630957236,
+            -0.0005749748797323552,
+            0.5511802127355273
+          ],
+          "error_norm_eV_A": 2.421489602042011,
+          "error_vector_eV_A": [
+            -0.0005773721950082598,
+            0.0005567090567851454,
+            2.4214894692139284
+          ],
+          "model_force_eV_A": [
+            3.1603768087463805e-05,
+            -1.8265822947209783e-05,
+            2.972669681949456
+          ],
+          "nearest_Ag_distance_A": 18.064347439345067,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.00560925
+        },
+        {
+          "atom_id": 19101018,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009260812656532183,
+            -0.00029135115768002764,
+            0.0727647816997723
+          ],
+          "error_norm_eV_A": 0.14561023421824326,
+          "error_vector_eV_A": [
+            -0.0007157292146894651,
+            0.0003801852906884318,
+            0.14560797883333057
+          ],
+          "model_force_eV_A": [
+            0.0002103520509637532,
+            8.883413300840416e-05,
+            0.21837276053310287
+          ],
+          "nearest_Ag_distance_A": 11.254733141965778,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.211749999999999
+        },
+        {
+          "atom_id": 19101019,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0442794033607561,
+            -0.04083963703512723,
+            0.6033688292614426
+          ],
+          "error_norm_eV_A": 1.2549558709243402,
+          "error_vector_eV_A": [
+            0.09465435376349743,
+            0.06571353874027959,
+            1.2496545611117154
+          ],
+          "model_force_eV_A": [
+            0.05037495040274132,
+            0.024873901705152357,
+            1.853023390373158
+          ],
+          "nearest_Ag_distance_A": 2.593391608369795,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.3999999999999986
+        },
+        {
+          "atom_id": 19101020,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013694078194070984,
+            0.0008275112293224442,
+            0.1711127144024047
+          ],
+          "error_norm_eV_A": 2.903574411575671,
+          "error_vector_eV_A": [
+            0.0013545969034332959,
+            -0.0008211606726884547,
+            2.9035739794810436
+          ],
+          "model_force_eV_A": [
+            -1.4810915973802533e-05,
+            6.350556633989598e-06,
+            3.0746866938834483
+          ],
+          "nearest_Ag_distance_A": 14.41886559740661,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.3452083
+        },
+        {
+          "atom_id": 19101021,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.004424672996316291,
+            -0.003809499811436084,
+            0.09224382052551733
+          ],
+          "error_norm_eV_A": 2.815275471997291,
+          "error_vector_eV_A": [
+            0.0009540897923901786,
+            0.002932232184111055,
+            2.8152737833036157
+          ],
+          "model_force_eV_A": [
+            -0.0034705832039261123,
+            -0.0008772676273250292,
+            2.907517603829133
+          ],
+          "nearest_Ag_distance_A": 5.589461610674918,
+          "position_A": [
+            0.0,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.5334582999999995
+        },
+        {
+          "atom_id": 19101022,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0005952697425275959,
+            0.0024991184023615645,
+            -0.09895614604741189
+          ],
+          "error_norm_eV_A": 2.8086119874600253,
+          "error_vector_eV_A": [
+            -0.0010609555991962854,
+            -0.003702583056494586,
+            -2.8086093465193906
+          ],
+          "model_force_eV_A": [
+            -0.0016562253417238813,
+            -0.0012034646541330216,
+            -2.9075654925668024
+          ],
+          "nearest_Ag_distance_A": 8.208373280981778,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.078291699999998
+        },
+        {
+          "atom_id": 19101023,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0006992098396304359,
+            0.0004813760919342261,
+            -0.8959116087614711
+          ],
+          "error_norm_eV_A": 2.340205552782732,
+          "error_vector_eV_A": [
+            0.0006133940454189756,
+            -0.000431861155448979,
+            -2.340205432546216
+          ],
+          "model_force_eV_A": [
+            -8.581579421146034e-05,
+            4.9514936485247104e-05,
+            -3.236117041307687
+          ],
+          "nearest_Ag_distance_A": 16.90847224452944,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -16.890041699999998
+        },
+        {
+          "atom_id": 19101024,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007515205395735943,
+            -0.0004019607494122414,
+            0.15973045893627125
+          ],
+          "error_norm_eV_A": 0.11502457956906921,
+          "error_vector_eV_A": [
+            -0.0007077947124657663,
+            0.00037543897837776267,
+            -0.11502178914127381
+          ],
+          "model_force_eV_A": [
+            4.3725827107828075e-05,
+            -2.652177103447872e-05,
+            0.044708669794997435
+          ],
+          "nearest_Ag_distance_A": 15.648510813332619,
+          "position_A": [
+            3.0575,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.617624999999999
+        },
+        {
+          "atom_id": 19101025,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007213852855001279,
+            -0.0014260315118989019,
+            -0.024997196675093727
+          ],
+          "error_norm_eV_A": 0.011812985641820007,
+          "error_vector_eV_A": [
+            0.008390614521866069,
+            0.007270334945230849,
+            0.0040356470984776426
+          ],
+          "model_force_eV_A": [
+            0.009111999807366197,
+            0.005844303433331947,
+            -0.020961549576616084
+          ],
+          "nearest_Ag_distance_A": 6.876453631777639,
+          "position_A": [
+            3.0575,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -6.805875
+        },
+        {
+          "atom_id": 19101026,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022585262515039905,
+            -4.790288104885062e-05,
+            -0.2552020263333843
+          ],
+          "error_norm_eV_A": 4.557966436523457,
+          "error_vector_eV_A": [
+            -0.00027438950931641553,
+            9.039349704732951e-06,
+            -4.557966428255371
+          ],
+          "model_force_eV_A": [
+            -4.853688416601651e-05,
+            -3.886353134411767e-05,
+            -4.813168454588755
+          ],
+          "nearest_Ag_distance_A": 13.253162618422223,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.229640749999998
+        },
+        {
+          "atom_id": 19101027,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0130703623529648,
+            0.009979117489933137,
+            -0.04891293323309101
+          ],
+          "error_norm_eV_A": 3.4650228675196924,
+          "error_vector_eV_A": [
+            -0.006479943509209702,
+            0.0021246751614718753,
+            -3.4650161570362075
+          ],
+          "model_force_eV_A": [
+            0.006590418843755098,
+            0.012103792651405012,
+            -3.5139290902692983
+          ],
+          "nearest_Ag_distance_A": 4.651489418302727,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.417890749999998
+        },
+        {
+          "atom_id": 19101028,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -5.714583183429207e-05,
+            -0.0014954615719263353,
+            0.016378251073370164
+          ],
+          "error_norm_eV_A": 4.444778629901101,
+          "error_vector_eV_A": [
+            0.0004545234660960476,
+            0.001987646594882658,
+            4.4447781622365525
+          ],
+          "model_force_eV_A": [
+            0.0003973776342617555,
+            0.0004921850229563226,
+            4.461156413309923
+          ],
+          "nearest_Ag_distance_A": 9.227674043234313,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.19385925
+        },
+        {
+          "atom_id": 19101029,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006256760907987712,
+            -0.0005652150321148356,
+            0.5511849008474021
+          ],
+          "error_norm_eV_A": 2.4214849083156444,
+          "error_vector_eV_A": [
+            -0.0005940723194261884,
+            0.0005470702271532128,
+            2.4214847736446066
+          ],
+          "model_force_eV_A": [
+            3.1603771372582835e-05,
+            -1.814480496162285e-05,
+            2.9726696744920087
+          ],
+          "nearest_Ag_distance_A": 18.06434743867568,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.00560925
+        },
+        {
+          "atom_id": 19101030,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009263449218675941,
+            -0.00029245474542259717,
+            0.07276590597828794
+          ],
+          "error_norm_eV_A": 0.14560912171160045,
+          "error_vector_eV_A": [
+            -0.0007159928693063224,
+            0.00038128040616262747,
+            0.14560686214971688
+          ],
+          "model_force_eV_A": [
+            0.00021035205256127176,
+            8.88256607400303e-05,
+            0.21837276812800482
+          ],
+          "nearest_Ag_distance_A": 11.254733141965778,
+          "position_A": [
+            3.0575,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.211749999999999
+        },
+        {
+          "atom_id": 19101031,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.04428067828085702,
+            -0.04083944084792521,
+            0.6033682776922605
+          ],
+          "error_norm_eV_A": 1.254956503134836,
+          "error_vector_eV_A": [
+            0.09465562891898865,
+            0.06571333966754314,
+            1.2496551098859654
+          ],
+          "model_force_eV_A": [
+            0.050374950638131626,
+            0.02487389881961794,
+            1.8530233875782258
+          ],
+          "nearest_Ag_distance_A": 2.5933916083697945,
+          "position_A": [
+            3.0575,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.3999999999999986
+        },
+        {
+          "atom_id": 19101032,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013721674794237584,
+            0.00082610748752371,
+            0.17111554104270904
+          ],
+          "error_norm_eV_A": 2.903571576957469,
+          "error_vector_eV_A": [
+            0.0013573565672065772,
+            -0.000819672482077012,
+            2.9035711439941427
+          ],
+          "model_force_eV_A": [
+            -1.4810912217181162e-05,
+            6.435005446697945e-06,
+            3.074686685036852
+          ],
+          "nearest_Ag_distance_A": 14.418865596567983,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.3452083
+        },
+        {
+          "atom_id": 19101033,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.004423619534249558,
+            -0.003808185467382536,
+            0.0922443295326289
+          ],
+          "error_norm_eV_A": 2.8152749390967053,
+          "error_vector_eV_A": [
+            0.0009530363314947188,
+            0.002930892725891945,
+            2.8152732521543156
+          ],
+          "model_force_eV_A": [
+            -0.003470583202754839,
+            -0.0008772927414905906,
+            2.9075175816869443
+          ],
+          "nearest_Ag_distance_A": 5.589461610674918,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.5334582999999995
+        },
+        {
+          "atom_id": 19101034,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.000594593609454367,
+            0.002499705885490369,
+            -0.09895623657917103
+          ],
+          "error_norm_eV_A": 2.8086118961498565,
+          "error_vector_eV_A": [
+            -0.001061631744029549,
+            -0.003703198319782911,
+            -2.8086092541424725
+          ],
+          "model_force_eV_A": [
+            -0.001656225353483916,
+            -0.001203492434292542,
+            -2.9075654907216437
+          ],
+          "nearest_Ag_distance_A": 8.208373280981778,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.078291699999998
+        },
+        {
+          "atom_id": 19101035,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007010421989028079,
+            0.0004891968223089057,
+            -0.8959144310549756
+          ],
+          "error_norm_eV_A": 2.340202742549319,
+          "error_vector_eV_A": [
+            0.000615226400507611,
+            -0.0004397080568314648,
+            -2.340202620370436
+          ],
+          "model_force_eV_A": [
+            -8.581579839519684e-05,
+            4.948876547744084e-05,
+            -3.2361170514254116
+          ],
+          "nearest_Ag_distance_A": 16.90847224452944,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -16.890041699999998
+        },
+        {
+          "atom_id": 19101036,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007552665906621001,
+            -0.0004038352738173187,
+            0.1597331480312482
+          ],
+          "error_norm_eV_A": 0.11502734415320812,
+          "error_vector_eV_A": [
+            -0.0007115407642012874,
+            0.0003773388302785982,
+            -0.11502452446364916
+          ],
+          "model_force_eV_A": [
+            4.372582646081265e-05,
+            -2.6496443538720493e-05,
+            0.044708623567599026
+          ],
+          "nearest_Ag_distance_A": 15.648510813332619,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.617624999999999
+        },
+        {
+          "atom_id": 19101037,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007205304315387046,
+            -0.0014244326239326603,
+            -0.0249980164184785
+          ],
+          "error_norm_eV_A": 0.011812900581038007,
+          "error_vector_eV_A": [
+            0.008391469375641721,
+            0.007268753606915886,
+            0.004036469107661117
+          ],
+          "model_force_eV_A": [
+            0.009111999807180426,
+            0.005844320982983225,
+            -0.020961547310817383
+          ],
+          "nearest_Ag_distance_A": 6.876453631777639,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -6.805875
+        },
+        {
+          "atom_id": 19101038,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022497432690396434,
+            -4.5672807934894896e-05,
+            -0.255202694135521
+          ],
+          "error_norm_eV_A": 4.557965744731462,
+          "error_vector_eV_A": [
+            -0.0002735112073178285,
+            6.857761445126589e-06,
+            -4.557965736519969
+          ],
+          "model_force_eV_A": [
+            -4.853688041386415e-05,
+            -3.881504648976831e-05,
+            -4.81316843065549
+          ],
+          "nearest_Ag_distance_A": 13.253162618422223,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.229640749999998
+        },
+        {
+          "atom_id": 19101039,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.013069799259377039,
+            0.009977999915206684,
+            -0.04891188097032993
+          ],
+          "error_norm_eV_A": 3.465023916233669,
+          "error_vector_eV_A": [
+            -0.006479380430906477,
+            0.0021258118393162485,
+            -3.465017206108011
+          ],
+          "model_force_eV_A": [
+            0.006590418828470562,
+            0.012103811754522933,
+            -3.513929087078341
+          ],
+          "nearest_Ag_distance_A": 4.651489418302727,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.417890749999998
+        },
+        {
+          "atom_id": 19101040,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -5.814536596762454e-05,
+            -0.0014940720028496848,
+            0.0163767469895583
+          ],
+          "error_norm_eV_A": 4.444780141463534,
+          "error_vector_eV_A": [
+            0.0004555229969398521,
+            0.001986281238157501,
+            4.4447796743071795
+          ],
+          "model_force_eV_A": [
+            0.00039737763097222756,
+            0.0004922092353078162,
+            4.461156421296738
+          ],
+          "nearest_Ag_distance_A": 9.227674043234313,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.19385925
+        },
+        {
+          "atom_id": 19101041,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006200356015314299,
+            -0.0005632691173071037,
+            0.5511779303578455
+          ],
+          "error_norm_eV_A": 2.4214918844189444,
+          "error_vector_eV_A": [
+            -0.0005884318334447425,
+            0.0005450032943569806,
+            2.4214917515916086
+          ],
+          "model_force_eV_A": [
+            3.160376808668741e-05,
+            -1.8265822950123143e-05,
+            2.972669681949454
+          ],
+          "nearest_Ag_distance_A": 18.064347439345067,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.00560925
+        },
+        {
+          "atom_id": 19101042,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000926011509591184,
+            -0.0002912980786110011,
+            0.07276527170284085
+          ],
+          "error_norm_eV_A": 0.14560974374132418,
+          "error_vector_eV_A": [
+            -0.0007156594586272148,
+            0.0003801322116196074,
+            0.14560748883026264
+          ],
+          "model_force_eV_A": [
+            0.00021035205096396934,
+            8.883413300860628e-05,
+            0.2183727605331035
+          ],
+          "nearest_Ag_distance_A": 11.254733141965778,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.211749999999999
+        },
+        {
+          "atom_id": 19101043,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.04428000954853328,
+            -0.04083978299755265,
+            0.60336923819123
+          ],
+          "error_norm_eV_A": 1.2549555170866082,
+          "error_vector_eV_A": [
+            0.09465495995127325,
+            0.06571368470270658,
+            1.2496541521819275
+          ],
+          "model_force_eV_A": [
+            0.05037495040273997,
+            0.02487390170515394,
+            1.8530233903731574
+          ],
+          "nearest_Ag_distance_A": 2.593391608369795,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.3999999999999986
+        },
+        {
+          "atom_id": 19101044,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013728708923837288,
+            0.0008258344235698072,
+            0.17111435774086545
+          ],
+          "error_norm_eV_A": 2.903572769381403,
+          "error_vector_eV_A": [
+            0.0013580599764099134,
+            -0.0008194838669361429,
+            2.903572336142581
+          ],
+          "model_force_eV_A": [
+            -1.4810915973815218e-05,
+            6.3505566336643105e-06,
+            3.0746866938834465
+          ],
+          "nearest_Ag_distance_A": 14.41886559740661,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.3452083
+        },
+        {
+          "atom_id": 19101045,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.004424770517183389,
+            -0.0038083736998500684,
+            0.09224409525472523
+          ],
+          "error_norm_eV_A": 2.8152751961286255,
+          "error_vector_eV_A": [
+            0.000954187313256985,
+            0.002931106072527514,
+            2.815273508574404
+          ],
+          "model_force_eV_A": [
+            -0.0034705832039264037,
+            -0.0008772676273225544,
+            2.9075176038291293
+          ],
+          "nearest_Ag_distance_A": 5.589461610674918,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.5334582999999995
+        },
+        {
+          "atom_id": 19101046,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0005945981908766494,
+            0.002499468451169726,
+            -0.09895633295257301
+          ],
+          "error_norm_eV_A": 2.8086118012702905,
+          "error_vector_eV_A": [
+            -0.001061627150842669,
+            -0.003702933105300553,
+            -2.808609159614231
+          ],
+          "model_force_eV_A": [
+            -0.0016562253417193185,
+            -0.0012034646541308268,
+            -2.9075654925668037
+          ],
+          "nearest_Ag_distance_A": 8.208373280981778,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.078291699999998
+        },
+        {
+          "atom_id": 19101047,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0006958853240046284,
+            0.00048425740990048604,
+            -0.8959089280816956
+          ],
+          "error_norm_eV_A": 2.3402082331268335,
+          "error_vector_eV_A": [
+            0.0006100695297941593,
+            -0.00043474247341635116,
+            -2.3402081132259935
+          ],
+          "model_force_eV_A": [
+            -8.581579421046919e-05,
+            4.951493648413486e-05,
+            -3.2361170413076894
+          ],
+          "nearest_Ag_distance_A": 16.90847224452944,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -16.890041699999998
+        },
+        {
+          "atom_id": 19101048,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            0.03528725955891118,
+            0.035299473742256754,
+            -0.339164144548889
+          ],
+          "error_norm_eV_A": 0.7120071027976403,
+          "error_vector_eV_A": [
+            -0.09677171582438207,
+            -0.07659410146730852,
+            -0.7012294154348563
+          ],
+          "model_force_eV_A": [
+            -0.06148445626547089,
+            -0.04129462772505177,
+            -1.0403935599837453
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            0.8102375,
+            0.55605326,
+            31.0058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101049,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.03528570667310354,
+            0.03529823161554219,
+            -0.3391653885645613
+          ],
+          "error_norm_eV_A": 0.7120055321108171,
+          "error_vector_eV_A": [
+            -0.09677016300979399,
+            -0.07659285167600835,
+            -0.7012281714104209
+          ],
+          "model_force_eV_A": [
+            -0.061484456336690446,
+            -0.041294620060466164,
+            -1.0403935599749823
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            -0.7185125,
+            3.20392593,
+            31.0058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101050,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.03528781981973602,
+            0.03529984148357198,
+            -0.33915732387048775
+          ],
+          "error_norm_eV_A": 0.7120139359383011,
+          "error_vector_eV_A": [
+            -0.09677227608520739,
+            -0.07659446920862448,
+            -0.7012362361132578
+          ],
+          "model_force_eV_A": [
+            -0.06148445626547136,
+            -0.04129462772505249,
+            -1.0403935599837455
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            3.8677375,
+            0.55605326,
+            31.0058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101051,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0352862973127618,
+            0.03529755990212157,
+            -0.33916438859708536
+          ],
+          "error_norm_eV_A": 0.7120065249593126,
+          "error_vector_eV_A": [
+            -0.09677075364945205,
+            -0.07659217996258777,
+            -0.7012291713778969
+          ],
+          "model_force_eV_A": [
+            -0.06148445633669025,
+            -0.04129462006046619,
+            -1.0403935599749823
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            2.3389875,
+            3.20392593,
+            31.0058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        }
+      ],
+      "per_species_force_errors": {
+        "Ag": {
+          "force_vector_RMSE_eV_A": 0.7120082739592436,
+          "max_atom_vector_error_eV_A": 0.7120139359383011,
+          "mean_atom_vector_error_eV_A": 0.7120082739515178,
+          "n": 4
+        },
+        "C": {
+          "force_vector_RMSE_eV_A": 2.7258653887217053,
+          "max_atom_vector_error_eV_A": 2.903574411575671,
+          "mean_atom_vector_error_eV_A": 2.7169161534889166,
+          "n": 16
+        },
+        "Si": {
+          "force_vector_RMSE_eV_A": 0.8933410956926434,
+          "max_atom_vector_error_eV_A": 1.254956503134836,
+          "mean_atom_vector_error_eV_A": 0.7002827462383647,
+          "n": 8
+        },
+        "Ti": {
+          "force_vector_RMSE_eV_A": 3.1202160137159116,
+          "max_atom_vector_error_eV_A": 4.557966436523457,
+          "mean_atom_vector_error_eV_A": 2.5026826225590173,
+          "n": 24
+        }
+      },
+      "result_sha256": "e6cc182e99f82b1a1df52c874a4fa30d54dfb10fa1a65551615c99ba79de8cef",
+      "scf_iterations": 59,
+      "source_sha256": "ea1c62e43ece0339f7047ac85b09d95fe6c6f07cf3d58fd0eab444ce9a088c43",
+      "whole_Ag_layer_normal_force_eV_A": {
+        "definition": "sum of F_z over all four Ag atoms; generalized force for rigid +z Ag-layer translation",
+        "dft": -1.3566512455810233,
+        "model": -4.161574239917455,
+        "signed_model_minus_dft": -2.8049229943364313
+      }
+    },
+    {
+      "all_atom_force_vector_RMSE_eV_A": 2.633784614681125,
+      "all_atom_gate": {
+        "limit_eV_A": 0.05,
+        "pass": false
+      },
+      "atoms": 52,
+      "dft_archive_verification": "PASS",
+      "dft_free_energy_eV_cell": -390.835184604586,
+      "dft_native_energy_eV_cell": -390.444666001729,
+      "energy_model_minus_dft_eV_cell": {
+        "free_energy": -33.525711173508455,
+        "native": -33.91622977636547
+      },
+      "force_error_localization_by_nearest_Ag_distance": {
+        "Ag_mean_z_A": 31.2058765,
+        "bins": {
+          "0-3": {
+            "atom_count": 8,
+            "force_vector_RMSE_eV_A": 0.9290403525130237,
+            "species": {
+              "Ag": {
+                "force_vector_RMSE_eV_A": 0.5850295169189386,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.5715397073849371
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 1.1764235706277906,
+                "n": 4,
+                "z_component_RMSE_eV_A": 1.1700431073188198
+              }
+            },
+            "z_component_RMSE_eV_A": 0.9207764414074512
+          },
+          "3-5": {
+            "atom_count": 4,
+            "force_vector_RMSE_eV_A": 3.4950729555507842,
+            "species": {
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.4950729555507842,
+                "n": 4,
+                "z_component_RMSE_eV_A": 3.4950726895397115
+              }
+            },
+            "z_component_RMSE_eV_A": 3.4950726895397115
+          },
+          "5-7": {
+            "atom_count": 4,
+            "force_vector_RMSE_eV_A": 2.854566885593844,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.854566885593844,
+                "n": 4,
+                "z_component_RMSE_eV_A": 2.854563177165822
+              }
+            },
+            "z_component_RMSE_eV_A": 2.854563177165822
+          },
+          ">7": {
+            "atom_count": 36,
+            "force_vector_RMSE_eV_A": 2.7505223571119997,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.69447741105547,
+                "n": 12,
+                "z_component_RMSE_eV_A": 2.6944764427982557
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 0.14909665227538996,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.14909436512063254
+              },
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.0425483978064265,
+                "n": 20,
+                "z_component_RMSE_eV_A": 3.0425457854771083
+              }
+            },
+            "z_component_RMSE_eV_A": 2.7505204217811725
+          }
+        },
+        "bins_A": "[0,3), [3,5), [5,7), [7,infinity)",
+        "distance_definition": "minimum-image 3D distance to any Ag atom; z is non-periodic"
+      },
+      "formula": "C16Ag4Si8Ti24",
+      "inference_seconds": 2.8557867000054102,
+      "label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+      "marked_pair": {
+        "Ag_atom_id": 19101048,
+        "contact_atom_id": 19101007,
+        "contact_species": "Si",
+        "distance_A": 2.7795107544967093,
+        "legacy_force_difference_definition_eV_A": {
+          "absolute_error": 1.7165114792257838,
+          "definition": "(F_contact - F_Ag) dot unit(Ag to contact)",
+          "dft": -1.5377562618212177,
+          "gate_eV_A": 0.1,
+          "model": -3.2542677410470016,
+          "pass": false,
+          "signed_model_minus_dft": -1.7165114792257838
+        },
+        "symmetric_relative_coordinate_generalized_force_eV_A": {
+          "definition": "0.5 * legacy pair force difference; equal/opposite half-displacement convention",
+          "dft": -0.7688781309106089,
+          "model": -1.6271338705235008,
+          "signed_model_minus_dft": -0.8582557396128919
+        }
+      },
+      "max_atom_force_vector_error_eV_A": 4.557509654921492,
+      "model_energy_eV_cell": -424.36089577809446,
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "per_atom": [
+        {
+          "atom_id": 19101000,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007546867099064841,
+            -0.0004231623504833114,
+            0.160044588967989
+          ],
+          "error_norm_eV_A": 0.11521835982729185,
+          "error_vector_eV_A": [
+            -0.0007108761358786862,
+            0.0003974394010009882,
+            -0.1152154813309968
+          ],
+          "model_force_eV_A": [
+            4.381057402779798e-05,
+            -2.5722949482323218e-05,
+            0.044829107636992216
+          ],
+          "nearest_Ag_distance_A": 15.848121045568394,
+          "position_A": [
+            0.0,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.817624999999998
+        },
+        {
+          "atom_id": 19101001,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0010374740412428043,
+            -0.0012456592280614995,
+            -0.01604415506179293
+          ],
+          "error_norm_eV_A": 0.04670718441565168,
+          "error_vector_eV_A": [
+            0.006456088176865326,
+            0.00574424802863454,
+            -0.04590080191103161
+          ],
+          "model_force_eV_A": [
+            0.00749356221810813,
+            0.0044985888005730406,
+            -0.06194495697282454
+          ],
+          "nearest_Ag_distance_A": 7.074458604726434,
+          "position_A": [
+            0.0,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.005875
+        },
+        {
+          "atom_id": 19101002,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            8.888436897809818e-05,
+            -8.012534479151342e-06,
+            -0.256145708790196
+          ],
+          "error_norm_eV_A": 4.557508354274166,
+          "error_vector_eV_A": [
+            -0.00013583174937520164,
+            -3.102751180532941e-05,
+            -4.557508352144387
+          ],
+          "model_force_eV_A": [
+            -4.694738039710345e-05,
+            -3.904004628448076e-05,
+            -4.813654060934583
+          ],
+          "nearest_Ag_distance_A": 13.452812928541903,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.429640749999997
+        },
+        {
+          "atom_id": 19101003,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.009418935178291557,
+            0.008417789670764274,
+            -0.07328717717939065
+          ],
+          "error_norm_eV_A": 3.4950728762025256,
+          "error_vector_eV_A": [
+            -0.0012845927605808164,
+            0.0004582379292881588,
+            -3.4950726100906735
+          ],
+          "model_force_eV_A": [
+            0.00813434241771074,
+            0.008876027600052433,
+            -3.5683597872700643
+          ],
+          "nearest_Ag_distance_A": 4.841849864316554,
+          "position_A": [
+            0.0,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.617890749999997
+        },
+        {
+          "atom_id": 19101004,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022789736481051225,
+            -0.00132024448157504,
+            0.014278095013857137
+          ],
+          "error_norm_eV_A": 4.430815933811298,
+          "error_vector_eV_A": [
+            0.00025014338623313855,
+            0.0018073780927611884,
+            4.430815558125705
+          ],
+          "model_force_eV_A": [
+            0.00047804075104365077,
+            0.0004871336111861484,
+            4.445093653139562
+          ],
+          "nearest_Ag_distance_A": 9.426956664172181,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.393859249999998
+        },
+        {
+          "atom_id": 19101005,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000732029453569228,
+            -0.000564082449268542,
+            0.5504823105127707
+          ],
+          "error_norm_eV_A": 2.4221956566050156,
+          "error_vector_eV_A": [
+            -0.0007004121766680866,
+            0.0005459447053926283,
+            2.4221954938120422
+          ],
+          "model_force_eV_A": [
+            3.161727690114143e-05,
+            -1.813774387591366e-05,
+            2.972677804324813
+          ],
+          "nearest_Ag_distance_A": 18.263704226831653,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.20560925
+        },
+        {
+          "atom_id": 19101006,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009480692135736097,
+            -0.0003623367318463772,
+            0.07315074792538694
+          ],
+          "error_norm_eV_A": 0.14909660941201275,
+          "error_vector_eV_A": [
+            -0.0006230995505617929,
+            0.0005420983385418611,
+            0.14909432187209454
+          ],
+          "model_force_eV_A": [
+            0.0003249696630118168,
+            0.00017976160669548382,
+            0.22224506979748146
+          ],
+          "nearest_Ag_distance_A": 11.453982630371973,
+          "position_A": [
+            0.0,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.411749999999998
+        },
+        {
+          "atom_id": 19101007,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            0.041046753373721906,
+            0.020861097079945035,
+            0.9480278136894568
+          ],
+          "error_norm_eV_A": 1.1764233255521164,
+          "error_vector_eV_A": [
+            0.10261530092442589,
+            0.0666451870762159,
+            1.1700428880852471
+          ],
+          "model_force_eV_A": [
+            0.1436620542981478,
+            0.08750628415616094,
+            2.118070701774704
+          ],
+          "nearest_Ag_distance_A": 2.7795107544967097,
+          "position_A": [
+            0.0,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.599999999999998
+        },
+        {
+          "atom_id": 19101008,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013683233704580252,
+            0.0008298474962803515,
+            0.1716557746129981
+          ],
+          "error_norm_eV_A": 2.903464159757502,
+          "error_vector_eV_A": [
+            0.00135282114620805,
+            -0.0008241400355168255,
+            2.9034637276302395
+          ],
+          "model_force_eV_A": [
+            -1.5502224249975226e-05,
+            5.707460763526052e-06,
+            3.0751195022432376
+          ],
+          "nearest_Ag_distance_A": 14.61785785988808,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.545208299999999
+        },
+        {
+          "atom_id": 19101009,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001793754094625128,
+            -0.0022759411096222675,
+            0.08259740332179688
+          ],
+          "error_norm_eV_A": 2.8545669295243052,
+          "error_vector_eV_A": [
+            -0.004579106324431676,
+            -0.0004526038930241314,
+            2.8545632208919116
+          ],
+          "model_force_eV_A": [
+            -0.006372860419056804,
+            -0.002728545002646399,
+            2.9371606242137087
+          ],
+          "nearest_Ag_distance_A": 5.787526623455709,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.733458299999999
+        },
+        {
+          "atom_id": 19101010,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.00101898241589088,
+            0.002281891345472651,
+            -0.09963567757077363
+          ],
+          "error_norm_eV_A": 2.8063281336101906,
+          "error_vector_eV_A": [
+            -0.000639018042108395,
+            -0.0034732800340651895,
+            -2.8063259114853008
+          ],
+          "model_force_eV_A": [
+            -0.001658000457999275,
+            -0.0011913886885925387,
+            -2.9059615890560746
+          ],
+          "nearest_Ag_distance_A": 8.40527861524742,
+          "position_A": [
+            0.0,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.278291699999997
+        },
+        {
+          "atom_id": 19101011,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007532565675761557,
+            0.0005278921485464167,
+            -0.8962378007932661
+          ],
+          "error_norm_eV_A": 2.3398801203073503,
+          "error_vector_eV_A": [
+            0.0006673629802865001,
+            -0.00047843468647591574,
+            -2.339879976224516
+          ],
+          "model_force_eV_A": [
+            -8.589358728965556e-05,
+            4.9457462070500946e-05,
+            -3.2361177770177822
+          ],
+          "nearest_Ag_distance_A": 17.108256787996332,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.0900417
+        },
+        {
+          "atom_id": 19101012,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007529073451489197,
+            -0.0004247480898310781,
+            0.1600438973835648
+          ],
+          "error_norm_eV_A": 0.11521770909077948,
+          "error_vector_eV_A": [
+            -0.0007090967717647592,
+            0.00039905047003033016,
+            -0.1152148359744444
+          ],
+          "model_force_eV_A": [
+            4.3810573384160494e-05,
+            -2.5697619800747924e-05,
+            0.04482906140912041
+          ],
+          "nearest_Ag_distance_A": 15.848121045568394,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.817624999999998
+        },
+        {
+          "atom_id": 19101013,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0010367857876379667,
+            -0.0012460513034429049,
+            -0.016045107428436588
+          ],
+          "error_norm_eV_A": 0.0467063917247787,
+          "error_vector_eV_A": [
+            0.006456776428676375,
+            0.005744657412196831,
+            -0.045899847247186536
+          ],
+          "model_force_eV_A": [
+            0.007493562216314342,
+            0.004498606108753926,
+            -0.06194495467562312
+          ],
+          "nearest_Ag_distance_A": 7.074458604726434,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.005875
+        },
+        {
+          "atom_id": 19101014,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            8.910420699735122e-05,
+            -7.828816790443392e-06,
+            -0.2561451005107273
+          ],
+          "error_norm_eV_A": 4.5575089386246495,
+          "error_vector_eV_A": [
+            -0.00013605158364367158,
+            -3.116273869534602e-05,
+            -4.557508936487391
+          ],
+          "model_force_eV_A": [
+            -4.6947376646320343e-05,
+            -3.899155548578941e-05,
+            -4.813654036998118
+          ],
+          "nearest_Ag_distance_A": 13.452812928541903,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.429640749999997
+        },
+        {
+          "atom_id": 19101015,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.009419017193339608,
+            0.008419375632888247,
+            -0.07328702078493399
+          ],
+          "error_norm_eV_A": 3.4950730289603267,
+          "error_vector_eV_A": [
+            -0.0012846748338334098,
+            0.00045667085172629296,
+            -3.4950727630234275
+          ],
+          "model_force_eV_A": [
+            0.008134342359506198,
+            0.00887604648461454,
+            -3.5683597838083614
+          ],
+          "nearest_Ag_distance_A": 4.841849864316554,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.617890749999997
+        },
+        {
+          "atom_id": 19101016,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022749984841020018,
+            -0.0013203973640477417,
+            0.014278239410902888
+          ],
+          "error_norm_eV_A": 4.430815797404424,
+          "error_vector_eV_A": [
+            0.0002505408990429403,
+            0.0018075551345062618,
+            4.430815421624139
+          ],
+          "model_force_eV_A": [
+            0.0004780407474531405,
+            0.0004871577704585201,
+            4.445093661035042
+          ],
+          "nearest_Ag_distance_A": 9.426956664172181,
+          "position_A": [
+            0.0,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.393859249999998
+        },
+        {
+          "atom_id": 19101017,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007292524820283133,
+            -0.0005623420886949443,
+            0.5504821693875148
+          ],
+          "error_norm_eV_A": 2.4221958039675084,
+          "error_vector_eV_A": [
+            -0.0006976352084115118,
+            0.0005440833268323384,
+            2.4221956423947786
+          ],
+          "model_force_eV_A": [
+            3.161727361680148e-05,
+            -1.8258761862605826e-05,
+            2.9726778117822934
+          ],
+          "nearest_Ag_distance_A": 18.263704227493733,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.20560925
+        },
+        {
+          "atom_id": 19101018,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000947697011857749,
+            -0.0003624127245176653,
+            0.0731506686375272
+          ],
+          "error_norm_eV_A": 0.1490966798526895,
+          "error_vector_eV_A": [
+            -0.000622727350609055,
+            0.0005421828286654427,
+            0.14909439356167117
+          ],
+          "model_force_eV_A": [
+            0.00032496966124869397,
+            0.00017977010414777737,
+            0.22224506219919837
+          ],
+          "nearest_Ag_distance_A": 11.453982630371973,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.411749999999998
+        },
+        {
+          "atom_id": 19101019,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.04104637435654459,
+            0.020860805158498794,
+            0.9480274816592934
+          ],
+          "error_norm_eV_A": 1.1764237081044884,
+          "error_vector_eV_A": [
+            0.10261568006032212,
+            0.06664548037535771,
+            1.1700432227664113
+          ],
+          "model_force_eV_A": [
+            0.14366205441686672,
+            0.0875062855338565,
+            2.1180707044257048
+          ],
+          "nearest_Ag_distance_A": 2.7795107544967097,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.599999999999998
+        },
+        {
+          "atom_id": 19101020,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001367698350525886,
+            0.0008296573936382728,
+            0.17165515953753038
+          ],
+          "error_norm_eV_A": 2.9034647833560068,
+          "error_vector_eV_A": [
+            0.0013521961225190986,
+            -0.0008240343805323257,
+            2.903464351549977
+          ],
+          "model_force_eV_A": [
+            -1.5502228006787416e-05,
+            5.623013105947165e-06,
+            3.0751195110875074
+          ],
+          "nearest_Ag_distance_A": 14.61785786071529,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.545208299999999
+        },
+        {
+          "atom_id": 19101021,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.00179386876865874,
+            -0.0022755929468539693,
+            0.08259753907535981
+          ],
+          "error_norm_eV_A": 2.8545668165783034,
+          "error_vector_eV_A": [
+            -0.004578991668690968,
+            -0.00045292763117491756,
+            2.854563108078336
+          ],
+          "model_force_eV_A": [
+            -0.006372860437349709,
+            -0.002728520578028887,
+            2.9371606471536955
+          ],
+          "nearest_Ag_distance_A": 5.787526623455709,
+          "position_A": [
+            0.0,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.733458299999999
+        },
+        {
+          "atom_id": 19101022,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001019343531889037,
+            0.0022811210401134704,
+            -0.09963549225949433
+          ],
+          "error_norm_eV_A": 2.806328319682735,
+          "error_vector_eV_A": [
+            -0.0006386569219186118,
+            -0.0034724817993652853,
+            -2.8063260986280287
+          ],
+          "model_force_eV_A": [
+            -0.0016580004538076488,
+            -0.0011913607592518147,
+            -2.905961590887523
+          ],
+          "nearest_Ag_distance_A": 8.40527861524742,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.278291699999997
+        },
+        {
+          "atom_id": 19101023,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007547205789413812,
+            0.0005292502333430394,
+            -0.8962363919392217
+          ],
+          "error_norm_eV_A": 2.339881519734293,
+          "error_vector_eV_A": [
+            0.0006688269958332478,
+            -0.00047976660017776774,
+            -2.339881374960817
+          ],
+          "model_force_eV_A": [
+            -8.589358310813345e-05,
+            4.948363316527169e-05,
+            -3.2361177669000387
+          ],
+          "nearest_Ag_distance_A": 17.108256787996332,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.0900417
+        },
+        {
+          "atom_id": 19101024,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007538400597484404,
+            -0.0004238784308736881,
+            0.1600436953672669
+          ],
+          "error_norm_eV_A": 0.11521746350061474,
+          "error_vector_eV_A": [
+            -0.0007100294857217774,
+            0.00039815548139158065,
+            -0.11521458773027629
+          ],
+          "model_force_eV_A": [
+            4.381057402666304e-05,
+            -2.5722949482107462e-05,
+            0.044829107636990606
+          ],
+          "nearest_Ag_distance_A": 15.848121045568394,
+          "position_A": [
+            3.0575,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.817624999999998
+        },
+        {
+          "atom_id": 19101025,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0010373594145543193,
+            -0.0012452893611190324,
+            -0.01604407067369314
+          ],
+          "error_norm_eV_A": 0.04670723770491111,
+          "error_vector_eV_A": [
+            0.006456202803553598,
+            0.005743878161688289,
+            -0.04590088629913519
+          ],
+          "model_force_eV_A": [
+            0.007493562218107918,
+            0.004498588800569256,
+            -0.06194495697282833
+          ],
+          "nearest_Ag_distance_A": 7.074458604726434,
+          "position_A": [
+            3.0575,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.005875
+        },
+        {
+          "atom_id": 19101026,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            8.91041339972953e-05,
+            -7.774711180773025e-06,
+            -0.2561457275287451
+          ],
+          "error_norm_eV_A": 4.557508335543793,
+          "error_vector_eV_A": [
+            -0.00013605151439426865,
+            -3.126533510611986e-05,
+            -4.557508333405834
+          ],
+          "model_force_eV_A": [
+            -4.6947380396973343e-05,
+            -3.904004628689289e-05,
+            -4.813654060934579
+          ],
+          "nearest_Ag_distance_A": 13.452812928541903,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.429640749999997
+        },
+        {
+          "atom_id": 19101027,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00941954348960043,
+            0.008417935498625672,
+            -0.07328713889326724
+          ],
+          "error_norm_eV_A": 3.495072914693163,
+          "error_vector_eV_A": [
+            -0.0012852010718880005,
+            0.00045809210142665896,
+            -3.495072648376796
+          ],
+          "model_force_eV_A": [
+            0.00813434241771243,
+            0.00887602760005233,
+            -3.5683597872700634
+          ],
+          "nearest_Ag_distance_A": 4.841849864316554,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.617890749999997
+        },
+        {
+          "atom_id": 19101028,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022744932523617806,
+            -0.001320275889029812,
+            0.014277642302840732
+          ],
+          "error_norm_eV_A": 4.430816386560406,
+          "error_vector_eV_A": [
+            0.00025059142581155484,
+            0.001807409500218802,
+            4.430816010836723
+          ],
+          "model_force_eV_A": [
+            0.0004780407510477329,
+            0.0004871336111889899,
+            4.445093653139564
+          ],
+          "nearest_Ag_distance_A": 9.426956664172181,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.393859249999998
+        },
+        {
+          "atom_id": 19101029,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007307829025390898,
+            -0.00056394847853243,
+            0.5504828828913358
+          ],
+          "error_norm_eV_A": 2.4221950838361592,
+          "error_vector_eV_A": [
+            -0.000699165625636851,
+            0.000545810734657774,
+            2.422194921433477
+          ],
+          "model_force_eV_A": [
+            3.161727690223883e-05,
+            -1.8137743874655984e-05,
+            2.9726778043248125
+          ],
+          "nearest_Ag_distance_A": 18.263704226831653,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.20560925
+        },
+        {
+          "atom_id": 19101030,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009483212837645198,
+            -0.00036246417553984764,
+            0.07315069259081068
+          ],
+          "error_norm_eV_A": 0.14909666626281737,
+          "error_vector_eV_A": [
+            -0.0006233516207524548,
+            0.0005422257822342027,
+            0.14909437720666707
+          ],
+          "model_force_eV_A": [
+            0.000324969663012065,
+            0.000179761606694355,
+            0.22224506979747777
+          ],
+          "nearest_Ag_distance_A": 11.453982630371973,
+          "position_A": [
+            3.0575,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.411749999999998
+        },
+        {
+          "atom_id": 19101031,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.041046899891275405,
+            0.020861273370729565,
+            0.948027489244711
+          ],
+          "error_norm_eV_A": 1.1764236254700258,
+          "error_vector_eV_A": [
+            0.1026151544068728,
+            0.06664501078543017,
+            1.1700432125299915
+          ],
+          "model_force_eV_A": [
+            0.1436620542981482,
+            0.08750628415615974,
+            2.1180707017747027
+          ],
+          "nearest_Ag_distance_A": 2.7795107544967097,
+          "position_A": [
+            3.0575,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.599999999999998
+        },
+        {
+          "atom_id": 19101032,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001368353927039441,
+            0.0008300569874588273,
+            0.17165571204209382
+          ],
+          "error_norm_eV_A": 2.903464222402105,
+          "error_vector_eV_A": [
+            0.0013528517027881972,
+            -0.0008243495266972235,
+            2.9034637902011435
+          ],
+          "model_force_eV_A": [
+            -1.5502224251243797e-05,
+            5.707460761603762e-06,
+            3.075119502243237
+          ],
+          "nearest_Ag_distance_A": 14.61785785988808,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.545208299999999
+        },
+        {
+          "atom_id": 19101033,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0017938430254867072,
+            -0.0022762321343893564,
+            0.0825975177204628
+          ],
+          "error_norm_eV_A": 2.854566814937006,
+          "error_vector_eV_A": [
+            -0.004579017393565859,
+            -0.00045231286825770777,
+            2.8545631064932477
+          ],
+          "model_force_eV_A": [
+            -0.006372860419052566,
+            -0.002728545002647064,
+            2.9371606242137105
+          ],
+          "nearest_Ag_distance_A": 5.787526623455709,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.733458299999999
+        },
+        {
+          "atom_id": 19101034,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0010191362451380907,
+            0.0022816328823394346,
+            -0.09963579849629789
+          ],
+          "error_norm_eV_A": 2.8063280123298697,
+          "error_vector_eV_A": [
+            -0.0006388642128584148,
+            -0.0034730215709323693,
+            -2.806325790559785
+          ],
+          "model_force_eV_A": [
+            -0.0016580004579965055,
+            -0.0011913886885929347,
+            -2.9059615890560826
+          ],
+          "nearest_Ag_distance_A": 8.40527861524742,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.278291699999997
+        },
+        {
+          "atom_id": 19101035,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007542816060543043,
+            0.0005279409215647307,
+            -0.8962376258536222
+          ],
+          "error_norm_eV_A": 2.339880295549532,
+          "error_vector_eV_A": [
+            0.0006683880187634606,
+            -0.000478483459493761,
+            -2.3398801511641576
+          ],
+          "model_force_eV_A": [
+            -8.589358729084365e-05,
+            4.945746207096976e-05,
+            -3.23611777701778
+          ],
+          "nearest_Ag_distance_A": 17.108256787996332,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.0900417
+        },
+        {
+          "atom_id": 19101036,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007531295504016048,
+            -0.0004250957874594784,
+            0.16004437335984206
+          ],
+          "error_norm_eV_A": 0.11521818762769,
+          "error_vector_eV_A": [
+            -0.0007093189770169308,
+            0.00039939816765803484,
+            -0.1152153119507216
+          ],
+          "model_force_eV_A": [
+            4.381057338467397e-05,
+            -2.569761980144355e-05,
+            0.04482906140912046
+          ],
+          "nearest_Ag_distance_A": 15.848121045568394,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -15.817624999999998
+        },
+        {
+          "atom_id": 19101037,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0010370424712946669,
+            -0.0012466302547855996,
+            -0.01604466642468994
+          ],
+          "error_norm_eV_A": 0.04670686084088049,
+          "error_vector_eV_A": [
+            0.006456519745017061,
+            0.0057452363635393435,
+            -0.045900288250931995
+          ],
+          "model_force_eV_A": [
+            0.007493562216311728,
+            0.0044986061087537435,
+            -0.06194495467562193
+          ],
+          "nearest_Ag_distance_A": 7.074458604726434,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.005875
+        },
+        {
+          "atom_id": 19101038,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            8.900005947657984e-05,
+            -7.772335453602773e-06,
+            -0.256144384211165
+          ],
+          "error_norm_eV_A": 4.557509654921492,
+          "error_vector_eV_A": [
+            -0.00013594743612110421,
+            -3.1219220029278936e-05,
+            -4.557509652786955
+          ],
+          "model_force_eV_A": [
+            -4.694737664452439e-05,
+            -3.899155548288171e-05,
+            -4.81365403699812
+          ],
+          "nearest_Ag_distance_A": 13.452812928541903,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.429640749999997
+        },
+        {
+          "atom_id": 19101039,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.009418237622011065,
+            0.008419155798594171,
+            -0.07328704714041562
+          ],
+          "error_norm_eV_A": 3.495073002347121,
+          "error_vector_eV_A": [
+            -0.0012838952625063762,
+            0.0004568906860193244,
+            -3.495072736667947
+          ],
+          "model_force_eV_A": [
+            0.00813434235950469,
+            0.008876046484613495,
+            -3.5683597838083627
+          ],
+          "nearest_Ag_distance_A": 4.841849864316554,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.617890749999997
+        },
+        {
+          "atom_id": 19101040,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.00022795059254743238,
+            -0.001320187815873848,
+            0.014278650405525653
+          ],
+          "error_norm_eV_A": 4.430815386298889,
+          "error_vector_eV_A": [
+            0.0002500901549058534,
+            0.0018073455863336575,
+            4.430815010629514
+          ],
+          "model_force_eV_A": [
+            0.0004780407474532858,
+            0.00048715777045980945,
+            4.44509366103504
+          ],
+          "nearest_Ag_distance_A": 9.426956664172181,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.393859249999998
+        },
+        {
+          "atom_id": 19101041,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007298973285439574,
+            -0.0005621460312467824,
+            0.5504824866283196
+          ],
+          "error_norm_eV_A": 2.4221954868685063,
+          "error_vector_eV_A": [
+            -0.0006982800549279241,
+            0.0005438872693814755,
+            2.4221953251539734
+          ],
+          "model_force_eV_A": [
+            3.161727361603332e-05,
+            -1.82587618653069e-05,
+            2.972677811782293
+          ],
+          "nearest_Ag_distance_A": 18.263704227493733,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.20560925
+        },
+        {
+          "atom_id": 19101042,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0009477436284131301,
+            -0.0003622052906683158,
+            0.07315069435711098
+          ],
+          "error_norm_eV_A": 0.14909665357403085,
+          "error_vector_eV_A": [
+            -0.0006227739671663165,
+            0.0005419753948183501,
+            0.14909436784208785
+          ],
+          "model_force_eV_A": [
+            0.0003249696612468137,
+            0.00017977010415003427,
+            0.22224506219919885
+          ],
+          "nearest_Ag_distance_A": 11.453982630371973,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.411749999999998
+        },
+        {
+          "atom_id": 19101043,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.04104618902008387,
+            0.02086053415511297,
+            0.9480275985321039
+          ],
+          "error_norm_eV_A": 1.1764236233844956,
+          "error_vector_eV_A": [
+            0.102615865396781,
+            0.06664575137874457,
+            1.170043105893598
+          ],
+          "model_force_eV_A": [
+            0.14366205441686486,
+            0.08750628553385753,
+            2.118070704425702
+          ],
+          "nearest_Ag_distance_A": 2.7795107544967097,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.599999999999998
+        },
+        {
+          "atom_id": 19101044,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013683410177730564,
+            0.0008288517541677886,
+            0.17165497117446546
+          ],
+          "error_norm_eV_A": 2.903464971789878,
+          "error_vector_eV_A": [
+            0.0013528387897678222,
+            -0.0008232287410611753,
+            2.903464539913041
+          ],
+          "model_force_eV_A": [
+            -1.5502228005234188e-05,
+            5.6230131066132985e-06,
+            3.0751195110875065
+          ],
+          "nearest_Ag_distance_A": 14.61785786071529,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.545208299999999
+        },
+        {
+          "atom_id": 19101045,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001794099089451569,
+            -0.0022755572579535614,
+            0.08259737395390467
+          ],
+          "error_norm_eV_A": 2.8545669813357586,
+          "error_vector_eV_A": [
+            -0.004578761347899812,
+            -0.00045296332007386305,
+            2.854563273199789
+          ],
+          "model_force_eV_A": [
+            -0.006372860437351381,
+            -0.0027285205780274244,
+            2.9371606471536937
+          ],
+          "nearest_Ag_distance_A": 5.787526623455709,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.733458299999999
+        },
+        {
+          "atom_id": 19101046,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0010194487460047747,
+            0.0022813983090362445,
+            -0.09963553974355302
+          ],
+          "error_norm_eV_A": 2.806328272517873,
+          "error_vector_eV_A": [
+            -0.000638551707798653,
+            -0.003472759068288241,
+            -2.806326051143972
+          ],
+          "model_force_eV_A": [
+            -0.0016580004538034277,
+            -0.0011913607592519966,
+            -2.905961590887525
+          ],
+          "nearest_Ag_distance_A": 8.40527861524742,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.278291699999997
+        },
+        {
+          "atom_id": 19101047,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007550672232713645,
+            0.0005281927190466415,
+            -0.8962373168839838
+          ],
+          "error_norm_eV_A": 2.3398805946721057,
+          "error_vector_eV_A": [
+            0.0006691736401644025,
+            -0.0004787090858842574,
+            -2.3398804500160555
+          ],
+          "model_force_eV_A": [
+            -8.589358310696205e-05,
+            4.948363316238411e-05,
+            -3.236117766900039
+          ],
+          "nearest_Ag_distance_A": 17.108256787996332,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.0900417
+        },
+        {
+          "atom_id": 19101048,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            -0.049257097308277896,
+            -0.02655187405239357,
+            -0.657617710981834
+          ],
+          "error_norm_eV_A": 0.5850302506040822,
+          "error_vector_eV_A": [
+            -0.1027320958380891,
+            -0.07104826406868378,
+            -0.5715405976651313
+          ],
+          "model_force_eV_A": [
+            -0.151989193146367,
+            -0.09760013812107736,
+            -1.2291583086469653
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            0.8102375,
+            0.55605326,
+            31.2058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101049,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.04925675062597981,
+            -0.02654946381282794,
+            -0.657620632119531
+          ],
+          "error_norm_eV_A": 0.5850277500136282,
+          "error_vector_eV_A": [
+            -0.10273244252708799,
+            -0.07105066770638685,
+            -0.571537676935566
+          ],
+          "model_force_eV_A": [
+            -0.1519891931530678,
+            -0.09760013151921479,
+            -1.229158309055097
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            -0.7185125,
+            3.20392593,
+            31.2058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101050,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.04925752675693424,
+            -0.026549891907107163,
+            -0.6576133861232429
+          ],
+          "error_norm_eV_A": 0.5850346410503058,
+          "error_vector_eV_A": [
+            -0.10273166638943287,
+            -0.07105024621396963,
+            -0.5715449225237197
+          ],
+          "model_force_eV_A": [
+            -0.1519891931463671,
+            -0.09760013812107679,
+            -1.2291583086469626
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            3.8677375,
+            0.55605326,
+            31.2058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101051,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.049257537239453315,
+            -0.02655101589871404,
+            -0.6576226766823863
+          ],
+          "error_norm_eV_A": 0.5850254259678659,
+          "error_vector_eV_A": [
+            -0.10273165591361522,
+            -0.07104911562049936,
+            -0.5715356323727108
+          ],
+          "model_force_eV_A": [
+            -0.15198919315306852,
+            -0.0976001315192134,
+            -1.229158309055097
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            2.3389875,
+            3.20392593,
+            31.2058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        }
+      ],
+      "per_species_force_errors": {
+        "Ag": {
+          "force_vector_RMSE_eV_A": 0.5850295169189386,
+          "max_atom_vector_error_eV_A": 0.5850346410503058,
+          "mean_atom_vector_error_eV_A": 0.5850295169089705,
+          "n": 4
+        },
+        "C": {
+          "force_vector_RMSE_eV_A": 2.7353782946968,
+          "max_atom_vector_error_eV_A": 2.903464971789878,
+          "mean_atom_vector_error_eV_A": 2.726060059255301,
+          "n": 16
+        },
+        "Si": {
+          "force_vector_RMSE_eV_A": 0.8385112489550658,
+          "max_atom_vector_error_eV_A": 1.1764237081044884,
+          "mean_atom_vector_error_eV_A": 0.6627601114515846,
+          "n": 8
+        },
+        "Ti": {
+          "force_vector_RMSE_eV_A": 3.122526720718195,
+          "max_atom_vector_error_eV_A": 4.557509654921492,
+          "mean_atom_vector_error_eV_A": 2.5112530014855015,
+          "n": 24
+        }
+      },
+      "result_sha256": "b3528f0f3bcafa7f8e90b5a8ee64250c9b2364de9b2e215ed184b077839a786a",
+      "scf_iterations": 51,
+      "source_sha256": "73eff17b1913b653017647e9af9c9681e340f0b8067936419f3377963a3bc02c",
+      "whole_Ag_layer_normal_force_eV_A": {
+        "definition": "sum of F_z over all four Ag atoms; generalized force for rigid +z Ag-layer translation",
+        "dft": -2.630474405906994,
+        "model": -4.916633235404122,
+        "signed_model_minus_dft": -2.286158829497128
+      }
+    },
+    {
+      "all_atom_force_vector_RMSE_eV_A": 2.6337134972473413,
+      "all_atom_gate": {
+        "limit_eV_A": 0.05,
+        "pass": false
+      },
+      "atoms": 52,
+      "dft_archive_verification": "PASS",
+      "dft_free_energy_eV_cell": -390.26853871031824,
+      "dft_native_energy_eV_cell": -389.8719952357024,
+      "energy_model_minus_dft_eV_cell": {
+        "free_energy": -33.17872355573377,
+        "native": -33.57526703034961
+      },
+      "force_error_localization_by_nearest_Ag_distance": {
+        "Ag_mean_z_A": 31.4058765,
+        "bins": {
+          "0-3": {
+            "atom_count": 8,
+            "force_vector_RMSE_eV_A": 0.7380433109850654,
+            "species": {
+              "Ag": {
+                "force_vector_RMSE_eV_A": 0.2995446699251739,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.2837285243225286
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 0.9998444121457171,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.9951835027444853
+              }
+            },
+            "z_component_RMSE_eV_A": 0.7317417849381784
+          },
+          "5-7": {
+            "atom_count": 8,
+            "force_vector_RMSE_eV_A": 3.250295947143722,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.889750241988993,
+                "n": 4,
+                "z_component_RMSE_eV_A": 2.8897384473095746
+              },
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.5746595679815956,
+                "n": 4,
+                "z_component_RMSE_eV_A": 3.574657050104801
+              }
+            },
+            "z_component_RMSE_eV_A": 3.2502893194085902
+          },
+          ">7": {
+            "atom_count": 36,
+            "force_vector_RMSE_eV_A": 2.747838440721467,
+            "species": {
+              "C": {
+                "force_vector_RMSE_eV_A": 2.693453438550256,
+                "n": 12,
+                "z_component_RMSE_eV_A": 2.6934526782539043
+              },
+              "Si": {
+                "force_vector_RMSE_eV_A": 0.1507522987519027,
+                "n": 4,
+                "z_component_RMSE_eV_A": 0.15075008660140213
+              },
+              "Ti": {
+                "force_vector_RMSE_eV_A": 3.0387084208349333,
+                "n": 20,
+                "z_component_RMSE_eV_A": 3.038707615846864
+              }
+            },
+            "z_component_RMSE_eV_A": 2.7478376842653405
+          }
+        },
+        "bins_A": "[0,3), [3,5), [5,7), [7,infinity)",
+        "distance_definition": "minimum-image 3D distance to any Ag atom; z is non-periodic"
+      },
+      "formula": "C16Ag4Si8Ti24",
+      "inference_seconds": 3.2973376380105037,
+      "label": "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "marked_pair": {
+        "Ag_atom_id": 19101048,
+        "contact_atom_id": 19101007,
+        "contact_species": "Si",
+        "distance_A": 2.9674366099990883,
+        "legacy_force_difference_definition_eV_A": {
+          "absolute_error": 1.2704815381317605,
+          "definition": "(F_contact - F_Ag) dot unit(Ag to contact)",
+          "dft": -1.73922680879907,
+          "gate_eV_A": 0.1,
+          "model": -3.0097083469308306,
+          "pass": false,
+          "signed_model_minus_dft": -1.2704815381317605
+        },
+        "symmetric_relative_coordinate_generalized_force_eV_A": {
+          "definition": "0.5 * legacy pair force difference; equal/opposite half-displacement convention",
+          "dft": -0.869613404399535,
+          "model": -1.5048541734654153,
+          "signed_model_minus_dft": -0.6352407690658802
+        }
+      },
+      "max_atom_force_vector_error_eV_A": 4.556846868160959,
+      "model_energy_eV_cell": -423.447262266052,
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "per_atom": [
+        {
+          "atom_id": 19101000,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000691763675195177,
+            -0.0004274253170044304,
+            0.16014163856171315
+          ],
+          "error_norm_eV_A": 0.11518178284774844,
+          "error_vector_eV_A": [
+            -0.0006484053790210274,
+            0.0004021318516368621,
+            -0.11517925577300903
+          ],
+          "model_force_eV_A": [
+            4.3358296174149625e-05,
+            -2.5293465367568282e-05,
+            0.044962382788704125
+          ],
+          "nearest_Ag_distance_A": 16.047740983546188,
+          "position_A": [
+            0.0,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -16.017625000000002
+        },
+        {
+          "atom_id": 19101001,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0012950287041207397,
+            -0.0011604000419460504,
+            -0.005434394087263337
+          ],
+          "error_norm_eV_A": 0.10487216755606255,
+          "error_vector_eV_A": [
+            0.002966932414574942,
+            0.0033633600913722684,
+            -0.1047762217721653
+          ],
+          "model_force_eV_A": [
+            0.004261961118695682,
+            0.002202960049426218,
+            -0.11021061585942864
+          ],
+          "nearest_Ag_distance_A": 7.272572760033957,
+          "position_A": [
+            0.0,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.2058750000000025
+        },
+        {
+          "atom_id": 19101002,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            1.0367827036546702e-05,
+            2.8690782057329396e-05,
+            -0.2570893361741032
+          ],
+          "error_norm_eV_A": 4.556845902669039,
+          "error_vector_eV_A": [
+            -4.823238345155959e-05,
+            -6.472357795389211e-05,
+            -4.556845901954126
+          ],
+          "model_force_eV_A": [
+            -3.786455641501289e-05,
+            -3.603279589656271e-05,
+            -4.813935238128229
+          ],
+          "nearest_Ag_distance_A": 13.652473475174535,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.62964075
+        },
+        {
+          "atom_id": 19101003,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.006450462980735217,
+            0.006470709011915995,
+            -0.11261707938402704
+          ],
+          "error_norm_eV_A": 3.5746591404210384,
+          "error_vector_eV_A": [
+            0.004205727006269265,
+            0.0005582445085511928,
+            -3.5746566227288312
+          ],
+          "model_force_eV_A": [
+            0.010656189987004482,
+            0.007028953520467188,
+            -3.6872737021128583
+          ],
+          "nearest_Ag_distance_A": 5.032958017764729,
+          "position_A": [
+            0.0,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.81789075
+        },
+        {
+          "atom_id": 19101004,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0005934360421593455,
+            -0.0012454293140817254,
+            0.011008121668241902
+          ],
+          "error_norm_eV_A": 4.417238294890874,
+          "error_vector_eV_A": [
+            -7.491571573861686e-06,
+            0.0017022696298907658,
+            4.417237966882972
+          ],
+          "model_force_eV_A": [
+            0.0005859444705854838,
+            0.0004568403158090404,
+            4.428246088551214
+          ],
+          "nearest_Ag_distance_A": 9.626269040920286,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.593859250000001
+        },
+        {
+          "atom_id": 19101005,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000777040671442209,
+            -0.0005587691266130771,
+            0.5503605636984398
+          ],
+          "error_norm_eV_A": 2.4223278353540305,
+          "error_vector_eV_A": [
+            -0.0007454192991997286,
+            0.0005406330665931126,
+            2.422327660329399
+          ],
+          "model_force_eV_A": [
+            3.1621372242480486e-05,
+            -1.8136060019964453e-05,
+            2.9726882240278387
+          ],
+          "nearest_Ag_distance_A": 18.4630749276817,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.40560925
+        },
+        {
+          "atom_id": 19101006,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0008931900746525313,
+            -0.0003844289831504062,
+            0.07437021584033295
+          ],
+          "error_norm_eV_A": 0.15075190795583182,
+          "error_vector_eV_A": [
+            -0.0005790914280687229,
+            0.0005763285455341905,
+            0.1507496940323566
+          ],
+          "model_force_eV_A": [
+            0.00031409864658380837,
+            0.00019189956238378428,
+            0.22511990987268954
+          ],
+          "nearest_Ag_distance_A": 11.65325783190533,
+          "position_A": [
+            0.0,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.61175
+        },
+        {
+          "atom_id": 19101007,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            0.05852228738380913,
+            0.0356403592878491,
+            1.0624705954202436
+          ],
+          "error_norm_eV_A": 0.9998445503528399,
+          "error_vector_eV_A": [
+            0.08058064953433425,
+            0.05296677121188258,
+            0.9951836036321566
+          ],
+          "model_force_eV_A": [
+            0.13910293691814338,
+            0.08860713049973168,
+            2.0576541990524
+          ],
+          "nearest_Ag_distance_A": 2.9674366099990883,
+          "position_A": [
+            0.0,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.8000000000000007
+        },
+        {
+          "atom_id": 19101008,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001303075024365732,
+            0.0007879705464642568,
+            0.17252397543783612
+          ],
+          "error_norm_eV_A": 2.9027625195404987,
+          "error_vector_eV_A": [
+            0.001286633750736894,
+            -0.000782955452587463,
+            2.9027621288013687
+          ],
+          "model_force_eV_A": [
+            -1.6441273628837945e-05,
+            5.015093876793849e-06,
+            3.075286104239205
+          ],
+          "nearest_Ag_distance_A": 14.816877259797081,
+          "position_A": [
+            -1.529e-05,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.745208300000002
+        },
+        {
+          "atom_id": 19101009,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0004116208283790324,
+            -0.0014075574562974894,
+            0.0719291045698521
+          ],
+          "error_norm_eV_A": 2.889749631597377,
+          "error_vector_eV_A": [
+            -0.007788587532172574,
+            -0.0027392980375793843,
+            2.8897378371519604
+          ],
+          "model_force_eV_A": [
+            -0.008200208360551606,
+            -0.004146855493876874,
+            2.9616669417218127
+          ],
+          "nearest_Ag_distance_A": 5.98572031899325,
+          "position_A": [
+            1.52875,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.933458300000002
+        },
+        {
+          "atom_id": 19101010,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0014305112645395719,
+            0.002141069343449151,
+            -0.10026859369120113
+          ],
+          "error_norm_eV_A": 2.8042373902868873,
+          "error_vector_eV_A": [
+            9.096505635051598e-05,
+            -0.0030588955705353558,
+            -2.8042357204711337
+          ],
+          "model_force_eV_A": [
+            -0.0013395462081890559,
+            -0.0009178262270862049,
+            -2.904504314162335
+          ],
+          "nearest_Ag_distance_A": 8.602326736408912,
+          "position_A": [
+            0.0,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.4782917
+        },
+        {
+          "atom_id": 19101011,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007508961410681097,
+            0.000502076878547404,
+            -0.8963937442257959
+          ],
+          "error_norm_eV_A": 2.3397223300265684,
+          "error_vector_eV_A": [
+            0.0006649769906674095,
+            -0.000452626628896476,
+            -2.3397221917483475
+          ],
+          "model_force_eV_A": [
+            -8.59191504007002e-05,
+            4.945024965092807e-05,
+            -3.2361159359741434
+          ],
+          "nearest_Ag_distance_A": 17.3080463081199,
+          "position_A": [
+            1.52876529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.290041700000003
+        },
+        {
+          "atom_id": 19101012,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006860128838484312,
+            -0.00043182649865872,
+            0.16014031944467794
+          ],
+          "error_norm_eV_A": 0.11518049329621251,
+          "error_vector_eV_A": [
+            -0.0006426545883142973,
+            0.0004065583645012205,
+            -0.11517798288446984
+          ],
+          "model_force_eV_A": [
+            4.335829553413391e-05,
+            -2.526813415749951e-05,
+            0.044962336560208094
+          ],
+          "nearest_Ag_distance_A": 16.047740983546188,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -16.017625000000002
+        },
+        {
+          "atom_id": 19101013,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0012945904198725644,
+            -0.0011624994884686,
+            -0.005433295327502332
+          ],
+          "error_norm_eV_A": 0.1048733432299872,
+          "error_vector_eV_A": [
+            0.0029673707047438444,
+            0.003365476521024845,
+            -0.10477731815198249
+          ],
+          "model_force_eV_A": [
+            0.004261961124616409,
+            0.0022029770325562447,
+            -0.11021061347948483
+          ],
+          "nearest_Ag_distance_A": 7.272572760033957,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.2058750000000025
+        },
+        {
+          "atom_id": 19101014,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            1.068167188806168e-05,
+            2.760444907002292e-05,
+            -0.2570883467327713
+          ],
+          "error_norm_eV_A": 4.556846868160959,
+          "error_vector_eV_A": [
+            -4.854622454984464e-05,
+            -6.35887495018926e-05,
+            -4.556846867458691
+          ],
+          "model_force_eV_A": [
+            -3.786455266178296e-05,
+            -3.5984300431869676e-05,
+            -4.813935214191462
+          ],
+          "nearest_Ag_distance_A": 13.652473475174535,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.62964075
+        },
+        {
+          "atom_id": 19101015,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.006449921324108857,
+            0.0064700152054853865,
+            -0.11261650337214518
+          ],
+          "error_norm_eV_A": 3.5746597131017612,
+          "error_vector_eV_A": [
+            0.004206268581614478,
+            0.0005589569262857055,
+            -3.574657194661404
+          ],
+          "model_force_eV_A": [
+            0.010656189905723335,
+            0.007028972131771092,
+            -3.6872736980335494
+          ],
+          "nearest_Ag_distance_A": 5.032958017764729,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.81789075
+        },
+        {
+          "atom_id": 19101016,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0005932538894055332,
+            -0.0012454443041656322,
+            0.011008144053434976
+          ],
+          "error_norm_eV_A": 4.417238280332173,
+          "error_vector_eV_A": [
+            -7.309421766769344e-06,
+            0.0017023087262420516,
+            4.417237952309509
+          ],
+          "model_force_eV_A": [
+            0.0005859444676387639,
+            0.00045686442207641936,
+            4.428246096362944
+          ],
+          "nearest_Ag_distance_A": 9.626269040920286,
+          "position_A": [
+            0.0,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.593859250000001
+        },
+        {
+          "atom_id": 19101017,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.000772738918117066,
+            -0.0005584286833591189,
+            0.5503583575086279
+          ],
+          "error_norm_eV_A": 2.4223300475782867,
+          "error_vector_eV_A": [
+            -0.0007411175491585109,
+            0.0005401716053425433,
+            2.4223298739767136
+          ],
+          "model_force_eV_A": [
+            3.162136895855513e-05,
+            -1.8257078016575552e-05,
+            2.972688231485342
+          ],
+          "nearest_Ag_distance_A": 18.46307492833663,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.40560925
+        },
+        {
+          "atom_id": 19101018,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0008920417996108867,
+            -0.00038423276320778406,
+            0.07436976241320573
+          ],
+          "error_norm_eV_A": 0.1507523486564814,
+          "error_vector_eV_A": [
+            -0.000577943154590923,
+            0.0005761408442209611,
+            0.15075013986356037
+          ],
+          "model_force_eV_A": [
+            0.0003140986450199637,
+            0.00019190808101317706,
+            0.2251199022767661
+          ],
+          "nearest_Ag_distance_A": 11.65325783190533,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.61175
+        },
+        {
+          "atom_id": 19101019,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.058522551472619325,
+            0.03563991759117717,
+            1.0624709103350778
+          ],
+          "error_norm_eV_A": 0.9998442416026562,
+          "error_vector_eV_A": [
+            0.08058038585581255,
+            0.052967213061615934,
+            0.9951832912694045
+          ],
+          "model_force_eV_A": [
+            0.13910293732843187,
+            0.0886071306527931,
+            2.0576542016044823
+          ],
+          "nearest_Ag_distance_A": 2.9674366099990888,
+          "position_A": [
+            -1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.8000000000000007
+        },
+        {
+          "atom_id": 19101020,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013077676481794468,
+            0.0007899112102689314,
+            0.17252428774094805
+          ],
+          "error_norm_eV_A": 2.9027622187102287,
+          "error_vector_eV_A": [
+            0.0012913263707759986,
+            -0.000784980562842712,
+            2.9027618253403515
+          ],
+          "model_force_eV_A": [
+            -1.6441277403448154e-05,
+            4.930647426219402e-06,
+            3.0752861130812996
+          ],
+          "nearest_Ag_distance_A": 14.81687726061318,
+          "position_A": [
+            -1.52876529,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.745208300000002
+        },
+        {
+          "atom_id": 19101021,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0004114093628634326,
+            -0.0014069606100166776,
+            0.07192817641500357
+          ],
+          "error_norm_eV_A": 2.8897505846012006,
+          "error_vector_eV_A": [
+            -0.007788799020331412,
+            -0.002739871285185683,
+            2.8897387890461905
+          ],
+          "model_force_eV_A": [
+            -0.008200208383194844,
+            -0.00414683189520236,
+            2.9616669654611942
+          ],
+          "nearest_Ag_distance_A": 5.98572031899325,
+          "position_A": [
+            0.0,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.933458300000002
+        },
+        {
+          "atom_id": 19101022,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0014307568290937,
+            0.00213984665626762,
+            -0.100268920416959
+          ],
+          "error_norm_eV_A": 2.80423706399916,
+          "error_vector_eV_A": [
+            9.121061680775547e-05,
+            -0.003057644797339574,
+            -2.8042353955393162
+          ],
+          "model_force_eV_A": [
+            -0.0013395462122859445,
+            -0.0009177981410719541,
+            -2.904504315956275
+          ],
+          "nearest_Ag_distance_A": 8.602326736408912,
+          "position_A": [
+            -1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.4782917
+        },
+        {
+          "atom_id": 19101023,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.000752081971383481,
+            0.0005038030019090785,
+            -0.8963943812987236
+          ],
+          "error_norm_eV_A": 2.3397216835027113,
+          "error_vector_eV_A": [
+            0.0006661628251642212,
+            -0.0004543265810606867,
+            -2.3397215445576447
+          ],
+          "model_force_eV_A": [
+            -8.59191462192597e-05,
+            4.947642084839177e-05,
+            -3.2361159258563683
+          ],
+          "nearest_Ag_distance_A": 17.3080463081199,
+          "position_A": [
+            1.529e-05,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.290041700000003
+        },
+        {
+          "atom_id": 19101024,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006848165065218554,
+            -0.00042691727493864517,
+            0.1601404243028594
+          ],
+          "error_norm_eV_A": 0.11518052794355998,
+          "error_vector_eV_A": [
+            -0.0006414582103477022,
+            0.00040162380957030954,
+            -0.11517804151415828
+          ],
+          "model_force_eV_A": [
+            4.3358296174153196e-05,
+            -2.5293465368335627e-05,
+            0.04496238278870113
+          ],
+          "nearest_Ag_distance_A": 16.047740983546188,
+          "position_A": [
+            3.0575,
+            0.0,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -16.017625000000002
+        },
+        {
+          "atom_id": 19101025,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0012911356980504494,
+            -0.0011601920539884775,
+            -0.005434441182003672
+          ],
+          "error_norm_eV_A": 0.10487222404328503,
+          "error_vector_eV_A": [
+            0.0029708254206458834,
+            0.003363152103411443,
+            -0.10477617467742527
+          ],
+          "model_force_eV_A": [
+            0.004261961118696333,
+            0.002202960049422965,
+            -0.11021061585942894
+          ],
+          "nearest_Ag_distance_A": 7.272572760033957,
+          "position_A": [
+            3.0575,
+            0.0,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.2058750000000025
+        },
+        {
+          "atom_id": 19101026,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            9.781598754392059e-06,
+            2.7220718100449987e-05,
+            -0.25709037909893184
+          ],
+          "error_norm_eV_A": 4.556844859717397,
+          "error_vector_eV_A": [
+            -4.7646155167472036e-05,
+            -6.325351399763025e-05,
+            -4.556844859029294
+          ],
+          "model_force_eV_A": [
+            -3.7864556413079974e-05,
+            -3.603279589718027e-05,
+            -4.813935238128225
+          ],
+          "nearest_Ag_distance_A": 13.652473475174535,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.62964075
+        },
+        {
+          "atom_id": 19101027,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.006450063262581423,
+            0.006472260924348199,
+            -0.11261663269248426
+          ],
+          "error_norm_eV_A": 3.5746595873405558,
+          "error_vector_eV_A": [
+            0.004206126724427317,
+            0.0005566925961179425,
+            -3.574657069420378
+          ],
+          "model_force_eV_A": [
+            0.01065618998700874,
+            0.007028953520466142,
+            -3.6872737021128623
+          ],
+          "nearest_Ag_distance_A": 5.032958017764729,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.81789075
+        },
+        {
+          "atom_id": 19101028,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0005941528347540744,
+            -0.001244945796583424,
+            0.011009343934544743
+          ],
+          "error_norm_eV_A": 4.417237072439629,
+          "error_vector_eV_A": [
+            -8.208364164352753e-06,
+            0.001701786112392257,
+            4.41723674461667
+          ],
+          "model_force_eV_A": [
+            0.0005859444705897216,
+            0.0004568403158088331,
+            4.428246088551214
+          ],
+          "nearest_Ag_distance_A": 9.626269040920286,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.593859250000001
+        },
+        {
+          "atom_id": 19101029,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007772772827844281,
+            -0.0005593937461413137,
+            0.5503708027713561
+          ],
+          "error_norm_eV_A": 2.422317596494166,
+          "error_vector_eV_A": [
+            -0.0007456559105405692,
+            0.0005412576861213163,
+            2.422317421256482
+          ],
+          "model_force_eV_A": [
+            3.162137224385891e-05,
+            -1.8136060019997412e-05,
+            2.9726882240278383
+          ],
+          "nearest_Ag_distance_A": 18.4630749276817,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.40560925
+        },
+        {
+          "atom_id": 19101030,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0008915255498382411,
+            -0.00038355400717230835,
+            0.07436973830877218
+          ],
+          "error_norm_eV_A": 0.15075237575305095,
+          "error_vector_eV_A": [
+            -0.0005774269032531522,
+            0.0005754535695572589,
+            0.1507501715639148
+          ],
+          "model_force_eV_A": [
+            0.0003140986465850889,
+            0.0001918995623849505,
+            0.22511990987268699
+          ],
+          "nearest_Ag_distance_A": 11.65325783190533,
+          "position_A": [
+            3.0575,
+            0.0,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.61175
+        },
+        {
+          "atom_id": 19101031,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.05852250770162447,
+            0.035641634641784534,
+            1.0624708938957588
+          ],
+          "error_norm_eV_A": 0.9998441679515315,
+          "error_vector_eV_A": [
+            0.08058042921651708,
+            0.052965495857945646,
+            0.9951833051566401
+          ],
+          "model_force_eV_A": [
+            0.13910293691814155,
+            0.08860713049973018,
+            2.057654199052399
+          ],
+          "nearest_Ag_distance_A": 2.9674366099990883,
+          "position_A": [
+            3.0575,
+            0.0,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.8000000000000007
+        },
+        {
+          "atom_id": 19101032,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0013055045363719016,
+            0.000787517953968385,
+            0.1725226672467677
+          ],
+          "error_norm_eV_A": 2.9027638286872355,
+          "error_vector_eV_A": [
+            0.001289063262741688,
+            -0.0007825028600925969,
+            2.902763436992439
+          ],
+          "model_force_eV_A": [
+            -1.6441273630213608e-05,
+            5.015093875788143e-06,
+            3.075286104239207
+          ],
+          "nearest_Ag_distance_A": 14.816877259797081,
+          "position_A": [
+            3.05748471,
+            1.76525727,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.745208300000002
+        },
+        {
+          "atom_id": 19101033,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0004116811810699884,
+            -0.0014075682007766291,
+            0.07192806786948307
+          ],
+          "error_norm_eV_A": 2.8897506681206737,
+          "error_vector_eV_A": [
+            -0.007788527179479311,
+            -0.0027392872931000798,
+            2.889738873852338
+          ],
+          "model_force_eV_A": [
+            -0.0082002083605493,
+            -0.004146855493876709,
+            2.961666941721821
+          ],
+          "nearest_Ag_distance_A": 5.98572031899325,
+          "position_A": [
+            4.58625,
+            0.88264188,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.933458300000002
+        },
+        {
+          "atom_id": 19101034,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001430296091165942,
+            0.0021413661054274975,
+            -0.10026823000126797
+          ],
+          "error_norm_eV_A": 2.8042377542933647,
+          "error_vector_eV_A": [
+            9.07498829805333e-05,
+            -0.0030591923325152598,
+            -2.8042360841610723
+          ],
+          "model_force_eV_A": [
+            -0.0013395462081854086,
+            -0.0009178262270877623,
+            -2.9045043141623403
+          ],
+          "nearest_Ag_distance_A": 8.602326736408912,
+          "position_A": [
+            3.0575,
+            1.7652308,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.4782917
+        },
+        {
+          "atom_id": 19101035,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0007498002717619052,
+            0.0005065961886511568,
+            -0.8963959754635739
+          ],
+          "error_norm_eV_A": 2.339720099356357,
+          "error_vector_eV_A": [
+            0.0006638811213594959,
+            -0.00045714593900104386,
+            -2.3397199605105667
+          ],
+          "model_force_eV_A": [
+            -8.591915040240936e-05,
+            4.945024965011291e-05,
+            -3.2361159359741407
+          ],
+          "nearest_Ag_distance_A": 17.3080463081199,
+          "position_A": [
+            4.58626529,
+            0.8826154,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.290041700000003
+        },
+        {
+          "atom_id": 19101036,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0006889157818165214,
+            -0.00043487092271690344,
+            0.1601447237036659
+          ],
+          "error_norm_eV_A": 0.11518492447789458,
+          "error_vector_eV_A": [
+            -0.0006455574862825076,
+            0.00040960278855882367,
+            -0.11518238714345952
+          ],
+          "model_force_eV_A": [
+            4.335829553401378e-05,
+            -2.5268134158079776e-05,
+            0.04496233656020637
+          ],
+          "nearest_Ag_distance_A": 16.047740983546188,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            15.3882515
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -16.017625000000002
+        },
+        {
+          "atom_id": 19101037,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0012939563111283197,
+            -0.0011643681586412978,
+            -0.005433211721154476
+          ],
+          "error_norm_eV_A": 0.1048735046874812,
+          "error_vector_eV_A": [
+            0.0029680048134876017,
+            0.0033673451911964735,
+            -0.10477740175832564
+          ],
+          "model_force_eV_A": [
+            0.004261961124615922,
+            0.0022029770325551756,
+            -0.11021061347948012
+          ],
+          "nearest_Ag_distance_A": 7.272572760033957,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            24.2000015
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -7.2058750000000025
+        },
+        {
+          "atom_id": 19101038,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            7.27863272256917e-06,
+            2.8213859082645925e-05,
+            -0.25708848462048384
+          ],
+          "error_norm_eV_A": 4.556846730246809,
+          "error_vector_eV_A": [
+            -4.514318538218963e-05,
+            -6.419815951322285e-05,
+            -4.556846729570979
+          ],
+          "model_force_eV_A": [
+            -3.786455265962046e-05,
+            -3.5984300430576914e-05,
+            -4.813935214191463
+          ],
+          "nearest_Ag_distance_A": 13.652473475174535,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            17.77623575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -13.62964075
+        },
+        {
+          "atom_id": 19101039,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.006450883136633269,
+            0.006469083633839125,
+            -0.11261638442500177
+          ],
+          "error_norm_eV_A": 3.574659831062988,
+          "error_vector_eV_A": [
+            0.004205306769088796,
+            0.0005598884979322915,
+            -3.574657313608553
+          ],
+          "model_force_eV_A": [
+            0.010656189905722065,
+            0.007028972131771416,
+            -3.6872736980335548
+          ],
+          "nearest_Ag_distance_A": 5.032958017764729,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            26.58798575
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -4.81789075
+        },
+        {
+          "atom_id": 19101040,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0005944396508788304,
+            -0.0012452194577199493,
+            0.01100716203792384
+          ],
+          "error_norm_eV_A": 4.417239262263086,
+          "error_vector_eV_A": [
+            -8.495183241181091e-06,
+            0.0017020838797980695,
+            4.417238934325019
+          ],
+          "model_force_eV_A": [
+            0.0005859444676376493,
+            0.00045686442207812025,
+            4.428246096362943
+          ],
+          "nearest_Ag_distance_A": 9.626269040920286,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            21.81201725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -9.593859250000001
+        },
+        {
+          "atom_id": 19101041,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0007753411735635049,
+            -0.0005573009756040257,
+            0.5503796577402574
+          ],
+          "error_norm_eV_A": 2.422308747894539,
+          "error_vector_eV_A": [
+            -0.000743719804605645,
+            0.000539043897584633,
+            2.4223085737450827
+          ],
+          "model_force_eV_A": [
+            3.162136895785983e-05,
+            -1.8257078019392635e-05,
+            2.97268823148534
+          ],
+          "nearest_Ag_distance_A": 18.46307492833663,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            13.00026725
+          ],
+          "species": "Ti",
+          "z_from_Ag_plane_A": -18.40560925
+        },
+        {
+          "atom_id": 19101042,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.0008941372309691059,
+            -0.00038550266832070674,
+            0.0743695613317453
+          ],
+          "error_norm_eV_A": 0.15075256264148118,
+          "error_vector_eV_A": [
+            -0.0005800385859500214,
+            0.0005774107493322104,
+            0.15075034094501769
+          ],
+          "model_force_eV_A": [
+            0.00031409864501908444,
+            0.00019190808101150362,
+            0.22511990227676298
+          ],
+          "nearest_Ag_distance_A": 11.65325783190533,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            19.7941265
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -11.61175
+        },
+        {
+          "atom_id": 19101043,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            0.05852254928355276,
+            0.03564124522553402,
+            1.0624703906848387
+          ],
+          "error_norm_eV_A": 0.9998446886757485,
+          "error_vector_eV_A": [
+            0.08058038804487845,
+            0.052965885427259614,
+            0.9951838109196449
+          ],
+          "model_force_eV_A": [
+            0.1391029373284312,
+            0.08860713065279363,
+            2.0576542016044836
+          ],
+          "nearest_Ag_distance_A": 2.9674366099990888,
+          "position_A": [
+            1.52875,
+            2.64787267,
+            28.6058765
+          ],
+          "species": "Si",
+          "z_from_Ag_plane_A": -2.8000000000000007
+        },
+        {
+          "atom_id": 19101044,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.001305808319777011,
+            0.0007897742429996092,
+            0.1725237832716213
+          ],
+          "error_norm_eV_A": 2.9027627222714827,
+          "error_vector_eV_A": [
+            0.0012893670423741554,
+            -0.0007848435955751426,
+            2.902762329809678
+          ],
+          "model_force_eV_A": [
+            -1.644127740285542e-05,
+            4.930647424466572e-06,
+            3.075286113081299
+          ],
+          "nearest_Ag_distance_A": 14.81687726061318,
+          "position_A": [
+            1.52873471,
+            4.41312995,
+            16.6606682
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -14.745208300000002
+        },
+        {
+          "atom_id": 19101045,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0004118094626359359,
+            -0.001406992006801649,
+            0.07192867627350372
+          ],
+          "error_norm_eV_A": 2.8897500836366015,
+          "error_vector_eV_A": [
+            -0.007788398920558822,
+            -0.002739839888398347,
+            2.8897382891876884
+          ],
+          "model_force_eV_A": [
+            -0.008200208383194758,
+            -0.004146831895199996,
+            2.961666965461192
+          ],
+          "nearest_Ag_distance_A": 5.98572031899325,
+          "position_A": [
+            3.0575,
+            3.53051455,
+            25.4724182
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -5.933458300000002
+        },
+        {
+          "atom_id": 19101046,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0014307496604021247,
+            0.002139448205111581,
+            -0.10026849734643029
+          ],
+          "error_norm_eV_A": 2.8042374866347775,
+          "error_vector_eV_A": [
+            9.120344811801035e-05,
+            -0.003057246346183828,
+            -2.8042358186098477
+          ],
+          "model_force_eV_A": [
+            -0.0013395462122841144,
+            -0.0009177981410722473,
+            -2.904504315956278
+          ],
+          "nearest_Ag_distance_A": 8.602326736408912,
+          "position_A": [
+            1.52875,
+            4.41310347,
+            22.9275848
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -8.4782917
+        },
+        {
+          "atom_id": 19101047,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.00075175089510709,
+            0.0005058069396135938,
+            -0.8963958467715134
+          ],
+          "error_norm_eV_A": 2.339720218325753,
+          "error_vector_eV_A": [
+            0.0006658317488885496,
+            -0.0004563305187669143,
+            -2.3397200790848567
+          ],
+          "model_force_eV_A": [
+            -8.59191462185405e-05,
+            4.947642084667946e-05,
+            -3.23611592585637
+          ],
+          "nearest_Ag_distance_A": 17.3080463081199,
+          "position_A": [
+            3.05751529,
+            3.53048807,
+            14.1158348
+          ],
+          "species": "C",
+          "z_from_Ag_plane_A": -17.290041700000003
+        },
+        {
+          "atom_id": 19101048,
+          "central_pair": true,
+          "dft_force_eV_A": [
+            -0.06531334724172737,
+            -0.04024831704251773,
+            -0.7298547205232389
+          ],
+          "error_norm_eV_A": 0.2995457984035459,
+          "error_vector_eV_A": [
+            -0.08000278424668812,
+            -0.05314979840026389,
+            -0.28372934071753475
+          ],
+          "model_force_eV_A": [
+            -0.1453161314884155,
+            -0.09339811544278162,
+            -1.0135840612407736
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            0.8102375,
+            0.55605326,
+            31.4058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101049,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.06531308879393527,
+            -0.04025123523577957,
+            -0.7298557704016827
+          ],
+          "error_norm_eV_A": 0.2995443549469683,
+          "error_vector_eV_A": [
+            -0.08000304254205759,
+            -0.05314687441013545,
+            -0.28372829168950064
+          ],
+          "model_force_eV_A": [
+            -0.14531613133599286,
+            -0.09339810964591502,
+            -1.0135840620911833
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            -0.7185125,
+            3.20392593,
+            31.4058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101050,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.06531373727036877,
+            -0.04025031274197008,
+            -0.729853634135615
+          ],
+          "error_norm_eV_A": 0.2995463691614723,
+          "error_vector_eV_A": [
+            -0.08000239421804595,
+            -0.05314780270081082,
+            -0.28373042710516105
+          ],
+          "model_force_eV_A": [
+            -0.1453161314884147,
+            -0.0933981154427809,
+            -1.013584061240776
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            3.8677375,
+            0.55605326,
+            31.4058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        },
+        {
+          "atom_id": 19101051,
+          "central_pair": false,
+          "dft_force_eV_A": [
+            -0.0653139095475107,
+            -0.040250354011593124,
+            -0.7298580243318119
+          ],
+          "error_norm_eV_A": 0.2995421571710591,
+          "error_vector_eV_A": [
+            -0.0800022217884824,
+            -0.05314775563432143,
+            -0.28372603775937166
+          ],
+          "model_force_eV_A": [
+            -0.1453161313359931,
+            -0.09339810964591455,
+            -1.0135840620911836
+          ],
+          "nearest_Ag_distance_A": 0.0,
+          "position_A": [
+            2.3389875,
+            3.20392593,
+            31.4058765
+          ],
+          "species": "Ag",
+          "z_from_Ag_plane_A": 0.0
+        }
+      ],
+      "per_species_force_errors": {
+        "Ag": {
+          "force_vector_RMSE_eV_A": 0.2995446699251739,
+          "max_atom_vector_error_eV_A": 0.2995463691614723,
+          "mean_atom_vector_error_eV_A": 0.2995446699207614,
+          "n": 4
+        },
+        "C": {
+          "force_vector_RMSE_eV_A": 2.74384450807576,
+          "max_atom_vector_error_eV_A": 2.9027638286872355,
+          "mean_atom_vector_error_eV_A": 2.73411789272443,
+          "n": 16
+        },
+        "Si": {
+          "force_vector_RMSE_eV_A": 0.7149877985245613,
+          "max_atom_vector_error_eV_A": 0.9998446886757485,
+          "mean_atom_vector_error_eV_A": 0.5752983554487026,
+          "n": 8
+        },
+        "Ti": {
+          "force_vector_RMSE_eV_A": 3.1344041262848252,
+          "max_atom_vector_error_eV_A": 4.556846868160959,
+          "mean_atom_vector_error_eV_A": 2.531853280752065,
+          "n": 24
+        }
+      },
+      "result_sha256": "7254a9dd11d98a07032a2b6acebb429c499e00322e997dd0288e4514319049d6",
+      "scf_iterations": 68,
+      "source_sha256": "8c6ccb44585ba8b0e9db9777c657ae2e92286a280b042a5f9bc1665cb9637d01",
+      "whole_Ag_layer_normal_force_eV_A": {
+        "definition": "sum of F_z over all four Ag atoms; generalized force for rigid +z Ag-layer translation",
+        "dft": -2.9194221493923482,
+        "model": -4.054336246663916,
+        "signed_model_minus_dft": -1.134914097271568
+      }
+    }
+  ],
+  "scope": "Same uploaded-CIF family diagnostic only; not independent validation, not a production qualification, and no training or sealed labels read.",
+  "title": "V18 MACE force screen on the fixed-geometry AgSi parent and rigid Ag-layer +/-0.20 A gap scan"
+}

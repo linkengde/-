@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-10T15:56:04.122534+00:00",
+  "updated_utc": "2026-10-11T01:26:28.032162+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "Matched 26 A dipole and 26-to-36 A vacuum comparisons both pass the fixed-parent numerical budgets and are published in commit 01fc31a. The AgSi parent is already complete; the registered -0.20 and +0.20 A rigid Ag-layer endpoints are now enabled for sequential A runs. B remains on its Ti3SiC2 C -0.02 A control.",
+  "current_stage": "AgSi fixed-geometry parent and rigid Ag-layer +/-0.20 A scan are complete, archive-verified, and published. The V18 force screen fails both provisional gates on all three points (all-atom force-vector RMSE about 2.634 eV/A; marked Ag-Si separation-force error 1.270-1.896 eV/A). Errors are dominated by Ti/C backbone forces away from Ag; the existing Ti3SiC2 pure-phase screen also fails. Next development must address backbone force coverage and retain an independent interface holdout; no new DFT job is registered or running.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -70,8 +70,8 @@
     "v19_AgSi_force_error_localization_window_b": "completed; B report bundle f576c99 published and SHA256 verified. Both public references reproduce force-vector RMSE 2.63375/2.63351 eV/A and Ag-Si separation-force absolute error 1.71714/1.71553 eV/A. Largest residuals are remote Ti framework sites with opposite z errors; four Ti +/-0.03 A geometry probes remain unowned, unlabeled, and launch-disabled.",
     "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19": "completed; SCF 51; 10,699.7 s; archive verifier PASS; published 7692a6e",
     "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19": "running; SCF iteration 20; updated 2026-10-10T07:36:03.313237+00:00",
-    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "running; SCF iteration 50; updated 2026-10-10T14:01:43.757104+00:00",
-    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "running; SCF iteration 20; updated 2026-10-10T15:56:04.122534+00:00"
+    "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 59; elapsed 13699s; updated 2026-10-11T01:25:37.104057+00:00",
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 68; elapsed 15766s; updated 2026-10-11T01:25:40.550849+00:00"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -116,7 +116,7 @@
     "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19": "completed",
     "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19": "completed",
     "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "completed",
-    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "queued"
+    "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "completed"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -166,11 +166,11 @@
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
     "job": "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19",
-    "state": "running",
-    "iteration": 20,
-    "elapsed_s": null,
-    "note": "Rigid interface gap SCF active; four MPI ranks",
-    "updated_utc": "2026-10-10T15:56:04.122534+00:00"
+    "state": "completed",
+    "iteration": 68,
+    "elapsed_s": 15765.7,
+    "note": "SCF converged in 68 iterations; archive verification PASS and result published.",
+    "updated_utc": "2026-10-11T01:25:40.550849+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
