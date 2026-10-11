@@ -2,7 +2,7 @@
 
 **决定：`WARMUP_RELEASE = HOLD`。** Codex 专用存储模式、归档逻辑和拒绝执行测试已准备并核验；D/E/F 当前没有任何一个节点达到科学暖机放行条件。本次没有创建节点采样目录，没有运行结构生成、MD、DFT、LAMMPS、TTM 或 MACE 训练。
 
-> 历史快照说明：以上状态是初始审计报告（配置 SHA `207451d2d43279b9a1ac2d661bbca56b60641890781090e9ea14ecb55ebbd34a`）。D/E/F 后续回执已补齐。当前仅 D 首项获得新配置的 1,000 步暖机条件放行；最新依据、签署及 SHA 见 `C_RELEASE_ATTESTATION_D_WARMUP_20261011.md`。本文件其余历史数据不重写。
+> 历史快照说明：以上状态是初始审计报告（配置 SHA `207451d2d43279b9a1ac2d661bbca56b60641890781090e9ea14ecb55ebbd34a`）。D/E/F 后续回执已补齐。当前仅 D 首项获得新配置的 1,000 步暖机条件放行；D 上一轮在 step 0 安全 HOLD 后，C 补入精确势文件的已审尾段策略并重发配置。最新依据、签署及 SHA 见 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md`。本文件其余历史数据不重写。
 
 首个审查候选仍为 D 的 `C-D-AGL-1250K-rho097-seed01`。这只是顺序指定，不是执行许可。不得自动启动同节点第二项、E/F 其他四项或余下 119,000 步。
 
@@ -45,5 +45,9 @@
 代码保留独立 `PERSISTENT_WORK_ROOT` 路径及其 `persistence_verified=true` 条件；Codex 临时模式拒绝把持久标志改成 true。纯合成测试覆盖：未签署配置、配置摘要错误、代码 SHA 错误、owner/task 错配、缺失归档通道、E fixture 未通过、势 SHA 错误/缺本机回执、持久模式兼容、临时模式持久标志约束、根路径创建前拒绝，以及本地 bare Git 归档 fresh fetch / SHA / 恢复。最后一次运行 `test_codex_release_gate.py` 的 17 项测试全通过；代码编译和 `--help` 检查通过，详见 `TEST_RESULTS.md`。
 
 本目录不证明任何 Ag 构型已经生成或经过液态 QA。warmup 只可用来核实暖机执行、资源和归档流程；温度达到 1250 K 不能单独证明液态，也不能替代 RDF、Q6、MSD、独立 seed 和几何去重审核。
+
+## 2026-10-11 径向尾部门禁补充
+
+D 的首次执行在 step 0 安全停止，状态为 `PUBLISHED_SETFL_RADIAL_TAIL_C_REVIEW_REQUIRED`；没有创建采样目录、坐标、checkpoint 或归档。C 依据既有原文来源、参数核验和 ASE 3.29.0 纯表插值审查，确认确切冻结势文件仅比最后表格半径多一个 `dr`，该区间的电子密度与 pair phi 的绝对值分别不超过 `1.98e-14` 与 `2.07e-13 eV`。这是精确势文件及精确 ASE 解释下的窄策略审查，不是任意 EAM 文件的通用许可。新配置显式携带该策略，科学任务范围和采样数值保持不变；D 必须用新 SHA 重跑当前预检。完整判断和执行命令见 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md`。
 
 保持 A/B 任务与 checkpoint 不变；G/H 待命；余下 24 项、所有 GPAW DFT、MACE 训练和生产 TTM 继续 HOLD。

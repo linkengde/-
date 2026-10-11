@@ -226,6 +226,12 @@ class GateTests(unittest.TestCase):
         self.assertEqual(config["sampling"]["warmup_steps"], 1000)
         self.assertEqual(config["sampling"]["dt_fs"], 0.5)
         self.assertFalse(config["hosts"]["D"]["persistence_verified"])
+        self.assertEqual(config["potential"]["radial_tail_policy"],
+                         "C_APPROVED_PUBLISHED_SETFL_ONE_BIN_ZERO_TAIL")
+        self.assertEqual(config["potential"]["radial_tail_review_evidence"]["potential_sha256"],
+                         EXPECTED_POTENTIAL)
+        self.assertEqual(config["potential"]["radial_tail_review_evidence"]["decision"],
+                         "APPROVED_FOR_THIS_EXACT_FILE_AND_ASE_3_29_INTERPOLATION_ONLY")
         self.assertEqual(config["hosts"]["D"]["identity_evidence_commit"],
                          "2c8b6f41ec8a7605ddc06f7218014c55957166ac")
 

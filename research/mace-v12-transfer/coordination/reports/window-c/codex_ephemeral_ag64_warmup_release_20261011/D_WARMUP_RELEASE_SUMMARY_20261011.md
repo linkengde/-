@@ -6,7 +6,7 @@
 
 | 节点 | owner 分支当前核验头 | 势 SHA / ASE 元数据解析 | 合成归档往返 | 当前预检 | C 放行 |
 |---|---|---|---|---|---|
-| D | `2c8b6f41ec8a7605ddc06f7218014c55957166ac` | PASS / PASS | PASS，20480-byte fixture；本轮报告已 fresh fetch 校验 | 旧 HOLD 配置下仅 C release 子项失败，其余通过 | 仅首 task 1000 步，需新 SHA 下本机 preflight PASS |
+| D | `2c8b6f41ec8a7605ddc06f7218014c55957166ac` | PASS / PASS | PASS，20480-byte fixture；本轮报告已 fresh fetch 校验 | 旧签署 SHA 下 preflight PASS；runner 在 step 0 因尾部策略字段缺失 HOLD | 新 SHA 下当前 preflight PASS 后，仅首 task 最多 1000 步 |
 | E | `39734568216e5a3d9853d7d052d28f9799172598` | PASS / PASS | PASS，20480-byte 确定性 fixture，从全新仓库恢复并逐字节及 SHA 核对 | 旧 HOLD 配置及旧配置 recovery 状态下 HOLD | 不放行 |
 | F | `2ddb39a899decd6b3cc8d6c002d48291c9a5e632` | PASS / PASS | PASS，既有 16415-byte fixture及本报告 fresh-fetch 核验 | 旧 HOLD 配置下仅 C release 子项失败，其余通过 | 不放行 |
 
@@ -16,9 +16,15 @@
 
 势函数 cutoff `5.995011 Å` 大于候选 64 原子立方盒的半边长。C 已在既有 `SAMPLER_SOURCE_REVIEW.md` 审核本执行器所用 ASE `PrimitiveNeighborList` 的整数周期 offset 和多周期像行为：该邻居表支持 cutoff 跨半盒长，且执行器保留同一原子的不同周期像。因此这里不构成采样实现阻塞；不可替换成 minimum-image 或按 atom index 去重。这个实现审查不代表有限尺寸熔点、扩散和凝固已通过物性验证。
 
-## 当前配置
+## 径向尾部复核更新（2026-10-11）
 
-- 现行配置：`CODEX_WARMUP_RELEASE_CONFIG.json`
+D 根据旧配置的门禁在第 0 步停止，没有生成任何采样文件。C 已复核已有采样器来源与参数核验记录，并批准只针对冻结势文件 SHA 的 ASE 3.29.0 单 `dr` 数值近零尾段策略；没有改势、改 cutoff 或放宽执行器阈值。新配置 SHA 为 `2e122b258a48fe54bf603709b5505a301c1257f398c5625eecc2ca94998c0052`。D 应使用 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md` 中的命令重跑本机 preflight；只有新配置下当前结果 PASS 才能进行原定唯一的 1000 步暖机。
+
+## 前一签署配置快照
+
+以下是本补充发布前的历史配置，保留用于审计，不再用于重试：
+
+- 前一签署配置：`CODEX_WARMUP_RELEASE_CONFIG_PRE_TAIL_POLICY_20261011.json`
 - SHA-256：`4aee9d64859736f35459259625598f767d5f3e0d8b33bc71f0abb5baf31639e2`
 - 只授权 D 的 `C-D-AGL-1250K-rho097-seed01`，暖机最多 1000 步、0.5 fs。
 - D 的 C host release 为 true；E/F 为 false；D 第二任务、E/F 四任务均 HOLD。
@@ -26,6 +32,6 @@
 
 ## D 唯一下一步
 
-D 必须先按 `C_RELEASE_ATTESTATION_D_WARMUP_20261011.md` 中的命令，以此完整 config SHA 和精确本机势路径重跑 `node_preflight_codex.py`。仅当当前会话输出 PASS 时，D 才可运行冻结的 `run_sampling_codex.py`。运行器会再次核验配置/代码 SHA、任务身份、当前 owner 分支 head、本机势、工作根/归档根及资源条件，并在完成后自动执行归档与 fresh-fetch 恢复校验。分支 HEAD 已变化、任一校验非 PASS、预算超限或备份失败均须停止并报告，不调整参数绕过。
+D 必须先按 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md` 中的命令，以新配置 SHA 和精确本机势路径重跑 `node_preflight_codex.py`。仅当当前会话输出 PASS 时，D 才可运行冻结的 `run_sampling_codex.py`。运行器会再次核验配置/代码 SHA、任务身份、当前 owner 分支 head、本机势、工作根/归档根及资源条件，并在完成后自动执行归档与 fresh-fetch 恢复校验。分支 HEAD 已变化、任一校验非 PASS、预算超限或备份失败均须停止并报告，不调整参数绕过。
 
 本次 C 仅签署配置，没有远程访问或启动 D 上的过程；当前没有新的 Ag 原子坐标、轨迹、checkpoint 或模拟结果。

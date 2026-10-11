@@ -6,4 +6,4 @@ C 确认此交付目录中的 Codex 临时存储门、归档及恢复实现、�
 
 因此本文件签署的是“审计结论为 HOLD”，不是对科学执行配置的批准。交付提交及文件 SHA 用于复核这份结论。未来只有补齐节点证据并由 C 发布新的、已签名且 SHA 固定的配置后，执行门才可能开放；本报告中的 HOLD 配置不能用作启动命令。
 
-**历史状态说明（2026-10-11）：** 本文件记录最初审计时的 HOLD，原配置字节另存为 `CODEX_WARMUP_RELEASE_CONFIG_PRE_RELEASE_HOLD.json`。在收到并核验 D/E/F 最新势文件、ASE 解析、资源和远端恢复证据后，C 单独签署 D 首项 1,000 步暖机。现行决定与配置 SHA 见 `C_RELEASE_ATTESTATION_D_WARMUP_20261011.md`；本历史 HOLD 不再代表当前 D 首项状态，也不放行其他任务。
+**历史状态说明（2026-10-11）：** 本文件记录最初审计时的 HOLD，原配置字节另存为 `CODEX_WARMUP_RELEASE_CONFIG_PRE_RELEASE_HOLD.json`。在收到并核验 D/E/F 最新势文件、ASE 解析、资源和远端恢复证据后，C 单独签署 D 首项 1,000 步暖机；D 的首次运行随后因签署配置遗漏尾部策略而 step-0 HOLD。现行窄范围决定与配置 SHA 见 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md`；本历史 HOLD 不再代表当前 D 首项状态，也不放行其他任务。

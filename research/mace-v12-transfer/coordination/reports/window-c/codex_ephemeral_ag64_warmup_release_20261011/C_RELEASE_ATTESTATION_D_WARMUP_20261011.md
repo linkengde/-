@@ -1,5 +1,7 @@
 # C 放行签署：D 首个 Ag64 暖机
 
+> 历史签署版本。D 的执行器在旧配置下第 0 步因未携带已审核的径向尾部策略而安全停止。此文件中的旧 SHA `4aee9d64859736f35459259625598f767d5f3e0d8b33bc71f0abb5baf31639e2` 已被取代，不要用于预检或启动。当前配置 SHA 和最新命令见 `C_RELEASE_ATTESTATION_D_WARMUP_TAIL_REVIEW_20261011.md`。
+
 日期：2026-10-11 UTC
 状态：`APPROVE_WARMUP_ONLY`，范围严格限定为一个 task。
 
