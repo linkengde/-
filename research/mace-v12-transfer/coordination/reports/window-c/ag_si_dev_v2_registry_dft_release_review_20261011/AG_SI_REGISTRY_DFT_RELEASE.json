@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED",
+  "execution_authorized": false,
+  "task": "Ag-Si DEV v2 first-round fixed-geometry registry screening",
+  "reviewed_e_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+  "reviewed_e_directory": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1",
+  "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+  "source_directory": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation",
+  "source_manifest_sha256": "a194e13815271ce1c99b11d41019c6db0d08adfe28da621bfb6c5f4883c62724",
+  "e_package": {
+    "DFT_INPUT_AUDIT.md_sha256": "ca7f8e71940f755f1896a7269ca1175ebe356d06e6e04e7ba5fd86057a58c9e9",
+    "PARAMETER_LOCK.json_sha256": "328c69522f2b06e47103b25f72e28942422cea6927e061445a3033554a98ba96",
+    "SHA256SUMS.txt_verified": true,
+    "all_listed_member_hashes_pass": true,
+    "source_manifest_sha_matches": true
+  },
+  "review_checks": {
+    "structure_identity": {
+      "status": "PASS",
+      "verification": "ASE 3.29.0 parse; byte-for-byte comparison against C source commit; independent SHA-256 verification; input.py constants and PARAMETER_LOCK cross-check",
+      "n_atoms_each": 20,
+      "element_counts_each": {"Ag": 7, "C": 4, "Si": 3, "Ti": 6},
+      "formula_each": "Ag7C4Si3Ti6",
+      "cell_A_each": [[3.071, 0.0, 0.0], [-1.5355, 2.6595640150220112, 0.0], [0.0, 0.0, 71.26826600017428]],
+      "pbc_each": [true, true, false],
+      "same_cell_and_pbc_for_R1_R4": true,
+      "structures_byte_identical_to_source": true,
+      "registries": {
+        "R1": {"registry": "top / OT-like", "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890", "input_py_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b"},
+        "R2": {"registry": "bridge / MT-like", "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70", "input_py_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66"},
+        "R3": {"registry": "threefold hollow / HCP-like", "structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76", "input_py_sha256": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2"},
+        "R4": {"registry": "alternate threefold hollow / FCC-like", "structure_sha256": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c", "input_py_sha256": "1a8fca555c0dd7a7028e8f223a54770ef5183549f0a9c230869ed88dbc4198e8"}
+      }
+    },
+    "parameter_lock": {
+      "status": "PASS_FOR_GEOMETRY",
+      "fixed_geometry": true,
+      "relax_atoms": false,
+      "relax_cell": false,
+      "coordinate_changes_allowed": false,
+      "cell_changes_allowed": false,
+      "registry_changes_allowed": false,
+      "input_script_checks_geometry_unchanged": true,
+      "method": {"engine": "GPAW 26.7.0", "ase": "3.29.0", "gpaw_data": "1.2.1", "xc": "PBE", "basis": "plane_wave", "cutoff_eV": 500, "smearing_eV": 0.1, "scf_energy_density_eigenstates": 1e-5, "max_scf_iterations": 160},
+      "kpoint_status": "BLOCKED_UNSELECTED",
+      "prepared_meshes": {"coarse": {"mesh": [6, 6, 1], "production_approved": false}, "medium": {"mesh": [8, 8, 1], "production_approved": false}},
+      "mpi_ranks": "NOT_SPECIFIED"
+    },
+    "required_outputs": {
+      "status": "PASS_IN_INPUT_CODE",
+      "total_energy_eV": true,
+      "force_consistent_free_energy_eV": true,
+      "atomic_forces_eV_A": true,
+      "full_3x3_stress_eV_A3": true,
+      "scf_convergence_checked": true,
+      "stress_supervision_allowed": false
+    },
+    "data_role": {
+      "status": "ROLE_POLICY_REQUIRED_BUT_NOT_ENFORCED_BY_RUNNER",
+      "allowed_role": "REGISTRY_SCREENING",
+      "prohibited_roles": ["TRAIN", "DEV", "TEST"],
+      "source_family": "COD-9009647/Kisi-1998-derived; same substrate family as prior scored Ag-Si geometries",
+      "independent_dev": false,
+      "runner_persists_or_validates_role": false,
+      "role_note": "The E parameter lock keeps the inputs geometry-only/unassigned; input.py result JSON does not persist a REGISTRY_SCREENING role. A signed release and result manifest must carry and preserve this restriction before execution."
+    }
+  },
+  "blocking_reasons": [
+    "No k-point mesh is selected or production-approved. The runner requires one exact mesh, while both prepared choices (6x6x1 and 8x8x1) are explicitly marked not production-approved.",
+    "No positive MPI rank count is specified, although the runner rejects a release configuration without mpi_ranks.",
+    "The runner does not write or validate the required REGISTRY_SCREENING-only data role. A release/result-manifest enforcement path is needed so the four results cannot be misregistered as TRAIN, DEV, or TEST.",
+    "The E package and source manifest explicitly do not authorize execution; no complete C execution release can be validated until the items above are resolved."
+  ],
+  "safe_preflight": {
+    "status": "PASS",
+    "ase_version": "3.29.0",
+    "R1_R4_default_input_py": "all printed INPUT_VALIDATED_DFT_NOT_EXECUTED and DFT_NOT_RUN",
+    "dft_started": false
+  },
+  "decision": "Do not execute DFT yet. Geometry identity, fixed-geometry locking, and requested output fields pass; release remains BLOCKED by unresolved numerical/runtime release fields and role enforcement.",
+  "next_required_before_re_review": [
+    "Select and approve the screening k-point mesh and MPI rank count without changing the frozen geometries.",
+    "Bind REGISTRY_SCREENING as the sole role in the release and ensure each result manifest preserves the role and source-family restriction.",
+    "Issue a new C release config bound to the E commit, four structure hashes, exact method settings, selected mesh, and runtime allocation."
+  ],
+  "non_actions": ["No DFT", "No geometry optimization", "No registry changes", "No training", "No data-role changes"]
+}
