@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "task": "Ag-Si registry screening v2 phase 1",
+  "configuration_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035",
+  "authorization_file": "REGISTRY_SCREENING_EXEC_AUTH_v2.json",
+  "authorization_sha256": "86b5058f12745e1484680bfc926659b3a58fe426a873076514ef614467fc6b9f",
+  "scheduler_policy": {
+    "fail_fast": false,
+    "continue_on_error": true
+  },
+  "registry_order": ["R1", "R2", "R3", "R4"],
+  "scientific_parameters": {
+    "method": "PBE/PAW/GPAW 26.7.0",
+    "geometry": "fixed_geometry",
+    "relax_atoms": false,
+    "relax_cell": false,
+    "kpoint_mesh": [6, 6, 1],
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "role": "REGISTRY_SCREENING_ONLY"
+  },
+  "per_registry_artifacts": [
+    "input.py",
+    "structure.xyz",
+    "C_EXECUTION_RELEASE_RECORD.json",
+    "stdout.log",
+    "stderr.log",
+    "exit_code.txt",
+    "SCF_STATUS.json",
+    "RUN_STATUS.json",
+    "results/coarse/gpaw.log",
+    "results/coarse/result.json (only when successful)"
+  ],
+  "failure_handling": {
+    "maximum_scf_iterations": 160,
+    "nonconverged_after_maximum": "FAILED_SCF",
+    "preserve_full_scf_log": true,
+    "preserve_partial_output": true,
+    "continue_to_next_registry": true,
+    "scientific_parameter_autofix": false,
+    "parameter_repair_requires_human_decision_after_all_results": true
+  },
+  "ranking": {
+    "successful_count_below_2": "INSUFFICIENT_FOR_8X8",
+    "successful_count_at_least_2": "READY_FOR_8X8_VALIDATION",
+    "sort_successes_by": "total_energy_eV ascending, then registry_id ascending",
+    "include_success_and_failure_lists": true,
+    "include_failure_reason": true,
+    "auto_launch_8x8": false
+  },
+  "no_parameter_changes": [
+    "k-point mesh",
+    "smearing",
+    "mixing",
+    "cutoff",
+    "geometry",
+    "input.py",
+    "structure.xyz"
+  ],
+  "preparation_only": true,
+  "dft_started_during_scheduler_preparation": false
+}
