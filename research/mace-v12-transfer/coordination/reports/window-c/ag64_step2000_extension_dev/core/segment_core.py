@@ -14,9 +14,12 @@ import errno
 import hashlib
 import json
 import os
+import signal
 import tarfile
 import tempfile
+import threading
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
@@ -80,6 +83,48 @@ SIGNED_SAMPLING_PARAMETERS = {
 
 class SegmentRefused(RuntimeError):
     """Identity, signed-boundary, resource, or numerical gate refused work."""
+
+
+class SegmentCheckpointSaved(SegmentRefused):
+    """A segment stop was handled and its latest valid state was checkpointed."""
+
+    def __init__(self, reason: str, checkpoint: dict, *, cause: BaseException | None = None):
+        self.reason = reason
+        self.checkpoint = copy.deepcopy(checkpoint)
+        self.cause_type = type(cause).__name__ if cause is not None else None
+        suffix = f":{self.cause_type}" if self.cause_type else ""
+        super().__init__(f"{reason}{suffix}:CHECKPOINT_SAVED:{checkpoint['bundle']}")
+
+
+class _SegmentStopSignals:
+    """Scoped SIGINT/SIGTERM capture; handlers only request a safe stop."""
+
+    def __init__(self):
+        self.event = threading.Event()
+        self.reason: str | None = None
+        self.previous: dict[int, object] = {}
+
+    def request(self, signum: int, _frame) -> None:
+        try:
+            self.reason = signal.Signals(signum).name
+        except ValueError:
+            self.reason = f"SIGNAL_{signum}"
+        self.event.set()
+
+
+@contextmanager
+def _capture_segment_stop_signals():
+    """Translate SIGINT/SIGTERM to a checkpoint request, then restore handlers."""
+    state = _SegmentStopSignals()
+    if threading.current_thread() is threading.main_thread():
+        for signum in (signal.SIGINT, signal.SIGTERM):
+            state.previous[signum] = signal.getsignal(signum)
+            signal.signal(signum, state.request)
+    try:
+        yield state
+    finally:
+        for signum, previous in state.previous.items():
+            signal.signal(signum, previous)
 
 
 def _rename_noreplace(source: Path, destination: Path) -> None:
@@ -621,11 +666,15 @@ def advance_segment_with_outputs(dyn: BoundedLangevin, *, rng_state_all: dict,
                                  existing_trajectory_frames: list[dict] | None = None,
                                  checkpoint_every: int = CONTINUATION_CHECKPOINT_INTERVAL,
                                  max_wall_s: float = 600.0,
-                                 clock: Callable[[], float] = time.monotonic) -> list[dict]:
+                                 clock: Callable[[], float] = time.monotonic,
+                                 stop_requested: Callable[[], bool] | None = None) -> list[dict]:
     """Execute only through the integrator-owned stop and archive each boundary.
 
     The callback is mandatory: a failed upload/fresh-fetch raises before another
-    ASE step. This helper was exercised only with a virtual calculator here.
+    ASE step. Wall-time expiry, SIGINT/SIGTERM, KeyboardInterrupt, TimeoutError,
+    and caller-requested graceful stops save the latest valid state locally.
+    Emergency checkpoints do not create out-of-cadence archives; the existing
+    1000-step/end-step archive policy remains unchanged.
     """
     _require(dyn.segment_start <= dyn.nsteps < dyn.stop_at_step,
              "OUTPUT_SEGMENT_START_OUTSIDE_CONFIGURED_BOUNDARIES")
@@ -646,6 +695,57 @@ def advance_segment_with_outputs(dyn: BoundedLangevin, *, rng_state_all: dict,
                  "RESUME_TRAJECTORY_ENDPOINT_MISMATCH")
     outputs: list[dict] = []
     original_callback = dyn.on_step
+
+    def save_checkpoint(step: int, *, label: str, publish: bool) -> dict:
+        if not trajectory_frames or trajectory_frames[-1]["step"] != step:
+            trajectory_frames.append({"step": step,
+                                      "positions": dyn.atoms.get_positions().copy()})
+        snapshot = snapshot_state(dyn.atoms, step, rng_state_all, dyn.rng,
+                                  source_provenance)
+        bundle = write_checkpoint_bundle(
+            output_root, label, snapshot, thermal_rows, trajectory_frames,
+            segment_start_step=dyn.segment_start, end_step=dyn.stop_at_step)
+        record = {"step": step, "bundle": str(bundle),
+                  "archive": None, "archive_sha256": None,
+                  "checkpoint_only": not publish}
+        if publish:
+            archive_path = Path(output_root) / "archives" / f"step-{step:09d}.tar.gz"
+            archive_sha = publish_and_verify(bundle, archive_path, remote_roundtrip)
+            record.update({"archive": str(archive_path), "archive_sha256": archive_sha,
+                           "checkpoint_only": False})
+        outputs.append(record)
+        return record
+
+    def save_emergency_checkpoint(reason: str, cause: BaseException | None = None):
+        step = int(dyn.nsteps)
+        if step <= dyn.segment_start:
+            raise SegmentRefused(f"{reason}:NO_ADDITIONAL_STEP_TO_CHECKPOINT") from cause
+        if step > dyn.stop_at_step:
+            raise SegmentRefused("EMERGENCY_CHECKPOINT_STEP_EXCEEDS_CONFIGURED_END") from cause
+        existing = next((item for item in reversed(outputs) if item["step"] == step), None)
+        normal_bundle = Path(output_root) / f"segment-step-{step:09d}"
+        if existing is not None:
+            record = copy.deepcopy(existing)
+            record["checkpoint_only"] = not bool(record.get("archive_sha256"))
+        elif normal_bundle.is_dir():
+            record = {"step": step, "bundle": str(normal_bundle),
+                      "archive": None, "archive_sha256": None,
+                      "checkpoint_only": True}
+            outputs.append(record)
+        else:
+            record = save_checkpoint(step, label=f"checkpoint_step{step}", publish=False)
+        record["stop_reason"] = reason
+        stopped = SegmentCheckpointSaved(reason, record, cause=cause)
+        if cause is not None:
+            raise stopped from cause
+        raise stopped
+
+    def requested_stop(signals: _SegmentStopSignals) -> str | None:
+        if signals.event.is_set():
+            return f"SEGMENT_SIGNAL_STOP_REQUESTED_{signals.reason or 'UNKNOWN'}"
+        if stop_requested is not None and stop_requested():
+            return "SEGMENT_GRACEFUL_STOP_REQUESTED"
+        return None
 
     def on_step(current_dyn, phase, target, _forces):
         step = current_dyn.nsteps
@@ -669,22 +769,27 @@ def advance_segment_with_outputs(dyn: BoundedLangevin, *, rng_state_all: dict,
         if step % 100 == 0:
             trajectory_frames.append({"step": step, "positions": current_dyn.atoms.positions.copy()})
         if step % checkpoint_every == 0 or step == dyn.stop_at_step:
-            snapshot = snapshot_state(current_dyn.atoms, step, rng_state_all,
-                                      current_dyn.rng, source_provenance)
-            bundle = write_checkpoint_bundle(output_root, "segment", snapshot,
-                                             thermal_rows, trajectory_frames,
-                                             segment_start_step=dyn.segment_start,
-                                             end_step=dyn.stop_at_step)
-            archive_path = Path(output_root) / "archives" / f"step-{step:09d}.tar.gz"
-            archive_sha = publish_and_verify(bundle, archive_path, remote_roundtrip)
-            outputs.append({"step": step, "bundle": str(bundle),
-                            "archive": str(archive_path), "archive_sha256": archive_sha})
+            save_checkpoint(step, label="segment", publish=True)
 
     dyn.on_step = on_step
-    while dyn.nsteps < dyn.stop_at_step:
-        if clock() - started >= max_wall_s:
-            raise SegmentRefused("SEGMENT_WALLTIME_BUDGET_EXCEEDED")
-        dyn.step()
+    with _capture_segment_stop_signals() as signals:
+        while dyn.nsteps < dyn.stop_at_step:
+            reason = requested_stop(signals)
+            if reason is not None:
+                save_emergency_checkpoint(reason)
+            if clock() - started >= max_wall_s:
+                save_emergency_checkpoint("SEGMENT_WALLTIME_BUDGET_EXCEEDED")
+            try:
+                dyn.step()
+            except KeyboardInterrupt as exc:
+                save_emergency_checkpoint("SEGMENT_INTERRUPTED", exc)
+            except TimeoutError as exc:
+                save_emergency_checkpoint("SEGMENT_WALLTIME_TIMEOUT", exc)
+            except Exception as exc:
+                if isinstance(exc, SegmentCheckpointSaved):
+                    raise
+                save_emergency_checkpoint(
+                    f"SEGMENT_STOPPED_AFTER_{type(exc).__name__.upper()}", exc)
     _require(dyn.nsteps == dyn.stop_at_step and outputs
              and outputs[-1]["step"] == dyn.stop_at_step,
              "FINAL_CONFIGURED_END_STEP_ARCHIVE_NOT_VERIFIED")

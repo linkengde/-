@@ -1,15 +1,17 @@
 """Offline pre-production tests for the step-2000 continuation.
 
 These tests deliberately stub ASE because the current validation runtime does
-not have ASE 3.29.0 installed. They never attach a calculator, evaluate forces
-or energy, or advance an integrator step. Set AG64_STEP2000_ARCHIVE to the
-verified step-2000 archive to run the checkpoint-backed cases.
+not have ASE 3.29.0 installed. They never attach a calculator or evaluate real
+forces or energies. Timeout recovery uses deterministic array-only virtual
+dynamics. Set AG64_STEP2000_ARCHIVE to the verified step-2000 archive to run
+the source-checkpoint cases.
 """
 from __future__ import annotations
 
 import copy
 import json
 import os
+import signal
 import sys
 import tempfile
 import types
@@ -58,6 +60,9 @@ class _MockAtoms:
     def get_velocities(self):
         return self._momenta / self._masses[:, None]
 
+    def set_positions(self, values, apply_constraint=True):
+        self.positions = np.asarray(values).copy()
+
     def get_positions(self):
         return self.positions.copy()
 
@@ -72,6 +77,21 @@ class _MockAtoms:
 
     def __len__(self):
         return len(self.numbers)
+
+    def get_potential_energy(self):
+        return 0.0
+
+    def get_kinetic_energy(self):
+        return float(np.sum(self._momenta ** 2) / 2.0)
+
+    def get_stress(self, voigt=False):
+        return np.zeros((3, 3), dtype=float)
+
+    def get_volume(self):
+        return float(np.linalg.det(self.cell.array))
+
+    def get_temperature(self):
+        return 1.0
 
 
 class _MockLangevin:
@@ -171,6 +191,153 @@ class BoundaryAndHashTests(unittest.TestCase):
         )
         self.assertIs(cfg["execution_authorized"], False)
 
+
+class _VirtualSegmentDynamics:
+    """Deterministic integer-step harness with no ASE integrator or calculator."""
+
+    def __init__(self, atoms, rng, *, nsteps=2000, end_step=3000):
+        self.atoms = atoms
+        self.rng = rng
+        self.nsteps = nsteps
+        self.segment_start = 2000
+        self.stop_at_step = end_step
+        self.on_step = None
+        self.visited_steps = []
+        self.signal_step = None
+        self.interrupt_step = None
+
+    def step(self):
+        if self.nsteps >= self.stop_at_step:
+            raise AssertionError("virtual runner exceeded its configured boundary")
+        noise = self.rng.normal(size=self.atoms.positions.shape)
+        self.atoms.set_positions(self.atoms.positions + noise * 1.0e-5)
+        self.atoms.set_momenta(self.atoms.get_momenta() + noise * 1.0e-3,
+                               apply_constraint=False)
+        self.nsteps += 1
+        self.visited_steps.append(self.nsteps)
+        if self.on_step is not None:
+            self.on_step(self, "hot_melt_candidate", 1250.0, np.zeros((64, 3)))
+        if self.signal_step == self.nsteps:
+            handler = signal.getsignal(signal.SIGTERM)
+            handler(signal.SIGTERM, None)
+        if self.interrupt_step == self.nsteps:
+            raise KeyboardInterrupt()
+
+
+def _virtual_segment_state(seed=2000):
+    numbers = np.full(64, 47, dtype=np.int64)
+    positions = np.arange(192, dtype=float).reshape(64, 3) / 100.0
+    atoms = _MockAtoms(numbers=numbers, positions=positions,
+                       cell=np.eye(3) * core.EXPECTED_CELL_EDGE_A,
+                       pbc=np.ones(3, dtype=bool))
+    atoms.set_masses(np.full(64, 107.8682))
+    atoms.set_momenta(np.full((64, 3), 0.25), apply_constraint=False)
+    atoms.new_array("atom_ids", np.arange(1, 65, dtype=np.int64))
+    rng = np.random.Generator(np.random.PCG64(seed))
+    all_rng = {}
+    for name, stream_seed in (("packing", seed + 1), ("velocity", seed + 2),
+                              ("thermostat", seed)):
+        stream = np.random.Generator(np.random.PCG64(stream_seed))
+        all_rng[name] = copy.deepcopy(stream.bit_generator.state)
+    return atoms, rng, all_rng
+
+
+class TimeoutRecoveryTests(unittest.TestCase):
+    def _run(self, dyn, rng_states, output_root, *, clock=None,
+             stop_requested=None, thermal_rows=None, trajectory_frames=None):
+        kwargs = {}
+        if clock is not None:
+            kwargs["clock"] = clock
+        if stop_requested is not None:
+            kwargs["stop_requested"] = stop_requested
+        return core.advance_segment_with_outputs(
+            dyn, rng_state_all=rng_states,
+            source_provenance={"synthetic": True, "execution_authorized": False},
+            output_root=output_root,
+            remote_roundtrip=lambda archive, digest: self.assertEqual(
+                core.sha256_file(archive), digest),
+            existing_thermal_rows=thermal_rows,
+            existing_trajectory_frames=trajectory_frames,
+            max_wall_s=3600.0, **kwargs)
+
+    def test_walltime_checkpoint_restore_resume_matches_continuous_virtual_run(self):
+        atoms, rng, rng_states = _virtual_segment_state()
+        timed = _VirtualSegmentDynamics(atoms, rng)
+        with tempfile.TemporaryDirectory(prefix="ag64-timeout-split-") as temp:
+            root = Path(temp)
+            with self.assertRaises(core.SegmentCheckpointSaved) as caught:
+                self._run(timed, rng_states, root / "split",
+                          clock=lambda: 3601.0 if timed.nsteps >= 2500 else 0.0)
+            saved = caught.exception.checkpoint
+            self.assertEqual(caught.exception.reason, "SEGMENT_WALLTIME_BUDGET_EXCEEDED")
+            self.assertEqual(saved["step"], 2500)
+            checkpoint = Path(saved["bundle"])
+            self.assertTrue(checkpoint.is_dir())
+            self.assertTrue(checkpoint.name.startswith("checkpoint_step2500"))
+
+            positions_2500 = timed.atoms.get_positions().copy()
+            velocities_2500 = timed.atoms.get_velocities().copy()
+            rng_2500 = copy.deepcopy(timed.rng.bit_generator.state)
+            restored = core.restore_segment_bundle_with_executor(
+                checkpoint, core.sha256_file(core.__file__), expected_global_step=2500)
+            np.testing.assert_array_equal(restored.atoms.get_positions(), positions_2500)
+            np.testing.assert_array_equal(restored.atoms.get_velocities(), velocities_2500)
+            self.assertEqual(restored.rng_state_all["thermostat"], rng_2500)
+            self.assertEqual(restored.rng_state_all, json.loads(
+                (checkpoint / "rng_state.json").read_text(encoding="utf-8")))
+
+            resumed = _VirtualSegmentDynamics(restored.atoms, restored.thermostat_rng,
+                                              nsteps=restored.global_step)
+            resumed_states = copy.deepcopy(restored.rng_state_all)
+            outputs = self._run(resumed, resumed_states, root / "resumed",
+                                thermal_rows=restored.thermal_rows,
+                                trajectory_frames=restored.trajectory_frames)
+            self.assertEqual(resumed.nsteps, 3000)
+            self.assertEqual([item["step"] for item in outputs], [3000])
+            all_steps = timed.visited_steps + resumed.visited_steps
+            self.assertEqual(all_steps, list(range(2001, 3001)))
+            self.assertEqual(len(all_steps), len(set(all_steps)))
+            self.assertNotIn(3001, all_steps)
+
+            control_atoms, control_rng, control_states = _virtual_segment_state()
+            control = _VirtualSegmentDynamics(control_atoms, control_rng)
+            self._run(control, control_states, root / "control")
+            np.testing.assert_array_equal(resumed.atoms.get_positions(),
+                                          control.atoms.get_positions())
+            np.testing.assert_array_equal(resumed.atoms.get_velocities(),
+                                          control.atoms.get_velocities())
+            self.assertEqual(resumed.rng.bit_generator.state,
+                             control.rng.bit_generator.state)
+            self.assertEqual(resumed.visited_steps, list(range(2501, 3001)))
+
+    def test_signal_interrupt_and_graceful_stop_each_save_current_checkpoint(self):
+        scenarios = ("signal", "interrupt", "graceful")
+        for scenario in scenarios:
+            with self.subTest(scenario=scenario), tempfile.TemporaryDirectory(
+                    prefix=f"ag64-stop-{scenario}-") as temp:
+                atoms, rng, rng_states = _virtual_segment_state()
+                dyn = _VirtualSegmentDynamics(atoms, rng)
+                output = Path(temp) / "out"
+                stop = None
+                if scenario == "signal":
+                    dyn.signal_step = 2250
+                elif scenario == "interrupt":
+                    dyn.interrupt_step = 2250
+                else:
+                    stop = lambda: dyn.nsteps >= 2250
+                with self.assertRaises(core.SegmentCheckpointSaved) as caught:
+                    self._run(dyn, rng_states, output, stop_requested=stop)
+                checkpoint = caught.exception.checkpoint
+                self.assertEqual(checkpoint["step"], 2250)
+                self.assertTrue(Path(checkpoint["bundle"]).is_dir())
+                if scenario == "signal":
+                    self.assertEqual(caught.exception.reason,
+                                     "SEGMENT_SIGNAL_STOP_REQUESTED_SIGTERM")
+                elif scenario == "interrupt":
+                    self.assertEqual(caught.exception.reason, "SEGMENT_INTERRUPTED")
+                else:
+                    self.assertEqual(caught.exception.reason,
+                                     "SEGMENT_GRACEFUL_STOP_REQUESTED")
     def test_step_3001_is_refused_without_integrator_call(self):
         _MockLangevin.step_calls = 0
         dyn = object.__new__(core.BoundedLangevin)
