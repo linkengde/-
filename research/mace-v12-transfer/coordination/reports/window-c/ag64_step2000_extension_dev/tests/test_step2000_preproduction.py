@@ -271,9 +271,12 @@ class TimeoutRecoveryTests(unittest.TestCase):
             saved = caught.exception.checkpoint
             self.assertEqual(caught.exception.reason, "SEGMENT_WALLTIME_BUDGET_EXCEEDED")
             self.assertEqual(saved["step"], 2500)
+            self.assertTrue(saved["checkpoint_only"])
+            self.assertIsNone(saved["archive"])
             checkpoint = Path(saved["bundle"])
             self.assertTrue(checkpoint.is_dir())
             self.assertTrue(checkpoint.name.startswith("checkpoint_step2500"))
+            self.assertFalse((root / "split" / "archives").exists())
 
             positions_2500 = timed.atoms.get_positions().copy()
             velocities_2500 = timed.atoms.get_velocities().copy()
@@ -294,6 +297,7 @@ class TimeoutRecoveryTests(unittest.TestCase):
                                 trajectory_frames=restored.trajectory_frames)
             self.assertEqual(resumed.nsteps, 3000)
             self.assertEqual([item["step"] for item in outputs], [3000])
+            self.assertTrue(Path(outputs[0]["archive"]).is_file())
             all_steps = timed.visited_steps + resumed.visited_steps
             self.assertEqual(all_steps, list(range(2001, 3001)))
             self.assertEqual(len(all_steps), len(set(all_steps)))
