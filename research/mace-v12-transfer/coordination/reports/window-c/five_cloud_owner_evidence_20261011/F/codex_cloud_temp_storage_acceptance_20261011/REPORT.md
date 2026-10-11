@@ -36,6 +36,8 @@ No Ag64 benchmark is available, and this task did not run the sampler. For plann
 
 Existing Python 3.12.14 / GPAW 26.7.0 / ASE 3.29.0 / OpenMPI 5.0.7 / gpaw-data 1.2.1 and PAW SHA evidence remain in the previously submitted F report; this addendum does not reinstall or alter them. `run_sampling.py` SHA is `b78b734798c9c075826e6611e3d2f7f156f0b05ff7c87159812ac76ed0e918a8`. The prior F resource/runtime report remains at `../REPORT.md` with its existing checksums intact.
 
+Supplementary provenance evidence for the attached Ag release notes and paper is recorded in [AG_POTENTIAL_PROVENANCE_SUPPLEMENT.md](AG_POTENTIAL_PROVENANCE_SUPPLEMENT.md). The supplement records source identity only; it does not change the release config or the separate redistribution hold.
+
 ## Required next step
 
 C should publish a Codex-specific config and SHA that accepts the temporary workspace plus tested GitHub archive/recovery path, signs exact F task roots and archive rules, and explicitly releases warmup. Until that arrives, do not run the 1000-step warmup. After the two warmups, report measured size, wall time, restart SHA, and resource observations back to C. DFT and full continuation remain HOLD.
