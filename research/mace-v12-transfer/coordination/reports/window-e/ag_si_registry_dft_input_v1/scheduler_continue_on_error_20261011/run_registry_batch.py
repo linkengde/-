@@ -203,13 +203,15 @@ def validate_environment(gpaw_exe: Path, mpiexec: str, launcher_dir: Path, work_
 
 def failure_reason(stderr: str, stdout: str, scf_log: str, return_code: int | None) -> tuple[str, str]:
     combined = "\n".join((stderr, stdout, scf_log))
-    if "SCF did not converge" in combined or "Maximum number of iterations" in combined:
+    if ("SCF did not converge" in combined
+            or "Maximum number of iterations" in combined
+            or "KohnShamConvergenceError" in combined):
         return "FAILED_SCF", "SCF reached the frozen iteration limit without convergence; full SCF log and partial output were retained."
     if return_code is None:
         return "FAILED", "process could not be started"
-    nonempty = [line.strip() for line in stderr.splitlines() if line.strip()]
+    nonempty = [line.replace("\x00", "").strip() for line in stderr.splitlines() if line.replace("\x00", "").strip()]
     if not nonempty:
-        nonempty = [line.strip() for line in stdout.splitlines() if line.strip()]
+        nonempty = [line.replace("\x00", "").strip() for line in stdout.splitlines() if line.replace("\x00", "").strip()]
     detail = nonempty[-1][-1000:] if nonempty else f"process exited with code {return_code}"
     return "FAILED", detail
 
@@ -334,7 +336,7 @@ def run_self_test() -> dict:
     assert [r["registry_id"] for r in ranking["FAILED"]] == ["R1", "R4"]
     assert all(r["failure_reason"] for r in ranking["FAILED"])
     assert ranking["status"] == "READY_FOR_8X8_VALIDATION" and ranking["auto_launch_8x8"] is False
-    failed_scf, reason = failure_reason("HOLD: SCF did not converge", "", "iteration 160", 1)
+    failed_scf, reason = failure_reason("gpaw.KohnShamConvergenceError", "", "iteration 160", 42)
     assert failed_scf == "FAILED_SCF" and "partial output" in reason
     fewer = build_ranking([outcomes[0], outcomes[1]], AUTH_SHA256, CONFIG_SHA256)
     assert fewer["status"] == "INSUFFICIENT_FOR_8X8"
