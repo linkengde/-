@@ -26,7 +26,7 @@ def csvrows(b):
  return [{k:(v if k=='phase' else float(v)) for k,v in row.items()} for row in rows]
 def savecsv(name,rows):
  with (OUT/name).open('w',newline='') as f:
-  w=csv.DictWriter(f,fieldnames=list(dict.fromkeys(k for row in rows for k in row)));w.writeheader();w.writerows(rows)
+  w=csv.DictWriter(f,lineterminator='\n',fieldnames=list(dict.fromkeys(k for row in rows for k in row)));w.writeheader();w.writerows(rows)
 def vectors(pos,cell):
  d=pos[None,:,:]-pos[:,None,:];s=d@np.linalg.inv(cell);s-=np.rint(s)
  return s@cell
