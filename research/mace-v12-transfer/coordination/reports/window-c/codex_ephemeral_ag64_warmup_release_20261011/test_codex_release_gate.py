@@ -14,7 +14,8 @@ import archive_checkpoint
 import numpy as np
 
 BASE = Path(__file__).parent
-CONFIG_PATH = BASE / "CODEX_WARMUP_RELEASE_CONFIG.json"
+CONFIG_PATH = BASE / "CODEX_WARMUP_RELEASE_CONFIG_PRE_RELEASE_HOLD.json"
+SIGNED_CONFIG_PATH = BASE / "CODEX_WARMUP_RELEASE_CONFIG.json"
 EXPECTED_POTENTIAL = gate.EXPECTED_POTENTIAL_SHA256
 
 
@@ -197,9 +198,13 @@ class GateTests(unittest.TestCase):
 
     def test_new_config_does_not_change_frozen_science_or_task_matrix(self):
         old = json.loads((BASE / "PERSISTENT_REFERENCE_CONFIG.json").read_text())
-        new = json.loads(CONFIG_PATH.read_text())
+        new = json.loads(SIGNED_CONFIG_PATH.read_text())
         for key, value in old["sampling"].items():
+            if key == "max_wall_definition":
+                continue  # explanatory resource-policy text, not a numerical sampler parameter
             self.assertEqual(new["sampling"][key], value, key)
+        self.assertIn("warmup <=1 hour", new["sampling"]["max_wall_definition"])
+        self.assertIn("Continuation is not authorized", new["sampling"]["max_wall_definition"])
         self.assertEqual(new["potential"]["sha256"], old["potential"]["sha256"])
         self.assertEqual(new["potential"]["cutoff_A"], old["potential"]["cutoff_A"])
         self.assertEqual((BASE / "AUTHORIZED_SIX_TASKS.csv").read_bytes(),
@@ -207,6 +212,22 @@ class GateTests(unittest.TestCase):
                              "git", "show",
                              "2959fd3e2396a7319bd1f5c7f4fec27ce442abe:research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_six_pilot_authorized_dispatch_20261011/AUTHORIZED_SIX_TASKS.csv",
                          ], cwd=BASE))
+
+    def test_signed_config_releases_only_first_D_warmup(self):
+        config = json.loads(SIGNED_CONFIG_PATH.read_text())
+        self.assertEqual(config["config_status"], "C_SIGNED_FOR_WARMUP")
+        self.assertEqual(config["release_decision"], "APPROVE_WARMUP_ONLY")
+        self.assertTrue(config["storage_release"] and config["warmup_release"])
+        self.assertFalse(config["continuation_release"])
+        self.assertEqual(config["warmup_task_ids"], ["C-D-AGL-1250K-rho097-seed01"])
+        self.assertTrue(config["hosts"]["D"]["C_host_release"])
+        self.assertFalse(config["hosts"]["E"]["C_host_release"])
+        self.assertFalse(config["hosts"]["F"]["C_host_release"])
+        self.assertEqual(config["sampling"]["warmup_steps"], 1000)
+        self.assertEqual(config["sampling"]["dt_fs"], 0.5)
+        self.assertFalse(config["hosts"]["D"]["persistence_verified"])
+        self.assertEqual(config["hosts"]["D"]["identity_evidence_commit"],
+                         "2c8b6f41ec8a7605ddc06f7218014c55957166ac")
 
     def test_runner_legacy_persistent_path_still_requires_true(self):
         old = json.loads((BASE / "PERSISTENT_REFERENCE_CONFIG.json").read_text())

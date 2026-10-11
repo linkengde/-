@@ -18,10 +18,10 @@
 |---|---|---|
 | A | Ag–Si parent 与 ±0.20 Å 三点在 main 快照 e91ef26 中 | 既有任务照常；本轮不改任务或 checkpoint |
 | B | Ti/C 四个位移最终结果在 34b8be9 归档 | 已完成；数值控制角色不变 |
-| C | 当前 C 协调分支基线 e753816 | 发布本协议和索引；只负责汇总，不代跑节点任务 |
-| D | owner 分支最近读到 81fd10b | 第一暖机候选仍 HOLD，待本机势 SHA、新鲜预检和 C 签署 |
-| E | owner 分支最近读到 5b9ba5c | 独立合成恢复回执及新鲜节点证据未齐，HOLD |
-| F | owner 分支最近读到 8d4a721 | 待本机势 SHA 与新鲜预检；HOLD |
+| C | C 协调分支含统一归档协议及 D 首项暖机签署 | 汇总节点回执；只释放 D 首项，不代跑节点任务 |
+| D | owner 分支 `2c8b6f41ec8a7605ddc06f7218014c55957166ac`；本机势 SHA、ASE 解析、资源及归档回执已核验 | C 已签署唯一首项的 1000 步暖机；D 必须以签署 SHA 重跑实时 preflight 并 PASS 后才能启动 |
+| E | owner 分支 `39734568216e5a3d9853d7d052d28f9799172598`；势 SHA、ASE 元数据解析及独立合成远端往返回执已核验 | 环境证据项通过；node preflight 和科学任务仍 HOLD。cutoff 跨半盒长由已审查的 ASE 多周期像邻居表支持 |
+| F | owner 分支 `2ddb39a899decd6b3cc8d6c002d48291c9a5e632`；势 SHA、ASE 元数据解析、资源身份预检及归档回执已核验 | 环境子检查通过；F host release=false，科学任务仍 HOLD |
 | G | 本轮远端分支头未核实；HANDOFF 已在 C 分支 | 待命；无结构、无新增任务 |
 | H | 本轮远端分支头未核实；HANDOFF 已在 C 分支 | 待命；无结构、无新增任务 |
 
@@ -30,16 +30,16 @@
 - **A：** 你已发布的结果和现有任务状态原样保留。继续使用 main 中现有规范结构/参考路径；后续经批准的结果使用 A 自己的分支和不可覆盖归档。不要改写旧归档，也不要重新启动已完成工作。
 - **B：** Ti/C 四个对称位移结果及报告（来源提交 `34b8be9`）保留原样，按 catalog 的路径读取。它们的数据角色不因新归档协议改变；不得自行加入训练。
 - **C：** 汇总 A–H 的归档回执和数据清单；每次核对节点分支当前头、归档外层/内部 SHA、恢复结果和科学状态。C 分支提交只用于协调文件，不代替节点输出归档。
-- **D：** 使用 C 分支中的 `START_D.md`、六任务登记和 Codex 门控脚本作为只读任务资料；只使用自己的 D 分支归档。唯一首候选仍为 `C-D-AGL-1250K-rho097-seed01`，当前未获暖机签署，继续 HOLD。必须先满足实时预检、节点本机势 SHA、远端通道和 C 配置签署。
-- **E：** 使用 C 分支中的 `START_E.md` 与门控脚本；仅在自己的 E 分支提交。E 独立 deterministic synthetic 文件的上传、fresh fetch、恢复及 SHA 证据仍是前置缺项。未补齐且 C 未签署前保持 HOLD。
-- **F：** 使用 C 分支中的 `START_F.md` 与门控脚本；仅在自己的 F 分支提交。历史 fixture 可作为已有证据索引，启动前仍需当前节点预检、本机势 SHA 和远端分支/写入条件核验；保持 HOLD。
+- **D：** C 已签署仅限 `C-D-AGL-1250K-rho097-seed01` 的最多 1000 步、0.5 fs 暖机，配置 SHA 为 `4aee9d64859736f35459259625598f767d5f3e0d8b33bc71f0abb5baf31639e2`。D 必须先在当前会话按 `codex_ephemeral_ag64_warmup_release_20261011/C_RELEASE_ATTESTATION_D_WARMUP_20261011.md` 重跑只读预检并取得 PASS；执行器会再次检查并在完成后归档/恢复核验。不得自动续算或启动 D 第二项。
+- **E：** 使用 C 分支中的 `START_E.md` 与门控脚本；仅在自己的 E 分支提交。E 的独立 synthetic fixture 已完成 fresh fetch、恢复和 SHA 核验（owner 提交 `39734568216e5a3d9853d7d052d28f9799172598`）。本机势 SHA 和 ASE 元数据解析也通过；旧配置下的预检为 HOLD。cutoff 相对半盒长的检查已有 C 的 ASE `PrimitiveNeighborList` 多周期像审查依据；任务本身仍 HOLD，因当前 C 配置不释放 E。
+- **F：** 使用 C 分支中的 `START_F.md` 与门控脚本；仅在自己的 F 分支提交。F 的两项当前预检及报告远端读回已经核验（owner 提交 `2ddb39a899decd6b3cc8d6c002d48291c9a5e632`），势 SHA、解析、资源/路径及 archive 子检查通过；F 的 `C_host_release=false` 且 task 不在放行范围内。不得启动 F 两项任务。
 - **G：** 仅取得 `HANDOFF_G.md` 和任务矩阵供后续准备；当前没有结构输入和新任务放行。保持待命，不生成结构、不启动 DFT。
 - **H：** 仅取得 `HANDOFF_H.md` 和任务矩阵供后续准备；当前没有结构输入和新任务放行。保持待命，不生成结构、不启动 DFT。
 
 ## 状态快照边界
 
-本次只读查询的 GitHub 头：`main=e91ef26`；A 报告引用该 main 快照，B 最终结果来源 `34b8be9`。D/E/F 的 owner 分支最近记录头分别为 `81fd10b`、`5b9ba5c`、`8d4a721`。这些是本次读取的仓库证据，不是节点当前实时预检；节点启动任何获批工作前仍须在自己的会话刷新分支头和资源。
+本次只读查询的 GitHub 头：`main=e91ef26`；A 报告引用该 main 快照，B 最终结果来源 `34b8be9`。D/E/F 的 owner 分支最近核验头分别为 `2c8b6f41ec8a7605ddc06f7218014c55957166ac`、`39734568216e5a3d9853d7d052d28f9799172598`、`2ddb39a899decd6b3cc8d6c002d48291c9a5e632`。D/E/F 详细验收结论见 `NODE_EVIDENCE_UPDATE_E_F_20261011.md` 与 `D_WARMUP_RELEASE_SUMMARY_20261011.md`。节点启动任何获批工作前仍须在自己的会话刷新分支头和资源。
 
 本次查到的远端分支列表未给出 G/H owner 分支头，故记作 `UNVERIFIED`。没有通过本通知建立或推送 G/H 分支。
 
-归档权限不等于科学执行授权。D/E/F Ag64 全部暖机仍受独立科学 gate；G/H 待命。A/B 的既有状态不变。不同对照轴及 D/E/F 的既有 3 密度 × 2 seed 分工见 `CONTROL_EXPERIMENT_MATRIX.md`；该矩阵不新增 task，也不解除放行门。
+归档权限不等于科学执行授权。D/E/F Ag64 暖机逐项受独立 gate。cutoff 大于半盒长已由冻结的 ASE 多周期像邻居表实现支持；该静态代码审查不代表 64 原子下的熔点、扩散或凝固物性验证。G/H 待命，A/B 的既有状态不变。不同对照轴及 D/E/F 的既有 3 密度 × 2 seed 分工见 `CONTROL_EXPERIMENT_MATRIX.md`；该矩阵不新增 task，也不解除放行门。

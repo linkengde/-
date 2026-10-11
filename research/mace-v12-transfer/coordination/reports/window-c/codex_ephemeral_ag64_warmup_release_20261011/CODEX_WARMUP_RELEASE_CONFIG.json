@@ -8,7 +8,7 @@
     "required_restore_test": "fresh remote fetch; outer archive SHA, manifest SHA, every internal member SHA, and identity fields must pass",
     "stop_on_failure": true
   },
-  "config_status": "C_HOLD_NOT_SIGNED_FOR_SCIENTIFIC_EXECUTION",
+  "config_status": "C_SIGNED_FOR_WARMUP",
   "continuation_release": false,
   "continuation_task_ids": [],
   "density_reference_pass": true,
@@ -24,30 +24,35 @@
   },
   "hosts": {
     "D": {
-      "C_host_release": false,
+      "C_host_release": true,
       "allowed_task_ids": [
         "C-D-AGL-1250K-rho097-seed01",
         "C-D-AGL-1250K-rho103-seed02"
       ],
       "archive_staging_root": "/workspace/.codex-ag64-archive/D",
-      "available_bytes_at_report": 28796854272,
-      "available_inodes_at_report": 2038496,
-      "codex_roundtrip_report_sha256": "30a0281bdefab5d0e4afd55c158e82b82d20102e74c63a95eaa5b016d391ad83",
+      "available_bytes_at_report": 28794232832,
+      "available_inodes_at_report": 2038456,
+      "codex_roundtrip_report_sha256": "6ce619eea8da27e3aff97a93a3893d09187cc50eb2a41410466a051072f8d2f7",
       "dft_work_root": null,
-      "identity_evidence_commit": "81fd10b429de56542135f2186de22291947e3189",
+      "identity_evidence_commit": "2c8b6f41ec8a7605ddc06f7218014c55957166ac",
       "isolation_verified": false,
       "machine_fingerprint_sha256": "6926836bb39914795d2a5304ad8f7326a8736f659508d110b1cc4e59584b1978",
       "owner": "D",
       "persistence_verified": false,
-      "potential_local_sha_receipt": null,
-      "potential_local_sha_verified": false,
-      "potential_path": null,
-      "raw_preflight_sha256": "8be2a47f6dd17b94a2252cd72f9e379491ca46131a26f0a6db2b5944c13e73e7",
+      "potential_local_sha_receipt": {
+        "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+        "report_commit": "2c8b6f41ec8a7605ddc06f7218014c55957166ac",
+        "report_path": "research/mace-v12-transfer/coordination/reports/window-c/five_cloud_preflight_and_liquid_pilot_readiness_20261011/owner_reports/D_NODE_POTENTIAL_RUNTIME_ACCEPTANCE_20261011/D_NODE_PREFLIGHT_RAW.json",
+        "report_sha256": "dffd8945cdc7d61cb7c76811321965b4fe1b12ad6e7307e3c9b3e21305eb2cc7"
+      },
+      "potential_local_sha_verified": true,
+      "potential_path": "/workspace/WMH2006_Ag-local-validation/Ag.eam.alloy",
+      "raw_preflight_sha256": "dffd8945cdc7d61cb7c76811321965b4fe1b12ad6e7307e3c9b3e21305eb2cc7",
       "remote_archive": {
         "branch": "cloud-d-b1-dft",
-        "evidence_commit": "81fd10b429de56542135f2186de22291947e3189",
+        "evidence_commit": "2c8b6f41ec8a7605ddc06f7218014c55957166ac",
         "exclude_potential_and_unlicensed_documents": true,
-        "expected_remote_head": "81fd10b429de56542135f2186de22291947e3189",
+        "expected_remote_head": "2c8b6f41ec8a7605ddc06f7218014c55957166ac",
         "fixture_bytes": 20480,
         "fixture_sha256": "84165d5c3bdfaec96c774e6f2bd2429d6685261894b3c5aadfa2c21c7e4b737b",
         "limits": {
@@ -59,12 +64,17 @@
         "roundtrip_status": "PASS",
         "scientific_output_upload_authorized": true,
         "synthetic_fixture_verified": true,
-        "upload_commit": "5b599df646edd549f7a682974e170bce89fffd5e"
+        "upload_commit": "5b599df646edd549f7a682974e170bce89fffd5e",
+        "fresh_report_readback_sha256": "6ce619eea8da27e3aff97a93a3893d09187cc50eb2a41410466a051072f8d2f7"
       },
-      "resource_report_commit": "81fd10b429de56542135f2186de22291947e3189",
-      "resource_report_sha256": "43815a97c18f865a433d234bd06fb12cefc3f20f1e9f59b20643a3482b3c393e",
-      "resource_summary": "4 CPU quota; Codex overlay; available bytes 28796854272; inode count from report 2038496",
-      "sampler_work_root": "/workspace/sampler-work/cloud-d/wmh2006-ag64-sixpilot"
+      "resource_report_commit": "2c8b6f41ec8a7605ddc06f7218014c55957166ac",
+      "resource_report_sha256": "6ce619eea8da27e3aff97a93a3893d09187cc50eb2a41410466a051072f8d2f7",
+      "resource_summary": "4 CPU quota; cgroup memory limit 34359738368 B; workspace free 28794232832 B; 2038456 free inodes; exact local potential SHA PASS; live preflight C-only HOLD",
+      "sampler_work_root": "/workspace/sampler-work/cloud-d/wmh2006-ag64-sixpilot",
+      "node_acceptance_report_sha256": "6ce619eea8da27e3aff97a93a3893d09187cc50eb2a41410466a051072f8d2f7",
+      "task_preflight_sha256_by_id": {
+        "C-D-AGL-1250K-rho097-seed01": "dffd8945cdc7d61cb7c76811321965b4fe1b12ad6e7307e3c9b3e21305eb2cc7"
+      }
     },
     "E": {
       "C_host_release": false,
@@ -73,41 +83,51 @@
         "C-E-AGL-1250K-rho100-seed01"
       ],
       "archive_staging_root": "/workspace/.codex-ag64-archive/E",
-      "available_bytes_at_report": 28798566400,
-      "available_inodes_at_report": 2039418,
-      "codex_roundtrip_report_sha256": "317303a9d7ae76feb6d3bc2acb111723e839fcf76f1cb7d017360e8a0036ae5b",
+      "available_bytes_at_report": 28795527168,
+      "available_inodes_at_report": 2039332,
+      "codex_roundtrip_report_sha256": "cf3dfe60a966963705e34c2eacee949b1c436e4ab6082d18a14e25d70e9c29c6",
       "dft_work_root": null,
-      "identity_evidence_commit": "5b9ba5c3804df85d9910cc83ac30c4c29b58ac57",
+      "identity_evidence_commit": "39734568216e5a3d9853d7d052d28f9799172598",
       "isolation_verified": false,
       "machine_fingerprint_sha256": "f6cd91beba645077ce89c5908fd24116053fa9266b06fe321ab537e52695e39c",
       "owner": "E",
       "persistence_verified": false,
-      "potential_local_sha_receipt": null,
-      "potential_local_sha_verified": false,
-      "potential_path": null,
-      "raw_preflight_sha256": "5498c19e492e494f0fc2cff717cd5794887dab6eb8c9c658a75e38427f998d7b",
+      "potential_local_sha_receipt": {
+        "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+        "report_commit": "39734568216e5a3d9853d7d052d28f9799172598",
+        "report_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_six_pilot_authorized_dispatch_20261011/owner_reports/E/codex_node_acceptance_20261011/NODE_PREFLIGHT_CODEX_E.json",
+        "report_sha256": "bc58ce061313e4319038cd72b6fa1607f90b8b01f23092dd7925096c8f9b382a"
+      },
+      "potential_local_sha_verified": true,
+      "potential_path": "/workspace/.ag-evidence/e-package.QlnLhK/Ag.eam.alloy",
+      "raw_preflight_sha256": "bc58ce061313e4319038cd72b6fa1607f90b8b01f23092dd7925096c8f9b382a",
       "remote_archive": {
         "branch": "cloud-e-b1-dft",
-        "evidence_commit": "5b9ba5c3804df85d9910cc83ac30c4c29b58ac57",
+        "evidence_commit": "39734568216e5a3d9853d7d052d28f9799172598",
         "exclude_potential_and_unlicensed_documents": true,
-        "expected_remote_head": "5b9ba5c3804df85d9910cc83ac30c4c29b58ac57",
-        "fixture_bytes": null,
-        "fixture_sha256": null,
+        "expected_remote_head": "39734568216e5a3d9853d7d052d28f9799172598",
+        "fixture_bytes": 20480,
+        "fixture_sha256": "c3c582d73df54e9e9118efec0b96ca1c8faebba7b363ce3ebb007796cb250cf6",
         "limits": {
           "max_archive_bytes": 52428800,
           "max_single_file_bytes": 52428800
         },
         "repository": "linkengde/-",
         "repository_visibility": "PUBLIC",
-        "roundtrip_status": "HOLD",
+        "roundtrip_status": "PASS",
         "scientific_output_upload_authorized": true,
-        "synthetic_fixture_verified": false,
-        "upload_commit": "6e517042eb5d75fb885f9c3cd886e342bf0547bd"
+        "synthetic_fixture_verified": true,
+        "upload_commit": "649b7f4ef673ac618cf962f804f8081ff993ffc5",
+        "readback_receipt_sha256": "3ff538445e5a4dd4fdf78d3f9db6389f5fe176405a63e0db9c1ae6bd52e05287"
       },
-      "resource_report_commit": "5b9ba5c3804df85d9910cc83ac30c4c29b58ac57",
-      "resource_report_sha256": "445c5489636123dc0e722d7ce8039560dbb82bf5b1488f526f31cf596c6969d7",
-      "resource_summary": "4 CPU quota; 32 GiB cgroup memory limit; Codex overlay; available bytes 28798566400; inode count 2039418",
-      "sampler_work_root": "/workspace/.work/e/sampling"
+      "resource_report_commit": "39734568216e5a3d9853d7d052d28f9799172598",
+      "resource_report_sha256": "adef468e84f5d07a5f5079aa882e3bccac5b9b8497ff0edf89bc4eb761bfa054",
+      "resource_summary": "4 CPU quota; cgroup memory limit 34359738368 B; headroom 30500605952 B; workspace free 28795527168 B; 2039332 free inodes; Codex overlay temporary",
+      "sampler_work_root": "/workspace/.work/e/sampling",
+      "node_acceptance_report_sha256": "cf3dfe60a966963705e34c2eacee949b1c436e4ab6082d18a14e25d70e9c29c6",
+      "task_preflight_sha256_by_id": {
+        "C-E-AGL-1250K-rho097-seed02": "bc58ce061313e4319038cd72b6fa1607f90b8b01f23092dd7925096c8f9b382a"
+      }
     },
     "F": {
       "C_host_release": false,
@@ -116,24 +136,29 @@
         "C-F-AGL-1250K-rho103-seed01"
       ],
       "archive_staging_root": "/workspace/.codex-ag64-archive/F",
-      "available_bytes_at_report": 28873072640,
-      "available_inodes_at_report": 2036714,
-      "codex_roundtrip_report_sha256": "3e89c2af986ebbd3e131e951da10001bb1192cc36057aaf3701e1904a6fab8f2",
+      "available_bytes_at_report": 28869709824,
+      "available_inodes_at_report": 2036415,
+      "codex_roundtrip_report_sha256": "d777b14fd440917698521de63a0cdb0b27131b0dbf178936407ba0fd6773c5ee",
       "dft_work_root": null,
-      "identity_evidence_commit": "8d4a721c6c4eb4588a61f994d325800d8f02b7d8",
+      "identity_evidence_commit": "2ddb39a899decd6b3cc8d6c002d48291c9a5e632",
       "isolation_verified": false,
       "machine_fingerprint_sha256": "3aab56094f55c22fe7532dd78b02329a95b92259530cd9248aae39ff6493b5af",
       "owner": "F",
       "persistence_verified": false,
-      "potential_local_sha_receipt": null,
-      "potential_local_sha_verified": false,
-      "potential_path": null,
-      "raw_preflight_sha256": "be50bdcdbd62a1db820b20611615ae82d6110b171e0b0c9eb114a09fa00eb39c",
+      "potential_local_sha_receipt": {
+        "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+        "report_commit": "2ddb39a899decd6b3cc8d6c002d48291c9a5e632",
+        "report_path": "research/mace-v12-transfer/coordination/reports/window-c/five_cloud_owner_evidence_20261011/F/codex_cloud_temp_storage_acceptance_20261011/ag_potential_runtime_preflight_20261011/preflight_owner_F.json",
+        "report_sha256": "61ef99445ceac2d4ec4bf9b6bea2c037e53826576cf570caa2a02e0b9fc889ca"
+      },
+      "potential_local_sha_verified": true,
+      "potential_path": "/workspace/wmh2006-ag-F.RdBqAx/Ag.eam.alloy",
+      "raw_preflight_sha256": "61ef99445ceac2d4ec4bf9b6bea2c037e53826576cf570caa2a02e0b9fc889ca",
       "remote_archive": {
         "branch": "cloud-f-b1-dft",
-        "evidence_commit": "8d4a721c6c4eb4588a61f994d325800d8f02b7d8",
+        "evidence_commit": "2ddb39a899decd6b3cc8d6c002d48291c9a5e632",
         "exclude_potential_and_unlicensed_documents": true,
-        "expected_remote_head": "8d4a721c6c4eb4588a61f994d325800d8f02b7d8",
+        "expected_remote_head": "2ddb39a899decd6b3cc8d6c002d48291c9a5e632",
         "fixture_bytes": 16415,
         "fixture_sha256": "24f3c1e665f4e0f74ea736d493704b7756871e238d2956761b001aff62921c6b",
         "limits": {
@@ -145,12 +170,18 @@
         "roundtrip_status": "PASS",
         "scientific_output_upload_authorized": true,
         "synthetic_fixture_verified": true,
-        "upload_commit": "afb1ec415df43dbf6a48212723237d8a999fd00a"
+        "upload_commit": "afb1ec415df43dbf6a48212723237d8a999fd00a",
+        "fresh_report_readback_sha256": "d777b14fd440917698521de63a0cdb0b27131b0dbf178936407ba0fd6773c5ee"
       },
-      "resource_report_commit": "8d4a721c6c4eb4588a61f994d325800d8f02b7d8",
-      "resource_report_sha256": "ce40d3317dafdb59728f7d539439e9c20f0c16f45842e75a3fdab7ba5b148ca1",
-      "resource_summary": "4 CPU quota; cgroup memory limit 32 GiB; Codex overlay; latest owner report available bytes 28873072640; free inodes 2036714",
-      "sampler_work_root": "/workspace/.work-f/sampling"
+      "resource_report_commit": "2ddb39a899decd6b3cc8d6c002d48291c9a5e632",
+      "resource_report_sha256": "d777b14fd440917698521de63a0cdb0b27131b0dbf178936407ba0fd6773c5ee",
+      "resource_summary": "4 CPU quota; cgroup memory limit 34359738368 B; workspace free 28869709824 B; 2036415 free inodes; Codex overlay temporary; latest preflight subchecks pass",
+      "sampler_work_root": "/workspace/.work-f/sampling",
+      "node_acceptance_report_sha256": "d777b14fd440917698521de63a0cdb0b27131b0dbf178936407ba0fd6773c5ee",
+      "task_preflight_sha256_by_id": {
+        "C-F-AGL-1250K-rho100-seed02": "3edd2a000c4708f5fb942e9f594c292ebf86ae801ae41d7b06115c28615f30d7",
+        "C-F-AGL-1250K-rho103-seed01": "58099c5694a1879c4915a3268f5c01ed40ed338ff16e1110fee2488345627833"
+      }
     }
   },
   "lineage": {
@@ -173,7 +204,7 @@
     "source_commit": "2959fd3e2396a7319bd1f5c7f4fec27ce442abe0",
     "source_verified": true
   },
-  "release_decision": "HOLD",
+  "release_decision": "APPROVE_WARMUP_ONLY",
   "release_scope": "WARMUP_1000_ONLY",
   "repository": {
     "name": "linkengde/-",
@@ -195,7 +226,7 @@
     "friction_per_fs": 0.01,
     "hot_steps": 20000,
     "max_rss_bytes": 8589934592,
-    "max_wall_definition": "cumulative_per_stage across resumptions; warmup <=1h + continuation <=5h, total <=6h per task; proposal pending C storage/performance freeze",
+    "max_wall_definition": "cumulative per stage across resumptions; warmup <=1 hour; any separately authorized continuation <=5 hours; total <=6 hours per task. Continuation is not authorized by this config.",
     "max_wall_s": {
       "continue": 18000,
       "warmup": 3600
@@ -214,11 +245,18 @@
   "schema_version": 1,
   "source_release": true,
   "storage_mode": "CODEX_EPHEMERAL_WITH_VERIFIED_REMOTE_ARCHIVE",
-  "storage_release": false,
+  "storage_release": true,
   "tasks_file": "AUTHORIZED_SIX_TASKS.csv",
   "tasks_sha256": "3232b70dde2c2c721b32114a9c30df280b6d0b64fd7c49d1aaca087fd0accd0b",
-  "warmup_release": false,
+  "warmup_release": true,
   "warmup_task_ids": [
     "C-D-AGL-1250K-rho097-seed01"
-  ]
+  ],
+  "signing_record": {
+    "signed_by": "C",
+    "signed_at_utc": "2026-10-11",
+    "scope": "D first Ag64 task only; warmup stage; 1000 steps maximum at frozen 0.5 fs; no automatic continuation",
+    "basis": "current D owner receipt 2c8b6f41ec8a7605ddc06f7218014c55957166ac; current E receipt 39734568216e5a3d9853d7d052d28f9799172598; current F receipt 2ddb39a899decd6b3cc8d6c002d48291c9a5e632; C-reviewed ASE multi-image neighbor-list method",
+    "signature_semantics": "C release attestation and immutable Git commit plus exact config SHA; not a public-key signature"
+  }
 }
