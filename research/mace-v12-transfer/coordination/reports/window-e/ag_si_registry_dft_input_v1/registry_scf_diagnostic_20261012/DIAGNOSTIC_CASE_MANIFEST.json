@@ -1,0 +1,59 @@
+{
+  "case_id": "R1_DIAGNOSTIC_ONLY_MAXITER200_MIXER_BETA010",
+  "source_registry": "R1",
+  "source_batch_commit": "ab364698dca879284be61c66f0340b02a6aaccd7",
+  "source_input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+  "source_structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+  "copied_input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+  "copied_structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+  "structure_hash_match": true,
+  "diagnostic_runner_sha256": "1fe1cd65c09a47b9f24d9a97f7b29cf5c62369b9f27b81bf4860e6c902439cc1",
+  "method": {
+    "xc": "PBE",
+    "basis": "PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      6,
+      6,
+      1
+    ],
+    "smearing_eV": 0.1,
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "geometry": "fixed",
+    "relax_atoms": false,
+    "relax_cell": false
+  },
+  "diagnostic_change": {
+    "maxiter": 200,
+    "mixer": {
+      "class": "Mixer",
+      "beta": 0.1,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "only_allowed_diagnostic_knobs_changed": [
+      "maxiter",
+      "mixer beta"
+    ]
+  },
+  "runtime": {
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "python": "3.12.14",
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1"
+  },
+  "paw_sha256": {
+    "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+    "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "role": "DIAGNOSTIC_ONLY_NOT_TRAIN_DEV_TEST",
+  "does_not_replace_R1": true
+}
