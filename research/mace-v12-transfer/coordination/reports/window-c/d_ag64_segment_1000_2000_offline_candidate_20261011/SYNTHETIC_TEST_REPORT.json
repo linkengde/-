@@ -1,0 +1,30 @@
+{
+  "actual_scientific_execution": {
+    "dft": false,
+    "mace_training": false,
+    "md": false,
+    "real_ag_eam_calculation": false,
+    "real_potential_bytes_loaded": false
+  },
+  "coverage": [
+    "exact global 1000 to 2000 bounded segment; reject attempted step 2001",
+    "reject wrong checkpoint start, owner/task, immutable source/science hash, RNG stream or PCG64 identity",
+    "restore saved numpy PCG64 state and reproduce exact synthetic random sequence",
+    "recompute actual config, release lock, code and potential file hashes; reject tampering/mismatches",
+    "unsigned proposal refuses before archive/potential execution path",
+    "timeout, cancellation/interruption, thrown step and NaN stop without corrupting last valid state",
+    "atomic full synthetic checkpoint directory, fsync metadata, no overwrite, cleanup on failed publication",
+    "README/MANIFEST/SHA256SUMS archive verification, reject potential payload and >50 MiB member",
+    "temporary local bare Git push plus a new clone readback verifies outer and member hashes",
+    "injected archive and fresh-clone failures preserve original step-1000 checkpoint",
+    "discard the candidate step when the synthetic step returns only after the hard wall budget"
+  ],
+  "errors": 0,
+  "failures": 0,
+  "fake_signed_fixture": "Used only to exercise a positive preflight path; it is not a C signature or scientific release.",
+  "remarks": "Synthetic numerical state only; no ASE/LAMMPS/MACE/GPAW integration. One prior gzip-trailer corruption attempt was too weak to invalidate tar parsing; final fault test uses a malformed byte stream and passes the rejection/retention assertion.",
+  "remote_test": "LOCAL_BARE_GIT_ONLY_NOT_GITHUB",
+  "status": "PASS_SYNTHETIC_TESTS_ONLY",
+  "test_command": "python -m unittest -v test_segment_guard.py",
+  "tests_run": 19
+}

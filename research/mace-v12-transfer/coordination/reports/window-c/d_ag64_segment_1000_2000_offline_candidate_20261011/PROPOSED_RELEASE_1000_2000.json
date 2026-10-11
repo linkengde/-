@@ -1,0 +1,84 @@
+{
+  "archive_policy": {
+    "exclude": [
+      "Ag.eam.alloy",
+      "unlicensed papers or third-party files",
+      "credentials"
+    ],
+    "fresh_fetch_required": true,
+    "include": [
+      "restart state arrays and atom trajectory",
+      "sampler state and all PCG64 states",
+      "MD trajectory",
+      "thermal/energy/pressure logs",
+      "source/configuration hashes",
+      "README.md",
+      "MANIFEST.json",
+      "SHA256SUMS.txt"
+    ],
+    "max_single_file_bytes": 52428800,
+    "no_followup_integration_after_backup_failure": true
+  },
+  "checkpoint_archive_bytes": 100700,
+  "checkpoint_archive_manifest_sha256": "ab9f0dffa8ef145eac7792dfe1e14e07c1354df1c2152dafec97bad1dc3a57b1",
+  "checkpoint_archive_sha256": "b62a818e58a2cf423e4cb1b9ed0468ae73ad578a75c4b2cb9fb3f28baf75e7b1",
+  "checkpoint_state_sha256": "e08574678b3f8231c0a52ab25febb13c9d06e815b28149eb306d4b451c83ef6f",
+  "execution_authorized": false,
+  "execution_code_sha256": {
+    "segment_guard.py": "0da4ea9b02c948ed36e4e2f6a1a35edc8ba81dae537833d485a4cc033611084e"
+  },
+  "forbidden_execution_paths": [
+    "unguarded --stage continue",
+    "implicit max-step defaults",
+    "reinitialize positions or velocities",
+    "reseed or reset PCG64"
+  ],
+  "latest_verified_D_branch_head": "145ee8050cf95a3a1988e868c6b935e10538f723",
+  "max_added_steps": 1000,
+  "must_restore_without_modification": [
+    "positions",
+    "momenta",
+    "velocities",
+    "cell",
+    "pbc",
+    "masses",
+    "atom_ids and order",
+    "all PCG64 generator states",
+    "thermostat state",
+    "global step",
+    "source manifest",
+    "fixed scientific parameters"
+  ],
+  "operation": "offline-design-and-synthetic-tests-only",
+  "original_release_config_sha256": "2e122b258a48fe54bf603709b5505a301c1257f398c5625eecc2ca94998c0052",
+  "owner": "D",
+  "potential_sha256_must_remain": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+  "proposed_limits_not_authorization": {
+    "hard_wall_seconds": 600,
+    "local_temp_space_reserve_bytes": 2000000,
+    "max_added_steps": 1000,
+    "stop_on_timeout_interrupt_nan_inf_distance_below_1_8_A_or_archive_failure": true
+  },
+  "release_note": "Proposal only. C has not signed this configuration. No MD is authorized.",
+  "release_status": "PROPOSED_UNSIGNED_NO_MD",
+  "required_cli_flag": "--stop-at-step 2000",
+  "schema_version": 1,
+  "scientific_parameters_sha256_must_remain": "8f792d6206c1b7bae7b900e7ea81445d6cd3e837de2b5979c88bb977650ab7b2",
+  "source_manifest_sha256": "9a694ea8f93655efa7a1c8695669ab2f17520c2d1b90f6df28115b2b1f9c2ad6",
+  "source_task_archive_commit": "11803909226538ab83847d1f06827a8292501139",
+  "stage_continue_default_endpoint_warning": 120000,
+  "start_step": 1000,
+  "stop_at_step_required": 2000,
+  "task_id": "C-D-AGL-1250K-rho097-seed01",
+  "unchanged_physical_parameters": {
+    "atom_count": 64,
+    "box_edge_A": 10.826824658074,
+    "density_g_cm3": 9.03273341876,
+    "dt_fs": 0.5,
+    "friction_per_fs": 0.01,
+    "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+    "seed": 125009701,
+    "species": "Ag",
+    "temperature_schedule_at_step_1000_K": 1600
+  }
+}
