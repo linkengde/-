@@ -1,0 +1,24 @@
+{
+  "blockers": [
+    "ENVIRONMENT_SHA payload absent; cited fff2d118 commit says ASE missing and dry-run NOT_RUN. C real-ASE restore does not establish D runtime identity.",
+    "New backend v2 SHA lacks version-matched upload/fresh-fetch/restore test evidence.",
+    "Archive cadence changed from 100 to1000 steps; timeout prior to next archive raises without saving a recovery checkpoint. Raising walltime does not fix this."
+  ],
+  "checks": {
+    "C_real_ASE_3_29_0_restore_rng_and_step3001_guard": "PASS; no forces, energy or dynamics",
+    "adapter_core_backend_actual_sha": "PASS",
+    "environment_sha_recorded": "YES; reproducible payload and matching D evidence missing",
+    "existing_mock_tests": "6/6 PASS",
+    "new_backend_v2_roundtrip_evidence": "NOT_FOUND",
+    "potential_frozen_sha_pin": "PASS; actual D local bytes still require preflight",
+    "source_archive_and_checkpoint_actual_sha": "PASS",
+    "timeout_recovery_before_first_1000_step_archive": "FAIL"
+  },
+  "decision": "REJECTED",
+  "execution_authorized": false,
+  "new_resource_budget_seconds": 3600,
+  "reviewed_commit": "538f23e6fc2b3b3461693085487e065325229e5e",
+  "reviewed_config_sha256": "1aa03f05ed2a3662985269c2b0148542d79202f771aff690d67894e25f7c1f96",
+  "revised_unsigned_config_sha256": "a6e794f208cc9b874b3dfa8e9c1ce0359c134f2babe9e768b6249d7d17fa8ac5",
+  "signed_config_sha256": null
+}
