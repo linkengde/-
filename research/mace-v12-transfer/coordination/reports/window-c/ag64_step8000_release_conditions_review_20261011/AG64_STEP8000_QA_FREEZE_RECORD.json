@@ -1,0 +1,113 @@
+{
+  "record_type": "Ag64 step8000 QA threshold and provenance audit",
+  "record_id": "AG64_STEP8000_QA_FREEZE_RECORD",
+  "record_status": "RECORDED_RETROSPECTIVELY; NOT_PROVEN_PREREGISTERED",
+  "decision_effect": "does_not_retroactively_authorize_structure_pass_or_DFT",
+  "target": {
+    "task_id": "C-D-AGL-1250K-rho097-seed01",
+    "candidate_id": "Ag64_step8000",
+    "step": 8000,
+    "D_handoff_commit": "38ff5afb5c3cbe14ca0889212910f0ca6558e991",
+    "candidate_structure_sha256": "08d5e9a7500e264cce2382c07d76afe032e257d5ae7f7d986868e2c646316b85",
+    "QA_report_sha256": "b73955953d03cc071560b375fb459c8fa3cd4f9f7d0490daabcd87e30ed144a7",
+    "MANIFEST_sha256": "0f2403055dc15ef456302c3894f92a79b4f616a9a77a871907dd11a7754a779f",
+    "SHA256SUMS_sha256": "80624ac16265e4660ed5390cafd67834ec60729d330c74c91b9382f484744a29",
+    "reported_structure_status_field": "STRUCTURE_PASS=F",
+    "field_semantics_from_C_policy": "manual_C_acceptance_gate_pending; not itself a failed physical metric",
+    "reported_QA_status": "TWO_CONSECUTIVE_WINDOWS_ALL_VALID"
+  },
+  "reported_thresholds": {
+    "thermal_valid": {
+      "target_temperature_K": 1600.0,
+      "mean_tolerance_K": 50.0,
+      "mean_condition": "abs(window_mean_temperature_K - 1600.0) <= 50.0",
+      "sample_standard_deviation_limit_K": 329.1804799191294,
+      "standard_deviation_basis": "2 * sqrt(2/(3*N-3)) * T, N=64, T=1600 K",
+      "window_samples": 25,
+      "window_duration_fs": 250.0
+    },
+    "liquid_structure_valid": {
+      "Q6_rule": "pass when Q6 slope <= 0 OR two-sided regression p-value >= 0.05",
+      "coordination_rule": "abs(first-half mean - second-half mean) <= 0.5",
+      "max_crystal_fraction": 0.15,
+      "max_coherent_crystal_cluster_atoms": 8,
+      "minimum_pair_distance_threshold": "NOT_SPECIFIED_IN_QA_report; measured values are diagnostic only",
+      "classification_method": "local l=6 Q6 plus coherent-bond graph; QA report says this substitutes for CNA/PTM"
+    },
+    "MSD_valid": {
+      "slope_rule": "linear MSD slope > 0",
+      "minimum_R_squared": 0.8
+    },
+    "two_consecutive_windows_rule": {
+      "rule": "two consecutive checks, each 1000 steps apart, must have Thermal_valid=true, Liquid_structure_valid=true, and MSD_valid=true",
+      "passing_check_steps": [7000, 8000],
+      "reported_stop_reason": "TWO_CONSECUTIVE_WINDOWS_ALL_VALID"
+    }
+  },
+  "observed_final_windows": [
+    {
+      "step": 7000,
+      "thermal_valid": true,
+      "temperature_mean_K": 1637.2333064068991,
+      "temperature_sample_sd_K": 155.97942191733995,
+      "liquid_structure_valid": true,
+      "Q6_slope_per_1000_steps": -0.02115386309215028,
+      "Q6_two_sided_p_value": 0.13574770345306938,
+      "coordination_half_window_drift": 0.125,
+      "crystal_fraction": 0.0,
+      "largest_coherent_cluster_atoms": 0,
+      "minimum_pair_distance_A": 2.2069518837373603,
+      "MSD_valid": true,
+      "MSD_slope_A2_per_fs": 0.0022011279153762614,
+      "MSD_fit_R_squared": 0.9918560489717042
+    },
+    {
+      "step": 8000,
+      "thermal_valid": true,
+      "temperature_mean_K": 1638.7645874848815,
+      "temperature_sample_sd_K": 84.67988667682864,
+      "liquid_structure_valid": true,
+      "Q6_slope_per_1000_steps": 0.04509837326557995,
+      "Q6_two_sided_p_value": 0.08264036458045537,
+      "coordination_half_window_drift": 0.10416666666666607,
+      "crystal_fraction": 0.0,
+      "largest_coherent_cluster_atoms": 0,
+      "minimum_pair_distance_A": 2.313570791337013,
+      "MSD_valid": true,
+      "MSD_slope_A2_per_fs": 0.0018011279153762614,
+      "MSD_fit_R_squared": 0.9887458536003897
+    }
+  ],
+  "threshold_governance": {
+    "values_source": "D candidate package QA_report.json screening_thresholds",
+    "candidate_QA_records_a_threshold_set_sha256": false,
+    "C_pre_run_threshold_freeze_evidence": "NOT_FOUND; C_RELEASE_CONFIG.json says thresholds_frozen_by_C=false",
+    "current_record_is_retroactive": true,
+    "thresholds_changed_to_make_result_pass": false,
+    "interpretation": "The values above are frozen verbatim as an audit record only. Since prior C configuration did not establish a pre-run freeze, this record cannot be represented as a preregistered acceptance gate."
+  },
+  "provenance_binding": {
+    "candidate_generator_script_path": "NOT_PRESENT_IN_D_HANDOFF_OR_REACHABLE_D_REPOSITORY_TREE",
+    "candidate_generator_commit_sha": "UNVERIFIED",
+    "actual_sampling_config_sha256": "NOT_RECORDED_IN_QA_REPORT_OR_MANIFEST",
+    "C_release_config_sha256_for_context_only": "57dc948d45daa3c51f7b3e5491a19e4f407546806531c3afae14a221b054ffc0",
+    "C_release_config_meaning": "proposal/config record only; thresholds_frozen_by_C=false; not proof of D's executed sampling config",
+    "C_reference_QA_script_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_six_pilot_authorized_dispatch_20261011/qa_sampling.py",
+    "C_reference_QA_script_sha256": "01b59bb149c574749b6adddf0e7df89703c1a46a6dd5a1b34c33350b7d4898b0",
+    "C_reference_QA_script_is_D_candidate_generator": false,
+    "candidate_manifest_declared_checkpoint_manifest_sha256": "44c5b966f52cbface56ed7a1fc135adc421288e91e76263c5ed53382e0230fa8",
+    "candidate_manifest_declared_checkpoint_step": 8000,
+    "candidate_manifest_declared_checkpoint_bytes_available_for_independent_rehash": false,
+    "QA_report_input_step": 4000,
+    "QA_report_input_state_sha256": "233eaeb46b02d7ee061d36ea09ab8cda206fdea1ba39e8b6e77e09479c2912cb",
+    "QA_report_input_arrays_sha256": "4e1eeb1fdfcb0cdd12f56c77b0c8a5a0881085c4c94a500b00e366a6b3e04591",
+    "QA_report_final_step8000_state_sha256": "d9f1a9beb250493779210d177393b552dd0174481ea52f4d1ad7db9b19a417e1",
+    "QA_report_final_step8000_arrays_sha256": "bd7dea517cd880fc848dec1bc4f7b12a42b6423cccfc829b19e5bb71e58a8f70"
+  },
+  "overall": {
+    "reported_auto_screen": "PASS under thresholds embedded in QA_report.json",
+    "physical_failure_metric_found_in_final_two_windows": false,
+    "formal_structure_acceptance": "HOLD",
+    "DFT_release": "NO"
+  }
+}
