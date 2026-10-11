@@ -1,0 +1,323 @@
+{
+  "schema_version": 2,
+  "config_id": "AG_SI_REGISTRY_DFT_RELEASE_v2",
+  "configuration_status": "FROZEN_PENDING_SEPARATE_EXECUTION_AUTHORIZATION",
+  "execution_authorized": false,
+  "scientific_execution_performed": false,
+  "based_on_c_review_commit": "0167df383be1e1e1a5cd43258dd991700f626fd2",
+  "reviewed_e_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+  "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+  "source_manifest_sha256": "a194e13815271ce1c99b11d41019c6db0d08adfe28da621bfb6c5f4883c62724",
+  "scope": {
+    "task": "Ag-Si DEV v2 fixed-geometry registry DFT screening",
+    "registries": [
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ]
+  },
+  "method": {
+    "engine": "GPAW 26.7.0",
+    "ase_version": "3.29.0",
+    "gpaw_data_version": "1.2.1",
+    "xc": "PBE",
+    "pseudopotential": "PAW",
+    "basis": "plane_wave",
+    "cutoff_eV": 500,
+    "occupations": "FermiDirac",
+    "smearing_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "max_scf_iterations": 160,
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "spin_polarized": false,
+    "charge": 0
+  },
+  "geometry": {
+    "fixed": true,
+    "cell_fixed": true,
+    "ions_fixed": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "registry_changes_allowed": false,
+    "coordinate_changes_allowed": false,
+    "cell_changes_allowed": false
+  },
+  "runtime": {
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "environment": {
+      "OMP_NUM_THREADS": "1"
+    }
+  },
+  "phase1_registry_screening": {
+    "purpose": "Compare frozen R1-R4 registry total energies on one common coarse mesh.",
+    "kpoint_mesh": [
+      6,
+      6,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack for integer kpts tuples; no explicit gamma override or extra offset is passed; slab kz=1",
+    "registries": [
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "per_registry_execution_authorized": false,
+    "selection_rule_for_phase2": "Rank converged phase-1 total_energy_eV from lowest to highest; select exactly the two lowest. If energies are exactly tied at the cutoff, break the tie by ascending registry_id.",
+    "required_outputs": [
+      "total_energy_eV",
+      "force_consistent_free_energy_eV",
+      "forces_eV_A",
+      "stress_eV_A3_full_3x3"
+    ],
+    "require_scf_converged": true
+  },
+  "phase2_refinement": {
+    "purpose": "Higher-k-point comparison of only the two lowest-energy phase-1 registries.",
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack for integer kpts tuples; no explicit gamma override or extra offset is passed; slab kz=1",
+    "selected_registries": "Exactly the two selected by phase1_registry_screening.selection_rule_for_phase2 after phase-1 result review.",
+    "per_registry_execution_authorized": false,
+    "requires_new_result_bound_release": true
+  },
+  "data_role": {
+    "role": "REGISTRY_SCREENING_ONLY",
+    "allowed": [
+      "REGISTRY_SCREENING_ONLY"
+    ],
+    "prohibited": [
+      "TRAIN",
+      "DEV",
+      "TEST"
+    ],
+    "source_family": "COD-9009647/Kisi-1998-derived",
+    "independent_dev_family": false,
+    "stress_supervision_allowed": false
+  },
+  "structures": [
+    {
+      "registry_id": "R1",
+      "registry_name": "top / OT-like",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R1.xyz",
+      "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R1/input.py",
+      "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "phase1_kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "phase1_execution_authorized": false
+    },
+    {
+      "registry_id": "R2",
+      "registry_name": "bridge / MT-like",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R2.xyz",
+      "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+      "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "phase1_kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "phase1_execution_authorized": false
+    },
+    {
+      "registry_id": "R3",
+      "registry_name": "threefold hollow / HCP-like",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R3.xyz",
+      "structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R3/input.py",
+      "input_sha256": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "phase1_kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "phase1_execution_authorized": false
+    },
+    {
+      "registry_id": "R4",
+      "registry_name": "alternate threefold hollow / FCC-like",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R4.xyz",
+      "structure_sha256": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R4/input.py",
+      "input_sha256": "1a8fca555c0dd7a7028e8f223a54770ef5183549f0a9c230869ed88dbc4198e8",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "phase1_kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "phase1_execution_authorized": false
+    }
+  ],
+  "outputs": {
+    "save_total_energy": true,
+    "save_force_consistent_free_energy": true,
+    "save_atomic_forces": true,
+    "save_full_stress_tensor": true,
+    "energy_unit": "eV",
+    "force_unit": "eV/Angstrom",
+    "stress_unit": "eV/Angstrom^3",
+    "stress_convention": "ASE tensile-positive Cartesian full 3x3; slab stress includes vacuum cell volume and is not a bulk training target",
+    "result_role_must_be": "REGISTRY_SCREENING_ONLY"
+  },
+  "execution_gate": {
+    "execution_authorized": false,
+    "authorization_note": "This file freezes screening parameters only. It does not authorize or start DFT. A later per-registry signed execution release must bind this configuration SHA, structure and input SHA, selected mesh, MPI/OMP allocation, and screening-only role.",
+    "runner_note": "The existing E input.py accepts a per-registry release object. This v2 file is the C master parameter record; it is not itself a per-run authorization token."
+  },
+  "non_actions": [
+    "No DFT",
+    "No geometry edits",
+    "No registry edits",
+    "No MACE training",
+    "No data-role promotion"
+  ],
+  "ROLE": "REGISTRY_SCREENING_ONLY",
+  "prohibited_roles": [
+    "TRAIN",
+    "DEV",
+    "TEST"
+  ]
+}
