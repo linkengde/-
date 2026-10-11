@@ -1,0 +1,75 @@
+{
+  "checked_at_utc": "2026-10-11",
+  "environment_checks": {
+    "adapter_import": {
+      "reason": "ModuleNotFoundError: No module named 'ase'",
+      "status": "BLOCKED"
+    },
+    "archive_backend_import": {
+      "status": "PASS"
+    },
+    "ase_version": {
+      "observed": null,
+      "required": "3.29.0",
+      "status": "BLOCKED_MISSING"
+    },
+    "core_import": {
+      "reason": "ModuleNotFoundError: No module named 'ase'",
+      "status": "BLOCKED"
+    },
+    "python_dependencies": {
+      "ase": "missing",
+      "numpy": "2.3.5",
+      "pytest": "missing_optional_unittest_used",
+      "status": "PARTIAL"
+    }
+  },
+  "execution_authorized_config_generated": false,
+  "mock_tests": {
+    "ase_stubbed": true,
+    "command": "AG64_STEP2000_ARCHIVE=/tmp/ag64-step2000.tar.gz python -m unittest discover -s ag64_step2000_extension_dev/tests -v",
+    "failed": 0,
+    "force_or_energy_calls": 0,
+    "integrator_advances": 0,
+    "passed": 6,
+    "skipped": 0
+  },
+  "overall_status": "HOLD_REAL_INTERFACE_VALIDATION_REQUIRES_ASE_3_29_0",
+  "potential_file_loaded_or_calculated": false,
+  "production_execution_performed": false,
+  "real_interface_dry_run": {
+    "boundary_validation": "PASS_IN_MOCK_TEST_HARNESS",
+    "checkpoint_and_rng_restore": "MOCK_ASE_PATH_PASS; REAL_ASE_RESTORE_BLOCKED",
+    "config_parse": "PASS",
+    "end_step": 3000,
+    "energy_calculations": 0,
+    "force_calculations": 0,
+    "integrator_advances": 0,
+    "overall": "BLOCKED_MISSING_ASE_3_29_0",
+    "start_step": 2000
+  },
+  "runtime": {
+    "ase_installed": null,
+    "ase_required": "3.29.0",
+    "numpy": "2.3.5",
+    "pytest_installed": false,
+    "python": "3.12.14",
+    "unittest": "stdlib"
+  },
+  "schema_version": 1,
+  "source_checkpoint": {
+    "archive_sha256": "c3a88a759e0bd258e74632aba0a68e4f1a765fcbe8324034d5bf127b5aa69965",
+    "archive_sha256_verified": true,
+    "arrays_sha256": "0f7830ebeba5f9a83da77b15e153546b24fb3efaf0299de767d9b4fbe4639f78",
+    "manifest_global_step": 2000,
+    "rng_state_restored_by_numpy_pcg64": true,
+    "rng_streams": [
+      "packing",
+      "thermostat",
+      "velocity"
+    ],
+    "state_sha256": "5d03864f07a98f177c3c0cbdcb850158ed89a64fa2a6ab7f879e8c7ab003be2a"
+  },
+  "target_branch": "ag64-step2000-extension-dev",
+  "task_id": "C-D-AGL-1250K-rho097-seed01"
+}
