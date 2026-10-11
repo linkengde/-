@@ -1,0 +1,212 @@
+{
+  "schema_version": 2,
+  "config_id": "FINAL_MINIMAL_DFT_RELEASE_CONFIG",
+  "status": "DEFINITION_PARTIALLY_FROZEN_EXECUTION_HOLD",
+  "scope": "Freeze candidate structure and label definitions only; this is not authorization to execute DFT or training.",
+  "E_input": {
+    "expected_file": "DFT_PRIORITY_TABLE_20261011.md",
+    "expected_branch": "cloud-e-b1-dft",
+    "branch_head_checked": "39734568216e5a3d9853d7d052d28f9799172598",
+    "also_checked_main_head": "e91ef26d175072553b409e08f5d9a826929078c7",
+    "file_found": false,
+    "result": "P1/P2 values below are frozen only where supported by C's existing review. Unavailable E-specific sources, IDs, d0, registry, and cell values remain explicit blockers."
+  },
+  "common_dft_method": {
+    "code": "GPAW",
+    "xc": "PBE",
+    "basis": "plane waves",
+    "paw": true,
+    "plane_wave_cutoff_eV": 500,
+    "fermi_smearing_eV": 0.1,
+    "scf_thresholds": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "max_iterations": 160,
+      "note": "Use project GPAW tolerance semantics; do not represent 1e-5 as a total-energy error bound."
+    },
+    "required_energy_outputs": [
+      "native_total_energy_eV",
+      "force_consistent_free_energy_eV"
+    ],
+    "required_force_outputs": "complete per-atom Cartesian forces in eV/angstrom",
+    "stress_policy": "save the full stress tensor for every point as a diagnostic; bulk Ti3SiC2 stress may become a training label only after k-mesh and cutoff convergence; do not use vacuum-containing slab stress as a stress label",
+    "execution_authorized": false
+  },
+  "P1_Ti_C": {
+    "group": "P1",
+    "role_recommendation": "DEV",
+    "role_status": "candidate only; exact independent parent source not established",
+    "source_family": "UNASSIGNED_NEW_Ti3SiC2_DEV_PARENT",
+    "source_requirement": "Must be a documented, genuinely new parent family, not a relabel, simple displacement, or expansion of already-scored COD 9009647/Kisi 1998 structures. The five existing numerical-control labels retain their roles and are not copied or reclassified here.",
+    "parent_structure_id": "PENDING_E_TABLE_AND_SOURCE_AUDIT",
+    "atom_mapping": "Crystallographic Ti(4f) and C(4f) sites in the chosen parent; exact atom IDs and symmetry/origin mapping must be generated from the source CIF and independently checked before inputs are frozen.",
+    "displacement_axis": "Cartesian z aligned with the parent crystallographic c axis",
+    "displacement_amplitude_A": 0.02,
+    "cell_policy": "fixed parent cell for all four endpoints; move only the mapped atom; no relaxation",
+    "structures": [
+      {
+        "structure_id": "DEV-TSC-Ti4f-z-m020",
+        "site": "Ti(4f)",
+        "displacement_A": [
+          0.0,
+          0.0,
+          -0.02
+        ]
+      },
+      {
+        "structure_id": "DEV-TSC-Ti4f-z-p020",
+        "site": "Ti(4f)",
+        "displacement_A": [
+          0.0,
+          0.0,
+          0.02
+        ]
+      },
+      {
+        "structure_id": "DEV-TSC-C4f-z-m020",
+        "site": "C(4f)",
+        "displacement_A": [
+          0.0,
+          0.0,
+          -0.02
+        ]
+      },
+      {
+        "structure_id": "DEV-TSC-C4f-z-p020",
+        "site": "C(4f)",
+        "displacement_A": [
+          0.0,
+          0.0,
+          0.02
+        ]
+      }
+    ],
+    "kpoint_policy": {
+      "candidate_convergence_pair": [
+        "8x8x4",
+        "10x10x4"
+      ],
+      "final_mesh": "HOLD pending a same-geometry convergence comparison; these are planned meshes, not verified results"
+    },
+    "label_policy": {
+      "energy": "required",
+      "forces": "required for every atom",
+      "stress": "save; use as a label only after convergence",
+      "split": "all four structures remain in this one DEV parent family"
+    }
+  },
+  "P2_Ag_Si": {
+    "group": "P2",
+    "role_recommendation": "DEV",
+    "role_status": "candidate only; no executable structures frozen",
+    "source_family": "UNASSIGNED_NEW_Ag_Si_DEV_PARENT",
+    "source_requirement": "Must be a documented new interface parent family, not the already-scored 52-atom Ag-Si family or a registry/distance perturbation of that family.",
+    "structure_source_id": "PENDING_E_TABLE_AND_SOURCE_AUDIT",
+    "termination": {
+      "requested": "Si-terminated Ti3SiC2(0001)",
+      "verified_from_structure": false
+    },
+    "registry": "UNRESOLVED; E table and source structure are unavailable",
+    "d0": {
+      "definition": "Reference plane-to-plane gap between the mean z coordinate of the outermost terminating Si layer and the mean z coordinate of the nearest Ag layer, for the selected termination, registry, and in-plane cell.",
+      "reference_basis": "Must be supplied by the source-qualified relaxed interface or a cited reproducible source; do not derive a numerical value from a schematic or adhesion-energy table alone.",
+      "value_A": null,
+      "status": "UNRESOLVED"
+    },
+    "distance_endpoints": [
+      {
+        "structure_id": "DEV-AGSI-gap-m010",
+        "gap": "d0 - 0.10 angstrom",
+        "construction": "Rigidly translate the whole Ag slab by -0.10 angstrom along z relative to the fixed Ti3SiC2 slab; preserve lateral registry and all internal coordinates."
+      },
+      {
+        "structure_id": "DEV-AGSI-gap-p010",
+        "gap": "d0 + 0.10 angstrom",
+        "construction": "Rigidly translate the whole Ag slab by +0.10 angstrom along z relative to the fixed Ti3SiC2 slab; preserve lateral registry and all internal coordinates."
+      }
+    ],
+    "cell_and_vacuum": {
+      "in_plane_cell": "UNRESOLVED until the source geometry, strain match, and registry are verified",
+      "cell_policy_for_pair": "same fixed cell and PBC for d0-0.10, d0, and d0+0.10 endpoints",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "vacuum_z_minimum_A": 18.0,
+      "vacuum_convergence_test": "repeat the same geometry with +4 angstrom vacuum before freezing final slab cell",
+      "dipole_correction": "apply in z for the asymmetric slab; verify implementation against the approved GPAW setup"
+    },
+    "kpoint_policy": {
+      "candidate_convergence_pair": [
+        "6x6x1",
+        "8x8x1"
+      ],
+      "final_mesh": "HOLD pending same-geometry convergence; candidate meshes are not verified"
+    },
+    "label_policy": {
+      "energy": "required",
+      "forces": "required for every atom",
+      "stress": "save as diagnostic only; do not use vacuum-cell stress as a training label",
+      "split": "both endpoints and the d0 reference belong to the same DEV parent family"
+    }
+  },
+  "release_gates": [
+    "Read and hash the actual E DFT_PRIORITY_TABLE_20261011.md before replacing any unresolved field.",
+    "Verify source CIF/structure lineage, chemistry, atom mapping, cell, termination, registry, and parent-family independence.",
+    "Freeze numeric P2 d0 and the complete fixed geometry/cell before preparing input files.",
+    "Complete the stated k-point, cutoff, and slab-vacuum convergence checks before freezing final numerical settings.",
+    "Keep all P1/P2 labels in DEV as a whole parent family; no split by endpoints.",
+    "Do not use Ag64 as TRAIN. Preserve sealed TEST isolation.",
+    "A separate explicit user authorization is required before DFT execution."
+  ],
+  "prohibited_in_this_task": [
+    "DFT execution",
+    "MACE training",
+    "potential modification",
+    "Ag64 training use"
+  ],
+  "revision_note": "Additive literature-reference revision; the original archived configuration remains unchanged.",
+  "AG_SI_DEV_SOURCE_REFERENCE": {
+    "DOI": "10.1002/pssb.201248542",
+    "authors": [
+      "A. H. M. Abdul Wasey",
+      "R. Batabyal",
+      "J. C. Mahato",
+      "B. N. Dev",
+      "Y. Kawazoe",
+      "G. P. Das"
+    ],
+    "title": "First principles electronic structure of coincidence site epitaxial Ag/Si(111) interface",
+    "journal": "physica status solidi (b)",
+    "volume": 250,
+    "issue": 7,
+    "pages": "1313-1319",
+    "year": 2013,
+    "status": "LITERATURE_SUPPORTED_PENDING_STRUCTURE_GENERATION",
+    "use": "Ag/Ti3SiC2 Si-termination DEV design-method reference only",
+    "design_evidence": {
+      "coincidence_system": "Ag(111)/Si(111)",
+      "matching_idea": "four Ag(111) surface unit cells on three Si(111) surface unit cells; paper reports about 0.3% residual mismatch/effective Ag strain",
+      "illustrated_registry": "every fifth Ag atom directly above the fourth Si atom; a cited example, not a systematic registry-energy ranking",
+      "reported_local_Ag_Si_bond_lengths_A": [
+        2.53,
+        2.72
+      ],
+      "distance_caveat": "local bond lengths, not a plane-to-plane d0; not transferable as target Ag/Ti3SiC2 d0",
+      "construction_method": "six Si(111) bilayers, one Ag monolayer, H-passivated opposite Si side, fully relaxed coordinates; VASP/PAW, CA-PZ LDA and PBE in some GGA calculations; 500 eV cutoff; reported 4x4x2 and, for a buried supercell LDA calculation, 5x5x1 k mesh"
+    },
+    "source_artifact": {
+      "provided_filename": "First principles electronic structure of coincide.pdf",
+      "pages": 7,
+      "sha256": "d431db3eed82682835869a8e434c0afd1293a74a888c96fef9a09737f49d8630",
+      "primary_text_checked": true,
+      "included_in_public_repository": false
+    },
+    "structure_or_training_data_source": false,
+    "primary_text_details_verified": true,
+    "verification_note": "Citation and the listed design details were checked against the user-provided primary PDF, title page and pp. 1313-1315 (Section 2, Section 3.1, Figs. 1 and 3). The paper does not provide machine-readable target Ag/Ti3SiC2 coordinates or target per-atom force labels. The numerical details apply to Ag/Si(111), not the Ti3SiC2 target.",
+    "execution_authorized": false
+  }
+}
