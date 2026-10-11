@@ -116,6 +116,13 @@ def run_backend_v2_roundtrip(temp_root: Path | None = None) -> dict:
         client = backend.GitHubArchiveBackend(
             bare.as_uri(), "main", base_head, "test-archives",
             allow_local_test_remote=True)
+        try:
+            client.upload(archive, archive_sha)
+        except backend.ArchiveBackendError as exc:
+            assert str(exc) == "ARCHIVE_STEP_OUTSIDE_SIGNED_100_STEP_SEGMENT_BOUNDARIES"
+            historical_guard_status = "PASS_BLOCKED_UNBOUND_STEP_3000"
+        else:
+            raise AssertionError("legacy upload accepted a step-3000 archive without segment binding")
         receipt = client.upload(
             archive, archive_sha, start_step=2000, end_step=3000,
             max_added_steps=1000, source_checkpoint_sha256=SOURCE_STATE_SHA)
@@ -161,6 +168,7 @@ def run_backend_v2_roundtrip(temp_root: Path | None = None) -> dict:
             "test_remote_type": "local_bare_git_file_remote",
             "production_backend_modified": False,
             "real_backend_methods": ["upload", "verify", "restore"],
+            "historical_step_guard": historical_guard_status,
             "fresh_clone_status": "PASS",
             "base_head": base_head,
             "fresh_clone_head": fresh_head,
