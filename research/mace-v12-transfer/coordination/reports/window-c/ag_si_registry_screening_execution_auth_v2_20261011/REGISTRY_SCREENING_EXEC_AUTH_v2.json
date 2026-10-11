@@ -1,0 +1,405 @@
+{
+  "schema_version": 1,
+  "authorization_id": "C-AGSI-REGISTRY-SCREENING-V2-R1-R4-6X6",
+  "execution_authorized": true,
+  "authorized_by": "C",
+  "C_approval": {
+    "signed_by": "C",
+    "approval_id": "C-AGSI-REGISTRY-SCREENING-V2-R1-R4-6X6"
+  },
+  "CONFIG_SHA256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035",
+  "config_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_registry_dft_release_v2_20261011/AG_SI_REGISTRY_DFT_RELEASE_v2.json",
+  "config_commit": "f17fa754a2a4cfbc5f63fc40aefd05162f5e2361",
+  "scope": {
+    "phase": "FIRST_ROUND_REGISTRY_SCREENING_ONLY",
+    "authorized_registries": [
+      "R1",
+      "R2",
+      "R3",
+      "R4"
+    ],
+    "calculation": "one fixed-geometry DFT single point per registry at 6x6x1",
+    "method": "PBE/PAW/GPAW",
+    "geometry": "fixed_geometry",
+    "relax_atoms": false,
+    "relax_cell": false,
+    "registry_changes_allowed": false,
+    "structure_modification_allowed": false
+  },
+  "kpoint_mesh": [
+    6,
+    6,
+    1
+  ],
+  "runtime": {
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "OMP_NUM_THREADS": "1"
+  },
+  "ROLE": "REGISTRY_SCREENING_ONLY",
+  "prohibited_roles": [
+    "TRAIN",
+    "DEV",
+    "TEST"
+  ],
+  "method": {
+    "engine": "GPAW 26.7.0",
+    "xc": "PBE",
+    "pseudopotential": "PAW",
+    "basis": "plane_wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "max_scf_iterations": 160,
+    "save_total_energy": true,
+    "save_force_consistent_free_energy": true,
+    "save_forces": true,
+    "save_full_3x3_stress": true
+  },
+  "registries": [
+    {
+      "registry_id": "R1",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R1.xyz",
+      "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R1/input.py",
+      "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+      "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+      "input_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "mpi_ranks": 4,
+      "omp_threads": 1,
+      "role": "REGISTRY_SCREENING_ONLY",
+      "prohibited_roles": [
+        "TRAIN",
+        "DEV",
+        "TEST"
+      ],
+      "runner_release_fields": {
+        "execution_authorized": true,
+        "registry_id": "R1",
+        "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+        "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+        "xc": "PBE",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "kpoint_mesh": [
+          6,
+          6,
+          1
+        ],
+        "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset",
+        "fixed_geometry": true,
+        "relax_atoms": false,
+        "relax_cell": false,
+        "save_energy": true,
+        "save_forces": true,
+        "save_stress": true,
+        "mpi_ranks": 4,
+        "omp_threads": 1,
+        "role": "REGISTRY_SCREENING_ONLY",
+        "prohibited_roles": [
+          "TRAIN",
+          "DEV",
+          "TEST"
+        ],
+        "authorization_document_config_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035"
+      }
+    },
+    {
+      "registry_id": "R2",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R2.xyz",
+      "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+      "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+      "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+      "input_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "mpi_ranks": 4,
+      "omp_threads": 1,
+      "role": "REGISTRY_SCREENING_ONLY",
+      "prohibited_roles": [
+        "TRAIN",
+        "DEV",
+        "TEST"
+      ],
+      "runner_release_fields": {
+        "execution_authorized": true,
+        "registry_id": "R2",
+        "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+        "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+        "xc": "PBE",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "kpoint_mesh": [
+          6,
+          6,
+          1
+        ],
+        "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset",
+        "fixed_geometry": true,
+        "relax_atoms": false,
+        "relax_cell": false,
+        "save_energy": true,
+        "save_forces": true,
+        "save_stress": true,
+        "mpi_ranks": 4,
+        "omp_threads": 1,
+        "role": "REGISTRY_SCREENING_ONLY",
+        "prohibited_roles": [
+          "TRAIN",
+          "DEV",
+          "TEST"
+        ],
+        "authorization_document_config_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035"
+      }
+    },
+    {
+      "registry_id": "R3",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R3.xyz",
+      "structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R3/input.py",
+      "input_sha256": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2",
+      "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+      "input_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "mpi_ranks": 4,
+      "omp_threads": 1,
+      "role": "REGISTRY_SCREENING_ONLY",
+      "prohibited_roles": [
+        "TRAIN",
+        "DEV",
+        "TEST"
+      ],
+      "runner_release_fields": {
+        "execution_authorized": true,
+        "registry_id": "R3",
+        "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+        "structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+        "xc": "PBE",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "kpoint_mesh": [
+          6,
+          6,
+          1
+        ],
+        "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset",
+        "fixed_geometry": true,
+        "relax_atoms": false,
+        "relax_cell": false,
+        "save_energy": true,
+        "save_forces": true,
+        "save_stress": true,
+        "mpi_ranks": 4,
+        "omp_threads": 1,
+        "role": "REGISTRY_SCREENING_ONLY",
+        "prohibited_roles": [
+          "TRAIN",
+          "DEV",
+          "TEST"
+        ],
+        "authorization_document_config_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035"
+      }
+    },
+    {
+      "registry_id": "R4",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-c/ag_si_dev_v2_structure_generation/Ag_Ti3SiC2_Si_R4.xyz",
+      "structure_sha256": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c",
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R4/input.py",
+      "input_sha256": "1a8fca555c0dd7a7028e8f223a54770ef5183549f0a9c230869ed88dbc4198e8",
+      "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+      "input_commit": "10e7acc27d203d7377c13f5de367690237e500e1",
+      "n_atoms": 20,
+      "element_counts": {
+        "Ag": 7,
+        "C": 4,
+        "Si": 3,
+        "Ti": 6
+      },
+      "formula": "Ag7C4Si3Ti6",
+      "cell_A": [
+        [
+          3.071,
+          0.0,
+          0.0
+        ],
+        [
+          -1.5355,
+          2.6595640150220112,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          71.26826600017428
+        ]
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "kpoint_mesh": [
+        6,
+        6,
+        1
+      ],
+      "mpi_ranks": 4,
+      "omp_threads": 1,
+      "role": "REGISTRY_SCREENING_ONLY",
+      "prohibited_roles": [
+        "TRAIN",
+        "DEV",
+        "TEST"
+      ],
+      "runner_release_fields": {
+        "execution_authorized": true,
+        "registry_id": "R4",
+        "source_commit": "9a5482d93a8756850ab457a605cf75dfa1f8a3d4",
+        "structure_sha256": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c",
+        "xc": "PBE",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "kpoint_mesh": [
+          6,
+          6,
+          1
+        ],
+        "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset",
+        "fixed_geometry": true,
+        "relax_atoms": false,
+        "relax_cell": false,
+        "save_energy": true,
+        "save_forces": true,
+        "save_stress": true,
+        "mpi_ranks": 4,
+        "omp_threads": 1,
+        "role": "REGISTRY_SCREENING_ONLY",
+        "prohibited_roles": [
+          "TRAIN",
+          "DEV",
+          "TEST"
+        ],
+        "authorization_document_config_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035"
+      }
+    }
+  ],
+  "explicitly_not_authorized": {
+    "kpoint_meshes_other_than_6x6x1": true,
+    "8x8x1_refinement": true,
+    "d0_scan": true,
+    "geometry_optimization": true,
+    "structure_or_registry_modification": true,
+    "MACE_training": true,
+    "data_role_promotion": true
+  },
+  "phase2_status": "NOT_AUTHORIZED; the two lowest-energy registries may be proposed for a separate 8x8x1 authorization after phase-1 results are reviewed.",
+  "execution_note": "This document authorizes the specified computation scope but no computation was started while preparing or committing it.",
+  "per_registry_runner_note": "Each runner payload is scoped to exactly one registry and includes the frozen input/structure hashes. Do not apply a payload to another registry."
+}
