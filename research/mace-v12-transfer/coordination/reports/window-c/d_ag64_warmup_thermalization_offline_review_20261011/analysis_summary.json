@@ -1,0 +1,113 @@
+{
+  "archive_task_id": "C-D-AGL-1250K-rho097-seed01",
+  "owner": "D",
+  "archive_sha256": "b62a818e58a2cf423e4cb1b9ed0468ae73ad578a75c4b2cb9fb3f28baf75e7b1",
+  "archive_bytes": 100700,
+  "manifest_sha256": "ab9f0dffa8ef145eac7792dfe1e14e07c1354df1c2152dafec97bad1dc3a57b1",
+  "thermal_sha256": "aece67f7faddb8f38f379c2ea34967f0ac9b86628d5376d549e40e0e48482140",
+  "trajectory_sha256": "7b5185a80526cd95d51c07d31f98f3627aa5f4f7242b9f513157e398e68b2818",
+  "sampler_state_sha256": "e08574678b3f8231c0a52ab25febb13c9d06e815b28149eb306d4b451c83ef6f",
+  "source_manifest_sha256": "9a694ea8f93655efa7a1c8695669ab2f17520c2d1b90f6df28115b2b1f9c2ad6",
+  "thermal_rows": 51,
+  "trajectory_frames": 11,
+  "atom_count": 64,
+  "box_edge_A": 10.826824658074,
+  "all_18_archive_members_verified": true,
+  "checkpoint_endpoint_exact_match": {
+    "positions": true,
+    "momenta": true,
+    "cell": true,
+    "numbers": true,
+    "masses": true,
+    "pbc": true,
+    "atom_ids": true,
+    "state_atoms_positions": true,
+    "state_atoms_momenta": true
+  },
+  "pbc": [
+    true,
+    true,
+    true
+  ],
+  "rdf_dr_A": 0.05,
+  "rdf_rmax_A": 5.413412329037,
+  "rdf_first_peak_A_smoothed": 2.725,
+  "rdf_first_peak_g_smoothed": 2.4792142681488203,
+  "rdf_first_minimum_A_smoothed": 3.6750000000000003,
+  "Q6_definition": "per-atom Steinhardt Q6 from neighbors inside the first minimum of the 5-bin-smoothed 11-frame RDF; coarse structural descriptor only",
+  "nearest_neighbor_distance_quantiles_A": {
+    "min": 2.2006860904193575,
+    "q01": 2.215348879884395,
+    "q10": 2.3378609244812485,
+    "median": 2.539261708684508,
+    "q90": 2.6768036990787953,
+    "q99": 2.8012604184075203,
+    "max": 2.966629020619611
+  },
+  "checkpoint_state": {
+    "status": "WARMUP_COMPLETE_C_REVIEW_REQUIRED",
+    "step": 1000,
+    "time_fs": 500.0,
+    "task_id": "C-D-AGL-1250K-rho097-seed01",
+    "bundle_sha256": {
+      "state_arrays.npz": "39da7d05b186ce61134e14dcc53c19311cfbda183a2d1403e1451d38d0205466",
+      "state_atoms.traj": "03fee48521925b419a67e509d6db8bc8902a5d7e4db7dc22cf260f3e8c9b142b",
+      "thermal.csv": "aece67f7faddb8f38f379c2ea34967f0ac9b86628d5376d549e40e0e48482140",
+      "trajectory.traj": "7b5185a80526cd95d51c07d31f98f3627aa5f4f7242b9f513157e398e68b2818"
+    },
+    "rng_class": "numpy.Generator(PCG64)",
+    "langevin_version": 5,
+    "C_release_config_sha256_at_checkpoint": "2e122b258a48fe54bf603709b5505a301c1257f398c5625eecc2ca94998c0052",
+    "scientific_parameters_sha256": "8f792d6206c1b7bae7b900e7ea81445d6cd3e837de2b5979c88bb977650ab7b2"
+  },
+  "source_classification": {
+    "liquid_QA": "NOT_PERFORMED",
+    "DFT_LABELS": "ABSENT",
+    "STRUCTURE_PASS": false,
+    "source_role": "liquid_pilot_candidate_not_training_or_independent_test",
+    "RNG_seed": 125009701,
+    "density_g_cm3": 9.03273341876,
+    "box_edge_A": 10.826824658074,
+    "packing_attempts": 1457
+  },
+  "analysis_software": {
+    "python": "3.12.14",
+    "ase": "3.29.0",
+    "numpy": "1.26.4",
+    "scipy": "1.17.1",
+    "matplotlib": "3.11.2"
+  },
+  "temperature_canonical_sigma_estimate_K_at_1600K": 164.5902399595647,
+  "energy_definition": {
+    "sampler_energy_eV": "potential energy from atoms.get_potential_energy(); kinetic energy is not included",
+    "kinetic_energy_derived_eV": "derived from logged T using ASE DOF=3*64-3=189 and K=DOF*kB*T/2; not an original CSV field",
+    "total_energy_derived_eV": "potential plus derived kinetic energy; Langevin NVT does not conserve this quantity",
+    "pressure_eV_A3": "runner formula -trace(stress)/3 + 2*K/(3V); K is kinetic energy"
+  },
+  "derived_energy_at_step0_peakT_and_final": {
+    "0": {
+      "T_K": 1599.9999999999995,
+      "potential_eV": -107.86403077042272,
+      "kinetic_derived_eV": 13.029407892363237,
+      "total_derived_eV": -94.83462287805948
+    },
+    "80": {
+      "T_K": 4266.297933987536,
+      "potential_eV": -139.53396332938823,
+      "kinetic_derived_eV": 34.74208498266887,
+      "total_derived_eV": -104.79187834671936
+    },
+    "1000": {
+      "T_K": 1855.2540299553118,
+      "potential_eV": -158.72091951776196,
+      "kinetic_derived_eV": 15.108038437649029,
+      "total_derived_eV": -143.6128810801129
+    }
+  },
+  "classification": {
+    "INITIAL_TRANSIENT": "YES: early potential energy falls while temperature and pressure show a large startup excursion",
+    "THERMALIZATION_NOT_ESTABLISHED": "YES: final 200-step temperature/energy/pressure means continue to drift and remain above target temperature",
+    "NUMERICAL_INSTABILITY": "NO_EVIDENCE: all logged values and coordinates finite; no runtime distance-stop violation; archived run completed normally",
+    "THERMALIZATION_CANDIDATE": "NOT_YET: 0.5 ps/11 structural frames are too short and show unresolved drift; no liquid claim"
+  }
+}
