@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "owner": "F",
+  "captured_utc": "2026-10-11T01:42:59Z",
+  "current_measurement_path": "/workspace",
+  "current_overlay_available_bytes": 28873228288,
+  "persistent_volume_quota_bytes": "UNVERIFIED",
+  "persistent_work_root": false,
+  "sampling": {
+    "scope": "F's two assigned tasks; six-task aggregate is distributed across D/E/F and storage is not pooled",
+    "config_source": "fixed execution pack C_RELEASE_CONFIG.json",
+    "config_storage_release": false,
+    "config_warmup_release": false,
+    "parameters_proposal_only": true,
+    "per_task_archive_cap_bytes": 536870912,
+    "per_task_checkpoint_reserve_bytes": 33554432,
+    "minimum_free_bytes": 2147483648,
+    "F_task_count": 2,
+    "F_archive_cap_total_bytes": 1073741824,
+    "F_checkpoint_reserve_total_bytes": 67108864,
+    "F_conservative_additive_envelope_bytes": 3288334336,
+    "F_overlay_numerically_fits_envelope": true,
+    "six_task_distributed_envelope_bytes_if_each_owner_has_same_2GiB_floor": 9865003008,
+    "six_task_all_host_capacity_verified": false,
+    "readiness": "NO; no verified durable root, quota, or isolation; D/E measurements are not available here",
+    "budget_note": "Conservative envelope sums archive cap, separate checkpoint reserve, and the per-root minimum-free threshold. The archive cap may already include restart data; overlap is not subtracted. Proposal values are not a C release."
+  },
+  "dft_checkpoint": {
+    "readiness": "NO",
+    "current_checkpoint_bytes": "NO F Ag64 checkpoint exists or was measured",
+    "retention_ledger": "UNAVAILABLE",
+    "C_engineering_example_required_free_decimal_gb": {
+      "Gamma plus active 2x2x2; two retained Gamma copies": 16.773,
+      "second 2x2x2; two Gamma and two completed 2x2x2 copies retained": 23.402,
+      "3x3x3 with 14 IBZ verified": 31.032,
+      "3x3x3 raw 27 IBZ points": 50.422
+    },
+    "model_status": "Illustrative only; assumed density 9.3 g/cm3, 662 bands and 1.25 checkpoint overhead are unverified; actual bands, IBZ/PW/FFT, checkpoint size, and runtime retention are unknown.",
+    "comparison_to_F_overlay": "The 2-mesh illustration is below current overlay free bytes but is not validated for this host; 3x3x3 illustrations exceed current free bytes. Overlay is not an approved DFT root.",
+    "capacity_policy": "Keep current + previous + atomic temporary checkpoint copies, existing mesh files, inputs/logs and risk reserve. Never delete historical checkpoints to fit."
+  }
+}
