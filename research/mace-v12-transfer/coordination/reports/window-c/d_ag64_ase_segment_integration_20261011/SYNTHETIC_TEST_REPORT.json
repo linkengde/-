@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "test_count": 14,
+  "ase_version": "3.29.0",
+  "python_version": "3.12.14",
+  "test_calculator": "VirtualHarmonic marked synthetic-only; no EAM/MACE model imported",
+  "real_D_checkpoint_probe": "read-only restoration only; no calculator; zero energy, force, or integration calls",
+  "tests": [
+    "test_ase_version_and_schedule_are_frozen_at_global_step",
+    "test_checkpoint_manifest_and_no_overwrite",
+    "test_continuous_and_bundle_interrupt_resume_match_every_step",
+    "test_local_archive_fresh_extract_and_internal_restore",
+    "test_non_test_integrator_requires_separately_hashed_signed_lock",
+    "test_nonfinite_force_rolls_back_coordinates_momenta_and_rng",
+    "test_output_workflow_stops_on_remote_failure_then_resumes_from_fresh_checkpoint",
+    "test_release_code_hash_and_unsigned_lock_gates",
+    "test_remote_archive_failure_keeps_new_bundle_and_original_step1000",
+    "test_remote_fresh_fetch_gate_is_mandatory_even_for_candidate_signed_shape",
+    "test_run_and_irun_cannot_bypass_owned_step_gate",
+    "test_step_2001_is_refused_before_force_or_rng_consumption",
+    "test_timeout_stops_before_next_step",
+    "test_wrong_initial_or_stop_boundary_refused"
+  ],
+  "continuous_vs_resume": {
+    "segment": "global step 1000 to 2000",
+    "interrupt_after_global_step": 1400,
+    "compared_per_step_states": 1000,
+    "positions_bitwise_equal": true,
+    "momenta_bitwise_equal": true,
+    "PCG64_thermostat_state_equal_at_each_step": true,
+    "packing_and_velocity_RNG_streams_preserved": true
+  },
+  "step_2001_attempt": {
+    "refused_before_force_or_RNG": true,
+    "positions_unchanged": true,
+    "momenta_unchanged": true,
+    "RNG_unchanged": true
+  },
+  "output_path": {
+    "checkpoint_interval_steps": 100,
+    "thermal_log_interval_steps": 20,
+    "trajectory_interval_steps": 100,
+    "thermal_rows_step_1020_through_2000": 50,
+    "trajectory_frames_1000_through_2000": 11,
+    "inner_manifest_and_SHA256SUMS": "PASS",
+    "local_tar_fresh_extract_and_restore": "PASS",
+    "remote_failure_stops_before_next_step": true,
+    "original_step1000_source_retained": true
+  },
+  "wall_time_for_test_suite_seconds": 1.46,
+  "github_remote_fresh_fetch": "NOT_TESTED; PRODUCTION BLOCKER",
+  "real_MD_DFT_or_training": "NOT_RUN"
+}

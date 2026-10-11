@@ -1,0 +1,25 @@
+{
+  "ase_version": "3.29.0",
+  "langevin_version_marker": 5,
+  "python_version": "3.12.14",
+  "resume_integrator_policy": "adapter calls step directly; ASE run/irun are disabled and global step increment occurs inside overridden step after finite-state validation.",
+  "set_temperature_source_sha256": "f634454d88dfd90814ec736867d008f913c9e607910a222d1d1e71fd46de9379",
+  "source_module": "ase/md/langevin.py",
+  "step_source_sha256": "ad43cc013b6fa7bfad9ab1ee09e064f029fa296c0508f44bac9468d1baca7567",
+  "temperature_change": "set_temperature changes temp and coefficients via updatevars; no RNG draw",
+  "updatevars_source_sha256": "4b1ae434fa0b896f65bd66ebc5dd0f4451571f3fa156aebe3d7a9df5b713b937",
+  "verified_order": [
+    "forces at current state if not passed",
+    "store current velocities",
+    "draw xi standard_normal (n,3)",
+    "draw eta standard_normal (n,3)",
+    "apply constraint redistributions if present",
+    "broadcast",
+    "form rnd_pos/rnd_vel",
+    "first velocity half-step",
+    "update positions with constraints",
+    "recompute force at updated state",
+    "second velocity update",
+    "set momenta with constraints"
+  ]
+}
