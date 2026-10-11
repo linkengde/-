@@ -1,0 +1,108 @@
+{
+  "status": "PASS",
+  "scope": "Independent pure array/CSV review; only specified public A references and C published force predictions; no script rerun, model inference, DFT, MD, training or sealed reads",
+  "checks": {
+    "row_counts_312_24_6_14": true,
+    "row_keys_unique": true,
+    "DFT_arrays_and_geometry_match_exact_public_archives": true,
+    "all_vector_axis_max_and_zSSE_metrics_match": true,
+    "element_metrics_and_atom_count_weighting_match": true,
+    "pair_MIC_Ag_to_Si_direction_and_half_factor_match": true,
+    "fourAg_Gz_and_mean_factor_four_match": true,
+    "fixed_point_fourAg_z_coordinate_secants_span_0p4_match": true,
+    "energy_curvature_denominator_0p04_match": true,
+    "DFT_native_and_free_keys_separate_relative_to_own_parent": true,
+    "reused_V18_all3_and_MP_minus_arrays_match": true,
+    "source_roles_PBC_order_parent_unchanged": true,
+    "MP_missing_minus_energy_all_central_quantities_NOT_ARCHIVED": true,
+    "new_inference_two_only_supported_by_script_metadata_origins": true,
+    "no_model_inference_performed_by_reviewer": true,
+    "CSV_LF_line_endings": true
+  },
+  "metrics": [
+    {
+      "label": "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "MACE-MP-0b3-medium",
+      "vector_RMSE_eV_A": 0.20242298559556776,
+      "max_atom_error_eV_A": 0.5160649796524062,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -3.381193415816624,
+      "legacy_pair_eV_A": -1.493158935143797,
+      "origin": "REUSED_C_THREE_MODEL_FULL_PRECISION_FORCE_CSV"
+    },
+    {
+      "label": "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "V18",
+      "vector_RMSE_eV_A": 2.6346643153848786,
+      "max_atom_error_eV_A": 4.557966436523457,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -4.161574239917455,
+      "legacy_pair_eV_A": -2.726787023765206,
+      "origin": "REUSED_A_FULL_PRECISION_METRICS_JSON"
+    },
+    {
+      "label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "MACE-MP-0b3-medium",
+      "vector_RMSE_eV_A": 0.19985067211016574,
+      "max_atom_error_eV_A": 0.48327376464855776,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -4.487180790074365,
+      "legacy_pair_eV_A": -2.1914502619996976,
+      "origin": "NEW_FROZEN_CPU_FLOAT64_INFERENCE_2_THREADS"
+    },
+    {
+      "label": "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "V18",
+      "vector_RMSE_eV_A": 2.633784614681125,
+      "max_atom_error_eV_A": 4.557509654921492,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -4.916633235404122,
+      "legacy_pair_eV_A": -3.2542677410470016,
+      "origin": "REUSED_A_FULL_PRECISION_METRICS_JSON"
+    },
+    {
+      "label": "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "MACE-MP-0b3-medium",
+      "vector_RMSE_eV_A": 0.164185513165698,
+      "max_atom_error_eV_A": 0.2858508738259132,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -3.980503437331423,
+      "legacy_pair_eV_A": -2.1076360640353395,
+      "origin": "NEW_FROZEN_CPU_FLOAT64_INFERENCE_2_THREADS"
+    },
+    {
+      "label": "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19",
+      "model": "V18",
+      "vector_RMSE_eV_A": 2.6337134972473413,
+      "max_atom_error_eV_A": 4.556846868160959,
+      "weighted_element_RMSE_MATCH": true,
+      "local_pair_and_layer_MATCH": true,
+      "AgGz_eV_A": -4.054336246663916,
+      "legacy_pair_eV_A": -3.00970834693083,
+      "origin": "REUSED_A_FULL_PRECISION_METRICS_JSON"
+    }
+  ],
+  "required_corrections": [],
+  "nonblocking_notes": [
+    "Pair projection direction is radial Ag->Si MIC, distinct from slab +z; pair response denominator0.4 is rigid Ag-z span, not pair-distance stiffness.",
+    "V18 energy curvature and layer-force secant are finite-window different estimates, not interchangeable.",
+    "MP energy slopes/curvatures remain NOT_ARCHIVED because reused minus energy absent; parent/plus relative energy retained.",
+    "Source/runtime inference counts are verified against script branches and metadata, not an independent replay.",
+    "CSV writer now specifies LF and existing CSV normalization verified; no numerical changes or inference replay."
+  ],
+  "source_sha256": {
+    "interface_per_atom.csv": "232e71e1894a01e77d950ee06b16d94587ae7d6de007218a5f4c1ba2e56d92e5",
+    "interface_per_element.csv": "b357ca17357fd2c3b803fd94a88ceb49d760bf7e6b9e8cf0ba1724d50ffc85e2",
+    "interface_metrics.csv": "de7cb6231aa20afb7433cfd460b62ca77273a242f4be8b6773f213adf8c3b0ae",
+    "interface_response_comparison.csv": "0525af0b7dd5b2d1364ca3c0a9e1bf94081f332bbcb2cf9e9a5e0e0fb207f2d9"
+  },
+  "threshold_interpretation": {
+    "vector_RMSE_0p05": "All six are >0.05 eV/A; none become an independent test or production qualification",
+    "legacy_pair_0p10": "All six absolute errors >0.10 eV/A; half-coordinate gate cannot silently replace this convention"
+  }
+}
