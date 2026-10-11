@@ -1,0 +1,163 @@
+rank=1 L00: Traceback (most recent call last):
+rank=1 L01:   File "/workspace/.venvs/gpaw-mpi/bin/gpaw", line 8, in <module>
+rank=1 L02:     sys.exit(main())
+rank=1 L03:              ^^^^^^
+rank=1 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/main.py", line 138, in main
+rank=1 L05:     ase_main('gpaw', 'GPAW command-line tool', __version__,
+rank=1 L06:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/cli/main.py", line 106, in main
+rank=1 L07:     f(args)
+rank=1 L08:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/python.py", line 48, in run
+rank=1 L09:     runpy.run_path(args.arguments[0], run_name='__main__')
+rank=1 L10:   File "<frozen runpy>", line 287, in run_path
+rank=1 L11:   File "<frozen runpy>", line 98, in _run_module_code
+rank=1 L12:   File "<frozen runpy>", line 88, in _run_code
+rank=1 L13:   File "input.py", line 201, in <module>
+rank=1 L14:     main()
+rank=1 L15:   File "input.py", line 168, in main
+rank=1 L16:     energy = float(atoms.get_potential_energy(force_consistent=False))
+rank=1 L17:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=1 L19:     energy = self._calc.get_potential_energy(self)
+rank=1 L20:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=1 L22:     return self.calculate_property(atoms,
+rank=1 L23:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=1 L25:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=1 L26:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 177, in iconverge
+rank=1 L28:     for ctx in self.dft.iconverge(
+rank=1 L29:                ^^^^^^^^^^^^^^^^^^^
+rank=1 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 252, in iconverge
+rank=1 L31:     for ctx in self.scf_loop.iterate(self.ibzwfs,
+rank=1 L32:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L33:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/scf.py", line 130, in iterate
+rank=1 L34:     raise KohnShamConvergenceError
+rank=1 L35: gpaw.KohnShamConvergenceError
+GPAW CLEANUP (node 1): <class 'gpaw.KohnShamConvergenceError'> occurred.  Calling MPI_Abort!
+rank=2 L00: Traceback (most recent call last):
+rank=2 L01:   File "/workspace/.venvs/gpaw-mpi/bin/gpaw", line 8, in <module>
+rank=2 L02:     sys.exit(main())
+rank=2 L03:              ^^^^^^
+rank=2 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/main.py", line 138, in main
+rank=2 L05:     ase_main('gpaw', 'GPAW command-line tool', __version__,
+rank=2 L06:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/cli/main.py", line 106, in main
+rank=2 L07:     f(args)
+rank=2 L08:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/python.py", line 48, in run
+rank=2 L09:     runpy.run_path(args.arguments[0], run_name='__main__')
+rank=2 L10:   File "<frozen runpy>", line 287, in run_path
+rank=2 L11:   File "<frozen runpy>", line 98, in _run_module_code
+rank=2 L12:   File "<frozen runpy>", line 88, in _run_code
+rank=2 L13:   File "input.py", line 201, in <module>
+rank=2 L14:     main()
+rank=2 L15:   File "input.py", line 168, in main
+rank=2 L16:     energy = float(atoms.get_potential_energy(force_consistent=False))
+rank=2 L17:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=2 L19:     energy = self._calc.get_potential_energy(self)
+rank=2 L20:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=2 L22:     return self.calculate_property(atoms,
+rank=2 L23:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=2 L25:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=2 L26:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 177, in iconverge
+rank=2 L28:     for ctx in self.dft.iconverge(
+rank=2 L29:                ^^^^^^^^^^^^^^^^^^^
+rank=2 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 252, in iconverge
+rank=2 L31:     for ctx in self.scf_loop.iterate(self.ibzwfs,
+rank=2 L32:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L33:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/scf.py", line 130, in iterate
+rank=2 L34:     raise KohnShamConvergenceError
+rank=2 L35: gpaw.KohnShamConvergenceError
+GPAW CLEANUP (node 2): <class 'gpaw.KohnShamConvergenceError'> occurred.  Calling MPI_Abort!
+rank=3 L00: Traceback (most recent call last):
+rank=3 L01:   File "/workspace/.venvs/gpaw-mpi/bin/gpaw", line 8, in <module>
+rank=3 L02:     sys.exit(main())
+rank=3 L03:              ^^^^^^
+rank=3 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/main.py", line 138, in main
+rank=3 L05:     ase_main('gpaw', 'GPAW command-line tool', __version__,
+rank=3 L06:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/cli/main.py", line 106, in main
+rank=3 L07:     f(args)
+rank=3 L08:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/python.py", line 48, in run
+rank=3 L09:     runpy.run_path(args.arguments[0], run_name='__main__')
+rank=3 L10:   File "<frozen runpy>", line 287, in run_path
+rank=3 L11:   File "<frozen runpy>", line 98, in _run_module_code
+rank=3 L12:   File "<frozen runpy>", line 88, in _run_code
+rank=3 L13:   File "input.py", line 201, in <module>
+rank=3 L14:     main()
+rank=3 L15:   File "input.py", line 168, in main
+rank=3 L16:     energy = float(atoms.get_potential_energy(force_consistent=False))
+rank=3 L17:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=3 L19:     energy = self._calc.get_potential_energy(self)
+rank=3 L20:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=3 L22:     return self.calculate_property(atoms,
+rank=3 L23:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=3 L25:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=3 L26:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 177, in iconverge
+rank=3 L28:     for ctx in self.dft.iconverge(
+rank=3 L29:                ^^^^^^^^^^^^^^^^^^^
+rank=3 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 252, in iconverge
+rank=3 L31:     for ctx in self.scf_loop.iterate(self.ibzwfs,
+rank=3 L32:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L33:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/scf.py", line 130, in iterate
+rank=3 L34:     raise KohnShamConvergenceError
+rank=3 L35: gpaw.KohnShamConvergenceError
+GPAW CLEANUP (node 3): <class 'gpaw.KohnShamConvergenceError'> occurred.  Calling MPI_Abort!
+rank=0 L00: Traceback (most recent call last):
+rank=0 L01:   File "/workspace/.venvs/gpaw-mpi/bin/gpaw", line 8, in <module>
+rank=0 L02:     sys.exit(main())
+rank=0 L03:              ^^^^^^
+rank=0 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/main.py", line 138, in main
+rank=0 L05:     ase_main('gpaw', 'GPAW command-line tool', __version__,
+rank=0 L06:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/cli/main.py", line 106, in main
+rank=0 L07:     f(args)
+rank=0 L08:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/cli/python.py", line 48, in run
+rank=0 L09:     runpy.run_path(args.arguments[0], run_name='__main__')
+rank=0 L10:   File "<frozen runpy>", line 287, in run_path
+rank=0 L11:   File "<frozen runpy>", line 98, in _run_module_code
+rank=0 L12:   File "<frozen runpy>", line 88, in _run_code
+rank=0 L13:   File "input.py", line 201, in <module>
+rank=0 L14:     main()
+rank=0 L15:   File "input.py", line 168, in main
+rank=0 L16:     energy = float(atoms.get_potential_energy(force_consistent=False))
+rank=0 L17:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=0 L19:     energy = self._calc.get_potential_energy(self)
+rank=0 L20:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=0 L22:     return self.calculate_property(atoms,
+rank=0 L23:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=0 L25:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=0 L26:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 177, in iconverge
+rank=0 L28:     for ctx in self.dft.iconverge(
+rank=0 L29:                ^^^^^^^^^^^^^^^^^^^
+rank=0 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 252, in iconverge
+rank=0 L31:     for ctx in self.scf_loop.iterate(self.ibzwfs,
+rank=0 L32:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L33:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/scf.py", line 130, in iterate
+rank=0 L34:     raise KohnShamConvergenceError
+rank=0 L35: gpaw.KohnShamConvergenceError
+GPAW CLEANUP (node 0): <class 'gpaw.KohnShamConvergenceError'> occurred.  Calling MPI_Abort!
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 2 in communicator MPI_COMM_WORLD
+  Proc: [[19302,1],2]
+  Errorcode: 42
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+prterun has exited due to process rank 1 with PID 0 on node 72025a3c565d calling
+"abort". This may have caused other processes in the application to be
+terminated by signals sent by prterun (as reported here).
+--------------------------------------------------------------------------
+ 

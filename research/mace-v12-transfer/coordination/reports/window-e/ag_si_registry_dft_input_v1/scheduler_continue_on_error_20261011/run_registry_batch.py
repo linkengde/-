@@ -203,12 +203,21 @@ def validate_environment(gpaw_exe: Path, mpiexec: str, launcher_dir: Path, work_
 
 def failure_reason(stderr: str, stdout: str, scf_log: str, return_code: int | None) -> tuple[str, str]:
     combined = "\n".join((stderr, stdout, scf_log))
-    if ("SCF did not converge" in combined
-            or "Maximum number of iterations" in combined
-            or "KohnShamConvergenceError" in combined):
+    # Only classify an SCF failure from an actual exception, not source-code
+    # context printed in a traceback (e.g. the line `require(..., "SCF did not
+    # converge")` can appear even when the real exception is AttributeError).
+    if ("KohnShamConvergenceError" in combined
+            or re.search(r"(?:SystemExit|RuntimeError|AssertionError):\s+(?:HOLD:\s+)?SCF did not converge", combined)
+            or "Maximum number of iterations reached without convergence" in combined):
         return "FAILED_SCF", "SCF reached the frozen iteration limit without convergence; full SCF log and partial output were retained."
+    if "AttributeError: 'ASECalculator' object has no attribute 'scf'" in combined:
+        return "FAILED_POSTPROCESS", "GPAW single-point quantities were calculated, but the frozen input's convergence-status check accessed a missing ASECalculator.scf attribute; convergence is unverified and no result.json was written."
     if return_code is None:
         return "FAILED", "process could not be started"
+    exception_lines = [line.replace("\x00", "").strip() for line in stderr.splitlines()
+                       if re.search(r"(?:AttributeError|RuntimeError|SystemExit|ValueError|TypeError|ImportError):", line)]
+    if exception_lines:
+        return "FAILED", exception_lines[-1][-1000:]
     nonempty = [line.replace("\x00", "").strip() for line in stderr.splitlines() if line.replace("\x00", "").strip()]
     if not nonempty:
         nonempty = [line.replace("\x00", "").strip() for line in stdout.splitlines() if line.replace("\x00", "").strip()]
@@ -268,7 +277,12 @@ def run_one(registry_id: str, work_root: Path, *, gpaw_exe: Path, mpiexec: str, 
         failure_status, reason = failure_reason(stderr, stdout, scf_log, return_code)
         if launch_error:
             reason = launch_error
-        scf_status = failure_status if failure_status == "FAILED_SCF" else ("NOT_REACHED" if not scf_log else "NOT_CONVERGED_OR_ABORTED")
+        if failure_status == "FAILED_SCF":
+            scf_status = "FAILED_SCF"
+        elif failure_status == "FAILED_POSTPROCESS":
+            scf_status = "CONVERGENCE_UNVERIFIED"
+        else:
+            scf_status = "NOT_REACHED" if not scf_log else "UNVERIFIED"
         partial = sorted(str(p.relative_to(directory)) for p in (directory / "results" / "coarse").glob("*") if p.is_file()) if (directory / "results" / "coarse").is_dir() else []
         record = {
             "registry_id": registry_id, "status": failure_status, "scf_status": scf_status,
@@ -338,9 +352,11 @@ def run_self_test() -> dict:
     assert ranking["status"] == "READY_FOR_8X8_VALIDATION" and ranking["auto_launch_8x8"] is False
     failed_scf, reason = failure_reason("gpaw.KohnShamConvergenceError", "", "iteration 160", 42)
     assert failed_scf == "FAILED_SCF" and "partial output" in reason
+    postprocess, reason = failure_reason("Traceback\nrequire(bool(calc.scf.converged), \"SCF did not converge\")\nAttributeError: 'ASECalculator' object has no attribute 'scf'", "", "iteration 124", 42)
+    assert postprocess == "FAILED_POSTPROCESS" and "convergence is unverified" in reason
     fewer = build_ranking([outcomes[0], outcomes[1]], AUTH_SHA256, CONFIG_SHA256)
     assert fewer["status"] == "INSUFFICIENT_FOR_8X8"
-    return {"status": "PASS", "test": "continue_on_error_failed_scf_and_ranking_thresholds", "registries_attempted": seen, "synthetic_failures_did_not_stop_dispatch": True, "max_iteration_failure_classified": failed_scf, "dft_started": False}
+    return {"status": "PASS", "test": "continue_on_error_failure_classification_and_ranking_thresholds", "registries_attempted": seen, "synthetic_failures_did_not_stop_dispatch": True, "max_iteration_failure_classified": failed_scf, "calculator_attribute_error_not_misclassified_as_scf": postprocess, "dft_started": False}
 
 
 def main() -> int:
