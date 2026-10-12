@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "document_id": "C_AG64_RHO100_STEP2000_CONTINUATION_EXECUTION_RELEASE_20261012",
+  "authorization_status": "ISSUED",
+  "execution_authorized": true,
+  "signed_by": "C",
+  "owner": "D",
+  "task_id": "C-D-AGL-1250K-rho100-followup01",
+  "execution_mode": "bounded_automatic_continuation",
+  "repository": "linkengde/-",
+  "d_branch": "cloud-d-b1-dft",
+  "d_branch_head": "4418a3f498803332b521e4870f4c559db1bd462c",
+  "d_code_release_commit": "2fb55ac472b2175f39bbe4f18edcd426077e413d",
+  "d_authorization_request_commit": "4418a3f498803332b521e4870f4c559db1bd462c",
+  "based_on_c_authorization": {
+    "commit": "e5a4d6c66af12d4eedce85644487cbed61a04eee",
+    "file": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_production_release_v2_1_20261012/C_EXECUTION_AUTHORIZATION.json",
+    "file_sha256": "c29842f9bfeb1c2e2013f3a077ba2bb6492a996afb00d0d3c06b77384d995b30",
+    "interpretation_update_commit": "e3dcd02c2d59d7c18733fe027bc885dc1792f809",
+    "interpretation_update_file_sha256": "b26598b04e9e6686e39a4ff6a901f2becfb59a7fd2079917621e34baa86272c9"
+  },
+  "strategy_lock_sha256": "054f36dcda113e37b23b112e5919ba1c8201c669626db37b79bbd2281b020e1c",
+  "scientific_lock_sha256": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+  "qa_science_lock_sha256": "848f8db72d83cea91dcf4cd42ee9fbbf49a80e7b5e3759cb4f535be8cc5873d2",
+  "config_sha256": "e0b8effafecadab3de32da7ae135ee99e2b5ee40ad8bf8a06384febfbb585d31",
+  "runner_sha256": "41b60d4bb12420ac2f4cba3b041057358e1423b4a580efcf54564595945def6f",
+  "criteria_sha256": "dadf5647cd1ffb68fd421e8f2742117c604b324e20443c0e2551e7208ae21c69",
+  "archive_backend_sha256": "6121984747ef710e0f0e6f1fb822bbf74871c435ac2110ea36c64b056f0af9e8",
+  "test_suite_sha256": "71d94135e494cd17750433d9c4c7a79949d62b4db0d0fd76ec231bee9cbe31ec",
+  "github_archive_test_harness_sha256": "d870bc41e343c85e5396b3f4b3d11310db17146c023c9497a6f78592fff00a4e",
+  "checkpoint_sha256": "3ae061355544c7c1871605d11cc532c58d975fd0d77611dfa6fab26b2f238381",
+  "checkpoint_binding_sha256": "b314ca230c412c5852e289e755dcda54ceefd0746d8dd2eff6bf9d1bcb56a285",
+  "resume_global_step": 2000,
+  "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+  "environment_sha256": "e71e04b8edc989001a702ffb308b1b897d6b521d0ebfdcb41b43592ae2bff1fb",
+  "resume_checkpoint": {
+    "archive_commit": "d549ef76b1e9f6a208744bea229fad9c581de2e6",
+    "archive_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_followup_runs_v2_1_20261012/C-D-AGL-1250K-rho100-followup01/chunks/step_02000",
+    "archive_sha256sums_sha256": "0d1f931f802f336bf9195dccead2636f0ad2d3cde7602d113fc89648fa688650",
+    "manifest_sha256": "dfc00bf79de7b4ab4eb5cd92a68afe6be4b82100ba5c6515d1087876b127cd14",
+    "segment_manifest_sha256": "64341d38c8214fdef9d8df74d50c9c195fd9237fab5f69802b1da08f8832c2a0",
+    "checkpoint_sha256": "3ae061355544c7c1871605d11cc532c58d975fd0d77611dfa6fab26b2f238381",
+    "global_step": 2000,
+    "source_step1000_checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+    "qa_status": "PENDING",
+    "qa_stage": "A_HOT_1600K",
+    "qa_target_temperature_K": 1600.0
+  },
+  "continuation_scope": {
+    "start_checkpoint_step": 2000,
+    "first_permitted_integrator_step": 2001,
+    "resume_only_from_bound_step2000_checkpoint": true,
+    "replay_step1000_to_2000_forbidden": true,
+    "checkpoint_mutation_forbidden": true,
+    "recovery_interpretation": "Restore positions, momenta, cell, PBC, masses, atom order, unwrapped positions, and all PCG64 streams exactly from the immutable step-2000 checkpoint. Reconstruct only the in-memory control-stage marker as A_HOT_1600K from the checksum-bound QA monitor and thermal log; this does not change the checkpoint or mark PENDING as PASS.",
+    "qa_status_policy": {
+      "PENDING": "remain in the current locked stage and continue only after every existing chunk archive, fresh-fetch, SHA, and restore gate passes",
+      "QA_HOLD": "stop; do not begin another chunk",
+      "PASS": "advance only under the existing locked stage-transition rules"
+    },
+    "automatic_stage_plan": [
+      "Continue 1600 K hot-stage sampling until the locked joint criteria pass in two consecutive valid 2 ps windows after the locked transient discard.",
+      "Then linearly cool from 1600 K to 1250 K over the locked 5 ps ramp.",
+      "At 1250 K, equilibrate for at most 10 ps and transition only after the locked joint criteria pass.",
+      "Then perform the locked 5 ps candidate window, final QA, archive, and stop."
+    ]
+  },
+  "maximum_global_step": 60000,
+  "maximum_added_steps": 58000,
+  "maximum_chunk_steps": 1000,
+  "maximum_chunk_wall_seconds": 3600,
+  "automatic_continue_only_after_remote_fresh_restore_and_all_sha_pass": true,
+  "live_preflight_required_immediately_before_run": true,
+  "forbidden": [
+    "start below global step 2000 or rerun steps 1000 through 2000",
+    "integrate beyond global step 60000",
+    "exceed 1000 steps or 3600 seconds in any chunk",
+    "reinitialize positions, velocities, or any RNG stream",
+    "modify the Ag EAM, density, cell, timestep, friction, temperature schedule, scientific locks, or QA criteria",
+    "start another trajectory, DFT, AIMD, TTM, or MACE training",
+    "change any prior data role or Ag64 step8000 ARCHIVED_HOLD status"
+  ],
+  "pre_run_gates": [
+    "D must fetch this exact C authorization commit and verify its file SHA before invoking --run.",
+    "D must rerun the live preflight at D branch HEAD 4418a3f498803332b521e4870f4c559db1bd462c; any mismatch or failed check keeps execution on HOLD.",
+    "The execution runner must independently verify this authorization blob, the step-2000 checkpoint and manifest bindings, the potential and code hashes, and the exact resume step."
+  ]
+}
