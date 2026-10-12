@@ -75,7 +75,8 @@
         "name": "PPCG",
         "niter": 4
       },
-      "reason": "R2 eigenstate residual remains high; the three prior attempts changed Mixer only and retained PPCG niter=2. GPAW 26.7.0 parameter syntax was checked without running DFT."
+      "reason": "R2 eigenstate residual remains high; the three prior attempts changed Mixer only and retained PPCG niter=2. GPAW 26.7.0 parameter syntax was checked without running DFT.",
+      "api_expression": "from gpaw.dft import PPCG; GPAW(..., eigensolver=PPCG(niter=4))"
     },
     "max_scf_iterations": {
       "current": 160,
@@ -91,7 +92,7 @@
     "checkpoint_policy": "one rolling diagnostic checkpoint; save at completed SCF iterations and verify its SHA/readability; check free disk space before starting",
     "if_checkpoint_write_or_readability_preflight_fails": "HOLD; do not start",
     "if_wall_clock_or_maxiter_limit_reached": "FAILED_SCF; preserve logs/checkpoint and stop; no retry",
-    "if_SCf_converges": "collect total energy, force-consistent free energy, atomic forces, stress, SCF steps and SHA256SUMS, then compare with R1 under same fixed settings"
+    "if_SCF_converges": "collect total energy, force-consistent free energy, atomic forces, stress, SCF steps and SHA256SUMS, then compare with R1 under same fixed settings"
   },
   "expected_question": "Does PPCG niter=4 stabilize the R2 eigenstate/density residuals under the frozen science parameters?",
   "risk": "The eigensolver work per SCF iteration and temporary memory use may rise; if density mixing is the dominant cause, this one point may still fail. No automatic second adjustment is allowed.",
