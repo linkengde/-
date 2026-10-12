@@ -1,0 +1,115 @@
+{
+  "spec_id": "AG64_RHO100_LIQUID_QA_V2",
+  "spec_version": "2.0.0",
+  "status": "PROPOSED_C_SCIENCE_REVIEW_NOT_SIGNED",
+  "execution_authorized": false,
+  "based_on": {
+    "C_strategy_commit": "53cc7bb8f33cf94568212b3b36a04c7f0a4a5709",
+    "D_existing_pilot_commit": "87ac1acf05a938f77180a0a3acfd4e76cf11c466",
+    "task_id": "C-D-AGL-1250K-rho100-pilot01",
+    "step1000_checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046"
+  },
+  "finite_cell": {
+    "atoms": 64,
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "cell_angstrom": [
+      10.717455315295654,
+      10.717455315295654,
+      10.717455315295654
+    ],
+    "volume_angstrom3": 1231.0481629488534,
+    "rdf_rmax_angstrom": 5.35,
+    "rdf_rmax_rule": "strictly less than half the shortest cell length; fail if cell or PBC differs from the locked source"
+  },
+  "rdf": {
+    "role": "first-shell quantitative consistency gate; peak width and higher shells are diagnostic only",
+    "frame_windows": "For each fixed-temperature phase, use all saved frames after its initial 2 ps discard and before the phase cap (up to 7.5 ps at 1600 K, up to 8 ps at 1250 K); frames are sampled every 0.05 ps. Also report the final two adjacent half-open 2 ps windows separately; each must meet the accepted peak/valley/CN point bounds.",
+    "distance_method": "minimum-image pair distances under full 3D PBC; count ordered pairs i != j",
+    "histogram": {
+      "edges_angstrom": "0.00 through 5.35 inclusive, fixed 0.05 A bins",
+      "normalization": "g_b = H_b / (F * N * (N-1) * shell_volume_b / cell_volume); H_b is the count of ordered pairs across F frames and shell_volume_b=4*pi/3*(r_hi^3-r_lo^3)",
+      "smoothing_for_extrema_only": "Gaussian filter sigma=0.10 A (2 bins); raw unsmoothed g(r) is used for coordination integration"
+    },
+    "peak_valley": {
+      "peak_search_range_angstrom": [
+        2.6,
+        3.2
+      ],
+      "valley_search_range_angstrom": [
+        3.4,
+        4.2
+      ],
+      "peak_definition": "highest local maximum of smoothed g(r) in the peak range",
+      "valley_definition": "lowest local minimum of smoothed g(r) in the valley range after the selected peak",
+      "accepted_peak_range_angstrom": [
+        2.6,
+        3.2
+      ],
+      "accepted_valley_range_angstrom": [
+        3.4,
+        4.2
+      ],
+      "resolution_rule": "the moving-block-bootstrap 95% lower confidence bound for g(r_peak)-g(r_valley) must be greater than zero; peak and valley must be detected in at least 95% of valid bootstrap replicates",
+      "unresolved_behavior": "RDF_UNRESOLVED => QA_HOLD; never substitute a point estimate or default PASS"
+    },
+    "coordination_number": {
+      "definition": "CN=4*pi*(N-1)/V * integral_0^rvalley g(r)*r^2 dr using trapezoidal integration of raw bins",
+      "accepted_range": [
+        9.0,
+        13.0
+      ],
+      "uncertainty_rule": "report a two-sided 95% moving-block-bootstrap interval; it must overlap the accepted range, and the point estimate must be within range"
+    },
+    "bootstrap": {
+      "method": "resample contiguous trajectory blocks with replacement; never resample individual correlated frames",
+      "integrated_autocorrelation_time": "estimate for temperature, potential energy/atom, mean local q6, PTM crystal fraction, coordination number, and g(r) at the first-peak bin; use the maximum tau_int, with tau_int=dt*(0.5+sum rho(k)) through the first non-positive lag",
+      "block_duration_rule": "max(0.5 ps, 5*tau_int)",
+      "minimum_effective_blocks": 8,
+      "replicates": 2000,
+      "seed": 20261012,
+      "insufficient_data_behavior": "If fewer than 8 complete autocorrelation-sized blocks are available, keep the phase gate pending and automatically collect the next internal chunk; if the phase cap is reached first, report RDF_UNCERTAINTY_INSUFFICIENT and QA_HOLD.",
+      "scope": "Use all eligible stationary frames in the current fixed-temperature phase after the 2 ps discard; do not restrict the uncertainty estimate to only the final two windows. The separate final two windows still must each meet the point-estimate bounds."
+    },
+    "report_only": [
+      "first-peak FWHM from the smoothed curve",
+      "g(r) peak locations/heights for r>r_valley and r<rmax",
+      "per-window and pooled raw/smoothed g(r) arrays with bootstrap bands"
+    ],
+    "removed_qualitative_gate": "Do not use uncalibrated 'broad peak' or 'no sharp higher-shell peaks' as a binary gate for this 64-atom cell. Those features remain diagnostics; sustained order is decided by the explicit Q6/PTM and MSD gates below.",
+    "rmax_note": "For the locked rho100 cubic cell, rmax=5.35 A is below L/2=5.3587276576 A. If cell changes, fail identity check; do not silently recompute bins."
+  },
+  "order": {
+    "local_q6_definition": "for each atom i, neighbors are all atoms within 3.8 A under minimum-image PBC; q_6m(i)=mean_j Y_6m(r_ij), q6(i)=sqrt(4*pi/13 * sum_m |q_6m(i)|^2); frame_Q6 is the arithmetic mean of q6(i) over 64 atoms",
+    "regression_requirement": "on the archived 11-frame pilot, reproduce the documented mean frame_Q6=0.0887 within 0.01 using the same frames and cutoff; otherwise the old 0.20 threshold is not comparable and the gate remains HOLD pending review",
+    "q6_frame_threshold": 0.2,
+    "q6_passing_frame_fraction_each_2ps_window": 0.8,
+    "crystal_classifier": "PTM, FCC/HCP labels only; implementation/library version and RMSD cutoff must be recorded in the D environment lock; RMSD cutoff=0.10",
+    "ptm_crystalline_atom_fraction_max": 0.1,
+    "largest_connected_crystalline_cluster_atoms_max": 8,
+    "cluster_connectivity": "edges join PTM FCC/HCP atoms separated by less than 3.8 A under minimum-image PBC",
+    "fraction_of_frames_meeting_ptm_and_cluster_limits_each_2ps_window": 0.8,
+    "persistent_order_rule": "Evaluate both final consecutive non-overlapping 2 ps windows separately; any window failing Q6/PTM fractions fails the gate. On all eligible stationary frames in the fixed-temperature phase, if the one-sided 95% moving-block-bootstrap lower bound on the slope of mean frame_Q6 or PTM crystalline fraction is greater than zero, classify ORDERING_TREND and HOLD.",
+    "classifier_unavailable_behavior": "missing PTM implementation, version, RMSD setting, or periodicity test => QA_HOLD; no CNA fallback without a separately versioned review"
+  },
+  "msd": {
+    "definition": "unwrapped coordinates; multiple time origins; compute the 3D self MSD averaged over all 64 Ag atoms",
+    "window": "same combined 4 ps used by the structural gate",
+    "pass": "delta MSD >= 1.0 A^2 and moving-block-bootstrap 95% lower confidence bound on the long-time slope > 0"
+  },
+  "behavior": {
+    "no_parameter_autotuning": true,
+    "any_missing_or_nonfinite_required_metric": "QA_HOLD",
+    "rdf_or_order_ambiguity": "QA_HOLD",
+    "strategy_change": "This V2 spec supersedes only the qualitative RDF shape gate in the 20261012 strategy; it does not alter density, seed, potential, integrator, temperature schedule, step caps, or existing checkpoint. The adaptive run plan and runner must bind this exact spec SHA before C can sign execution."
+  },
+  "d_audit_status": {
+    "followup_runner_sha_claimed": "33f6e2f93f33258b1a69008a107ffc9b5a43741f30a757ff827115be1c6c2d95",
+    "liquid_criteria_sha_claimed": "7c4191a648dc7b4a9486bc1b8f46a5fa1cfaef8f5e3030a8ace0fc63695d1ec6",
+    "remote_artifact_status": "NOT_FOUND_ON_CURRENT_cloud-d-b1-dft_HEAD_87ac1acf; hashes and source files cannot yet be independently verified",
+    "release_status": "BLOCKED_PENDING_D_ARCHIVE_AND_REVIEW"
+  }
+}
