@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "lock_id": "LIQUID_AG_RHO100_FIRST_PILOT_20261012",
+  "lock_status": "C_SCIENTIFIC_PARAMETERS_FROZEN_EXECUTION_HOLD_FOR_D_PREFLIGHT",
+  "execution_authorized": false,
+  "execution_hold_reason": "D_ENGINEERING_PREFLIGHT_AND_CURRENT_NODE_RECEIPT_NOT_YET_PUBLISHED; latest verifiable D evidence is cfe9b1adb61f7a0c4cac72b791886caf614618ff and reports PREFLIGHT_BLOCKED, ACTUAL_STEPS=0",
+  "D_evidence_baseline": {
+    "branch": "cloud-d-b1-dft",
+    "branch_head_at_review": "cfe9b1adb61f7a0c4cac72b791886caf614618ff",
+    "report_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_source_family_archive_20261012/FIRST_LIQUID_AG_PILOT_REPORT.md",
+    "report_sha256": "b2edc20e1cc37d9d3e5078a349f75ae5ab889b83aa8d6c6499f5eb9a5b4b4af1",
+    "new_D_engineering_commit": null,
+    "new_D_live_preflight_sha256": null
+  },
+  "scope": {
+    "task_id": "C-D-AGL-1250K-rho100-pilot01",
+    "owner": "D",
+    "source_family": "PF-WMH2006-Ag64-rho100-Dpilot-20261012-seed003",
+    "master_seed": 125010003,
+    "seed_selection": "first unused rho100 seed after the existing planned seed IDs 125010001 and 125010002; does not reassign or alter E/F tasks",
+    "atom_count": 64,
+    "composition": {"Ag": 64},
+    "data_role": "SAMPLING_PILOT_ONLY_NOT_TRAIN_DEV_OR_TEST",
+    "initial_step": 0,
+    "maximum_added_steps": 1000,
+    "maximum_end_step": 1000,
+    "maximum_wall_seconds": 3600,
+    "automatic_continuation": false,
+    "other_five_tasks_released": false,
+    "dft_or_training_released": false
+  },
+  "density": {
+    "target_temperature_K": 1250.0,
+    "relative_density": 1.0,
+    "reference_density_g_cm3": 9.312096308,
+    "reference_density_kg_m3": 9312.096308,
+    "reference_equation": "rho_l(T) = 9327.1 - 0.9956 * (T - 1234.93) kg/m^3",
+    "equation_evaluation_T_K": 1250.0,
+    "literature_range_K": [1234.93, 1631.0],
+    "working_relative_uncertainty_percent": 0.26,
+    "uncertainty_interpretation": "conservative scale covering adjacent published Table 1 errors (0.25% at 1234.93 K and 0.26% at 1300 K); not a published 1250 K uncertainty or confidence interval",
+    "measurement_atmosphere": "pure argon",
+    "measurement_pressure": "not numerically reported; <5 mPa in the paper refers only to sample degassing pretreatment",
+    "citation": "R. N. Abdullaev, R. A. Khairulin, S. V. Stankus, Density and thermal expansion of silver in the solid and liquid states, J. Phys.: Conf. Ser. 1677 (2020) 012161, DOI 10.1088/1742-6596/1677/1/012161, Eq. (2), Table 1",
+    "source_pdf_sha256": "f1cf9284a708b197f8233d67c06861117d004e1e3d0645b1239ee7d125cc6106",
+    "mass_basis": "64 * ASE Ag mass 107.8682 g/mol / Avogadro constant 6.02214076e23 mol^-1",
+    "cell": {
+      "shape": "orthorhombic diagonal cube",
+      "matrix_A": [[10.717455315295654, 0.0, 0.0], [0.0, 10.717455315295654, 0.0], [0.0, 0.0, 10.717455315295654]],
+      "volume_A3": 1231.048162948854,
+      "pbc": [true, true, true],
+      "density_recomputed_from_cell_g_cm3": 9.312096308,
+      "half_box_A": 5.358727657647827
+    }
+  },
+  "potential": {
+    "filename": "Ag.eam.alloy",
+    "format": "LAMMPS setfl alloy; one element Ag, Z=47",
+    "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+    "bytes": 780452,
+    "source_url": "https://www.ctcms.nist.gov/potentials/Download/2006--Williams-P-L-Mishin-Y-Hamilton-J-C--Ag/2/Ag.eam.alloy",
+    "source_citation": "P. L. Williams, Y. Mishin, J. C. Hamilton, An embedded-atom potential for the Cu-Ag system, Modelling Simul. Mater. Sci. Eng. 14 (2006) 817-833, DOI 10.1088/0965-0393/14/5/002",
+    "source_parameter_sha_evidence": "user-supplied NIST download record and matching file; NIST release-notes PDF SHA256 262d9102f5a77572792b9a1d72f6c55c01372ec798f3321285d76246446a8c53",
+    "paper_pdf_sha256": "2a1e8ec6d59e21275e671bdfd1b54b9ebcc04ab85439954a0f7aa6612a23bd57",
+    "cutoff_A": 5.995011000293092,
+    "radial_tail_policy": "C_APPROVED_PUBLISHED_SETFL_ONE_BIN_ZERO_TAIL; exact source hash required; only the documented one-grid-bin near-zero tail",
+    "scientific_use_basis": "NIST-published scientific-use instructions plus the user's supplied legally obtained file and explicit research request",
+    "express_open_source_or_redistribution_license": "not explicitly stated",
+    "redistribution_status": "UNVERIFIED_DO_NOT_UPLOAD_POTENTIAL_FILE_OR_ORIGINAL_PARAMETER_TABLES",
+    "applicability": "pure-Ag EAM fitted to experimental and first-principles solid properties; paper reports a solid-liquid-interface melting estimate 1267 +/- 5 K versus experimental 1235 K and Cu-Ag phase-diagram work, while liquid configurations were not fitting targets. Suitable only for this exploratory Ag64 sampler pilot; not evidence of 1250 K equilibrium, finite-size accuracy, or MACE-quality labels.",
+    "ASE_neighbor_requirement": "retain ASE integer periodic image offsets; cutoff exceeds half the 64-atom box, so minimum-image-only and index-deduplicated neighbor lists are forbidden",
+    "parameter_file_uploaded_to_GitHub": false
+  },
+  "initial_structure_generator": {
+    "algorithm": "sequential periodic random rejection packing; independent of a crystal; each trial draws one point uniformly in [0,L)^3; accept only if periodic minimum-image distance to every already placed atom is >= r_min; preserve insertion order as atom IDs 1..64; no retries with a different seed, no cell change, no clipping or relaxation",
+    "r_min_A": 2.2,
+    "maximum_trial_points": 200000,
+    "rng": "NumPy Generator(PCG64) seeded by SeedSequence(master_seed).spawn(3); child streams in fixed order: packing, velocity initialization, Langevin thermostat",
+    "packing_draw_order": "one three-component uniform draw per candidate; rejected candidates consume packing stream; never restart stream on rejection",
+    "velocity_initialization": "ASE 3.29.0 MaxwellBoltzmannDistribution with force_temp=True at 1600 K using the velocity child stream and FixCom constraint; no velocity redraw or reseed",
+    "overlap_rejection": "reject candidate if any periodic minimum-image pair distance is strictly less than 2.2 A; require exactly 64 accepted atoms within 200000 trial points or fail without relaxing r_min",
+    "structure_generated": false
+  },
+  "generator_reference": {
+    "path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_six_pilot_authorized_dispatch_20261011/run_sampling.py::pack_random",
+    "reference_file_sha256": "b78b734798c9c075826e6611e3d2f7f156f0b05ff7c87159812ac76ed0e918a8",
+    "note": "reference implementation is frozen only for the algorithm described above; D must provide and bind its tested one-task runner/generator SHA before execution"
+  },
+  "dynamics": {
+    "engine": "ASE 3.29.0 EAM calculator using the exact setfl file above",
+    "integrator_and_ensemble": "ASE Langevin NVT, fixed cubic cell, FixCom constraint, Langevin fixcm=False",
+    "timestep_fs": 0.5,
+    "segment_temperature_schedule": "steps 0 through 999 target 1600 K (the existing hot-start stage); no cooling or 1250 K equilibration is included in this pilot",
+    "langevin_friction_fs_inverse": 0.01,
+    "ase_unit_conversion": "timestep = 0.5 * ase.units.fs; friction = 0.01 / ase.units.fs; calculator outputs eV, eV/A and eV/A^3",
+    "temperature_dof": "3N-3 = 189 after FixCom; use ASE constraint-aware temperature; no rotational constraints",
+    "thermostat_rng": "PCG64 child stream 3, checkpoint exact bit-generator state after every completed step boundary",
+    "cell_dynamics": "none; cell, atom count and PBC fixed",
+    "sampling_parameters_changed": false
+  },
+  "restart_and_output": {
+    "resume_state_required": ["positions", "momenta/velocities", "masses", "cell", "PBC", "atom IDs/order", "completed global step", "time", "PCG64 states for all three child streams", "target-temperature schedule position", "ASE/Langevin version", "scientific lock SHA", "runner SHA", "potential SHA", "thermal log", "trajectory offset/hash", "walltime ledger"],
+    "log_interval_steps": 20,
+    "trajectory_interval_steps": 100,
+    "checkpoint_interval_steps": 1000,
+    "checkpoint_rule": "write atomically at the last completed step on normal end, timeout, or handled stop; never claim an incomplete step as committed",
+    "required_logged_energy_fields": ["potential_energy_eV", "kinetic_energy_eV", "total_energy_eV"],
+    "restart_must_include_rng": true,
+    "archive": "new immutable task directory; README, MANIFEST, internal SHA256SUMS; push only this pilot's public-safe outputs to the D branch; fresh-fetch to a new directory and verify outer and member hashes; do not upload EAM file or PDFs; stop if any single file is >50 MiB, upload/fetch fails, or backup capacity is not confirmed",
+    "automatic_continue_after_step_1000": false
+  },
+  "stops": {
+    "wall_seconds": 3600,
+    "maximum_step": 1000,
+    "minimum_runtime_pair_distance_A": 1.8,
+    "maximum_rss_bytes": 8589934592,
+    "minimum_free_bytes": 2147483648,
+    "trajectory_bundle_cap_bytes": 536870912,
+    "checkpoint_reserve_bytes": 33554432,
+    "stop_on": ["nonfinite coordinates/momenta/forces/energy/stress", "EAM embedding-density grid overflow", "pair distance below 1.8 A", "wall/RSS/disk/archive gate", "identity/hash mismatch", "checkpoint or archive/restore failure", "step greater than 1000"]
+  },
+  "source_and_code_hashes": {
+    "density_pdf_sha256": "f1cf9284a708b197f8233d67c06861117d004e1e3d0645b1239ee7d125cc6106",
+    "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+    "nist_release_notes_pdf_sha256": "262d9102f5a77572792b9a1d72f6c55c01372ec798f3321285d76246446a8c53",
+    "potential_paper_pdf_sha256": "2a1e8ec6d59e21275e671bdfd1b54b9ebcc04ab85439954a0f7aa6612a23bd57",
+    "C_reference_run_sampling_py_sha256": "b78b734798c9c075826e6611e3d2f7f156f0b05ff7c87159812ac76ed0e918a8",
+    "C_reference_inspect_eam_py_sha256": "d3a437582dcd5bad7e361c6c81f64ac1191161170105b43133ffdd4065526a77",
+    "D_final_runner_sha256": null,
+    "D_final_generator_sha256": null,
+    "D_final_dry_run_report_sha256": null,
+    "D_final_preflight_report_sha256": null,
+    "environment_sha256": null
+  },
+  "runtime_versions": {
+    "python_expected": "3.12.14",
+    "python_evidence": "reported in D cfe9b1adb61f7a0c4cac72b791886caf614618ff; must be reconfirmed at execution preflight",
+    "ase_expected": "3.29.0",
+    "numpy": null,
+    "numpy_version_gate": "D must report and bind the exact installed version because SeedSequence/Generator output reproducibility depends on implementation/version; no version inferred from E or F"
+  },
+  "release_gates": {
+    "density_and_box": "PASS_C",
+    "potential_identity_source_and_tail": "PASS_C_SOURCE_REVIEW; D must verify local file SHA and ASE parsing",
+    "potential_scientific_applicability": "PASS_FOR_EXPLORATORY_PILOT_ONLY",
+    "ASE_real_calculator_energy_force_integrator_restart_tests": "PENDING_D",
+    "D_generator_runner_dry_run_and_code_SHA": "PENDING_D",
+    "D_current_resource_node_and_archive_preflight": "PENDING_D",
+    "execution_authorized": false,
+    "scope_expansion": "not permitted"
+  }
+}
