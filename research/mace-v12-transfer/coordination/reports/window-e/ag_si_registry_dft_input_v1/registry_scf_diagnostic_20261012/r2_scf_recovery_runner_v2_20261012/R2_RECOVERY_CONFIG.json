@@ -1,0 +1,121 @@
+{
+  "document_id": "R2_SINGLE_POINT_SCF_RECOVERY_CONFIG_V2",
+  "status": "PREPARED_NOT_AUTHORIZED",
+  "execution_authorized": false,
+  "scope": {
+    "registry_id": "R2",
+    "diagnostic_copy_only": true,
+    "role": "REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY",
+    "other_registries": false,
+    "R1_rerun": false,
+    "d0_scan": false,
+    "train_dev_test_assignment": false,
+    "MACE_training": false
+  },
+  "source_bindings": {
+    "phase2_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+    "parameter_lock_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/PHASE2_PARAMETER_LOCK.json",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+    "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+    "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R2/structure.xyz",
+    "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [8, 8, 1],
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset; slab kz=1",
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "convergence": {
+      "energy": 1e-5,
+      "density": 1e-5,
+      "eigenstates": 1e-5
+    },
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "baseline_max_scf_iterations": 160,
+    "max_scf_iterations": 200,
+    "max_wall_clock_seconds": 14400,
+    "wall_clock_exit_margin_seconds": 1800,
+    "wall_clock_check": "At each completed SCF iteration; request orderly checkpoint-and-stop at 12600 seconds, leaving a 1800-second margin. launch_r2.sh sends TERM at 14399 seconds and enforces the 14400-second hard deadline; the latest verified checkpoint and logs remain available if the deadline guard must terminate a stuck iteration.",
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "coordinates_cell_pbc_changes_allowed": false,
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "parallel": {
+      "sl_auto": true
+    }
+  },
+  "checkpoint_policy": {
+    "interval_completed_scf_iterations": 40,
+    "mode": "all",
+    "include_wavefunctions": true,
+    "naming": "checkpoint/checkpoint_iter_NNNNNN.gpw with an adjacent JSON sidecar binding the GPW SHA-256 to the completed SCF iteration",
+    "write_failure": "Abort all MPI ranks at the collective boundary; retain previous verified checkpoints and logs; no retry.",
+    "readback": "Read each newly written GPW with GPAW read_gpw using a serial communicator; verify atoms, cell, PBC, wavefunction presence, file size, SHA-256 and iteration sidecar before marking valid.",
+    "iteration_state_note": "GPAW GPW stores the current density and wavefunctions; its SCF iteration number is bound by the sidecar to the GPW SHA-256. The GPW is diagnostic and is not an automatic restart instruction."
+  },
+  "checkpoint_space_budget": {
+    "wavefunction_bytes_observed": 1024913408,
+    "paw_projector_bytes_observed": 384342528,
+    "per_checkpoint_estimate_multiplier": 2.0,
+    "per_checkpoint_estimate_bytes": 2818511872,
+    "maximum_periodic_checkpoints": 5,
+    "simultaneous_write_temporary_copies": 1,
+    "log_allowance_bytes": 1073741824,
+    "free_space_reserve_bytes": 5368709120,
+    "required_free_space_bytes": 23353522176,
+    "budget_basis": "R2 8x8x1 archived wavefunction and projector aggregate byte counts; 2x per-file margin; five interval checkpoints plus one in-progress checkpoint, 1 GiB logs and 5 GiB free-space reserve. Runtime stops if remaining free space falls below one estimated checkpoint plus reserve."
+  },
+  "required_outputs": [
+    "total_energy_eV",
+    "force_consistent_free_energy_eV",
+    "forces_eV_A",
+    "stress_eV_A3",
+    "scf_converged",
+    "scf_steps",
+    "input_sha256",
+    "structure_sha256",
+    "parameter_lock_sha256"
+  ],
+  "engine_versions": {
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1"
+  },
+  "paw_sha256_by_element": {
+    "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+    "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+    "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+  },
+  "prohibited": [
+    "R1 or any other registry",
+    "geometry or cell changes",
+    "k-point, cutoff, smearing, mixer, convergence or PAW changes",
+    "automatic retry or automatic restart",
+    "d0 scan",
+    "TRAIN/DEV/TEST assignment",
+    "MACE training"
+  ]
+}

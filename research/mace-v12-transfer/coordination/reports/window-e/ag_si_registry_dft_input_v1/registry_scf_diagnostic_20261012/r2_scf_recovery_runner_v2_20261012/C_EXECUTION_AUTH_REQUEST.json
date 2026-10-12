@@ -1,0 +1,77 @@
+{
+  "document_id": "C_EXECUTION_AUTH_REQUEST_R2_SINGLE_SCF_RECOVERY_V2",
+  "request_status": "PENDING_C_REVIEW",
+  "execution_authorized": false,
+  "r2_dft_started": false,
+  "prior_review_state_reported_by_user": {
+    "review_status": "REJECTED",
+    "execution_authorization": "NOT_ISSUED",
+    "previous_e_commit": "19d9b672cc75c6297646d01f491427cf581b2569"
+  },
+  "scope": {
+    "registry_id": "R2",
+    "scope_name": "R2_ONLY_SINGLE_DIAGNOSTIC",
+    "role": "REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY",
+    "only_one_calculation_point": true,
+    "R1": false,
+    "other_registry": false,
+    "automatic_retry": false,
+    "d0_scan": false,
+    "train_dev_test_assignment": false,
+    "MACE_training": false
+  },
+  "reviewed_source": {
+    "phase2_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+    "parameter_lock_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/PHASE2_PARAMETER_LOCK.json",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+    "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+    "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R2/structure.xyz",
+    "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70"
+  },
+  "requested_single_point": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [8, 8, 1],
+    "occupations": {"name": "FermiDirac", "width_eV": 0.1},
+    "convergence": {"energy": 1e-5, "density": 1e-5, "eigenstates": 1e-5},
+    "mixer": {"name": "Mixer", "beta": 0.05, "nmaxold": 8, "weight": 100},
+    "eigensolver": {"name": "PPCG", "niter": 4},
+    "max_scf_iterations": 200,
+    "max_wall_clock_seconds": 14400,
+    "checkpoint_interval_scf_iterations": 40,
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false
+  },
+  "package_bindings": {
+    "config_path": "R2_RECOVERY_CONFIG.json",
+    "config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437",
+    "runner_path": "runner.py",
+    "runner_sha256": "da4b122948714b86a19ec42878f18fe24d65006238ad890383b433fd30d24a18",
+    "collector_path": "collector.py",
+    "collector_sha256": "ca28bae1e7f2ced09b6eed161eb01ed224bfbe3b2f61fd021dc360a99dcb0bfb",
+    "launcher_path": "launch_r2.sh",
+    "launcher_sha256": "799a6ad26b08ff793b0f399f7afbb0f86fa3a057a9c4072f876b153617ce18c9",
+    "resource_preflight_path": "RESOURCE_PREFLIGHT.json",
+    "resource_preflight_sha256": "f35a026a9ec3274a643b0b2edc5f7f18c360e68164c6534e22e3039a05898609",
+    "test_report_path": "TEST_REPORT.md",
+    "test_report_sha256": "7ca174ee98f618989317ae8e1f99a072002c3d09a9af843c28fc3ec2c290c11e"
+  },
+  "test_status": "PASS_WITH_LIMITATION",
+  "checkpoint_test_status": "PASS: serial real-GPAW full-wavefunction GPW readback and MPI4 write-failure synchronization; optional MPI4 synthetic H initialization repeat stalled before checkpoint hook and is not counted",
+  "disk_preflight_status": "PASS",
+  "resource_budget": {
+    "free_bytes": 27939389440,
+    "required_free_bytes": 23353522176,
+    "free_space_margin_bytes": 4585867264,
+    "inode_free": 2038336,
+    "memory_headroom_bytes": 32258322432,
+    "estimated_checkpoint_working_set_bytes": 2818511872,
+    "cpu_quota_cores": 4.0
+  },
+  "requested_c_action": "Review the package at the E branch commit and, only if every binding and test is accepted, issue a fresh C authorization file with execution_authorized=true for this one R2 diagnostic point. No calculation may start before that signed authorization is available and passes the runner gate."
+}
