@@ -1,0 +1,64 @@
+{
+  "approval_id": "C-AG64-RHO100-QA-V2.1-STRESS-RELEASE-20261012",
+  "archive_backend_sha256": "6121984747ef710e0f0e6f1fb822bbf74871c435ac2110ea36c64b056f0af9e8",
+  "authorization_status": "ISSUED",
+  "checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+  "config_sha256": "3af1d791a0e8afb601bfd10822a56ad09b2fe0d87580e5e16758057674c86c1c",
+  "criteria_sha256": "dadf5647cd1ffb68fd421e8f2742117c604b324e20443c0e2551e7208ae21c69",
+  "d_branch": "cloud-d-b1-dft",
+  "d_branch_head": "e228f4624e4b022023b995f12b7e05b28c92cd94",
+  "document_id": "C_AG64_RHO100_BOUNDED_EXECUTION_RELEASE_QA_V2_1",
+  "environment_sha256": "e71e04b8edc989001a702ffb308b1b897d6b521d0ebfdcb41b43592ae2bff1fb",
+  "execution_authorized": true,
+  "execution_mode": "bounded_automatic_continuation",
+  "execution_scope": {
+    "automatic_stage_plan": [
+      "1600 K heat until the locked joint criteria pass in two consecutive 2 ps windows after the locked transient discard",
+      "linear 5 ps cooling from 1600 K to 1250 K",
+      "1250 K equilibration for at most 10 ps; transition only after the same joint criteria pass",
+      "1250 K candidate sampling for 5 ps, then final QA and stop"
+    ],
+    "continuation": "After each 1000-step chunk, checkpoint and archive; continue only after immutable GitHub upload, fresh fetch, SHA verification, and state restore all pass.",
+    "not_authorized": [
+      "step greater than 60000",
+      "more than 1000 steps or 3600 seconds in any internal chunk",
+      "reinitializing coordinates, velocities, or RNG",
+      "changing Ag EAM, density, cell, timestep, friction, temperature path, or any locked science criterion",
+      "other trajectories, DFT, AIMD, LAMMPS, TTM, or MACE training"
+    ],
+    "resume_from_global_step": 1000
+  },
+  "github_archive_test_harness_sha256": "d870bc41e343c85e5396b3f4b3d11310db17146c023c9497a6f78592fff00a4e",
+  "maximum_added_steps": 59000,
+  "maximum_chunk_steps": 1000,
+  "maximum_chunk_wall_seconds": 3600,
+  "maximum_global_step": 60000,
+  "owner": "D",
+  "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+  "qa_science_lock_sha256": "848f8db72d83cea91dcf4cd42ee9fbbf49a80e7b5e3759cb4f535be8cc5873d2",
+  "repository": "linkengde/-",
+  "review_evidence": {
+    "archive_test_commit": "c4f954e0b00bce9a75e7cc120fe03625d88a2ba1",
+    "archive_test_scope": "Synthetic payload only; verified through GitHub upload, fresh fetch, restore, and SHA checks. Production run must repeat this gate on every real chunk.",
+    "d_commit": "e228f4624e4b022023b995f12b7e05b28c92cd94",
+    "d_engineering_tests": "17/17 PASS; no production MD steps executed before this release",
+    "live_preflight": "PREPARED_HOLD; all reported preflight checks pass, with HOLD attributable to this pending C authorization. D must rerun live preflight immediately before execution."
+  },
+  "runner_sha256": "f26be9819baedc6cad5c3d1ed36ee0e7dba33be2786b09ce8bacf826e3a1c6bd",
+  "schema_version": 1,
+  "scientific_lock_sha256": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+  "signed_by": "C",
+  "strategy_lock_sha256": "054f36dcda113e37b23b112e5919ba1c8201c669626db37b79bbd2281b020e1c",
+  "stress_gate_review": {
+    "absolute_pressure_threshold": null,
+    "interpretation_limit": "This is a bounded pilot screening criterion, not proof of equilibrium and not publication-grade simultaneous inference. A CI spanning zero is absence of resolved drift under this test, not proof of zero drift.",
+    "joint_liquid_qa_wiring": "Confirmed: pressure/stress gate is included in the joint liquid pass condition; missing or malformed inputs produce QA_HOLD and insufficient data produce PENDING, never default PASS.",
+    "method": "OLS trend with residual circular moving-block bootstrap; tau_int estimated from detrended residuals using the initial-positive sequence; block length ceil(2*tau_int/dt); 2000 deterministic replicates.",
+    "minimum_data_rule": "At least 4.0 ps at 0.01 ps cadence and at least 8 complete autocorrelation-sized blocks are required for this pilot gate. Any insufficient series remains PENDING and cannot pass. At 400 samples, the eight-block rule requires an estimated block length no greater than 50 samples; longer correlation requires more data.",
+    "multiple_comparison_policy": "No adjustment across pressure and six components is accepted for this conservative fail-closed screen. Intervals are per-series nominal 95%, not simultaneous 95% intervals. Under independent all-null series, the chance of at least one false drift flag could reach 1-(0.95)^7=30.2%; actual dependence is unknown. This primarily raises false HOLD/extra-sampling risk; it is not grounds to claim a familywise 95% guarantee.",
+    "resolved_drift_rule": "A two-sided 95% bootstrap slope interval excluding zero is a resolved drift; any resolved pressure or stress-component drift fails this subgate.",
+    "review_status": "APPROVED_FOR_THIS_BOUNDED_PILOT"
+  },
+  "task_id": "C-D-AGL-1250K-rho100-followup01",
+  "test_suite_sha256": "eecdc40f00abaa72f33243471e89df2477c77e665c096225418fa70da4d3d5f9"
+}
