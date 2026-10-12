@@ -1,6 +1,6 @@
 # REGISTRY_PHASE1_RECOVERY_REPORT
 
-Status: **PHASE1_RECOVERY_COMPLETE**. R1's isolated diagnostic copy converged in 105 SCF steps; the original R1 screening result remains unchanged and failed at its original 160-step limit.
+Status: **PHASE1_RECOVERY_COMPLETE**. Independent R1 and R3 diagnostic copies converged in 105 and 116 SCF steps. Their original screening inputs and registry definitions remain unchanged.
 
 Source batch: E branch commit `ab364698dca879284be61c66f0340b02a6aaccd7`.
 
@@ -32,6 +32,10 @@ The diagnostic result includes free energy `-120.294555 eV`, forces for all 20 a
 
 Original R1/R3 SCF analysis: [`R1_R3_SCF_SUMMARY.json`](R1_R3_SCF_SUMMARY.json) and [`R1_R3_SCF_HISTORY.csv`](R1_R3_SCF_HISTORY.csv).
 
+## R3 diagnostic copy
+
+R3 was copied independently with matching input and structure SHA-256, then run with `maxiter=200` and `Mixer beta=0.10`. It converged in 116 steps. Total energy is `-120.116100 eV`; force-consistent free energy is `-120.247716 eV`. All 20 forces and stress are saved in [`R3_diagnostic_case/run_maxiter200_mixer_beta010/result.json`](R3_diagnostic_case/run_maxiter200_mixer_beta010/result.json). The SCF history and convergence state are [`R3_diagnostic_case/R3_DIAGNOSTIC_SCF_HISTORY.csv`](R3_diagnostic_case/R3_DIAGNOSTIC_SCF_HISTORY.csv) and [`R3_diagnostic_case/R3_DIAGNOSTIC_CONVERGENCE_STATUS.json`](R3_diagnostic_case/R3_DIAGNOSTIC_CONVERGENCE_STATUS.json). The original R3 input and structure SHA-256 values were rechecked after the run and match the frozen values.
+
 ## Decision
 
-Phase 1 is complete as a diagnostic/recovery report. R2/R4 energies and forces are recovered from existing logs; their stress is `STRESS_UNAVAILABLE`. The independent R1 copy converged with beta 0.10, but it does not replace the original screening result. No 8×8 validation was run or authorized by this report.
+The unified result table [`RANKING_6x6_RECOVERED.json`](RANKING_6x6_RECOVERED.json) contains total energy, force-consistent free energy, all atom forces, SCF steps, recovery method, and original input/structure hashes for R1–R4. It marks `diagnostic_recovered=true`; R1/R3 values come from the independent diagnostic copies and do not replace their original screening runs. Energy order is R2, R1, R3, R4. No 8×8 validation, d0 scan, geometry modification, or data-role assignment was performed.

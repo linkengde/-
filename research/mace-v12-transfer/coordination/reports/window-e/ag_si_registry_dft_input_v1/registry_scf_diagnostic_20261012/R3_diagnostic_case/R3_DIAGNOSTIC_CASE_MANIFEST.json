@@ -1,0 +1,62 @@
+{
+  "case_id": "R3_DIAGNOSTIC_ONLY_MAXITER200_MIXER_BETA010",
+  "source_batch_commit": "ab364698dca879284be61c66f0340b02a6aaccd7",
+  "registry_id": "R3",
+  "original_input_sha256": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2",
+  "original_structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+  "diagnostic_copy_input_sha256": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2",
+  "diagnostic_copy_structure_sha256": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+  "input_copy_matches": true,
+  "structure_copy_matches": true,
+  "method": {
+    "xc": "PBE",
+    "basis": "PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      6,
+      6,
+      1
+    ],
+    "smearing_eV": 0.1,
+    "geometry": "fixed",
+    "relax_atoms": false,
+    "relax_cell": false,
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    }
+  },
+  "diagnostic_changes_only": {
+    "maxiter": 200,
+    "mixer": {
+      "class": "Mixer",
+      "beta": 0.1,
+      "nmaxold": 8,
+      "weight": 100
+    }
+  },
+  "runtime": {
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "python": "3.12.14",
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1"
+  },
+  "execution_scope": "Independent diagnostic copy; does not replace or modify R3 screening inputs or registry; not TRAIN/DEV/TEST.",
+  "paw_sha256": {
+    "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+    "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "diagnostic_runner_sha256": "e26954e6abfa00785ac5bfab4365340877fbb49a35237c81f63eda33d22beb6c",
+  "preflight_report_sha256": "cca60ea3d52b98e3e04949fc168fe020096fd43905afd5c10ca03065cd822df7",
+  "scf_log_sha256": "465da165f39a5f49789a805cdeefecdc29f762fd628af9df040c6bd383b04325",
+  "result_sha256": "19dc62e1be6ffaaae05b7ca8e664b33cd110094704a0c3b4a9318cfefe6240fd",
+  "scf_history_sha256": "6934aec0f057aec098efdb6e76da8ef783225c81c06a7c7292abc0b8bfd7ab1b",
+  "convergence_status_sha256": "dd6a66f479fd8940d72b0652ff479a0b552adbee735744e68c110fa65bffe7ba",
+  "scf_steps": 116,
+  "scf_converged": true
+}
