@@ -1,0 +1,79 @@
+{
+  "diagnostic_id": "R2_PHASE2_SCF_RECOVERY_8X8X1_20261012",
+  "baseline_phase2_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+  "scope": "R2 independent diagnostic copy only",
+  "allowed_parameter_changes": {
+    "maxiter": 240,
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.1,
+      "nmaxold": 8,
+      "weight": 100
+    }
+  },
+  "locked_parameters": {
+    "registry": "R2",
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "role": "REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY"
+  },
+  "original_input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+  "original_structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+  "attempts": [
+    {
+      "run": "run_maxiter240_mixer_beta010",
+      "status": "STOPPED_DIAGNOSTIC_NO_CONVERGENCE_TREND",
+      "scf_steps_observed": 13,
+      "maxiter": 240,
+      "mixer": {
+        "name": "Mixer",
+        "beta": 0.1,
+        "nmaxold": 8,
+        "weight": 100
+      },
+      "runner": "diagnostic_runner_beta010.py",
+      "runner_sha256": "50753bc83ce3f02dd8c386b641c073d5231c9d5d322090b3858468ed28e31e32"
+    },
+    {
+      "run": "run_maxiter300_mixer_beta002",
+      "status": "STOPPED_DIAGNOSTIC_NO_CONVERGENCE_TREND",
+      "scf_steps_observed": 34,
+      "maxiter": 300,
+      "mixer": {
+        "name": "Mixer",
+        "beta": 0.02,
+        "nmaxold": 8,
+        "weight": 100
+      },
+      "runner": "diagnostic_runner_beta002.py",
+      "runner_sha256": "d24851013977aa4607f720c3009455fbab8e7bb8d5718a3de87639198d5fcd20"
+    },
+    {
+      "run": "run_maxiter300_mixer_beta005_nmaxold003",
+      "status": "STOPPED_NOT_CONVERGED",
+      "scf_steps_observed": 123,
+      "maxiter": 300,
+      "mixer": {
+        "name": "Mixer",
+        "beta": 0.05,
+        "nmaxold": 3,
+        "weight": 100
+      },
+      "runner": "diagnostic_runner_beta003.py",
+      "runner_sha256": "aee6cc317311b455e647ef454b6aeb601e3a49e1ff4f8e65ef47cbce961db3f7"
+    }
+  ],
+  "final_status": "NOT_RECOVERED"
+}

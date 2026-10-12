@@ -1,0 +1,119 @@
+{
+  "document_id": "R2_NEXT_SINGLE_POINT_PROPOSAL",
+  "status": "PENDING_C_REVIEW",
+  "execution_authorized": false,
+  "request_to_C": "Please review and, if approved, issue one explicit authorization for the single R2 diagnostic point below, bound to this proposal SHA and the exact source/runner/collector hashes.",
+  "baseline_phase2_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+  "branch": "cloud-e-b1-dft",
+  "scope": {
+    "registry_id": "R2",
+    "diagnostic_copy_only": true,
+    "role": "REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY",
+    "other_registries": false,
+    "R1_rerun": false,
+    "d0_scan": false,
+    "train_dev_test_assignment": false,
+    "MACE_training": false
+  },
+  "source_bindings": {
+    "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+    "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+    "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R2/structure.xyz",
+    "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78"
+  },
+  "frozen_science_parameters": {
+    "xc": "PBE",
+    "paw": "GPAW PAW; gpaw-data 1.2.1; fixed Ag/C/Si/Ti hashes",
+    "cutoff_eV": 500,
+    "kpoints": [
+      8,
+      8,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh",
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "structure_coordinates": "unchanged",
+    "cell": "unchanged",
+    "pbc": [
+      true,
+      true,
+      false
+    ],
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "mpi_ranks": 4,
+    "omp_threads": 1
+  },
+  "single_point_diagnostic_changes": {
+    "eigensolver": {
+      "current_from_log": {
+        "name": "PPCG",
+        "niter": 2
+      },
+      "proposed": {
+        "name": "PPCG",
+        "niter": 4
+      },
+      "reason": "R2 eigenstate residual remains high; the three prior attempts changed Mixer only and retained PPCG niter=2. GPAW 26.7.0 parameter syntax was checked without running DFT."
+    },
+    "max_scf_iterations": {
+      "current": 160,
+      "proposed": 200,
+      "reason": "finite upper bound only; the earlier maxiter increase to 240/300 did not itself produce convergence, so this is not claimed as the fix"
+    },
+    "wall_clock_limit_seconds": 14400
+  },
+  "checkpoint_and_failure_policy": {
+    "checkpoint_interval_scf_steps": 40,
+    "checkpoint_path": "R2_diagnostic_only/checkpoint/R2_latest.gpw",
+    "checkpoint_mode": "all (include wavefunctions)",
+    "checkpoint_policy": "one rolling diagnostic checkpoint; save at completed SCF iterations and verify its SHA/readability; check free disk space before starting",
+    "if_checkpoint_write_or_readability_preflight_fails": "HOLD; do not start",
+    "if_wall_clock_or_maxiter_limit_reached": "FAILED_SCF; preserve logs/checkpoint and stop; no retry",
+    "if_SCf_converges": "collect total energy, force-consistent free energy, atomic forces, stress, SCF steps and SHA256SUMS, then compare with R1 under same fixed settings"
+  },
+  "expected_question": "Does PPCG niter=4 stabilize the R2 eigenstate/density residuals under the frozen science parameters?",
+  "risk": "The eigensolver work per SCF iteration and temporary memory use may rise; if density mixing is the dominant cause, this one point may still fail. No automatic second adjustment is allowed.",
+  "prohibited": [
+    "geometry changes",
+    "cell or PBC changes",
+    "k-point changes",
+    "cutoff changes",
+    "smearing changes",
+    "mixer changes",
+    "other registry runs",
+    "d0 scan",
+    "TRAIN/DEV/TEST assignment",
+    "MACE training"
+  ],
+  "requested_C_authorization_bindings": [
+    "this proposal SHA256",
+    "R2 input SHA256",
+    "R2 structure SHA256",
+    "parameter lock SHA256",
+    "runner SHA256",
+    "collector SHA256"
+  ],
+  "result_status_until_authorized": "HOLD"
+}
