@@ -1,0 +1,179 @@
+{
+  "document_id": "R1_ENERGY_COMPARABILITY_RECOVERY_EXEC_AUTH_REQUEST_20261012",
+  "request_status": "PENDING_C_REVIEW",
+  "execution_authorized": false,
+  "requested_r1_dft_started": false,
+  "source_e_commit": "d42cbdd77c4665139edc862ca034699c5248b40e",
+  "branch": "cloud-e-b1-dft",
+  "scope": {
+    "registry_id": "R1",
+    "scope_name": "R1_ENERGY_COMPARABILITY_RECOVERY_SINGLE_POINT",
+    "role": "REGISTRY_SCREENING_ONLY_COMPARABILITY_RECOVERY",
+    "only_one_calculation_point": true,
+    "R2": false,
+    "other_registry": false,
+    "ranking": false,
+    "d0_scan": false,
+    "train_dev_test_assignment": false,
+    "MACE_training": false
+  },
+  "frozen_inputs": {
+    "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R1/input.py",
+    "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+    "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R1/structure.xyz",
+    "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+    "parameter_lock_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/PHASE2_PARAMETER_LOCK.json",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "matched_r2_recovery_config_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/r2_scf_recovery_execution_20261012/R2_RECOVERY_CONFIG.json",
+    "matched_r2_recovery_config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437"
+  },
+  "requested_single_point": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no gamma override or extra offset",
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "max_scf_iterations": 200,
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "parallel": {
+      "sl_auto": true
+    },
+    "max_wall_clock_seconds": 14400,
+    "orderly_stop_seconds": 12600
+  },
+  "package_bindings": {
+    "config_path": "R1_RECOVERY_CONFIG.json",
+    "config_sha256": "03dcd34d74249c360fc16414c48c3d5fe53d175bc855248a0e3403e6ee3f17b8",
+    "runner_path": "R1_RECOVERY_RUNNER.py",
+    "runner_sha256": "36f35f1657a8fb9ae80c5b6dc4bf42869b694ba891f496a20739626826613f5d",
+    "resource_preflight_path": "RESOURCE_PREFLIGHT.json",
+    "resource_preflight_sha256": "e50fb64c4d20d903e6ddabfa7bd6a538f16a1f29d2277c276534c78c161ca063",
+    "comparability_report_path": "ENERGY_COMPARABILITY_HOLD_REPORT.md",
+    "comparability_report_sha256": "b565ad132e8dae810fcdc9db9a0f5ae3dda88046a0e7455a62a2c46c506376cc"
+  },
+  "requested_outputs": [
+    "SCF convergence status and iteration count",
+    "total energy",
+    "force-consistent free energy",
+    "20 atomic force vectors",
+    "stress tensor",
+    "SCF log",
+    "verified checkpoint SHA-256 and sidecar",
+    "input/structure/config/parameter-lock/authorization SHA-256 manifest"
+  ],
+  "resource_preflight": {
+    "status": "PREFLIGHT_PASS",
+    "cpu_quota_cores": 4.0,
+    "memory_headroom_bytes": 28957753344,
+    "disk_free_bytes": 24733458432,
+    "disk_required_bytes": 23353522176,
+    "free_inodes": 2038195,
+    "checkpoint_estimate_bytes": 2818511872,
+    "free_space_reserve_bytes": 5368709120
+  },
+  "prior_attempt_disclosure": {
+    "status": "ABORTED_PENDING_C_AUTH",
+    "completed_scf_iterations": 2,
+    "converged": false,
+    "checkpoint_status": "NONE",
+    "valid_dft_result": false,
+    "partial_log_sha256": "24ce531e1946abc398590c41dfdafa19202e23d53c825ed780b240a1e453736a",
+    "note": "A previously started run was terminated after a newer user instruction required submitting authorization first. The partial log is retained for audit only; it is not a label and does not contribute to comparability.",
+    "partial_log_archive_path": "prior_attempt_audit/gpaw_partial.log.gz",
+    "partial_log_archive_sha256": "19259e27cf7d10daf419ff8f6a35ab6862989876a8f14a26b7e8e8c6a6c12f3f"
+  },
+  "authorization_file_requested": {
+    "path": "R1_RECOVERY_EXEC_AUTH.json",
+    "required_fields": {
+      "execution_authorized": true,
+      "registry_id": "R1",
+      "scope": "R1_ENERGY_COMPARABILITY_RECOVERY_SINGLE_POINT",
+      "bindings": {
+        "config_sha256": "03dcd34d74249c360fc16414c48c3d5fe53d175bc855248a0e3403e6ee3f17b8",
+        "runner_sha256": "36f35f1657a8fb9ae80c5b6dc4bf42869b694ba891f496a20739626826613f5d",
+        "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+        "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+        "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78"
+      },
+      "method": {
+        "xc": "PBE",
+        "basis": "GPAW PAW plane waves",
+        "cutoff_eV": 500,
+        "kpoint_mesh": [
+          8,
+          8,
+          1
+        ],
+        "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no gamma override or extra offset",
+        "occupations": {
+          "name": "FermiDirac",
+          "width_eV": 0.1
+        },
+        "mixer": {
+          "name": "Mixer",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "eigensolver": {
+          "name": "PPCG",
+          "niter": 4
+        },
+        "max_scf_iterations": 200,
+        "convergence": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "mpi_ranks": 4,
+        "omp_threads": 1,
+        "fixed_geometry": true,
+        "relax_atoms": false,
+        "relax_cell": false,
+        "symmetry": {
+          "point_group": true,
+          "time_reversal": true
+        },
+        "poissonsolver": {},
+        "parallel": {
+          "sl_auto": true
+        },
+        "max_wall_clock_seconds": 14400,
+        "orderly_stop_seconds": 12600
+      }
+    }
+  },
+  "c_action_requested": "Review this exact package at the E branch commit. If approved, issue R1_RECOVERY_EXEC_AUTH.json at the bound path with execution_authorized=true and the exact bindings above. The runner must remain HOLD until that file is present and its gate passes."
+}

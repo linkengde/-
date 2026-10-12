@@ -1,0 +1,88 @@
+{
+  "document_id": "R1_ENERGY_COMPARABILITY_RECOVERY_CONFIG_20261012",
+  "scope": {
+    "registry_id": "R1",
+    "fixed_geometry_single_point": true,
+    "other_registries": false,
+    "ranking": false,
+    "d0_scan": false,
+    "train_dev_test_assignment": false
+  },
+  "authorization_basis": "C execution authorization is required before starting; request status is PENDING_C_REVIEW and this runner must HOLD until a matching authorization file is issued.",
+  "source_bindings": {
+    "fresh_fetched_e_commit": "d42cbdd77c4665139edc862ca034699c5248b40e",
+    "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R1/input.py",
+    "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+    "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R1/structure.xyz",
+    "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+    "parameter_lock_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/PHASE2_PARAMETER_LOCK.json",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "matched_recovery_reference_config_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/r2_scf_recovery_execution_20261012/R2_RECOVERY_CONFIG.json",
+    "matched_recovery_reference_config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no gamma override or extra offset",
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "max_scf_iterations": 200,
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "parallel": {
+      "sl_auto": true
+    },
+    "max_wall_clock_seconds": 14400,
+    "orderly_stop_seconds": 12600
+  },
+  "checkpoint_policy": {
+    "interval_scf_steps": 40,
+    "include_wavefunctions": true,
+    "readback_verify": true,
+    "per_checkpoint_estimate_bytes": 2818511872,
+    "free_space_reserve_bytes": 5368709120,
+    "initial_required_free_bytes": 23353522176,
+    "max_periodic_checkpoints": 5,
+    "final_checkpoint": "reuse last periodic checkpoint if convergence occurs on a checkpoint step; otherwise write one final checkpoint"
+  },
+  "paw_sha256_by_element": {
+    "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+    "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "authorization_status": "PENDING_C_REVIEW",
+  "authorization_file_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/r1_comparability_recovery_auth_request_20261012/R1_RECOVERY_EXEC_AUTH.json",
+  "requested_execution": "One fixed-geometry R1 recovery single point after C authorization only."
+}
