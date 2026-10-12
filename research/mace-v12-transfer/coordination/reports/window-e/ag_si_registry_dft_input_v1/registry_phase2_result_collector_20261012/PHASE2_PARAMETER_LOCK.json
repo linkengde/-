@@ -1,0 +1,83 @@
+{
+  "document_id": "AG_SI_REGISTRY_PHASE2_PARAMETER_LOCK",
+  "based_on_review": "REGISTRY_PHASE2_RELEASE_REVIEW",
+  "authorization_status": "PREPARED_NOT_ISSUED",
+  "execution_authorized": false,
+  "allowed_structure_ids": [
+    "R1",
+    "R2"
+  ],
+  "role": "REGISTRY_SCREENING_ONLY",
+  "method": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "max_scf_iterations": 160,
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    }
+  },
+  "kpoint_mesh": [
+    8,
+    8,
+    1
+  ],
+  "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset; slab kz=1",
+  "geometry": {
+    "calculation": "single_point_fixed_geometry",
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "coordinate_changes_allowed": false,
+    "cell_changes_allowed": false
+  },
+  "resources": {
+    "mpi_ranks": 4,
+    "omp_threads": 1
+  },
+  "required_outputs": [
+    "total_energy_eV",
+    "force_consistent_free_energy_eV",
+    "forces_eV_A",
+    "stress_eV_A3",
+    "scf_converged",
+    "scf_steps"
+  ],
+  "engine_versions": {
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1"
+  },
+  "paw_sha256_by_element": {
+    "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+    "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+    "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+  },
+  "structures": {
+    "R1": {
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R1/input.py",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R1/structure.xyz",
+      "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+      "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890"
+    },
+    "R2": {
+      "input_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/R2/input.py",
+      "structure_path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/phase1_6x6x1_20261011_exec04/R2/structure.xyz",
+      "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+      "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70"
+    }
+  }
+}
