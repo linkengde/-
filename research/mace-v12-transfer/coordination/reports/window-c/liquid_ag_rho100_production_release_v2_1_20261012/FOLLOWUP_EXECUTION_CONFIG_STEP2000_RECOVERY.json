@@ -1,0 +1,338 @@
+{
+  "D_branch": "cloud-d-b1-dft",
+  "D_source_head_at_package_start": "d549ef76b1e9f6a208744bea229fad9c581de2e6",
+  "archive": {
+    "branch": "cloud-d-b1-dft",
+    "force_push_permitted": false,
+    "fresh_clone_fetch_restore_each_segment": true,
+    "immutable_segment_directories": true,
+    "potential_file_included": false,
+    "remote": "origin",
+    "root": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_followup_runs_v2_1_20261012/C-D-AGL-1250K-rho100-followup01"
+  },
+  "code_sha256": {
+    "archive_backend_v2.py": "6121984747ef710e0f0e6f1fb822bbf74871c435ac2110ea36c64b056f0af9e8",
+    "followup_runner_v2_1.py": "41b60d4bb12420ac2f4cba3b041057358e1423b4a580efcf54564595945def6f",
+    "github_archive_integration_test.py": "d870bc41e343c85e5396b3f4b3d11310db17146c023c9497a6f78592fff00a4e",
+    "liquid_criteria_v2.py": "dadf5647cd1ffb68fd421e8f2742117c604b324e20443c0e2551e7208ae21c69",
+    "test_production_runner_v2_1.py": "71d94135e494cd17750433d9c4c7a79949d62b4db0d0fd76ec231bee9cbe31ec"
+  },
+  "criteria_implementation": {
+    "global_q6": "legacy coherent Steinhardt Q6; history regression and strict <0.20 gate, at least 80% frames in each of two final nonoverlapping 2 ps windows",
+    "liquid_joint_gates": [
+      "global_q6",
+      "PTM_fraction_and_cluster",
+      "RDF_peak_valley_CN_and_CI",
+      "MSD",
+      "temperature_and_energy_stationarity"
+    ],
+    "local_q6": "report only; no pass/fail threshold or trend gate",
+    "pressure_stress_gate": {
+      "absolute_pressure_threshold": null,
+      "analysis_seed": "first 64 bits of SHA256 of named time/value input series; separate from MD RNG",
+      "block_length": "ceil(2*tau_int/dt), where tau_int=dt*(0.5+sum(rho(k))) through the first non-positive residual autocorrelation lag; estimate tau_int from OLS detrended residuals",
+      "input": "stress.csv six ASE Voigt components joined by step to thermal.csv target_temperature_K",
+      "insufficient_or_invalid": "PENDING if duration/effective blocks are insufficient; QA_HOLD for missing, malformed, non-finite, or irregular-grid data",
+      "mean_uncertainty": "two-sided 95% circular moving-block-bootstrap interval for each series",
+      "minimum_effective_blocks": 8,
+      "multiple_comparison": "no adjustment; any component resolving drift fails closed",
+      "pressure": "P=-(sigma_xx+sigma_yy+sigma_zz)/3; positive for compression; eV/Angstrom^3 (GPa reported as diagnostic)",
+      "replicates": 2000,
+      "required_duration_ps": 4.0,
+      "review_question": "C must explicitly confirm the residual moving-block slope bootstrap, 95% zero-exclusion rule, and per-component multiplicity handling before signing execution release",
+      "sampling": "every 20 steps at 0.5 fs per step (0.01 ps); regular time grid required",
+      "scope": "all fixed-target samples after the existing phase transient discard through the current boundary",
+      "significance": "two-sided 95% bootstrap slope interval excluding zero means statistically resolved drift; any pressure or stress-component drift fails the subgate",
+      "slope": "OLS versus time; residual circular moving-block bootstrap on the original fixed time axis",
+      "status": "PROPOSED_REQUIRES_C_CONFIRMATION",
+      "stress_components_order": [
+        "xx",
+        "yy",
+        "zz",
+        "yz",
+        "xz",
+        "xy"
+      ],
+      "stress_sign_and_unit": "ASE positive tensile, eV/Angstrom^3"
+    },
+    "ptm": "OVITO PTM, FCC/HCP only, RMSD 0.10, PBC and cell verified, periodic crystalline cluster; no CNA fallback",
+    "rdf": "QA v2 finite-cell ordered-pair normalization; fixed 0.05 A bins to 5.35 A; moving-block bootstrap; peak width/higher peaks report only",
+    "review_interval_steps": 1000,
+    "science_lock_sha256": "848f8db72d83cea91dcf4cd42ee9fbbf49a80e7b5e3759cb4f535be8cc5873d2",
+    "thermal_log_interval_steps": 20,
+    "trajectory_interval_steps": 100
+  },
+  "criteria_thresholds": {
+    "1250K_recrystallization_rule": "any gate failure or increasing crystalline order at 1250 K is HOLD/NO_LIQUID_AT_LOCKED_MODEL_CONDITIONS; do not change density, potential, or target to force passage",
+    "CNA_or_PTM_crystalline_atom_fraction_max_percent": 10.0,
+    "MSD": "unwrap periodic trajectories; multiple-time-origin fit; over the combined 4 ps QA interval require delta-MSD >= 1.0 A^2 and the autocorrelation/block-bootstrap 95% lower confidence bound on the long-time slope > 0",
+    "RDF_first_minimum_range_A": [
+      3.4,
+      4.2
+    ],
+    "RDF_first_peak_range_A": [
+      2.6,
+      3.2
+    ],
+    "RDF_rule": "broad first-neighbor peak and no persistent sharp fcc/hcp-like multi-shell order within the finite-cell RDF range",
+    "coordination_number_range": [
+      9.0,
+      13.0
+    ],
+    "finite_values_required": true,
+    "fraction_frames_meeting_Q6_at_least": 0.8,
+    "fraction_frames_meeting_crystal_limits_at_least": 0.8,
+    "global_Steinhardt_Q6_max": 0.2,
+    "largest_connected_crystalline_cluster_atoms_max": 8,
+    "minimum_pair_distance_A": 1.8,
+    "must_pass_in_both_consecutive_2ps_windows": true
+  },
+  "execution_authorized": false,
+  "limits": {
+    "checkpoint_reserve_bytes": 33554432,
+    "maximum_bundle_bytes": 536870912,
+    "maximum_rss_bytes": 8589934592,
+    "maximum_single_file_bytes": 52428800,
+    "minimum_free_bytes": 2147483648
+  },
+  "output_directory": "/workspace/sampler-work/cloud-d/AG64-rho100-followup01-v2_1-resume-step2000",
+  "owner": "D",
+  "package_id": "AG64_RHO100_PRODUCTION_RELEASE_QA_V2_1_20261012",
+  "potential": {
+    "bytes": 780452,
+    "modification_permitted": false,
+    "path": "/workspace/WMH2006_Ag-local-validation/Ag.eam.alloy",
+    "redistribution_to_git": false,
+    "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447"
+  },
+  "prohibited": [
+    "modify_scientific_lock",
+    "modify_potential",
+    "change_density_or_cell",
+    "reinitialize_structure_or_velocity",
+    "reset_or_reseed_any_PCG64_stream",
+    "exceed_global_step_60000",
+    "DFT",
+    "AIMD",
+    "LAMMPS",
+    "TTM",
+    "MACE_training",
+    "TRAIN_DEV_TEST_assignment",
+    "modify_Ag64_step8000_ARCHIVED_HOLD"
+  ],
+  "q6_regression": {
+    "expected_legacy_global_q6_mean": 0.08871920638262233,
+    "frame_count": 11,
+    "local_q6_role": "REPORT_ONLY",
+    "tolerance": 0.01,
+    "trajectory_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_pilot_results_20261012/C-D-AGL-1250K-rho100-pilot01/trajectory.traj",
+    "trajectory_sha256": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5"
+  },
+  "qa_science_lock": {
+    "C_commit": "457a341ad7712704a607f2c5038d1aa41de6bae9",
+    "path": "LIQUID_QA_SCIENCE_LOCK_V2_1.json",
+    "sha256": "848f8db72d83cea91dcf4cd42ee9fbbf49a80e7b5e3759cb4f535be8cc5873d2"
+  },
+  "repository": "linkengde/-",
+  "required_C_execution_release_fields": [
+    "execution_authorized=true",
+    "owner=D",
+    "task_id",
+    "strategy_lock_sha256",
+    "scientific_lock_sha256",
+    "qa_science_lock_sha256",
+    "config_sha256",
+    "runner_sha256",
+    "criteria_sha256",
+    "archive_backend_sha256",
+    "test_suite_sha256",
+    "github_archive_test_harness_sha256",
+    "checkpoint_sha256",
+    "potential_sha256",
+    "environment_sha256",
+    "d_branch_head",
+    "maximum_global_step",
+    "maximum_added_steps",
+    "maximum_chunk_steps",
+    "maximum_chunk_wall_seconds",
+    "checkpoint_binding_sha256",
+    "resume_global_step"
+  ],
+  "resume_checkpoint": {
+    "archive_commit": "d549ef76b1e9f6a208744bea229fad9c581de2e6",
+    "archive_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_followup_runs_v2_1_20261012/C-D-AGL-1250K-rho100-followup01/chunks/step_02000",
+    "archive_sha256sums_sha256": "0d1f931f802f336bf9195dccead2636f0ad2d3cde7602d113fc89648fa688650",
+    "binding_file": "STEP2000_CHECKPOINT_BINDING.json",
+    "binding_sha256": "b314ca230c412c5852e289e755dcda54ceefd0746d8dd2eff6bf9d1bcb56a285",
+    "checkpoint_sha256": "3ae061355544c7c1871605d11cc532c58d975fd0d77611dfa6fab26b2f238381",
+    "global_step": 2000,
+    "manifest_sha256": "dfc00bf79de7b4ab4eb5cd92a68afe6be4b82100ba5c6515d1087876b127cd14",
+    "producer_runner_sha256": "f26be9819baedc6cad5c3d1ed36ee0e7dba33be2786b09ce8bacf826e3a1c6bd",
+    "recovery_policy": {
+      "recorded_run_status": "POST_STEP_AND_CHECKPOINT_SAVE_FAILED",
+      "recorded_failure_stage": "POST_STEP_OR_CHECKPOINT_FAILURE",
+      "recorded_failure": "NameError: name 'config' is not defined",
+      "recorded_next_target_K": 1250.0,
+      "qa_status": "PENDING",
+      "qa_stage": "A_HOT_1600K",
+      "qa_target_K": 1600.0,
+      "thermal_rows_rule": "All rows with 1000 < step <= 2000 have target_temperature_K=1600.0 and the final row is step 2000.",
+      "resume_stage": "A_HOT_1600K",
+      "resume_target_K": 1600.0,
+      "state_recovery_scope": "In-memory control metadata only: replace the exception-handler stage marker with the stage independently recorded in QA_monitor_latest.json and confirmed by thermal.csv; preserve checkpoint positions, momenta, all RNG states, unwrapped positions, and global step exactly.",
+      "checkpoint_file_must_remain_immutable": true,
+      "requires_C_authorization": true
+    },
+    "segment_manifest_sha256": "64341d38c8214fdef9d8df74d50c9c195fd9237fab5f69802b1da08f8832c2a0"
+  },
+  "runtime": {
+    "activation": "source /workspace/onboarding/runtime.sh",
+    "expected_environment": {
+      "GPAW_MPI_BACKEND": "cgpaw",
+      "GPAW_SETUP_PATH": "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw_data/setups",
+      "ase_version": "3.29.0",
+      "gpaw_data_path": "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw_data/setups",
+      "gpaw_version": "26.7.0",
+      "host_os": "Linux-6.18.44-x86_64-with-glibc2.41",
+      "numpy_version": "2.5.3",
+      "openmpi_version": "mpiexec (Open MPI) 5.0.7",
+      "ovito_version": "3.16.1",
+      "python_executable": "/workspace/.venvs/gpaw-mpi/bin/python",
+      "python_version": "3.12.14",
+      "runtime_sh": "/workspace/onboarding/runtime.sh",
+      "runtime_sh_sha256": "d8b6d0c05020eb9baf270ea17ef67c0f8c043d5b6d5f5eac692eba007969e926",
+      "scipy_version": "1.18.1"
+    },
+    "expected_environment_sha256": "e71e04b8edc989001a702ffb308b1b897d6b521d0ebfdcb41b43592ae2bff1fb",
+    "fresh_environment_preflight_required_before_C_release": true,
+    "source_checkpoint_environment_sha256": "f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f"
+  },
+  "schedule": {
+    "phase_1_hot_liquidification": {
+      "discard_initial_continuation_for_stationarity_ps": 2.0,
+      "maximum_additional_steps_from_current_checkpoint": 18000,
+      "maximum_global_step": 20000,
+      "maximum_total_duration_from_step0_ps": 10.0,
+      "review_interval_steps": 1000,
+      "start_global_step": 1000,
+      "target_K": 1600.0,
+      "transition_when_gate_passes": "as soon as two consecutive valid 2 ps windows pass after the initial 2 ps transient, automatically begin the 5 ps cooling ramp from the current global step; do not wait for the phase maximum and do not prompt the user"
+    },
+    "phase_2_controlled_cooling": {
+      "automatic_transition_to_phase_3": true,
+      "cooling_rate_K_per_ps": 70.0,
+      "duration_ps": 5.0,
+      "end_global_step": "start_global_step + 10000",
+      "start_global_step": "the global step at which the phase_1 gate passes",
+      "temperature_schedule": "linear 1600 K to 1250 K; update target every 100 steps (0.05 ps; 3.5 K per update)",
+      "transition_rule": "after exactly 10000 ramp steps, automatically begin phase 3; no user prompt"
+    },
+    "phase_3_target_equilibration": {
+      "discard_first_2ps_after_ramp_for_stationarity": true,
+      "maximum_duration_ps": 10.0,
+      "maximum_end_global_step": "min(start_global_step + 20000, 60000)",
+      "review_interval_steps": 1000,
+      "start_global_step": "the global step at completion of the cooling ramp",
+      "target_K": 1250.0,
+      "transition_when_gate_passes": "as soon as two consecutive valid 2 ps windows pass after the initial 2 ps post-ramp transient, automatically begin the 5 ps candidate sampling window; no user prompt"
+    },
+    "phase_4_candidate_sampling_window": {
+      "automatic_transition_after_phase_3_pass": true,
+      "candidate_snapshot_spacing_rule": "select using measured autocorrelation; at least max(0.5 ps, 5*tau_int); all snapshots remain one source family",
+      "maximum_global_step": 60000,
+      "minimum_duration_ps": 5.0,
+      "start_after_phase_3_pass": "automatic immediately after the phase_3 gate passes",
+      "steps_at_0p5fs": 10000,
+      "stop_when": "complete 5 ps only while all liquid QA remains passing; archive and fresh-fetch verify, then stop and report to C. No user prompt occurs at internal chunk boundaries or phase transitions.",
+      "target_K": 1250.0,
+      "trajectory_frame_interval_ps": 0.05
+    },
+    "segment_policy": {
+      "automatic_continuation_is_confined_to_this_signed_bounded_plan": true,
+      "automatic_continue_after_verified_chunk": true,
+      "checkpoint_at_every_chunk_boundary": true,
+      "chunk_duration_ps": 0.5,
+      "immutable_remote_archive_and_fresh_fetch_each_chunk": true,
+      "manual_review_between_chunks": false,
+      "maximum_added_steps_per_internal_chunk": 1000,
+      "maximum_wall_seconds_per_chunk": 3600,
+      "pause_for_user_after_each_chunk": false,
+      "stop_only_on": "1250K_candidate_window_complete_and_final_QA_pass, phase_or_global_maximum, hard_failure, resource_limit, or archive_restore_failure",
+      "terminal_user_review_only_after": "candidate_window_complete_or_a_terminal_stop_condition"
+    }
+  },
+  "schema_version": 2,
+  "scientific_lock": {
+    "path": "C_SCIENTIFIC_LOCK.json",
+    "sha256": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+    "source_commit": "287b60af424f7bcc3a7b3598e524f5b543884ec9",
+    "source_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_first_pilot_release_20261012/LIQUID_AG_PILOT_LOCK.json"
+  },
+  "source_checkpoint": {
+    "D_source_commit": "87ac1acf05a938f77180a0a3acfd4e76cf11c466",
+    "archive_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_pilot_results_20261012/C-D-AGL-1250K-rho100-pilot01",
+    "checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+    "environment_sha256": "f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f",
+    "global_step": 1000,
+    "member_sha256": {
+      "C_EXECUTION_AUTHORIZATION.json": "623ba38ec086c59719201eb4b4f99922407f09c74e0098de2dcbf1af95eb1e15",
+      "D_LIVE_PREFLIGHT.json": "b4bfc4256ca6422c297c7cb273316aa3cbde4b3567f0033ae36213e4893ce264",
+      "LIQUID_AG_PILOT_LOCK.json": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+      "README.md": "05e1e73e24fcfb0e202d65e1b8632b363462b4564f78c1c17dee94ef6c3bdef2",
+      "RUN_RESULT.json": "59a65012d378262b02895517b91c88d086d84de0b41be15ed150f8cff9c3d8db",
+      "RUN_RESULT.md": "0f54a3dfef9b6fc156b98af5faf3fcae37f5dbff3aae87935e17d7927b9f98a2",
+      "SHA256SUMS": "1294911fa0ef682a73587e3c9a8ad9ea37c8ed4de83654fdcde75a4fda17b376",
+      "checkpoint.json": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+      "checkpoint.sha256": "534341d83d477af42e58880ea4cc4fc61fe5a8fd7d80c8ea7799730433aac176",
+      "energy.csv": "ef296c0bb36bebe918f8e151e3c6004ecea45b686b96adb067aedbf608f3ca41",
+      "initial_geometry.json": "ad30558a1227a71c8f5a77c463c5094c2a3ab594309494281a95ac66aa5a4770",
+      "initial_rng.json": "6ea489876ff94ec02c98c9ecef55725c24480921028854f9cc49ba645ae6390e",
+      "initial_structure.extxyz": "0acab4d1bebe261beb545f1299de068700454829d9a4fc5d74bd90015fdddb9d",
+      "manifest.json": "86321e25ff82aa3d1efa346c03dc2bfef34bed5560adc97806fbed6970b4cd31",
+      "thermal.csv": "ba44edc99d8480db60e2b8479a4456c132d45036156a7d14461481ab57854245",
+      "trajectory.traj": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5"
+    },
+    "no_reinitialization": true,
+    "no_source_checkpoint_modification": true,
+    "parameter_sha256": "86ea1bb9ad269d0cd3aa626a9b01e39c3bd0cd5ac5c64c951c5d44e2deea22e4",
+    "pilot_runner_sha256": "cfe4c104ccfa9c69d5aad0b11287edc36a685a37bf9f67fdd8b792b546150fb0",
+    "q6_regression_trajectory_sha256": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5",
+    "source_checkpoint_environment_sha256": "f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f",
+    "task_id": "C-D-AGL-1250K-rho100-pilot01",
+    "time_fs": 500.0
+  },
+  "source_family_id": "PF-WMH2006-Ag64-rho100-Dpilot-20261012-seed003",
+  "status": "D_STEP2000_RECOVERY_RELEASE_PENDING_C_AUTH",
+  "step_policy": {
+    "automatic_continue_only_after_remote_fresh_restore_and_all_sha_pass": true,
+    "do_not_reinitialize_positions_velocities_or_rng": true,
+    "maximum_added_steps": 58000,
+    "maximum_chunk_steps": 1000,
+    "maximum_chunk_wall_seconds": 3600,
+    "maximum_global_step": 60000,
+    "resume_global_step": 2000
+  },
+  "strategy": {
+    "C_commit": "53cc7bb8f33cf94568212b3b36a04c7f0a4a5709",
+    "C_strategy_lock_sha256": "054f36dcda113e37b23b112e5919ba1c8201c669626db37b79bbd2281b020e1c",
+    "C_strategy_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_followup_strategy_20261012/STRATEGY_LOCK.json",
+    "C_strategy_report_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_followup_strategy_20261012/POST_PILOT_STRATEGY.md",
+    "C_strategy_report_sha256": "16640f182b53431d61605251a88cb936f3e4f08438cd69db921026f7c77a1628",
+    "strategy_status": "STRATEGY_FROZEN_EXECUTION_HOLD"
+  },
+  "task_id": "C-D-AGL-1250K-rho100-followup01",
+  "thermal_thresholds": {
+    "absolute_temperature_trend_limit_K_per_ps": 25.0,
+    "adjacent_window_mean_difference_tolerance_percent": 3.0,
+    "finite_size_note": "For 64 atoms with 3N-3=189 DOF, canonical instantaneous sigma(T)/T is approximately sqrt(2/189)=10.3%; judge block means and trends, not single samples or raw instantaneous SD.",
+    "instantaneous_temperature_standard_deviation_limit": null,
+    "mean_temperature_confidence_interval_must_include_setpoint": true,
+    "potential_energy_per_atom_adjacent_window_difference_limit_eV": 0.02,
+    "pressure_stress": "log mean and block uncertainty; require no statistically resolved drift, but do not impose an absolute pressure pass threshold in this pilot",
+    "required_consecutive_nonoverlapping_passing_windows": 2,
+    "steps_per_window": 4000,
+    "temperature_mean_tolerance_percent": 5.0,
+    "use_autocorrelation_aware_block_bootstrap": true,
+    "window_duration_ps": 2.0
+  }
+}

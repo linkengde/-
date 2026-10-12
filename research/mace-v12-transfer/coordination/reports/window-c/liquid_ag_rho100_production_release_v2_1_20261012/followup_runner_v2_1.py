@@ -309,6 +309,133 @@ def _restore_atoms(checkpoint: dict, expected_global_step: int | None = None) ->
     return atoms, restored_rngs
 
 
+def _load_resume_checkpoint(repo: Path, config: dict) -> dict:
+    """Verify and restore the signed step-2000 recovery archive without integration."""
+    resume = config.get("resume_checkpoint")
+    if not isinstance(resume, dict):
+        raise GateError("configuration lacks the step-2000 resume checkpoint binding")
+    binding_path = PACKAGE_DIR / resume["binding_file"]
+    binding = _verify_json_sha(binding_path, resume["binding_sha256"], "step-2000 checkpoint binding")
+    if binding.get("task_id") != TASK_ID or binding.get("owner") != "D":
+        raise GateError("step-2000 checkpoint binding task/owner mismatch")
+    for field in ("archive_commit", "archive_path", "archive_sha256sums_sha256", "manifest_sha256",
+                  "segment_manifest_sha256", "checkpoint_sha256", "global_step", "producer_runner_sha256"):
+        if binding.get(field) != resume.get(field):
+            raise GateError(f"step-2000 checkpoint binding/config mismatch: {field}")
+    binding_policy = binding.get("recovery_policy")
+    recovery_policy = resume.get("recovery_policy")
+    if not isinstance(binding_policy, dict) or binding_policy != recovery_policy:
+        raise GateError("step-2000 checkpoint recovery policy differs from its binding document")
+    if (
+        binding_policy.get("qa_status") != "PENDING"
+        or binding_policy.get("qa_stage") != "A_HOT_1600K"
+        or binding_policy.get("qa_target_K") != 1600.0
+        or binding_policy.get("resume_stage") != "A_HOT_1600K"
+        or binding_policy.get("resume_target_K") != 1600.0
+        or binding_policy.get("checkpoint_file_must_remain_immutable") is not True
+        or binding_policy.get("requires_C_authorization") is not True
+    ):
+        raise GateError("step-2000 recovery policy does not bind the approved pending 1600 K continuation")
+    if binding.get("source_step1000_checkpoint_sha256") != config["source_checkpoint"]["checkpoint_sha256"]:
+        raise GateError("step-2000 binding does not identify the original step-1000 source checkpoint")
+    if binding.get("potential_sha256") != EXPECTED_POTENTIAL_SHA256:
+        raise GateError("step-2000 checkpoint binding potential SHA mismatch")
+    if binding.get("environment_sha256") != config["runtime"]["expected_environment_sha256"]:
+        raise GateError("step-2000 checkpoint binding environment SHA mismatch")
+    archive_rel = PurePosixPath(resume["archive_path"])
+    if archive_rel.is_absolute() or ".." in archive_rel.parts:
+        raise GateError("resume archive path is unsafe")
+    archive_dir = repo / Path(*archive_rel.parts)
+    archive_commit = resume["archive_commit"]
+    if subprocess.run(["git", "-C", str(repo), "merge-base", "--is-ancestor", archive_commit, "HEAD"], check=False).returncode != 0:
+        raise GateError("step-2000 archive commit is not an ancestor of the D release branch")
+    member_sha = archive_backend.verify_sha256sums(archive_dir)
+    if archive_backend.sha256_file(archive_dir / "SHA256SUMS.txt") != resume["archive_sha256sums_sha256"]:
+        raise GateError("step-2000 archive SHA256SUMS binding mismatch")
+    for filename, config_field, binding_field in (
+        ("checkpoint.json", "checkpoint_sha256", "checkpoint_sha256"),
+        ("MANIFEST.json", "manifest_sha256", "manifest_sha256"),
+        ("SEGMENT_MANIFEST.json", "segment_manifest_sha256", "segment_manifest_sha256"),
+    ):
+        expected = resume[config_field]
+        if member_sha.get(filename) != expected or binding.get(binding_field) != expected:
+            raise GateError(f"step-2000 archive member binding mismatch: {filename}")
+        blob = subprocess.run(
+            ["git", "-C", str(repo), "show", f"{archive_commit}:{archive_rel.as_posix()}/{filename}"],
+            check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        if blob.returncode or hashlib.sha256(blob.stdout).hexdigest() != expected:
+            raise GateError(f"step-2000 archived Git blob mismatch: {filename}")
+    checkpoint = _verify_json_sha(archive_dir / "checkpoint.json", resume["checkpoint_sha256"], "step-2000 checkpoint")
+    sidecar = (archive_dir / "checkpoint.json.sha256").read_text(encoding="ascii").split()
+    if not sidecar or sidecar[0] != resume["checkpoint_sha256"]:
+        raise GateError("step-2000 checkpoint SHA sidecar mismatch")
+    expected_step = int(resume["global_step"])
+    if checkpoint.get("global_step") != expected_step or checkpoint.get("time_fs") != expected_step * 0.5:
+        raise GateError("step-2000 checkpoint boundary/time mismatch")
+    if checkpoint.get("source_step1000_checkpoint_sha256") != config["source_checkpoint"]["checkpoint_sha256"]:
+        raise GateError("step-2000 checkpoint is not descended from the locked step-1000 checkpoint")
+    if checkpoint.get("lock_sha256") != SCIENTIFIC_LOCK_SHA256 or checkpoint.get("potential_sha256") != EXPECTED_POTENTIAL_SHA256:
+        raise GateError("step-2000 checkpoint scientific-lock or EAM binding mismatch")
+    if checkpoint.get("environment_sha256") != config["runtime"]["expected_environment_sha256"]:
+        raise GateError("step-2000 checkpoint environment binding mismatch")
+    if checkpoint.get("runner_sha256") != resume["producer_runner_sha256"]:
+        raise GateError("step-2000 checkpoint producer runner binding mismatch")
+    if checkpoint.get("parameter_sha256") != config["source_checkpoint"]["parameter_sha256"]:
+        raise GateError("step-2000 checkpoint parameter-lock binding mismatch")
+    atoms, rngs = _restore_atoms(checkpoint, expected_global_step=expected_step)
+
+    manifest = json.loads((archive_dir / "MANIFEST.json").read_text(encoding="utf-8"))
+    segment_manifest = json.loads((archive_dir / "SEGMENT_MANIFEST.json").read_text(encoding="utf-8"))
+    qa = json.loads((archive_dir / "QA_monitor_latest.json").read_text(encoding="utf-8"))
+    if manifest.get("owner") != "D" or manifest.get("task_id") != TASK_ID:
+        raise GateError("step-2000 recovery manifest owner/task mismatch")
+    if manifest.get("source_checkpoint_sha256") != config["source_checkpoint"]["checkpoint_sha256"]:
+        raise GateError("step-2000 manifest does not identify the original step-1000 checkpoint")
+    if segment_manifest.get("task_id") != TASK_ID or segment_manifest.get("step_start_exclusive") != 1000 or segment_manifest.get("step_end_inclusive") != expected_step:
+        raise GateError("step-2000 segment manifest boundary/task mismatch")
+    raw_state = checkpoint.get("stage_state")
+    if not isinstance(raw_state, dict) or raw_state.get("global_step") != expected_step:
+        raise GateError("step-2000 checkpoint lacks matching stage state")
+    allowed_failure = resume["recovery_policy"]["recorded_failure"]
+    expected_failed_stage = resume["recovery_policy"]["recorded_failure_stage"]
+    if raw_state.get("failure") != allowed_failure or raw_state.get("stage") != expected_failed_stage:
+        raise GateError("step-2000 checkpoint failure marker differs from the signed recovery binding")
+    if manifest.get("checkpoint_sha256") != resume["checkpoint_sha256"] or manifest.get("run_status") != resume["recovery_policy"]["recorded_run_status"]:
+        raise GateError("step-2000 recovery manifest status/checkpoint binding mismatch")
+    if manifest.get("qa_status") != "PENDING" or segment_manifest.get("qa_status") != "PENDING":
+        raise GateError("step-2000 archive is not the expected PENDING boundary")
+    if qa.get("gate_status") != "PENDING" or qa.get("stage") != "A_HOT_1600K" or qa.get("target_temperature_K") != 1600.0 or qa.get("step") != expected_step:
+        raise GateError("step-2000 QA monitor does not support continuation in the locked 1600 K stage")
+    if raw_state.get("last_monitor") != qa or raw_state.get("last_monitor_step") != expected_step:
+        raise GateError("step-2000 stage state and archived QA monitor differ")
+    schedule = checkpoint.get("temperature_schedule_position", {})
+    if schedule.get("stage") != expected_failed_stage or schedule.get("next_integrator_step_target_K") != resume["recovery_policy"]["recorded_next_target_K"]:
+        raise GateError("step-2000 failure-marked schedule position differs from the recovery binding")
+    thermal_rows = _read_csv(archive_dir / "thermal.csv")
+    segment_rows = [r for r in thermal_rows if 1000 < int(r["step"]) <= expected_step]
+    if not segment_rows or int(segment_rows[-1]["step"]) != expected_step or any(float(r["target_temperature_K"]) != 1600.0 for r in segment_rows):
+        raise GateError("step-2000 thermal log does not confirm the locked 1600 K segment")
+
+    # The exception handler changed only the control marker after the step-2000
+    # physical state was saved.  Recover the prior stage only when the archived
+    # QA record and full segment temperature log independently prove it.
+    state = copy.deepcopy(raw_state)
+    state["stage"] = resume["recovery_policy"]["resume_stage"]
+    state.pop("failure", None)
+    state["recovered_from_checkpoint_sha256"] = resume["checkpoint_sha256"]
+    state["recovered_runner_failure"] = allowed_failure
+    return {
+        "archive_dir": archive_dir,
+        "checkpoint": checkpoint,
+        "checkpoint_sha256": resume["checkpoint_sha256"],
+        "atoms": atoms,
+        "rngs": rngs,
+        "state": state,
+        "qa_monitor": qa,
+    }
+
+
 def _restore_verified_segment(checkpoint: dict, current_atoms: Atoms, current_rngs: dict,
                               current_state: dict, calculator):
     """Reload the exact remotely restored boundary before permitting another chunk."""
@@ -425,6 +552,7 @@ def run_preflight(config_path: Path, expected_config_sha: str, *, allow_active_o
         raise GateError("step1000 checkpoint is not bound to the archived pilot runner")
     if checkpoint.get("rng_provenance", {}).get("bit_generator") != "PCG64" or checkpoint.get("rng_provenance", {}).get("child_order") != list(RNG_NAMES):
         raise GateError("checkpoint RNG provenance differs from the frozen three-stream rule")
+    resume_context = _load_resume_checkpoint(repo, config) if "resume_checkpoint" in config else None
     actual_code_sha = {name: sha256_file(PACKAGE_DIR / name) for name in config["code_sha256"]}
     code_pass = actual_code_sha == config["code_sha256"]
     if not code_pass:
@@ -468,7 +596,8 @@ def run_preflight(config_path: Path, expected_config_sha: str, *, allow_active_o
         output_boundary_pass = output_path.is_dir() and (output_path / "checkpoint.json").is_file()
     else:
         output_boundary_pass = not output_path.exists() and os.access(output_path.parent, os.W_OK)
-    preflight_pass = bool(potential_pass and eam_parser_pass and env_pass and resource_pass and q6_regression_pass and output_boundary_pass)
+    resume_pass = resume_context is not None
+    preflight_pass = bool(potential_pass and eam_parser_pass and env_pass and resource_pass and q6_regression_pass and output_boundary_pass and resume_pass)
     return {
         "schema_version": 1,
         "owner": "D",
@@ -485,6 +614,10 @@ def run_preflight(config_path: Path, expected_config_sha: str, *, allow_active_o
         "checkpoint_sha256": sha256_file(checkpoint_path),
         "checkpoint_position_momentum_rng_restore_pass": True,
         "checkpoint_member_sha256_pass": True,
+        "resume_checkpoint_step": resume_context["checkpoint"]["global_step"] if resume_context else None,
+        "resume_checkpoint_sha256": resume_context["checkpoint_sha256"] if resume_context else None,
+        "resume_checkpoint_position_momentum_rng_restore_pass": resume_pass,
+        "resume_checkpoint_archive_manifest_pass": resume_pass,
         "potential_path": str(potential_path),
         "potential_sha256": potential_sha,
         "potential_sha_pass": potential_pass,
@@ -509,7 +642,7 @@ def run_preflight(config_path: Path, expected_config_sha: str, *, allow_active_o
         "current_task_only": True,
         "notes": [
             "Read-only check only; ASE parsed the EAM file, but no energy, force, dynamics, output directory, or checkpoint write was performed.",
-            "A separate C execution release bound to this exact D branch head/config/code/environment is still required.",
+            "A separate C execution release bound to this exact D branch head/config/code/environment/step-2000 checkpoint binding is still required.",
             "RDF peak width and higher-shell peaks are diagnostics only under QA v2.1; all locked numeric gates remain fail-closed.",
         ],
     }
@@ -518,6 +651,7 @@ def run_preflight(config_path: Path, expected_config_sha: str, *, allow_active_o
 def _authorization_check(auth_path: Path, auth_sha: str, config_sha: str, config: dict, repo: Path, release_commit: str, release_repo_path: str) -> dict:
     _verify_release_blob(repo, release_commit, release_repo_path, auth_sha, auth_path)
     auth = _verify_json_sha(auth_path, auth_sha, "C execution release")
+    resume = config["resume_checkpoint"]
     required = {
         "execution_authorized": True,
         "owner": "D",
@@ -531,11 +665,13 @@ def _authorization_check(auth_path: Path, auth_sha: str, config_sha: str, config
         "archive_backend_sha256": config["code_sha256"]["archive_backend_v2.py"],
         "test_suite_sha256": config["code_sha256"]["test_production_runner_v2_1.py"],
         "github_archive_test_harness_sha256": config["code_sha256"]["github_archive_integration_test.py"],
-        "checkpoint_sha256": EXPECTED_CHECKPOINT_SHA256,
+        "checkpoint_sha256": resume["checkpoint_sha256"],
+        "checkpoint_binding_sha256": resume["binding_sha256"],
+        "resume_global_step": resume["global_step"],
         "potential_sha256": EXPECTED_POTENTIAL_SHA256,
         "environment_sha256": config["runtime"]["expected_environment_sha256"],
         "maximum_global_step": 60000,
-        "maximum_added_steps": 59000,
+        "maximum_added_steps": config["step_policy"]["maximum_added_steps"],
         "maximum_chunk_steps": 1000,
         "maximum_chunk_wall_seconds": 3600,
         "d_branch_head": subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip(),
@@ -780,7 +916,7 @@ def _bundle_and_archive(repo: Path, out: Path, global_step: int, config: dict, a
                 shutil.rmtree(restore_dir)
 
 
-def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atoms: Atoms, rngs: dict, state: dict, output_dir: Path, repo: Path) -> dict:
+def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atoms: Atoms, rngs: dict, state: dict, output_dir: Path, repo: Path, initial_archive_dir: Path | None = None) -> dict:
     global _STOP_REQUESTED
     _STOP_REQUESTED = False
     potential = Path(config["potential"]["path"])
@@ -788,13 +924,19 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
         raise GateError("potential changed after preflight")
     if output_dir.exists():
         raise GateError("run output directory already exists; use only a separately verified resume archive")
-    output_dir.mkdir(parents=True)
-    source = repo / config["source_checkpoint"]["archive_path"]
-    for name in ("checkpoint.json", "trajectory.traj", "thermal.csv", "energy.csv"):
-        shutil.copy2(source / name, output_dir / name)
-    (output_dir / "stress.csv").write_text("step,time_fs,xx_eV_A3,yy_eV_A3,zz_eV_A3,yz_eV_A3,xz_eV_A3,xy_eV_A3\n", encoding="utf-8")
-    (output_dir / "unwrapped_positions.jsonl").write_text("", encoding="utf-8")
-    (output_dir / "frame_metrics.jsonl").write_text("", encoding="utf-8")
+    if initial_archive_dir is not None:
+        # Resume from the exact archived boundary, preserving its trajectory,
+        # thermodynamic/stress logs, unwrapped coordinates, metrics, and RNG checkpoint.
+        archive_backend.verify_sha256sums(initial_archive_dir)
+        shutil.copytree(initial_archive_dir, output_dir)
+    else:
+        output_dir.mkdir(parents=True)
+        source = repo / config["source_checkpoint"]["archive_path"]
+        for name in ("checkpoint.json", "trajectory.traj", "thermal.csv", "energy.csv"):
+            shutil.copy2(source / name, output_dir / name)
+        (output_dir / "stress.csv").write_text("step,time_fs,xx_eV_A3,yy_eV_A3,zz_eV_A3,yz_eV_A3,xz_eV_A3,xy_eV_A3\n", encoding="utf-8")
+        (output_dir / "unwrapped_positions.jsonl").write_text("", encoding="utf-8")
+        (output_dir / "frame_metrics.jsonl").write_text("", encoding="utf-8")
     calculator = EAM(potential=str(potential), form="alloy")
     atoms.calc = calculator
     dynamics = Langevin(
@@ -809,7 +951,8 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
     sample_interval = 20
     trajectory_interval = 100
     chunk_steps = 1000
-    maximum_global = min(60000, current_step + 59000)
+    execution_start_step = current_step
+    maximum_global = min(60000, current_step + int(config["step_policy"]["maximum_added_steps"]))
     status = "RUNNING"
     previous_handlers = {
         signal.SIGTERM: signal.signal(signal.SIGTERM, _request_graceful_stop),
@@ -979,7 +1122,7 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
             state["global_step"] = current_step
             last_checkpoint_sha = _save_checkpoint(output_dir / "checkpoint.json", atoms, rngs, state, config, start_wall)
             _atomic_json(output_dir / "RUN_STATE.json", {**state, "status": status})
-            _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha)
+            _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha, config)
             try:
                 archive_result = _bundle_and_archive(repo, output_dir, current_step, config, auth)
             except BaseException as exc:
@@ -987,14 +1130,14 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
                 state["stage"] = status
                 state["archive_failure"] = f"{type(exc).__name__}: {exc}"
                 _atomic_json(output_dir / "RUN_STATE.json", {**state, "status": status})
-                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha)
+                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha, config)
                 break
             if not archive_backend.segment_archive_passed(archive_result):
                 status = "ARCHIVE_OR_RESTORE_FAILURE"
                 state["stage"] = status
                 state["archive_failure"] = "segment archive result did not pass every required gate"
                 _atomic_json(output_dir / "RUN_STATE.json", {**state, "status": status})
-                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha)
+                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha, config)
                 break
             restored_payload = archive_result.pop("_verified_checkpoint_payload", None)
             try:
@@ -1006,7 +1149,7 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
                 state["stage"] = status
                 state["archive_failure"] = f"fresh-fetch restore mismatch: {type(exc).__name__}: {exc}"
                 _atomic_json(output_dir / "RUN_STATE.json", {**state, "status": status})
-                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha)
+                _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha, config)
                 break
             if not _archive_allows_continuation(status, archive_result):
                 break
@@ -1027,7 +1170,7 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
         try:
             last_checkpoint_sha = _save_checkpoint(output_dir / "checkpoint.json", atoms, rngs, state, config, start_wall)
             _atomic_json(output_dir / "RUN_STATE.json", {**state, "status": status})
-            _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha)
+            _write_result_and_sums(output_dir, state, status, time.monotonic() - start_wall, last_checkpoint_sha, config)
         except BaseException as save_exc:
             state["checkpoint_save_failure"] = f"{type(save_exc).__name__}: {save_exc}"
             status = "POST_STEP_AND_CHECKPOINT_SAVE_FAILED"
@@ -1038,7 +1181,7 @@ def _run_loop(config_path: Path, config_sha: str, config: dict, auth: dict, atom
             signal.signal(signum, previous)
     return {
         "status": status,
-        "actual_start_step": 1000,
+        "actual_start_step": execution_start_step,
         "actual_end_step": current_step,
         "time_ps": current_step * 0.0005,
         "checkpoint_sha256": last_checkpoint_sha,
@@ -1117,7 +1260,7 @@ def _historical_q6_regression(repo: Path, config: dict) -> dict:
     return report
 
 
-def _write_result_and_sums(out: Path, state: dict, status: str, wall_s: float, checkpoint_sha: str) -> None:
+def _write_result_and_sums(out: Path, state: dict, status: str, wall_s: float, checkpoint_sha: str, config: dict) -> None:
     result = {
         "task_id": TASK_ID,
         "source_family_id": SOURCE_FAMILY_ID,
@@ -1146,6 +1289,8 @@ def _write_result_and_sums(out: Path, state: dict, status: str, wall_s: float, c
         "scientific_lock_sha256": SCIENTIFIC_LOCK_SHA256,
         "strategy_lock_sha256": STRATEGY_LOCK_SHA256,
         "source_step1000_checkpoint_sha256": EXPECTED_CHECKPOINT_SHA256,
+        "checkpoint_sha256": checkpoint_sha,
+        "checkpoint_binding_sha256": config.get("resume_checkpoint", {}).get("binding_sha256"),
         "potential_sha256": EXPECTED_POTENTIAL_SHA256,
         "runner_sha256": state.get("runner_sha256"),
         "criteria_sha256": state.get("criteria_sha256"),
@@ -1153,11 +1298,8 @@ def _write_result_and_sums(out: Path, state: dict, status: str, wall_s: float, c
         "data_role": "SINGLE_SOURCE_FAMILY_SAMPLING_CANDIDATE_ONLY_NO_TRAIN_DEV_TEST",
         "member_sha256": members,
     })
-    lines = []
-    for path in sorted(out.iterdir()):
-        if path.is_file() and path.name != "SHA256SUMS.txt":
-            lines.append(f"{sha256_file(path)}  {path.name}\n")
-    (out / "SHA256SUMS.txt").write_text("".join(lines), encoding="ascii")
+    archive_backend.write_sha256sums(out)
+    archive_backend.verify_sha256sums(out)
 
 
 def run_authorized(config_path: Path, config_sha: str, authorization_path: Path, authorization_sha: str,
@@ -1170,27 +1312,13 @@ def run_authorized(config_path: Path, config_sha: str, authorization_path: Path,
     auth = _authorization_check(authorization_path, authorization_sha, config_sha, config,
                                 repo, authorization_commit, authorization_repo_path)
     auth["_release_sha256"] = authorization_sha
-    source = repo / config["source_checkpoint"]["archive_path"]
-    checkpoint = json.loads((source / "checkpoint.json").read_text(encoding="utf-8"))
-    atoms, rngs = _restore_atoms(checkpoint)
-    state = {
-        "stage": "A_HOT_1600K",
-        "global_step": 1000,
-        "stage_a_start_step": 1000,
-        "stage_a_initial_transient_end_step": 5000,
-        "liquid_onset_step": None,
-        "stage_b_start_step": None,
-        "stage_c_start_step": None,
-        "stage_d_start_step": None,
-        "unwrapped_positions_A": atoms.get_positions().tolist(),
-        "qa_msd_origin_positions_A": None,
-        "last_monitor_step": None,
-        "last_monitor": None,
-    }
+    resume_context = _load_resume_checkpoint(repo, config)
+    atoms, rngs, state = resume_context["atoms"], resume_context["rngs"], resume_context["state"]
     out = Path(config["output_directory"])
     if out.exists():
         raise GateError("output directory exists; no overwrite/reinitialization allowed")
-    return _run_loop(config_path, config_sha, config, auth, atoms, rngs, state, out, repo)
+    return _run_loop(config_path, config_sha, config, auth, atoms, rngs, state, out, repo,
+                     initial_archive_dir=resume_context["archive_dir"])
 
 
 def main() -> int:

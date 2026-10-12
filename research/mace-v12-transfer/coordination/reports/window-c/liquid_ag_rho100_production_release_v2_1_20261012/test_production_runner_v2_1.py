@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import importlib
 import csv
+import hashlib
 import json
 import math
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -232,6 +234,93 @@ class ProductionRunnerV21Tests(unittest.TestCase):
             expected.bit_generator.state = checkpoint["rng_states"][name]
             self.assertEqual(stream.random(), expected.random())
         self.assertEqual(before_sha, runner.sha256_file(checkpoint_path))
+
+    def test_step2000_resume_binding_restores_checkpoint_without_changing_physical_state(self):
+        config_path = HERE / "FOLLOWUP_EXECUTION_CONFIG_STEP2000_RECOVERY.json"
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        resume = config["resume_checkpoint"]
+        archive_dir = REPO / resume["archive_path"]
+        checkpoint_path = archive_dir / "checkpoint.json"
+        before_sha = runner.sha256_file(checkpoint_path)
+        checkpoint_before = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+
+        restored = runner._load_resume_checkpoint(REPO, config)
+
+        self.assertEqual(restored["checkpoint_sha256"], "3ae061355544c7c1871605d11cc532c58d975fd0d77611dfa6fab26b2f238381")
+        self.assertEqual(restored["checkpoint"]["global_step"], 2000)
+        self.assertEqual(restored["state"]["stage"], "A_HOT_1600K")
+        self.assertEqual(restored["qa_monitor"]["gate_status"], "PENDING")
+        self.assertEqual(restored["atoms"].get_chemical_formula(), "Ag64")
+        self.assertIsNone(restored["atoms"].calc)
+        np.testing.assert_array_equal(restored["atoms"].get_positions(), checkpoint_before["positions_A"])
+        np.testing.assert_array_equal(restored["atoms"].get_momenta() * runner.fs,
+                                      checkpoint_before["momenta_amu_A_per_fs"])
+        for name, generator in restored["rngs"].items():
+            self.assertEqual(generator.bit_generator.state, checkpoint_before["rng_states"][name])
+        # The archived physical checkpoint keeps the original exception marker;
+        # only the in-memory control stage is recovered from QA + thermal logs.
+        self.assertEqual(checkpoint_before["stage_state"]["stage"], "POST_STEP_OR_CHECKPOINT_FAILURE")
+        self.assertEqual(runner.sha256_file(checkpoint_path), before_sha)
+
+    def test_manifest_records_checkpoint_sha_and_verifies_member_sums(self):
+        with tempfile.TemporaryDirectory(prefix="ag64-manifest-sha-") as td:
+            out = Path(td)
+            checkpoint_bytes = b'{"global_step":2000,"synthetic":true}\n'
+            (out / "checkpoint.json").write_bytes(checkpoint_bytes)
+            (out / "checkpoint.json.sha256").write_text(
+                f"{hashlib.sha256(checkpoint_bytes).hexdigest()}  checkpoint.json\n",
+                encoding="ascii",
+            )
+            config = {
+                "resume_checkpoint": {"binding_sha256": "binding-sha-test"},
+                "runtime": {"expected_environment_sha256": "environment-sha-test"},
+            }
+            state = {
+                "global_step": 2000, "liquid_onset_step": None,
+                "runner_sha256": "runner-sha-test", "criteria_sha256": "criteria-sha-test",
+            }
+            checkpoint_sha = runner.sha256_file(out / "checkpoint.json")
+            runner._write_result_and_sums(out, state, "PENDING", 12.5, checkpoint_sha, config)
+            manifest = json.loads((out / "MANIFEST.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["checkpoint_sha256"], checkpoint_sha)
+            self.assertEqual(manifest["checkpoint_binding_sha256"], "binding-sha-test")
+            self.assertEqual(manifest["member_sha256"]["checkpoint.json"], checkpoint_sha)
+            self.assertEqual(archive_backend.verify_sha256sums(out)["checkpoint.json"], checkpoint_sha)
+
+    def test_step2000_checkpoint_archive_fresh_fetch_and_restore_sha(self):
+        config = json.loads((HERE / "FOLLOWUP_EXECUTION_CONFIG_STEP2000_RECOVERY.json").read_text(encoding="utf-8"))
+        original = REPO / config["resume_checkpoint"]["archive_path"]
+        expected_checkpoint_sha = config["resume_checkpoint"]["checkpoint_sha256"]
+        self.assertEqual(runner.sha256_file(original / "checkpoint.json"), expected_checkpoint_sha)
+        with tempfile.TemporaryDirectory(prefix="ag64-step2000-restore-") as td:
+            base = Path(td)
+            bare, repo = base / "remote.git", base / "repo"
+            source, restored = base / "source", base / "restored"
+            subprocess.run(["git", "init", "--bare", str(bare)], check=True, capture_output=True)
+            subprocess.run(["git", "init", "-b", "cloud-d-b1-dft", str(repo)], check=True, capture_output=True)
+            subprocess.run(["git", "-C", str(repo), "config", "user.name", "QA Test"], check=True)
+            subprocess.run(["git", "-C", str(repo), "config", "user.email", "qa-test@example.invalid"], check=True)
+            (repo / "README.md").write_text("synthetic archive transport fixture\n", encoding="utf-8")
+            subprocess.run(["git", "-C", str(repo), "add", "README.md"], check=True)
+            subprocess.run(["git", "-C", str(repo), "commit", "-m", "fixture"], check=True, capture_output=True)
+            subprocess.run(["git", "-C", str(repo), "remote", "add", "origin", str(bare)], check=True)
+            subprocess.run(["git", "-C", str(repo), "push", "-u", "origin", "cloud-d-b1-dft"], check=True, capture_output=True)
+            base_head = subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip()
+            shutil.copytree(original, source)
+
+            result = archive_backend.archive_push_fresh_restore(
+                repo_root=repo, source_dir=source,
+                archive_relpath="synthetic/step2000/recovery", branch="cloud-d-b1-dft",
+                remote="origin", expected_remote_head=base_head, restore_dir=restored,
+                commit_message="synthetic step2000 restore QA",
+            )
+
+            self.assertTrue(archive_backend.segment_archive_passed(result), result)
+            self.assertEqual(archive_backend.remote_branch_head(repo, "origin", "cloud-d-b1-dft"), result["commit"])
+            self.assertEqual(runner.sha256_file(restored / "checkpoint.json"), expected_checkpoint_sha)
+            self.assertEqual(archive_backend.verify_sha256sums(restored), archive_backend.verify_sha256sums(source))
+            self.assertEqual(json.loads((restored / "checkpoint.json").read_text(encoding="utf-8")),
+                             json.loads((original / "checkpoint.json").read_text(encoding="utf-8")))
 
     def test_production_remote_boundary_restore_preserves_rng_and_state(self):
         checkpoint_path = REPO / "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_pilot_results_20261012/C-D-AGL-1250K-rho100-pilot01/checkpoint.json"
