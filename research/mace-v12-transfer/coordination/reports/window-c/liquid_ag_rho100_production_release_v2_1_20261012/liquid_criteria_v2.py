@@ -33,6 +33,9 @@ FRAME_INTERVAL_PS = 0.05
 STEP_INTERVAL = 100
 BOOTSTRAP_REPLICATES = 2000
 BOOTSTRAP_SEED = 20261012
+ASE_STRESS_TO_GPA = 160.21766208
+STRESS_SAMPLE_INTERVAL_PS = 0.01
+STRESS_MIN_STATIONARY_DURATION_PS = 4.0
 
 
 class CriteriaError(RuntimeError):
@@ -374,6 +377,172 @@ def integrated_autocorrelation_time(values: Sequence[float], dt_ps: float = FRAM
     return float(dt_ps * (0.5 + total))
 
 
+def _circular_block_indices(n: int, block_frames: int, replicates: int,
+                            rng: np.random.Generator) -> np.ndarray:
+    if n < 1 or block_frames < 1 or block_frames > n:
+        raise CriteriaError("invalid circular moving-block dimensions")
+    blocks_needed = int(math.ceil(n / block_frames))
+    starts = rng.integers(0, n, size=(replicates, blocks_needed))
+    offsets = np.arange(block_frames)
+    indices = (starts[:, :, None] + offsets[None, None, :]) % n
+    return indices.reshape(replicates, -1)[:, :n]
+
+
+def _stress_series_seed(times_ps: np.ndarray, values: np.ndarray, name: str) -> int:
+    payload = name.encode("utf-8") + b"\0" + np.column_stack((times_ps, values)).astype("<f8").tobytes()
+    return int.from_bytes(hashlib.sha256(payload).digest()[:8], "little")
+
+
+def _stress_observable_summary(times_ps: np.ndarray, values: np.ndarray, name: str,
+                               dt_ps: float, replicates: int) -> dict:
+    n = len(values)
+    centered_t = times_ps - float(np.mean(times_ps))
+    denominator = float(np.dot(centered_t, centered_t))
+    if denominator <= 0.0:
+        return {"status": "QA_HOLD", "reason": "stress trend time axis is degenerate", "sample_count": n}
+    slope = float(np.dot(centered_t, values - float(np.mean(values))) / denominator)
+    fitted = float(np.mean(values)) + slope * centered_t
+    residual = values - fitted
+    residual -= float(np.mean(residual))
+    # Estimate correlation in the detrended residual series so a real trend is
+    # not mistaken for a near-unit-root autocorrelation and made untestable.
+    tau_ps = integrated_autocorrelation_time(residual, dt_ps)
+    block_frames = max(1, int(math.ceil(2.0 * tau_ps / dt_ps)))
+    effective_blocks = n // block_frames
+    if effective_blocks < 8:
+        return {
+            "status": "PENDING", "reason": "fewer than eight complete autocorrelation-sized blocks",
+            "sample_count": n, "mean": float(np.mean(values)),
+            "mean_ci95": None, "mean_block_uncertainty_95pct_half_width": None,
+            "slope_per_ps": slope, "slope_ci95_per_ps": None,
+            "statistically_resolved_drift": None,
+            "tau_int_ps": tau_ps, "block_length_samples": block_frames,
+            "complete_effective_blocks": effective_blocks,
+        }
+
+    rng = np.random.Generator(np.random.PCG64(_stress_series_seed(times_ps, values, name)))
+    indices = _circular_block_indices(n, block_frames, replicates, rng)
+    mean_replicates = values[indices].mean(axis=1)
+    mean_ci = np.quantile(mean_replicates, [0.025, 0.975])
+    slope_replicates = np.empty(replicates, dtype=float)
+    if np.all(values == values[0]):
+        # Avoid classifying floating-point cancellation noise as a trend in an
+        # exactly constant synthetic/recorded series.
+        slope = 0.0
+        slope_ci = np.asarray([0.0, 0.0])
+    else:
+        for replicate, sample_indices in enumerate(indices):
+            bootstrap_values = fitted + residual[sample_indices]
+            slope_replicates[replicate] = float(
+                np.dot(centered_t, bootstrap_values - float(np.mean(bootstrap_values))) / denominator
+            )
+        slope_ci = np.quantile(slope_replicates, [0.025, 0.975])
+    no_resolved_drift = bool(slope_ci[0] <= 0.0 <= slope_ci[1])
+    mean = float(np.mean(values))
+    return {
+        "status": "PASS" if no_resolved_drift else "FAIL_DRIFT",
+        "sample_count": n,
+        "mean": mean,
+        "mean_ci95": [float(mean_ci[0]), float(mean_ci[1])],
+        "mean_block_uncertainty_95pct_half_width": float((mean_ci[1] - mean_ci[0]) / 2.0),
+        "slope_per_ps": slope,
+        "slope_ci95_per_ps": [float(slope_ci[0]), float(slope_ci[1])],
+        "statistically_resolved_drift": not no_resolved_drift,
+        "significance_rule": "two-sided 95% residual circular moving-block-bootstrap slope interval excludes zero",
+        "tau_int_ps": tau_ps,
+        "block_length_samples": block_frames,
+        "complete_effective_blocks": effective_blocks,
+        "bootstrap_replicates": replicates,
+        "bootstrap_seed": _stress_series_seed(times_ps, values, name),
+    }
+
+
+def pressure_stress_gate(times_ps: Sequence[float] | None,
+                         stress_eV_A3: Sequence[Sequence[float]] | None,
+                         lock: dict = LOCK) -> dict:
+    """Require stationary pressure and all six stress components to have no resolved drift.
+
+    ASE stress is tensile-positive in eV/Angstrom^3; hydrostatic pressure is
+    therefore P = -trace(stress)/3 (positive for compression).  The gate has
+    no absolute pressure acceptance threshold.
+    """
+    if times_ps is None or stress_eV_A3 is None:
+        return {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                "reason": "pressure/stress input missing"}
+    try:
+        times = _finite_array(times_ps, "stress times")
+        stress = _finite_array(stress_eV_A3, "six-component stress")
+    except (CriteriaError, TypeError, ValueError) as exc:
+        return {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                "reason": f"invalid pressure/stress input: {exc}"}
+    if times.ndim != 1 or stress.ndim != 2 or stress.shape != (len(times), 6):
+        return {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                "reason": "stress input must contain six finite Voigt components per time"}
+    n = len(times)
+    if n == 0 and stress.size == 0:
+        return {"status": "PENDING", "pressure_stress_gate_pass": False,
+                "reason": "no eligible fixed-temperature stress samples", "sample_count": 0}
+    if n < 2 or np.any(np.diff(times) <= 0.0):
+        return {"status": "PENDING", "pressure_stress_gate_pass": False,
+                "reason": "not enough increasing stress samples", "sample_count": n}
+    differences = np.diff(times)
+    dt_ps = float(np.median(differences))
+    if not math.isfinite(dt_ps) or dt_ps <= 0.0 or not np.allclose(
+        differences, dt_ps, rtol=1e-5, atol=1e-9
+    ):
+        return {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                "reason": "stress samples are not on a regular time grid", "sample_count": n}
+    if not math.isclose(dt_ps, STRESS_SAMPLE_INTERVAL_PS, rel_tol=0.0, abs_tol=1e-9):
+        return {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                "reason": "stress sample cadence differs from the frozen 0.01 ps output interval",
+                "sample_count": n, "sample_interval_ps": dt_ps}
+    duration_ps = float(times[-1] - times[0] + dt_ps)
+    if duration_ps + 1e-12 < STRESS_MIN_STATIONARY_DURATION_PS:
+        return {"status": "PENDING", "pressure_stress_gate_pass": False,
+                "reason": "less than the complete 4 ps fixed-temperature QA interval",
+                "sample_count": n, "duration_ps": duration_ps}
+
+    diagonal = stress[:, :3]
+    pressure = -np.sum(diagonal, axis=1) / 3.0
+    names = ("pressure", "stress_xx", "stress_yy", "stress_zz", "stress_yz", "stress_xz", "stress_xy")
+    series = (pressure,) + tuple(stress[:, index] for index in range(6))
+    reps = int(lock["rdf"]["bootstrap"]["replicates"])
+    summaries = {
+        name: _stress_observable_summary(times, values, name, dt_ps, reps)
+        for name, values in zip(names, series)
+    }
+    pending = [name for name, item in summaries.items() if item["status"] == "PENDING"]
+    invalid = [name for name, item in summaries.items() if item["status"] == "QA_HOLD"]
+    drift = [name for name, item in summaries.items() if item["status"] == "FAIL_DRIFT"]
+    if invalid:
+        status, reason = "QA_HOLD", "one or more stress statistics are not reliable"
+    elif drift:
+        status, reason = "FAIL_DRIFT", "statistically resolved pressure/stress drift"
+    elif pending:
+        status, reason = "PENDING", "one or more stress series have too few effective blocks"
+    else:
+        status, reason = "PASS", None
+    return {
+        "status": status,
+        "pressure_stress_gate_pass": status == "PASS",
+        "reason": reason,
+        "pressure_definition": "P=-(sigma_xx+sigma_yy+sigma_zz)/3",
+        "stress_convention": "ASE positive tensile; pressure positive compressive",
+        "stress_unit": "eV/Angstrom^3",
+        "pressure_unit": "eV/Angstrom^3",
+        "pressure_mean_GPa": float(np.mean(pressure) * ASE_STRESS_TO_GPA),
+        "duration_ps": duration_ps,
+        "sample_interval_ps": dt_ps,
+        "sample_count": n,
+        "bootstrap_method": "circular moving-block bootstrap; OLS detrended residual blocks for slope CI",
+        "bootstrap_replicates": reps,
+        "confidence_level": 0.95,
+        "multiple_comparison_policy": "each of pressure and six components uses its two-sided 95% interval; any resolved drift fails closed",
+        "confirmation_required": "C review of slope bootstrap and significance rule before release",
+        "series": summaries,
+    }
+
+
 def _slope(values: np.ndarray, dt_ps: float) -> float:
     y = np.asarray(values, dtype=float)
     x = np.arange(len(y), dtype=float) * dt_ps
@@ -684,7 +853,8 @@ def _thermal_gate(first: Sequence[FrameMetrics], second: Sequence[FrameMetrics],
 
 def assess_phase(frames: Sequence[FrameMetrics], final_windows_ps: Sequence[Sequence[float]],
                  unwrapped_positions_A: Sequence[Sequence[Sequence[float]]], target_K: float,
-                 q6_regression: dict, thermal_thresholds: dict, lock: dict = LOCK) -> dict:
+                 q6_regression: dict, thermal_thresholds: dict, lock: dict = LOCK,
+                 pressure_stress: dict | None = None) -> dict:
     """Complete V2 liquid gate; every missing/unresolved component yields HOLD."""
     if not frames:
         return {"gate_status": "PENDING", "reason": "no eligible phase frames yet"}
@@ -729,23 +899,52 @@ def assess_phase(frames: Sequence[FrameMetrics], final_windows_ps: Sequence[Sequ
         if "needs the complete 4 ps QA interval" in msd["reason"] or "fewer than eight complete moving blocks" in msd["reason"]:
             return {"gate_status": "PENDING", "reason": msd["reason"], "rdf": rdf, "order_windows": window_order, "thermal": thermal}
         return {"gate_status": "QA_HOLD", "reason": msd["reason"], "rdf": rdf, "order_windows": window_order, "thermal": thermal}
+    if not isinstance(pressure_stress, dict):
+        stress_gate = pressure_stress_gate(None, None, lock)
+    elif pressure_stress.get("input_error"):
+        stress_gate = {"status": "QA_HOLD", "pressure_stress_gate_pass": False,
+                       "reason": str(pressure_stress["input_error"])}
+    else:
+        stress_gate = pressure_stress_gate(
+            pressure_stress.get("times_ps"), pressure_stress.get("stress_eV_A3"), lock,
+        )
+    if stress_gate["status"] == "PENDING":
+        return {
+            "gate_status": "PENDING", "reason": "PRESSURE_STRESS_DATA_INSUFFICIENT",
+            "rdf": rdf, "order_windows": window_order, "thermal": thermal, "msd": msd,
+            "pressure_stress": stress_gate,
+        }
+    if stress_gate["status"] == "QA_HOLD":
+        return {
+            "gate_status": "QA_HOLD", "reason": "PRESSURE_STRESS_QA_HOLD",
+            "rdf": rdf, "order_windows": window_order, "thermal": thermal, "msd": msd,
+            "pressure_stress": stress_gate,
+        }
     order_pass = all(w.get("status") == "PASS" for w in window_order) and not ordering_trend
-    passed = bool(rdf.get("rdf_gate_pass") and order_pass and thermal.get("temperature_gate_pass") and msd.get("msd_gate_pass"))
+    passed = bool(
+        rdf.get("rdf_gate_pass") and order_pass and thermal.get("temperature_gate_pass")
+        and msd.get("msd_gate_pass") and stress_gate.get("pressure_stress_gate_pass")
+    )
     if q6_regression.get("regression_pass") is not True:
         return {
             "gate_status": "QA_HOLD", "reason": "LEGACY_GLOBAL_Q6_REGRESSION_HOLD",
             "q6_regression": q6_regression, "rdf": rdf, "order_windows": window_order,
             "ordering_trend": ordering_trend, "mean_local_q6_slope_ci95_report_only": local_q6_slope_ci,
             "ptm_fraction_slope_ci95": ptm_slope_ci, "thermal": thermal, "msd": msd,
+            "pressure_stress": stress_gate,
         }
     return {
         "gate_status": "PASS" if passed else "FAIL_WINDOW",
-        "reason": "ORDERING_TREND" if ordering_trend else None,
+        "reason": (
+            "PRESSURE_STRESS_DRIFT" if stress_gate["status"] == "FAIL_DRIFT" else
+            "ORDERING_TREND" if ordering_trend else None
+        ),
         "rdf": rdf, "order_windows": window_order,
         "ordering_trend": ordering_trend,
         "mean_local_q6_slope_ci95_report_only": local_q6_slope_ci,
         "ptm_fraction_slope_ci95": ptm_slope_ci,
         "thermal": thermal, "msd": msd,
+        "pressure_stress": stress_gate,
         "ptm_implementation": "OVITO PolyhedralTemplateMatchingModifier",
         "ptm_version": frames[-1].ptm_version, "ptm_rmsd_cutoff": 0.10,
     }

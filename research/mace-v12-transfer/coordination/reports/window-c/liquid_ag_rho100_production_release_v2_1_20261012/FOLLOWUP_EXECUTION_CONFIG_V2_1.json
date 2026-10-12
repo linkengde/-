@@ -12,10 +12,10 @@
   },
   "code_sha256": {
     "archive_backend_v2.py": "6121984747ef710e0f0e6f1fb822bbf74871c435ac2110ea36c64b056f0af9e8",
-    "followup_runner_v2_1.py": "244ffe5c6a76d255bbfeb95cefed778bcd21c011d6fa6f0caae0ffc19610a3bd",
+    "followup_runner_v2_1.py": "f26be9819baedc6cad5c3d1ed36ee0e7dba33be2786b09ce8bacf826e3a1c6bd",
     "github_archive_integration_test.py": "d870bc41e343c85e5396b3f4b3d11310db17146c023c9497a6f78592fff00a4e",
-    "liquid_criteria_v2.py": "24830aed0efb807da75a40622c6d560704ecf0ba701e6d6d04a5704623646cee",
-    "test_production_runner_v2_1.py": "986a9525309e8e619ea940b7166e99d7af259e36a00d3641a470ef41af29ca9a"
+    "liquid_criteria_v2.py": "dadf5647cd1ffb68fd421e8f2742117c604b324e20443c0e2551e7208ae21c69",
+    "test_production_runner_v2_1.py": "eecdc40f00abaa72f33243471e89df2477c77e665c096225418fa70da4d3d5f9"
   },
   "criteria_implementation": {
     "global_q6": "legacy coherent Steinhardt Q6; history regression and strict <0.20 gate, at least 80% frames in each of two final nonoverlapping 2 ps windows",
@@ -32,7 +32,35 @@
     "review_interval_steps": 1000,
     "science_lock_sha256": "848f8db72d83cea91dcf4cd42ee9fbbf49a80e7b5e3759cb4f535be8cc5873d2",
     "thermal_log_interval_steps": 20,
-    "trajectory_interval_steps": 100
+    "trajectory_interval_steps": 100,
+    "pressure_stress_gate": {
+      "status": "PROPOSED_REQUIRES_C_CONFIRMATION",
+      "input": "stress.csv six ASE Voigt components joined by step to thermal.csv target_temperature_K",
+      "scope": "all fixed-target samples after the existing phase transient discard through the current boundary",
+      "required_duration_ps": 4.0,
+      "sampling": "every 20 steps at 0.5 fs per step (0.01 ps); regular time grid required",
+      "stress_components_order": [
+        "xx",
+        "yy",
+        "zz",
+        "yz",
+        "xz",
+        "xy"
+      ],
+      "stress_sign_and_unit": "ASE positive tensile, eV/Angstrom^3",
+      "pressure": "P=-(sigma_xx+sigma_yy+sigma_zz)/3; positive for compression; eV/Angstrom^3 (GPa reported as diagnostic)",
+      "absolute_pressure_threshold": null,
+      "mean_uncertainty": "two-sided 95% circular moving-block-bootstrap interval for each series",
+      "block_length": "ceil(2*tau_int/dt), where tau_int=dt*(0.5+sum(rho(k))) through the first non-positive residual autocorrelation lag; estimate tau_int from OLS detrended residuals",
+      "slope": "OLS versus time; residual circular moving-block bootstrap on the original fixed time axis",
+      "replicates": 2000,
+      "analysis_seed": "first 64 bits of SHA256 of named time/value input series; separate from MD RNG",
+      "significance": "two-sided 95% bootstrap slope interval excluding zero means statistically resolved drift; any pressure or stress-component drift fails the subgate",
+      "multiple_comparison": "no adjustment; any component resolving drift fails closed",
+      "minimum_effective_blocks": 8,
+      "insufficient_or_invalid": "PENDING if duration/effective blocks are insufficient; QA_HOLD for missing, malformed, non-finite, or irregular-grid data",
+      "review_question": "C must explicitly confirm the residual moving-block slope bootstrap, 95% zero-exclusion rule, and per-component multiplicity handling before signing execution release"
+    }
   },
   "criteria_thresholds": {
     "1250K_recrystallization_rule": "any gate failure or increasing crystalline order at 1250 K is HOLD/NO_LIQUID_AT_LOCKED_MODEL_CONDITIONS; do not change density, potential, or target to force passage",
@@ -245,7 +273,7 @@
     "time_fs": 500.0
   },
   "source_family_id": "PF-WMH2006-Ag64-rho100-Dpilot-20261012-seed003",
-  "status": "D_ENGINEERING_RELEASE_PENDING_C_EXECUTION_AUTHORIZATION",
+  "status": "D_ENGINEERING_RELEASE_PENDING_C_STRESS_METHOD_CONFIRMATION",
   "step_policy": {
     "automatic_continue_only_after_remote_fresh_restore_and_all_sha_pass": true,
     "do_not_reinitialize_positions_velocities_or_rng": true,

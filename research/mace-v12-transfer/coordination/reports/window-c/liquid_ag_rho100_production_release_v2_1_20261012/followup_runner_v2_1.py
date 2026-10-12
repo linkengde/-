@@ -574,6 +574,93 @@ def _read_csv(path: Path) -> list[dict]:
         return list(csv.DictReader(stream))
 
 
+STRESS_CSV_COLUMNS = (
+    "step", "time_fs", "xx_eV_A3", "yy_eV_A3", "zz_eV_A3",
+    "yz_eV_A3", "xz_eV_A3", "xy_eV_A3",
+)
+THERMAL_CSV_COLUMNS = (
+    "step", "time_fs", "target_temperature_K", "temperature_K",
+    "potential_energy_eV", "kinetic_energy_eV", "total_energy_eV",
+)
+
+
+def _eligible_pressure_stress_samples(out: Path, target_K: float, discard_end_step: int,
+                                      through_step: int) -> dict:
+    """Join fixed-target stress.csv and thermal.csv rows after the phase discard."""
+    stress_path = out / "stress.csv"
+    thermal_path = out / "thermal.csv"
+    if not stress_path.is_file() or not thermal_path.is_file():
+        return {"input_error": "stress.csv or thermal.csv is missing"}
+    try:
+        with stress_path.open(newline="", encoding="utf-8") as stream:
+            reader = csv.DictReader(stream)
+            if tuple(reader.fieldnames or ()) != STRESS_CSV_COLUMNS:
+                return {"input_error": "stress.csv does not contain the required six named Voigt components"}
+            stress_rows = list(reader)
+        with thermal_path.open(newline="", encoding="utf-8") as stream:
+            reader = csv.DictReader(stream)
+            if tuple(reader.fieldnames or ()) != THERMAL_CSV_COLUMNS:
+                return {"input_error": "thermal.csv header is incomplete or inconsistent"}
+            thermal_rows = list(reader)
+        stress_by_step: dict[int, dict] = {}
+        thermal_by_step: dict[int, dict] = {}
+        for row in stress_rows:
+            step = int(row["step"])
+            if step in stress_by_step:
+                return {"input_error": f"duplicate stress row at step {step}"}
+            stress_by_step[step] = row
+        for row in thermal_rows:
+            step = int(row["step"])
+            if step in thermal_by_step:
+                return {"input_error": f"duplicate thermal row at step {step}"}
+            thermal_by_step[step] = row
+
+        eligible_thermal: dict[int, dict] = {}
+        for step, row in thermal_by_step.items():
+            if not (discard_end_step < step <= through_step):
+                continue
+            target = float(row["target_temperature_K"])
+            if not math.isfinite(target):
+                return {"input_error": f"non-finite target temperature at step {step}"}
+            if math.isclose(target, target_K, rel_tol=0.0, abs_tol=1e-9):
+                eligible_thermal[step] = row
+        eligible_stress = {
+            step: row for step, row in stress_by_step.items()
+            if discard_end_step < step <= through_step
+        }
+        if set(eligible_thermal) != set(eligible_stress):
+            missing_stress = sorted(set(eligible_thermal) - set(eligible_stress))[:8]
+            missing_thermal = sorted(set(eligible_stress) - set(eligible_thermal))[:8]
+            return {"input_error": "stress/thermal sample mismatch; "
+                    f"missing_stress_steps={missing_stress}, missing_thermal_steps={missing_thermal}"}
+        ordered_steps = sorted(eligible_thermal)
+        times_ps, components = [], []
+        for step in ordered_steps:
+            thermal_row = eligible_thermal[step]
+            stress_row = eligible_stress[step]
+            time_fs_thermal = float(thermal_row["time_fs"])
+            time_fs_stress = float(stress_row["time_fs"])
+            expected_time_fs = step * 0.5
+            if not all(math.isfinite(value) for value in (time_fs_thermal, time_fs_stress)):
+                return {"input_error": f"non-finite sample time at step {step}"}
+            if not (math.isclose(time_fs_thermal, expected_time_fs, rel_tol=0.0, abs_tol=1e-9)
+                    and math.isclose(time_fs_stress, expected_time_fs, rel_tol=0.0, abs_tol=1e-9)):
+                return {"input_error": f"stress/thermal time does not match step {step}"}
+            try:
+                row_values = [float(stress_row[name]) for name in STRESS_CSV_COLUMNS[2:]]
+            except (TypeError, ValueError) as exc:
+                return {"input_error": f"missing or invalid stress component at step {step}: {exc}"}
+            if not np.isfinite(row_values).all():
+                return {"input_error": f"non-finite stress component at step {step}"}
+            times_ps.append(expected_time_fs * 0.001)
+            components.append(row_values)
+        return {"times_ps": times_ps, "stress_eV_A3": components,
+                "sample_count": len(ordered_steps), "target_temperature_K": target_K,
+                "discard_end_step_exclusive": discard_end_step, "through_step_inclusive": through_step}
+    except (OSError, csv.Error, KeyError, TypeError, ValueError) as exc:
+        return {"input_error": f"unable to parse stress/thermal samples: {type(exc).__name__}: {exc}"}
+
+
 def _load_frame_metrics(directory: Path) -> list[criteria.FrameMetrics]:
     result = []
     path = directory / "frame_metrics.jsonl"
@@ -992,6 +1079,7 @@ def _monitor_at_boundary(out: Path, step: int, state: dict, config: dict, auth: 
         target,
         historical,
         config["thermal_thresholds"],
+        pressure_stress=_eligible_pressure_stress_samples(out, target, discard_end, step),
     )
     last_window = [f for f in stationary_frames if windows[1][0] <= f.time_ps < windows[1][1]]
     monitor = {
