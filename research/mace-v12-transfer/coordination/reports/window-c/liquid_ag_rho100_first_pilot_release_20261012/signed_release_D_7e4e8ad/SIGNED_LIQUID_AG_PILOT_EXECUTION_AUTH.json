@@ -1,0 +1,123 @@
+{
+  "authorization_id": "C-D-AGL-1250K-rho100-pilot01-20261012",
+  "authorization_issued_by": "C",
+  "authorization_record_type": "C-branch-commit-attested-release",
+  "automatic_continuation": false,
+  "bindings": {
+    "C_branch": "cloud-c-liquid-ag-rho100-pilot-lock-20261012",
+    "C_lock_commit": "287b60af424f7bcc3a7b3598e524f5b543884ec9",
+    "C_lock_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_first_pilot_release_20261012/LIQUID_AG_PILOT_LOCK.json",
+    "D_branch": "cloud-d-b1-dft",
+    "D_branch_head": "7e4e8ad147928f764b152c7c851171bf1f233493",
+    "D_commit": "7e4e8ad147928f764b152c7c851171bf1f233493",
+    "D_engineering_evidence": {
+      "all_listed_files_verified": true,
+      "engineering_unit_tests_passed": 8,
+      "formal_steps_at_preflight": 0,
+      "manifest_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_pilot_engineering_20261012/MANIFEST.json",
+      "manifest_sha256": "563439427d90c3ededb3f3cc9b53272350bb708fed7d5cca102f28ecb6714e55",
+      "preflight_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_pilot_engineering_20261012/D_RHO100_ENGINEERING_PREFLIGHT.json",
+      "preflight_sha256": "00293a844651cc629184f7bef358ff7cea22a7af202a2e8d6de9ae57a31be909",
+      "preflight_status": "PASS",
+      "restart_and_rng_continuity": "PASS",
+      "sha256sums_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_pilot_engineering_20261012/SHA256SUMS",
+      "test_report_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_pilot_engineering_20261012/D_RHO100_ENGINEERING_TEST_REPORT.md",
+      "test_report_sha256": "8839c45ae93d68053a277023094ab4169316d5ae80b764945f5d1580cb5ef369"
+    },
+    "archive_backend_prior_test": {
+      "commit": "c1c9f866426e572e82ab88157654a015802707f8",
+      "commit_is_ancestor_of_bound_D_head": true,
+      "limitation": "synthetic archive test only; formal run output still requires its own immutable archive, fresh fetch, restore and SHA verification",
+      "synthetic_archive_sha256": "1f9f5dc0536b2736cf8b05583631bf7c3dcd3f595f73db38a3534d97ff33c924"
+    },
+    "potential": {
+      "filename": "Ag.eam.alloy",
+      "sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+      "size_bytes": 780452,
+      "upload_to_repository": false
+    },
+    "repository": "linkengde/-",
+    "runner_components": {
+      "pilot_engine.py": "5c245b104fc8946bf91d8284f074bb31a658bb5059818ba14ff0dc954ca4233f",
+      "run_pilot.py": "8cb04390240244ec49c513bfe96fe6ea0db8c9549250ffbbb715177fc86219fb"
+    },
+    "runtime": {
+      "ase": "3.29.0",
+      "environment_sha256": "f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f",
+      "gpaw": "26.7.0",
+      "numpy": "2.5.3",
+      "openmpi": "5.0.7",
+      "python": "3.12.14",
+      "runtime_sh_sha256": "d8b6d0c05020eb9baf270ea17ef67c0f8c043d5b6d5f5eac692eba007969e926",
+      "scipy": "1.18.1"
+    }
+  },
+  "environment_sha256": "f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f",
+  "execution_authorized": true,
+  "lock_sha256": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+  "locked_science": {
+    "atom_count": 64,
+    "composition": {
+      "Ag": 64
+    },
+    "data_role": "SAMPLING_PILOT_ONLY_NOT_TRAIN_DEV_OR_TEST",
+    "langevin_friction_fs_inverse": 0.01,
+    "master_seed": 125010003,
+    "pilot_temperature_schedule_K": 1600.0,
+    "potential_change_permitted": false,
+    "relative_density": 1.0,
+    "sampling_parameter_change_permitted": false,
+    "structure_reinitialization_on_resume_permitted": false,
+    "target_temperature_K": 1250.0,
+    "timestep_fs": 0.5
+  },
+  "maximum_added_steps": 1000,
+  "maximum_end_step": 1000,
+  "maximum_wall_seconds": 3600,
+  "other_releases": {
+    "Ag64_step8000": "ARCHIVED_HOLD",
+    "DFT": "HOLD",
+    "MACE_training": "HOLD",
+    "other_five_Ag_tasks": "HOLD"
+  },
+  "owner": "D",
+  "required_post_run_archive": {
+    "branch": "cloud-d-b1-dft",
+    "exclude": [
+      "Ag.eam.alloy",
+      "copyrighted_paper_PDFs",
+      "credentials_or_tokens",
+      "sealed_TEST_data"
+    ],
+    "fresh_fetch_restore_and_SHA256_required": true,
+    "if_upload_fetch_restore_or_hash_fails": "stop; preserve local outputs; no rerun, continuation, or next task until C review",
+    "immutable_new_task_archive": true,
+    "include": [
+      "positions_and_atom_IDs",
+      "cell_and_PBC",
+      "velocities_or_momenta",
+      "all_PCG64_states",
+      "checkpoint",
+      "trajectory",
+      "thermal_and_energy_logs",
+      "configuration_and_source_manifest",
+      "README",
+      "MANIFEST",
+      "SHA256SUMS"
+    ]
+  },
+  "runner_sha256": "cfe4c104ccfa9c69d5aad0b11287edc36a685a37bf9f67fdd8b792b546150fb0",
+  "runtime_stop_policy": {
+    "after_that_step_do_not_start_another": true,
+    "automatic_continuation": false,
+    "do_not_start_new_integrator_step_at_or_after_budget": true,
+    "if_a_step_started_before_budget_then_finish_and_checkpoint_that_step": true,
+    "maximum_global_step": 1000,
+    "reported_elapsed_may_exceed_budget_by_one_inflight_step": true,
+    "wall_budget_seconds": 3600
+  },
+  "schema_version": 1,
+  "start_step": 0,
+  "stop_step": 1000,
+  "task_id": "C-D-AGL-1250K-rho100-pilot01"
+}
