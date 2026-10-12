@@ -14,6 +14,8 @@ from pilot_engine import (
     pack_random_positions,
     run_authorized,
     verify_lock,
+    walltime_reached,
+    _save_exit_boundary,
 )
 
 
@@ -51,12 +53,95 @@ class Rho100EngineeringTests(unittest.TestCase):
         self.assertFalse(self.lock["initial_structure_generator"]["structure_generated"])
         self.assertFalse(self.lock["execution_authorized"])
 
-    def test_limits_accept_only_locked_boundary(self):
+    def test_walltime_is_a_stop_boundary_not_an_overflow_exception(self):
         assert_segment_limits(self.lock, 1000, 3600.0)
         with self.assertRaises(PreflightError):
             assert_segment_limits(self.lock, 1001, 1.0)
-        with self.assertRaises(PreflightError):
-            assert_segment_limits(self.lock, 1000, 3600.01)
+        self.assertFalse(walltime_reached(3599.0, 3600.0))
+        self.assertTrue(walltime_reached(3600.0, 3600.0))
+        self.assertTrue(walltime_reached(3600.01, 3600.0))
+        # An expired wall clock must remain observable as a stop decision even
+        # when elapsed time is a little over the bound.
+        assert_segment_limits(self.lock, 37, 3600.01)
+
+    def test_walltime_crossing_finishes_one_step_then_saves_nonperiodic_boundary(self):
+        with tempfile.TemporaryDirectory(prefix="D-rho100-wall-boundary-test-") as tmp:
+            root = Path(tmp)
+            clock = {"elapsed": 3599.0}
+            state = {
+                "global_step": 37,
+                "rng_states": {"thermostat": {"synthetic_counter": 37}},
+            }
+            checkpoint = root / "fixture_checkpoint.json"
+            checkpoint.write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+            integrate_calls = 0
+
+            # Synthetic indivisible integrator step: it begins below the cap,
+            # completes above it, and advances the state/RNG exactly once.
+            while state["global_step"] < 1000:
+                if walltime_reached(clock["elapsed"], 3600.0):
+                    break
+                integrate_calls += 1
+                state["global_step"] += 1
+                state["rng_states"]["thermostat"]["synthetic_counter"] += 1
+                clock["elapsed"] = 3601.2
+                if walltime_reached(clock["elapsed"], 3600.0):
+                    break
+
+            checkpoint.write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+            saved = json.loads(checkpoint.read_text(encoding="utf-8"))
+            self.assertEqual(integrate_calls, 1)
+            self.assertEqual(saved["global_step"], 38)
+            self.assertEqual(saved["rng_states"]["thermostat"]["synthetic_counter"], 38)
+            self.assertEqual(hashlib.sha256(checkpoint.read_bytes()).hexdigest(), hashlib.sha256(
+                json.dumps(saved, sort_keys=True).encode("utf-8")
+            ).hexdigest())
+
+    def test_walltime_already_expired_does_not_start_a_step_and_saves_latest_step(self):
+        for elapsed in (3600.0, 3602.0):
+            with self.subTest(elapsed=elapsed), tempfile.TemporaryDirectory(prefix="D-rho100-wall-expired-test-") as tmp:
+                root = Path(tmp)
+                state = {"global_step": 37, "rng_state": "unchanged-at-last-complete-step"}
+                integrate_calls = 0
+                if not walltime_reached(elapsed, 3600.0):
+                    integrate_calls += 1
+                    state["global_step"] += 1
+                checkpoint = root / "fixture_checkpoint.json"
+                checkpoint.write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+                saved = json.loads(checkpoint.read_text(encoding="utf-8"))
+                self.assertEqual(integrate_calls, 0)
+                self.assertEqual(saved["global_step"], 37)
+                self.assertEqual(saved["rng_state"], "unchanged-at-last-complete-step")
+
+    def test_exception_after_completed_step_persists_latest_state_and_rng(self):
+        with tempfile.TemporaryDirectory(prefix="D-rho100-exception-boundary-test-") as tmp:
+            checkpoint = Path(tmp) / "fixture_checkpoint.json"
+            state = {
+                "global_step": 41,
+                "rng_states": {"thermostat": {"synthetic_counter": 41}},
+            }
+            # Simulate a completed step followed by an output exception before
+            # the periodic checkpoint; exercise the same production exit-save
+            # helper used by run_authorized().
+            state["global_step"] += 1
+            state["rng_states"]["thermostat"]["synthetic_counter"] += 1
+
+            def save_boundary(status):
+                state["boundary_status"] = status
+                checkpoint.write_text(json.dumps(state, sort_keys=True), encoding="utf-8")
+                return hashlib.sha256(checkpoint.read_bytes()).hexdigest(), status
+
+            status, failure, checkpoint_sha = _save_exit_boundary(
+                save_boundary, "RUNNING", None, OSError("synthetic thermal-log write failure"),
+            )
+
+            saved = json.loads(checkpoint.read_text(encoding="utf-8"))
+            self.assertEqual(status, "STOPPED_AFTER_EXCEPTION_AT_LAST_COMPLETED_STEP")
+            self.assertIn("synthetic thermal-log write failure", failure)
+            self.assertEqual(checkpoint_sha, hashlib.sha256(checkpoint.read_bytes()).hexdigest())
+            self.assertEqual(saved["boundary_status"], status)
+            self.assertEqual(saved["global_step"], 42)
+            self.assertEqual(saved["rng_states"]["thermostat"]["synthetic_counter"], 42)
 
     def test_current_hold_cannot_create_formal_output(self):
         with tempfile.TemporaryDirectory(prefix="D-rho100-hold-gate-test-") as tmp:

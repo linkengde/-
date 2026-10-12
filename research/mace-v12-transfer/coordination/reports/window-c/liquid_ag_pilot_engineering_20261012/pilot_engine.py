@@ -441,8 +441,34 @@ def _parameter_sha(lock: dict) -> str:
 def assert_segment_limits(lock: dict, step: int, elapsed_wall_s: float) -> None:
     if step < 0 or step > int(lock["stops"]["maximum_step"]):
         raise PreflightError("global step exceeds the frozen 1000-step ceiling")
-    if elapsed_wall_s < 0 or elapsed_wall_s > float(lock["stops"]["wall_seconds"]):
-        raise PreflightError("walltime exceeds the frozen 3600-second ceiling")
+    if not math.isfinite(float(elapsed_wall_s)) or elapsed_wall_s < 0:
+        raise PreflightError("elapsed walltime must be finite and nonnegative")
+
+
+def walltime_reached(elapsed_wall_s: float, maximum_wall_s: float) -> bool:
+    """Return the stop decision without treating an expired clock as an error.
+
+    A completed integrator step is indivisible. The caller checks this before
+    starting a step and again immediately after it completes, then persists
+    that last complete state without starting another step.
+    """
+    elapsed = float(elapsed_wall_s)
+    maximum = float(maximum_wall_s)
+    if not math.isfinite(elapsed) or elapsed < 0:
+        raise PreflightError("elapsed walltime must be finite and nonnegative")
+    if not math.isfinite(maximum) or maximum <= 0:
+        raise PreflightError("maximum walltime must be finite and positive")
+    return elapsed >= maximum
+
+
+def _save_exit_boundary(save_boundary, status: str, failure: str | None, exc=None):
+    """Classify an exceptional exit and persist its last complete boundary."""
+    if exc is not None:
+        status = "STOPPED_AFTER_EXCEPTION_AT_LAST_COMPLETED_STEP"
+        detail = f"{type(exc).__name__}: {exc}"
+        failure = f"{failure}; {detail}" if failure else detail
+    checkpoint_sha, persisted_status = save_boundary(status)
+    return persisted_status, failure, checkpoint_sha
 
 
 def _state_payload(
@@ -960,7 +986,6 @@ def engineering_preflight(lock_path: Path, potential_path: Path) -> dict:
         raise PreflightError("workspace free space is below C's minimum_free_bytes gate")
     limits = {
         "max_step_guard_rejects_1001": False,
-        "wall_guard_rejects_3601s": False,
         "configured_maximum_step": int(lock["stops"]["maximum_step"]),
         "configured_wall_seconds": int(lock["stops"]["wall_seconds"]),
         "checkpoint_reserve_bytes": int(lock["stops"]["checkpoint_reserve_bytes"]),
@@ -971,13 +996,24 @@ def engineering_preflight(lock_path: Path, potential_path: Path) -> dict:
         assert_segment_limits(lock, 1001, 1.0)
     except PreflightError:
         limits["max_step_guard_rejects_1001"] = True
-    try:
-        assert_segment_limits(lock, 1, 3601.0)
-    except PreflightError:
-        limits["wall_guard_rejects_3601s"] = True
     assert_segment_limits(lock, 1000, 3600.0)
-    if not limits["max_step_guard_rejects_1001"] or not limits["wall_guard_rejects_3601s"]:
-        raise PreflightError("step or wall-time guard failed")
+    assert_segment_limits(lock, 37, 3601.0)
+    walltime_boundaries = {
+        "3599_seconds_allows_next_step": not walltime_reached(3599.0, 3600.0),
+        "3600_seconds_stops_before_next_step": walltime_reached(3600.0, 3600.0),
+        "over_3600_seconds_stops_before_next_step": walltime_reached(3600.01, 3600.0),
+        "over_limit_elapsed_is_stop_not_preflight_error": True,
+        "crossing_step_policy": "finish_current_integrator_step_then_save_before_any_next_step",
+    }
+    if not limits["max_step_guard_rejects_1001"] or not all(
+        walltime_boundaries[k] for k in (
+            "3599_seconds_allows_next_step",
+            "3600_seconds_stops_before_next_step",
+            "over_3600_seconds_stops_before_next_step",
+            "over_limit_elapsed_is_stop_not_preflight_error",
+        )
+    ):
+        raise PreflightError("step or wall-time boundary guard failed")
     return {
         "report_schema_version": 1,
         "owner": "D",
@@ -1026,6 +1062,7 @@ def engineering_preflight(lock_path: Path, potential_path: Path) -> dict:
         "checkpoint_restart": restart,
         "storage_estimate": storage,
         "limits_and_resources": limits,
+        "walltime_boundary_checks": walltime_boundaries,
         "resources": resources,
         "environment": environment,
         "environment_sha256": environment_sha,
@@ -1236,6 +1273,7 @@ def run_authorized(
     last_log_step = -1
     status = "COMPLETED"
     failure = None
+    loop_exception = None
     stop_flag = {"requested": False}
     previous_term = signal.getsignal(signal.SIGTERM)
     previous_int = signal.getsignal(signal.SIGINT)
@@ -1256,98 +1294,145 @@ def run_authorized(
         _append_row(thermal, [current_step, f"{tfs:.12g}", f"{target:.12g}", f"{temp:.16g}", f"{epot:.16g}", f"{ekin:.16g}", f"{epot + ekin:.16g}"])
         _append_row(energy, [current_step, f"{tfs:.12g}", f"{epot:.16g}", f"{ekin:.16g}", f"{epot + ekin:.16g}"])
 
-    def save_boundary(boundary_status: str) -> str:
-        nonlocal last_frame_step, last_log_step
+    def save_boundary(boundary_status: str) -> tuple[str, str]:
+        nonlocal last_frame_step, last_log_step, failure
+        output_errors = []
+        effective_status = boundary_status
         if last_frame_step != step:
-            with Trajectory(trajectory, "a", properties=[]) as traj:
-                atoms.info.update({"step": step, "task_id": TASK_ID})
-                traj.write(atoms)
-            last_frame_step = step
+            try:
+                with Trajectory(trajectory, "a", properties=[]) as traj:
+                    atoms.info.update({"step": step, "task_id": TASK_ID})
+                    traj.write(atoms)
+                last_frame_step = step
+            except Exception as exc:
+                output_errors.append(f"trajectory: {type(exc).__name__}: {exc}")
         if last_log_step != step:
-            log_step(step)
-            last_log_step = step
+            try:
+                log_step(step)
+                last_log_step = step
+            except Exception as exc:
+                output_errors.append(f"thermal/energy log: {type(exc).__name__}: {exc}")
+        if output_errors:
+            effective_status = "STOPPED_AFTER_OUTPUT_ERROR_AT_LAST_COMPLETED_STEP"
+            failure = "; ".join(output_errors)
         state = _formal_checkpoint(
             atoms, rngs, lock, lock_sha, lock["potential"]["sha256"],
             runner_sha, environment_sha, step, out, started, trajectory, thermal, energy,
         )
+        state["boundary_status"] = effective_status
+        state["boundary_output_errors"] = output_errors
         _atomic_json(out / "checkpoint.json", state)
         digest = sha256_file(out / "checkpoint.json")
         (out / "checkpoint.sha256").write_text(f"{digest}  checkpoint.json\n", encoding="ascii")
         with (out / "checkpoint.sha256").open("rb") as stream:
             os.fsync(stream.fileno())
-        _write_formal_manifest(out, lock_sha, {**lock, "_execution_authorization_sha256": auth_actual},
-                               runner_sha, environment_sha, boundary_status, step, time.monotonic() - started)
-        return digest
+        try:
+            _write_formal_manifest(
+                out, lock_sha, {**lock, "_execution_authorization_sha256": auth_actual},
+                runner_sha, environment_sha, effective_status,
+                step, time.monotonic() - started,
+            )
+        except Exception as exc:
+            effective_status = "STOPPED_AFTER_MANIFEST_ERROR_AT_LAST_COMPLETED_STEP"
+            detail = f"manifest: {type(exc).__name__}: {exc}"
+            failure = f"{failure}; {detail}" if failure else detail
+            state["boundary_status"] = effective_status
+            state["boundary_output_errors"] = output_errors + [detail]
+            _atomic_json(out / "checkpoint.json", state)
+            digest = sha256_file(out / "checkpoint.json")
+            (out / "checkpoint.sha256").write_text(f"{digest}  checkpoint.json\n", encoding="ascii")
+            with (out / "checkpoint.sha256").open("rb") as stream:
+                os.fsync(stream.fileno())
+        return digest, effective_status
 
     try:
-        log_step(0)
-        last_log_step = 0
-        save_boundary("INITIALIZED")
-        while step < max_steps:
-            elapsed = time.monotonic() - started
-            assert_segment_limits(lock, step, elapsed)
-            if stop_flag["requested"]:
-                status = "STOPPED_AT_LAST_COMPLETED_STEP"
-                break
-            if elapsed >= max_wall:
-                status = "WALLTIME_LIMIT_AT_LAST_COMPLETED_STEP"
-                break
-            limits = _resource_guards(lock, out)
-            if limits["max_rss_bytes"] > int(lock["stops"]["maximum_rss_bytes"]):
-                status = "RSS_LIMIT_AT_LAST_COMPLETED_STEP"
-                break
-            if limits["free_bytes"] < int(lock["stops"]["minimum_free_bytes"]) + int(lock["stops"]["checkpoint_reserve_bytes"]):
-                status = "DISK_LIMIT_AT_LAST_COMPLETED_STEP"
-                break
-            old_positions = atoms.get_positions().copy()
-            old_momenta = atoms.get_momenta().copy()
-            old_rng_state = copy.deepcopy(rngs["thermostat"].bit_generator.state)
-            next_step = step + 1
-            try:
-                dyn.step()
-                pos = atoms.get_positions()
-                mom = atoms.get_momenta()
-                if not np.all(np.isfinite(pos)) or not np.all(np.isfinite(mom)):
-                    raise PreflightError("non-finite coordinates or momenta")
-                minimum = minimum_periodic_pair_distance(pos, float(lock["density"]["cell"]["matrix_A"][0][0]))
-                if minimum < float(lock["stops"]["minimum_runtime_pair_distance_A"]):
-                    raise PreflightError("minimum runtime pair distance below C limit")
-                epot = float(atoms.get_potential_energy())
-                ekin = float(atoms.get_kinetic_energy())
-                if not math.isfinite(epot + ekin):
-                    raise PreflightError("non-finite energy after integrator step")
-                step = next_step
-            except Exception as exc:
-                atoms.set_positions(old_positions, apply_constraint=False)
-                atoms.set_momenta(old_momenta, apply_constraint=False)
-                rngs["thermostat"].bit_generator.state = old_rng_state
-                dyn.nsteps = step
-                status = "STOPPED_AFTER_ROLLBACK_TO_LAST_COMPLETED_STEP"
-                failure = f"{type(exc).__name__}: {exc}"
-                break
-            if step % int(lock["restart_and_output"]["log_interval_steps"]) == 0:
-                log_step(step)
-                last_log_step = step
-            if step % int(lock["restart_and_output"]["trajectory_interval_steps"]) == 0:
-                with Trajectory(trajectory, "a", properties=[]) as traj:
-                    atoms.info.update({"step": step, "task_id": TASK_ID})
-                    traj.write(atoms)
-                last_frame_step = step
-            if step % int(lock["restart_and_output"]["checkpoint_interval_steps"]) == 0:
-                save_boundary("RUNNING")
-            if stop_flag["requested"]:
-                status = "STOPPED_AT_LAST_COMPLETED_STEP"
-                break
-            if sum(p.stat().st_size for p in out.iterdir() if p.is_file()) > int(lock["stops"]["trajectory_bundle_cap_bytes"]):
-                status = "OUTPUT_BUNDLE_LIMIT_AT_LAST_COMPLETED_STEP"
-                break
-        else:
-            status = "COMPLETED_MAXIMUM_STEP"
+        try:
+            log_step(0)
+            last_log_step = 0
+            _initial_checkpoint_sha, status = save_boundary("INITIALIZED")
+            while step < max_steps:
+                elapsed = time.monotonic() - started
+                # Expiry is a stop condition, not a preflight error. Check it
+                # before any guard that could raise and before starting a step.
+                if walltime_reached(elapsed, max_wall):
+                    status = "WALLTIME_LIMIT_AT_LAST_COMPLETED_STEP"
+                    break
+                assert_segment_limits(lock, step, elapsed)
+                if stop_flag["requested"]:
+                    status = "STOPPED_AT_LAST_COMPLETED_STEP"
+                    break
+                if failure is not None:
+                    break
+                limits = _resource_guards(lock, out)
+                if limits["max_rss_bytes"] > int(lock["stops"]["maximum_rss_bytes"]):
+                    status = "RSS_LIMIT_AT_LAST_COMPLETED_STEP"
+                    break
+                if limits["free_bytes"] < int(lock["stops"]["minimum_free_bytes"]) + int(lock["stops"]["checkpoint_reserve_bytes"]):
+                    status = "DISK_LIMIT_AT_LAST_COMPLETED_STEP"
+                    break
+                old_positions = atoms.get_positions().copy()
+                old_momenta = atoms.get_momenta().copy()
+                old_rng_state = copy.deepcopy(rngs["thermostat"].bit_generator.state)
+                next_step = step + 1
+                try:
+                    dyn.step()
+                    pos = atoms.get_positions()
+                    mom = atoms.get_momenta()
+                    if not np.all(np.isfinite(pos)) or not np.all(np.isfinite(mom)):
+                        raise PreflightError("non-finite coordinates or momenta")
+                    minimum = minimum_periodic_pair_distance(pos, float(lock["density"]["cell"]["matrix_A"][0][0]))
+                    if minimum < float(lock["stops"]["minimum_runtime_pair_distance_A"]):
+                        raise PreflightError("minimum runtime pair distance below C limit")
+                    epot = float(atoms.get_potential_energy())
+                    ekin = float(atoms.get_kinetic_energy())
+                    if not math.isfinite(epot + ekin):
+                        raise PreflightError("non-finite energy after integrator step")
+                    step = next_step
+                except Exception as exc:
+                    atoms.set_positions(old_positions, apply_constraint=False)
+                    atoms.set_momenta(old_momenta, apply_constraint=False)
+                    rngs["thermostat"].bit_generator.state = old_rng_state
+                    dyn.nsteps = step
+                    status = "STOPPED_AFTER_ROLLBACK_TO_LAST_COMPLETED_STEP"
+                    failure = f"{type(exc).__name__}: {exc}"
+                    break
+                # A step already in progress is indivisible. Keep its complete
+                # state, then stop before any subsequent integration step.
+                if walltime_reached(time.monotonic() - started, max_wall):
+                    status = "WALLTIME_LIMIT_AFTER_LAST_COMPLETED_STEP"
+                    break
+                if step % int(lock["restart_and_output"]["log_interval_steps"]) == 0:
+                    log_step(step)
+                    last_log_step = step
+                if step % int(lock["restart_and_output"]["trajectory_interval_steps"]) == 0:
+                    with Trajectory(trajectory, "a", properties=[]) as traj:
+                        atoms.info.update({"step": step, "task_id": TASK_ID})
+                        traj.write(atoms)
+                    last_frame_step = step
+                if step % int(lock["restart_and_output"]["checkpoint_interval_steps"]) == 0:
+                    _periodic_checkpoint_sha, status = save_boundary("RUNNING")
+                if failure is not None:
+                    break
+                if stop_flag["requested"]:
+                    status = "STOPPED_AT_LAST_COMPLETED_STEP"
+                    break
+                if sum(p.stat().st_size for p in out.iterdir() if p.is_file()) > int(lock["stops"]["trajectory_bundle_cap_bytes"]):
+                    status = "OUTPUT_BUNDLE_LIMIT_AT_LAST_COMPLETED_STEP"
+                    break
+            else:
+                status = "COMPLETED_MAXIMUM_STEP"
+        except (Exception, KeyboardInterrupt) as exc:
+            loop_exception = exc
     finally:
         signal.signal(signal.SIGTERM, previous_term)
         signal.signal(signal.SIGINT, previous_int)
 
-    checkpoint_sha = save_boundary(status)
+    # Always attempt a final boundary write after a loop/step/output exception.
+    # The checkpoint is the primary recovery artifact; errors while appending
+    # trajectory/log data are recorded without discarding the last full state.
+    status, failure, checkpoint_sha = _save_exit_boundary(
+        save_boundary, status, failure, loop_exception,
+    )
     wall_s = time.monotonic() - started
     files = [p for p in out.iterdir() if p.is_file()]
     if any(p.stat().st_size > 50 * 1024 * 1024 for p in files):

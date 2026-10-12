@@ -9,18 +9,21 @@
 - D 的顺序拒绝初始化与 C 固定提交里的 `pack_random` 逐位比对通过：位置数组及三个 PCG64 子流状态完全相同，均在 2598 次候选点后放入 64 个原子。临时测试构型的最小周期距离为 2.204983 Å，原子 ID 为唯一的 1–64。该临时构型仅在 `/tmp` 使用，测试结束后已清理，没有加入本报告包。
 - 温度初始化使用锁定的 ASE MaxwellBoltzmannDistribution、`force_temp=True`、1600 K、velocity 子流和 FixCom。ASE 计算自由度为 189，约束感知温度为 1600 K；Langevin 使用锁定的 0.5 fs、0.01 fs⁻¹、`fixcm=False`。温度和能量日志字段均为有限数值。
 - 在两个相同的临时构型上比较不间断 6 步与 step 3 接收 SIGTERM、保存后恢复到 step 6：最终坐标、动量、三个 RNG 状态和 0–6 的全部轨迹帧逐项完全相同。恢复前核验了 checkpoint、trajectory、thermal log、energy log 的 SHA 和文件长度。SIGTERM 在已完成步边界停止；没有生成正式轨迹或正式 checkpoint。
-- step 1001 和墙钟 3601 秒的守卫测试均按锁定上限拒绝；边界 1000 步和 3600 秒通过。runner 的正式路径只有在 C 单独签发并提供匹配 SHA 的授权 JSON 后才会继续，当前 C 锁不会触发正式结构或 MD。
+- **墙钟超时修复**：正式循环先检查 walltime stop condition，再进入积分步；不再由 `assert_segment_limits` 把略超时当作 preflight 异常。elapsed 为 3599 秒时仍可开始下一步，达到 3600 秒或超过上限时不会开始新步。若积分步在 3599 秒开始、到 3601.2 秒才完整返回，runner 保留该完整步并立刻进入最终保存，不启动后续步。
+- 临时边界测试从已有 step 37 checkpoint 开始：3600 秒和 3602 秒情形均不启动积分步，保存 step 37 及原 RNG；跨界情形只完成一次合成积分步，保存 step 38 及对应 RNG，证明超时发生于周期 checkpoint 之间也不会退回 step 0。另模拟完整步后输出异常，实际调用 runner 使用的 `_save_exit_boundary`，保存最新 step 42 和 RNG 状态。八项单元测试全部通过。
+- 修复后的完整工程预检再次 PASS。ASE、势函数、cutoff、步数上限 1000 和墙钟上限 3600 秒均未改变。正式 runner 仅在 C 单独签发并提供 SHA 匹配的授权 JSON 后才允许执行；当前 C 锁仍是 `execution_authorized=false`，没有生成正式结构或启动正式 MD。
 - 只用重复静态测试帧（0 个 MD 步）测量 1000 步锁定输出频率对应的归档体积估算为 59,608 字节，最大单文件远低于 50 MiB，低于 512 MiB bundle 上限。当前 `/workspace` 可用 28,785,012,736 字节、inode 余量 2,037,659；cgroup 配额为 4 CPU、内存上限 34,359,738,368 字节，预检进程峰值 RSS 约 107 MB。2 GiB 空间门槛和 32 MiB checkpoint 预留均满足。
 
 ASE 的 C 参考解析器将径向尾部状态标为 `C_TAIL_REVIEW_REQUIRED`，这是解析器不签发策略许可的状态；同一份已验 SHA 的 C 锁明确采用仅适用于该原始文件哈希的“一网格 bin 近零尾部”策略。解析输出确认尾部范围在一个网格间隔内、数值约为 (10^{-13})，D 没有更改势函数或自行替代 C 的策略判断。势函数文件本身及论文 PDF 不会上传到公开分支。
 
 ## 绑定摘要
 
-- runner（`pilot_engine.py` 与 `run_pilot.py` 组合 SHA-256）：`af9c3a0b223b5506e6127af73d02387eec4000580089ab2f7f584fbca793a9f8`
-- generator（`pilot_engine.py` SHA-256）：`ce3b4329b6c650398a422fbe0ef94b949ed83c073ff3c59d57e6bdcfc40e47a8`
+- runner（`pilot_engine.py` 与 `run_pilot.py` 组合 SHA-256）：`cfe4c104ccfa9c69d5aad0b11287edc36a685a37bf9f67fdd8b792b546150fb0`
+- `pilot_engine.py` / generator module SHA-256：`5c245b104fc8946bf91d8284f074bb31a658bb5059818ba14ff0dc954ca4233f`。仅 runner 控制流变更；锁定生成算法参数和 C 参考比对未变且仍通过。
+- `run_pilot.py` SHA-256：`8cb04390240244ec49c513bfe96fe6ea0db8c9549250ffbbb715177fc86219fb`
 - environment（Python/GPAW/ASE/NumPy/SciPy/OpenMPI、runtime.sh 与平台信息的规范化 SHA-256）：`f3f6d27f7e8b387bb5cc7b91048dba7fa26280f9ed54aa1572c73879946e867f`
 - runtime：Python 3.12.14、GPAW 26.7.0、ASE 3.29.0、NumPy 2.5.3、SciPy 1.18.1、OpenMPI 5.0.7；`GPAW_SETUP_PATH` 与 `gpaw_data.datapath()` 一致。
-- 六步临时工程段的测得时间约 1.57 秒；按该测试的逐步 checkpoint 和文件 I/O 线性外推，1000 步约 262 秒。这只是资源估算，不是正式运行时间承诺。
+- 六步临时工程段本次测得约 1.62 秒；按该测试的逐步 checkpoint 和文件 I/O 线性外推，1000 步约 270 秒。这只是资源估算，不是正式运行时间承诺。
 
 ## HOLD 与提交范围
 

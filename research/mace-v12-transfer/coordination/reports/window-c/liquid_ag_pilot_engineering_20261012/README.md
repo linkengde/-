@@ -2,7 +2,7 @@
 
 This package is bound to C commit `287b60af424f7bcc3a7b3598e524f5b543884ec9` and its `LIQUID_AG_PILOT_LOCK.json` SHA-256 `e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b`. The lock says `execution_authorized=false`; the package preserves that HOLD.
 
-The engineering command verifies the C lock, Ag EAM identity, ASE 3.29.0 parser and units, periodic image offsets at cutoff greater than half the box, C's exact PCG64 packing reference, FixCom degrees of freedom, temperature logging, checkpoint SHA and complete three-stream RNG restoration, interrupted boundary saves, and storage/step/wall guards. Its six integration steps use a temporary fixture under `/tmp`; they are not the pilot trajectory and are not copied into this release.
+The engineering command verifies the C lock, Ag EAM identity, ASE 3.29.0 parser and units, periodic image offsets at cutoff greater than half the box, C's exact PCG64 packing reference, FixCom degrees of freedom, temperature logging, checkpoint SHA and complete three-stream RNG restoration, interrupted boundary saves, and storage/step/wall guards. It also tests the 3599/3600/over-3600-second gates, a completed integration step that crosses the wall limit, and exception-exit checkpoint saving between periodic boundaries. Its six integration steps use a temporary fixture under `/tmp`; they are not the pilot trajectory and are not copied into this release.
 
 Run from the activated D environment:
 
