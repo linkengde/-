@@ -36,6 +36,10 @@
 
 这张图用未轰击的 4,305 原子结构作基准，按原子 ID 匹配后计算周期展开的位移，减去底部参考层的整体漂移。三维点和中心剖面显示的是**实际末态原子坐标**；原有原子的颜色表示局部平滑位移幅值 `|Δr|`，新加入的 Ag 用金色标出。黑线是实际表面的径向中位轮廓，灰虚线是未轰击表面。论文图的红黄蓝色标表示温度，而本图的色标表示位移，因此它能显示局部形变与坑形，不能代替温度场或熔化判据。
 
+![按材料相着色的三时点原子结构：紫色为 Ti3SiC2 骨架，金黄色为 Ag](images/deformation_history_phase_colors_80_230_476.png)
+
+上图使用相同的 80、230、476 次轰击实际原子坐标，按 LAMMPS 原子类型着色：type 1–3（Ti、Si、C）为紫色，type 4（Ag）为金黄色。下排是轰击中心附近的原子截面和表面中位轮廓。颜色只区分材料相，不代表温度、位移或熔化状态。
+
 | 累计 Ag 轰击数 | 中心相对外环表面凹陷 | 中心区原子位移 P90 | 远场位移 P90 |
 |---:|---:|---:|---:|
 | 80 | 13.9 Å | 10.9 Å | 0.9 Å |
@@ -62,6 +66,7 @@
 ## 文件
 
 - 轰击形变区三时点对比：`images/deformation_history_80_230_476impacts.png`；数据摘要 `analysis_deformation_history.json`，绘图脚本 `render_deformation_history.py`
+- 按材料相着色的三时点原子图：`images/deformation_history_phase_colors_80_230_476.png`；绘图脚本 `render_phase_colored_history.py`
 - 双色 3D 图：`images/crater_3d_two_phase_colors_106ps.png`
 - 按元素分别着色的对照版：`images/crater_3d_comparison_105_106ps.png`
 - 轰击轨迹局部指标：`analysis_summary.json`、`analysis_local_order.csv`、`analysis_msd.csv`、`analysis_local_temperature.csv`
