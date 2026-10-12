@@ -28,7 +28,7 @@
 
 两份结构中 Ti₃SiC₂ 基底坐标相同；Ag 层的面内位置按 registry 平移，原子 z 坐标不变。`R1/input.py` 与 `R2/input.py` 的文本差异只有 registry ID、来源文件路径和绑定的结构 SHA。两份运行日志均为 1 个对称操作、64 个 BZ 点/32 个 IBZ 点、136 个 bands、219 个价电子和 `[16,16,375]` 实空间网格。因此，未发现 k 点、晶胞、PBC、组成或其他已锁定电子参数的意外差异。
 
-输入文件 SHA：R1 `d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b`；R2 `7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66`。结构 SHA：R1 `b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890`；R2 `cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70`。参数锁 SHA 为 `d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78`。
+输入文件 SHA：R1 `d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b`；R2 `7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66`。结构 SHA：R1 `b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890`；R2 `cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70`。参数锁 SHA 为 `d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78`。 两边运行环境均记录 GPAW 26.7.0、ASE 3.29.0、Python 3.12.14，均为 4 MPI ranks、OMP=1。四份 PBE PAW 的固定 SHA-256 为 Ag `bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97`、C `fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983`、Si `2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0`、Ti `bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f`，R1/R2 一致。
 
 ## SCF 残差与停止原因
 
