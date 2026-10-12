@@ -1,0 +1,168 @@
+{
+  "document_id": "E_R2_SCF_RECOVERY_EXECUTION_MANIFEST_20261012",
+  "owner": "E",
+  "scope": "R2 recovery single point only; REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY",
+  "execution_status": "SUCCESS",
+  "scf_converged": true,
+  "scf_steps": 141,
+  "execution_elapsed_seconds": 12042.344759221,
+  "c_authorization": {
+    "commit": "cf6dd19fee9375a414336b008746c4881822c0b5",
+    "authorization_id": "C-E-R2-SCF-RECOVERY-20261012",
+    "authorization_sha256": "a78fc33528521631f02c215c70786e49ead9ce5b11088b9351bf4631a9ab3901"
+  },
+  "e_source_commit": "4d97374aefc338a714411003aa06ec35aa894611",
+  "package": {
+    "path": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_scf_diagnostic_20261012/r2_scf_recovery_runner_v2_20261012",
+    "runner_sha256": "da4b122948714b86a19ec42878f18fe24d65006238ad890383b433fd30d24a18",
+    "collector_sha256": "ca28bae1e7f2ced09b6eed161eb01ed224bfbe3b2f61fd021dc360a99dcb0bfb",
+    "launcher_sha256": "799a6ad26b08ff793b0f399f7afbb0f86fa3a057a9c4072f876b153617ce18c9",
+    "package_sha256sums_sha256": "00392086c488b09224fba79beea2a1ea34909ff377d2ef82f41ee725e5929336"
+  },
+  "sources": {
+    "phase2_baseline_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+    "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+    "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "fixed_geometry": true,
+    "fermi_dirac_width_eV": 0.1,
+    "mixer": {
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "max_scf_iterations": 200,
+    "convergence_thresholds": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "walltime_limit_seconds": 14400,
+    "orderly_stop_request_seconds": 12600
+  },
+  "results": {
+    "total_energy_eV": -141.95994372571232,
+    "force_consistent_free_energy_eV": -142.13553840263307,
+    "forces_status": "AVAILABLE",
+    "stress_status": "AVAILABLE",
+    "stress_eV_A3": [
+      [
+        0.04195557955493784,
+        -5.514114339630683e-05,
+        -0.00010180308838019456
+      ],
+      [
+        -5.514114339630683e-05,
+        0.03996632414505553,
+        6.481382755037803e-05
+      ],
+      [
+        -0.00010180308838019456,
+        6.481382755037803e-05,
+        0.013427860445340185
+      ]
+    ],
+    "scf_steps": 141,
+    "failure_reason": null
+  },
+  "environment": {
+    "python": "3.12.14",
+    "gpaw": "26.7.0",
+    "ase": "3.29.0",
+    "gpaw_data": "1.2.1",
+    "openmpi": "5.0.7",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "paw_sha256_by_element": {
+      "Ag": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "Ti": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    }
+  },
+  "resource_preflight": {
+    "status": "PREFLIGHT_PASS",
+    "cgroup_cpu_quota_cores": 4.0,
+    "memory_headroom_bytes": 32251387904,
+    "estimated_working_set_bytes": 2818511872,
+    "pre_run_free_bytes": 27939160064,
+    "required_free_bytes": 23353522176,
+    "free_inodes": 2038282,
+    "all_checks_pass": true,
+    "note": "Resource-only preflight output is kept separate from the runner authorization gate; C authorization was verified by the run-mode gate and bound again in results."
+  },
+  "checkpoints": [
+    {
+      "iteration": 40,
+      "status": "CHECKPOINT_VALID",
+      "readback_verified": true,
+      "wavefunctions_included": true,
+      "size_bytes": 1068408070,
+      "sha256": "57d85331cc6bd9530373aba76885923d03279b83c1a30d60c001545e0433806f",
+      "sidecar_sha256": "a2837c6344812efd2ee48907f693495e8687a026b08735cc9c6ec45a97e732dc",
+      "binary_committed": false,
+      "workspace_path": "/workspace/e-r2-phase2-recovery-cf6dd19f-r2/checkpoint/checkpoint_iter_000040.gpw"
+    },
+    {
+      "iteration": 80,
+      "status": "CHECKPOINT_VALID",
+      "readback_verified": true,
+      "wavefunctions_included": true,
+      "size_bytes": 1068408071,
+      "sha256": "6ed66e745300648ac4d15e4b23d833b3f6b928e5da4f2465a1624c8ed8d9deaf",
+      "sidecar_sha256": "05753e7289ddff189d720412185c8dc1a0b7d939f405fb1d4f0cbb28cee04727",
+      "binary_committed": false,
+      "workspace_path": "/workspace/e-r2-phase2-recovery-cf6dd19f-r2/checkpoint/checkpoint_iter_000080.gpw"
+    },
+    {
+      "iteration": 120,
+      "status": "CHECKPOINT_VALID",
+      "readback_verified": true,
+      "wavefunctions_included": true,
+      "size_bytes": 1068408068,
+      "sha256": "cbbff03964692bcef10a6ad09eb70420e0b92b2c2269b4bd4fa06cc9080e09d8",
+      "sidecar_sha256": "e386a76fc38819cd125a3d80dfe8a50571a36169a6e305e4ff358fb8943e1597",
+      "binary_committed": false,
+      "workspace_path": "/workspace/e-r2-phase2-recovery-cf6dd19f-r2/checkpoint/checkpoint_iter_000120.gpw"
+    }
+  ],
+  "artifact_hashes": {
+    "MPI_PREFLIGHT.txt": "a8bfef4032cd179c9368461a16361b55b024a8b8c0e427974081b5df3841d80f",
+    "R2_RECOVERY_CONFIG.json": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437",
+    "R2_SCF_RECOVERY_EXECUTION_REPORT.md": "db3fe3a771d2bf45a916982b82c1d3dc40d4d8a1431da4a38f80c97fe1522710",
+    "RESOURCE_PREFLIGHT.json": "5aee38dd73b45204459654e60e9e47f3c05a8dcfad91559302690445a3030859",
+    "RESULTS_COLLECTED.json": "cae4cb515d653c4c545f0c58e71f1be98e936f351a72f33262ebc970801d126e",
+    "RESULTS_RAW.json": "af942d1bc577274860043926fc1dfb6f4851ab26b14d9e2631c1e4a4d31b775d",
+    "RUN_STATUS.json": "0e556c69a711b0c369eef6a15726eae51ec4f78199b79379d2035fd630aff772",
+    "checkpoints/checkpoint_iter_000040.json": "a2837c6344812efd2ee48907f693495e8687a026b08735cc9c6ec45a97e732dc",
+    "checkpoints/checkpoint_iter_000080.json": "05753e7289ddff189d720412185c8dc1a0b7d939f405fb1d4f0cbb28cee04727",
+    "checkpoints/checkpoint_iter_000120.json": "e386a76fc38819cd125a3d80dfe8a50571a36169a6e305e4ff358fb8943e1597",
+    "gpaw.log": "298071fccd74235c1e90814b0a0830c42ccc4a03fb577e058d85e438c9b7414d",
+    "launcher.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "launcher.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "startup_attempt01.stderr.log": "2f380ea02b87662425f61ba082d0f00ae9bf670ce4ac27fc179727b9eda5556d",
+    "startup_attempt02.stderr.log": "98be33f6a69fdd7fa6c7100a60c37fb90e688eef42204212e592c99b75cd3e36"
+  },
+  "notes": [
+    "The two failed launcher attempts happened before GPAW entered SCF; no scientific settings or source inputs were changed. The authorized run then used the reviewed runner and exact source hashes.",
+    "The GPW payloads exceed 1 GiB each and remain in the workspace; this GitHub report package contains their verified sidecars, sizes, and SHA-256 values, not the binary checkpoint payloads.",
+    "No TRAIN/DEV/TEST role was assigned; no R1 rerun, other registry, d0 scan, retry, or training occurred."
+  ]
+}
