@@ -89,6 +89,25 @@ class ProductionRunnerV21Tests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 runner._atomic_json(Path(temp_name) / "invalid.json", {"bad": np.asarray([np.nan])})
 
+    def test_canonical_sha_matches_numpy_state_to_fresh_json_restore(self):
+        live_state = {
+            "global_step": 17000,
+            "last_monitor": {
+                "rdf": {"r_A": np.asarray([2.5, 2.6]), "g": np.asarray([1.1, 1.2])},
+                "window": np.float64(8.5),
+            },
+        }
+        restored_state = {
+            "global_step": 17000,
+            "last_monitor": {
+                "rdf": {"r_A": [2.5, 2.6], "g": [1.1, 1.2]},
+                "window": 8.5,
+            },
+        }
+        self.assertEqual(runner.canonical_sha(live_state), runner.canonical_sha(restored_state))
+        with self.assertRaises(ValueError):
+            runner.canonical_sha({"bad": np.asarray([np.nan])})
+
     def test_history_q6_regression_reproduces_legacy_global_and_reports_local(self):
         self.assertTrue(HISTORY.is_file())
         sys.path.insert(0, str(OLD_CRITERIA_DIR))

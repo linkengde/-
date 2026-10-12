@@ -1,0 +1,7 @@
+# Step 17000 fresh-restore comparison fix
+
+The step 17000 archive uploaded, fresh-fetched, and passed per-file SHA and checkpoint restore checks. The runner then stopped while comparing live QA state to the fetched checkpoint because the live QA record still contained NumPy arrays. `canonical_sha` now normalizes NumPy arrays/scalars to JSON-native values before hashing, while continuing to reject non-finite values.
+
+The fix is limited to metadata serialization and canonical state comparison. It does not alter the QA criteria, EAM, scientific lock, structure, positions, velocities, RNG, timestep, thermostat, or temperature schedule. The full suite passes all 22 tests, including regressions for array serialization, canonical hash equivalence after JSON restore, and strict NaN rejection. The actual step 17000 archive was independently reloaded through `_restore_verified_segment`; positions, momenta, RNG, and control state match.
+
+Checkpoint SHA-256: `96288dffb9f882585ef55cd53c46b5aecbbf8f6fc08a1cffc91756426f9c22a7`. QA remains `PENDING` (`MSD has fewer than eight complete moving blocks`), so the locked hot stage continues automatically. The new bounded user-authorized config SHA is `694f959a9e640ce7699f3c5e546fb8cbdbc88923ed06a107681ce799628b587a`, and the step 17000 user override SHA is `faf42db9b0c754f92e6c3653c65f91da6c337e3b53659a4bade38634e5e62f69`. The global cap remains step 60000; each segment remains capped at 1000 steps and 3600 seconds.

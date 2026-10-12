@@ -71,7 +71,7 @@ def sha256_file(path: Path) -> str:
 
 
 def canonical_sha(value: dict) -> str:
-    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
+    payload = json.dumps(_json_safe(value), sort_keys=True, separators=(",", ":"), allow_nan=False).encode()
     return hashlib.sha256(payload).hexdigest()
 
 
