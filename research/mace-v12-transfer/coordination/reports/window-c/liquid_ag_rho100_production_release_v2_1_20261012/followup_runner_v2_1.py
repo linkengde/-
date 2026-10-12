@@ -684,10 +684,25 @@ def _authorization_check(auth_path: Path, auth_sha: str, config_sha: str, config
     return auth
 
 
+def _json_safe(value):
+    """Convert NumPy diagnostics to JSON-native containers without hiding NaNs."""
+    if isinstance(value, np.ndarray):
+        return [_json_safe(item) for item in value.tolist()]
+    if isinstance(value, np.generic):
+        return value.item()
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return value
+
+
 def _atomic_json(path: Path, value: dict) -> None:
     temp = path.with_name(path.name + f".tmp-{os.getpid()}")
     with temp.open("x", encoding="utf-8") as stream:
-        json.dump(value, stream, indent=2, sort_keys=True, allow_nan=False)
+        # RDF diagnostics include NumPy arrays.  Preserve their values as JSON
+        # lists while keeping allow_nan=False so invalid statistics still fail closed.
+        json.dump(_json_safe(value), stream, indent=2, sort_keys=True, allow_nan=False)
         stream.write("\n")
         stream.flush()
         os.fsync(stream.fileno())

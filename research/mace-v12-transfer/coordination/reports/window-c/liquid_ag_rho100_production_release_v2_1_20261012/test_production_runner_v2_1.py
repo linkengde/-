@@ -69,6 +69,26 @@ def synthetic_stress(frame_count: int = 400, start_ps: float = 14.0,
 
 
 class ProductionRunnerV21Tests(unittest.TestCase):
+    def test_atomic_json_serializes_numpy_rdf_diagnostics_and_rejects_nonfinite(self):
+        with tempfile.TemporaryDirectory(prefix="ag64-json-safe-") as temp_name:
+            output = Path(temp_name) / "monitor.json"
+            source = {
+                "assessment": {
+                    "rdf": {
+                        "r_A": np.asarray([2.5, 2.6]),
+                        "raw_g": np.asarray([1.1, 1.2]),
+                        "peak": np.float64(2.85),
+                    }
+                }
+            }
+            runner._atomic_json(output, source)
+            loaded = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(loaded["assessment"]["rdf"]["r_A"], [2.5, 2.6])
+            self.assertEqual(loaded["assessment"]["rdf"]["raw_g"], [1.1, 1.2])
+            self.assertEqual(loaded["assessment"]["rdf"]["peak"], 2.85)
+            with self.assertRaises(ValueError):
+                runner._atomic_json(Path(temp_name) / "invalid.json", {"bad": np.asarray([np.nan])})
+
     def test_history_q6_regression_reproduces_legacy_global_and_reports_local(self):
         self.assertTrue(HISTORY.is_file())
         sys.path.insert(0, str(OLD_CRITERIA_DIR))
