@@ -1,0 +1,174 @@
+{
+  "data_handling": {
+    "data_role": "SAMPLING_CANDIDATE_ONLY; no TRAIN/DEV/TEST assignment",
+    "estimate_note": "about 3.24 h compute-only using 197.483 s/1000 steps; extrapolation excludes archive, analysis, variability and segment overhead",
+    "estimated_compute_time_seconds_from_observed_1000_step_pilot": 11652,
+    "maximum_additional_steps_from_current_step1000": 59000,
+    "no_DFT_or_MACE_training": true,
+    "source_family_split": "all frames from this task remain in one family",
+    "total_max_global_step": 60000
+  },
+  "decision": "A_STAGED_1600K_LIQUIDIFICATION_THEN_CONTROLLED_COOL_TO_1250K",
+  "decision_basis": {
+    "exploratory_11_frame_structure": {
+      "RDF_rmax_A": 5.358727657647827,
+      "coordination_estimate": 11.93,
+      "frame_count": 11,
+      "global_Q6_neighbor_cutoff_A": 3.8,
+      "mean_global_Q6": 0.0887,
+      "minimum_pair_distance_final_A": 2.4246,
+      "rdf_first_minimum_A": 3.775,
+      "rdf_peak_A": 2.775,
+      "unwrapped_MSD_at_0p5ps_A2": 1.3834
+    },
+    "interpretation": "0.5 ps shows marked relaxation and disordered/mobile structure indicators, but temperature is not stationary at the 1600 K setpoint. The EAM literature estimate of melting is 1267 +/- 5 K; therefore 1250 K is below this model estimate and crystallization/metastability must be explicitly checked.",
+    "last_500_steps_mean_temperature_K": 1909.64,
+    "last_500_steps_potential_energy_trend_eV_per_atom_per_ps": -0.139864,
+    "last_500_steps_temperature_linear_trend_K_per_ps": 1020.328,
+    "last_500_steps_temperature_sd_K": 160.333,
+    "last_500_steps_window_duration_ps": 0.25,
+    "logged_samples": 51,
+    "logged_temperature_mean_K": 2258.446,
+    "logged_temperature_sample_sd_K": 637.012
+  },
+  "execution_authorized": false,
+  "invariants": {
+    "atom_count": 64,
+    "cell_A": 10.717455315295654,
+    "continue_from_archived_step1000_checkpoint": true,
+    "density_changes_permitted": false,
+    "langevin_friction_fs_inverse": 0.01,
+    "master_seed": 125010003,
+    "potential_changes_permitted": false,
+    "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+    "preserve_atom_count_density_cell_PBC_seed_potential_timestep_and_friction": true,
+    "preserve_positions_velocities_and_all_PCG64_states": true,
+    "reinitialization_permitted": false,
+    "relative_density": 1.0,
+    "seed_changes_permitted": false,
+    "timestep_fs": 0.5
+  },
+  "liquid_structure_acceptance": {
+    "1250K_recrystallization_rule": "any gate failure or increasing crystalline order at 1250 K is HOLD/NO_LIQUID_AT_LOCKED_MODEL_CONDITIONS; do not change density, potential, or target to force passage",
+    "CNA_or_PTM_crystalline_atom_fraction_max_percent": 10.0,
+    "MSD": "unwrap periodic trajectories; multiple-time-origin fit; over the combined 4 ps QA interval require delta-MSD >= 1.0 A^2 and the autocorrelation/block-bootstrap 95% lower confidence bound on the long-time slope > 0",
+    "RDF_first_minimum_range_A": [
+      3.4,
+      4.2
+    ],
+    "RDF_first_peak_range_A": [
+      2.6,
+      3.2
+    ],
+    "RDF_rule": "broad first-neighbor peak and no persistent sharp fcc/hcp-like multi-shell order within the finite-cell RDF range",
+    "coordination_number_range": [
+      9.0,
+      13.0
+    ],
+    "finite_values_required": true,
+    "fraction_frames_meeting_Q6_at_least": 0.8,
+    "fraction_frames_meeting_crystal_limits_at_least": 0.8,
+    "global_Steinhardt_Q6_max": 0.2,
+    "largest_connected_crystalline_cluster_atoms_max": 8,
+    "minimum_pair_distance_A": 1.8,
+    "must_pass_in_both_consecutive_2ps_windows": true
+  },
+  "release_gates": {
+    "C_review_required_after_terminal_stop": true,
+    "current_node_resource_preflight_required_before_each_segment": true,
+    "current_potential_sha_recheck_required": true,
+    "execution_authorized": false,
+    "manual_C_review_between_1000_step_chunks": false,
+    "new_runner_and_schedule_code_sha_required": true,
+    "new_science_config_sha_required": true,
+    "one_initial_C_execution_release_for_entire_bounded_adaptive_plan_required": true,
+    "remote_archive_restore_sha_required_after_each_segment": true,
+    "step1000_source_checkpoint_rehash_required": true,
+    "manual_C_review_between_phase_transitions": false
+  },
+  "schedule": {
+    "phase_1_hot_liquidification": {
+      "discard_initial_continuation_for_stationarity_ps": 2.0,
+      "maximum_additional_steps_from_current_checkpoint": 19000,
+      "maximum_global_step": 20000,
+      "maximum_total_duration_from_step0_ps": 10.0,
+      "review_interval_steps": 1000,
+      "start_global_step": 1000,
+      "target_K": 1600.0,
+      "transition_when_gate_passes": "as soon as two consecutive valid 2 ps windows pass after the initial 2 ps transient, automatically begin the 5 ps cooling ramp from the current global step; do not wait for the phase maximum and do not prompt the user"
+    },
+    "phase_2_controlled_cooling": {
+      "automatic_transition_to_phase_3": true,
+      "cooling_rate_K_per_ps": 70.0,
+      "duration_ps": 5.0,
+      "temperature_schedule": "linear 1600 K to 1250 K; update target every 100 steps (0.05 ps; 3.5 K per update)",
+      "start_global_step": "the global step at which the phase_1 gate passes",
+      "end_global_step": "start_global_step + 10000",
+      "transition_rule": "after exactly 10000 ramp steps, automatically begin phase 3; no user prompt"
+    },
+    "phase_3_target_equilibration": {
+      "discard_first_2ps_after_ramp_for_stationarity": true,
+      "maximum_duration_ps": 10.0,
+      "review_interval_steps": 1000,
+      "target_K": 1250.0,
+      "transition_when_gate_passes": "as soon as two consecutive valid 2 ps windows pass after the initial 2 ps post-ramp transient, automatically begin the 5 ps candidate sampling window; no user prompt",
+      "start_global_step": "the global step at completion of the cooling ramp",
+      "maximum_end_global_step": "min(start_global_step + 20000, 60000)"
+    },
+    "phase_4_candidate_sampling_window": {
+      "candidate_snapshot_spacing_rule": "select using measured autocorrelation; at least max(0.5 ps, 5*tau_int); all snapshots remain one source family",
+      "maximum_global_step": 60000,
+      "minimum_duration_ps": 5.0,
+      "start_after_phase_3_pass": "automatic immediately after the phase_3 gate passes",
+      "steps_at_0p5fs": 10000,
+      "stop_when": "complete 5 ps only while all liquid QA remains passing; archive and fresh-fetch verify, then stop and report to C. No user prompt occurs at internal chunk boundaries or phase transitions.",
+      "target_K": 1250.0,
+      "trajectory_frame_interval_ps": 0.05,
+      "automatic_transition_after_phase_3_pass": true
+    },
+    "segment_policy": {
+      "automatic_continuation_is_confined_to_this_signed_bounded_plan": true,
+      "automatic_continue_after_verified_chunk": true,
+      "checkpoint_at_every_chunk_boundary": true,
+      "chunk_duration_ps": 0.5,
+      "immutable_remote_archive_and_fresh_fetch_each_chunk": true,
+      "manual_review_between_chunks": false,
+      "maximum_added_steps_per_internal_chunk": 1000,
+      "maximum_wall_seconds_per_chunk": 3600,
+      "pause_for_user_after_each_chunk": false,
+      "stop_only_on": "1250K_candidate_window_complete_and_final_QA_pass, phase_or_global_maximum, hard_failure, resource_limit, or archive_restore_failure",
+      "terminal_user_review_only_after": "candidate_window_complete_or_a_terminal_stop_condition"
+    }
+  },
+  "source": {
+    "D_commit": "87ac1acf05a938f77180a0a3acfd4e76cf11c466",
+    "archive_path": "research/mace-v12-transfer/coordination/reports/window-c/liquid_ag_rho100_pilot_results_20261012/C-D-AGL-1250K-rho100-pilot01/",
+    "repository": "linkengde/-",
+    "task_id": "C-D-AGL-1250K-rho100-pilot01"
+  },
+  "source_identity": {
+    "authorization_sha256": "623ba38ec086c59719201eb4b4f99922407f09c74e0098de2dcbf1af95eb1e15",
+    "lock_sha256": "e1adaf12d542184c709d2eb2a5363cbfe9578c168ebc5e7ad260ee39a4faf09b",
+    "potential_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447",
+    "runner_sha256": "cfe4c104ccfa9c69d5aad0b11287edc36a685a37bf9f67fdd8b792b546150fb0",
+    "step1000_checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+    "thermal_csv_sha256": "ba44edc99d8480db60e2b8479a4456c132d45036156a7d14461481ab57854245",
+    "trajectory_sha256": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5"
+  },
+  "strategy_id": "AG64_RHO100_POST_PILOT_STRATEGY_20261012",
+  "strategy_status": "STRATEGY_FROZEN_EXECUTION_HOLD",
+  "thermal_acceptance": {
+    "absolute_temperature_trend_limit_K_per_ps": 25.0,
+    "adjacent_window_mean_difference_tolerance_percent": 3.0,
+    "finite_size_note": "For 64 atoms with 3N-3=189 DOF, canonical instantaneous sigma(T)/T is approximately sqrt(2/189)=10.3%; judge block means and trends, not single samples or raw instantaneous SD.",
+    "instantaneous_temperature_standard_deviation_limit": null,
+    "mean_temperature_confidence_interval_must_include_setpoint": true,
+    "potential_energy_per_atom_adjacent_window_difference_limit_eV": 0.02,
+    "pressure_stress": "log mean and block uncertainty; require no statistically resolved drift, but do not impose an absolute pressure pass threshold in this pilot",
+    "required_consecutive_nonoverlapping_passing_windows": 2,
+    "steps_per_window": 4000,
+    "temperature_mean_tolerance_percent": 5.0,
+    "use_autocorrelation_aware_block_bootstrap": true,
+    "window_duration_ps": 2.0
+  }
+}
