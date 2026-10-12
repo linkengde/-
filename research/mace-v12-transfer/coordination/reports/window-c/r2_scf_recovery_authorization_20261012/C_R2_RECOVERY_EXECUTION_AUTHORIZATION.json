@@ -1,0 +1,107 @@
+{
+  "C_approval": {
+    "approval_id": "C-E-R2-SCF-RECOVERY-20261012",
+    "signed_by": "C"
+  },
+  "E_branch_head": "4d97374aefc338a714411003aa06ec35aa894611",
+  "allowed_parameter_changes_for_this_recovery_only": {
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "max_scf_iterations": 200
+  },
+  "bindings": {
+    "collector_sha256": "ca28bae1e7f2ced09b6eed161eb01ed224bfbe3b2f61fd021dc360a99dcb0bfb",
+    "config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437",
+    "e_commit": "4d97374aefc338a714411003aa06ec35aa894611",
+    "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+    "launcher_sha256": "799a6ad26b08ff793b0f399f7afbb0f86fa3a057a9c4072f876b153617ce18c9",
+    "package_manifest_sha256": "c0cd087cfe0b8e7335e9b6ad26ee4faf1805ddce2735bb13a8fd903216e23034",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "phase2_commit": "0dd8628e4a91e88f31aba3fd7bbce1c8a40a2aa2",
+    "proposal_sha256": "2d16458e0d3139722609746c067cb65a9577533a29db04282213d69da4a0bf2f",
+    "resource_preflight_sha256": "f35a026a9ec3274a643b0b2edc5f7f18c360e68164c6534e22e3039a05898609",
+    "runner_sha256": "da4b122948714b86a19ec42878f18fe24d65006238ad890383b433fd30d24a18",
+    "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+    "test_report_sha256": "7ca174ee98f618989317ae8e1f99a072002c3d09a9af843c28fc3ec2c290c11e"
+  },
+  "checkpoint_test_decision": {
+    "basis": "The package reports a successful serial real-GPAW full-wavefunction GPW write/readback, a four-rank write-failure synchronization test, and a prior completed synthetic four-rank readback. The production runner collectively stops all MPI ranks on checkpoint write/readback failure, keeps prior verified checkpoints, and does not retry or allow the collector to emit labels from an incomplete run.",
+    "decision": "ACCEPT_LIMITATION",
+    "limitation": "One optional four-rank synthetic H initialization repeat did not reach the checkpoint hook before the time limit and is inconclusive; it is not a checkpoint failure and is not counted as a pass.",
+    "residual_risk": "A four-rank success-path checkpoint could still fail during the actual single point; this wastes part of the bounded run but fails closed with no scientific label."
+  },
+  "data_role": "REGISTRY_SCREENING_ONLY_DIAGNOSTIC_COPY",
+  "document_id": "C_EXEC_AUTH_R2_SINGLE_SCF_RECOVERY_20261012",
+  "execution_authorized": true,
+  "failure_policy": {
+    "checkpoint_error": "Collective safe stop; retain previous verified checkpoint and logs; no retry; collector must not emit energy/force/stress labels",
+    "collector_acceptance": "Only a complete converged record with matching log marker, status, step count, R2 identity, role, authorization/config/source hashes, finite energy/free energy and correctly shaped finite force/stress arrays may produce SUCCESS",
+    "nonconvergence": "FAILED_SCF; preserve logs and latest verified checkpoint; no retry; no labels",
+    "wall_clock": "Orderly stop at 12600 seconds with checkpoint attempt; 14400-second hard deadline; incomplete result is rejected by collector"
+  },
+  "frozen_parameters": {
+    "automatic_retry": false,
+    "basis": "GPAW PAW plane waves",
+    "checkpoint_interval_completed_scf_iterations": 40,
+    "checkpoint_mode": "all",
+    "convergence": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "cutoff_eV": 500,
+    "fixed_geometry": true,
+    "include_wavefunctions": true,
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "mixer": {
+      "beta": 0.05,
+      "name": "Mixer",
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "relax_atoms": false,
+    "relax_cell": false,
+    "xc": "PBE"
+  },
+  "limits": {
+    "max_scf_iterations": 200,
+    "max_wall_clock_seconds": 14400,
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "registry_id": "R2"
+  },
+  "prohibited": [
+    "R1 rerun",
+    "any other registry",
+    "Phase2 result modification",
+    "d0 scan",
+    "new registry generation",
+    "geometry or cell modification",
+    "automatic retry or restart",
+    "TRAIN/DEV/TEST assignment",
+    "MACE training"
+  ],
+  "registry_id": "R2",
+  "resource_gate": {
+    "checkpoint_estimate_bytes": 2818511872,
+    "filesystem_free_bytes_at_snapshot": 27939389440,
+    "fresh_preflight_required_immediately_before_run": true,
+    "inode_free_at_snapshot": 2038336,
+    "margin_bytes": 4585867264,
+    "preflight_snapshot_status": "PASS",
+    "required_free_bytes": 23353522176,
+    "stop_if_current_budget_fails": true
+  },
+  "schema_version": 1,
+  "scope": "R2_ONLY_SINGLE_DIAGNOSTIC"
+}
