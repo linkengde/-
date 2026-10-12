@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/workspace/-/research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/phase2_runner.py", line 234, in run_registry
+    labels["total_energy_eV"] = float(atoms.get_potential_energy(force_consistent=False))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+    energy = self._calc.get_potential_energy(self)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+    return self.calculate_property(atoms,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+    for _ in self.iconverge(atoms, need_wfs=need_wfs):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 177, in iconverge
+    for ctx in self.dft.iconverge(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 252, in iconverge
+    for ctx in self.scf_loop.iterate(self.ibzwfs,
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/scf.py", line 130, in iterate
+    raise KohnShamConvergenceError
+gpaw.KohnShamConvergenceError
