@@ -1,0 +1,93 @@
+{
+  "document_id": "C_E_R1_ENERGY_COMPARABILITY_RECOVERY_EXEC_AUTH",
+  "authorization_status": "ISSUED",
+  "execution_authorized": true,
+  "C_approval": {
+    "signed_by": "C",
+    "approval_id": "C-E-R1-COMPARABILITY-RECOVERY-20261012"
+  },
+  "issued_at_utc": "2026-10-12T15:36:52Z",
+  "e_source_commit": "9fa1046dfdf6a924b30d1d87a470ea7bdec89bd6",
+  "registry_id": "R1",
+  "scope": "R1_ENERGY_COMPARABILITY_RECOVERY_SINGLE_POINT",
+  "role": "REGISTRY_SCREENING_ONLY_COMPARABILITY_RECOVERY",
+  "bindings": {
+    "e_commit": "9fa1046dfdf6a924b30d1d87a470ea7bdec89bd6",
+    "config_sha256": "03dcd34d74249c360fc16414c48c3d5fe53d175bc855248a0e3403e6ee3f17b8",
+    "runner_sha256": "36f35f1657a8fb9ae80c5b6dc4bf42869b694ba891f496a20739626826613f5d",
+    "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+    "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "matched_r2_recovery_config_sha256": "c969d1cee9b8fe8014412eebbbcba4355c2a372d6baa58b5139fee2f1b252437",
+    "resource_preflight_sha256": "e50fb64c4d20d903e6ddabfa7bd6a538f16a1f29d2277c276534c78c161ca063"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "GPAW PAW plane waves",
+    "cutoff_eV": 500,
+    "kpoint_mesh": [
+      8,
+      8,
+      1
+    ],
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no gamma override or extra offset",
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "mixer": {
+      "name": "Mixer",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "eigensolver": {
+      "name": "PPCG",
+      "niter": 4
+    },
+    "max_scf_iterations": 200,
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mpi_ranks": 4,
+    "omp_threads": 1,
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "symmetry": {
+      "point_group": true,
+      "time_reversal": true
+    },
+    "poissonsolver": {},
+    "parallel": {
+      "sl_auto": true
+    },
+    "max_wall_clock_seconds": 14400,
+    "orderly_stop_seconds": 12600
+  },
+  "scope_limits": {
+    "allowed_registry_ids": [
+      "R1"
+    ],
+    "maximum_calculation_points": 1,
+    "fixed_geometry": true,
+    "max_wall_clock_seconds": 14400,
+    "orderly_stop_seconds": 12600,
+    "max_scf_iterations": 200,
+    "mpi_ranks": 4,
+    "omp_threads": 1
+  },
+  "prohibited_actions": [
+    "run R2 or any other registry",
+    "modify or replace frozen R1 input or structure",
+    "run a d0 scan",
+    "assign TRAIN, DEV, or TEST roles",
+    "start MACE training",
+    "overwrite prior R1 or R2 results",
+    "automatically retry after failure",
+    "rank registries before the matched R1 result is reviewed"
+  ],
+  "pre_run_gate": "The runner must verify this authorization and all bound hashes, engine and PAW identities, MPI=4, OMP=1, and the live resource preflight. Any failed gate means HOLD before GPAW calculation construction."
+}
