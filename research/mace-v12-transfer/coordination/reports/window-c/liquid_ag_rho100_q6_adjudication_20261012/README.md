@@ -1,0 +1,1 @@
+This directory publishes C's versioned scientific resolution of the Ag64 rho100 Q6 statistic conflict. It supersedes only the Q6 definitions/regression/gate interpretation of QA lock V2; all other V2 checks and all MD scientific parameters are unchanged. This is not an MD execution authorization.
