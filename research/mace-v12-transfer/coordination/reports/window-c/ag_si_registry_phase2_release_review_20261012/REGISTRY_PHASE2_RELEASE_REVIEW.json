@@ -1,0 +1,127 @@
+{
+  "document_id": "REGISTRY_PHASE2_RELEASE_REVIEW",
+  "schema_version": 1,
+  "created_utc": "2026-10-12",
+  "input_commit": "6d2f778a79cb3a5b0226aaf12d44ab1f2a96b14a",
+  "scope": "Offline review of Ag-Si registry screening phase 1 and selection of possible 8x8x1 follow-up targets. No calculation was started.",
+  "integrity_review": {
+    "source_commit_present_locally": true,
+    "sha256_manifests_checked": [
+      "ag_si_registry_dft_input_v1/SHA256SUMS.txt",
+      "phase1_6x6x1_20261011_exec04/SHA256SUMS.txt",
+      "registry_scf_diagnostic_20261012/SHA256SUMS.txt",
+      "scheduler_continue_on_error_20261011/SHA256SUMS.txt"
+    ],
+    "all_listed_hashes_match": true,
+    "structures": {
+      "atom_count": 20,
+      "composition": "Ag7C4Si3Ti6",
+      "cell_and_pbc": "same frozen cell and PBC across R1-R4; periodic in x/y and nonperiodic in z",
+      "source_family": "COD-9009647/Kisi-1998-derived; not an independent DEV family",
+      "structure_sha256": {
+        "R1": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890",
+        "R2": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70",
+        "R3": "edc7a00668be7fb0f76616463d3eacf2ac53d0ea8837b21fb9fb3c66eafa6f76",
+        "R4": "6465b1e2ea8c675a4d368a6f385cc31302a5c4b017d9b39842e82c93c196210c"
+      },
+      "input_sha256": {
+        "R1": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+        "R2": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+        "R3": "c9b731143aafe2fb7ba367093cad72ad1489a4a812aa63b4c4ccba53256f33e2",
+        "R4": "1a8fca555c0dd7a7028e8f223a54770ef5183549f0a9c230869ed88dbc4198e8"
+      }
+    }
+  },
+  "phase1_assessment": {
+    "frozen_configuration_sha256": "515cd81f16e491d8d521426ba63f17946cb47dd5fa0361fa9a8d946e07f0d035",
+    "original_mesh": [6, 6, 1],
+    "original_phase1_complete_result_json_count": 0,
+    "original_run_status": {
+      "R1": "FAILED_SCF at frozen 160-iteration limit",
+      "R2": "FAILED_POSTPROCESS; original convergence status unverified by runner",
+      "R3": "FAILED_SCF at frozen 160-iteration limit",
+      "R4": "FAILED_POSTPROCESS; original convergence status unverified by runner"
+    },
+    "recovered_results": [
+      {
+        "registry_id": "R1",
+        "total_energy_eV": -120.1555032881544,
+        "force_consistent_free_energy_eV": -120.29455483566414,
+        "scf_steps": 105,
+        "recovery": "independent diagnostic copy; maxiter=200 and Mixer beta=0.10 instead of frozen maxiter=160 and beta=0.05",
+        "forces_and_stress_persisted": true,
+        "structure_modified": false
+      },
+      {
+        "registry_id": "R2",
+        "total_energy_eV": -142.621455,
+        "force_consistent_free_energy_eV": -142.792091,
+        "scf_steps": 103,
+        "recovery": "energy and forces recovered from original GPAW log without recalculation",
+        "forces_persisted_in_log": true,
+        "stress_persisted": false,
+        "complete_result_json": false
+      },
+      {
+        "registry_id": "R3",
+        "total_energy_eV": -120.11609990685736,
+        "force_consistent_free_energy_eV": -120.24771581583845,
+        "scf_steps": 116,
+        "recovery": "independent diagnostic copy; maxiter=200 and Mixer beta=0.10 instead of frozen maxiter=160 and beta=0.05",
+        "forces_and_stress_persisted": true,
+        "structure_modified": false
+      },
+      {
+        "registry_id": "R4",
+        "total_energy_eV": -120.079642,
+        "force_consistent_free_energy_eV": -120.215165,
+        "scf_steps": 124,
+        "recovery": "energy and forces recovered from original GPAW log without recalculation",
+        "forces_persisted_in_log": true,
+        "stress_persisted": false,
+        "complete_result_json": false
+      }
+    ],
+    "rank_by_frozen_rule_total_energy_ascending": ["R2", "R1", "R3", "R4"],
+    "rank_by_force_consistent_free_energy_ascending": ["R2", "R1", "R3", "R4"],
+    "ranking_quality": "RECOVERED_MIXED_PROVENANCE_NOT_A_UNIFORM_PHASE1_RESULT_SET",
+    "energy_anomaly": {
+      "comparison": "R2 minus R1",
+      "total_energy_difference_eV": -22.4659517118456,
+      "force_consistent_free_energy_difference_eV": -22.49753616433586,
+      "free_energy_difference_per_atom_eV": -1.124876808216793,
+      "assessment": "Large registry energy separation; the frozen geometry screen passes its listed minimum-distance checks, but the energy gap remains unexplained and must be checked by the higher-mesh comparison. Do not treat it as an established physical ordering."
+    }
+  },
+  "decision": {
+    "review_status": "APPROVED_FOR_PHASE2_TARGETS_WITH_PREREQUISITES",
+    "allow_8x8x1_validation": true,
+    "accepted_validation_targets": ["R2", "R1"],
+    "target_meaning": "Provisional targets for higher-mesh registry screening only; not a validated final registry selection.",
+    "phase2_mesh": [8, 8, 1],
+    "phase2_fixed_geometry": true,
+    "phase2_execution_authorized": false,
+    "new_per_registry_signed_release_required": true,
+    "execution_started": false,
+    "execution_authorization_note": "This review does not supersede AG_SI_REGISTRY_DFT_RELEASE_v2.json, whose phase2_refinement.per_registry_execution_authorized is false and requires a new result-bound release."
+  },
+  "release_prerequisites": [
+    "Before any 8x8x1 run, issue a separate signed release bound to R2 and R1 structure SHA-256, input SHA-256, frozen configuration SHA-256, execution-script SHA-256, environment identity, mesh, MPI/OMP allocation, and REGISTRY_SCREENING_ONLY role.",
+    "Correct and test result collection so it obtains the GPAW convergence status through a supported interface; do not access the unsupported ASECalculator.scf attribute. Persist convergence evidence, total energy, force-consistent free energy, all 20 atomic forces, full 3x3 stress, units, and hashes for each registry.",
+    "Use a common, explicitly recorded SCF policy for both 8x8x1 targets. Preserve PBE/PAW, 500 eV cutoff, 0.10 eV Fermi-Dirac smearing, fixed ions/cell/registry, and the frozen energy/density/eigenstate convergence thresholds. Any change to scientific or numerical settings requires review and a new bound release.",
+    "After results return, compare mesh sensitivity for each target and investigate the R2 energy outlier before claiming a preferred physical registry. No relaxation, d0 scan, or expansion beyond R2/R1 is included in this decision."
+  ],
+  "data_role_guard": {
+    "role": "REGISTRY_SCREENING_ONLY",
+    "allowed_roles": ["REGISTRY_SCREENING_ONLY"],
+    "prohibited_roles": ["TRAIN", "DEV", "TEST"],
+    "role_changed": false,
+    "independent_dev_claim": false
+  },
+  "non_actions": [
+    "No DFT was started by this review.",
+    "No structure, input, model, or historical result was modified.",
+    "No data role was changed.",
+    "No TRAIN, DEV, or TEST promotion was made."
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "document_id": "REGISTRY_PHASE2_EXEC_AUTH_v2",
+  "schema_version": 1,
+  "authorization_status": "ISSUED",
+  "execution_authorized": true,
+  "execution_started": false,
+  "issued_at_utc": "2026-10-12T03:19:13Z",
+  "issued_by": "C",
+  "source_e_commit": "63646c9ec786e35307a47abcd719d79b8e7d2525",
+  "review_basis": {
+    "phase2_review_record": "REGISTRY_PHASE2_RELEASE_REVIEW",
+    "phase2_review_record_sha256": "0fd3a6e67e33031c7b86063a4604c22519c7c493deee8febd6b64aa1d29ca281",
+    "e_collector_test_report": "research/mace-v12-transfer/coordination/reports/window-e/ag_si_registry_dft_input_v1/registry_phase2_result_collector_20261012/PHASE2_COLLECTOR_TEST_REPORT.md",
+    "e_collector_test_report_status": "7_TESTS_PASS"
+  },
+  "allowed_structure_ids": [
+    "R1",
+    "R2"
+  ],
+  "registry_order_for_reporting": [
+    "R2",
+    "R1"
+  ],
+  "role": "REGISTRY_SCREENING_ONLY",
+  "kpoint_mesh": [
+    8,
+    8,
+    1
+  ],
+  "calculation": "PBE/PAW fixed-geometry single point",
+  "geometry": {
+    "fixed_geometry": true,
+    "relax_atoms": false,
+    "relax_cell": false,
+    "coordinate_changes_allowed": false,
+    "cell_changes_allowed": false,
+    "registry_changes_allowed": false,
+    "d0_scan_allowed": false
+  },
+  "resources": {
+    "mpi_ranks": 4,
+    "omp_threads": 1
+  },
+  "config_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+  "bindings": {
+    "parameter_lock_sha256": "d97de3fe5a26ab6529d5e6e8ceef15adc1f3a2f548f03b59f9f092361c2c0c78",
+    "runner_sha256": "2f5f0a449bce86320275f3d18df785686327ca0ab49664cc05e484a6b79d916a",
+    "collector_sha256": "15592f6ac93755a1b0870574d49d9cac5d856c52ec48ac42a17bd82df375469f",
+    "structures": {
+      "R1": {
+        "input_sha256": "d3f7b5542f071cbc432ade3277a22b0af5277cfd539d1eb48a0d006e7250ca6b",
+        "structure_sha256": "b758b39571a6ce8b24f687e9b341c4328336c108d761b4adaa25e3fb51932890"
+      },
+      "R2": {
+        "input_sha256": "7c1327f403c94240e6181da990fe7b078f420cc32f92a68bee3282792b0bcc66",
+        "structure_sha256": "cb2e16376887f7cdeb05c7ddf4aacfacacbea0a000837a3888a0f3ea91785f70"
+      }
+    }
+  },
+  "data_role_guard": {
+    "allowed_roles": [
+      "REGISTRY_SCREENING_ONLY"
+    ],
+    "prohibited_roles": [
+      "DEV",
+      "TRAIN",
+      "TEST"
+    ],
+    "role_promotion_authorized": false
+  },
+  "prohibitions": [
+    "No d0 scan",
+    "No structure or cell modification",
+    "No registry modification",
+    "No parameter modification",
+    "No relaxation",
+    "No execution for any registry other than R1 and R2"
+  ],
+  "C_approval": {
+    "signed_by": "C",
+    "approval_id": "C-AGSI-REGISTRY-PHASE2-8X8-R1-R2-20261012",
+    "approval_scope": "Only one fixed-geometry 8x8x1 registry-screening single point for each of R1 and R2 under the hash bindings in this document."
+  }
+}
