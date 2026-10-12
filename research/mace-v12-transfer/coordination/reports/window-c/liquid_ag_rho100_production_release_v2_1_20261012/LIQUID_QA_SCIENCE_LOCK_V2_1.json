@@ -1,0 +1,154 @@
+{
+  "based_on": {
+    "C_strategy_commit": "53cc7bb8f33cf94568212b3b36a04c7f0a4a5709",
+    "D_QA_V2_commit": "9f7b4fe5e740acca9f5764374f8c51c9d7bceefd",
+    "D_existing_pilot_commit": "87ac1acf05a938f77180a0a3acfd4e76cf11c466",
+    "step1000_checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdabb24f34046",
+    "task_id": "C-D-AGL-1250K-rho100-pilot01"
+  },
+  "behavior": {
+    "any_missing_or_nonfinite_required_metric": "QA_HOLD",
+    "execution_release": "This C science ruling does not authorize execution. A production runner/config must bind this exact lock SHA, implement the distinct metrics and joint gate, pass affected regressions and real GitHub archive fresh-fetch/restore testing, and receive a separate C execution authorization.",
+    "no_parameter_autotuning": true,
+    "q6_metric_separation": "Legacy global Q6 regression and <0.20 joint screen apply only to coherent/global Q6. V2 local Q6 is report-only pending independent calibration. The old and new Q6 values are not numerically compared.",
+    "rdf_or_order_ambiguity": "QA_HOLD",
+    "strategy_change": "This V2 spec supersedes only the qualitative RDF shape gate in the 20261012 strategy; it does not alter density, seed, potential, integrator, temperature schedule, step caps, or existing checkpoint. The adaptive run plan and runner must bind this exact spec SHA before C can sign execution."
+  },
+  "d_audit_status": {
+    "execution_release_status": "HOLD_PENDING_D_PRODUCTION_INTEGRATION_AND_FINAL_C_REVIEW",
+    "latest_D_evidence_commit": "9f7b4fe5e740acca9f5764374f8c51c9d7bceefd",
+    "production_runner": "NOT_RELEASED; latest D package explicitly excludes an execution-ready runner",
+    "qa_v2_metrics_and_synthetic_suite": "engineering evidence only; Q6 distinction adjudicated by this lock",
+    "real_github_segment_archive_restore": "NOT_YET_VERIFIED_FOR_FINAL_D_QA_V2_RUNNER"
+  },
+  "execution_authorized": false,
+  "finite_cell": {
+    "atoms": 64,
+    "cell_angstrom": [
+      10.717455315295654,
+      10.717455315295654,
+      10.717455315295654
+    ],
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "rdf_rmax_angstrom": 5.35,
+    "rdf_rmax_rule": "strictly less than half the shortest cell length; fail if cell or PBC differs from the locked source",
+    "volume_angstrom3": 1231.0481629488534
+  },
+  "msd": {
+    "definition": "unwrapped coordinates; multiple time origins; compute the 3D self MSD averaged over all 64 Ag atoms",
+    "pass": "delta MSD >= 1.0 A^2 and moving-block-bootstrap 95% lower confidence bound on the long-time slope > 0",
+    "window": "same combined 4 ps used by the structural gate"
+  },
+  "order": {
+    "joint_liquid_decision": "A phase may pass only if the legacy global-Q6 screen, PTM/cluster limits, resolved finite-cell RDF and coordination criteria, MSD diffusion criterion, and two-window thermal stationarity criteria all pass. Any missing, non-finite, unresolved, statistically underpowered, or inconsistent required input yields PENDING/HOLD. No single Q6 statistic proves liquid behavior.",
+    "legacy_global_q6": {
+      "definition": "For each atom i, compute q_6m(i) as the neighbor-average of Y_6m over periodic neighbors within 3.8 A; average q_6m(i) over all atoms first; then compute sqrt(4*pi/13 * sum_m |mean_i(q_6m(i))|^2). This is the coherent/global Steinhardt Q6 used by the archived legacy implementation.",
+      "historical_regression": {
+        "expected_mean": 0.08871920638262233,
+        "frame_count": 11,
+        "meaning": "This regression verifies the legacy global-Q6 implementation only. It does not constrain or compare against local Q6.",
+        "status": "MUST_PASS_AS_HISTORICAL_IMPLEMENTATION_REGRESSION",
+        "tolerance": 0.01,
+        "trajectory_sha256": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5"
+      },
+      "joint_liquid_gate": {
+        "applies_separately_to_each_of_two_final_consecutive_nonoverlapping_2ps_windows": true,
+        "minimum_passing_frame_fraction": 0.8,
+        "per_frame_condition": "global_Q6 < 0.20",
+        "role": "necessary_joint_screen_for_coherent_crystalline_order; insufficient on its own to establish a liquid"
+      },
+      "neighbor_cutoff_angstrom": 3.8
+    },
+    "other_crystalline_order_gates": {
+      "classifier": "OVITO PTM, FCC/HCP only; RMSD cutoff 0.10; periodicity verified; no CNA fallback",
+      "crystalline_atom_fraction_max": 0.1,
+      "largest_connected_crystalline_cluster_atoms_max": 8,
+      "minimum_fraction_of_frames_meeting_limits_each_final_2ps_window": 0.8,
+      "persistent_order_gate": "HOLD if the one-sided 95% moving-block-bootstrap lower confidence bound on the stationary-phase PTM crystalline-fraction slope is greater than zero"
+    },
+    "q6_relationship": "The global and local statistics are mathematically distinct reductions of q_6m and are not expected to have equal values. Never apply the legacy 0.20 cutoff to mean-local Q6.",
+    "v2_local_q6": {
+      "definition": "for each atom i, neighbors are all atoms within 3.8 A under minimum-image PBC; q_6m(i)=mean_j Y_6m(r_ij), q6(i)=sqrt(4*pi/13 * sum_m |q_6m(i)|^2); frame_Q6 is the arithmetic mean of q6(i) over 64 atoms",
+      "historical_diagnostic": {
+        "frame_count": 11,
+        "observed_mean": 0.3516369060394911,
+        "status": "REPORT_ONLY_METHOD_DIAGNOSTIC",
+        "trajectory_sha256": "80961895ae1b552aec908c35511de421fab74d26026063cd9d0c3693f93dacd5"
+      },
+      "liquid_gate_role": "REPORT_ONLY; no threshold, no pass/fail, and no requirement to equal global Q6",
+      "threshold": null,
+      "trend_role": "report time series and uncertainty as diagnostic; do not fail liquid solely on a local-Q6 trend until separately calibrated and versioned"
+    }
+  },
+  "rdf": {
+    "bootstrap": {
+      "block_duration_rule": "max(0.5 ps, 5*tau_int)",
+      "insufficient_data_behavior": "If fewer than 8 complete autocorrelation-sized blocks are available, keep the phase gate pending and automatically collect the next internal chunk; if the phase cap is reached first, report RDF_UNCERTAINTY_INSUFFICIENT and QA_HOLD.",
+      "integrated_autocorrelation_time": "estimate for temperature, potential energy/atom, mean local q6, PTM crystal fraction, coordination number, and g(r) at the first-peak bin; use the maximum tau_int, with tau_int=dt*(0.5+sum rho(k)) through the first non-positive lag",
+      "method": "resample contiguous trajectory blocks with replacement; never resample individual correlated frames",
+      "minimum_effective_blocks": 8,
+      "replicates": 2000,
+      "scope": "Use all eligible stationary frames in the current fixed-temperature phase after the 2 ps discard; do not restrict the uncertainty estimate to only the final two windows. The separate final two windows still must each meet the point-estimate bounds.",
+      "seed": 20261012
+    },
+    "coordination_number": {
+      "accepted_range": [
+        9.0,
+        13.0
+      ],
+      "definition": "CN=4*pi*(N-1)/V * integral_0^rvalley g(r)*r^2 dr using trapezoidal integration of raw bins",
+      "uncertainty_rule": "report a two-sided 95% moving-block-bootstrap interval; it must overlap the accepted range, and the point estimate must be within range"
+    },
+    "distance_method": "minimum-image pair distances under full 3D PBC; count ordered pairs i != j",
+    "frame_windows": "For each fixed-temperature phase, use all saved frames after its initial 2 ps discard and before the phase cap (up to 7.5 ps at 1600 K, up to 8 ps at 1250 K); frames are sampled every 0.05 ps. Also report the final two adjacent half-open 2 ps windows separately; each must meet the accepted peak/valley/CN point bounds.",
+    "histogram": {
+      "edges_angstrom": "0.00 through 5.35 inclusive, fixed 0.05 A bins",
+      "normalization": "g_b = H_b / (F * N * (N-1) * shell_volume_b / cell_volume); H_b is the count of ordered pairs across F frames and shell_volume_b=4*pi/3*(r_hi^3-r_lo^3)",
+      "smoothing_for_extrema_only": "Gaussian filter sigma=0.10 A (2 bins); raw unsmoothed g(r) is used for coordination integration"
+    },
+    "peak_valley": {
+      "accepted_peak_range_angstrom": [
+        2.6,
+        3.2
+      ],
+      "accepted_valley_range_angstrom": [
+        3.4,
+        4.2
+      ],
+      "peak_definition": "highest local maximum of smoothed g(r) in the peak range",
+      "peak_search_range_angstrom": [
+        2.6,
+        3.2
+      ],
+      "resolution_rule": "the moving-block-bootstrap 95% lower confidence bound for g(r_peak)-g(r_valley) must be greater than zero; peak and valley must be detected in at least 95% of valid bootstrap replicates",
+      "unresolved_behavior": "RDF_UNRESOLVED => QA_HOLD; never substitute a point estimate or default PASS",
+      "valley_definition": "lowest local minimum of smoothed g(r) in the valley range after the selected peak",
+      "valley_search_range_angstrom": [
+        3.4,
+        4.2
+      ]
+    },
+    "removed_qualitative_gate": "Do not use uncalibrated 'broad peak' or 'no sharp higher-shell peaks' as a binary gate for this 64-atom cell. Those features remain diagnostics; sustained order is decided by the explicit Q6/PTM and MSD gates below.",
+    "report_only": [
+      "first-peak FWHM from the smoothed curve",
+      "g(r) peak locations/heights for r>r_valley and r<rmax",
+      "per-window and pooled raw/smoothed g(r) arrays with bootstrap bands"
+    ],
+    "rmax_note": "For the locked rho100 cubic cell, rmax=5.35 A is below L/2=5.3587276576 A. If cell changes, fail identity check; do not silently recompute bins.",
+    "role": "first-shell quantitative consistency gate; peak width and higher shells are diagnostic only"
+  },
+  "source_checkpoint_sha256": "c820437a2512c4b3d7dc9e60bb60ac3ced6588aa1f2a629d58cfdcabb24f34046",
+  "spec_id": "AG64_RHO100_LIQUID_QA",
+  "spec_version": "2.1.0",
+  "status": "C_ADJUDICATED_Q6_METRICS_DISTINCT",
+  "supersedes": {
+    "scope": "Q6 definitions, historical regression handling, and Q6 contribution to the joint liquid gate only. All non-Q6 V2 scientific criteria remain unchanged.",
+    "sha256": "94b2f5b711cee538d64a736702c53461a2ee01d2dab80b5968d54ff43c48180e",
+    "spec_id": "AG64_RHO100_LIQUID_QA_V2",
+    "spec_version": "2.0.0"
+  }
+}
