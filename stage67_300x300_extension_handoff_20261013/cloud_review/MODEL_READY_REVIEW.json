@@ -1,0 +1,119 @@
+{
+  "review_status": "MODEL_READY=NO",
+  "source_branch": "cloud-d-stage67-300x300-extension-handoff-20261013",
+  "source_commit": "f4faca36e3987ddc577c49c6ce8c27a1731073da",
+  "handoff_zip_sha256": "6cbef8dbf96ee2f94bf5c2929b0b622902db12898f879cde00e6c97c56a59547",
+  "internal_package_checksums": "PASS (49 files; all entries in reports/SHA256SUMS.txt verified)",
+  "source_frame": {
+    "path": "input/source_200A_step1650/high_frequency_step_1650.dump",
+    "sha256": "91d04a6fa3cb1b2fd9eb668b392cad04ecb593620723beac3e12ea4e7b8e85fc",
+    "step": 1650,
+    "time_ps": 0.165,
+    "atom_count": 303372,
+    "box_A": [
+      150.1,
+      200.0,
+      200.0
+    ],
+    "boundary": "p p p",
+    "number_density_A^-3": 0.05052831445702865,
+    "mass_density_g_cm^-3": 4.714587173890223,
+    "atom_counts_by_type": {
+      "1_Ti": 105948,
+      "2_Si": 33176,
+      "3_C": 69624,
+      "4_Ag": 94624
+    }
+  },
+  "requested_target": {
+    "box_A": [
+      150.0,
+      300.0,
+      300.0
+    ],
+    "only_expand_yz": true
+  },
+  "source_parameter_audit": {
+    "md_timestep_fs": 0.1,
+    "potential_sha256": {
+      "Ag_u3.eam": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "TSCBOP.tersoff": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "potential.interface_calibration_v0.inc": "34deced5e08174ba369290b87f5c3bfd2b284b272991adf302b2b0d28c12815f"
+    },
+    "cross_potential_status": "calibration-v0; handoff says not production-qualified",
+    "old_ttm_grid": [
+      15,
+      20,
+      20
+    ],
+    "old_ttm_cells": 6000,
+    "candidate_target_ttm_grid": [
+      15,
+      30,
+      30
+    ],
+    "candidate_target_ttm_cells": 13500,
+    "candidate_target_cell_A_if_X150": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "candidate_target_cell_A_if_preserve_source_X150_1": [
+      10.0066666667,
+      10.0,
+      10.0
+    ],
+    "old_heat_source_center_A": [
+      50.0,
+      100.0,
+      100.0
+    ],
+    "old_heat_source_center_evidence": "200A source map: radial distance centered at y=z=100 A; depth is x-50 A; positive-power weighted x centroid=69.7722818034 A",
+    "old_heat_source_total_eV_per_ps": 64000.0,
+    "old_heat_source_active_cells": 320
+  },
+  "density_scaled_estimates_not_generated_model": {
+    "preserve_source_x_150_1_box_A": [
+      150.1,
+      300.0,
+      300.0
+    ],
+    "volume_factor": 2.25,
+    "estimated_atom_count_same_density": 682587,
+    "estimated_counts_if_each_source_type_scaled_2_25": {
+      "Ti": 238383,
+      "Si": 74646,
+      "C": 156654,
+      "Ag": 212904
+    },
+    "exact_user_box_volume_A3": 13500000.0,
+    "ideal_atom_count_at_source_number_density": 682132.2451698867,
+    "note": "These are density arithmetic only; no candidate structure or atom selection was generated. Exact X=150 conflicts with keeping source X=150.1 unchanged."
+  },
+  "tile_symmetry_check": {
+    "method": "compare each 100x100 YZ quadrant after modulo-100 coordinates, type and position rounded to 1e-6 A",
+    "quadrant_counts": {
+      "00": 75840,
+      "01": 75842,
+      "10": 75846,
+      "11": 75844
+    },
+    "exact_100A_repeat": "FAIL",
+    "shared_position_keys_vs_quadrant_00": {
+      "01": 14696,
+      "10": 14817,
+      "11": 14574
+    },
+    "conclusion": "The source frame is not an exact 100 A Y/Z tile; 3x3 construction from a single tile would change/drop source atom positions and composition."
+  },
+  "blockers": [
+    "No validated deterministic Y/Z extension rule for the dynamic 200 A source; exact 100 A tile symmetry fails, and 300/200=1.5 is non-integer.",
+    "Requested X=150 A differs from source X=150.1 A; changing it would violate only-expand-Y/Z unless 150 A is clarified as rounded.",
+    "Heat-source Y/Z center is (100,100) A in the source grid; preserving absolute position gives (50,100,100), while recentering in the 300 A box gives (50,150,150). The intended center transform is unspecified.",
+    "The source handoff explicitly lacks the matching 300 A structure, rebuilt 15x30x30 material-fraction/G_mix/Te/source maps, and complete runnable input; old 15x20x20 maps are marked NOT_FOR_300A.",
+    "The original Stage67 manifest references in.regions_x_surface.inc, which is absent."
+  ],
+  "generated_structure": false,
+  "generated_ttm_mapping": false,
+  "md_started": false
+}
