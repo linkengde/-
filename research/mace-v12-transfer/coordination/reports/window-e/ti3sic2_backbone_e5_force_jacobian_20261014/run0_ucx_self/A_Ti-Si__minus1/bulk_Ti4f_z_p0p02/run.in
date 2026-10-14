@@ -1,0 +1,15 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+read_data /workspace/-/research/mace-v12-transfer/coordination/reports/window-e/ti3sic2_backbone_e5_force_jacobian_20261014/run0_ucx_self/A_Ti-Si__minus1/bulk_Ti4f_z_p0p02/atoms.data
+pair_style tersoff
+pair_coeff * * /workspace/-/research/mace-v12-transfer/coordination/reports/window-e/ti3sic2_backbone_e5_force_jacobian_20261014/potentials/TSCBOP_A_Ti-Si_minus1.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe
+dump forces all custom 1 forces.dump id type x y z fx fy fz
+dump_modify forces sort id format line "%d %d %.16g %.16g %.16g %.16g %.16g %.16g"
+run 0 post no
+undump forces

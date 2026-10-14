@@ -1,0 +1,9 @@
+# Stage E5 frozen run-0 audit
+
+The E4 package was checked against its 184-entry SHA-256 manifest. It contains six converged force-label geometries totaling 354 atoms: five 48-atom configurations from one bulk parent and one 114-atom interface-derived TSC-only slab. Actual force arrays, structure IDs, elements, coordinates and source geometry hashes were preserved. No force labels were inferred from RMSE.
+
+LAMMPS 22 Jul 2025 Update 4 was run with `units metal` (forces eV/Å), `pair_style tersoff`, the same `Ti Si C` map, `p p p`, neighbor settings, 1 OpenMP thread, and `run 0 post no`. The 102 calls are six common baseline checks plus 8 blocks × 2 signs × 6 structures. There was no integrator or minimizer. The frozen `atoms.data` SHA is common across baseline and all variants for each structure; all atom IDs and periodic coordinates were validated. Maximum wrapped-coordinate discrepancy was `1.07e-14 Å`.
+
+The new baseline forces match the E4 baseline exactly for every atom/component in all six structures (`baseline_reproduction.json`). The E5 `A_Ti-C` −1% and +1% force arrays also match the corresponding E4 variants exactly for all 1062 components per sign. The original potential SHA remains `729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7`. LAMMPS-only startup diagnostics: the default singleton MPICH/UCX transport could not create a sandbox-denied local socket and exited before any force output. The successful runs used `UCX_TLS=self`, which is sufficient for the single-process executable; the scientific input/settings were otherwise unchanged. The failed startup log is retained under `run0/`.
+
+Every successful run has its own `run.in`, frozen `atoms.data`, force dump/CSV, screen/log/launcher output and `run_metadata.json` under `run0_ucx_self/`. All records report step 0; no DFT, fitting, minimization, MD or TTM was run.
