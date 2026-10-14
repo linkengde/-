@@ -1,0 +1,45 @@
+{
+  "freeze_id": "E_STAGE_E2_EXISTING_DATA_ROLE_FREEZE_20261014",
+  "status": "CURRENT_ARCHIVE_ROLES_FROZEN_NO_TRAIN_DEV_TEST_RECLASSIFICATION",
+  "scope": "Only the DFT archives inspected in this audit; no source data were edited.",
+  "TRAIN": [],
+  "DEV": [],
+  "TEST": [],
+  "diagnostic_only_groups": [
+    {
+      "geometry_family": "bulk_parent_48",
+      "records": [
+        "Ti3SiC2_baseline_k4x4x2_v19",
+        "Ti3SiC2_baseline_k6x6x2_v19",
+        "Ti3SiC2_baseline_k6x6x4_v19",
+        "Ti3SiC2_baseline_k8x8x2_v19",
+        "Ti3SiC2_baseline_k8x8x4_v19",
+        "Ti3SiC2_baseline_k10x10x2_v19",
+        "Ti3SiC2_baseline_k10x10x4_v19",
+        "Ti3SiC2_Ti4f_id0003_z_m020A_k10x10x4_v19",
+        "Ti3SiC2_Ti4f_id0003_z_p020A_k10x10x4_v19",
+        "Ti3SiC2_C4f_id0009_z_m020A_k10x10x4_v19",
+        "Ti3SiC2_C4f_id0009_z_p020A_k10x10x4_v19"
+      ],
+      "archived_role": "numerical_pure_phase_control_not_training_or_independent_validation",
+      "reason": "seven mesh runs share one baseline geometry; four Ti/C displacement points share its single parent source family."
+    },
+    {
+      "geometry_family": "single_interface_derived_slab_family",
+      "records": [
+        "TSC_only_114_from_optimized_Ag_interface"
+      ],
+      "archived_role": "single_component_diagnostic_only_not_train_or_independent_validation",
+      "reason": "one frozen substrate subset derived from the same 135-atom optimized interface; not an independent clean-surface family."
+    },
+    {
+      "geometry_family": "single_135atom_interface_family",
+      "records": [
+        "full_Ag_Ti3SiC2_135_optimized_interface_context"
+      ],
+      "archived_role": "interface_context_only_not_TSC_only",
+      "reason": "contains Ag and is not a skeleton-only target."
+    }
+  ],
+  "future_fit_gate": "Any reclassification to TRAIN/DEV/TEST requires a separately reviewed split manifest before fitting. With current DEV=TEST=empty, any later fit would be exploratory only and cannot support a generalization claim."
+}
