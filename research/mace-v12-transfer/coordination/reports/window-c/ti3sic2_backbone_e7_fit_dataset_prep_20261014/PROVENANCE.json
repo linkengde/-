@@ -1,0 +1,54 @@
+{
+  "package": "Stage E7 Ti3SiC2 backbone fitting dataset readiness audit",
+  "date_utc": "2026-10-14",
+  "scope": "offline import, identity/geometry checks, label inventory, role-family audit, and geometric pair-cutoff coverage; no DFT, fitting, MD, or TTM",
+  "stage_c_source": {
+    "branch": "cloud-c-tisc-dft-extension-plan-20261014",
+    "commit": "0a8585e03522b88075e5f62770a8b5409031bf69",
+    "directory": "research/mace-v12-transfer/coordination/reports/window-c/ti3sic2_DFT_extension_20261014",
+    "note": "The source package explicitly says START_DFT=NO and contains ten geometry-only inputs, not DFT energy/force/stress results."
+  },
+  "stage_c_source_files": {
+    "DFT_STRUCTURE_LIST.csv": "verified against source SHA256SUMS.txt",
+    "geometry_validation.json": "verified against source SHA256SUMS.txt",
+    "geometry_only_inputs": "ten exact-byte copies; each SHA is checked against DFT_STRUCTURE_LIST.csv and geometry_validation.json"
+  },
+  "stage_e5_source": {
+    "branch": "cloud-e-b1-dft",
+    "commit": "195436e25d8bf8e4a524ce035b2c35c519f0bdc9",
+    "report_sha256": "79cf0ba2d85ea2f5f472f4312eb5bde16790976fa16206edb4c3aa7710ae7755",
+    "parameter_response_matrix_sha256": "aff16543fb08a7ff6ea8fb3b707f1c10e4d963e2e43901eed735f36167730e84",
+    "force_response_by_structure_sha256": "d2b9ab6f69452c051add33708210a4f054d85b56b3ef858a0b5d04c6cdd722c8",
+    "pair_activation_analysis_sha256": "f2030481ca2a315ef1843f7aa2366bff79ef3f0d44410fdca7839880fec74ff9",
+    "original_tscbop_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7"
+  },
+  "stage_e6_source": {
+    "branch": "cloud-e-b1-dft",
+    "commit": "bdba4115569f74578e2fc2e2bee031cebf3f502d",
+    "request_sha256": "c081a2dce8faa1a08f9f6a221658dccfa0d4b712cd97b6e9fb511c3fdcf41c61",
+    "requirements_sha256": "e35120d8d09369d0b31db95bc9c37debcfd102bcb9e72183150494cba51a723e"
+  },
+  "stage_b_label_source": {
+    "commit": "34b8be988015af96d3fd8791fc041f6cc811e2b7",
+    "path": "research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_backbone_force_response_execution_window_b/final_results.json",
+    "final_results_sha256": "c34cfa6f6505fc6b385908b6fad79119354cf24d8647423a89863765f8955c4e",
+    "archived_B_bulk_label_records": 5,
+    "B_label_verification": "audit_existing_labels.py verifies the baseline plus four displaced output hashes, atom counts, force properties, energies, and convergence/archive status",
+    "method_manifest_sha256": "702df71e586a61cd5785afc62653d7135a707032c91b72842b035b62198fd709",
+    "role_note": "Baseline and four Ti/C response points are existing numerical-control/diagnostic data; no role changed."
+  },
+  "environment": {
+    "audit_python": "existing gpaw-mpi virtual environment Python",
+    "ase": "3.29.0",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1"
+  },
+  "data_governance": {
+    "sealed_test_data_accessed": false,
+    "existing_data_roles_modified": false,
+    "tscbop_modified": false,
+    "dfT_started": false,
+    "fit_started": false,
+    "md_or_ttm_started": false
+  }
+}
