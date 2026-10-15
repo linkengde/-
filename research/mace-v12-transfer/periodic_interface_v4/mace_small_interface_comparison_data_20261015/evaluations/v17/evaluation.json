@@ -1,0 +1,84 @@
+{
+  "status": "FAIL",
+  "cycle": "V17 provisional numerical screening",
+  "model_path": "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03/models/MACE_periodic_v17_provisional_screening.model",
+  "model_sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+  "selection_record_sha256": "66a2b683c6c6ec7a612362930ef3d0d890244eca498b31fef814611e9fb51a55",
+  "development_validation_only": true,
+  "withheld_test_labels_opened": false,
+  "gates": {
+    "energy_abs_error_meV_atom": 10.0,
+    "force_vector_RMSE_eV_A": 0.05,
+    "separating_force_abs_error_eV_A": 0.1
+  },
+  "per_structure": [
+    {
+      "label": "AgC_v17_dev_validation_01",
+      "interface": "AgC",
+      "role": "development_validation_only",
+      "atoms": 48,
+      "formula": "C13Ag2Si10Ti23",
+      "model_sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+      "reference_sha256": "1467015445c37826ba837edf38c5f9bae41f60e82750f4d7ae05d5aa4c08b385",
+      "energy_abs_error_meV_atom": 2.7552374979660974,
+      "force_vector_RMSE_eV_A": 0.12825387741111088,
+      "force_vector_max_error_eV_A": 0.4284629849029352,
+      "marked_pair_distance_A": 2.659731418990152,
+      "separating_force_abs_error_eV_A": 0.09479635404966835
+    },
+    {
+      "label": "AgSi_v17_dev_validation_01",
+      "interface": "AgSi",
+      "role": "development_validation_only",
+      "atoms": 51,
+      "formula": "C13Ag17Si8Ti13",
+      "model_sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+      "reference_sha256": "92c61d8b1de31b7fd72280013ff9656b57ef8b7822ad04b1c6dc02d40fa20b8f",
+      "energy_abs_error_meV_atom": 1.771149838515719,
+      "force_vector_RMSE_eV_A": 0.06129409880223268,
+      "force_vector_max_error_eV_A": 0.16153353322342695,
+      "marked_pair_distance_A": 2.887742799486164,
+      "separating_force_abs_error_eV_A": 0.19092631480636124
+    },
+    {
+      "label": "AgTi_v17_dev_validation_01",
+      "interface": "AgTi",
+      "role": "development_validation_only",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "model_sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+      "reference_sha256": "c4b1539a391b587b3bdb76926690e1bbeb392c417936f03a503bdc8080c98c4e",
+      "energy_abs_error_meV_atom": 1.2212907977799177,
+      "force_vector_RMSE_eV_A": 0.09416294790821386,
+      "force_vector_max_error_eV_A": 0.34819619619067005,
+      "marked_pair_distance_A": 3.2229748469740787,
+      "separating_force_abs_error_eV_A": 0.21347105697002045
+    }
+  ],
+  "by_interface": {
+    "AgC": {
+      "energy_abs_error_meV_atom": 2.7552374979660974,
+      "force_vector_RMSE_eV_A": 0.12825387741111088,
+      "separating_force_abs_error_eV_A": 0.09479635404966835,
+      "provisional_gates_met": false
+    },
+    "AgSi": {
+      "energy_abs_error_meV_atom": 1.771149838515719,
+      "force_vector_RMSE_eV_A": 0.06129409880223268,
+      "separating_force_abs_error_eV_A": 0.19092631480636124,
+      "provisional_gates_met": false
+    },
+    "AgTi": {
+      "energy_abs_error_meV_atom": 1.2212907977799177,
+      "force_vector_RMSE_eV_A": 0.09416294790821386,
+      "separating_force_abs_error_eV_A": 0.21347105697002045,
+      "provisional_gates_met": false
+    }
+  },
+  "limitations": [
+    "The 14 partially supported and 12 inherited-declaration V16 rows retain their source uncertainty.",
+    "The three dev structures were already used to diagnose V16 and are not fresh final blind tests.",
+    "All eight added labels are paired local training diagnostics, not independent tests.",
+    "A gate pass would not establish thermal, pressure, morphology, or production transferability."
+  ]
+}
