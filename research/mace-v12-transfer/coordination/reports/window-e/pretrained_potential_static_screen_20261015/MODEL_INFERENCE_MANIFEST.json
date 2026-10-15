@@ -1,0 +1,68 @@
+{
+  "date_utc": "2026-10-15",
+  "branch": "cloud-e-b1-dft",
+  "purpose": "frozen CPU static screening; no DFT/training/relaxation/MD/TTM",
+  "source_commit": "dbcf2f7d6bf966b8fc0476224d2cba52c3866de0",
+  "data": {
+    "135_structure_sha256": "eda2586c63c6c3c793ffce99417e7c04569941b0a2a916fda1b5402b7ba52d9f",
+    "135_full_forces_sha256": "efd00ea38c50e6bf9eb54ac8f45d7f0ed9bd8a2a31a8f31d725af7f74b7f03c6",
+    "Ag_subset_sha256": "e75ed95aa31ff7340adeb6a8c0644e117a9c8b22bf13515262b86e8872afc35d",
+    "Ag_forces_sha256": "1c1f3bdc0cb0ff9177bdf723bb52ddd2b40e8c80b5cc9d3fb5f4521f0c88dbb1",
+    "TSC_subset_sha256": "260ae9b736cb95a641b4d1eae9ffbec5711f2ffe895ed1f0acc7e25ff637fdf1",
+    "TSC_forces_sha256": "299d3cad8e984bbb6a0c084322e763104c0da658d442c0e0862929b96799c1d5",
+    "bulk48_reference_output_sha256": "75b083e225b8b20bbdde181c8e1847bae4b0052a854c6e9ee48885c940166415",
+    "dft_handoff_commit": "1353d3efa04c1bdd19f139b3535f21d02985013d",
+    "dft_archive_sha256": "4e35ce85e6a47295e07c6e4e688925bc343fee7cdd966d39e3619b9d00d7026f",
+    "dft_status": "all full/component SCFs converged; mapping IDs, species, coordinates, cell and PBC checked",
+    "bulk48_input_structure_sha256": "157c1dab02a28e6140dd5191187ccd914fe558950e2ac6c136866bcc7805c3e4"
+  },
+  "models": {
+    "SevenNet-MF-0": {
+      "official_source_commit": "209339d4eb4c1717f906c4cb715629159f00f88c",
+      "package_version": "0.13.0",
+      "checkpoint_sha256": "81791329b37d445f46b531578c182c41792d98c7814222c9e5dde276402225fd",
+      "checkpoint_bytes": 10322158,
+      "supported_elements": {
+        "Ag": true,
+        "Ti": true,
+        "Si": true,
+        "C": true
+      },
+      "dtype": "torch.float32",
+      "device": "cpu",
+      "cutoff_A": 5.0
+    },
+    "MatterSim-v1.0.0-5M": {
+      "official_source_commit": "afe58a03d048f46693f65423ce05165302bbbb91",
+      "package_version": "1.0.0",
+      "checkpoint_sha256": "e3df9fa708725e3d453140646c7d1838324b347a3d1214cf1440522146f872b5",
+      "checkpoint_bytes": 91176875,
+      "supported_elements": {
+        "Ag": true,
+        "Ti": true,
+        "Si": true,
+        "C": true
+      },
+      "dtype": "torch.float32",
+      "device": "cpu",
+      "cutoff_A": 5.0
+    }
+  },
+  "outputs": [
+    "SEVENNET_MODEL_INVENTORY.md",
+    "MATTERSIM_MODEL_INVENTORY.md",
+    "PRETRAINED_DFT_FORCE_COMPARISON.csv",
+    "PRETRAINED_INTERFACE_ENERGY_COMPARISON.csv",
+    "BACKBONE_MODEL_COMPARISON.md",
+    "INFERENCE_COST_COMPARISON.md",
+    "PRETRAINED_POTENTIAL_SELECTION_DECISION.md",
+    "NEW_MODEL_PER_ATOM_FORCE_PREDICTIONS.csv"
+  ],
+  "training_overlap_audit": {
+    "MACE_exact_geometry_scan": "no exact 135-atom full/component match in available V12/V14/V17/V18 train/valid/test partitions per inherited audit",
+    "MACE_family_level_independence": "UNVERIFIED; complete join to all historically scored development parent families unavailable",
+    "SevenNet_Materials_Project_overlap": "POSSIBLE; not checked against model training records",
+    "MatterSim_training_overlap": "UNVERIFIED; model card reports 6M samples from paper workflows, exact local overlap not established",
+    "blind_test": "NO"
+  }
+}
