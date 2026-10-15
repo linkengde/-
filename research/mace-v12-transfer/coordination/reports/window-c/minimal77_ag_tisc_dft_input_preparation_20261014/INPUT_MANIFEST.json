@@ -1,0 +1,124 @@
+{
+  "D5_source_manifest_sha256": "0e1a6d6175143f35d88834bf1bb262b7dcfbafcbde28237071f717a06f97e636",
+  "DFT_STARTED": false,
+  "builder_sha256": "00686a34e80c42cb26213e59c2ee2b2629b94407d1f090c9a098d9266a5a0198",
+  "execution_authorized": false,
+  "method": {
+    "code": "GPAW 26.7.0 / ASE 3.29.0 / gpaw-data 1.2.1",
+    "convergence": {
+      "density": 1e-05,
+      "eigenstates_eV": 1e-05,
+      "energy_eV_per_electron": 1e-05
+    },
+    "cutoff_eV": 500,
+    "geometry": "fixed ions and fixed cell; no relaxation",
+    "kpoint_convention": "GPAW default Monkhorst-Pack integer mesh; no explicit gamma override or extra offset",
+    "kpoint_status": "PROPOSED_FIRST_MESH_NOT_CONVERGENCE_VALIDATED; prior M77 design recommends a 5x5x1 denser central-gap comparison",
+    "kpoints": [
+      4,
+      4,
+      1
+    ],
+    "maxiter": 160,
+    "mixer": {
+      "beta": 0.05,
+      "nmaxold": 8,
+      "type": "Pulay",
+      "weight": 100
+    },
+    "mode": "PW",
+    "occupations": {
+      "type": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "outputs": [
+      "native_energy_eV",
+      "force_consistent_free_energy_eV",
+      "forces_eV_per_A",
+      "stress_eV_per_A3_diagnostic_only"
+    ],
+    "paw": true,
+    "paw_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    },
+    "resources": {
+      "mpi_ranks": 4,
+      "omp_threads": 1
+    },
+    "stress_note": "Slab 3D stress includes vacuum dilution; diagnostic only, not a fitting target unless a slab stress convention is approved.",
+    "xc": "PBE"
+  },
+  "notes": [
+    "4x4x1 is the first proposed comparable-density mesh from the archived M77 resource plan, not a demonstrated converged mesh.",
+    "A 5x5x1 central-gap comparison is proposed before labels are released; no k-point test was run.",
+    "Peak memory and wall time are unmeasured for these exact geometries."
+  ],
+  "package_status": "INPUT_FILES_PREPARED_NOT_RELEASED",
+  "runner_path": "run_fixed_singlepoint.py",
+  "runner_sha256": "542d1ddfd8af8bb6f324d23815e2fe6274c4e7fc0162ac4d9fc734ba380028d9",
+  "structures": [
+    {
+      "Ag_strain_percent": 3.0975227030672903,
+      "PBC": "T T T",
+      "TSC_strain_percent": -3.0044589063391136,
+      "cell_a1_A": "[7.446832669890703, -2.5796585079428977, 0.0]",
+      "cell_a2_A": "[-1.4893665339781406, 7.738975523828693, 0.0]",
+      "cell_a3_A": "[0.0, 0.0, 37.9451596]",
+      "cell_volume_A3": 2041.0245518005172,
+      "composition": "{\"Ag\": 28, \"C\": 14, \"Si\": 14, \"Ti\": 21}",
+      "execution_authorized": false,
+      "input_config_path": "DFT_INPUTS/configs/M77_SHARED_STRAIN_GAP_2.16A.json",
+      "input_config_sha256": "ed772be88120a9a5c9c455f530c498ab8bc9bb7d75c8ef506942ff8161416c1a",
+      "interface_gap_A": 2.16,
+      "natoms": 77,
+      "structure_id": "M77_SHARED_STRAIN_GAP_2.16A",
+      "structure_path": "DFT_INPUTS/structures/Ag_Ti3SiC2_M77_gap_2p16A.extxyz",
+      "structure_sha256": "51223cc8f1dd881a6fa1f2e4ea5564f886ca3682e6d4ef4389393d3a6768c5d3",
+      "task_id": "C-D6-GAP-2.16A",
+      "twist_deg": 0.0
+    },
+    {
+      "Ag_strain_percent": 3.0975227030672903,
+      "PBC": "T T T",
+      "TSC_strain_percent": -3.0044589063391136,
+      "cell_a1_A": "[7.446832669890703, -2.5796585079428977, 0.0]",
+      "cell_a2_A": "[-1.4893665339781406, 7.738975523828693, 0.0]",
+      "cell_a3_A": "[0.0, 0.0, 37.9451596]",
+      "cell_volume_A3": 2041.0245518005172,
+      "composition": "{\"Ag\": 28, \"C\": 14, \"Si\": 14, \"Ti\": 21}",
+      "execution_authorized": false,
+      "input_config_path": "DFT_INPUTS/configs/M77_SHARED_STRAIN_GAP_2.40A.json",
+      "input_config_sha256": "5ab320dec595b45a345d28e24f15ec227346f64b28e11e24eb39124ba914c629",
+      "interface_gap_A": 2.4,
+      "natoms": 77,
+      "structure_id": "M77_SHARED_STRAIN_GAP_2.40A",
+      "structure_path": "DFT_INPUTS/structures/Ag_Ti3SiC2_M77_gap_2p40A.extxyz",
+      "structure_sha256": "1de937b99b2d1f5b4be3b9b45e4d13e4e634bd99531110a080abf7ce970319dd",
+      "task_id": "C-D6-GAP-2.40A",
+      "twist_deg": 0.0
+    },
+    {
+      "Ag_strain_percent": 3.0975227030672903,
+      "PBC": "T T T",
+      "TSC_strain_percent": -3.0044589063391136,
+      "cell_a1_A": "[7.446832669890703, -2.5796585079428977, 0.0]",
+      "cell_a2_A": "[-1.4893665339781406, 7.738975523828693, 0.0]",
+      "cell_a3_A": "[0.0, 0.0, 37.9451596]",
+      "cell_volume_A3": 2041.0245518005172,
+      "composition": "{\"Ag\": 28, \"C\": 14, \"Si\": 14, \"Ti\": 21}",
+      "execution_authorized": false,
+      "input_config_path": "DFT_INPUTS/configs/M77_SHARED_STRAIN_GAP_2.64A.json",
+      "input_config_sha256": "63b2f0bfc91169fa78087b897c5edd3ded04d552be0a340f7d8f878a4116f637",
+      "interface_gap_A": 2.64,
+      "natoms": 77,
+      "structure_id": "M77_SHARED_STRAIN_GAP_2.64A",
+      "structure_path": "DFT_INPUTS/structures/Ag_Ti3SiC2_M77_gap_2p64A.extxyz",
+      "structure_sha256": "52815dc6d9f4868cbdd988f11fd86cb2fac47b7dc7faf56b2449887f88a93a34",
+      "task_id": "C-D6-GAP-2.64A",
+      "twist_deg": 0.0
+    }
+  ]
+}
