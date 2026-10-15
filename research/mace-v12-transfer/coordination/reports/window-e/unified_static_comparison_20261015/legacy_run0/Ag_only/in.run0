@@ -1,0 +1,16 @@
+clear
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+read_data structure.data
+include potential.interface_calibration_v0.inc
+group drop type 1 2 3
+delete_atoms group drop compress no
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe etotal press pxx pyy pzz pxy pxz pyz
+thermo_modify format float %.16g
+run 0
+write_dump all custom lammps_forces_precise.dump id type x y z fx fy fz modify sort id format float %.16e

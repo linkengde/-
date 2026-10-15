@@ -1,0 +1,83 @@
+{
+  "task": "frozen static comparison; no training/DFT/MD/TTM",
+  "date_utc": "2026-10-15",
+  "branch": "cloud-e-b1-dft",
+  "archive_sources": [
+    {
+      "commit": "3c8ffa28cf6f5aaa72981d8b9f1a29389f9d8d50",
+      "path": "research/mace-v12-transfer/coordination/reports/window-c/minimal77_ag_tisc_dft_input_preparation_20261014/MACE_SMALL_INTERFACE_COMPARISON_DATA_20261015.zip",
+      "sha256": "f37d5c84b919ac583c9811b557c8eacdb06254d2d4095b6634c0f9ab927ba678"
+    },
+    {
+      "commit": "1353d3efa04c1bdd19f139b3535f21d02985013d",
+      "path": "research/mace-v12-transfer/coordination/reports/window-e/AG_TISC_C_DFT_HANDOFF_20261015.tar.gz",
+      "sha256": "4e35ce85e6a47295e07c6e4e688925bc343fee7cdd966d39e3619b9d00d7026f"
+    }
+  ],
+  "inference_environment": {
+    "ase": "3.29.0",
+    "torch": "2.5.1+cpu",
+    "mace": "0.3.16",
+    "dtype": "float64",
+    "device": "cpu",
+    "torch_threads": 1,
+    "units": "ASE eV, Angstrom"
+  },
+  "model_weights": {
+    "MACE-MP-0b3-medium": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model",
+      "sha256": "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012",
+      "status": "loaded"
+    },
+    "MACE-V12": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/checkpoints/MACE_periodic_v12_interface_energy_run-45.model",
+      "sha256": "011280f8d999a62c1603848226fd64c9592740d54e28d4d04f76e2035a034628",
+      "status": "loaded"
+    },
+    "MACE-V14": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v14_interface_energy/checkpoints/MACE_periodic_v14_interface_energy_run-45.model",
+      "sha256": "41bd411355b034b0dab85dbdbda932ecfc394122cb67a2b51a550bd04207645d",
+      "status": "loaded"
+    },
+    "MACE-V17": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03/models/MACE_periodic_v17_provisional_screening.model",
+      "sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+      "status": "loaded"
+    },
+    "MACE-V18": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v18_clean_core/training_clean_core_01/models/MACE_periodic_v18_clean_core.model",
+      "sha256": "757586671174db85acbf7971ccfe92de19cc58378ee2431a797efa6d6163cb62",
+      "status": "loaded"
+    }
+  },
+  "dft_reference": {
+    "optimized_structure_sha256": "eda2586c63c6c3c793ffce99417e7c04569941b0a2a916fda1b5402b7ba52d9f",
+    "input_structure_sha256": "1a3e341e1132bba9b349ab0fe6e3a3be11d1e1661671b96f6810a54f2e1f54ae",
+    "full_forces_sha256": "efd00ea38c50e6bf9eb54ac8f45d7f0ed9bd8a2a31a8f31d725af7f74b7f03c6",
+    "E_interaction_native_total_eV": -22.229525474611933,
+    "E_interaction_force_consistent_free_eV": -21.378661277249307,
+    "SCF_status": "all three converged"
+  },
+  "mapping_checks": "PASS: component DFT force source IDs mapped to full row IDs; symbols/positions/cell/PBC match; LAMMPS IDs/types and MIC coordinates match; all forces finite",
+  "dataset_overlap": "No exact geometry matches in scanned V12/V14/V17/V18 data partitions; parent-family independence UNVERIFIED",
+  "lammps_run0": {
+    "version": "LAMMPS 22 Jul 2025 - Update 4",
+    "units": "metal",
+    "mpi_ranks": 1,
+    "omp_threads": 1,
+    "commands": "run 0 only; phase-isolated cases use delete_atoms group ... compress no",
+    "source_potential_sha256": {
+      "potential.interface_calibration_v0.inc": "34deced5e08174ba369290b87f5c3bfd2b284b272991adf302b2b0d28c12815f",
+      "potentials/Ag_u3.eam": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "potentials/TSCBOP.tersoff": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7"
+    }
+  },
+  "output_files": [
+    "MODEL_AND_DATA_INVENTORY.md",
+    "DFT_135ATOM_MODEL_COMPARISON.csv",
+    "DFT_135ATOM_FORCE_DECOMPOSITION.csv",
+    "INTERFACE_77ATOM_GAP_SCAN.csv",
+    "OLD_HYBRID_COMPARABILITY.md",
+    "POTENTIAL_SELECTION_DECISION.md"
+  ]
+}
