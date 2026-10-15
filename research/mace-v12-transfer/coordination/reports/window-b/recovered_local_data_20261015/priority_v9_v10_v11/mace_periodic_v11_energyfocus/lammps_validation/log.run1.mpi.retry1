@@ -1,0 +1,97 @@
+LAMMPS (30 Sep 2026)
+KOKKOS mode with Kokkos version 5.2.1 is enabled
+  using double precision
+  using view layout = legacy
+package kokkos
+units metal
+atom_style atomic/kk
+boundary p p p
+processors 2 1 1
+read_data /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/lammps_v9_serial_smoke_retry2/AgTi_d2p55.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (28 28 28)
+  2 by 1 by 1 MPI processor grid
+  reading atoms ...
+  49 atoms
+  read_data CPU = 0.003 seconds
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+run_style verlet/kk
+pair_style mliap/kk unified /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v11_energyfocus/lammps_validation/mace_v11_lammps_mliap_forcecpu.pt 0
+pair_coeff * * C Si Ti Ag
+compute atomforce all property/atom fx fy fz
+variable force_mag atom sqrt(c_atomforce[1]^2+c_atomforce[2]^2+c_atomforce[3]^2)
+compute maxforce all reduce max v_force_mag
+thermo 1
+thermo_style custom step atoms temp pe ke etotal c_maxforce
+thermo_modify norm no lost error
+timestep 0.0001
+velocity all set 0.0 0.0 0.0
+fix integrate all nve/kk
+dump traj all custom 1 /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v11_energyfocus/lammps_validation/traj.run1.mpi.retry1.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id
+run 1
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- KOKKOS package: https://doi.org/10.1145/3731599.3767498
+
+@inproceedings{Johansson25,
+ author = {A. Johansson and E. Weinberg and C. Trott and M. McCarthy and S. Moore},
+ title = {{LAMMPS-KOKKOS}: {P}erformance Portable Molecular Dynamics Across Exascale Architectures},
+ year = 2025,
+ booktitle = {Proceedings of the SC '25 Workshops of the International Conference for High Performance Computing,
+  Networking, Storage and Analysis},
+ pages = {1217--1232},
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8
+  ghost atom cutoff = 8
+  binsize = 4, bins = 7 7 7
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair mliap/kk, perpetual
+      attributes: full, newton on, kokkos_device
+      pair build: full/bin/kk/device
+      stencil: full/bin/3d
+      bin: kk/device
+WARNING: PackForwardComm has only been tested on Kokkos devices (src/lammps-mace-ghostmap-source/src/KOKKOS/pair_mliap_kokkos.cpp:446)
+Per MPI rank memory allocation (min/avg/max) = 5.122 | 5.136 | 5.149 Mbytes
+   Step        Atoms         Temp          PotEng         KinEng         TotEng       c_maxforce  
+         0          49   0             -177.69739      0             -177.69739      4.3600618    
+         1          49   0.070635638   -177.69783      0.0004382579  -177.69739      4.3600666    
+Loop time of 0.707039 on 2 procs for 1 steps with 49 atoms
+
+Performance: 0.012 ns/day, 1963.997 hours/ns, 1.414 timesteps/s, 69.303 atom-step/s
+83.2% CPU use with 2 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.69085    | 0.69864    | 0.70642    |   0.9 | 98.81
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 4.0726e-05 | 0.0078305  | 0.01562    |   8.8 |  1.11
+Output  | 0.0003205  | 0.00033644 | 0.00035237 |   0.0 |  0.05
+Modify  | 8.3285e-05 | 0.00011074 | 0.0001382  |   0.0 |  0.02
+Other   |            | 0.0001254  |            |       |  0.02
+
+Nlocal:           24.5 ave          27 max          22 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:           24.5 ave          27 max          22 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 2 0 0 0 0 0 0 0 0 0
+FullNghs:          905 ave         997 max         813 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 1810
+Ave neighs/atom = 36.938776
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:06

@@ -1,0 +1,438 @@
+{
+  "state": "DFT_CONVERGED_V8_V9_SCORED",
+  "started_utc": "2026-10-03 03:57:44 UTC",
+  "last_epoch": 79,
+  "last_log_line": "2026-10-03 04:12:43.842 INFO: Done",
+  "v9_model": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v9_forceonly.model",
+  "dft_pid": 216404,
+  "progress": {
+    "contact": "AgTi_d2p7",
+    "iteration": 35,
+    "elapsed_s": 9622.858231782913
+  },
+  "dft_returncode": 1,
+  "reason": "GPAW calculation converged; original runner failed after writing force labels because GPAW 26.7.0 ASECalculator has no calc.scf attribute. Summary recovered from explicit convergence log and verified force-labelled extxyz.",
+  "runner_postprocessing_recovered": true,
+  "summary_recovery_provenance": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p7/retry1/summary_recovery_provenance.json",
+  "dft_summary": {
+    "source": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/composition_candidate_screen/interface_contact_scan/AgTi_AgSi_environment_distance_scans_PBE_v1/AgTi/d2.7/input.extxyz",
+    "source_sha256": "6ab7219c372b8674e9c8afc33a1aa05af1c3145d9800b715bf57a8d90681f368",
+    "contact": "AgTi_d2p7",
+    "atoms": 49,
+    "formula": "C11Ag28SiTi9",
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "cell_A": [
+      28.0,
+      28.0,
+      28.0
+    ],
+    "central_pair_ids": {
+      "Ag": 687247,
+      "Ti": 479027
+    },
+    "central_pair_distance_A": 2.6999999924868017,
+    "energy_eV_cell": -177.01482096216398,
+    "scf_converged": true,
+    "scf_iterations": 37,
+    "central_pair_separating_force_eV_A": -0.8024178084849083,
+    "fmax_eV_A": 4.337105310035066,
+    "rms_force_eV_A": 1.8842543139205428,
+    "max_force_source_id": 480801,
+    "method": {
+      "xc": "PBE",
+      "basis": "plane wave",
+      "cutoff_eV": 500,
+      "kpts": [
+        1,
+        1,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "scf_thresholds": "energy/density/eigenstates 1e-5",
+      "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+      "maxiter": 160,
+      "GPAW_version": "26.7.0"
+    },
+    "elapsed_s": 10143.805,
+    "note": "Periodic PW-PBE single point on the existing Ag-Ti 2.7 \u00c5 scan geometry. This checks method transfer at an LCAO scan point, not a novel coordination motif.",
+    "recovery": {
+      "runner_returncode": 1,
+      "runner_exception": "AttributeError: ASECalculator object has no attribute scf",
+      "basis": "GPAW gpaw.log explicit convergence marker and force-labelled extxyz written before the exception",
+      "verification": "49-atom output extxyz exactly matches pre-run input symbols, IDs, central-pair flags, positions, and cell; PBC set true by runner; energy/forces finite."
+    }
+  },
+  "comparisons": {
+    "v8": {
+      "contact": "AgTi_d2p7",
+      "scf_converged": true,
+      "scf_iterations": 37,
+      "reference_method": "periodic PBE plane-wave, 500 eV, Gamma, 0.1 eV Fermi smearing",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "central_pair_ids": {
+        "Ag": 687247,
+        "Ti": 479027
+      },
+      "central_pair_distance_A": 2.6999999924868017,
+      "full_force_component_RMSE_eV_A": 0.054485322180181685,
+      "full_force_vector_max_abs_error_eV_A": 0.2610918038633246,
+      "reference_pair_separating_force_eV_A": -0.8024178084849083,
+      "model_pair_separating_force_eV_A": -0.8737010004308976,
+      "pair_force_error_eV_A": -0.07128319194598931,
+      "absolute_energy_error_meV_atom": 86.11216767141454,
+      "max_force_error_hotspots": [
+        {
+          "id": 479027,
+          "element": "Ti",
+          "position_A": [
+            12.67732904,
+            14.25236827,
+            13.90329541
+          ],
+          "reference_force_eV_A": [
+            0.64623397,
+            2.22158891,
+            1.91058376
+          ],
+          "model_force_eV_A": [
+            0.6906843622074971,
+            2.4212540353955694,
+            2.0728395160703963
+          ],
+          "vector_error_eV_A": 0.2610918038633246
+        },
+        {
+          "id": 480810,
+          "element": "Ti",
+          "position_A": [
+            10.62235057,
+            14.70705537,
+            12.26522857
+          ],
+          "reference_force_eV_A": [
+            -0.98553408,
+            -0.47495004,
+            -0.76057576
+          ],
+          "model_force_eV_A": [
+            -1.1885087039391773,
+            -0.44486462166514756,
+            -0.7842430926854229
+          ],
+          "vector_error_eV_A": 0.20655259135647758
+        },
+        {
+          "id": 480813,
+          "element": "C",
+          "position_A": [
+            11.98467917,
+            18.76062403,
+            12.89743879
+          ],
+          "reference_force_eV_A": [
+            0.51850053,
+            -0.84939621,
+            0.96305094
+          ],
+          "model_force_eV_A": [
+            0.4845973855918322,
+            -0.6705009939023072,
+            0.9852642675034704
+          ],
+          "vector_error_eV_A": 0.18342942365437914
+        },
+        {
+          "id": 685467,
+          "element": "Ag",
+          "position_A": [
+            17.19776216,
+            15.83167375,
+            14.08549729
+          ],
+          "reference_force_eV_A": [
+            0.06585246,
+            0.444223,
+            -0.20122196
+          ],
+          "model_force_eV_A": [
+            0.14189305123030135,
+            0.560182415613488,
+            -0.27110139988049176
+          ],
+          "vector_error_eV_A": 0.15528004927255368
+        },
+        {
+          "id": 480811,
+          "element": "Ti",
+          "position_A": [
+            11.15436553,
+            17.41948724,
+            11.88768609
+          ],
+          "reference_force_eV_A": [
+            0.07747047,
+            0.52573182,
+            -1.35471358
+          ],
+          "model_force_eV_A": [
+            0.022511043282146162,
+            0.5008282899006812,
+            -1.494234195905689
+          ],
+          "vector_error_eV_A": 0.1520089690092845
+        },
+        {
+          "id": 479021,
+          "element": "Ti",
+          "position_A": [
+            12.45686073,
+            12.84745961,
+            11.2420666
+          ],
+          "reference_force_eV_A": [
+            1.14373357,
+            -1.20912813,
+            -1.18144112
+          ],
+          "model_force_eV_A": [
+            1.2669941417790582,
+            -1.2847948027291087,
+            -1.1979472508972147
+          ],
+          "vector_error_eV_A": 0.1455715160132311
+        },
+        {
+          "id": 480805,
+          "element": "C",
+          "position_A": [
+            11.36142339,
+            12.99260824,
+            13.30091022
+          ],
+          "reference_force_eV_A": [
+            -1.99509816,
+            -0.73565186,
+            -0.5213523
+          ],
+          "model_force_eV_A": [
+            -2.1337476973210494,
+            -0.7486609071841581,
+            -0.5419435070608837
+          ],
+          "vector_error_eV_A": 0.1407726085437253
+        },
+        {
+          "id": 682693,
+          "element": "Ag",
+          "position_A": [
+            13.14100541,
+            11.72208471,
+            14.08549729
+          ],
+          "reference_force_eV_A": [
+            -0.31021185,
+            -1.2217365,
+            0.08553657
+          ],
+          "model_force_eV_A": [
+            -0.2478908355243494,
+            -1.3275861012479897,
+            0.13054724515240393
+          ],
+          "vector_error_eV_A": 0.13082051753187612
+        }
+      ],
+      "model": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v8_forceonly.model",
+      "note": "Method-transfer check at a PW-labeled geometry also present in the LCAO scan; not an unseen coordination motif or thermal structure."
+    },
+    "v9": {
+      "contact": "AgTi_d2p7",
+      "scf_converged": true,
+      "scf_iterations": 37,
+      "reference_method": "periodic PBE plane-wave, 500 eV, Gamma, 0.1 eV Fermi smearing",
+      "atoms": 49,
+      "formula": "C11Ag28SiTi9",
+      "central_pair_ids": {
+        "Ag": 687247,
+        "Ti": 479027
+      },
+      "central_pair_distance_A": 2.6999999924868017,
+      "full_force_component_RMSE_eV_A": 0.04608342457397964,
+      "full_force_vector_max_abs_error_eV_A": 0.22516606494357705,
+      "reference_pair_separating_force_eV_A": -0.8024178084849083,
+      "model_pair_separating_force_eV_A": -0.8702963257204596,
+      "pair_force_error_eV_A": -0.06787851723555127,
+      "absolute_energy_error_meV_atom": 75.4741538104692,
+      "max_force_error_hotspots": [
+        {
+          "id": 479027,
+          "element": "Ti",
+          "position_A": [
+            12.67732904,
+            14.25236827,
+            13.90329541
+          ],
+          "reference_force_eV_A": [
+            0.64623397,
+            2.22158891,
+            1.91058376
+          ],
+          "model_force_eV_A": [
+            0.6717356273696435,
+            2.4194028823057563,
+            2.0150780403898563
+          ],
+          "vector_error_eV_A": 0.22516606494357705
+        },
+        {
+          "id": 685467,
+          "element": "Ag",
+          "position_A": [
+            17.19776216,
+            15.83167375,
+            14.08549729
+          ],
+          "reference_force_eV_A": [
+            0.06585246,
+            0.444223,
+            -0.20122196
+          ],
+          "model_force_eV_A": [
+            0.1510503063197727,
+            0.5521030979364338,
+            -0.27798281404450376
+          ],
+          "vector_error_eV_A": 0.15744528339059177
+        },
+        {
+          "id": 480805,
+          "element": "C",
+          "position_A": [
+            11.36142339,
+            12.99260824,
+            13.30091022
+          ],
+          "reference_force_eV_A": [
+            -1.99509816,
+            -0.73565186,
+            -0.5213523
+          ],
+          "model_force_eV_A": [
+            -2.1204663278218954,
+            -0.7441868135599132,
+            -0.5623956334565839
+          ],
+          "vector_error_eV_A": 0.13219144509580472
+        },
+        {
+          "id": 691757,
+          "element": "Ag",
+          "position_A": [
+            15.16938378,
+            17.88646828,
+            18.19508634
+          ],
+          "reference_force_eV_A": [
+            0.09732299,
+            -0.34410575,
+            -0.31738647
+          ],
+          "model_force_eV_A": [
+            0.024113873332610253,
+            -0.3392136958964966,
+            -0.40858072258432176
+          ],
+          "vector_error_eV_A": 0.1170465662075747
+        },
+        {
+          "id": 480813,
+          "element": "C",
+          "position_A": [
+            11.98467917,
+            18.76062403,
+            12.89743879
+          ],
+          "reference_force_eV_A": [
+            0.51850053,
+            -0.84939621,
+            0.96305094
+          ],
+          "model_force_eV_A": [
+            0.48905295690596845,
+            -0.7420956964203679,
+            0.9964122652374408
+          ],
+          "vector_error_eV_A": 0.11616168816429728
+        },
+        {
+          "id": 480810,
+          "element": "Ti",
+          "position_A": [
+            10.62235057,
+            14.70705537,
+            12.26522857
+          ],
+          "reference_force_eV_A": [
+            -0.98553408,
+            -0.47495004,
+            -0.76057576
+          ],
+          "model_force_eV_A": [
+            -1.1002992313700946,
+            -0.465418557383207,
+            -0.7698726816405543
+          ],
+          "vector_error_eV_A": 0.11553493792730213
+        },
+        {
+          "id": 687247,
+          "element": "Ag",
+          "position_A": [
+            15.32267096,
+            13.74763173,
+            14.09670459
+          ],
+          "reference_force_eV_A": [
+            -0.40068777,
+            0.26218671,
+            -0.08541249
+          ],
+          "model_force_eV_A": [
+            -0.4824997987624181,
+            0.20695636574064546,
+            -0.12109416362058795
+          ],
+          "vector_error_eV_A": 0.10496085370077601
+        },
+        {
+          "id": 687243,
+          "element": "Ag",
+          "position_A": [
+            17.19776216,
+            9.66729019,
+            16.14029182
+          ],
+          "reference_force_eV_A": [
+            -0.30467474,
+            0.37852275,
+            -0.16031737
+          ],
+          "model_force_eV_A": [
+            -0.2695346967422759,
+            0.4172994638223396,
+            -0.06962136426380311
+          ],
+          "vector_error_eV_A": 0.10471017921632357
+        }
+      ],
+      "model": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v9_forceonly.model",
+      "note": "Method-transfer check at a PW-labeled geometry also present in the LCAO scan; not an unseen coordination motif or thermal structure."
+    }
+  },
+  "completed_utc": "2026-10-03 07:57:05 UTC"
+}

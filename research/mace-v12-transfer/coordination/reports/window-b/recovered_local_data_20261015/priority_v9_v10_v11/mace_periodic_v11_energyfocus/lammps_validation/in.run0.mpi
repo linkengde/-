@@ -1,0 +1,19 @@
+units metal
+atom_style atomic/kk
+boundary p p p
+processors 2 1 1
+read_data /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v9_holdouts/AgTi_d2p55/lammps_v9_serial_smoke_retry2/AgTi_d2p55.data
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+run_style verlet/kk
+pair_style mliap/kk unified /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v11_energyfocus/lammps_validation/mace_v11_lammps_mliap.pt 0
+pair_coeff * * C Si Ti Ag
+compute atomforce all property/atom fx fy fz
+variable force_mag atom sqrt(c_atomforce[1]^2+c_atomforce[2]^2+c_atomforce[3]^2)
+compute maxforce all reduce max v_force_mag
+thermo 1
+thermo_style custom step atoms pe c_maxforce
+thermo_modify norm no lost error
+dump force all custom 1 /workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v11_energyfocus/lammps_validation/forces.run0.mpi.dump id type x y z fx fy fz
+dump_modify force sort id
+run 0

@@ -1,0 +1,56 @@
+{
+  "models": {
+    "v9": {
+      "path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v9_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v9_forceonly.model",
+      "sha256": "7d183ed99dae18bfb0f84eaf33be38458671d18508ff59e9413b7339bd97db86"
+    },
+    "v10": {
+      "path": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v10_energycal/checkpoints/MACE_periodic_v10_energycal_run-43.model",
+      "sha256": "8ed91080e4646e0e8021a6a5258c28075468d1cb2ef1c4a6f416cb3a89e04d85"
+    }
+  },
+  "holdout_count": 2,
+  "per_structure": [
+    {
+      "contact": "AgSi",
+      "source_file": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgSi/retry1/AgSi_cluster_PW_PBE.extxyz",
+      "source_sha256": "e20fe3f7572b436a5afdcb67fb8c3f7c664036a6d10963dd8cac2a49d4e4773d",
+      "formula": "C13Ag17Si8Ti13",
+      "atoms": 51,
+      "DFT_energy_eV_cell": -207.46017015684328,
+      "v9_energy_error_meV_atom": -129.6955166734099,
+      "v9_force_vector_RMSE_eV_A": 0.07970758970283023,
+      "v9_force_component_RMSE_eV_A": 0.046019198371385274,
+      "v9_force_vector_max_error_eV_A": 0.15453938085450242,
+      "central_pair_distance_A": 2.454117131713038,
+      "DFT_pair_separating_force_eV_A": 1.7079510603267585,
+      "v9_pair_separating_force_eV_A": 1.8352984992718129,
+      "v10_energy_error_meV_atom": -214.53175075143906,
+      "v10_force_vector_RMSE_eV_A": 0.08658930328903255,
+      "v10_force_component_RMSE_eV_A": 0.049992357562865096,
+      "v10_force_vector_max_error_eV_A": 0.16266378964081343,
+      "v10_pair_separating_force_eV_A": 1.827310888629618
+    },
+    {
+      "contact": "AgC",
+      "source_file": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_cluster_transfer_pw_20261002_run3_mixer_retry2/AgC_cluster_PW_PBE.extxyz",
+      "source_sha256": "7e7d098a13743ee7a85bb24cffff1e4c88b06694b83bd4faeee394b9999a1d27",
+      "formula": "C13Ag2Si10Ti23",
+      "atoms": 48,
+      "DFT_energy_eV_cell": -259.1460694818018,
+      "v9_energy_error_meV_atom": -495.5080301963394,
+      "v9_force_vector_RMSE_eV_A": 0.10418065181737847,
+      "v9_force_component_RMSE_eV_A": 0.06014872737111414,
+      "v9_force_vector_max_error_eV_A": 0.19064006422036128,
+      "central_pair_distance_A": 2.202603164364853,
+      "DFT_pair_separating_force_eV_A": -1.4154912201066192,
+      "v9_pair_separating_force_eV_A": -1.3532225834336733,
+      "v10_energy_error_meV_atom": -300.1750251562119,
+      "v10_force_vector_RMSE_eV_A": 0.11390238439072763,
+      "v10_force_component_RMSE_eV_A": 0.06576157228932682,
+      "v10_force_vector_max_error_eV_A": 0.21638984773954884,
+      "v10_pair_separating_force_eV_A": -1.393885617802597
+    }
+  ],
+  "scope_note": "These independent structures were excluded from v10 training. Ag-Si is an external periodic PBE motif; Ag-C is a method-transfer check on a previously studied geometry, not an unseen geometry. Passing these small frozen tests does not validate liquid, TTM, or production-scale behavior."
+}

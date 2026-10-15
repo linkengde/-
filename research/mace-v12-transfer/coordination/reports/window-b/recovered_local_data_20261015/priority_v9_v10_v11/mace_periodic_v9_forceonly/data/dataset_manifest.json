@@ -1,0 +1,71 @@
+{
+  "model_version": "MACE v9 force-only",
+  "purpose": "Target the Ag-Ti nearest-contact force mismatch using an independent converged periodic PW-PBE force label.",
+  "parent_dataset": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/data",
+  "added_frame": {
+    "config_type": "AgTi_2p3871A_periodic_PW_PBE_force_only",
+    "method": {
+      "xc": "PBE",
+      "basis": "plane wave",
+      "cutoff_eV": 500,
+      "kpts": [
+        1,
+        1,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "scf_thresholds": "energy/density/eigenstates 1e-5",
+      "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+      "maxiter": 160,
+      "GPAW_version": "26.7.0"
+    },
+    "central_pair_distance_A": 2.3870911918314524,
+    "atoms": 49,
+    "energy_label_included": false,
+    "reason": "local-cluster absolute-energy gauge is not calibrated"
+  },
+  "split_sizes": {
+    "train": 18,
+    "valid": 2,
+    "test": 2
+  },
+  "label_counts": {
+    "training_energy_frames": 9,
+    "training_force_frames": 18
+  },
+  "v8_agti_pw_holdout_metrics_preserved": {
+    "contact": "AgTi",
+    "scf_converged": true,
+    "scf_iterations": 36,
+    "reference_method": "periodic PBE plane-wave, 500 eV, Gamma, 0.1 eV Fermi smearing",
+    "atoms": 49,
+    "formula": "C11Ag28SiTi9",
+    "central_pair_ids": {
+      "Ag": 687247,
+      "Ti": 479027
+    },
+    "central_pair_distance_A": 2.3870911918314524,
+    "full_force_component_RMSE_eV_A": 0.06950352252576132,
+    "full_force_vector_max_abs_error_eV_A": 0.45771832187927647,
+    "reference_pair_separating_force_eV_A": 4.869600524950052,
+    "MACE_pair_separating_force_eV_A": 5.589669293578124,
+    "pair_force_error_eV_A": 0.7200687686280727,
+    "absolute_energy_error_meV_atom": 86.94709913720429,
+    "MACE_model": "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/models/Ag_Ti_Si_C_MACE_periodic_v8_forceonly.model",
+    "note": "External single-point motif holdout; forces are the main transfer metric. Not a thermally disordered environment or proof for production MD."
+  },
+  "caveats": [
+    "The Ag-Ti nearest-contact geometry becomes training data for v9 and is not an independent v9 test.",
+    "The Ag-Si PW-PBE holdout remains excluded from training.",
+    "A separate Ag-Ti PW-PBE geometry is required before v9 can pass cross-potential validation.",
+    "No thermal disorder, liquid Ag, production-size cell, or TTM data are included."
+  ],
+  "sha256": {
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/data/train.extxyz": "ad4b88326eafc186ceb74a1470b270265308a21f372418ac168ebdcb797a5e11",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/data/valid.extxyz": "a5360480a207b2b61f1a71935778ce1c89272faf417f5dc70d326d5570b7a106",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/mace_periodic_v8_forceonly/data/test.extxyz": "df2aac452ae14f14b564a28f44e705d3cf65d73a965591d66b9bc0506f361770",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/AgTi_cluster_PW_PBE.extxyz": "0b49ea7bf39fdcf7a0cf0bca13b69f23606eebf50f93519010280fb6e02a7f1e",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/summary.json": "29b3538c132dd3c29066377516437653656c4af6d218b223934248f773862ab8",
+    "/workspace/.local/lammps-ttm/run_1ps_diagnostic_20261001/potential_screening/periodic_interface_v4/pbe_external_v8_motif_holdouts/AgTi/retry1/mace_v8_comparison.json": "a9a946fa6e93ac0038d155680730770016273b6e1b9f6fb07ebad9b70caa022c"
+  }
+}
