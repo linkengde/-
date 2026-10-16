@@ -43,3 +43,14 @@
 - 下一步仅交C审核候选输入与母体、重复/父族/数据角色、k网格选择及风险；请平台/资源方证实存储、checkpoint持久性、外部墙钟配额后，再单独提出唯一单点授权。**未授权DFT、MD、AIMD、TTM、松弛或训练**。
 
 ---
+
+## 2026-10-16 — C窗口48原子Ti₃SiC₂正式审核：NEEDS_REVISION
+
+- 正式审核：[C_H_TSC48_SCIENTIFIC_REVIEW.md](https://github.com/linkengde/-/blob/25bb74065797d516f1e8c8bbf9b68a4b558aefef/research/mace-v12-transfer/coordination/reports/window-c/h_tsc48_static_perturb_review_20261016/C_H_TSC48_SCIENTIFIC_REVIEW.md)，分支 `cloud-c-h-tsc48-static-review-20261016`，提交 `25bb74065797d516f1e8c8bbf9b68a4b558aefef`。本聊天通过GitHub读取报告和提交清单，确认远端分支HEAD；这是审核不是授权。
+- 原始状态：`C_SCIENTIFIC_REVIEW=NEEDS_REVISION; DATA_ROLE=HOLD; KGRID_CANDIDATE=REVISE; RESOURCE_READY=NO; DFT_EXECUTION_READY=NO`，`execution_authorized=false`。
+- 结构检查通过：48原子Ti24Si8C16，候选SHA-256 `da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b`，母体/晶胞/PBC/最短距离与已有五个样本对照通过；不是精确重复，但同一 `TSC_BULK_PARENT_OR_CONTROL_FAMILY`，不能作为独立DEV/TEST；本次仅留`DATA_ROLE=HOLD`。
+- **重要纠错（取代此前H预检的Γ居中解释）**：48原子母体旧日志的整数 `MonkhorstPack(size=[10,10,4])`、`shift=[0,0,0]` 是偶数标准MP网格，不含Γ点，**不等价于显式`gamma=True`**。母体`8×8×4→10×10×4`力RMS `0.004617983 eV/Å`和能量差可支持候选**网格密度**，不支持将原对照称为显式Γ居中结果，更不证明扰动候选自身k点收敛。H需做最小配置/报告修订：10×10×4采用与母体相同MP约定、无额外Gamma/offset，记录实际k点列表或哈希；锁定PPCG niter=2及其余原始方法参数。
+- 资源：H先前快照`/workspace`空余`28.83 GB`低于30GB**建议**值，但30GB并非固定最低要求，仅差1.17GB不是唯一否决依据；尚缺外部墙钟保障（建议按≥5h审议）、checkpoint体积/空间预算、持久存储及超时恢复证据。不能清理历史数据、不能把tmpfs当持久checkpoint。
+- 下一步：H只读修订预检/执行包并提交证据供C复审，同时平台/资源方提供具体存储/墙钟证据；C复审通过后仍需用户对唯一单点另行明确授权。**未启动或授权DFT、MD、AIMD、TTM、松弛或训练**。
+
+---
