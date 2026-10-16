@@ -1,6 +1,6 @@
 # Ti3SiC2 48-atom GPAW segmented SCF runner
 
-Status: **V3 PATCH SUBMITTED / V3 OFFLINE TESTS PENDING H / REAL GPAW RESTART UNVALIDATED / NO DFT STARTED**
+Status: **V4 PATCH SUBMITTED / V4 OFFLINE TESTS PENDING H / REAL GPAW RESTART UNVALIDATED / NO DFT STARTED**
 
 This package handles exactly one fixed-geometry Ti3SiC2 single point.
 No historical inputs, results or mother scripts were modified.
@@ -90,9 +90,44 @@ solver, mixer, convergence thresholds, atom coordinates, or MPI rank count.
 V3 remains unvalidated for actual four-rank GPW write/read, interruption,
 persistent storage, scratch peak, and wallclock. No DFT has been started.
 
+## V4 fixes after H V3 static acceptance failed
+
+H V3 reported CHECKPOINT_TIMING_ACCOUNTING=FAIL and
+SCF_CONTEXT_MAPPING=FAIL, despite seven offline tests passing. V4 fixes the
+specific implementation/test mismatches, without modifying physics:
+
+1. **GPW write-only timing**: record rank-0 write_finished immediately
+   when calc.write(mode='all') returns, BEFORE the subsequent MPI barrier.
+   Only this interval is checkpoint_write_elapsed_seconds. Barrier,
+   SHA-256, fsync and manifest publication are not included.
+
+2. **Cumulative elapsed / safe publication**: fsync + SHA the staged GPW,
+   atomically publish it, write an UNFINALIZED slot manifest, append the
+   CHECKPOINT_PUBLISHING ledger record, and write the interim status.
+   ONLY AFTER all those operations, sample cumulative elapsed and atomically
+   rewrite the manifest as checkpoint_finalized=true. verified_slots()
+   rejects absent, incomplete, unfinalized or mismatched metadata.
+   The final manifest fsync and later MPI broadcast take additional time;
+   save_checkpoint() returns a later post-publication elapsed snapshot.
+   A manifest cannot encode its own future fsync duration. A graceful
+   segment stop records a later end-of-segment cumulative timestamp.
+
+3. **SCF context counter**: record actual ctx.niter as
+   scf_iteration_from_context, separate from local_iteration.
+   The unit test intentionally makes these two numbers different.
+
+4. **Seven regression tests**: a deliberately slow mock MPI barrier proves
+   it is excluded from GPW-only timing; cumulative time includes GPW
+   publication and metadata operations; unfinalized GPWs are excluded
+   from restart even if SHA and size match. These tests use mock I/O.
+
+H must repeat py_compile, all seven offline tests, exact SHA comparison,
+and GPAW 26.7.0 compatibility review. No GPAW scientific computation
+has run. RESOURCE_READY=NO, DFT_EXECUTION_READY=NO.
+
 ## H offline acceptance (NO GPAW needed)
 
-From a fresh checkout of branch chatgpt-tsc48-segmented-runner-20261016:
+From a fresh checkout of branch chatgpt-tsc48-segmented-runner-v4-20261016:
 
 ~~~bash
 ROOT=research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016
@@ -171,9 +206,9 @@ convergence has not been measured. No subsequent k mesh is authorized.
 
 ## Honest current status
 
-RUNNER_V3_PATCH_SUBMITTED=YES
-PYTHON_COMPILE_PASS=AWAITING_H_V3
-OFFLINE_TESTS_7_PASS=AWAITING_H_V3
+RUNNER_V4_PATCH_SUBMITTED=YES
+PYTHON_COMPILE_PASS=AWAITING_H_V4
+OFFLINE_TESTS_7_PASS=AWAITING_H_V4
 CHECKPOINT_WRITE_READY=UNVERIFIED
 REAL_GPAW_RESTART_VALIDATED=NO
 PERSISTENT_STORAGE_READY=NO
