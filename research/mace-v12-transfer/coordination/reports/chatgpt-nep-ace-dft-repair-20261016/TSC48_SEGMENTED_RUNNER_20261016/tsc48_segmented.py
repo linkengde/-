@@ -105,6 +105,11 @@ def verified_slots(directory, lock):
                 continue
             if meta['slot'] != slot or meta['mode'] != 'all':
                 continue
+            if meta.get('checkpoint_finalized') is not True:
+                continue
+            if not isinstance(meta.get('cumulative_elapsed_seconds'),
+                              (float, int)):
+                continue
             if gpw.stat().st_size != meta['bytes'] or sha256(gpw) != meta['sha256']:
                 continue
             valid.append((meta, gpw))
@@ -145,17 +150,23 @@ def root_action(world, directory, callback):
 def save_checkpoint(calc, world, directory, lock, sequence, iteration,
                     source_sha, segment_number, segment_started,
                     prior_elapsed, cumulative_steps, log_name):
-    """All ranks write the full-wavefunction GPW, one slot at a time.
+    """Collective GPW write with two-phase, fail-closed manifest publication.
 
-    On a Python-visible writer error attempt communicator abort, since one-rank
-    unwinding can deadlock the others. This cannot guarantee survival of a
-    hung MPI collective; real failure injection is a separate H gate.
+    Rank 0 times only calc.write(); all four ranks enter the same collectives.
+    The final checkpoint manifest is stamped only AFTER hashing, preliminary
+    manifest/ledger/status publication.  The final manifest fsync itself
+    necessarily takes a further small time; the post-publication duration
+    returned to the caller includes that final fsync.
     """
+    import numpy as np
     slot = ('A', 'B')[sequence % 2]
     stage = directory / ('slot_'+slot+'.writing.gpw')
     final = directory / ('slot_'+slot+'.gpw')
+    manifest = directory / ('slot_'+slot+'.json')
     collective_stage_clear(world, stage)
     world.barrier()
+
+    # No extra world.barrier() is included in the write-only duration.
     write_started = time.monotonic()
     try:
         calc.write(str(stage), mode='all')
@@ -163,69 +174,72 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
         if hasattr(world, 'abort'):
             world.abort(9)
         raise
+    write_finished = time.monotonic()
     world.barrier()
 
-    # Rank 0 owns the measured GPW write duration; the value is broadcast so
-    # every rank records identical checkpoint accounting.
-    import numpy as np
-    write_elapsed = np.zeros(1, dtype=float)
+    write_seconds = np.zeros(1, dtype=float)
     if world.rank == 0:
-        write_elapsed[0] = time.monotonic() - write_started
-    world.broadcast(write_elapsed, 0)
+        write_seconds[0] = write_finished - write_started
+    world.broadcast(write_seconds, 0)
 
     def publish():
-        need(stage.is_file() and stage.stat().st_size > 0, 'CHECKPOINT_WRITE_MISSING')
-        with stage.open('rb') as f:
-            os.fsync(f.fileno())
+        need(stage.is_file() and stage.stat().st_size > 0,
+             'CHECKPOINT_WRITE_MISSING')
+        with stage.open('rb') as handle:
+            os.fsync(handle.fileno())
+        gpw_sha = sha256(stage)
+        gpw_bytes = stage.stat().st_size
         os.replace(stage, final)
         sync_directory(directory)
 
-        # The cumulative checkpoint time is sampled AFTER the expensive GPW
-        # write and publication, so the checkpoint write is not lost when the
-        # next segment reads this manifest.  Rank 0 is the sole writer.
-        checkpoint_elapsed = time.monotonic() - segment_started
-        cumulative_after_checkpoint = prior_elapsed + checkpoint_elapsed
+        # A partial checkpoint must never qualify for restart, even after
+        # GPW file publication; the other valid A/B slot remains untouched.
         info = {**lock, 'slot':slot, 'sequence':sequence, 'mode':'all',
-                'bytes':final.stat().st_size, 'sha256':sha256(final),
+                'bytes':gpw_bytes, 'sha256':gpw_sha,
+                'checkpoint_finalized':False,
                 'iteration_in_segment':iteration,
                 'source_checkpoint_sha256':source_sha,
                 'segment_number':segment_number,
-                'cumulative_elapsed_seconds':round(cumulative_after_checkpoint, 3),
+                'cumulative_elapsed_seconds':None,
                 'checkpoint_write_elapsed_seconds':round(
-                    float(write_elapsed[0]), 3),
+                    float(write_seconds[0]), 6),
                 'cumulative_logged_scf_steps':cumulative_steps,
                 'scf_log_file':log_name,
-                'saved_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
-        # The newly published GPW is already in final; metadata follows.
-        # The other slot remains intact as the fallback checkpoint.
-        write_atomic(directory / ('slot_'+slot+'.json'), info)
+                'saved_utc':datetime.datetime.now(
+                    datetime.timezone.utc).isoformat()}
+        write_atomic(manifest, info)
         append_ledger(directory, {
-            'event':'CHECKPOINT_COMMITTED', 'saved_utc':info['saved_utc'],
+            'event':'CHECKPOINT_PUBLISHING',
             'segment_number':segment_number, 'sequence':sequence,
             'source_checkpoint_sha256':source_sha,
-            'checkpoint_sha256':info['sha256'],
-            'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
+            'checkpoint_sha256':gpw_sha,
             'checkpoint_write_elapsed_seconds':info[
                 'checkpoint_write_elapsed_seconds'],
             'cumulative_logged_scf_steps':cumulative_steps,
-            'local_iteration':iteration, 'scf_log_file':log_name
-        })
+            'local_iteration':iteration, 'scf_log_file':log_name})
         write_atomic(directory/'segment_status.json',
-                     {'status':'CHECKPOINT_WRITTEN', 'sequence':sequence,
-                      'checkpoint_sha256':info['sha256'],
+                     {'status':'CHECKPOINT_PUBLISHING',
+                      'sequence':sequence,
+                      'checkpoint_sha256':gpw_sha,
                       'source_checkpoint_sha256':source_sha,
-                      'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
-                      'checkpoint_write_elapsed_seconds':info[
-                          'checkpoint_write_elapsed_seconds'],
-                      'cumulative_logged_scf_steps':cumulative_steps})
+                      'checkpoint_finalized':False})
+
+        # First persist SHA, provisional manifest, ledger and status. Only now
+        # sample cumulative time and atomically finalize the manifest.
+        info['cumulative_elapsed_seconds'] = round(
+            prior_elapsed + (time.monotonic()-segment_started), 6)
+        info['checkpoint_finalized'] = True
+        info['finalized_utc'] = datetime.datetime.now(
+            datetime.timezone.utc).isoformat()
+        write_atomic(manifest, info)
+
     root_action(world, directory, publish)
 
-    # Root's post-publication clock is authoritative; broadcast it so the
-    # pause handler and every rank use the same cumulative accounting.
-    import numpy as np
+    # This is the segment time after final-manifest publication (incl. fsync),
+    # and is broadcast for consistent in-memory bookkeeping on all ranks.
     elapsed = np.zeros(1, dtype=float)
     if world.rank == 0:
-        elapsed[0] = prior_elapsed + (time.monotonic() - segment_started)
+        elapsed[0] = prior_elapsed + (time.monotonic()-segment_started)
     world.broadcast(elapsed, 0)
     return float(elapsed[0])
 
@@ -268,8 +282,13 @@ def scf_context_sample(ctx, local_iter, elapsed):
     """Record only fields exposed by GPAW 26.7 SCFContext."""
     import math
     from ase.units import Ha
+    # ctx.niter is GPAW's actual SCF iteration for this run; it must not
+    # be silently replaced by the runner's local hook-call counter.
+    scf_iteration = getattr(ctx, 'niter', None)
     record = {'local_iteration': local_iter,
               'elapsed_seconds': round(elapsed, 3)}
+    if isinstance(scf_iteration, int) and scf_iteration >= 0:
+        record['scf_iteration_from_context'] = scf_iteration
     energy = getattr(getattr(ctx, 'ham', None),
                      'e_total_extrapolated', None)
     dens = getattr(getattr(ctx, 'dens', None), 'error', None)
