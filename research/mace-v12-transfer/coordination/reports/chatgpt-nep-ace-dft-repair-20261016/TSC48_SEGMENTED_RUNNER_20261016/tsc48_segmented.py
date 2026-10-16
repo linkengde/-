@@ -143,8 +143,8 @@ def root_action(world, directory, callback):
     need(not error.exists(), 'ROOT_OPERATION_FAILED: '+(error.read_text() if error.exists() else ''))
 
 def save_checkpoint(calc, world, directory, lock, sequence, iteration,
-                    source_sha, segment_number, cumulative_elapsed,
-                    cumulative_steps, log_name):
+                    source_sha, segment_number, segment_started,
+                    prior_elapsed, cumulative_steps, log_name):
     """All ranks write the full-wavefunction GPW, one slot at a time.
 
     On a Python-visible writer error attempt communicator abort, since one-rank
@@ -168,18 +168,27 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
         need(stage.is_file() and stage.stat().st_size > 0, 'CHECKPOINT_WRITE_MISSING')
         with stage.open('rb') as f:
             os.fsync(f.fileno())
+        os.replace(stage, final)
+        sync_directory(directory)
+
+        # The cumulative checkpoint time is sampled AFTER the expensive GPW
+        # write and publication, so the checkpoint write is not lost when the
+        # next segment reads this manifest.  Rank 0 is the sole writer.
+        checkpoint_elapsed = time.monotonic() - segment_started
+        cumulative_after_checkpoint = prior_elapsed + checkpoint_elapsed
         info = {**lock, 'slot':slot, 'sequence':sequence, 'mode':'all',
-                'bytes':stage.stat().st_size, 'sha256':sha256(stage),
+                'bytes':final.stat().st_size, 'sha256':sha256(final),
                 'iteration_in_segment':iteration,
                 'source_checkpoint_sha256':source_sha,
                 'segment_number':segment_number,
-                'cumulative_elapsed_seconds':round(cumulative_elapsed, 3),
+                'cumulative_elapsed_seconds':round(cumulative_after_checkpoint, 3),
+                'checkpoint_write_elapsed_seconds':round(
+                    checkpoint_elapsed, 3),
                 'cumulative_logged_scf_steps':cumulative_steps,
                 'scf_log_file':log_name,
                 'saved_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
-        # Older slot rotates out; other good slot remains intact.
-        os.replace(stage, final)
-        sync_directory(directory)
+        # The newly published GPW is already in final; metadata follows.
+        # The other slot remains intact as the fallback checkpoint.
         write_atomic(directory / ('slot_'+slot+'.json'), info)
         append_ledger(directory, {
             'event':'CHECKPOINT_COMMITTED', 'saved_utc':info['saved_utc'],
@@ -187,6 +196,8 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
             'source_checkpoint_sha256':source_sha,
             'checkpoint_sha256':info['sha256'],
             'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
+            'checkpoint_write_elapsed_seconds':info[
+                'checkpoint_write_elapsed_seconds'],
             'cumulative_logged_scf_steps':cumulative_steps,
             'local_iteration':iteration, 'scf_log_file':log_name
         })
@@ -195,8 +206,19 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
                       'checkpoint_sha256':info['sha256'],
                       'source_checkpoint_sha256':source_sha,
                       'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
+                      'checkpoint_write_elapsed_seconds':info[
+                          'checkpoint_write_elapsed_seconds'],
                       'cumulative_logged_scf_steps':cumulative_steps})
     root_action(world, directory, publish)
+
+    # Root's post-publication clock is authoritative; broadcast it so the
+    # pause handler and every rank use the same cumulative accounting.
+    import numpy as np
+    elapsed = np.zeros(1, dtype=float)
+    if world.rank == 0:
+        elapsed[0] = prior_elapsed + (time.monotonic() - segment_started)
+    world.broadcast(elapsed, 0)
+    return float(elapsed[0])
 
 def append_ledger(directory, record):
     """Append one durable JSONL event; only rank zero calls this."""
@@ -234,14 +256,31 @@ def collective_stage_clear(world, stage):
 
 
 def scf_context_sample(ctx, local_iter, elapsed):
-    """Lightweight trace: only record numeric SCF context fields actually present."""
+    """Record only fields exposed by GPAW 26.7 SCFContext."""
     import math
-    record = {'local_iteration': local_iter, 'elapsed_seconds': round(elapsed, 3)}
-    for field in ('niter', 'energy', 'e_total', 'e_error', 'density_error',
-                  'eigenstates_error'):
-        v = getattr(ctx, field, None)
-        if isinstance(v, (int, float)) and math.isfinite(v):
-            record[field] = float(v)
+    from ase.units import Ha
+    record = {'local_iteration': local_iter,
+              'elapsed_seconds': round(elapsed, 3)}
+    energy = getattr(getattr(ctx, 'ham', None),
+                     'e_total_extrapolated', None)
+    dens = getattr(getattr(ctx, 'dens', None), 'error', None)
+    wfs = getattr(getattr(getattr(ctx, 'wfs', None),
+                          'eigensolver', None), 'error', None)
+    eig = getattr(ctx, 'eig_error', None)
+    nvalence = getattr(getattr(ctx, 'wfs', None), 'nvalence', None)
+
+    def finite(value):
+        return isinstance(value, (int, float)) and math.isfinite(value)
+
+    if finite(energy):
+        record['total_extrapolated_energy_eV'] = float(energy * Ha)
+    if finite(dens) and finite(nvalence) and nvalence > 0:
+        record['density_error_per_valence'] = float(dens / nvalence)
+    if finite(wfs) and finite(nvalence) and nvalence > 0:
+        record['eigenstates_error_eV2_per_valence'] = float(
+            wfs * Ha**2 / nvalence)
+    if finite(eig):
+        record['eigenvalue_error_eV'] = float(eig * Ha)
     return record
 
 
@@ -380,10 +419,11 @@ def run_segment(args, lock):
                 'scf_log_file':log_name, **sample}))
         if save_now:
             ckpt_seq[0] += 1
-            save_checkpoint(calc, world, directory, lock, ckpt_seq[0],
-                            int(ctx.niter), source_sha, segment_number,
-                            prior_seconds+elapsed, prior_steps+local_iter[0],
-                            log_name)
+            checkpoint_cumulative = save_checkpoint(
+                calc, world, directory, lock, ckpt_seq[0],
+                local_iter[0], source_sha, segment_number, started,
+                prior_seconds, prior_steps+local_iter[0], log_name)
+            elapsed = checkpoint_cumulative - prior_seconds
         if stop_now:
             raise Pause()
 
