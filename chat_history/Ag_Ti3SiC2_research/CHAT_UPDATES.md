@@ -73,3 +73,13 @@
 - 后续仅将已批准的科学设置、锁定候选输入SHA、H修订证据和C最终裁定交给新窗口做只读执行前预检；得到资源放行且用户对唯一48原子固定几何单点明确批准后才可以启动。**本轮未运行DFT、MD、AIMD、TTM、松弛或训练。**
 
 ---
+
+## 2026-10-16 — 已有唯一48原子单点启动授权，但H资源门槛阻塞；排查完整波函数checkpoint
+
+- 用户在科学审核完成后明确提出“快开始吧”，随后执行窗口回报本轮**并未启动DFT**。该授权是受预检通过约束的**唯一Ti₃SiC₂48原子固定几何单点**（SHA-256 `da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b`）；不授权第二网格、MD、TTM、松弛或训练。
+- 执行窗口用户回报（非本聊天独立平台测量）：Python3.12.14/GPAW26.7.0/ASE3.29.0/gpaw-data1.2.1/OpenMPI5.0.7和4-rank环境探针PASS；输入及H配置SHA分别为`da3820c4...d052d5e8b`、`ca6f365e...e0669dfe7`，PAW一致；CPU4核/内存32GiB，`/workspace`约28.83GB可用，属于overlay，`/tmp`为tmpfs。跨任务checkpoint持久性、scratch峰值和外部墙钟配额均未知，依原执行停止条件保持`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`，`DATA_ROLE=HOLD`，未启动计算。
+- 本聊天查阅GPAW官方restart文档，区分`calc.write('state.gpw')`与`mode='all'`（后者包含大型波函数）；同时从原科研GitHub母体脚本 `research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_pure_phase_controls/run_pw_reference.py`读取到历史每20个SCF循环确实执行`calc.write(str(state_path), mode='all')`。这是历史单份7.36GB checkpoint大、预计新10×10×4单份约11.50GB、双份约23GB的重要技术线索。只是潜在优化方向，**普通模式能否忠实继续尚未验证，不可未经恢复验证直接替换**；历史母体脚本本身不能改动。
+- 优先以独立开发/验证范围检查当前候选runner是否也采用`mode='all'`，在不启动目标新DFT的前提下测试普通checkpoint的体积、读取、恢复连续性（可用已批准的既有测试证据或小型非生产验证，且不能谎称已验证），量化暂存峰值及失败恢复风险；并取得外部作业墙钟和持久存储证明。若无法安全替代全波函数checkpoint，应使用真实持久存储更充足的平台；绝不可自动取消容错保障或清理历史数据。
+- 目前科学配置维持C批准的标准MP10×10×4无显式Gamma、PBE/PW500/Fermi0.10等；不因为资源障碍修改物理参数。不提前宣称任何执行成功。
+
+---
