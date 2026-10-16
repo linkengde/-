@@ -63,3 +63,13 @@
 - 当前状态：`DATA_ROLE=HOLD`，`ENV_READY=YES`，`C_REVIEW_ON_REVISION=PENDING`，`RESOURCE_READY=NO`，`DFT_EXECUTION_READY=NO`。下一步应C单独复审H修订版的科学配置，资源问题另需平台实证；即使C科学通过仍必须获得资源放行和用户对唯一单点明确计算授权。禁止自动运行DFT、MD、AIMD、TTM、松弛或训练。
 
 ---
+
+## 2026-10-16 — C最终科学裁定：48原子Ti₃SiC₂ APPROVED，资源移交
+
+- C新增[最终科学裁定](https://github.com/linkengde/-/blob/f84b163f7346b5d35e4c01cfcfed4a4248f6c8a6/research/mace-v12-transfer/coordination/reports/window-c/h_tsc48_static_perturb_review_20261016/FINAL_ADJUDICATION_20261016/FINAL_ADJUDICATION.md)及同目录`REVIEW_DECISION.json`，GitHub提交 `f84b163f7346b5d35e4c01cfcfed4a4248f6c8a6`；本聊天回读两文件内容及提交文件清单，原审查报告在本提交内未被改动。该裁定文件自述系“用户给出的最终科学裁定”补充记录；其机器字段 `reviewed_submission` 仍指向早期H预检 `e9230084...`，修订配置证据另见H提交 `3bf6a926...`，交接时两者应明确关联。
+- 决定：`C_SCIENTIFIC_REVIEW=APPROVED`、`KGRID_DEFINITION=PASS`、`KGRID_CANDIDATE=10x10x4`。网格为标准偶数整数Monkhorst–Pack，**不启用显式Gamma override或额外offset**；不代表此扰动结构自身k点收敛已测量，亦不代表应力收敛。
+- `DATA_ROLE=HOLD`；候选未加入TRAIN/DEV/TEST，所属同一Ti₃SiC₂母体族的旧标签数据角色不变。
+- `RESOURCE_CHECK=DEFER_TO_EXECUTION_WINDOW`，即新的计算窗口须独立核验墙钟、内存/磁盘、checkpoint写入与恢复、持久工作根和归档通道。当前 `RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`execution_authorized=false`。原H窗口28.83GB磁盘与checkpoint预算不能自动移植为新窗口资源事实。
+- 后续仅将已批准的科学设置、锁定候选输入SHA、H修订证据和C最终裁定交给新窗口做只读执行前预检；得到资源放行且用户对唯一48原子固定几何单点明确批准后才可以启动。**本轮未运行DFT、MD、AIMD、TTM、松弛或训练。**
+
+---
