@@ -17,7 +17,7 @@
 |---|---|---|---|
 | P0 | 32原子参考k点收敛 | 最终离线审计已完成；暂停该结构加密，若恢复需独立批准新网格；候选0.05容差须另行论证 | 原始STRICT三对均FAIL；工程候选后两对PASS但适用性未定 |
 | P0 | 历史1×4×2数值差异 | 追查缺失的旧k点偏移、PAW/setup、GPAW原始日志和完整参数；新旧标签严格隔离 | 新P0对旧记录Native差+0.600732 eV、力RMS差0.101692 eV/Å；未解决 |
-| P1 | 纯Ti₃SiC₂骨架 | H验收V1代码/3项离线PASS但发现各MPI rank独立墙钟停止可能死锁；ChatGPT已上传V2修正为rank0广播并补5项离线测试及累计SCF/checkpoint来源日志（branch chatgpt-tsc48-segmented-runner-v2-20261016@779f9b2e），等待H复验V2。需真实4-rank写入/恢复、持久卷、墙钟、三份GPW暂存峰值+scratch预算证据。 | V3_PATCH_SUBMITTED_H_REVIEW_PENDING；REAL_RESTART_VALIDATED=NO；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；DATA_ROLE=HOLD；NOT_STARTED |
+| P1 | 纯Ti₃SiC₂骨架 | H已验收V3：7/7离线PASS、MPI广播PASS，但checkpoint时钟和ctx.niter映射静态FAIL。ChatGPT已向独立分支`chatgpt-tsc48-segmented-runner-v4-20261016@5b67aa30`提交手术修复（写入时长排除额外barrier，完整manifest最终化后继承累计时钟，ctx.niter与local_iter分离，增加对应回归断言）。待H V4语法/7项离线/静态复审，并证明真实4rank重启、跨会话持久存储、三份GPW暂存+scratch及平台墙钟。 | V4_PATCH_SUBMITTED_H_REVIEW_PENDING；REAL_RESTART_VALIDATED=NO；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；DATA_ROLE=HOLD；NOT_STARTED |
 | P1 | 纯Ag相变 | 不同温度密度种子下真正液相和固液共存DFT | 不足 |
 | P1 | Ag–Ti₃SiC₂界面 | 多终止面/配准/间距并定量核验法向力 | 不足 |
 | P2 | 专用NEP/ACE | 严格分组训练集与盲测；小模型热力学和MD效率验证 | 尚未批准 |
