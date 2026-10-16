@@ -31,6 +31,58 @@ class OfflineTests(unittest.TestCase):
             (root/'slot_B.writing.gpw').write_bytes(b'incomplete')
             self.assertEqual(len(mod.verified_slots(root,lock)),1)
 
+    def test_mpi_shared_decision_root_only(self):
+        import numpy as np
+        class Bus:
+            packet = None
+        class FakeComm:
+            def __init__(self, rank, bus):
+                self.rank, self.bus = rank, bus
+            def broadcast(self, buf, root):
+                self_ref = self
+                if self_ref.rank == root:
+                    self_ref.bus.packet = buf.copy()
+                else:
+                    buf[:] = self_ref.bus.packet
+        bus = Bus()
+        root = FakeComm(0, bus)
+        follower = FakeComm(1, bus)
+        # Root crossed wallclock threshold; rank 1 did not.
+        a = mod.shared_decision(root, 3, 10, 20, 97, 90,
+                                False, 300, 100)
+        b = mod.shared_decision(follower, 3, 10, 20, 40, 90,
+                                False, 999999, 100)
+        self.assertEqual(a, (True, True, False))
+        self.assertEqual(b, a)
+        # A low-space event blocks all ranks even when non-root sees free disk.
+        c = mod.shared_decision(root, 10, 10, 20, 10, 90,
+                                False, 30, 100)
+        d = mod.shared_decision(follower, 10, 10, 20, 10, 90,
+                                False, 1000000, 100)
+        self.assertEqual(c, (True, False, True))
+        self.assertEqual(d, c)
+        self.assertEqual(bus.packet.dtype, np.int32)
+
+    def test_append_only_ledger_source_linkage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            mod.append_ledger(root, {'event':'SEGMENT_STARTED',
+                                     'resume_basis_checkpoint_sha256':'oldsha'})
+            mod.append_ledger(root, {'event':'CHECKPOINT_COMMITTED',
+                                     'source_checkpoint_sha256':'oldsha',
+                                     'checkpoint_sha256':'newsha',
+                                     'cumulative_elapsed_seconds':33.5,
+                                     'cumulative_logged_scf_steps':20})
+            events = [json.loads(x) for x in
+                      (root/'segment_ledger.jsonl').read_text().splitlines()]
+            self.assertEqual(len(events),2)
+            self.assertEqual(events[1]['source_checkpoint_sha256'],
+                             events[0]['resume_basis_checkpoint_sha256'])
+            self.assertEqual(events[1]['cumulative_logged_scf_steps'],20)
+            self.assertEqual(mod.latest_verified_counters({
+                'cumulative_elapsed_seconds':33.5,
+                'cumulative_logged_scf_steps':20}), (33.5,20))
+
     def test_resource_fail_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
             workdir=Path(tmp)/'task'
