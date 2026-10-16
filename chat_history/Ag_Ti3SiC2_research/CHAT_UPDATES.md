@@ -132,3 +132,11 @@
 - ChatGPT通过GitHub重新读取V4四文件并检查源代码关键时序、7个单测的修改片段；**本窗口没有在真实H GPAW环境运行V4 Python测试及真实4rank GPW读写/重启，不能声明V4 PASS**。当前`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`，需H重复离线和静态验收及取得独立持久存储、scratch、墙钟证据；原overlay可用约28.83 GB不足以证明三份完整checkpoint暂存（估计>34 GB，不含scratch）。
 
 ---
+
+## 2026-10-16 — H V4静态与离线验收通过；资源和真实重启仍HOLD
+
+- 用户回报H针对固定V4完整提交`5b67aa3002b1e3c197d7d511e9e075586c942095`完成验收：`V4_STATIC_REVIEW=PASS`、`V4_OFFLINE_TESTS=PASS`（7/7）、`CHECKPOINT_TIMING_ACCOUNTING=PASS`、`SCF_CONTEXT_MAPPING=PASS`、`MPI_DECISION_SYNC=PASS`；H实际语法检查与`verify=OFFLINE_INPUT_CONFIG_PASS`。用户回报runner/input/H-config SHA分别`23250241…80ed5c95`、`da3820c4…052d5e8b`、`ca6f365e…0669dfe7`。本聊天经GitHub独立核对V4分支HEAD确实是该完整提交与已存在的runner源码。H现场实际测试证据来自用户回报，不冒充本窗口运行过GPAW。
+- GPAW V4计时、未finalized GPW排除、`ctx.niter`与本地迭代分别记录、4rank广播助手均通过H离线/静态；PBE/PW500/标准MP10×10×4/Fermi0.10/PPCG/混合器/阈值/maxiter/4rank不变。**决定停止V1–V4反复补代码**，除非真实运行新证据证明还有缺陷。
+- 现阶段唯一关键阻塞：4rank真实`mode=all`写入/GPW SHA校验/fresh-process读取与SCF warm restart未验证；没有跨会话持久存储或独立恢复证明；overlay`/workspace`约28.83GB可用、三份GPW同时存在的估算峰值约34.5GB且不含scratch；外部墙钟额度与写入余量未知。维持`REAL_GPAW_RESTART_VALIDATED=NO`、`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一行动不是启动正式DFT，而是H提供有验证的持久储存/足够空间/墙钟证据，再申请或按明确范围执行真实重启受控测试，最后放行唯一固定48原子单点。未经验证不得为了省空间取消checkpoint或破坏历史文件。
+
+---
