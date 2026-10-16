@@ -83,3 +83,13 @@
 - 目前科学配置维持C批准的标准MP10×10×4无显式Gamma、PBE/PW500/Fermi0.10等；不因为资源障碍修改物理参数。不提前宣称任何执行成功。
 
 ---
+
+## 2026-10-16 — 分段DFT仍为资源HOLD：先建立输入绑定runner与恢复验证
+
+- 用户回报：已在执行窗口明确豁免“估算双份完整checkpoint后的约5.82 GB余量本身”作为单独拒绝理由，但该窗口仍回报 `RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`，**未启动任何DFT**；`DATA_ROLE=HOLD`。
+- 问题进一步定位：GitHub已有母体 `run_pw_reference.py`，但尚无绑定固定候选 `TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz` 的正式分段runner。GPAW默认`write()`不写入完整波函数，`mode="all"`写入波函数；能否在本案例无损或精度可控地恢复尚未验证，不能把较小默认checkpoint当作现成SCF续算证明。
+- 当前H执行环境没有大型`.gpw`恢复测试文件与跨会话持久工作卷证据；当前`/workspace`为overlay、`/tmp`为tmpfs；两份完整文件估算约23.00GB、可用空间约28.83GB，scratch峰值尚未测量；外部作业墙钟/主动停止保留时间仍未知。
+- 本聊天核对GPAW官方restart文档（https://gpaw.readthedocs.io/documentation/restart_files.html），并提出下一最小工作包：先以**独立开发分支**创建单个候选绑定的`start/resume/verify/stop` runner和非生产预检/单元测试；强制校验输入、科学配置、PAW与checkpoint身份，保护已完成checkpoint，采用两阶段写入/可恢复中断；设置实测空间与墙钟保护门槛，未知资源时不能宣称READY。对小checkpoint完整恢复能力必须经过具有明确授权的验证，不能据文件可读取就宣称有效；完整模式也应实测可恢复。
+- 原科学审批不变：C最终批准标准偶数MP10×10×4、PBE/PW500等，用户对唯一单点给予以资源通过为条件的授权；此时**没有授权启动其他科学DFT或替代数值物理参数**。目标是消除流程阻碍，而不是反复审查输入或启动正式计算。
+
+---
