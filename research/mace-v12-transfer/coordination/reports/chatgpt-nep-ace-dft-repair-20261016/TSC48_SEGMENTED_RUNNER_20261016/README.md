@@ -1,6 +1,6 @@
 # Ti3SiC2 48-atom GPAW segmented SCF runner
 
-Status: **V2 PATCH SUBMITTED / V2 OFFLINE TESTS PENDING H / REAL GPAW RESTART UNVALIDATED / NO DFT STARTED**
+Status: **V3 PATCH SUBMITTED / V3 OFFLINE TESTS PENDING H / REAL GPAW RESTART UNVALIDATED / NO DFT STARTED**
 
 This package handles exactly one fixed-geometry Ti3SiC2 single point.
 No historical inputs, results or mother scripts were modified.
@@ -13,7 +13,7 @@ Branch base: H revision 3bf6a926ecd0b928c1e3b444f769468d0ee25fe4.
 - Input: NEW_DFT_GEOMETRY_CANDIDATES/structures/TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz
 - Input SHA-256: da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b
 - Approved H config SHA-256: ca6f365e8b0b8ec847e329d0312ebb51381b21e996050949494f2d3e0669dfe7
-- V2 runner SHA-256: compute from new v2 branch and record independently; old V1 hash is no longer valid.
+- V3 runner SHA-256: compute from this v3 branch and record independently; old V1/V2 hashes are no longer valid.
 - Fixed 48 atoms Ti24Si8C16, fixed cell, PBE/PW500, integer standard Monkhorst-Pack (10,10,4)
   with no explicit Gamma override. Fermi 0.10 eV, spin unpolarized,
   PPCG niter=2, Mixer(.05,8,100), energy/density/eigenstates 1e-5,
@@ -51,6 +51,45 @@ V2 is not production validated: H must re-run syntax and FIVE offline
 tests before any execution, followed by independently authorized real
 GPAW checkpoint/restart testing and genuine resource evidence.
 
+## V3 correction after H V2 acceptance (report commit 115069e0e015395badbd2d77fa946ad6d1df127b)
+
+V2 had two review findings:
+1. the cumulative elapsed time stored in a checkpoint manifest was sampled before
+   checkpoint writing, so the next segment inherited an undercount;
+2. the SCF JSON sampler probed fields that are not exposed by GPAW 26.7.0
+   `SCFContext`.
+
+V3 fixes only these two items:
+- `save_checkpoint` now measures elapsed time from the segment start through
+  GPW publication on rank 0, stores `cumulative_elapsed_seconds` and
+  `checkpoint_write_elapsed_seconds` in the slot manifest/status/ledger, and
+  broadcasts the post-publication cumulative value to all ranks. The retained
+  fallback slot is not overwritten until the new GPW has been successfully
+  published.
+- `scf_context_sample` now uses the GPAW 26.7.0 `SCFContext` interface:
+  `ctx.niter`, `ctx.ham.e_total_extrapolated`, `ctx.dens.error`,
+  `ctx.wfs.eigensolver.error`, `ctx.eig_error`, and
+  `ctx.wfs.nvalence`. The exported values are explicitly converted to the
+  same units used by GPAW's convergence criteria; the authoritative detailed
+  trend remains the GPAW segment log.
+- Offline tests increase from 5 to 7: one verifies the GPAW 26.7 context mapping
+  and one uses a fake checkpoint writer with a deliberate delay to verify that
+  cumulative accounting includes checkpoint write/publication time. These are
+  not real DFT or MPI-write tests.
+
+GPAW's documented 26.7 SCF loop yields the context to the `scf_step` hook
+before convergence checking, and its context exposes the fields used above.
+The built-in criteria convert energy/eigenstate/density quantities using the
+same `Ha` and valence-electron normalization. See the upstream GPAW source
+and convergence-criteria documentation. Real execution still requires H
+validation in the actual installed 26.7.0 environment.
+
+V3 does NOT change the scientific input, PBE/PW500, 10x10x4 k-grid, smearing,
+solver, mixer, convergence thresholds, atom coordinates, or MPI rank count.
+
+V3 remains unvalidated for actual four-rank GPW write/read, interruption,
+persistent storage, scratch peak, and wallclock. No DFT has been started.
+
 ## H offline acceptance (NO GPAW needed)
 
 From a fresh checkout of branch chatgpt-tsc48-segmented-runner-20261016:
@@ -69,7 +108,7 @@ python "$RUNNER" verify --input "$INPUT" --h-config "$HCFG" \
 
 Verify checks the source and config SHAs and does NOT load GPAW.
 If the specified workdir does not exist, it checks the input/config only.
-The five included unittest cases use fake checkpoint bytes and a fake MPI broadcast, NOT DFT or real GPAW MPI.
+The seven included unittest cases use fake checkpoint bytes and a fake MPI broadcast, NOT DFT or real GPAW MPI.
 
 ## Minimum real H acceptance before --execute
 
@@ -132,9 +171,9 @@ convergence has not been measured. No subsequent k mesh is authorized.
 
 ## Honest current status
 
-RUNNER_V2_PATCH_SUBMITTED=YES
-PYTHON_COMPILE_PASS=AWAITING_H_V2
-OFFLINE_TESTS_5_PASS=AWAITING_H_V2
+RUNNER_V3_PATCH_SUBMITTED=YES
+PYTHON_COMPILE_PASS=AWAITING_H_V3
+OFFLINE_TESTS_7_PASS=AWAITING_H_V3
 CHECKPOINT_WRITE_READY=UNVERIFIED
 REAL_GPAW_RESTART_VALIDATED=NO
 PERSISTENT_STORAGE_READY=NO
