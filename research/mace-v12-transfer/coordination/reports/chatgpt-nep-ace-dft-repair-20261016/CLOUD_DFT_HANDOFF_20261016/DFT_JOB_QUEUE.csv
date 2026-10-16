@@ -1,0 +1,14 @@
+order,priority,input_id,kpoints,start_condition,authorization,purpose
+01,P0,P0_CONFLICT_32,1x4x2,NEW_SAME_METHOD_KPOINT_BASELINE,RUN_ONE_JOB_THEN_STOP,32 atom AgTiSiC reference; do not assume historical 1x4x2 had identical centering
+02,P0,P0_CONFLICT_32,1x6x4,NEXT_AFTER_01_OK,RUN_ONE_JOB_THEN_COMPARE,reference refinement against 01 under identical parameters
+03,P0,P0_CONFLICT_32,1x8x6,CONDITIONAL_AFTER_02,RUN_IF_REQUIRED,only after 01 to 02 convergence gate requires it
+04,P1,AG32_STRAIN_004,kmesh TBD,AFTER_AG_BULK_MESH_CHECK,DO_NOT_RUN_AUTOMATICALLY,static solid Ag proxy, no liquid
+05,P1,AG32_STRAIN_008,kmesh TBD,AFTER_AG_BULK_MESH_CHECK,DO_NOT_RUN_AUTOMATICALLY,static solid Ag proxy, no liquid
+06,P1,TSC48_STRAIN_0025,kmesh TBD,AFTER_TSC_DISPLACED_KMESH_CHECK,DO_NOT_RUN_AUTOMATICALLY,static solid Ti3SiC2 proxy
+07,P1,TSC48_STRAIN_005,kmesh TBD,AFTER_TSC_DISPLACED_KMESH_CHECK,DO_NOT_RUN_AUTOMATICALLY,static solid Ti3SiC2 proxy
+08,P2,AGTSC_R0_260,kxy TBD kz=1,AFTER_SLAB_METHOD_CONVERGENCE,DO_NOT_RUN_AUTOMATICALLY,baseline interface registry same parent
+09,P2,AGTSC_R1_260,kxy TBD kz=1,AFTER_SLAB_METHOD_CONVERGENCE,DO_NOT_RUN_AUTOMATICALLY,second registry same parent
+10,P2,AGTSC_R0_235,kxy TBD kz=1,AFTER_08_09,DO_NOT_RUN_AUTOMATICALLY,compressed contact
+11,P2,AGTSC_R0_295,kxy TBD kz=1,AFTER_08_09,DO_NOT_RUN_AUTOMATICALLY,separated contact
+12,P2,AGTSC_R1_235,kxy TBD kz=1,AFTER_08_09,DO_NOT_RUN_AUTOMATICALLY,compressed contact
+13,P2,AGTSC_R1_295,kxy TBD kz=1,AFTER_08_09,DO_NOT_RUN_AUTOMATICALLY,separated contact
