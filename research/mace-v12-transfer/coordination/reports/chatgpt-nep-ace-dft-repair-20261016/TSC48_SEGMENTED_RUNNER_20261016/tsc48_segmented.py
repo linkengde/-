@@ -269,33 +269,58 @@ def run_segment(args, lock):
     directory = args.workdir.resolve()
     clearance = approved_resources(args.clearance, directory, args.segment_seconds,
                                    args.margin_seconds)
+
     if args.command == 'start':
         need(not directory.exists(), 'WORKDIR_ALREADY_EXISTS')
         if world.rank == 0:
             directory.mkdir(parents=False, exist_ok=False)
         world.barrier()
         root_action(world, directory, lambda: write_atomic(directory/'lock.json', lock))
-        sequence, checkpoint = 0, None
+        sequence, checkpoint, source_meta = 0, None, None
     else:
         need(directory.is_dir() and read_json(directory/'lock.json') == lock,
              'RESUME_LOCK_MISMATCH')
         need(not (directory/'RESULT.json').exists(), 'ALREADY_CONVERGED')
         good = verified_slots(directory, lock)
         need(bool(good), 'NO_VERIFIED_FULL_WAVEFUNCTION_CHECKPOINT')
-        sequence, checkpoint = good[0][0]['sequence'], good[0][1]
+        source_meta, checkpoint = good[0]
+        sequence = source_meta['sequence']
+
     frozen = read(str(args.input), format='extxyz')
     need(len(frozen)==48 and np.all(frozen.pbc), 'ASE_INPUT_MISMATCH')
+    prior_seconds, prior_steps = latest_verified_counters(source_meta or {})
+    source_sha = source_meta['sha256'] if source_meta else None
+    segment_number = sequence + 1
+    log_name = ('gpaw.start.log' if checkpoint is None
+                else 'gpaw.resume.%04d.log' % segment_number)
+
+    def acquire_active():
+        active = directory/'ACTIVE_RUN.json'
+        # The exclusive create is deliberate: two concurrent jobs must not
+        # overwrite each other's GPW slots. A crash leaves a stale lock that
+        # requires independent H process/persistence inspection before recovery.
+        with active.open('x', encoding='utf-8') as handle:
+            json.dump({'pid':os.getpid(), 'started_utc':
+                       datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                       'segment_number':segment_number, 'source_checkpoint_sha256':
+                       source_sha}, handle, sort_keys=True)
+            handle.write('\n')
+            handle.flush()
+            os.fsync(handle.fileno())
+        sync_directory(directory)
+
+    root_action(world, directory, acquire_active)
+
     if checkpoint is None:
         atoms = frozen
         calc = GPAW(mode=PW(500), xc='PBE', kpts=MESH,
                     occupations=FermiDirac(.10), eigensolver=PPCG(niter=2),
                     mixer=Mixer(.05,8,100),
                     convergence={'energy':1e-5,'density':1e-5,'eigenstates':1e-5},
-                    maxiter=160, spinpol=False, txt=str(directory/'gpaw.start.log'))
+                    maxiter=160, spinpol=False, txt=str(directory/log_name))
         atoms.calc = calc
     else:
-        atoms, calc = restart(str(checkpoint),
-                              txt=str(directory / ('gpaw.resume.%04d.log' % (sequence+1))))
+        atoms, calc = restart(str(checkpoint), txt=str(directory/log_name))
         need(atoms.get_chemical_symbols() == frozen.get_chemical_symbols()
              and np.array_equal(atoms.positions, frozen.positions)
              and np.array_equal(atoms.cell.array, frozen.cell.array)
@@ -305,39 +330,98 @@ def run_segment(args, lock):
              and 'gamma' not in p.kpts.todict() and p.mode.name == 'pw'
              and float(p.mode.ecut) == 500 and p.xc.name == 'PBE'
              and p.maxiter == 160, 'RESTART_SCIENTIFIC_PARAMS_MISMATCH')
-        need(p.eigensolver.todict().get('niter') == 2, 'RESTART_SOLVER_MISMATCH')
+        need(p.eigensolver.todict().get('niter') == 2,
+             'RESTART_SOLVER_MISMATCH')
         atoms.calc = calc
-    start = time.monotonic()
+
+    started = time.monotonic()
     local_iter, ckpt_seq = [0], [sequence]
     stop_file = directory/'STOP_REQUESTED'
-    # A stop request remains active until a new segment begins.
     if world.rank == 0 and stop_file.exists():
         stop_file.unlink()
     world.barrier()
+    root_action(world, directory, lambda: append_ledger(directory, {
+        'event':'SEGMENT_STARTED',
+        'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'segment_number':segment_number, 'resume_basis_checkpoint_sha256':source_sha,
+        'resume_basis_slot':source_meta['slot'] if source_meta else None,
+        'previous_checkpoint_sequence':sequence,
+        'previous_cumulative_elapsed_seconds':prior_seconds,
+        'previous_cumulative_logged_scf_steps':prior_steps,
+        'scf_log_file':log_name,
+        'resume_kind':'WAVEFUNCTION_WARM_RESTART_NOT_BITWISE_SCFL_LOOP'
+    }))
+
     def on_step(ctx):
         local_iter[0] += 1
-        due = local_iter[0] % args.checkpoint_every == 0
-        end = local_iter[0] >= args.segment_iters
-        wall = time.monotonic()-start >= (args.segment_seconds-args.margin_seconds-
-                                           clearance['checkpoint_write_reserve_seconds'])
-        should_stop = end or wall or stop_file.exists()
-        if due or should_stop:
-            need(shutil.disk_usage(directory).free >= clearance['minimum_free_bytes'],
-                 'CHECKPOINT_DISK_RESERVE_DEPLETED')
+        elapsed = time.monotonic()-started
+        # All non-root ranks pass dummy decision inputs. Rank 0 alone owns
+        # the timer, STOP_REQUESTED and disk-space decision, then broadcasts.
+        remaining = 0
+        stop_requested = False
+        if world.rank == 0:
+            try:
+                remaining = shutil.disk_usage(directory).free
+                stop_requested = stop_file.exists()
+            except OSError:
+                remaining = 0  # fail closed on root filesystem exceptions
+        save_now, stop_now, disk_block = shared_decision(
+            world, local_iter[0], args.checkpoint_every, args.segment_iters,
+            elapsed, args.segment_seconds-args.margin_seconds-
+            clearance['checkpoint_write_reserve_seconds'], stop_requested,
+            remaining, clearance['minimum_free_bytes'])
+        need(not disk_block, 'CHECKPOINT_DISK_RESERVE_DEPLETED')
+        if (local_iter[0] % 5 == 0) or save_now:
+            sample = scf_context_sample(ctx, local_iter[0], elapsed)
+            root_action(world, directory, lambda: append_ledger(directory, {
+                'event':'SCF_SAMPLE', 'segment_number':segment_number,
+                'source_checkpoint_sha256':source_sha,
+                'cumulative_elapsed_seconds':round(prior_seconds+elapsed, 3),
+                'scf_log_file':log_name, **sample}))
+        if save_now:
             ckpt_seq[0] += 1
-            save_checkpoint(calc, world, directory, lock, ckpt_seq[0], int(ctx.niter))
-        if should_stop:
+            save_checkpoint(calc, world, directory, lock, ckpt_seq[0],
+                            int(ctx.niter), source_sha, segment_number,
+                            prior_seconds+elapsed, prior_steps+local_iter[0],
+                            log_name)
+        if stop_now:
             raise Pause()
+
     calc.hooks['scf_step'] = on_step
+
+    def release_active():
+        active = directory/'ACTIVE_RUN.json'
+        need(active.is_file(), 'ACTIVE_RUN_LOCK_MISSING')
+        active.unlink()
+        sync_directory(directory)
+
     try:
         native = float(atoms.get_potential_energy(force_consistent=False))
     except Pause:
-        root_action(world, directory, lambda: write_atomic(directory/'segment_status.json',
-                     {'status':'PAUSED_WITH_CHECKPOINT','sequence':ckpt_seq[0],
-                      'iterations_this_segment':local_iter[0]}))
+        elapsed = time.monotonic()-started
+        root_action(world, directory, lambda: append_ledger(directory, {
+            'event':'SEGMENT_PAUSED',
+            'segment_number':segment_number, 'utc':datetime.datetime.now(
+                datetime.timezone.utc).isoformat(),
+            'resume_basis_checkpoint_sha256':source_sha,
+            'last_checkpoint_sequence':ckpt_seq[0],
+            'local_iterations':local_iter[0],
+            'cumulative_logged_scf_steps':prior_steps+local_iter[0],
+            'cumulative_elapsed_seconds':round(prior_seconds+elapsed,3),
+            'scf_log_file':log_name
+        }))
+        root_action(world, directory, lambda: write_atomic(
+            directory/'segment_status.json',
+            {'status':'PAUSED_WITH_CHECKPOINT',
+             'sequence':ckpt_seq[0], 'iterations_this_segment':local_iter[0],
+             'resume_basis_checkpoint_sha256':source_sha,
+             'cumulative_elapsed_seconds':round(prior_seconds+elapsed,3),
+             'cumulative_logged_scf_steps':prior_steps+local_iter[0]}))
+        root_action(world, directory, release_active)
         if world.rank == 0:
             print(json.dumps({'status':'PAUSED','checkpoint_sequence':ckpt_seq[0]}))
         return
+
     free = float(atoms.get_potential_energy(force_consistent=True))
     forces = np.asarray(atoms.get_forces(),dtype=float)
     need(np.isfinite([native,free]).all() and np.isfinite(forces).all(),
@@ -347,14 +431,27 @@ def run_segment(args, lock):
         stress_state = 'AVAILABLE'
     except Exception as exc:
         stress,stress_state = None,'UNAVAILABLE_'+type(exc).__name__
+    elapsed = time.monotonic()-started
     payload = {**lock,'status':'SCF_CONVERGED_KPOINT_UNVALIDATED',
                'data_role':'HOLD','atom_count':48,'kmesh':list(MESH),
                'energy_native_eV':native,'free_energy_eV':free,
                'forces_eV_A':forces.tolist(),'stress_voigt_eV_A3':stress,
                'stress_status':stress_state,
                'stress_convention':'ASE Voigt xx yy zz yz xz xy',
-               'iterations_this_segment':local_iter[0]}
+               'iterations_this_segment':local_iter[0],
+               'resume_basis_checkpoint_sha256':source_sha,
+               'cumulative_logged_scf_steps':prior_steps+local_iter[0],
+               'cumulative_elapsed_seconds':round(prior_seconds+elapsed,3),
+               'scf_log_file':log_name}
     root_action(world, directory, lambda: write_atomic(directory/'RESULT.json',payload))
+    root_action(world, directory, lambda: append_ledger(directory, {
+        'event':'SEGMENT_CONVERGED','segment_number':segment_number,
+        'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'resume_basis_checkpoint_sha256':source_sha,
+        'cumulative_elapsed_seconds':payload['cumulative_elapsed_seconds'],
+        'cumulative_logged_scf_steps':payload['cumulative_logged_scf_steps'],
+        'scf_log_file':log_name}))
+    root_action(world, directory, release_active)
     if world.rank == 0:
         print(json.dumps({'status':payload['status'],'path':str(directory/'RESULT.json')}))
 
