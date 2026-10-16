@@ -1,6 +1,6 @@
 # Ti3SiC2 48-atom GPAW segmented SCF runner
 
-Status: **CODE DELIVERED / OFFLINE-TESTED / GPAW RESTART UNVALIDATED / NO DFT STARTED**
+Status: **V2 PATCH SUBMITTED / V2 OFFLINE TESTS PENDING H / REAL GPAW RESTART UNVALIDATED / NO DFT STARTED**
 
 This package handles exactly one fixed-geometry Ti3SiC2 single point.
 No historical inputs, results or mother scripts were modified.
@@ -13,11 +13,43 @@ Branch base: H revision 3bf6a926ecd0b928c1e3b444f769468d0ee25fe4.
 - Input: NEW_DFT_GEOMETRY_CANDIDATES/structures/TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz
 - Input SHA-256: da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b
 - Approved H config SHA-256: ca6f365e8b0b8ec847e329d0312ebb51381b21e996050949494f2d3e0669dfe7
-- Runner SHA-256: 0d9b97d2ed138985fc75e292485288ef7755e63399e2e4ecdaaeb30804c47e8f
+- V2 runner SHA-256: compute from new v2 branch and record independently; old V1 hash is no longer valid.
 - Fixed 48 atoms Ti24Si8C16, fixed cell, PBE/PW500, integer standard Monkhorst-Pack (10,10,4)
   with no explicit Gamma override. Fermi 0.10 eV, spin unpolarized,
   PPCG niter=2, Mixer(.05,8,100), energy/density/eigenstates 1e-5,
   maxiter 160 and four MPI ranks.
+
+## V2 correction after H audit (commit 25eb20bbd064ba5a410bb1bd95a6588c5f224366)
+
+- The V1 MPI stop decision was rank-local. V2 uses shared_decision:
+  only rank 0 evaluates wallclock, STOP_REQUESTED, iteration limit and free disk;
+  one NumPy int32 vector is broadcast to all ranks before collective GPW writing.
+  collective_stage_clear also broadcasts the staged-file status.
+- The append-only segment_ledger.jsonl records SEGMENT_STARTED, SCF_SAMPLE,
+  CHECKPOINT_COMMITTED, SEGMENT_PAUSED, SEGMENT_CONVERGED with timestamps,
+  exact source checkpoint SHA, checkpoint SHA, SCF log path, cumulative
+  elapsed time, and cumulative *logged* SCF iterations. These are accounting
+  quantities, NOT proof that GPAW resumes the same SCF iteration/mixer.
+- Slot manifests include cumulative counters and source checkpoint identity.
+  Per-segment GPAW logs preserve the SCF trend; optional numeric SCF context
+  fields are emitted only if observed (no guessed convergence numbers).
+- ACTIVE_RUN.json prevents concurrent process writes. After a crash it
+  intentionally remains: H must verify the previous job is gone before
+  any manual recovery action. Never blindly delete an active-job lock.
+- On Python-level collective writer exceptions the code attempts world.abort(9).
+  This does not guarantee recovery from every MPI/GPW I/O failure, and
+  does not replace an authorized real four-rank fault-injection test.
+
+IMPORTANT STORAGE ACCOUNTING: two retained mode=all GPW slots plus a third
+temporary staging file may simultaneously exist during rotation. If each
+is roughly 11.50 GB, transient GPW bytes alone could exceed 34 GB BEFORE
+scratch; prior 23 GB estimate covered only two files. No actual write-size
+or scratch peak has yet been measured. This is a safety observation, not a
+new arbitrary disk threshold.
+
+V2 is not production validated: H must re-run syntax and FIVE offline
+tests before any execution, followed by independently authorized real
+GPAW checkpoint/restart testing and genuine resource evidence.
 
 ## H offline acceptance (NO GPAW needed)
 
@@ -37,7 +69,7 @@ python "$RUNNER" verify --input "$INPUT" --h-config "$HCFG" \
 
 Verify checks the source and config SHAs and does NOT load GPAW.
 If the specified workdir does not exist, it checks the input/config only.
-The three included unittest cases use fake checkpoint bytes, NOT DFT.
+The five included unittest cases use fake checkpoint bytes and a fake MPI broadcast, NOT DFT or real GPAW MPI.
 
 ## Minimum real H acceptance before --execute
 
@@ -100,9 +132,9 @@ convergence has not been measured. No subsequent k mesh is authorized.
 
 ## Honest current status
 
-RUNNER_SOURCE_CREATED=YES
-PYTHON_COMPILE_PASS=YES
-OFFLINE_TESTS_3_PASS=YES
+RUNNER_V2_PATCH_SUBMITTED=YES
+PYTHON_COMPILE_PASS=AWAITING_H_V2
+OFFLINE_TESTS_5_PASS=AWAITING_H_V2
 CHECKPOINT_WRITE_READY=UNVERIFIED
 REAL_GPAW_RESTART_VALIDATED=NO
 PERSISTENT_STORAGE_READY=NO
