@@ -17,7 +17,7 @@
 |---|---|---|---|
 | P0 | 32原子参考k点收敛 | 最终离线审计已完成；暂停该结构加密，若恢复需独立批准新网格；候选0.05容差须另行论证 | 原始STRICT三对均FAIL；工程候选后两对PASS但适用性未定 |
 | P0 | 历史1×4×2数值差异 | 追查缺失的旧k点偏移、PAW/setup、GPAW原始日志和完整参数；新旧标签严格隔离 | 新P0对旧记录Native差+0.600732 eV、力RMS差0.101692 eV/Å；未解决 |
-| P1 | 纯Ti₃SiC₂骨架 | C已审核但要求H修订48原子候选网格中心定义：保留10×10×4密度，使用与母体一致的标准偶数MP无Gamma override、补PPCG niter=2及实际k点证据；继续核实墙钟、checkpoint存储/恢复预算，后交C复审及单点用户授权 | C=NEEDS_REVISION; DATA_ROLE=HOLD; RESOURCE_READY=NO; DFT_EXECUTION_READY=NO |
+| P1 | 纯Ti₃SiC₂骨架 | H修订版已提交（3bf6a926）：标准偶数MP 10×10×4、PPCG=2、BZ/IBZ及MPI证据；需C正式复审、外部≥5h墙钟/持久checkpoint与scratch空间上界证据，再向用户申请唯一单点授权 | C旧决定NEEDS_REVISION；修订版PENDING；DATA_ROLE=HOLD；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO |
 | P1 | 纯Ag相变 | 不同温度密度种子下真正液相和固液共存DFT | 不足 |
 | P1 | Ag–Ti₃SiC₂界面 | 多终止面/配准/间距并定量核验法向力 | 不足 |
 | P2 | 专用NEP/ACE | 严格分组训练集与盲测；小模型热力学和MD效率验证 | 尚未批准 |
