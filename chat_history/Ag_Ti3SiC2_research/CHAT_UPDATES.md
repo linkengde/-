@@ -149,3 +149,11 @@
 - 当前`V4_STATIC_REVIEW=PASS`、`V4_OFFLINE_TESTS=7/7_PASS`、`REAL_GPAW_RESTART_VALIDATED=NO`、`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`，科学输入与`DATA_ROLE=HOLD`不变。
 
 ---
+
+## 2026-10-16 — 多窗口接力：GitHub普通文件拆分/合并原型
+
+- 用户明确要求同一个GPW完整文件拆为小块，通过现有GitHub仓库到不同H窗口后重新组合。GitHub官方硬门槛：普通Git单文件超过100MiB拒绝，超过50MiB提示；单次push≤2GiB；仓库强烈建议<5GiB，而单个GPW估约11.5GiB，正常Git多轮提交会永久膨胀历史。建议不把常规Git当作生产长期多GB checkpoint对象存储。公开仓库`linkengde/-`隐私风险仍然存在。
+- ChatGPT已在独立GitHub分支`chatgpt-tsc48-git-chunks-20261016`提交离线`chunk_transfer.py`、单元测试、`stream_join_github.py`及README；最近提交`10d61bda1463843b234a5983a9fdc1b3104c8a08`。chunk默认32MiB，逐块和整体SHA256，合并至`.writing`后验证整文件再原子发布；stream join可从**公开**GitHub raw文件逐块下载，避免H2双份本地分块，但实际HTTP传输尚未验证。测试仅为合成数据和mock下载，本地共6/6 PASS；源文件已GitHub回读。无真实GPW可拆、没有进行H1 Git push或H2真实下载，更没有运行DFT。V4计算程序不变。
+- 当前仍须实测H窗口实际git push/pull认证，5MiB合成文件跨窗口往返、manifest和whole hash，评估现有仓库11.5GiB对象历史长期风险和H单窗口28.83GB磁盘/scratch；不因分块可行而认为V4的三份GPW峰值被解决。`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`。
+
+---
