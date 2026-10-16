@@ -17,7 +17,7 @@
 |---|---|---|---|
 | P0 | 32原子参考k点收敛 | 最终离线审计已完成；暂停该结构加密，若恢复需独立批准新网格；候选0.05容差须另行论证 | 原始STRICT三对均FAIL；工程候选后两对PASS但适用性未定 |
 | P0 | 历史1×4×2数值差异 | 追查缺失的旧k点偏移、PAW/setup、GPAW原始日志和完整参数；新旧标签严格隔离 | 新P0对旧记录Native差+0.600732 eV、力RMS差0.101692 eV/Å；未解决 |
-| P1 | 纯Ti₃SiC₂骨架 | C科学APPROVED；用户已明确授权唯一固定几何单点但受资源门槛限制；执行窗口资源未就绪（外部墙钟/持久checkpoint/scratch上界未证实）。先检查runner的mode='all'检查点策略并验证较小checkpoint的真实可恢复性，或迁移至有证据的持久存储环境。 | USER_AUTHORIZED_CONDITIONAL；DATA_ROLE=HOLD；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；NOT_STARTED |
+| P1 | 纯Ti₃SiC₂骨架 | C科学APPROVED、用户授权唯一单点但尚未开跑；H需先建立固定48原子候选专用分段runner（start/resume/checkpoint/verify），以独立已授权验证证明恢复可靠性并取得跨会话持久存储、scratch/墙钟实证；不能仅因5.82GB余量豁免就启动。 | USER_AUTHORIZED_CONDITIONAL；DATA_ROLE=HOLD；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；NOT_STARTED |
 | P1 | 纯Ag相变 | 不同温度密度种子下真正液相和固液共存DFT | 不足 |
 | P1 | Ag–Ti₃SiC₂界面 | 多终止面/配准/间距并定量核验法向力 | 不足 |
 | P2 | 专用NEP/ACE | 严格分组训练集与盲测；小模型热力学和MD效率验证 | 尚未批准 |
