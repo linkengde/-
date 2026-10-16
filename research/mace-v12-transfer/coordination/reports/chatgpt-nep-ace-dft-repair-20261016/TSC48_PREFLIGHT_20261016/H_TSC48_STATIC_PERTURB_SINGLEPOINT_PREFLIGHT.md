@@ -77,11 +77,12 @@
 |---|---:|---|
 | CPU | cgroup 配额 4 CPU；cpuset 显示 `0-4`，`cpu.max=400000/100000` | 4-rank 作业可用；CPU 亲和集合比配额多一个逻辑 CPU，不等于 5 核吞吐 |
 | 内存 | 上限 `34,359,738,368` bytes（32 GiB）；检查时已用 `4,122,353,664` bytes，限额余量约 28.16 GiB | 尚无本扰动任务峰值 RSS 记录，峰值需求为 UNVERIFIED |
-| `/workspace` 可用磁盘 | `28,871,266,304` bytes（28.87 GB / 26.89 GiB） | 低于项目建议的 30 GB，短缺约 1.13 GB；不删除历史文件扩容 |
+| `/workspace` 可用磁盘 | `28,828,061,696` bytes（28.83 GB / 26.84 GiB） | 低于项目建议的 30 GB，短缺约 1.17 GB；不删除历史文件扩容 |
+| 持久化 / checkpoint 盘 | 未发现独立持久盘挂载；`/workspace` 为 overlay，`/tmp` 为 tmpfs（约 17.30 GB 可用） | `/tmp` 不作为持久 checkpoint 位置；`/workspace` 的跨任务持久性仍需平台侧确认 |
 | 进程 CPU 时间 | `ulimit -t` 为 unlimited | 仅说明该 shell 的 CPU 时间限制，不说明云端作业/会话硬超时 |
 | 外部墙钟时限 | 无可验证的调度器/任务时限记录 | **UNVERIFIED** |
 
-可比母体的 10×10×4 实测约 3.26 h；8×8×4 曾用约 4.23 h。它们不是对本扰动任务的时长保证。建议 C 只在确认单作业墙钟配额不少于 5 h 后考虑放行，并保留余量。持久 checkpoint 所在挂载及本任务 checkpoint 峰值空间均未确认；当前看到的是 `/workspace` overlay 文件系统。
+可比母体的 10×10×4 实测约 3.26 h；8×8×4 曾用约 4.23 h。它们不是对本扰动任务的时长保证。建议 C 只在确认单作业墙钟配额不少于 5 h 后考虑放行，并保留余量。本任务 checkpoint 峰值空间及 `/workspace` 的跨任务持久性均未确认。
 
 因此 `RESOURCE_READY=NO`：磁盘未达到 30 GB 项目建议线，外部墙钟时限和 checkpoint 持久化属性也未核实。
 
@@ -101,7 +102,11 @@
 
 `DFT_EXECUTION_READY=NO`。本报告不包含也不调用计算启动命令。
 
-## 7. 总结状态
+## 7. C 审核状态复查
+
+用户要求等待 C 审核。只读检查当前可访问的 C 相关远端分支时，分支头分别为 `cloud-c-tisc-dft-extension-plan-20261014`（2026-10-14）、`cloud-c-ag-tisc-cross-dft-review-20261015`（2026-10-15）及 `cloud-c-five-cloud-dft-plan`（2026-10-10）；这些分支和 `main` 均未检索到本候选文件名、作业标识或对应预检批准记录。因此 C 对本候选的审查状态仍是 **PENDING / 未找到记录**。本次“继续”未被解释为越过该审核门槛的单点计算授权。
+
+## 8. 总结状态
 
 | 检查项 | 状态 | 说明 |
 |---|---|---|
@@ -109,7 +114,7 @@
 | 已有 Ti₃SiC₂ 母体网格依据 | PASS（限母体） | 10×10×4 在原始能量/力差门槛内；不证明候选扰动点已收敛 |
 | 现有几何去重 / 父族归属 | PASS（候选不重复；同一父族） | 需 C 冻结训练/评估角色 |
 | 软件 / PAW / MPI / runtime | PASS（绝对路径） | runtime 未配置 venv `bin` 默认 PATH |
-| 资源 / 墙钟 / checkpoint | NOT READY | 磁盘低于 30 GB，墙钟与持久挂载 UNVERIFIED |
+| 资源 / 墙钟 / checkpoint | NOT READY | 磁盘低于 30 GB；墙钟及跨任务持久挂载 UNVERIFIED |
 | DFT 执行 | **HOLD / NO** | 等待 C 审核及用户明确授权 |
 
 静态小位移候选仅是一份固定几何输入；本检查没有、也不能将其描述为高温 Ti₃SiC₂ 结构。
