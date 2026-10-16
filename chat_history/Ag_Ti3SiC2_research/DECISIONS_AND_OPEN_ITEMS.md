@@ -17,7 +17,7 @@
 |---|---|---|---|
 | P0 | 32原子参考k点收敛 | 最终离线审计已完成；暂停该结构加密，若恢复需独立批准新网格；候选0.05容差须另行论证 | 原始STRICT三对均FAIL；工程候选后两对PASS但适用性未定 |
 | P0 | 历史1×4×2数值差异 | 追查缺失的旧k点偏移、PAW/setup、GPAW原始日志和完整参数；新旧标签严格隔离 | 新P0对旧记录Native差+0.600732 eV、力RMS差0.101692 eV/Å；未解决 |
-| P1 | 纯Ti₃SiC₂骨架 | V4静态+7/7离线已PASS并冻结。H确认旧云端不可放行：overlay可用28.83GB、tmpfs不可持久，三份完整GPW暂存估计34.5GB+scratch且墙钟未知。下一步由云账户/管理员提供持久Linux VM（起始建议4vCPU/32GiB+100GB块卷），跨VM重启校验、scratch/GPW峰值实测与作业时限证据通过后，另行授权真实4rank write/read/fresh-process warm restart，最后才可正式DFT。 | V4_STATIC_PASS_OFFLINE_PASS；MIGRATION_REQUIRED；REAL_RESTART_VALIDATED=NO；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；DATA_ROLE=HOLD；NOT_STARTED |
+| P1 | 纯Ti₃SiC₂骨架 | V4静态+离线PASS并冻结。新增独立`chatgpt-tsc48-git-chunks-20261016@10d61bda`拆分/逐块SHA/合并工具及H2逐块GitHub raw下载原型，本地合成数据6/6单测PASS、真实远端传输未验证。现有普通Git单文件100MiB及单次push 2GiB限制可用32MiB分块规避，但11.5GiB单GPW超过建议仓库5GiB规模并造成多轮历史膨胀；公开仓库数据隐私需确认。仍需5MiB跨窗口push/download核验、单窗scratch与checkpoint峰值、真实GPAW恢复和外部墙钟证据。 | CHUNK_TOOL_DELIVERED_OFFLINE_PASS；V4_STATIC_PASS；REAL_RESTART_VALIDATED=NO；RESOURCE_READY=NO；DFT_EXECUTION_READY=NO；DATA_ROLE=HOLD；NOT_STARTED |
 | P1 | 纯Ag相变 | 不同温度密度种子下真正液相和固液共存DFT | 不足 |
 | P1 | Ag–Ti₃SiC₂界面 | 多终止面/配准/间距并定量核验法向力 | 不足 |
 | P2 | 专用NEP/ACE | 严格分组训练集与盲测；小模型热力学和MD效率验证 | 尚未批准 |
