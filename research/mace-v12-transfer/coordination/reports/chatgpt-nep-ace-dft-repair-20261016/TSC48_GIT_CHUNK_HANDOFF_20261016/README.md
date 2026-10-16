@@ -6,6 +6,45 @@ run GPAW, edit the V4 runner, or remove checkpoint files. No real GPW currently
 exists to transfer. The source scientific lock remains the frozen V4 commit
 `5b67aa3002b1e3c197d7d511e9e075586c942095`.
 
+## Streaming assembly in H2 (one chunk at a time)
+
+The optional `stream_join_github.py` downloads the parts **one at a time** from
+`raw.githubusercontent.com`, checks each SHA-256 as it streams, and writes
+exactly one final `.gpw.writing` file. It atomically renames that file only
+after verifying the **entire** original SHA-256. It avoids checking out a
+multi-GB Git repository or storing a second local copy of all chunk files.
+The manifest itself must be transferred separately and trusted by SHA.
+
+**Example (NOT executable until the test parts are really pushed)**:
+
+```bash
+python -m unittest discover -p 'test_*.py' -v
+# H1: only on an existing file, in a separate work directory
+python chunk_transfer.py split sample.bin sample_parts --chunk-mib 1
+python chunk_transfer.py verify sample_parts/manifest.json
+# After authenticated git push of sample parts to a test branch, pin its
+# EXACT commit hash. Do not use moving branch names for scientific lineage.
+# H2: fetch small manifest.json via Git; then stream remote chunks:
+python stream_join_github.py sample_parts/manifest.json \
+  'https://raw.githubusercontent.com/linkengde/-/<EXACT_UPLOAD_COMMIT>/<PATH_TO_SAMPLE_PARTS>/' \
+  sample-restored.bin
+sha256sum sample.bin sample-restored.bin
+```
+
+Replace the placeholders only after the Git push is observed successful. The
+stream downloader currently works on **public raw GitHub files only** and must
+not be treated as a private-repository credential bypass. The existing
+`linkengde/-` repository is PUBLIC. Do not transfer an unpublished GPW there
+without a conscious publication decision. Real private transfers need an
+authorized authenticated download method, not hardcoded tokens.
+
+**Git size remains independent of chunk size:** splitting into ~368 x 32 MiB
+normal Git objects still uploads roughly the whole 11.5 GiB into repository
+history. This is larger than GitHub's strongly recommended 5 GiB repository
+size. New windows and streaming assembly improve *local disk use* but do not
+solve repository history growth, actual upload authentication, or V4 writer's
+three-GPW peak.
+
 ## Offline 5 MiB demonstration
 
 ```bash
