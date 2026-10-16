@@ -93,3 +93,12 @@
 - 原科学审批不变：C最终批准标准偶数MP10×10×4、PBE/PW500等，用户对唯一单点给予以资源通过为条件的授权；此时**没有授权启动其他科学DFT或替代数值物理参数**。目标是消除流程阻碍，而不是反复审查输入或启动正式计算。
 
 ---
+
+## 2026-10-16 — ChatGPT编写并上传TSC48专用分段runner（无DFT执行）
+
+- 用户明确要求“编写专用分段 runner 你在这个编写好上传仓库到时候再让H提取”。本聊天已在独立分支 `chatgpt-tsc48-segmented-runner-20261016` 创建4个全新文件，分支最新提交 `7e77a8e2ee05e4ec1a9bdb2b0afe325c616cc003`，[代码目录](https://github.com/linkengde/-/tree/7e77a8e2ee05e4ec1a9bdb2b0afe325c616cc003/research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/TSC48_SEGMENTED_RUNNER_20261016/)。与H基准提交`3bf6a926ecd0b928c1e3b444f769468d0ee25fe4`比较，仅新增4个文件，未修改原始结构、旧runner、计算文件。
+- 主程序 `tsc48_segmented.py` SHA-256 `0d9b97d2ed138985fc75e292485288ef7755e63399e2e4ecdaaeb30804c47e8f`；绑定48原子输入SHA `da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b` 和H修订配置SHA `ca6f365e8b0b8ec847e329d0312ebb51381b21e996050949494f2d3e0669dfe7`，支持`verify/start/resume/stop`。固定标准偶数MP10×10×4（无Gamma override）、PBE/PW500/Fermi0.10/PPCG(niter=2)/Mixer(0.05,8,100)/SCF阈值/4 MPI ranks。完整波函数`mode="all"`双槽checkpoint、暂存文件、SHA检查、保留前一有效槽；runner需要真实平台资源批准证明才允许`--execute`。
+- 另上传`test_offline.py`、默认`resource_ready=false`的`resource_clearance_TEMPLATE.json`和`README.md`。本地Python语法检查及3项不含GPAW的离线测试PASS（双槽完整性/损坏回退、资源门槛阻断、原子JSON写入）；4个新文件均从GitHub读回与上传内容逐字一致。**未运行GPAW、真实MPI checkpoint、DFT、MD、TTM、松弛或训练。**
+- 交付状态：`RUNNER_SOURCE_CREATED=YES; OFFLINE_TESTS=PASS; REAL_GPAW_RESTART_VALIDATED=NO; CHECKPOINT_WRITE_READY=UNVERIFIED; PERSISTENT_STORAGE_READY=NO; RESOURCE_READY=NO; DFT_EXECUTION_READY=NO`。H后续应先fresh fetch该分支，核验SHA与文档，在实际GPAW节点测试真实checkpoint写入/恢复及跨会话持久性。需要额外的科学DFT用于验证时必须单独申请对应范围授权；不能将离线代码交付冒充物理计算已成功。
+
+---
