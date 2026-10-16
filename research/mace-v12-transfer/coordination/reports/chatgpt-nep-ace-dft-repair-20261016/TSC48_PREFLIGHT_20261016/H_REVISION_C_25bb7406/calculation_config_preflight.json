@@ -1,0 +1,90 @@
+{
+  "calculator": {
+    "convergence": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "eigensolver": {
+      "constructor": "gpaw.dft.PPCG(niter=2)",
+      "name": "PPCG",
+      "parameters": {
+        "blocksize": null,
+        "include_cg": true,
+        "max_buffer_mem": 209715200,
+        "min_niter": 1,
+        "niter": 2,
+        "promote_inner_dtype": false,
+        "rr_modulo": 5,
+        "tolerances": null
+      }
+    },
+    "kpoints": {
+      "argument_form": "integer tuple as in mother run_pw_reference.py",
+      "convention": "standard Monkhorst-Pack",
+      "gamma": "omitted / default None",
+      "offset": [
+        0,
+        0,
+        0
+      ],
+      "size": [
+        10,
+        10,
+        4
+      ]
+    },
+    "maxiter": 160,
+    "mixer": {
+      "constructor": "gpaw.mixer.Mixer(0.05, 8, 100)",
+      "name": "Pulay",
+      "parameters": {
+        "backend": "pulay",
+        "beta": 0.05,
+        "method": "separate",
+        "nmaxold": 8,
+        "weight": 100
+      }
+    },
+    "mode": {
+      "cutoff_eV": 500,
+      "name": "PW"
+    },
+    "occupations": {
+      "name": "FermiDirac",
+      "width_eV": 0.1
+    },
+    "paw_file_sha256": {
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    },
+    "software": {
+      "ASE": "3.29.0",
+      "GPAW": "26.7.0",
+      "gpaw-data": "1.2.1"
+    },
+    "spin_polarized": false,
+    "xc": "PBE"
+  },
+  "data_role": "HOLD",
+  "execution_authorized": false,
+  "execution_started": false,
+  "fixed_geometry": true,
+  "output_root_created": false,
+  "parallel_environment": {
+    "BLAS_NUM_THREADS": 1,
+    "GPAW_SETUP_PATH": "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw_data/setups",
+    "OMP_NUM_THREADS": 1,
+    "OpenMPI": "5.0.7",
+    "mpi_ranks": 4
+  },
+  "purpose": "preflight configuration only; no calculation is authorized or run",
+  "schema": "H_TSC48_STATIC_PERTURB_PREFLIGHT_CONFIG_V1",
+  "source_input": {
+    "atoms": 48,
+    "path": "research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/NEW_DFT_GEOMETRY_CANDIDATES/structures/TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz",
+    "repository_commit": "cc65a3e6b75be28c06fda8608b4064662d714117",
+    "sha256": "da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b"
+  }
+}
