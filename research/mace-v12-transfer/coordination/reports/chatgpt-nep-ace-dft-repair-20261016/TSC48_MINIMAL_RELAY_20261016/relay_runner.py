@@ -29,31 +29,6 @@ def ensure_two_file_budget(folder, lock):
     base.need(not extras,'PREVIOUS_OR_ORPHAN_GPW_REQUIRES_VERIFIED_RETIREMENT: '+repr(extras))
     return good
 
-def publish(folder,lock,sequence,writer,metadata):
-    """Old GPW is untouched until a fully hashed candidate and atomic pointer exist.
-    Failure before pointer publication leaves old pointer usable; orphan files block new writes.
-    """
-    old=ensure_two_file_budget(folder,lock)
-    if old: base.need(sequence>old[0][0]['sequence'],'SEQUENCE_NOT_INCREASING')
-    final=folder/('checkpoint.%08d.gpw'%sequence)
-    stage=folder/'checkpoint.writing.gpw'
-    base.need(not final.exists() and not stage.exists(),'STALE_CHECKPOINT')
-    t=time.monotonic(); writer(stage); write_elapsed=time.monotonic()-t
-    base.need(stage.is_file() and stage.stat().st_size>0,'EMPTY_CHECKPOINT')
-    with stage.open('rb') as f: os.fsync(f.fileno())
-    info={**metadata,**lock,'sequence':sequence,'slot':'CURRENT','file':final.name,
-          'mode':'all','bytes':stage.stat().st_size,'sha256':base.sha256(stage),
-          'checkpoint_finalized':True,'checkpoint_write_elapsed_seconds':write_elapsed,
-          'previous_file':old[0][1].name if old else None,
-          'previous_sha256':old[0][0]['sha256'] if old else None}
-    os.replace(stage,final); base.sync_directory(folder)
-    base.write_atomic(folder/('checkpoint.%08d.json'%sequence),info)
-    if 'prior_elapsed' in info:
-        info['cumulative_elapsed_seconds']=info.pop('prior_elapsed')+time.monotonic()-info.pop('segment_started')
-    # Pointer publication is the transaction commit. Never replace the sole old GPW.
-    base.write_atomic(folder/'current.json',info)
-    return info
-
 def retire_previous(folder,lock,receipt_path):
     """Explicit maintenance after externally verified remote roundtrip, while no runner active.
     Receipt is an auditable operator attestation, not independent proof of remote availability.
