@@ -142,30 +142,112 @@ def root_action(world, directory, callback):
     world.barrier()
     need(not error.exists(), 'ROOT_OPERATION_FAILED: '+(error.read_text() if error.exists() else ''))
 
-def save_checkpoint(calc, world, directory, lock, sequence, iteration):
-    # All ranks enter the GPAW collective write.  No rank-0-only calc.write().
-    slot = ('A','B')[sequence % 2]
+def save_checkpoint(calc, world, directory, lock, sequence, iteration,
+                    source_sha, segment_number, cumulative_elapsed,
+                    cumulative_steps, log_name):
+    """All ranks write the full-wavefunction GPW, one slot at a time.
+
+    On a Python-visible writer error attempt communicator abort, since one-rank
+    unwinding can deadlock the others. This cannot guarantee survival of a
+    hung MPI collective; real failure injection is a separate H gate.
+    """
+    slot = ('A', 'B')[sequence % 2]
     stage = directory / ('slot_'+slot+'.writing.gpw')
     final = directory / ('slot_'+slot+'.gpw')
-    need(not stage.exists(), 'STALE_STAGE_FILE')
+    collective_stage_clear(world, stage)
     world.barrier()
-    calc.write(str(stage), mode='all')
+    try:
+        calc.write(str(stage), mode='all')
+    except Exception:
+        if hasattr(world, 'abort'):
+            world.abort(9)
+        raise
     world.barrier()
+
     def publish():
         need(stage.is_file() and stage.stat().st_size > 0, 'CHECKPOINT_WRITE_MISSING')
         with stage.open('rb') as f:
             os.fsync(f.fileno())
         info = {**lock, 'slot':slot, 'sequence':sequence, 'mode':'all',
                 'bytes':stage.stat().st_size, 'sha256':sha256(stage),
-                'iteration_in_segment':iteration}
-        # Only the older slot is overwritten; most recent good slot is retained.
+                'iteration_in_segment':iteration,
+                'source_checkpoint_sha256':source_sha,
+                'segment_number':segment_number,
+                'cumulative_elapsed_seconds':round(cumulative_elapsed, 3),
+                'cumulative_logged_scf_steps':cumulative_steps,
+                'scf_log_file':log_name,
+                'saved_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        # Older slot rotates out; other good slot remains intact.
         os.replace(stage, final)
         sync_directory(directory)
         write_atomic(directory / ('slot_'+slot+'.json'), info)
+        append_ledger(directory, {
+            'event':'CHECKPOINT_COMMITTED', 'saved_utc':info['saved_utc'],
+            'segment_number':segment_number, 'sequence':sequence,
+            'source_checkpoint_sha256':source_sha,
+            'checkpoint_sha256':info['sha256'],
+            'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
+            'cumulative_logged_scf_steps':cumulative_steps,
+            'local_iteration':iteration, 'scf_log_file':log_name
+        })
         write_atomic(directory/'segment_status.json',
                      {'status':'CHECKPOINT_WRITTEN', 'sequence':sequence,
-                      'checkpoint_sha256':info['sha256']})
+                      'checkpoint_sha256':info['sha256'],
+                      'source_checkpoint_sha256':source_sha,
+                      'cumulative_elapsed_seconds':info['cumulative_elapsed_seconds'],
+                      'cumulative_logged_scf_steps':cumulative_steps})
     root_action(world, directory, publish)
+
+def append_ledger(directory, record):
+    """Append one durable JSONL event; only rank zero calls this."""
+    p = directory / 'segment_ledger.jsonl'
+    with p.open('a', encoding='utf-8') as handle:
+        handle.write(json.dumps(record, sort_keys=True, ensure_ascii=False)+'\n')
+        handle.flush()
+        os.fsync(handle.fileno())
+    sync_directory(directory)
+
+
+def shared_decision(world, local_iter, every, limit, elapsed, stop_after,
+                    stop_requested, free_bytes, min_free):
+    """Only rank 0 decides. Broadcast a fixed-size buffer to every GPAW rank."""
+    import numpy as np
+    decision = np.zeros(3, dtype=np.int32)  # save, stop, disk_block
+    if world.rank == 0:
+        end = local_iter >= limit
+        wall = elapsed >= stop_after
+        stop = end or wall or bool(stop_requested)
+        save = local_iter % every == 0 or stop
+        decision[:] = (int(save), int(stop),
+                       int(save and free_bytes < min_free))
+    world.broadcast(decision, 0)
+    return tuple(bool(x) for x in decision)
+
+
+def collective_stage_clear(world, stage):
+    import numpy as np
+    clear = np.zeros(1, dtype=np.int32)
+    if world.rank == 0:
+        clear[0] = int(not stage.exists())
+    world.broadcast(clear, 0)
+    need(bool(clear[0]), 'STALE_CHECKPOINT_STAGE_FILE')
+
+
+def scf_context_sample(ctx, local_iter, elapsed):
+    """Lightweight trace: only record numeric SCF context fields actually present."""
+    import math
+    record = {'local_iteration': local_iter, 'elapsed_seconds': round(elapsed, 3)}
+    for field in ('niter', 'energy', 'e_total', 'e_error', 'density_error',
+                  'eigenstates_error'):
+        v = getattr(ctx, field, None)
+        if isinstance(v, (int, float)) and math.isfinite(v):
+            record[field] = float(v)
+    return record
+
+
+def latest_verified_counters(meta):
+    return (float(meta.get('cumulative_elapsed_seconds', 0.0)),
+            int(meta.get('cumulative_logged_scf_steps', 0)))
 
 def run_segment(args, lock):
     import numpy as np
