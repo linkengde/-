@@ -24,6 +24,8 @@ class OfflineTests(unittest.TestCase):
                 (root/f'slot_{slot}.gpw').write_bytes(data)
                 mod.write_atomic(root/f'slot_{slot}.json', {
                     **lock,'mode':'all','slot':slot,'sequence':sequence,
+                    'checkpoint_finalized':True,
+                    'cumulative_elapsed_seconds':12.0,
                     'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()})
             found = mod.verified_slots(root,lock)
             self.assertEqual([x['sequence'] for x,_ in found],[2,1])
@@ -32,6 +34,11 @@ class OfflineTests(unittest.TestCase):
             self.assertEqual([x['sequence'] for x,_ in found],[1])
             (root/'slot_B.writing.gpw').write_bytes(b'incomplete')
             self.assertEqual(len(mod.verified_slots(root,lock)),1)
+            # A byte-valid, not-yet-finalized slot is not recoverable.
+            meta = mod.read_json(root/'slot_B.json')
+            meta['checkpoint_finalized'] = False
+            mod.write_atomic(root/'slot_B.json',meta)
+            self.assertEqual(mod.verified_slots(root,lock),[])
 
     def test_mpi_shared_decision_root_only(self):
         import numpy as np
@@ -95,8 +102,11 @@ class OfflineTests(unittest.TestCase):
                 nvalence=8.0,
                 eigensolver=SimpleNamespace(error=0.003)),
             eig_error=0.005)
-        sample = mod.scf_context_sample(ctx, 7, 12.5)
-        self.assertEqual(sample['local_iteration'], 7)
+        # Deliberately diverge the SCF counter and local hook-call number,
+        # preventing the regression missed by the V3 tests.
+        sample = mod.scf_context_sample(ctx, 3, 12.5)
+        self.assertEqual(sample['local_iteration'], 3)
+        self.assertEqual(sample['scf_iteration_from_context'], 7)
         self.assertEqual(sample['elapsed_seconds'], 12.5)
         self.assertAlmostEqual(sample['total_extrapolated_energy_eV'],
                                2.0 * Ha)
@@ -114,7 +124,9 @@ class OfflineTests(unittest.TestCase):
             def __init__(self):
                 self.value = None
             def barrier(self):
-                return None
+                # Explicitly delay the MPI barrier so the test can detect
+                # whether it is incorrectly counted as calc.write duration.
+                time.sleep(0.035)
             def broadcast(self, buf, root):
                 if root == 0:
                     self.value = buf.copy()
@@ -139,11 +151,19 @@ class OfflineTests(unittest.TestCase):
             meta = mod.read_json(root/'slot_B.json')
             self.assertEqual(meta['mode'], 'all')
             self.assertEqual(meta['source_checkpoint_sha256'], 'SOURCE')
+            self.assertTrue(meta['checkpoint_finalized'])
             self.assertGreater(meta['checkpoint_write_elapsed_seconds'], 0.015)
+            self.assertLess(meta['checkpoint_write_elapsed_seconds'], 0.04)
+            self.assertGreater(meta['cumulative_elapsed_seconds'], 100.07)
+            self.assertGreater(meta['cumulative_elapsed_seconds'],
+                               meta['checkpoint_write_elapsed_seconds']+100.05)
             self.assertGreaterEqual(
                 cumulative, meta['cumulative_elapsed_seconds'] - 0.01)
             self.assertGreater(meta['cumulative_elapsed_seconds'], 100.015)
             self.assertTrue((root/'slot_B.gpw').is_file())
+            self.assertEqual(len(mod.verified_slots(root,lock)),1)
+            ledger=(root/'segment_ledger.jsonl').read_text()
+            self.assertIn('CHECKPOINT_PUBLISHING',ledger)
             self.assertFalse((root/'slot_B.writing.gpw').exists())
 
     def test_resource_fail_closed(self):
