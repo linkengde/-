@@ -102,3 +102,12 @@
 - 交付状态：`RUNNER_SOURCE_CREATED=YES; OFFLINE_TESTS=PASS; REAL_GPAW_RESTART_VALIDATED=NO; CHECKPOINT_WRITE_READY=UNVERIFIED; PERSISTENT_STORAGE_READY=NO; RESOURCE_READY=NO; DFT_EXECUTION_READY=NO`。H后续应先fresh fetch该分支，核验SHA与文档，在实际GPAW节点测试真实checkpoint写入/恢复及跨会话持久性。需要额外的科学DFT用于验证时必须单独申请对应范围授权；不能将离线代码交付冒充物理计算已成功。
 
 ---
+
+## 2026-10-16 — H验收发现MPI停止竞态，ChatGPT上传runner v2修订
+
+- H验收报告：[H_ACCEPTANCE_REPORT_20261016.md](https://github.com/linkengde/-/blob/25eb20bbd064ba5a410bb1bd95a6588c5f224366/research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/TSC48_SEGMENTED_RUNNER_20261016/H_ACCEPTANCE_REPORT_20261016.md)，分支`audit-h-tsc48-segmented-acceptance-20261016`、commit `25eb20bbd064ba5a410bb1bd95a6588c5f224366`，本聊天已从GitHub逐字回读报告和V1 runner。H确认V1语法、3项假GPW离线测试、输入/配置verify、GPAW26.7.0/ASE3.29.0/PAW哈希和4rank import均PASS；科学计算未启动，真实4rank完整GPW写入/恢复未验证。GPAW重启是波函数warm restart，mixer及SCF计数重置，不能称bitwise的SCF状态续算。
+- H报告明确指出V1`on_step`墙钟阈值/停止请求由各rank独立判定，可能MPI不同步而卡在集体写；另有GPW写入异常处理、分段累计耗时、SCF趋势、resume来源SHA缺失。持久存储、scratch峰值、外部墙钟仍无证据。H现场`/workspace`约28.827GB剩余且为overlay、`/tmp`为tmpfs。**双槽A/B轮换可能需要同时容纳两份现存完整GPW和第三份stage文件**；每份约11.50GB的估算对应潜在>34GB峰值（尚不含scratch），前期23GB只覆盖双份，不可用于证明写入安全。
+- ChatGPT从V1发布提交`7e77a8e2ee05e4ec1a9bdb2b0afe325c616cc003`建立独立新分支`chatgpt-tsc48-segmented-runner-v2-20261016`，修订最新HEAD `779f9b2e16ec33421e52f62a27ff09b72e8b8107`，[V2目录](https://github.com/linkengde/-/tree/chatgpt-tsc48-segmented-runner-v2-20261016/research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/TSC48_SEGMENTED_RUNNER_20261016/)。主要修正：`shared_decision`由rank0判断是否保存/停止、磁盘门槛并广播NumPy int32状态；`collective_stage_clear`同步stage存在性；`segment_ledger.jsonl`追加SCF_SAMPLE/SEGMENT_STARTED/COMMITTED/PAUSED/CONVERGED事件、累积耗时、累积记录SCF迭代、GPW来源SHA/日志；新增独占`ACTIVE_RUN.json`防并发；Python可见GPW写入异常尝试world.abort，但无法保证一切MPI I/O故障不中断。增加2个假MPI/日志离线测试，总计5项。README明确三份GPW峰值和科学执行放行限制。
+- V2 4个文件已远端GitHub回读并做静态结构检查；**尚未在实际H环境对V2执行Python语法、5项离线测试及真实GPAW MPI写入恢复**。不得将“源码更新”当作“V2通过H验收”，更不得认为科学计算开始。现`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一步H提取V2，执行只读/离线复验，再做经允许的真实checkpoint回读/SCF warm restart测试及资源证明；此前不开正式计算。
+
+---
