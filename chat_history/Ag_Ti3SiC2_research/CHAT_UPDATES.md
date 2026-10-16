@@ -122,3 +122,13 @@
 - 当前仍`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一步仅让H验收V3；V3通过后再处理真实4-rank checkpoint/write/readback及资源证据。
 
 ---
+
+## 2026-10-16 — H V3审查FAIL，ChatGPT完成runner V4手术修复
+
+- 用户回报H对固定V3提交45419de…的审查：7项离线测试PASS、4rank广播助手PASS，但静态门槛FAIL；`checkpoint_write_elapsed_seconds`跨过`calc.write`之后的额外barrier，manifest累计时间取样过早（尚未覆盖SHA和后续metadata/ledger发布）；结构化SCF计数没有真正读取`ctx.niter`，此前单测误把本地迭代数和ctx.niter设为相同。真实GPW写入/恢复和持久存储、外部墙钟均未验证，未启动DFT。
+- ChatGPT从v3基线新建GitHub分支`chatgpt-tsc48-segmented-runner-v4-20261016`，当前提交[`5b67aa3002b1e3c197d7d511e9e075586c942095`](https://github.com/linkengde/-/commit/5b67aa3002b1e3c197d7d511e9e075586c942095)。仅更新专用runner、单元测试、README，新增H V4验收请求；未更改母体模型、输入、PAW或科学配置。
+- V4时序：根rank在`calc.write(mode='all')`返回瞬间记录write_finished并在额外MPI barrier之前停止写入专属计时；先fsync/SHA完整GPW，发布GPW，写入`checkpoint_finalized=false`临时manifest、`CHECKPOINT_PUBLISHING` ledger和中间状态，之后才取累计时间并原子发布`checkpoint_finalized=true`最终manifest。`verified_slots`拒绝未最终发布的checkpoint。对外返回的累计时钟还晚于最终manifest fsync。manifest无法包含自身未来写入耗时，故严格区分写入时长、manifest时间和结束后的计时时间。
+- V4 SCF采样显式读取`ctx.niter`为`scf_iteration_from_context`，与`local_iteration`分开。保留原7项离线测试数量，修改测试令ctx.niter=7/local_iter=3（检测原V3盲点）、模拟额外MPI barrier延迟、要求checkpoint写入时长不包括barrier、累计时间包含SHA/manifest/ledger、拒绝未finalized即使哈希正确的slot。
+- ChatGPT通过GitHub重新读取V4四文件并检查源代码关键时序、7个单测的修改片段；**本窗口没有在真实H GPAW环境运行V4 Python测试及真实4rank GPW读写/重启，不能声明V4 PASS**。当前`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`，需H重复离线和静态验收及取得独立持久存储、scratch、墙钟证据；原overlay可用约28.83 GB不足以证明三份完整checkpoint暂存（估计>34 GB，不含scratch）。
+
+---
