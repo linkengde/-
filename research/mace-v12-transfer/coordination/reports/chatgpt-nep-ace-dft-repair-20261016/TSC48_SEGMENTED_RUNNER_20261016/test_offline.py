@@ -4,7 +4,9 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import time
 import unittest
+from types import SimpleNamespace
 
 P = Path(__file__).with_name('tsc48_segmented.py')
 spec = importlib.util.spec_from_file_location('tsc48_segmented', P)
@@ -82,6 +84,67 @@ class OfflineTests(unittest.TestCase):
             self.assertEqual(mod.latest_verified_counters({
                 'cumulative_elapsed_seconds':33.5,
                 'cumulative_logged_scf_steps':20}), (33.5,20))
+
+    def test_gpaw_26_7_context_mapping(self):
+        from ase.units import Ha
+        ctx = SimpleNamespace(
+            niter=7,
+            ham=SimpleNamespace(e_total_extrapolated=2.0),
+            dens=SimpleNamespace(error=0.004),
+            wfs=SimpleNamespace(
+                nvalence=8.0,
+                eigensolver=SimpleNamespace(error=0.003)),
+            eig_error=0.005)
+        sample = mod.scf_context_sample(ctx, 7, 12.5)
+        self.assertEqual(sample['local_iteration'], 7)
+        self.assertEqual(sample['elapsed_seconds'], 12.5)
+        self.assertAlmostEqual(sample['total_extrapolated_energy_eV'],
+                               2.0 * Ha)
+        self.assertAlmostEqual(sample['density_error_per_valence'], 0.004 / 8.0)
+        self.assertAlmostEqual(sample['eigenstates_error_eV2_per_valence'],
+                               0.003 * Ha**2 / 8.0)
+        self.assertAlmostEqual(sample['eigenvalue_error_eV'], 0.005 * Ha)
+        self.assertNotIn('e_error', sample)
+        self.assertNotIn('density_error', sample)
+        self.assertNotIn('eigenstates_error', sample)
+
+    def test_checkpoint_cumulative_includes_write_and_publication(self):
+        class FakeWorld:
+            rank = 0
+            def __init__(self):
+                self.value = None
+            def barrier(self):
+                return None
+            def broadcast(self, buf, root):
+                if root == 0:
+                    self.value = buf.copy()
+                else:
+                    buf[:] = self.value
+
+        class FakeCalc:
+            def write(self, filename, mode=''):
+                self.mode = mode
+                time.sleep(0.02)
+                Path(filename).write_bytes(b'fake-full-wavefunction-gpw')
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            world = FakeWorld()
+            lock = {'scope':mod.SCOPE,'input_sha256':'I',
+                    'h_config_sha256':'C','runner_sha256':'R'}
+            started = time.monotonic()
+            cumulative = mod.save_checkpoint(
+                FakeCalc(), world, root, lock, 1, 20, 'SOURCE',
+                1, started, 100.0, 20, 'gpaw.start.log')
+            meta = mod.read_json(root/'slot_B.json')
+            self.assertEqual(meta['mode'], 'all')
+            self.assertEqual(meta['source_checkpoint_sha256'], 'SOURCE')
+            self.assertGreater(meta['checkpoint_write_elapsed_seconds'], 0.015)
+            self.assertGreaterEqual(
+                cumulative, meta['cumulative_elapsed_seconds'] - 0.01)
+            self.assertGreater(meta['cumulative_elapsed_seconds'], 100.015)
+            self.assertTrue((root/'slot_B.gpw').is_file())
+            self.assertFalse((root/'slot_B.writing.gpw').exists())
 
     def test_resource_fail_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
