@@ -54,3 +54,12 @@
 - 下一步：H只读修订预检/执行包并提交证据供C复审，同时平台/资源方提供具体存储/墙钟证据；C复审通过后仍需用户对唯一单点另行明确授权。**未启动或授权DFT、MD、AIMD、TTM、松弛或训练**。
 
 ---
+
+## 2026-10-16 — H修订48原子预检：C复审待办与资源HOLD
+
+- H修订报告：[H_TSC48_STATIC_PERTURB_SINGLEPOINT_PREFLIGHT_REVISION.md](https://github.com/linkengde/-/blob/3bf6a926ecd0b928c1e3b444f769468d0ee25fe4/research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/TSC48_PREFLIGHT_20261016/H_REVISION_C_25bb7406/H_TSC48_STATIC_PERTURB_SINGLEPOINT_PREFLIGHT_REVISION.md)，分支 `cloud-h-tsc48-preflight-revision-20261016`，提交 `3bf6a926ecd0b928c1e3b444f769468d0ee25fe4`。本聊天通过GitHub回读该报告、k点网格审计、静态配置、资源预算、4-rank环境探针及提交目录；未启动科学计算。C原审核分支 `cloud-c-h-tsc48-static-review-20261016` 仍指向 `25bb74065797d516f1e8c8bbf9b68a4b558aefef`，截至本轮核对该分支未有新的复审提交；不推断其他未检索位置绝对不存在审查。
+- H更正为与母体相同的偶数标准Monkhorst–Pack `10×10×4`、`shift=[0,0,0]`、不传`gamma=True`或额外offset；离线全BZ 400点、IBZ 200点，母体与候选完整BZ坐标一致，母体日志可见IBZ点一致。母体网格收敛结果不等于候选扰动几何自己的收敛证明。PPCG `niter=2`、Pulay `Mixer(0.05,8,100)`、PBE/PW500/Fermi0.10、非自旋、SCF 1e-5/maxiter160等配置已锁定，4-rank环境一致性探针通过。
+- 资源最新快照：`/workspace=28,827,836,416 bytes` 可用（约28.83GB）；历史48原子8×8×4 checkpoint 7.36GB，按IBZ 128→200点比例估算单份10×10×4 checkpoint约11.50GB，保留旧文件并阶段写新文件约23.00GB，余约5.82GB；**以上只是估算并非严格上界**，scratch峰值、持久checkpoint挂载/恢复、外部墙钟≥5h均仍未证实。无30GB自动否决原则，但不能据估算申请已通过的例外，也不得清理历史数据。
+- 当前状态：`DATA_ROLE=HOLD`，`ENV_READY=YES`，`C_REVIEW_ON_REVISION=PENDING`，`RESOURCE_READY=NO`，`DFT_EXECUTION_READY=NO`。下一步应C单独复审H修订版的科学配置，资源问题另需平台实证；即使C科学通过仍必须获得资源放行和用户对唯一单点明确计算授权。禁止自动运行DFT、MD、AIMD、TTM、松弛或训练。
+
+---
