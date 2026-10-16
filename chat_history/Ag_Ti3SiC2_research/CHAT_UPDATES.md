@@ -140,3 +140,12 @@
 - 现阶段唯一关键阻塞：4rank真实`mode=all`写入/GPW SHA校验/fresh-process读取与SCF warm restart未验证；没有跨会话持久存储或独立恢复证明；overlay`/workspace`约28.83GB可用、三份GPW同时存在的估算峰值约34.5GB且不含scratch；外部墙钟额度与写入余量未知。维持`REAL_GPAW_RESTART_VALIDATED=NO`、`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一行动不是启动正式DFT，而是H提供有验证的持久储存/足够空间/墙钟证据，再申请或按明确范围执行真实重启受控测试，最后放行唯一固定48原子单点。未经验证不得为了省空间取消checkpoint或破坏历史文件。
 
 ---
+
+## 2026-10-16 — H确认原云端不可放行，下一步迁移持久化VM
+
+- H执行环境最终资源核验：`/workspace`为overlay，总容量约33.77GB、可用约28.83GB；`/tmp`为tmpfs可用约14.74GB，均无跨会话持久保存证明。容器仅4 CPU/32GiB RAM，可用配置接口不能扩盘、挂载持久卷或查外部强制墙钟；`ulimit -t unlimited`不证明外部墙钟无限。
+- 预计完整GPAW `mode="all"`单个checkpoint约11.5GB；双槽旧文件加第三stage峰值约34.5GB，**未计scratch**；因此旧盘即使不考虑持久性也不能按这份估算安全通过峰值。没有启动实际4-rank GPAW GPW写入、fresh-process加载或SCF warm restart。未修改V4 runner、历史文件和科学参数。
+- H建议将已通过离线验收的48原子唯一单点迁移至有独立持久块卷的Debian13或等效Linux VM，最低4vCPU/32GiB，初始100GB独立持久卷，配置完成后目标至少50GB可用空间（最终按实测GPW、scratch峰值调整）。验证停止-重启VM后检验文件SHA不变、正确恢复挂载路径；取得明确平台作业时限/外部终止政策，核实分段墙钟≥segment_seconds+margin_seconds+checkpoint写入预留，并测量GPW写入及scratch高水位。资源证明完成后，先提交真实4rank checkpoint写入/读回/warm restart受控试验方案并获相应授权，再考虑启动唯一正式DFT。
+- 当前`V4_STATIC_REVIEW=PASS`、`V4_OFFLINE_TESTS=7/7_PASS`、`REAL_GPAW_RESTART_VALIDATED=NO`、`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`，科学输入与`DATA_ROLE=HOLD`不变。
+
+---
