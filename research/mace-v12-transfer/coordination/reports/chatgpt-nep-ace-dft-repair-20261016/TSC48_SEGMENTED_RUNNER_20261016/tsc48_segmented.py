@@ -156,6 +156,7 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
     final = directory / ('slot_'+slot+'.gpw')
     collective_stage_clear(world, stage)
     world.barrier()
+    write_started = time.monotonic()
     try:
         calc.write(str(stage), mode='all')
     except Exception:
@@ -163,6 +164,14 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
             world.abort(9)
         raise
     world.barrier()
+
+    # Rank 0 owns the measured GPW write duration; the value is broadcast so
+    # every rank records identical checkpoint accounting.
+    import numpy as np
+    write_elapsed = np.zeros(1, dtype=float)
+    if world.rank == 0:
+        write_elapsed[0] = time.monotonic() - write_started
+    world.broadcast(write_elapsed, 0)
 
     def publish():
         need(stage.is_file() and stage.stat().st_size > 0, 'CHECKPOINT_WRITE_MISSING')
@@ -183,7 +192,7 @@ def save_checkpoint(calc, world, directory, lock, sequence, iteration,
                 'segment_number':segment_number,
                 'cumulative_elapsed_seconds':round(cumulative_after_checkpoint, 3),
                 'checkpoint_write_elapsed_seconds':round(
-                    checkpoint_elapsed, 3),
+                    float(write_elapsed[0]), 3),
                 'cumulative_logged_scf_steps':cumulative_steps,
                 'scf_log_file':log_name,
                 'saved_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
