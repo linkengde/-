@@ -32,3 +32,14 @@
 - 科学决策：暂时停止此32原子冻结构型的k点加密，不等于严格收敛通过；优先准备现有48原子Ti₃SiC₂静态小位移候选 `TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz`（原始输入SHA-256 `da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b`），先复核体相k网格、输入/PAW、数据集父族隔离、内存/磁盘、独立任务授权；该静态扰动不等于高温样本。液态Ag已确认DFT标签仍为0，界面液态接触与骨架热态覆盖仍缺。**不授权新DFT/MD/松弛/训练**。
 
 ---
+
+## 2026-10-16 — H窗口 Ti₃SiC₂ 48原子静态扰动单点预检（仅审阅）
+
+- [原始只读预检报告](https://github.com/linkengde/-/blob/e923008453d71077421b651cf19c6705420d2356/research/mace-v12-transfer/coordination/reports/chatgpt-nep-ace-dft-repair-20261016/TSC48_PREFLIGHT_20261016/H_TSC48_STATIC_PERTURB_SINGLEPOINT_PREFLIGHT.md)，独立提交 `e923008453d71077421b651cf19c6705420d2356`；本聊天通过GitHub读取报告并确认提交只含此一报告，未在本聊天计算DFT或实际复核云端磁盘配额。
+- 输入：`TSC48_static_perturb_std0p025_seed2026101603_UNLABELED.extxyz`，SHA-256 `da3820c477023e0bb423f87550ed82ae0c2a571f53d294c055f78d7d052d5e8b`；48原子 `Ti24Si8C16`，与既有五个体相DFT标签非精确几何重复，但同属 `TSC_BULK_PARENT_OR_CONTROL_FAMILY`；不得将同父新样本误认独立DEV/TEST，也不代表热态。
+- 候选单点采用Γ居中 `10×10×4`；同48原子母体 `8×8×4→10×10×4` 的力向量RMS `0.004618 eV/Å` 和能量差符合原始标准，但**当前扰动结构的k点收敛尚未验证**。科学设置拟锁定PBE、PW500、Fermi0.10、非自旋、GPAW26.7.0、ASE3.29.0、4 MPI ranks及已核实PAW。
+- 运行环境 `ENV_READY=YES`，但资源 `RESOURCE_READY=NO`，执行 `DFT_EXECUTION_READY=NO`：`/workspace` 可用 `28,828,061,696 bytes`（28.83 GB）低于30GB建议线；`/tmp` 为tmpfs而非持久checkpoint盘；`/workspace` 的跨任务持久性未确认；外部墙钟时限未知（建议确认单点≥5小时）；资源峰值未知。不得随意清理历史文件以凑空间。
+- H在当时可访问的C相关远端分支未找到此候选的批准记录；`C_REVIEW=PENDING`，用户也未批准唯一单点开跑。`ENV_READY=YES / RESOURCE_READY=NO / DFT_EXECUTION_READY=NO`，保持HOLD。
+- 下一步仅交C审核候选输入与母体、重复/父族/数据角色、k网格选择及风险；请平台/资源方证实存储、checkpoint持久性、外部墙钟配额后，再单独提出唯一单点授权。**未授权DFT、MD、AIMD、TTM、松弛或训练**。
+
+---
