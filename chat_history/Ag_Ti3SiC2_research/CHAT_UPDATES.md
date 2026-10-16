@@ -111,3 +111,14 @@
 - V2 4个文件已远端GitHub回读并做静态结构检查；**尚未在实际H环境对V2执行Python语法、5项离线测试及真实GPAW MPI写入恢复**。不得将“源码更新”当作“V2通过H验收”，更不得认为科学计算开始。现`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一步H提取V2，执行只读/离线复验，再做经允许的真实checkpoint回读/SCF warm restart测试及资源证明；此前不开正式计算。
 
 ---
+
+## 2026-10-16 — H V2验收后修订TSC48 runner v3
+
+- H V2验收：5/5离线测试PASS、MPI停止决策同步PASS，但V2_STATIC_REVIEW=FAIL。两项具体问题为：累计耗时在checkpoint前记录，导致后续segment继承的累计时间漏掉GPW写入；SCF结构化采样探测了GPAW 26.7.0不存在的上下文字段。真实GPAW checkpoint写入/读回仍未验证，资源状态仍NO。
+- ChatGPT已从V2 HEAD `779f9b2e16ec33421e52f62a27ff09b72e8b8107`建立V3分支 `chatgpt-tsc48-segmented-runner-v3-20261016`。V3最新提交 `45419de48280cc4d452a4dcbe5e8f68b02a0c663`，包含源程序、7项离线测试、README和H验收请求。
+- V3修复：checkpoint GPW写入时段单独计时；checkpoint发布完成后由rank0记录累计时间并广播；manifest/status/ledger保存`cumulative_elapsed_seconds`和`checkpoint_write_elapsed_seconds`。SCF采样改用GPAW 26.7.0实际`SCFContext`字段及正确单位换算。未修改科学参数。
+- V3离线测试新增两项：实际GPAW 26.7 context映射测试；带人为延迟的假GPW写入测试，用于检查累计时间包含checkpoint写入。当前尚未在H环境实际执行这些测试，不能称V3通过。
+- 上游GPAW源码核对确认：26.7 SCF loop将`SCFContext`传给`scf_step` hook；context包含`niter`、`ham.e_total_extrapolated`、`wfs.eigensolver.error`、`dens.error`、`eig_error`等，收敛判据使用相同的单位换算。见GPAW官方源码/文档。
+- 当前仍`RESOURCE_READY=NO`、`DFT_EXECUTION_READY=NO`、`DFT_STARTED=NO`、`DATA_ROLE=HOLD`。下一步仅让H验收V3；V3通过后再处理真实4-rank checkpoint/write/readback及资源证据。
+
+---
