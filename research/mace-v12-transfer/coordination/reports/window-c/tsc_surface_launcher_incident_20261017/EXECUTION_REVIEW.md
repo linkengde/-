@@ -21,7 +21,7 @@ This is an execution-wrapper defect, not a failed SCF calculation. The first aut
 - Archived `RUN_STATUS.json` SHA-256: `6327b9aac9c4ffe0a1177e5040ae5599ce7222436afd0390e392b7d38e971dae`
 - Archived `stderr.log` SHA-256: `dfbe9a9b7e8ea4d864e713b513e7c6966e107f14241c5e89c2b9dc82e006f9f6`
 
-The archived status records exit code 2 after 2.0009 seconds, no checkpoint, no result, and no automatic retry. `stderr.log` contains the GPAW CLI usage error: it rejects worker arguments such as `--task-id`, `--input`, and `--run-dir`. The supervisor launches `gpaw python <worker> ...`; those worker arguments are being parsed by the GPAW command-line layer. The worker therefore did not construct a `GPAW` calculator or enter SCF. There is no `RESULT.json` or GPAW calculation log.
+The archived status records exit code 2 after 2.0009 seconds, no checkpoint, no result, and no automatic retry. `stderr.log` contains the GPAW CLI usage error: it rejects worker arguments such as `--task-id`, `--input`, and `--run-dir`. The supervisor launches `gpaw python <worker> ...` without GPAW's required `--` separator, so worker options are parsed by the GPAW command-line layer. The worker therefore did not construct a `GPAW` calculator or enter SCF. There is no `RESULT.json` or GPAW calculation log.
 
 The failed run manifest confirms the execution preflight had passed before the output directory was created: GPAW 26.7.0, ASE 3.29.0, gpaw-data 1.2.1, 4 MPI ranks, 1 OMP thread, 4-core quota, 32 GiB cgroup memory limit, and 30,155,169,792 bytes initially free on `/workspace`. This immediate CLI failure does not measure the actual DFT peak memory or runtime.
 
@@ -29,16 +29,16 @@ The existing four-input scientific review remains unchanged: fixed geometries, P
 
 ## Required repair before another launch
 
-1. In the supervisor, invoke the worker directly with the same interpreter used by the successful MPI probe:
+1. In the supervisor, retain GPAW's Python launcher and insert the required `--` separator:
 
-   `mpiexec -n 4 <sys.executable> <run_surface_singlepoint.py> <worker arguments>`
+   `mpiexec -n 4 <gpaw executable> python -- <run_surface_singlepoint.py> <worker arguments>`
 
-   Do not route the worker arguments through the `gpaw` CLI. The existing preflight already checks MPI using `mpiexec -n 4 sys.executable -c ...`.
+   GPAW 26.7.0 documents this separator as the way to pass options beginning with `-` to the target program. I verified the corrected four-rank command with the worker's `--help`; argument parsing succeeded and no calculator or SCF was started.
 
 2. Preserve the failed attempt at `results/TSC100_TI0001_COD9009647_2x2x2_REF/`. The supervisor currently requires that exact path to be new, so rerunning with the same path will fail preflight. Add an explicit, validated attempt ID and use a new leaf such as `results/TSC100_TI0001_COD9009647_2x2x2_REF/attempt-0002/`. Check that leaf for nonexistence; never overwrite or move the archived attempt.
 
 3. Update the execution lock's `supervisor_sha256`, package `SHA256SUMS.txt`, and command instructions to bind the repaired supervisor and new lock SHA. Keep the worker, config, input structures, PAW hashes, and all scientific settings unchanged. Keep automatic retry disabled.
 
-4. Before DFT, run a non-scientific MPI CLI smoke test (`mpiexec -n 4 <sys.executable> <worker> --help`) and confirm success with no result/checkpoint/calculation output. Then run the task's fresh resource/hash preflight for `attempt-0002`. A passing smoke test alone is not a release; C must review the new committed supervisor/lock hashes before the calculation command is considered valid.
+4. Before DFT, run a non-scientific MPI CLI smoke test (`mpiexec -n 4 <gpaw executable> python -- <worker> --help`) and confirm success with no result/checkpoint/calculation output. Then run the task's fresh resource/hash preflight for `attempt-0002`. A passing smoke test alone is not a release; C must review the new committed supervisor/lock hashes before the calculation command is considered valid.
 
 After C verifies the repaired commit and bindings, E may run only the listed surface tasks sequentially, one at a time, with the existing per-task resource and fresh-fetch archive gates. No other DFT, fitting, MD, or training is authorized by this record.
