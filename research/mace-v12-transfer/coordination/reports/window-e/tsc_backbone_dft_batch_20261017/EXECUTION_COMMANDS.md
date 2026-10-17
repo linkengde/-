@@ -1,13 +1,18 @@
 # E：四个 Ti₃SiC₂ 表面固定几何 DFT 单点命令
 
-执行锁 SHA-256：`678d1d287482e82039fc59e0c6961a92069a817f2c856c8745c82cf58bbd5863`
+执行锁 SHA-256：`579f5803cd6c3e5d522ecf396c4f25fb06ea9fe8939f9ef684e750702f9edb46`
 
 输入包/结构来自 E 提交 `cbc14c97fe5d962dc808a4cf48bca3e6b5588ea0`，C 审核来自 `669aafefd9efbda59b7ba088893e338d469d3f96`。每次只运行一个结构。执行器会重查资源、PAW/软件/结构 SHA、C 审核和分支状态；运行成功或失败后，只暂存该任务目录，推送 E 分支，再 fresh-fetch 并校验该目录的 SHA 清单。失败不会重试或自动改参数。
 
 ```bash
 cd /workspace/-
-git fetch --no-tags origin cloud-e-b1-dft
-git switch cloud-e-b1-dft 2>/dev/null || git switch --track -c cloud-e-b1-dft origin/cloud-e-b1-dft
+git fetch --no-tags origin +refs/heads/cloud-e-b1-dft:refs/remotes/origin/cloud-e-b1-dft
+if git show-ref --verify --quiet refs/heads/cloud-e-b1-dft; then
+  git switch cloud-e-b1-dft
+else
+  REMOTE_E_HEAD=$(git rev-parse refs/remotes/origin/cloud-e-b1-dft)
+  git switch -c cloud-e-b1-dft "$REMOTE_E_HEAD"
+fi
 git pull --ff-only origin cloud-e-b1-dft
 
 # Use the existing GPAW environment; do not install or upgrade packages here.
@@ -18,11 +23,20 @@ TASK_PACKAGE=research/mace-v12-transfer/coordination/reports/window-e/tsc_backbo
 cd "$TASK_PACKAGE"
 sha256sum -c SHA256SUMS.txt
 
-# 先运行每项的只读预检。只有输出 PREFLIGHT_PASS 才运行下面对应的计算命令。
-python execute_one_surface_task.py --task-id TSC100_TI0001_COD9009647_2x2x2_REF --lock-sha256 678d1d287482e82039fc59e0c6961a92069a817f2c856c8745c82cf58bbd5863 --confirm-5h-window --preflight-only
-python execute_one_surface_task.py --task-id TSC100_TI0001_COD9009647_2x2x2_REF --lock-sha256 678d1d287482e82039fc59e0c6961a92069a817f2c856c8745c82cf58bbd5863 --confirm-5h-window
+# Non-scientific four-rank CLI smoke test; --help must exit 0 and creates no calculation output.
+mpiexec -n 4 gpaw python -- "$PWD/run_surface_singlepoint.py" --help
 
-# 每项归档并 fresh-fetch 校验完成后，再对下一项重复这两条命令：
+# Preserve the original pre-SCF launcher failure at results/<TASK_ID>/.
+# Retry it only at the distinct attempt-0002 path.
+TASK_ID=TSC100_TI0001_COD9009647_2x2x2_REF
+ATTEMPT_ID=attempt-0002
+LOCK_SHA=579f5803cd6c3e5d522ecf396c4f25fb06ea9fe8939f9ef684e750702f9edb46
+python execute_one_surface_task.py --task-id "$TASK_ID" --attempt-id "$ATTEMPT_ID" --lock-sha256 "$LOCK_SHA" --confirm-5h-window --preflight-only
+# Run only if output status is PREFLIGHT_PASS.
+python execute_one_surface_task.py --task-id "$TASK_ID" --attempt-id "$ATTEMPT_ID" --lock-sha256 "$LOCK_SHA" --confirm-5h-window
+
+# Each completed task is archived and SHA-verified from a fresh fetch before proceeding.
+# For each remaining task, omit --attempt-id and use the new LOCK_SHA above:
 # TSC100_TI0001_COD9009647_2x2x2_RESP_Z020
 # TSC100_SI0001_COD9009647_2x2x2_REF
 # TSC100_SI0001_COD9009647_2x2x2_RESP_Z020

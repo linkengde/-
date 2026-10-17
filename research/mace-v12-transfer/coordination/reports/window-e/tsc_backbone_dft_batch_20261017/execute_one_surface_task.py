@@ -35,6 +35,8 @@ REQUIRED_START_BYTES = 17179869184  # 10 GiB scratch + 6 GiB headroom
 MIN_RUNTIME_HEADROOM_BYTES = 6442450944  # 6 GiB
 MAX_CGROUP_CURRENT_BYTES = 30064771072  # 28 GiB conservative stop threshold
 MAX_WALLTIME_SECONDS = 18000
+RETRY_TASK_ID = "TSC100_TI0001_COD9009647_2x2x2_REF"
+RETRY_ATTEMPT_ID = "attempt-0002"
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -54,6 +56,17 @@ def run(cmd, *, cwd=REPO, env=None, check=True, capture=False):
 def available_bytes(path: Path) -> int:
     st = os.statvfs(path)
     return st.f_bavail * st.f_frsize
+
+
+def task_output_path(task_id: str, attempt_id: str | None) -> Path:
+    task_root = BASE / "results" / task_id
+    if attempt_id is None:
+        return task_root
+    if task_id != RETRY_TASK_ID or attempt_id != RETRY_ATTEMPT_ID:
+        raise ValueError(
+            f"Only {RETRY_ATTEMPT_ID} is permitted for {RETRY_TASK_ID}"
+        )
+    return task_root / attempt_id
 
 
 def read_int(path: str) -> int:
@@ -103,7 +116,8 @@ def verify_manifest(base: Path):
     return p.stdout
 
 
-def preflight(task_id: str, confirm_window: bool, expected_lock_sha: str):
+def preflight(task_id: str, attempt_id: str | None,
+              confirm_window: bool, expected_lock_sha: str):
     cfg = json.loads(CONFIG_PATH.read_text())
     lock = json.loads(LOCK_PATH.read_text())
     checks = {}
@@ -179,8 +193,36 @@ def preflight(task_id: str, confirm_window: bool, expected_lock_sha: str):
         and cfg["resources"]["automatic_retry"] is False
     )
     free = available_bytes(Path("/workspace"))
+    output_path = task_output_path(task_id, attempt_id)
+    retry_policy = lock.get("manual_retry_policy", {})
+    if attempt_id is not None:
+        previous_attempt = BASE / retry_policy.get("preserve_existing_attempt_path", "INVALID")
+        previous_manifest = previous_attempt / "SHA256SUMS.txt"
+        previous_check = subprocess.run(
+            ["sha256sum", "-c", "SHA256SUMS.txt"], cwd=previous_attempt,
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        ) if previous_attempt.is_dir() else None
+        checks["manual_attempt_authorized_by_lock"] = (
+            retry_policy.get("task_id") == task_id
+            and retry_policy.get("attempt_id") == attempt_id
+            and retry_policy.get("automatic_retry") is False
+        )
+        checks["retry_path_matches_lock"] = (
+            output_path.relative_to(BASE).as_posix() == retry_policy.get("new_attempt_path")
+        )
+        checks["previous_attempt_manifest_sha256"] = (
+            previous_manifest.is_file()
+            and sha256(previous_manifest) == retry_policy.get("preserved_attempt_manifest_sha256")
+        )
+        checks["previous_attempt_archive_hashes"] = (
+            previous_check is not None and previous_check.returncode == 0
+        )
+        checks["previous_attempt_commit_in_history"] = run(
+            ["git", "merge-base", "--is-ancestor",
+             retry_policy.get("previous_attempt_commit", "INVALID"), "HEAD"], check=False
+        ).returncode == 0
     checks["initial_scratch_and_headroom"] = free >= REQUIRED_START_BYTES
-    checks["output_path_is_new"] = not (BASE / "results" / task_id).exists()
+    checks["output_path_is_new"] = not output_path.exists()
     checks["no_active_DFT_process"] = not active_compute_processes()
     env = os.environ.copy()
     env["GPAW_MPI_BACKEND"] = "cgpaw"
@@ -189,6 +231,7 @@ def preflight(task_id: str, confirm_window: bool, expected_lock_sha: str):
     mpi_rows = check_mpi(env, cfg["software"])
     checks["MPI_4_rank_consistency"] = len(mpi_rows) == 4
     return checks, {"task": task, "config": cfg, "lock": lock,
+                    "output_path": str(output_path), "attempt_id": attempt_id,
                     "workspace_free_bytes": free, "memory_current_bytes": read_int("/sys/fs/cgroup/memory.current"),
                     "memory_limit_bytes": read_int("/sys/fs/cgroup/memory.max"),
                     "cpu_max": Path("/sys/fs/cgroup/cpu.max").read_text().strip(),
@@ -245,11 +288,13 @@ def verify_remote_dir(remote_ref: str, repo_relpath: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--task-id", required=True)
+    parser.add_argument("--attempt-id", choices=[RETRY_ATTEMPT_ID])
     parser.add_argument("--lock-sha256", required=True)
     parser.add_argument("--confirm-5h-window", action="store_true")
     parser.add_argument("--preflight-only", action="store_true")
     args = parser.parse_args()
-    checks, details = preflight(args.task_id, args.confirm_5h_window, args.lock_sha256)
+    checks, details = preflight(args.task_id, args.attempt_id,
+                                args.confirm_5h_window, args.lock_sha256)
     report = {"status": "PREFLIGHT_PASS" if all(checks.values()) else "PREFLIGHT_HOLD",
               "checks": checks, "details": details,
               "minimum_start_free_bytes": REQUIRED_START_BYTES,
@@ -265,12 +310,14 @@ def main():
 
     task = details["task"]
     cfg = details["config"]
-    out = BASE / "results" / args.task_id
+    out = Path(details["output_path"])
     out.mkdir(parents=True, exist_ok=False)
     input_path = BASE / task["input_path"]
     shutil.copy2(input_path, out / "input.extxyz")
     (out / "RUN_MANIFEST.json").write_text(json.dumps({
-        "structure_id": args.task_id, "role": details["lock"]["role"],
+        "structure_id": args.task_id,
+        "attempt_id": args.attempt_id or "attempt-0001",
+        "role": details["lock"]["role"],
         "input_sha256": task["input_sha256"], "config_sha256": CONFIG_SHA,
         "execution_lock_sha256": args.lock_sha256,
         "source_input_commit": details["lock"]["input_package_commit"],
@@ -299,7 +346,7 @@ def main():
                 "TMPDIR": str(scratch_dir), "TMP": str(scratch_dir)})
     cmd = [shutil.which("mpiexec") or "mpiexec", "-n", "4",
            shutil.which("gpaw") or str(Path(sys.executable).with_name("gpaw")), "python",
-           str(WORKER_PATH), "--task-id", args.task_id,
+           "--", str(WORKER_PATH), "--task-id", args.task_id,
            "--input", str(out / "input.extxyz"), "--run-dir", str(out),
            "--config", str(CONFIG_PATH), "--config-sha256", CONFIG_SHA,
            "--execution-lock", str(LOCK_PATH), "--execution-lock-sha256", args.lock_sha256]

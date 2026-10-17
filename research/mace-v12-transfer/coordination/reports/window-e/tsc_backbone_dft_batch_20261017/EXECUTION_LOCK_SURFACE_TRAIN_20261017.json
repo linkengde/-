@@ -1,10 +1,12 @@
 {
   "schema_version": "1.0",
-  "status": "CONDITIONALLY_AUTHORIZED; RUNTIME_PREFLIGHT_REQUIRED_FOR_EACH_TASK",
+  "status": "USER_AUTHORIZED_LAUNCHER_REPAIR; RUNTIME_PREFLIGHT_REQUIRED_FOR_EACH_TASK",
   "execution_authorized": true,
   "authorization_basis": [
     "C review 669aafefd9efbda59b7ba088893e338d469d3f96 approves the four fixed-geometry methods and permits execution once the listed resource and execution gates pass, without an expanded-scope request.",
-    "User confirmed that the execution window can run for five hours and supplied a passing 16 GiB-plus disk preflight from the target window. The runner independently rechecks the target window before every task."
+    "User confirmed that the execution window can run for five hours and supplied a passing 16 GiB-plus disk preflight from the target window. The runner independently rechecks the target window before every task.",
+    "User explicitly instructed repair of the GPAW CLI argument delimiter, preservation of the archived pre-SCF failure, and one manual attempt-0002 without waiting for further C review; no scientific inputs or settings may change.",
+    "User explicitly instructed repair of the GPAW CLI argument delimiter, preservation of the archived pre-SCF failure, and one manual attempt-0002 without waiting for further C review; scientific inputs and settings remain unchanged."
   ],
   "C_review_commit": "669aafefd9efbda59b7ba088893e338d469d3f96",
   "C_review_sha256": "c3f016a93cb118d3ac75805c13e7b60247a42c1d34aba5a89df323b34bbc5ea7",
@@ -16,7 +18,7 @@
   "runner_path": "research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017/run_surface_singlepoint.py",
   "runner_sha256": "95f8661d9f29b607ae96dc421b81a3694972c0becca9dc3862c2ba2e6a9cd408",
   "supervisor_path": "research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017/execute_one_surface_task.py",
-  "supervisor_sha256": "42dbe008db8145daec13d874a12efe104f2000bef4f3a386da5e819beb7553d5",
+  "supervisor_sha256": "0bc65561151b620630cb5bef9e0de619e031263adcb62397da8487781fd44dd1",
   "scope": [
     {
       "structure_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
@@ -64,7 +66,9 @@
     "archive_success_or_failure_before_next_structure": true,
     "push_branch": "cloud-e-b1-dft",
     "fresh_fetch_and_verify_result_SHA256_before_next_structure": true,
-    "stage_only_task_result_directory": true
+    "stage_only_task_result_directory": true,
+    "retry_result_path": "results/<task_id>/<attempt_id>/",
+    "preserve_prior_failed_archive": true
   },
   "prohibited": [
     "geometry or cell changes",
@@ -73,5 +77,15 @@
     "automatic retries",
     "DEV or TEST tasks",
     "DFT tasks outside the four listed structures"
-  ]
+  ],
+  "manual_retry_policy": {
+    "automatic_retry": false,
+    "task_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
+    "attempt_id": "attempt-0002",
+    "reason": "Repair GPAW CLI argument parsing after the archived pre-SCF launch failure.",
+    "preserve_existing_attempt_path": "results/TSC100_TI0001_COD9009647_2x2x2_REF",
+    "previous_attempt_commit": "a8c354fb3cb11efaec033782e716aabdc438425c",
+    "preserved_attempt_manifest_sha256": "81fff1aa84e7387edee4596fdbba5b7dfd65919d1149388e83b2b6fb82ea589f",
+    "new_attempt_path": "results/TSC100_TI0001_COD9009647_2x2x2_REF/attempt-0002"
+  }
 }
