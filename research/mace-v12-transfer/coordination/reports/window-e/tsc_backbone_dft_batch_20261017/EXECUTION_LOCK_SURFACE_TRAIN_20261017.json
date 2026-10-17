@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "status": "CONDITIONALLY_AUTHORIZED; RUNTIME_PREFLIGHT_REQUIRED_FOR_EACH_TASK",
+  "execution_authorized": true,
+  "authorization_basis": [
+    "C review 669aafefd9efbda59b7ba088893e338d469d3f96 approves the four fixed-geometry methods and permits execution once the listed resource and execution gates pass, without an expanded-scope request.",
+    "User confirmed that the execution window can run for five hours and supplied a passing 16 GiB-plus disk preflight from the target window. The runner independently rechecks the target window before every task."
+  ],
+  "C_review_commit": "669aafefd9efbda59b7ba088893e338d469d3f96",
+  "C_review_sha256": "c3f016a93cb118d3ac75805c13e7b60247a42c1d34aba5a89df323b34bbc5ea7",
+  "C_decision_sha256": "577d95f533446bd60044a484949b33740c445ec3cfaf304b47e5fa2d48fda876",
+  "input_package_commit": "cbc14c97fe5d962dc808a4cf48bca3e6b5588ea0",
+  "branch": "cloud-e-b1-dft",
+  "config_path": "research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017/SURFACE_DFT_CONFIG.json",
+  "config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "runner_path": "research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017/run_surface_singlepoint.py",
+  "runner_sha256": "95f8661d9f29b607ae96dc421b81a3694972c0becca9dc3862c2ba2e6a9cd408",
+  "supervisor_path": "research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017/execute_one_surface_task.py",
+  "supervisor_sha256": "42dbe008db8145daec13d874a12efe104f2000bef4f3a386da5e819beb7553d5",
+  "scope": [
+    {
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
+      "input_sha256": "b1948a44b89efe17ee7c2891b984167982067feeffa774b7f6fa77d9e9158d86"
+    },
+    {
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_RESP_Z020",
+      "input_sha256": "afa99ddae62e861bf641d3e7f2d908c78dfb0d466e762a25ebaeec64b0a91078"
+    },
+    {
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+      "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4"
+    },
+    {
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_RESP_Z020",
+      "input_sha256": "f78560dfe891ea86d8a7da5843216050430f9aef8303c463231f31c19ca10da0"
+    }
+  ],
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "energy_and_stress_loss": false,
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "kpoint_convention": "standard Monkhorst-Pack through GPAW kpts=(6,6,1); no gamma=True and no explicit shift",
+  "resource_gate": {
+    "minimum_initial_free_bytes": 17179869184,
+    "minimum_runtime_free_bytes": 6442450944,
+    "minimum_cpu_quota_cores": 4,
+    "minimum_memory_limit_bytes": 34359738368,
+    "stop_when_cgroup_memory_current_bytes_reaches": 30064771072,
+    "per_structure_walltime_seconds": 18000,
+    "user_reported_target_window_free_bytes": 28421353472,
+    "target_window_resource_checks_must_be_repeated": true
+  },
+  "checkpoint_policy": {
+    "checkpoint_enabled": false,
+    "restart_from_partial_state": false,
+    "automatic_retry": false,
+    "failure_action": "preserve stdout, stderr, GPAW log and status; archive to branch; do not retry or alter settings"
+  },
+  "archive_policy": {
+    "one_structure_per_invocation": true,
+    "archive_success_or_failure_before_next_structure": true,
+    "push_branch": "cloud-e-b1-dft",
+    "fresh_fetch_and_verify_result_SHA256_before_next_structure": true,
+    "stage_only_task_result_directory": true
+  },
+  "prohibited": [
+    "geometry or cell changes",
+    "relaxation",
+    "automatic parameter changes",
+    "automatic retries",
+    "DEV or TEST tasks",
+    "DFT tasks outside the four listed structures"
+  ]
+}

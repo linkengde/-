@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "scope": "four C-reviewed Ti3SiC2 (0001) clean-surface fixed-geometry single points only",
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "energy_and_stress_loss": false,
+  "method": {
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "kpoint_type": "standard Monkhorst-Pack via GPAW kpts tuple; no explicit gamma flag or extra shift",
+    "kpoints_size": [6, 6, 1],
+    "fermi_dirac_width_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-5,
+      "density": 1e-5,
+      "eigenstates": 1e-5
+    },
+    "maxiter": 160,
+    "eigensolver": "GPAW default Davidson, niter=2",
+    "mixer": {
+      "type": "MSR1",
+      "nmaxold": 10,
+      "beta": 0.05,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    },
+    "sl_auto": true,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "relaxation": false,
+    "pbc": [true, true, true]
+  },
+  "software": {
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "gpaw_data_version": "1.2.1"
+  },
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "parallel": {
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1,
+    "GPAW_MPI_BACKEND": "cgpaw"
+  },
+  "resources": {
+    "minimum_start_free_bytes": 17179869184,
+    "minimum_memory_limit_bytes": 34359738368,
+    "minimum_runtime_headroom_bytes": 6442450944,
+    "maximum_cgroup_memory_current_bytes": 30064771072,
+    "per_structure_walltime_seconds": 18000,
+    "automatic_retry": false,
+    "continue_to_next_task_after_this_task_archived": true
+  },
+  "tasks": [
+    {
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
+      "source_family": "surface_ti0001_cod9009647",
+      "input_path": "inputs/TSC100_TI0001_COD9009647_2x2x2_REF.extxyz",
+      "input_sha256": "b1948a44b89efe17ee7c2891b984167982067feeffa774b7f6fa77d9e9158d86",
+      "geometry_sha256": "b478ed6803312e49c620e5e7a4b8761a9a98c3455d13ef381df1b3b6998b509c",
+      "atom_count": 100,
+      "composition": {"Ti": 52, "Si": 16, "C": 32}
+    },
+    {
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_RESP_Z020",
+      "source_family": "surface_ti0001_cod9009647",
+      "input_path": "inputs/TSC100_TI0001_COD9009647_2x2x2_RESP_Z020.extxyz",
+      "input_sha256": "afa99ddae62e861bf641d3e7f2d908c78dfb0d466e762a25ebaeec64b0a91078",
+      "geometry_sha256": "25be98f9aab79a478b8e8bfcf7363cf0fb65aabb4c8612a46c129a539757c4f2",
+      "atom_count": 100,
+      "composition": {"Ti": 52, "Si": 16, "C": 32}
+    },
+    {
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+      "source_family": "surface_si0001_cod9009647",
+      "input_path": "inputs/TSC100_SI0001_COD9009647_2x2x2_REF.extxyz",
+      "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+      "geometry_sha256": "a349663c5d7de8f1dc325d557e2fb789bbd16e838635d15d67485a42f1137133",
+      "atom_count": 100,
+      "composition": {"Ti": 48, "Si": 20, "C": 32}
+    },
+    {
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_RESP_Z020",
+      "source_family": "surface_si0001_cod9009647",
+      "input_path": "inputs/TSC100_SI0001_COD9009647_2x2x2_RESP_Z020.extxyz",
+      "input_sha256": "f78560dfe891ea86d8a7da5843216050430f9aef8303c463231f31c19ca10da0",
+      "geometry_sha256": "951a17837443fc2acec4e50529a8618680272b700e7b87e9ae437cbf38b39b0a",
+      "atom_count": 100,
+      "composition": {"Ti": 48, "Si": 20, "C": 32}
+    }
+  ]
+}
