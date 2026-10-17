@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "status": "PARTIAL_INPUT_PACKAGE_READY_FOR_C_REVIEW; DEV_INPUTS_HOLD",
+  "request_commit": "1b641b31e750731509a34f033eb5eeee47c029d7",
+  "request_sha256": "7b2b2fe73306dbcb9ff764ea54a43b7a9780473de24c232952b6e31570c1c1da",
+  "execution_authorized": false,
+  "E_scope": "six public E tasks maximum; four surface TRAIN candidates prepared, two independent DEV candidates blocked on a qualifying source family",
+  "test_scope": "Two TEST tasks belong to the independent evaluator; no test identity, coordinates, or labels are present in this package.",
+  "tasks": [
+    {
+      "task_index": 1,
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
+      "role_proposal": "TRAIN",
+      "source_family": "surface_ti0001_cod9009647",
+      "input_path": "inputs/TSC100_TI0001_COD9009647_2x2x2_REF.extxyz",
+      "input_sha256": "b1948a44b89efe17ee7c2891b984167982067feeffa774b7f6fa77d9e9158d86",
+      "status": "READY_FOR_C_INPUT_REVIEW"
+    },
+    {
+      "task_index": 2,
+      "structure_id": "TSC100_TI0001_COD9009647_2x2x2_RESP_Z020",
+      "role_proposal": "TRAIN",
+      "source_family": "surface_ti0001_cod9009647",
+      "input_path": "inputs/TSC100_TI0001_COD9009647_2x2x2_RESP_Z020.extxyz",
+      "input_sha256": "afa99ddae62e861bf641d3e7f2d908c78dfb0d466e762a25ebaeec64b0a91078",
+      "status": "READY_FOR_C_INPUT_REVIEW"
+    },
+    {
+      "task_index": 3,
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+      "role_proposal": "TRAIN",
+      "source_family": "surface_si0001_cod9009647",
+      "input_path": "inputs/TSC100_SI0001_COD9009647_2x2x2_REF.extxyz",
+      "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+      "status": "READY_FOR_C_INPUT_REVIEW"
+    },
+    {
+      "task_index": 4,
+      "structure_id": "TSC100_SI0001_COD9009647_2x2x2_RESP_Z020",
+      "role_proposal": "TRAIN",
+      "source_family": "surface_si0001_cod9009647",
+      "input_path": "inputs/TSC100_SI0001_COD9009647_2x2x2_RESP_Z020.extxyz",
+      "input_sha256": "f78560dfe891ea86d8a7da5843216050430f9aef8303c463231f31c19ca10da0",
+      "status": "READY_FOR_C_INPUT_REVIEW"
+    },
+    {
+      "task_index": 5,
+      "structure_id": null,
+      "role_proposal": "DEV",
+      "source_family": null,
+      "input_path": null,
+      "input_sha256": null,
+      "status": "HOLD_NO_VERIFIED_INDEPENDENT_NONTRAIN_SOURCE",
+      "blocker": "The repository contains one Ti3SiC2 crystallographic CIF source. Available alternative TSC structures are descendants of that bulk parent, the 135-atom interface-derived TSC-only slab used in E5 response analysis, or legacy MACE training structures. No candidate satisfies the handoff's independent-parent requirement without a source-family decision or a new independently sourced structure."
+    },
+    {
+      "task_index": 6,
+      "structure_id": null,
+      "role_proposal": "DEV",
+      "source_family": null,
+      "input_path": null,
+      "input_sha256": null,
+      "status": "HOLD_NO_VERIFIED_INDEPENDENT_NONTRAIN_SOURCE",
+      "blocker": "Must be the deterministic response descendant of task 5's approved independent DEV reference; no such reference family has been identified."
+    }
+  ],
+  "C_review_required": [
+    "approve the 100-atom symmetric Ti-terminated and Si-terminated (0001) slab geometries or request changes",
+    "approve the 0.02 Angstrom symmetric terminal-site normal displacement definition",
+    "approve the derived standard Monkhorst-Pack 6x6x1 mesh",
+    "approve the proposed MSR1/maxiter160 method lock and resource/walltime risk",
+    "identify or accept a source for an independent DEV family; until then tasks 5-6 remain HOLD",
+    "freeze roles and issue the reviewed input hashes before any DFT launch"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "status": "PROPOSED_FOR_C_REVIEW_ONLY",
+  "execution_authorized": false,
+  "fit_authorized": false,
+  "potential_modification_authorized": false,
+  "source_request_commit": "1b641b31e750731509a34f033eb5eeee47c029d7",
+  "source_request_sha256": "7b2b2fe73306dbcb9ff764ea54a43b7a9780473de24c232952b6e31570c1c1da",
+  "existing_six_train_use_approval_commit": "52e722f30e70f4d0d7ec2a43643930d95a09dca3",
+  "this_proposal_scope": "four Ti3SiC2 (0001) clean-surface fixed-geometry single points; two DEV points remain HOLD until an independent source family is identified",
+  "method_reference": {
+    "successful_P0_execution_lock_path": "research/mace-v12-transfer/coordination/reports/window-e/dft_supplement_results_20261016/EXECUTION_LOCK_K6X6X2_MSR1.json",
+    "successful_P0_execution_lock_sha256": "81d9ce869d153b3bde909f3d8259a3b89a437a8150158dcd32211e9a911afd0f",
+    "successful_P0_runner_path": "research/mace-v12-transfer/coordination/reports/window-e/dft_supplement_results_20261016/run_single_point_msr1.py",
+    "successful_P0_runner_sha256": "812110a1d63c8b374f5ace669fec00aac26b04ae125dccbe102ad197382cc9e4",
+    "note": "The successful runner/lock are method references only; they do not bind the new surface inputs, authorize execution, or claim slab convergence."
+  },
+  "scientific_method": {
+    "code": "GPAW",
+    "version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "paw_data_version": "1.2.1",
+    "paw_sha256": {
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    },
+    "occupations": {
+      "type": "Fermi-Dirac",
+      "width_eV": 0.1
+    },
+    "kpoints": {
+      "type": "standard Monkhorst-Pack",
+      "size": [6, 6, 1],
+      "api_convention": "GPAW kpts tuple; no explicit gamma flag and no additional shift",
+      "coordinate_audit": "KPOINT_REVIEW.json",
+      "status": "proposed; C review required"
+    },
+    "scf_convergence": {
+      "energy": 1e-5,
+      "density": 1e-5,
+      "eigenstates": 1e-5,
+      "maxiter": 160,
+      "mixer": {
+        "type": "MSR1",
+        "nmaxold": 10,
+        "beta": 0.05,
+        "reg": 0.005,
+        "gb_scale": 1.0,
+        "max_A": 0.75,
+        "trust_scale": 1.0,
+        "soft_lim": 4.0,
+        "hard_lim": 6.0,
+        "weight": 20.0,
+        "sigma": 0.015
+      },
+      "eigensolver": "GPAW default Davidson, matching the successful P0 MSR1 runner; no explicit alternative eigensolver"
+    },
+    "parallel": {
+      "mpi_ranks": 4,
+      "OMP_NUM_THREADS": 1,
+      "sl_auto": true,
+      "GPAW_MPI_BACKEND": "cgpaw"
+    },
+    "geometry": {
+      "fixed_coordinates": true,
+      "fixed_cell": true,
+      "relaxation": false,
+      "pbc": [true, true, true],
+      "vacuum_gap_angstrom": 18.0
+    },
+    "outputs": [
+      "SCF convergence and iterations",
+      "native total energy",
+      "force-consistent free energy, separately named",
+      "per-atom forces in eV/Angstrom",
+      "stress tensor in eV/Angstrom^3 and GPa, diagnostic only for slabs"
+    ],
+    "loss_scope_proposal": {
+      "TRAIN": "forces only, after separate C role review; existing six-point approval does not automatically include these four new structures",
+      "energy_loss": false,
+      "stress_loss": false,
+      "DEV": "model selection only, pending proof of independent parent family",
+      "slab_stress_warning": "3D stress is vacuum-volume normalized and must not be treated as bulk elastic data"
+    }
+  },
+  "execution_policy_proposal": {
+    "one_structure_at_a_time": true,
+    "automatic_retry": false,
+    "automatic_parameter_change": false,
+    "write_final_labels_only_after_scf_convergence": true,
+    "checkpoint_policy": "No persistent checkpoint planned after success; if interruption recovery is approved, use a temporary per-task checkpoint and remove it only after validated success. Exact checkpoint mechanism remains untested.",
+    "per_structure_walltime_seconds": null,
+    "walltime_note": "No platform-level job wall-clock cap was verified. The offline estimate is near a 4-hour budget at 41 SCF iterations; C must approve a safe limit or explicitly accept timeout risk."
+  },
+  "task_manifest": "PUBLIC_TASK_MANIFEST.json",
+  "surface_candidate_manifest": "SURFACE_CANDIDATE_MANIFEST.json",
+  "kpoint_review": "KPOINT_REVIEW.json",
+  "resource_review": "RESOURCE_BUDGET.md"
+}
