@@ -1,0 +1,37 @@
+{
+  "structure_id": "TSC100_TI0001_COD9009647_2x2x2_REF",
+  "input_sha256": "b1948a44b89efe17ee7c2891b984167982067feeffa774b7f6fa77d9e9158d86",
+  "software": {"GPAW": "26.7.0", "ASE": "3.29.0", "gpaw-data": "1.2.1"},
+  "method": {
+    "xc": "PBE",
+    "paw_setups": "GPAW PBE PAW datasets from gpaw-data 1.2.1",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "kpoints_type": "standard Monkhorst-Pack",
+    "kpoints_size": [6, 6, 1],
+    "fermi_dirac_width_eV": 0.1,
+    "spin_polarized": false,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "convergence": {"energy": 1e-5, "density": 1e-5, "eigenstates": 1e-5},
+    "eigensolver": {"type": "Davidson", "niter": 2},
+    "max_scf_steps": 160,
+    "mixer": {
+      "type": "MSR1",
+      "beta": 0.02,
+      "nmaxold": 10,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    }
+  },
+  "parallel": {"MPI_ranks": 4, "OMP_NUM_THREADS": 1},
+  "checkpoint": {"every_scf_steps": 10, "mode": "all", "includes_wavefunctions": true},
+  "walltime_limit_seconds": 18000,
+  "automatic_retry": false
+}
