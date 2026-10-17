@@ -53,5 +53,5 @@ result={'schema_version':'2.0','e_commit':'f9f2e88e34b4c1e18e6a42ed16fd7c949f7c2
 (out/'FAMILY_USAGE_MANIFEST_v2.json').write_text(json.dumps(result,indent=2)+'\n')
 (out/'SOURCE_SHA256.json').write_text(json.dumps(sources,indent=2)+'\n')
 with (out/'SIX_POINT_LABEL_REVIEW.csv').open('w') as f:
- fields=['structure_id','scf_iterations','energy_eV','free_energy_eV','max_force_eV_A','launcher_exit_code','label_qualification','data_role'];w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore');w.writeheader();w.writerows(records)
+ fields=['structure_id','scf_iterations','energy_eV','free_energy_eV','max_force_eV_A','launcher_exit_code','label_qualification','data_role'];w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore',lineterminator='\n');w.writeheader();w.writerows(records)
 print(json.dumps(result['checks_passed']));print([(r['structure_id'],r['scf_iterations'],r['PAW_log_ids']) for r in records])
