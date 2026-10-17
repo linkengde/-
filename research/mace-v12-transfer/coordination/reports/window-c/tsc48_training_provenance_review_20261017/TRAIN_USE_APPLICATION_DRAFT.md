@@ -1,0 +1,13 @@
+# 待批准：bulk_parent_48六点有限探索用途申请
+
+状态：DRAFT_NOT_APPROVED。来源审核见同目录C_PROVENANCE_REVIEW.md。
+
+申请对象：TSC48_VOL_m02、TSC48_VOL_p02、TSC48_BASAL_XY_SHEAR_m005、TSC48_BASAL_XY_SHEAR_p005、TSC48_SI_ID7_Z_m020、TSC48_SI_ID7_Z_p020。精确input/label/result SHA沿用C的FAMILY_USAGE_MANIFEST_v2.json，来源E f9f2e88e34b4c1e18e6a42ed16fd7c949f7c22ef；补证E fa699e1340e8777a7095bb8c639a7247c28d1956。
+
+申请用途：在用户明确批准后建立独立训练用途映射，用于后续受约束、力重点的探索性骨架拟合准备。原档案保持DIAGNOSTIC_ONLY身份；新映射须记录批准来源和具体用途。当前不创建映射、不复制标签、不拟合。
+
+拟议限制：六点同一bulk_parent_48家族，仅TRAIN候选；不存在六个独立样本家族的主张。旧五点、H随机扰动以及其他后代未自动纳入；整个同族不能充当独立DEV/TEST。保留PAW批次级绑定、五项退出码缺失、6×6×2精度只在母体上部分验证的限制。不启用stress loss，不用六点认证弹性常数；独立DEV不足时只能称探索，不能宣称泛化或生产适用。
+
+若使用能量loss，需另明确同批采用force-consistent free_energy、单位eV、0.10 eV展宽及跨来源能量基准一致；初轮可只申请force目标而保留双能量作诊断。数据用途批准不会自动批准拟合、DFT、MD或参数修改。
+
+待用户明确决定：是否允许上述六项在这些限制下建立TRAIN用途映射。未批准前TRAIN/DEV/TEST保持为空。
