@@ -1,0 +1,94 @@
+{
+  "status": "USER_AUTHORIZED_DIAGNOSTIC_SINGLE_POINTS; BENCHMARKED 6X6X2 MESH AND MSR1",
+  "source_preparation_commit": "f3e09b7a3b595d21c1fd02cd72a6dda9cb74b8c1",
+  "candidate_manifest": "research/mace-v12-transfer/coordination/reports/window-e/dft_supplement_prep_20261015/ti3sic2_bulk_p0/structures/DFT_INPUT_CANDIDATE_MANIFEST.json",
+  "candidate_manifest_sha256": "421499e6594eb090fdd7076ef6ae2ba6fc246a133283336a024609f6e7f0b29f",
+  "scope": [
+    "TSC48_VOL_m02",
+    "TSC48_VOL_p02",
+    "TSC48_BASAL_XY_SHEAR_m005",
+    "TSC48_BASAL_XY_SHEAR_p005",
+    "TSC48_SI_ID7_Z_m020",
+    "TSC48_SI_ID7_Z_p020"
+  ],
+  "scientific_method": {
+    "code": "GPAW",
+    "version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "xc": "PBE",
+    "mode": "PW",
+    "cutoff_eV": 500,
+    "paw_data_version": "1.2.1",
+    "occupations": "Fermi-Dirac, width=0.10 eV",
+    "kpoints": {
+      "type": "Monkhorst-Pack",
+      "size": [
+        6,
+        6,
+        2
+      ],
+      "evidence": "Archived same-geometry mesh_comparison_k6x6x2.json: delta vs 6x6x4 is 0.318336 meV/atom and force vector RMS 0.002884 eV/A, both within documented gates. Stress convergence on deformed cells remains untested."
+    },
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "maxiter": 160,
+      "mixer": {
+        "type": "MSR1",
+        "nmaxold": 10,
+        "beta": 0.05,
+        "reg": 0.005,
+        "gb_scale": 1.0,
+        "max_A": 0.75,
+        "trust_scale": 1.0,
+        "soft_lim": 4.0,
+        "hard_lim": 6.0,
+        "weight": 20.0,
+        "sigma": 0.015
+      }
+    },
+    "parallel": {
+      "mpi_ranks": 4,
+      "OMP_NUM_THREADS": 1,
+      "sl_auto": true
+    },
+    "geometry": "fixed input coordinates and fixed input cell; no relaxation",
+    "outputs": [
+      "native total energy",
+      "force-consistent free energy",
+      "per-atom forces",
+      "stress tensor",
+      "SCF convergence status and iteration count",
+      "stdout, stderr, GPAW log, input/output SHA-256"
+    ],
+    "mesh_selection_evidence": {
+      "same_geometry_and_order": true,
+      "source_structure_sha256": "157c1dab02a28e6140dd5191187ccd914fe558950e2ac6c136866bcc7805c3e4",
+      "k6_output_sha256": "29e9ac254984b4a4ab6a22cbac7043c2cf9a826eb498422f1860a5798e72cee4",
+      "k10_output_sha256": "75b083e225b8b20bbdde181c8e1847bae4b0052a854c6e9ee48885c940166415",
+      "native_energy_delta_k10_minus_k6_meV_atom": -0.14165053073374642,
+      "force_vector_rms_delta_eV_per_A": 0.006258089096168282,
+      "force_vector_max_delta_eV_per_A": 0.009724123447481957,
+      "limitation": "Mesh error was measured at the parent geometry only; deformed variants are not independently k-mesh converged. All six variants use the same selected 6x6x4 mesh."
+    },
+    "occupations_width_eV": 0.1,
+    "eigensolver": {
+      "type": "GPAW default Davidson",
+      "niter": 2
+    }
+  },
+  "execution_policy": {
+    "one_structure_at_a_time": true,
+    "per_structure_walltime_limit_seconds": 14400,
+    "continue_on_error": true,
+    "fail_fast": false,
+    "automatic_retry": false,
+    "automatic_parameter_change": false,
+    "checkpoint_policy": "Retain logs and failure state; write result labels only after SCF convergence. No restart from partial or failed state.",
+    "attempt_label": "attempt_k6x6x2_msr1_01"
+  },
+  "role": "DIAGNOSTIC_ONLY; TRAIN/DEV/TEST freeze unchanged",
+  "execution_authorized": true,
+  "authorization_basis": "Direct user instruction: \u201c\u60f3\u600e\u4e48\u505a\u90fd\u53ef\u4ee5 \u4f60\u628a\u6211\u8981\u7684\u7ed3\u679c\u7b97\u51fa\u6765\u5c31\u53ef\u4ee5\u201d"
+}
