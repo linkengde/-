@@ -10,6 +10,10 @@ git fetch --no-tags origin cloud-e-b1-dft
 git switch cloud-e-b1-dft 2>/dev/null || git switch --track -c cloud-e-b1-dft origin/cloud-e-b1-dft
 git pull --ff-only origin cloud-e-b1-dft
 
+# Use the existing GPAW environment; do not install or upgrade packages here.
+source /workspace/.venvs/gpaw-mpi/bin/activate
+python -c "import gpaw, ase; print('GPAW', gpaw.__version__, 'ASE', ase.__version__)"
+
 TASK_PACKAGE=research/mace-v12-transfer/coordination/reports/window-e/tsc_backbone_dft_batch_20261017
 cd "$TASK_PACKAGE"
 sha256sum -c SHA256SUMS.txt
