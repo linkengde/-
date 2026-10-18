@@ -38,6 +38,12 @@ def geometry_sha(atoms) -> str:
     return h.hexdigest()
 
 
+def atomic_json(path: Path, data: dict) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(data, indent=2) + "\n")
+    os.replace(tmp, path)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--task-id", required=True)
 parser.add_argument("--input", required=True)
@@ -107,22 +113,69 @@ calc = GPAW(
 atoms.calc = calc
 
 energy = float(atoms.get_potential_energy(force_consistent=False))
-free_energy = float(atoms.get_potential_energy(force_consistent=True))
-forces = np.asarray(atoms.get_forces(), dtype=float)
-stress = np.asarray(atoms.get_stress(voigt=False), dtype=float)
-log_text = (run_dir / "gpaw.log").read_text(errors="replace")
-matches = re.findall(r"Converged in (\d+) steps", log_text)
-if not matches:
-    raise RuntimeError("No converged-SCF marker; final labels are not written")
-iterations = int(matches[-1])
+calc.log.fd.flush()
+world.barrier()
+marker_status = np.array([0, -1], dtype=np.int64)
+if world.rank == 0:
+    log_text = (run_dir / "gpaw.log").read_text(errors="replace")
+    matches = re.findall(r"Converged in (\d+) steps", log_text)
+    marker_status[0] = int(bool(matches))
+    marker_status[1] = int(matches[-1]) if matches else -1
+world.broadcast(marker_status, 0)
 reported_iterations = int(calc.get_number_of_iterations())
-if reported_iterations != iterations:
-    raise RuntimeError(f"SCF iteration mismatch: log={iterations}, GPAW={reported_iterations}")
-if forces.shape != (100, 3) or stress.shape != (3, 3):
-    raise RuntimeError(f"Unexpected result dimensions: forces={forces.shape}, stress={stress.shape}")
-if not (np.isfinite(energy) and np.isfinite(free_energy)
-        and np.all(np.isfinite(forces)) and np.all(np.isfinite(stress))):
-    raise RuntimeError("Non-finite DFT result; refusing to write labels")
+if not marker_status[0] or marker_status[1] != reported_iterations:
+    raise RuntimeError(
+        "GPAW returned from SCF but flushed convergence marker disagrees: "
+        f"log={marker_status[1]}, GPAW={reported_iterations}"
+    )
+iterations = int(marker_status[1])
+if not np.isfinite(energy):
+    raise RuntimeError("Non-finite DFT energy; refusing to write labels")
+if world.rank == 0:
+    atomic_json(run_dir / "SCF_CONVERGENCE.json", {
+        "status": "SCF_CONVERGED_LABEL_EXTRACTION_IN_PROGRESS",
+        "scf_converged": True,
+        "scf_iterations": iterations,
+        "convergence": method["scf_convergence"],
+        "energy_eV": energy,
+        "gpaw_log_sha256": sha256(run_dir / "gpaw.log"),
+        "evidence": "GPAW returned normally; flushed log marker agrees with GPAW iteration count.",
+    })
+world.barrier()
+
+free_energy = float(atoms.get_potential_energy(force_consistent=True))
+if not np.isfinite(free_energy):
+    raise RuntimeError("Non-finite force-consistent free energy")
+if world.rank == 0:
+    atomic_json(run_dir / "ENERGIES.json", {
+        "status": "WRITTEN",
+        "energy_eV": energy,
+        "force_consistent_free_energy_eV": free_energy,
+        "labels_only_after_scf_convergence": True,
+    })
+world.barrier()
+
+forces = np.asarray(atoms.get_forces(), dtype=float)
+if forces.shape != (100, 3):
+    raise RuntimeError(f"Unexpected force dimensions: forces={forces.shape}")
+if not np.all(np.isfinite(forces)):
+    raise RuntimeError("Non-finite atomic force")
+if world.rank == 0:
+    atomic_json(run_dir / "FORCES.json", {
+        "status": "WRITTEN", "units": "eV/Angstrom", "forces": forces.tolist(),
+        "labels_only_after_scf_convergence": True,
+    })
+world.barrier()
+
+stress = np.asarray(atoms.get_stress(voigt=False), dtype=float)
+if stress.shape != (3, 3) or not np.all(np.isfinite(stress)):
+    raise RuntimeError(f"Unexpected or non-finite stress: shape={stress.shape}")
+if world.rank == 0:
+    atomic_json(run_dir / "STRESS.json", {
+        "status": "WRITTEN", "units": "eV/Angstrom^3", "stress": stress.tolist(),
+        "labels_only_after_scf_convergence": True,
+    })
+world.barrier()
 if geometry_sha(atoms) != before_geometry_sha:
     raise RuntimeError("Coordinates/cell/PBC/atom order changed during fixed-geometry calculation")
 
@@ -132,7 +185,9 @@ if world.rank == 0:
         labelled, energy=energy, free_energy=free_energy, forces=forces, stress=stress
     )
     output_path = run_dir / "labelled.extxyz"
-    write(output_path, labelled, format="extxyz")
+    tmp_output_path = output_path.with_suffix(".extxyz.tmp")
+    write(tmp_output_path, labelled, format="extxyz")
+    os.replace(tmp_output_path, output_path)
     result = {
         "structure_id": args.task_id,
         "status": "SUCCESS",
@@ -159,5 +214,5 @@ if world.rank == 0:
         "role": lock["role"],
         "units": {"energy": "eV", "forces": "eV/Angstrom", "stress": "eV/Angstrom^3 and GPa"},
     }
-    (run_dir / "RESULT.json").write_text(json.dumps(result, indent=2) + "\n")
+    atomic_json(run_dir / "RESULT.json", result)
 world.barrier()
