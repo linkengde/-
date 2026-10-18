@@ -1,0 +1,137 @@
+{
+  "models": [
+    {
+      "model": "MACE_MP",
+      "model_sha256": "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012",
+      "device": "CPU",
+      "dtype": "float64",
+      "MACE_version": "0.3.16",
+      "steps_completed": 55,
+      "simulated_time_ps": 0.011,
+      "requested_steps": 500,
+      "dt_fs": 0.2,
+      "thermostat": "ASE NoseHooverChainNVT, 300 K, tdamp 100 fs",
+      "local_patch_atoms": 899,
+      "mobile_atoms": 140,
+      "fixed_buffer_atoms": 759,
+      "Fmax_mobile_eV_A": 2.1046868408784825,
+      "P99_mobile_eV_A_max": 1.9020894820400103,
+      "minimum_Ti_C_A": 1.928184931617978,
+      "T_mobile_range_K": [
+        274.57550692403197,
+        301.53157806784895
+      ],
+      "status": "partial_smoke_test",
+      "stop_reason": "manually_stopped_at_55_steps_to_bound_cpu_cost",
+      "interpretation": "Local fixed-buffer diagnostic only; not a full-model MD or whole-backbone stability validation.",
+      "snapshots_written": 12,
+      "observed_Fmax_mobile_eV_A": 2.1046868408784825,
+      "observed_P95_mobile_eV_A_max": 1.5428814959505879,
+      "observed_P99_mobile_eV_A_max": 1.9020894820400103,
+      "observed_min_Ti_C_A": 1.928184931617978,
+      "observed_min_Ag_C_A": 2.522901433209015,
+      "observed_min_Ag_Ti_A": 2.5296799399334264,
+      "observed_local_T_range_K": [
+        274.57550692403197,
+        301.53157806784895
+      ],
+      "nan_or_inf_observed": false
+    },
+    {
+      "model": "MACE_V17",
+      "model_file": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v17_interface_energy/training_provisional_03/models/MACE_periodic_v17_provisional_screening.model",
+      "model_sha256": "559b12c024fe8e2155e26ffc7ca48cf9fa1c2682ea37ff9c5367af14a5cc43d3",
+      "MACE_version": "0.3.16",
+      "torch_version": "2.5.1+cpu",
+      "device": "CPU",
+      "default_dtype": "float64",
+      "n_steps_requested": 50,
+      "n_steps_completed": 50,
+      "step_fs": 0.2,
+      "elapsed_wall_seconds": 382.70179295539856,
+      "initial_active_temperature_K": 300.0,
+      "thermostat": "NoseHooverChainNVT; target 300 K; tdamp 100 fs",
+      "mobile_atoms": 140,
+      "local_patch_atoms": 899,
+      "stop_reason": "completed_50_steps_0.010ps",
+      "peak_rss_gib": 7.223228454589844,
+      "note": "Local fixed-buffer trajectory only; cannot be interpreted as full-model stability or melt-pool test.",
+      "requested_steps": 50,
+      "snapshots_written": 11,
+      "observed_Fmax_mobile_eV_A": 2.1996625626277364,
+      "observed_P95_mobile_eV_A_max": 1.4607418395919138,
+      "observed_P99_mobile_eV_A_max": 1.8280191791431575,
+      "observed_min_Ti_C_A": 1.9314450176195885,
+      "observed_min_Ag_C_A": 2.522901429745243,
+      "observed_min_Ag_Ti_A": 2.53377063633094,
+      "observed_local_T_range_K": [
+        278.6127008412362,
+        301.260081241404
+      ],
+      "nan_or_inf_observed": false
+    }
+  ],
+  "local_patch_audit": {
+    "source_data": "research/mace-v12-transfer/coordination/reports/window-f/bicontinuous_ag_ti3sic2_ttm_20261015/exploratory_melt_cool_20261018/input/NEW_MODEL_ATOMS.data",
+    "source_sha256": "e2b62a68c46e23037370a6ca20951aa0774edea2d728d3c3aadbcba4b3755674",
+    "atom_count_full": 39486,
+    "mobile_center_source_id": 19219,
+    "mobile_region": "sphere radius <= 8.0 A around C ID 19219, using X nonperiodic and Y/Z minimum image",
+    "fixed_buffer": "remaining atoms within radius <= 16.0 A; MACE cutoff 6 A, gives >6 A static environment around the mobile boundary",
+    "patch_atom_count": 899,
+    "mobile_atom_count": 140,
+    "fixed_buffer_atom_count": 759,
+    "boundary": "X nonperiodic, Y/Z periodic; original full cell retained",
+    "starting_coordinates": "exactly from NEW_MODEL_ATOMS.data; no relaxation or deletion from source; atoms outside local 16 A patch omitted only for this explicitly local diagnostic",
+    "initial_velocities": "reused ID-matched prior 300 K velocity sample for mobile atoms, zeroed for fixed buffer, mobile COM removed and scaled to 300 K",
+    "mobile_initial_temperature_K": 300.0000000000001,
+    "mobile_degrees_of_freedom": 420,
+    "note": "This is not a full-model MD result; frozen outer buffer limits heat/strain transport."
+  },
+  "starting_force_crosscheck_against_full_static": {
+    "MACE_MP": {
+      "19219": {
+        "patch_force_norm_eV_A": 0.18877117128464926,
+        "full_static_force_norm_eV_A": 0.1888691653,
+        "vector_difference_norm_eV_A": 0.00020444056552381846
+      },
+      "25627": {
+        "patch_force_norm_eV_A": 0.7505684252300409,
+        "full_static_force_norm_eV_A": 0.7505369637,
+        "vector_difference_norm_eV_A": 0.0023139026713719854
+      },
+      "25628": {
+        "patch_force_norm_eV_A": 1.1466458249703266,
+        "full_static_force_norm_eV_A": 1.146915255,
+        "vector_difference_norm_eV_A": 0.0007861955346186088
+      },
+      "38116": {
+        "patch_force_norm_eV_A": 0.7766120211972033,
+        "full_static_force_norm_eV_A": 0.7766519442,
+        "vector_difference_norm_eV_A": 0.00014392194224943503
+      }
+    },
+    "MACE_V17": {
+      "19219": {
+        "patch_force_norm_eV_A": 0.34535547292500013,
+        "full_static_force_norm_eV_A": 0.3455336835,
+        "vector_difference_norm_eV_A": 0.00020985862790151935
+      },
+      "25627": {
+        "patch_force_norm_eV_A": 0.7811617943924303,
+        "full_static_force_norm_eV_A": 0.7808139478,
+        "vector_difference_norm_eV_A": 0.002533840957470229
+      },
+      "25628": {
+        "patch_force_norm_eV_A": 1.2086706292755154,
+        "full_static_force_norm_eV_A": 1.208870112,
+        "vector_difference_norm_eV_A": 0.0005962962357151795
+      },
+      "38116": {
+        "patch_force_norm_eV_A": 0.7948745139160959,
+        "full_static_force_norm_eV_A": 0.794425497,
+        "vector_difference_norm_eV_A": 0.0007096107917216071
+      }
+    }
+  }
+}
