@@ -1,0 +1,27 @@
+clear
+units metal
+dimension 3
+boundary f p p
+atom_style atomic
+read_data post_relax.data
+include potentials/potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax all reduce max v_fmag
+compute Fmean all reduce ave v_fmag
+velocity all create 300.0 928475 mom yes rot yes dist gaussian
+fix bath all nvt temp 300.0 300.0 0.1
+timestep 0.001
+thermo 100
+thermo_style custom step temp pe ke etotal c_Fmax c_Fmean
+thermo_modify format float %.10g lost error flush yes
+dump traj all custom 100 trajectory_300K.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id
+run 2000
+unfix bath
+undump traj
+run 0
+write_dump all custom post_300K.dump id type x y z vx vy vz fx fy fz modify sort id format float %.16e
+write_data post_300K.data
+write_restart post_300K.restart

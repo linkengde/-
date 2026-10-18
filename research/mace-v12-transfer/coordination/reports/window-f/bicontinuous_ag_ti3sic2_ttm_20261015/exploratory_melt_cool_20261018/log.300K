@@ -1,0 +1,86 @@
+LAMMPS (4 Feb 2025)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+boundary f p p
+atom_style atomic
+read_data post_relax.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (110 98.085134 100.92075)
+  2 by 1 by 2 MPI processor grid
+  reading atoms ...
+  39486 atoms
+  reading velocities ...
+  39486 velocities
+  read_data CPU = 0.170 seconds
+include potentials/potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax all reduce max v_fmag
+compute Fmean all reduce ave v_fmag
+velocity all create 300.0 928475 mom yes rot yes dist gaussian
+fix bath all nvt temp 300.0 300.0 0.1
+timestep 0.001
+thermo 100
+thermo_style custom step temp pe ke etotal c_Fmax c_Fmean
+thermo_modify format float %.10g lost error flush yes
+dump traj all custom 100 trajectory_300K.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id
+run 2000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 22 20 21
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 6.666 | 19.04 | 31.42 Mbytes
+   Step          Temp          PotEng         KinEng         TotEng         c_Fmax        c_Fmean    
+         0  300 -227196.0481 1531.151048 -225664.897 2.450105488 0.05143187789
+       100  198.9974283 -226598.9318 1015.650403 -225583.2814 66.49135073 0.7546777245
+       200  263.0009004 -226778.0677 1342.31368 -225435.754 67.00996811 0.8611272597

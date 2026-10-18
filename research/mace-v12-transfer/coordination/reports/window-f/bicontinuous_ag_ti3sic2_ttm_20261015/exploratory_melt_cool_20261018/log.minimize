@@ -1,0 +1,238 @@
+LAMMPS (4 Feb 2025)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+boundary f p p
+atom_style atomic
+read_data input/NEW_MODEL_ATOMS.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (110 98.085134 100.92075)
+  2 by 1 by 2 MPI processor grid
+  reading atoms ...
+  39486 atoms
+  read_data CPU = 0.053 seconds
+include potentials/potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax all reduce max v_fmag
+compute Fmean all reduce ave v_fmag
+thermo 10
+thermo_style custom step atoms pe c_Fmax c_Fmean
+thermo_modify format float %.12g lost error flush yes
+dump pre all custom 1 pre_relax.dump id type x y z fx fy fz
+dump_modify pre sort id
+run 0
+WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 22 20 21
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 6.616 | 17.35 | 28.08 Mbytes
+   Step        Atoms        PotEng         c_Fmax        c_Fmean    
+         0       39486  -206891.756759 3.80027566548 1.2371077848
+Loop time of 2.59145e-05 on 4 procs for 0 steps with 39486 atoms
+
+102.3% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.591e-05  |            |       |100.00
+
+Nlocal:         9871.5 ave       18004 max        1768 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        10569.8 ave       15350 max        5790 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+undump pre
+min_style fire
+min_modify dmax 0.05
+dump relax all custom 25 minimization_frames.dump id type x y z fx fy fz
+dump_modify relax sort id
+minimize 0.0 0.5 500 5000
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 6.866 | 17.85 | 28.83 Mbytes
+   Step        Atoms        PotEng         c_Fmax        c_Fmean    
+         0       39486  -206891.756759 3.80027566548 1.2371077848
+        10       39486  -208208.793122 3.82471524353 0.665709872557
+        20       39486  -209251.357461 3.16393660258 0.336476798936
+        30       39486  -210577.441278 3.12718260975 0.287791896035
+        40       39486  -211786.230958 3.51540778019 0.263097393386
+        50       39486  -212821.255843 3.59340867416 0.244474989462
+        60       39486  -213612.835785 3.23212463132 0.228389005633
+        70       39486  -214377.868524 3.14658108578 0.21302822367
+        80       39486  -215129.75246 3.40705746291 0.199189001834
+        90       39486  -215786.137755 3.14546794747 0.18868203003
+       100       39486  -216435.462425 3.40378614834 0.180517942021
+       110       39486  -217031.094989 3.32657588033 0.17418086203
+       120       39486  -217577.943815 4.02327422928 0.169712240769
+       130       39486  -218116.410591 3.06113526145 0.168256091281
+       140       39486  -218624.018285 3.1821428089 0.169961389535
+       150       39486  -219089.765366 3.34956002924 0.171094463688
+       160       39486  -219594.989202 3.89547584499 0.176725740338
+       170       39486  -220067.244232 3.28497127486 0.181099067203
+       180       39486  -220558.63855 3.6646128372 0.191333070343
+       190       39486  -221064.356101 4.26649177804 0.203147709172
+       200       39486  -221543.824053 4.66611051981 0.210909844835
+       210       39486  -221994.91381 3.74392222253 0.219130540008
+       220       39486  -222457.660411 3.94277673822 0.229255662848
+       230       39486  -222891.944279 5.6754853732 0.238928682454
+       240       39486  -223266.496044 4.00854336844 0.244120949854
+       250       39486  -223588.235024 4.80353952336 0.240889189523
+       260       39486  -223911.1985 4.06235985985 0.248405471271
+       270       39486  -224203.330661 5.62802112872 0.256615189444
+       280       39486  -224419.33245 5.48775086723 0.259401671082
+       290       39486  -224626.934061 4.96549470902 0.256388432779
+       300       39486  -224833.998643 5.29802499855 0.258321904785
+       310       39486  -224996.85373 9.47349583426 0.27325247575
+       320       39486  -225136.44874 5.92993338958 0.271639948109
+       330       39486  -225409.494884 37.6886858589 0.120343273854
+       340       39486  -225475.378942 3.65029922454 0.0924554358047
+       350       39486  -225577.493503 3.14360480088 0.0816815164535
+       360       39486  -225729.114229 2.34620757084 0.0736114780125
+       370       39486  -225897.353188 2.39647979242 0.0691783749026
+       380       39486  -226077.496459 2.53871256353 0.0665031500254
+       390       39486  -226211.130695 2.29357960656 0.065509432492
+       400       39486  -226344.545304 1.98183492001 0.0631937832039
+       410       39486  -226497.310333 2.81996128806 0.0616814374412
+       420       39486  -226629.032853 3.84922847525 0.0607463765389
+       430       39486  -226738.710967 2.82036694156 0.0612452637664
+       440       39486  -226843.102178 2.74377345932 0.0602186536378
+       450       39486  -226935.049603 3.9847476468 0.0588816087654
+       460       39486  -227061.173223 8.11572676339 0.063341899538
+       470       39486  -227147.767151 4.71980674825 0.0636185847936
+       480       39486  -227168.934433 2.91690676429 0.0584874850368
+       490       39486  -227178.429379 2.95249374732 0.0540147603853
+       500       39486  -227196.048075 2.45010548801 0.0514318778907
+Loop time of 107.601 on 4 procs for 500 steps with 39486 atoms
+
+99.5% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -206891.756758596   -227193.45473085  -227196.048074518
+  Force two-norm initial, final = 325.12611 19.769306
+  Force max component initial, final = 3.427176 1.7807215
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 500 506
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 4.4061     | 53.195     | 103.56     | 669.1 | 49.44
+Neigh   | 0.096225   | 0.98269    | 1.8917     |  89.4 |  0.91
+Comm    | 1.6164     | 52.822     | 102.52     | 683.6 | 49.09
+Output  | 0.34281    | 0.35455    | 0.36378    |   1.3 |  0.33
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.2473     |            |       |  0.23
+
+Nlocal:         9871.5 ave       18620 max        1134 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        10700.5 ave       14729 max        6687 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 20
+Dangerous builds = 0
+undump relax
+run 0
+WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 6.853 | 19.55 | 32.25 Mbytes
+   Step        Atoms        PotEng         c_Fmax        c_Fmean    
+       500       39486  -227196.048075 2.45010548801 0.0514318778907
+Loop time of 4.84458e-05 on 4 procs for 0 steps with 39486 atoms
+
+103.2% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 4.845e-05  |            |       |100.00
+
+Nlocal:         9871.5 ave       18632 max        1122 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:          10710 ave       14719 max        6718 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom post_relax.dump id type x y z fx fy fz modify sort id format float %.16e
+write_data post_relax.data
+System init for write_data ...
+write_restart post_relax.restart
+System init for write_restart ...
+Total wall time: 0:01:48

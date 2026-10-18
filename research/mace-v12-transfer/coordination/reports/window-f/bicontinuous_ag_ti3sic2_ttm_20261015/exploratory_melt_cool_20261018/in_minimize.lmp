@@ -1,0 +1,29 @@
+clear
+units metal
+dimension 3
+boundary f p p
+atom_style atomic
+read_data input/NEW_MODEL_ATOMS.data
+include potentials/potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax all reduce max v_fmag
+compute Fmean all reduce ave v_fmag
+thermo 10
+thermo_style custom step atoms pe c_Fmax c_Fmean
+thermo_modify format float %.12g lost error flush yes
+dump pre all custom 1 pre_relax.dump id type x y z fx fy fz
+dump_modify pre sort id
+run 0
+undump pre
+min_style fire
+min_modify dmax 0.05
+dump relax all custom 25 minimization_frames.dump id type x y z fx fy fz
+dump_modify relax sort id
+minimize 0.0 0.5 500 5000
+undump relax
+run 0
+write_dump all custom post_relax.dump id type x y z fx fy fz modify sort id format float %.16e
+write_data post_relax.data
+write_restart post_relax.restart
