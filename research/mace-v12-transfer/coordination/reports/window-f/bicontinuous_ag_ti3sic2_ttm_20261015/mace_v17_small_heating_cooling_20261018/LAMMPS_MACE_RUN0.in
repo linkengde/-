@@ -1,0 +1,21 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data SMALL_MODEL_INITIAL.data
+
+mass 1 47.867
+mass 2 28.085
+mass 3 12.011
+mass 4 107.8682
+
+pair_style mliap unified MACE_V17_MLIAP_RUNTIME.pt 0
+pair_coeff * * Ti Si C Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+thermo 1
+thermo_style custom step pe
+dump forces all custom 1 MACE_LAMMPS_RUN0.dump id type x y z fx fy fz
+dump_modify forces sort id
+run 0
+undump forces

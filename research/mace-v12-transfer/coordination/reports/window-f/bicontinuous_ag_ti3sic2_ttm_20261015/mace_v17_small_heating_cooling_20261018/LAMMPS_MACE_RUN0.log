@@ -1,0 +1,46 @@
+LAMMPS (30 Sep 2026)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data SMALL_MODEL_INITIAL.data
+Reading data file ...
+  triclinic box = (0 0 0) to (30.575 26.478727 48.857896) with tilt (-15.2875 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  1926 atoms
+  read_data CPU = 0.004 seconds
+
+mass 1 47.867
+mass 2 28.085
+mass 3 12.011
+mass 4 107.8682
+
+pair_style mliap unified MACE_V17_MLIAP_RUNTIME.pt 0
+pair_coeff * * Ti Si C Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+thermo 1
+thermo_style custom step pe
+dump forces all custom 1 MACE_LAMMPS_RUN0.dump id type x y z fx fy fz
+dump_modify forces sort id
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8
+  ghost atom cutoff = 8
+  binsize = 4, bins = 12 7 13
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair mliap, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+ERROR: Running mliappy unified compute_forces failure. (src/src/ML-IAP/mliap_unified.cpp:71)
+Last input line: run 0

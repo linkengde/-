@@ -1,0 +1,11 @@
+# Backbone and interface report
+
+- Model: independent 1,926-atom layered slab, 1,200 ideal-crystal Ti₃SiC₂ atoms and 726 ideal FCC Ag atoms. It is not the original bicontinuous model.
+- Initial TSC and Ag geometric networks each form one component at the audited cutoffs (3.25 Å for TSC, 3.10 Å for Ag). The lower 100-Ti plane is fixed; the other 1,100 TSC atoms are mobile.
+- The top interface is C-terminated Ti₃SiC₂(0001)/Ag(111), with a 3.8907% in-plane Ag compression. Initial minimum Ag–TSC distance was 2.7048 Å; after the short FIRE relaxation it was 2.6019 Å.
+- During the partial 300 K baseline, minimum Ag–TSC distance reached 2.4463 Å. During the initial 1 fs heat segment, it reached 1.9689 Å at 0.09 ps while minimum Ag–Ag was 2.2434 Å, minimum Ti–C was 1.8254 Å, and Fmax was 6.384 eV/Å. This was retained as a local-contact caution, not assigned as a proven potential failure.
+- A separate 0.2 fs continuation from the saved 0.09 ps positions and velocities ran to 0.11 ps. At its end Fmax was 4.037 eV/Å; minima were Ag–Ag 2.295 Å, Ag–TSC 2.013 Å, and Ti–C 1.832 Å. There was no atom escape or component break. This was not a paired 1 fs control, so it does not isolate the cause of the original force peak.
+- During the 0.02 ps heat-off cooling branch the minimum Ti–C distance was 1.857 Å at its final frame. The short trajectory does not establish a full cooldown.
+- The Ti₃SiC₂ neighbor graph stayed at one component in every analyzed frame. Minimum largest-component fraction was 1.0. At the hottest sampled frame its mobile-atom RMS displacement from the 300 K reference was about 0.259 Å, consistent with a vibrating, connected backbone over this limited interval.
+- The hottest Ag region stayed ordered by multiple measures: q₆ median 0.529 versus 0.572 at baseline, coordination median 12, no low-q₆ atoms, and only 0.275 Å RMS displacement. At final cooling, one of 92 fixed hot-region Ag atoms had q₆ < 0.35; its largest connected low-q₆ component was one atom. No liquid region was identified.
+- The 300 K baseline is only 0.02 ps. Geometric and short-duration connectivity does not validate long-term MACE V17 interface stability. Interface forces remain exploratory and unresolved.
