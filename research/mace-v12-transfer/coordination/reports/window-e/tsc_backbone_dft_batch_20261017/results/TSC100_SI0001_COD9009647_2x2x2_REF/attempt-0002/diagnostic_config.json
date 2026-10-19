@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+  "attempt_id": "attempt-0002",
+  "parent_attempt_id": "attempt-0001",
+  "input_path": "input.extxyz",
+  "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+  "geometry_sha256": "a349663c5d7de8f1dc325d557e2fb789bbd16e838635d15d67485a42f1137133",
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "method": {
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "kpoint_type": "standard Monkhorst-Pack via GPAW kpts tuple; no explicit gamma flag or extra shift",
+    "kpoints_size": [
+      6,
+      6,
+      1
+    ],
+    "fermi_dirac_width_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "eigensolver": "GPAW default Davidson, niter=2",
+    "mixer": {
+      "type": "MSR1",
+      "nmaxold": 10,
+      "beta": 0.02,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    },
+    "sl_auto": true,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "relaxation": false,
+    "pbc": [
+      true,
+      true,
+      true
+    ]
+  },
+  "software": {
+    "GPAW": "26.7.0",
+    "ASE": "3.29.0",
+    "gpaw-data": "1.2.1"
+  },
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "parallel": {
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1,
+    "GPAW_MPI_BACKEND": "cgpaw"
+  },
+  "resources": {
+    "minimum_start_free_bytes": 17179869184,
+    "minimum_memory_limit_bytes": 34359738368,
+    "minimum_runtime_headroom_bytes": 6442450944,
+    "maximum_cgroup_memory_current_bytes": 30064771072,
+    "per_structure_walltime_seconds": 18000,
+    "automatic_retry": false,
+    "continue_to_next_task_after_this_task_archived": true
+  },
+  "runtime_observation": {
+    "attempt_0001_log_eigensolver": "PPCG",
+    "canonical_config_eigensolver_text": "GPAW default Davidson, niter=2",
+    "retry_behavior": "leave GPAW eigensolver unspecified, preserving the same runtime default that produced PPCG in attempt-0001"
+  },
+  "mixer_change_reason": "Attempt-0001 reached the five-hour walltime without convergence; its late SCF rows retained oscillatory energy changes and density residual above the locked 1e-5 criterion. Reducing MSR1 beta from 0.05 to 0.02 is the sole numerical mixing adjustment and is intended to damp charge sloshing.",
+  "checkpoint_policy": {
+    "enabled": true,
+    "mode": "all",
+    "precision": "single",
+    "wavefunctions_included": true,
+    "first_step": 1,
+    "periodic_steps": 10,
+    "retain_latest_only": true,
+    "atomic_replace_after_write_and_sha256": true,
+    "memory_guard_bytes": 30064771072,
+    "minimum_write_headroom_bytes": 4294967296,
+    "no_midrun_checkpoint_readback": "The GPAW 26.7.0 full-wavefunction write/read interface passed an MPI-4 preflight. Re-reading during active SCF would duplicate memory; the latest checkpoint is SHA-256 verified after writing and retained locally."
+  },
+  "automatic_retry": false,
+  "labels_only_after_scf_convergence": true
+}

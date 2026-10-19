@@ -1,0 +1,90 @@
+{
+  "C_review_commit": "669aafefd9efbda59b7ba088893e338d469d3f96",
+  "attempt_id": "attempt-0002",
+  "automatic_retry": false,
+  "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "checkpoint_enabled": true,
+  "checkpoint_policy": {
+    "atomic_replace_after_write_and_sha256": true,
+    "enabled": true,
+    "first_step": 1,
+    "memory_guard_bytes": 30064771072,
+    "minimum_write_headroom_bytes": 4294967296,
+    "mode": "all",
+    "no_midrun_checkpoint_readback": "The GPAW 26.7.0 full-wavefunction write/read interface passed an MPI-4 preflight. Re-reading during active SCF would duplicate memory; the latest checkpoint is SHA-256 verified after writing and retained locally.",
+    "periodic_steps": 10,
+    "precision": "single",
+    "retain_latest_only": true,
+    "wavefunctions_included": true
+  },
+  "config_diff": {
+    "attempt_0001_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+    "attempt_0002_config_sha256": "0e0d0d788369c17436cee856e6eaeef8468ec77a2dad60a168ab99800c468ebe",
+    "automatic_retry": false,
+    "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+    "checkpoint_mechanics": {
+      "from": "disabled in attempt-0001",
+      "preflight_full_size_wavefunction_checkpoint_bytes": 3239353332,
+      "preflight_max_cgroup_memory_current_bytes": 14051078144,
+      "preflight_status": "PASS",
+      "scientific_parameters_changed": false,
+      "to": "mode=all, precision=single, includes wavefunctions; first checkpoint after SCF step 1 and every 10 steps thereafter",
+      "wavefunctions_reloaded": true
+    },
+    "runtime_eigensolver_note": {
+      "attempt_0001_log_eigensolver": "PPCG",
+      "canonical_config_eigensolver_text": "GPAW default Davidson, niter=2",
+      "retry_behavior": "leave GPAW eigensolver unspecified, preserving the same runtime default that produced PPCG in attempt-0001"
+    },
+    "scientific_or_numerical_changes": [
+      {
+        "from": 0.05,
+        "path": "method.mixer.beta",
+        "reason": "Attempt-0001 reached the five-hour walltime without convergence; its late SCF rows retained oscillatory energy changes and density residual above the locked 1e-5 criterion. Reducing MSR1 beta from 0.05 to 0.02 is the sole numerical mixing adjustment and is intended to damp charge sloshing.",
+        "to": 0.02
+      }
+    ],
+    "unchanged_physical_settings": [
+      "PBE/PAW",
+      "PW cutoff 500 eV",
+      "MP 6x6x1",
+      "Fermi-Dirac 0.10 eV",
+      "non-spin-polarized",
+      "fixed 100-atom coordinates/cell/PBC",
+      "energy/density/eigenstate tolerances 1e-5"
+    ]
+  },
+  "created_utc": "2026-10-19T02:22:18+00:00",
+  "diagnostic_config_sha256": "0e0d0d788369c17436cee856e6eaeef8468ec77a2dad60a168ab99800c468ebe",
+  "environment": {
+    "ASE_version": "3.29.0",
+    "GPAW_MPI_BACKEND": "cgpaw",
+    "GPAW_SETUP_PATH": "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw_data/setups",
+    "GPAW_version": "26.7.0",
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1,
+    "cpu_max": "400000 100000",
+    "gpaw_data_version": "1.2.1",
+    "hostname": "61e13b1b023e",
+    "memory_current_bytes_at_start": 465805312,
+    "memory_limit_bytes": 34359738368,
+    "paw_sha256": {
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    },
+    "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "workspace_free_bytes_at_start": 22304804864
+  },
+  "execution_lock_sha256": "9c83140686b3b808b41895fa6c5dce2013d86452a0254629790406fb38524f38",
+  "geometry_sha256": "a349663c5d7de8f1dc325d557e2fb789bbd16e838635d15d67485a42f1137133",
+  "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+  "max_scf_iterations": 160,
+  "parent_attempt_id": "attempt-0001",
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "source_input_commit": "cbc14c97fe5d962dc808a4cf48bca3e6b5588ea0",
+  "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+  "supervisor_sha256": "6ab3007f6116ea6f47aeef7a372a5b02e3553a92b01a82fc0111adef90cfea3c",
+  "walltime_limit_seconds": 18000,
+  "worker_sha256": "86006c65475bcc922d50a8c461b0a5b45766a29831caabd2af718b6b3263722b"
+}

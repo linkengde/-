@@ -1,0 +1,37 @@
+{
+  "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "attempt_0001_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "attempt_0002_config_sha256": "0e0d0d788369c17436cee856e6eaeef8468ec77a2dad60a168ab99800c468ebe",
+  "scientific_or_numerical_changes": [
+    {
+      "path": "method.mixer.beta",
+      "from": 0.05,
+      "to": 0.02,
+      "reason": "Attempt-0001 reached the five-hour walltime without convergence; its late SCF rows retained oscillatory energy changes and density residual above the locked 1e-5 criterion. Reducing MSR1 beta from 0.05 to 0.02 is the sole numerical mixing adjustment and is intended to damp charge sloshing."
+    }
+  ],
+  "checkpoint_mechanics": {
+    "from": "disabled in attempt-0001",
+    "to": "mode=all, precision=single, includes wavefunctions; first checkpoint after SCF step 1 and every 10 steps thereafter",
+    "scientific_parameters_changed": false,
+    "preflight_status": "PASS",
+    "preflight_full_size_wavefunction_checkpoint_bytes": 3239353332,
+    "preflight_max_cgroup_memory_current_bytes": 14051078144,
+    "wavefunctions_reloaded": true
+  },
+  "runtime_eigensolver_note": {
+    "attempt_0001_log_eigensolver": "PPCG",
+    "canonical_config_eigensolver_text": "GPAW default Davidson, niter=2",
+    "retry_behavior": "leave GPAW eigensolver unspecified, preserving the same runtime default that produced PPCG in attempt-0001"
+  },
+  "unchanged_physical_settings": [
+    "PBE/PAW",
+    "PW cutoff 500 eV",
+    "MP 6x6x1",
+    "Fermi-Dirac 0.10 eV",
+    "non-spin-polarized",
+    "fixed 100-atom coordinates/cell/PBC",
+    "energy/density/eigenstate tolerances 1e-5"
+  ],
+  "automatic_retry": false
+}

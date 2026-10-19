@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "status": "USER_AUTHORIZED_MANUAL_RETRY_ATTEMPT_0002; PREFLIGHT_REQUIRED",
+  "execution_authorized": true,
+  "authorization_basis": [
+    "The user replied \u201c\u53ef\u4ee5\u7ee7\u7eed\u5427\u201d to the proposed isolated Si-reference retry plan on 2026-10-19.",
+    "The user previously instructed that no additional C review is required for repairs/retries they authorize.",
+    "C-reviewed input/method package is preserved; this retry changes only numerical MSR1 beta and checkpoint serialization, not physical settings."
+  ],
+  "task_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+  "attempt_id": "attempt-0002",
+  "parent_attempt_id": "attempt-0001",
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "branch": "cloud-e-b1-dft",
+  "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+  "geometry_sha256": "a349663c5d7de8f1dc325d557e2fb789bbd16e838635d15d67485a42f1137133",
+  "input_package_commit": "cbc14c97fe5d962dc808a4cf48bca3e6b5588ea0",
+  "C_review_commit": "669aafefd9efbda59b7ba088893e338d469d3f96",
+  "preserve_previous_attempt": {
+    "path": "results/TSC100_SI0001_COD9009647_2x2x2_REF",
+    "status": "FAILED",
+    "stop_reason": "WALLTIME_LIMIT_18000_SECONDS",
+    "checkpoint_written": false,
+    "sha256_manifest_sha256": "4ca2ddb54aa30e104460577680fa290bc6de81b4cb18693c6c255b01655f17da"
+  },
+  "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+  "config_path": "diagnostic_config.json",
+  "config_sha256": "0e0d0d788369c17436cee856e6eaeef8468ec77a2dad60a168ab99800c468ebe",
+  "worker_path": "attempt_worker.py",
+  "worker_sha256": "86006c65475bcc922d50a8c461b0a5b45766a29831caabd2af718b6b3263722b",
+  "supervisor_path": "attempt_supervisor.py",
+  "supervisor_sha256": "6ab3007f6116ea6f47aeef7a372a5b02e3553a92b01a82fc0111adef90cfea3c",
+  "checkpoint_preflight_path": "checkpoint_preflight/checkpoint_preflight.json",
+  "checkpoint_preflight_sha256": "a6555eba411a788f5505e543fe9859623a1ab0ce8ed329664beb23cfc591e449",
+  "config_diff_path": "CONFIG_DIFF.json",
+  "config_diff_sha256": "cc1de9cfcf1af4ac87a7eb64f21b245ad2119efb8f07fe65103e280aa018f72f",
+  "config_diff": {
+    "base_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+    "attempt_0001_config_sha256": "e9a4e27d23c4646b873e77de7acbb79844422c8708c9f24d209827f1849312d2",
+    "attempt_0002_config_sha256": "0e0d0d788369c17436cee856e6eaeef8468ec77a2dad60a168ab99800c468ebe",
+    "scientific_or_numerical_changes": [
+      {
+        "path": "method.mixer.beta",
+        "from": 0.05,
+        "to": 0.02,
+        "reason": "Attempt-0001 reached the five-hour walltime without convergence; its late SCF rows retained oscillatory energy changes and density residual above the locked 1e-5 criterion. Reducing MSR1 beta from 0.05 to 0.02 is the sole numerical mixing adjustment and is intended to damp charge sloshing."
+      }
+    ],
+    "checkpoint_mechanics": {
+      "from": "disabled in attempt-0001",
+      "to": "mode=all, precision=single, includes wavefunctions; first checkpoint after SCF step 1 and every 10 steps thereafter",
+      "scientific_parameters_changed": false,
+      "preflight_status": "PASS",
+      "preflight_full_size_wavefunction_checkpoint_bytes": 3239353332,
+      "preflight_max_cgroup_memory_current_bytes": 14051078144,
+      "wavefunctions_reloaded": true
+    },
+    "runtime_eigensolver_note": {
+      "attempt_0001_log_eigensolver": "PPCG",
+      "canonical_config_eigensolver_text": "GPAW default Davidson, niter=2",
+      "retry_behavior": "leave GPAW eigensolver unspecified, preserving the same runtime default that produced PPCG in attempt-0001"
+    },
+    "unchanged_physical_settings": [
+      "PBE/PAW",
+      "PW cutoff 500 eV",
+      "MP 6x6x1",
+      "Fermi-Dirac 0.10 eV",
+      "non-spin-polarized",
+      "fixed 100-atom coordinates/cell/PBC",
+      "energy/density/eigenstate tolerances 1e-5"
+    ],
+    "automatic_retry": false
+  },
+  "checkpoint_policy": {
+    "enabled": true,
+    "mode": "all",
+    "precision": "single",
+    "wavefunctions_included": true,
+    "first_step": 1,
+    "periodic_steps": 10,
+    "retain_latest_only": true,
+    "atomic_replace_after_write_and_sha256": true,
+    "memory_guard_bytes": 30064771072,
+    "minimum_write_headroom_bytes": 4294967296,
+    "no_midrun_checkpoint_readback": "The GPAW 26.7.0 full-wavefunction write/read interface passed an MPI-4 preflight. Re-reading during active SCF would duplicate memory; the latest checkpoint is SHA-256 verified after writing and retained locally."
+  },
+  "resource_limits": {
+    "walltime_seconds": 18000,
+    "memory_stop_guard_bytes": 30064771072,
+    "checkpoint_write_headroom_bytes": 4294967296,
+    "workspace_minimum_free_bytes_at_start": 17179869184,
+    "workspace_runtime_headroom_bytes": 6442450944,
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1
+  },
+  "automatic_retry": false,
+  "failure_action": "Preserve logs and the last SHA-verified complete checkpoint; archive status; do not automatically resume or try another parameter set.",
+  "C_review_sha256": "c3f016a93cb118d3ac75805c13e7b60247a42c1d34aba5a89df323b34bbc5ea7",
+  "C_decision_sha256": "577d95f533446bd60044a484949b33740c445ec3cfaf304b47e5fa2d48fda876"
+}
