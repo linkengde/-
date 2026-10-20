@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "scope": "Two fixed-geometry DFT single points: prismatic DEV geometry reference and one deterministic terminal-Ti displacement response",
+  "role": "DEV_GEOMETRY_CANDIDATE_ONLY; no data-role reassignment",
+  "source_family": "surface_prismatic_10m10_cod9009647_8layer",
+  "method": {
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "kpoint_type": "standard Monkhorst-Pack using GPAW kpts tuple; no explicit gamma flag or additional shift",
+    "kpoints_size": [12, 2, 1],
+    "kpoint_fractional_coordinates_sha256": "fbba337aa9679b3acfb23dbf424e9e4781c234a0988030d5dd5c99a59e994c02",
+    "kpoint_mesh_rationale": "Reciprocal-grid spacing matched to or denser than the archived basal-slab 6x6x1 mesh for this 3.0575 x 17.6235 A in-plane cell; no k-point convergence study is implied.",
+    "fermi_dirac_width_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-5,
+      "density": 1e-5,
+      "eigenstates": 1e-5
+    },
+    "maxiter": 160,
+    "eigensolver": "GPAW default Davidson, niter=2",
+    "mixer": {
+      "type": "MSR1",
+      "nmaxold": 10,
+      "beta": 0.05,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    },
+    "sl_auto": true,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "relaxation": false,
+    "pbc": [true, true, true],
+    "vacuum_angstrom": 18.0
+  },
+  "software": {
+    "python": "3.12.14",
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "gpaw_data_version": "1.2.1",
+    "MPI_backend": "cgpaw"
+  },
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "parallel": {
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1,
+    "GPAW_MPI_BACKEND": "cgpaw"
+  },
+  "resources": {
+    "CPU_quota_cores": 4,
+    "memory_limit_bytes": 34359738368,
+    "workspace_available_bytes_at_preflight": 16643678208,
+    "memory_stop_guard_bytes": 30064771072,
+      "disk_stop_guard_bytes": 4294967296,
+    "walltime_seconds_per_point": 18000,
+      "checkpoint_policy": "One rotating full-wavefunction, single-precision checkpoint after each 20 SCF iterations; write a new file, hash it, then atomically replace the prior checkpoint. Resume validates the current checkpoint SHA, geometry, and restored wavefunctions before continuing. If writing or restart validation fails, stop the point; no parameter change or automatic retry.",
+      "estimated_checkpoint_bytes": 4000000000,
+      "resource_estimate_basis": "Scaled from an archived 100-atom, 6x6x1 full-wavefunction single-precision GPAW checkpoint (3,239,353,332 bytes), adjusted for the 96-atom cell volume, electron count, and 24 vs 36 k-points. This predicts about 3.6 GB; 4.0 GB is reserved as a conservative estimate. Actual size remains empirical."
+  },
+  "task_authorization": {
+    "authorized_by_current_user": true,
+    "scope": "Build this DEV candidate family and run only the two listed fixed-geometry single points; do not modify TRAIN/DEV/TEST roles, touch TEST identity/labels, relax geometry, or run other science jobs.",
+    "c_approval_required": false
+  }
+}
