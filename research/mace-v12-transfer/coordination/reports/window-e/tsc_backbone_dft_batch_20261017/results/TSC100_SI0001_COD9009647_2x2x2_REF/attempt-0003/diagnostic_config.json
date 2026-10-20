@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "structure_id": "TSC100_SI0001_COD9009647_2x2x2_REF",
+  "attempt_id": "attempt-0003",
+  "input_sha256": "ac8b804516424215694c284d3bcc36d23da590f80390f47a0805c87cedb764c4",
+  "geometry_sha256": "a349663c5d7de8f1dc325d557e2fb789bbd16e838635d15d67485a42f1137133",
+  "software": {
+    "GPAW": "26.7.0",
+    "ASE": "3.29.0",
+    "gpaw-data": "1.2.1"
+  },
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "method": {
+    "xc": "PBE",
+    "cutoff_eV": 500,
+    "kpoints_size": [
+      6,
+      6,
+      1
+    ],
+    "fermi_dirac_width_eV": 0.1,
+    "spin_polarized": false,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "sl_auto": true,
+    "mixer": {
+      "type": "Pulay",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100,
+      "sigma": 0.015
+    },
+    "physical_settings_unchanged": [
+      "fixed input geometry",
+      "fixed cell",
+      "PBE/PAW",
+      "PW500",
+      "standard MP 6x6x1",
+      "Fermi-Dirac 0.10 eV",
+      "non-spin-polarized",
+      "SCF thresholds 1e-5"
+    ],
+    "single_numerical_change": "replace failed attempt-0002 MSR1(beta=0.02,nmaxold=10,weight=20) with Pulay(beta=0.05,nmaxold=8,weight=100), matching converged Ti3SiC2 calculations in the archived pure-phase controls"
+  },
+  "role": "TRAIN_FORCE_LABEL_CANDIDATE",
+  "result_policy": "write labels only after SCF convergence",
+  "checkpoint_policy": {
+    "enabled": true,
+    "every_scf_steps": 10,
+    "mode": "all",
+    "precision": "single",
+    "retain_latest_only": true,
+    "temporary_path": "checkpoints/latest.partial.gpw",
+    "final_path": "checkpoints/latest.gpw",
+    "minimum_runtime_free_bytes": 6442450944,
+    "memory_guard_bytes": 30064771072,
+    "checkpoint_estimated_bytes": 3239353332,
+    "checkpoint_and_headroom_required_bytes": 12921157608
+  },
+  "walltime_limit_seconds": 18000,
+  "safe_stop_reserve_seconds": 600,
+  "automatic_retry": false,
+  "mpi_ranks": 4,
+  "omp_num_threads": 1
+}
