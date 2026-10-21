@@ -66,6 +66,8 @@ if not attempt.is_dir():
 cfg_path = ROOT / "SCIENTIFIC_CONFIG.json"
 cfg_sha = sha256(cfg_path)
 config = json.loads(cfg_path.read_text())
+if int(config["resources"].get("disk_stop_guard_bytes", -1)) <= 0:
+    raise RuntimeError("SCIENTIFIC_CONFIG is missing a positive disk_stop_guard_bytes guard")
 manifest = json.loads((ROOT / "TASKS.json").read_text())
 task = next(t for t in manifest["tasks"] if t["structure_id"] == args.task_id)
 input_path = ROOT / task["input_path"]
@@ -271,11 +273,13 @@ try:
     energy = float(atoms.get_potential_energy(force_consistent=False))
 except SafeStop as exc:
     if world.rank == 0:
+        progress = json.loads((attempt / "SCF_PROGRESS.json").read_text()) if (attempt / "SCF_PROGRESS.json").is_file() else {}
         atomic_json(attempt / "RUN_STATUS.json", {
             "status": "STOPPED_WITH_CHECKPOINT" if (attempt / "checkpoint.gpw").is_file() else "STOPPED_WITHOUT_CHECKPOINT",
             "scf_converged": False,
             "stop_reason": str(exc),
-            "logical_scf_iteration": last_checkpoint_step,
+            "logical_scf_iteration": int(progress.get("logical_scf_iteration", last_checkpoint_step)),
+            "last_valid_checkpoint_iteration": last_checkpoint_step,
             "checkpoint_sha256": json.loads((attempt / "CHECKPOINT_STATUS.json").read_text()).get("checkpoint_sha256")
                                   if (attempt / "CHECKPOINT_STATUS.json").is_file() else None,
             "labels_written": False,

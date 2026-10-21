@@ -97,6 +97,8 @@ resume_number = len(list(attempt.glob("SUPERVISOR_STARTED_resume-*.json"))) + 1 
 run_tag = f"resume-{resume_number:02d}" if args.resume else "initial"
 
 cfg = json.loads((ROOT / "SCIENTIFIC_CONFIG.json").read_text())
+if int(cfg["resources"].get("disk_stop_guard_bytes", -1)) != DISK_GUARD:
+    raise RuntimeError("SCIENTIFIC_CONFIG disk_stop_guard_bytes missing or inconsistent with supervisor")
 setup = Path("/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw_data/setups")
 start_free = free_bytes(Path("/workspace"))
 preflight = {
@@ -121,6 +123,7 @@ preflight = {
     "workspace_free_bytes": start_free,
     "workspace_free_gib": round(start_free / 1024**3, 3),
     "disk_guard_bytes": DISK_GUARD,
+    "disk_stop_guard_bytes": int(cfg["resources"]["disk_stop_guard_bytes"]),
     "minimum_start_free_bytes": 13_000_000_000,
     "estimated_checkpoint_bytes": cfg["resources"]["estimated_checkpoint_bytes"],
     "active_compute_processes": active_compute_processes(),
@@ -140,6 +143,8 @@ if preflight["memory_limit_bytes"] < cfg["resources"]["memory_limit_bytes"]:
     preflight["status"] = "PREFLIGHT_FAIL_MEMORY_LIMIT"
 if preflight["memory_current_bytes"] >= MEMORY_REQUEST_STOP:
     preflight["status"] = "PREFLIGHT_FAIL_MEMORY_CURRENT"
+if preflight["disk_stop_guard_bytes"] != DISK_GUARD:
+    preflight["status"] = "PREFLIGHT_FAIL_DISK_GUARD_CONFIG"
 if preflight["input_sha256"] != task["input_sha256"] or not preflight["PAW_hashes_match"]:
     preflight["status"] = "PREFLIGHT_FAIL_SHA"
 if preflight["active_compute_processes"]:
@@ -257,7 +262,7 @@ summary = {
     "status": status.get("status"),
     "scf_converged": status.get("scf_converged", False),
     "exit_code": rc,
-    "stop_reason": stop_reason or "PROCESS_EXIT",
+    "stop_reason": status.get("stop_reason", stop_reason or "PROCESS_EXIT"),
     "elapsed_seconds": round(time.monotonic() - started, 3),
     "max_walltime_seconds": MAX_WALLTIME,
     "memory_current_peak_bytes": peak_memory,
