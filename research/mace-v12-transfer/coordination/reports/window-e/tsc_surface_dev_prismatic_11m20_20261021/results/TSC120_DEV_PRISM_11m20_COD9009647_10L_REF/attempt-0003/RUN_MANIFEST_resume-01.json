@@ -1,0 +1,66 @@
+{
+  "task_id": "TSC120_DEV_PRISM_11m20_COD9009647_10L_REF",
+  "status": "SCF_RUNNING",
+  "input_path": "inputs/TSC120_DEV_PRISM_11m20_COD9009647_10L_REF.extxyz",
+  "input_sha256": "fd5ff5c1cae1490bcbde9ffd08f329c7ec8cac687555f29568d725f4230cc5c3",
+  "geometry_sha256": "e876359dc190632d02ca2630bbd145afb4b866ddd19de65c8e1019c2e6f6c1a4",
+  "config_sha256": "23630f8ac5bd99b4b526c67b2cac40c5d7161aee5b682059623da5325d24515a",
+  "runner_sha256": "254c3b416a2a9b35f4bec48265703eb1fe021fa8ed20ef1811329320a52b9bce",
+  "role_candidate": "DEV_GEOMETRY_FAMILY_REFERENCE_CANDIDATE",
+  "source_family": "surface_prismatic_11m20_cod9009647_10layer",
+  "source_cif_sha256": "6abbf0a40208c5985cacc3b9ac3564a944702203ad57e961010a674f30d598c3",
+  "resume": true,
+  "GPAW_version": "26.7.0",
+  "ASE_version": "3.29.0",
+  "PAW_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "method": {
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "kpoint_type": "standard Monkhorst-Pack using GPAW kpts tuple; no explicit gamma flag or additional shift",
+    "kpoints_size": [
+      7,
+      2,
+      1
+    ],
+    "kpoint_fractional_coordinates_sha256": "f898dd205d09c45c984dc81459661aa493bff6c636267910fc67d7ef95850261",
+    "kpoint_mesh_rationale": "7x2x1 keeps reciprocal spacing at least as dense as the prior 12x2x1 mesh for in-plane lengths 3.0575x17.6235 A; new in-plane lengths are recorded in STRUCTURE_AUDIT.json. No k-point convergence study is implied.",
+    "fermi_dirac_width_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "eigensolver": "GPAW Davidson niter=2",
+    "mixer": {
+      "type": "MSR1",
+      "nmaxold": 10,
+      "beta": 0.05,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    },
+    "sl_auto": true,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "relaxation": false,
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "vacuum_angstrom": 18.0
+  },
+  "started_utc": "2026-10-21T07:50:27+00:00"
+}

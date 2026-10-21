@@ -132,8 +132,23 @@ if args.resume:
         raise RuntimeError("Resume checkpoint missing or SHA mismatch")
     calc = GPAW(str(cp_path), txt=str(log_path))
     atoms = calc.atoms.copy()
-    if geometry_sha(atoms) != task["geometry_sha256"]:
+    # GPAW GPW preserves chemical ordering and exact geometry but may omit
+    # ASE-only metadata arrays. Reattach source IDs only after verifying every
+    # stored atom matches the SHA-bound frozen extxyz in order and coordinates.
+    if (len(atoms) != len(expected)
+            or atoms.get_chemical_symbols() != expected.get_chemical_symbols()
+            or not np.array_equal(np.asarray(atoms.positions), np.asarray(expected.positions))
+            or not np.array_equal(np.asarray(atoms.cell), np.asarray(expected.cell))
+            or not np.array_equal(np.asarray(atoms.pbc), np.asarray(expected.pbc))):
         raise RuntimeError("Checkpoint geometry does not match requested input")
+    expected_ids = expected.arrays["source_atom_id"]
+    checkpoint_ids = atoms.arrays.get("source_atom_id")
+    if checkpoint_ids is None:
+        atoms.set_array("source_atom_id", expected_ids.copy())
+    elif not np.array_equal(checkpoint_ids, expected_ids):
+        raise RuntimeError("Checkpoint source atom IDs do not match frozen input")
+    if geometry_sha(atoms) != task["geometry_sha256"]:
+        raise RuntimeError("Checkpoint geometry/source-ID SHA does not match requested input")
     start_step = int(cp_meta["logical_scf_iteration"])
     remaining = int(config["method"]["maxiter"]) - start_step
     if remaining <= 0:
