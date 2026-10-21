@@ -67,10 +67,24 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--task-id", required=True)
 parser.add_argument("--resume", action="store_true")
 parser.add_argument("--preflight-only", action="store_true")
+parser.add_argument("--attempt-number", type=int)
 args = parser.parse_args()
 manifest = json.loads((ROOT / "TASKS.json").read_text())
 task = next(t for t in manifest["tasks"] if t["structure_id"] == args.task_id)
-attempt = ROOT / "results" / args.task_id / "attempt-0001"
+task_results = ROOT / "results" / args.task_id
+existing_attempts = sorted(task_results.glob("attempt-[0-9][0-9][0-9][0-9]")) if task_results.exists() else []
+if args.attempt_number is not None:
+    attempt_number = args.attempt_number
+elif args.resume:
+    resumable = [p for p in existing_attempts if (p / "checkpoint.gpw").is_file()]
+    if not resumable:
+        raise RuntimeError("--resume requested but no existing attempt has a checkpoint")
+    attempt_number = max(int(p.name.split("-")[1]) for p in resumable)
+else:
+    attempt_number = max((int(p.name.split("-")[1]) for p in existing_attempts), default=0) + 1
+attempt = task_results / f"attempt-{attempt_number:04d}"
+if attempt_number < 1:
+    raise RuntimeError("attempt number must be >= 1")
 attempt.mkdir(parents=True, exist_ok=True)
 if any(attempt.iterdir()) and not args.resume:
     raise RuntimeError(f"Attempt path is not empty: {attempt}")
