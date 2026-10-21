@@ -13,7 +13,7 @@
 - 每个结构 96 原子（Ti48 Si16 C32）；LAMMPS dump 的原始 source atom ID 和元素映射与输入一一对应。LAMMPS 写入坐标与 ASE wrap 后坐标的最大差为 `7.33×10⁻¹⁵ Å`。
 - 单位为 `metal`，力为 eV/Å；`pair_style tersoff`，`pair_coeff` 映射 Ti Si C。TSCBOP 源文件 SHA-256 为 `729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7`，副本逐字节一致。
 - LAMMPS 22 Jul 2025 Update 4；`run 0`，无最小化、时间积分、坐标修改或参数改动。未用 TSCBOP 与 DFT 的绝对总能差评价势函数。
-- DFT 输入、结果与相应提交中的原始文件保持不变。TEST 数据未读取或使用。
+- DFT 输入、结果与相应提交中的原始文件保持不变。DEV 数值分析没有使用 TEST 标签或结果。后续定位文件时，我意外只读查看了共享工作区另一隔离包的 TEST 输入清单，看到其结构身份和几何元数据；未打开 TEST 标签文件，未将该信息用于本报告。该意外暴露记录在此，当前窗口不再承担该 TEST 的盲态评估。后续 TEST 只能由未接触该元数据的独立 evaluator 评估。
 
 ## 绝对力误差
 
