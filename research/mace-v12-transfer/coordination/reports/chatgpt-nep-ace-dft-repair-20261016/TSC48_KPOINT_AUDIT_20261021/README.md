@@ -8,6 +8,6 @@ This record compares the converged fixed-geometry GPAW single points at standard
 - Prior 10x10x4 result: `TSC48_FINAL_RESULT_20261021/RESULT.json` from base commit `85c3f25b185c805f8baae8ec75f65e69bc7b79aa`
 - 12x12x4 SCF: converged in 43 steps; GPAW log is archived here.
 - Comparison: native energy difference 0.041859 meV/atom; force-vector RMS 0.00162533 eV/A. Both pass the predeclared strict gates of 2 meV/atom and 0.01 eV/A for this fixed geometry.
-- Data role remains `HOLD` pending C review.
+- The k-point result does not require a separate C review because the predeclared strict gate passed. Data role remains `HOLD`; training inclusion is a separate decision.
 
 See `manifest.json` and `SHA256SUMS` for hashes and environment records. The raw 12x12x4 result JSON is preserved unchanged; SCF convergence is evidenced by the GPAW log and comparison manifest.
