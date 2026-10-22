@@ -124,8 +124,8 @@ def persistent_melt(rows, hot_count):
     need=max(12,int(np.ceil(0.32*hot_count)))
     tail=rows[-3:]
     return all(r["hot_max_liquid_cluster_Ag"]>=need and r["q6_hot_median"]<0.42 and
-               r["hot_Ag_displacement_rms_A"]>=1.5 and r["n_hot_displacement_ge_1p4_A"]>=need and
-               r["outside_hot_max_cluster_Ag"]<10 for r in tail)
+               r["hot_Ag_displacement_rms_A"]>=1.5 and r["n_hot_displacement_ge_1p4_A"]>=need
+               for r in tail)
 
 def persistent_solidification(rows):
     if len(rows)<3:return False
