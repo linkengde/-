@@ -1,0 +1,44 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+read_data /workspace/-/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_dev_prismatic_11m20_20261021/analysis/TSCBOP_RUN0_PAIR_20261022/runs/RESP_TIZ020/atoms.data
+Reading data file ...
+  triclinic box = (0 0 0) to (5.2957453 17.6235 31.758781) with tilt (0 0 0)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  120 atoms
+  read_data CPU = 0.001 seconds
+pair_style tersoff
+pair_coeff * * /workspace/-/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_dev_prismatic_11m20_20261021/analysis/TSCBOP_RUN0_PAIR_20261022/runs/RESP_TIZ020/TSCBOP.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe
+dump forces all custom 1 forces.dump id type x y z fx fy fz
+dump_modify forces sort id format line "%d %d %.16g %.16g %.16g %.16g %.16g %.16g"
+run 0 post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.8838
+  ghost atom cutoff = 5.8838
+  binsize = 2.9419, bins = 2 6 11
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair tersoff, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.074 | 3.074 | 3.074 Mbytes
+   Step        Atoms        PotEng    
+         0         120  -749.64007    
+Loop time of 9.83e-07 on 1 procs for 0 steps with 120 atoms
+
+undump forces
+Total wall time: 0:00:00
