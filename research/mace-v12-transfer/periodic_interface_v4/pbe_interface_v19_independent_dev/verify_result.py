@@ -28,6 +28,7 @@ assert np.max(np.abs(source.cell.array - result.cell.array)) < 1e-10
 assert np.array_equal(source.pbc, result.pbc)
 assert np.max(np.abs(source.positions - result.positions)) < 1e-10
 assert np.array_equal(source.arrays["lammps_id"], result.arrays["lammps_id"])
+assert np.array_equal(source.arrays["lammps_type"], result.arrays["lammps_type"])
 assert np.array_equal(source.arrays["central_pair"], result.arrays["central_pair"])
 assert "PW_PBE_forces" in result.arrays and result.arrays["PW_PBE_forces"].shape == (len(result), 3)
 assert np.isfinite(result.arrays["PW_PBE_forces"]).all()

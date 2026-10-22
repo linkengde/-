@@ -36,6 +36,11 @@ def load(label, launch=False):
     assert record["source_CIF_sha256"] == manifest["source_CIF_sha256"]
     assert record["method"] == manifest["method"]
     assert record["pbc"] == manifest["pbc"]
+    source_path = (REPO / manifest["source_CIF"]).resolve()
+    audit_path = (REPO / manifest["geometry_audit"]).resolve()
+    assert source_path.is_relative_to(REPO) and sha(source_path) == manifest["source_CIF_sha256"]
+    assert audit_path.is_relative_to(REPO) and sha(audit_path) == manifest["geometry_audit_sha256"]
+    assert json.loads(audit_path.read_text())["status"] == "PASS_GEOMETRY_AND_ROLE_SCREEN_PENDING_EXTERNAL_B_AUDIT"
     task = json.loads(TASKS.read_text())
     assert task.get("owner_instance") == sync_tasks.identity(), "A task belongs to another instance"
     assert label in task.get("labels", {}), "Label is outside the A assignment"
