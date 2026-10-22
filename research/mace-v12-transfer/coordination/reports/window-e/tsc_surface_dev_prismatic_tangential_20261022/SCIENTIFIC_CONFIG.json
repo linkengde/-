@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "scope": "One fixed-geometry PBE/PAW static point for tangential Ti-displacement response on the COD 9009647 (11-20) slab; reuse archived same-geometry reference force label for paired response analysis.",
+  "role": "SAME_SOURCE_DIAGNOSTIC_ONLY; no TRAIN/DEV/TEST assignment",
+  "source_family": "surface_prismatic_11m20_cod9009647_10layer",
+  "method": {
+    "xc": "PBE",
+    "mode": "plane-wave",
+    "cutoff_eV": 500,
+    "spin_polarized": false,
+    "kpoint_type": "standard Monkhorst-Pack using GPAW kpts tuple; no explicit gamma flag or additional shift",
+    "kpoints_size": [
+      7,
+      2,
+      1
+    ],
+    "kpoint_fractional_coordinates_sha256": "f898dd205d09c45c984dc81459661aa493bff6c636267910fc67d7ef95850261",
+    "kpoint_mesh_rationale": "7x2x1 keeps reciprocal spacing at least as dense as the prior 12x2x1 mesh for in-plane lengths 3.0575x17.6235 A; new in-plane lengths are recorded in STRUCTURE_AUDIT.json. No k-point convergence study is implied.",
+    "fermi_dirac_width_eV": 0.1,
+    "scf_convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "eigensolver": "GPAW Davidson niter=2",
+    "mixer": {
+      "type": "MSR1",
+      "nmaxold": 10,
+      "beta": 0.05,
+      "reg": 0.005,
+      "gb_scale": 1.0,
+      "max_A": 0.75,
+      "trust_scale": 1.0,
+      "soft_lim": 4.0,
+      "hard_lim": 6.0,
+      "weight": 20.0,
+      "sigma": 0.015
+    },
+    "sl_auto": true,
+    "fixed_coordinates": true,
+    "fixed_cell": true,
+    "relaxation": false,
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "vacuum_angstrom": 18.0
+  },
+  "software": {
+    "python": "3.12.14",
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "gpaw_data_version": "1.2.1",
+    "MPI_backend": "cgpaw"
+  },
+  "paw_sha256": {
+    "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+    "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+    "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+  },
+  "parallel": {
+    "MPI_ranks": 4,
+    "OMP_NUM_THREADS": 1,
+    "GPAW_MPI_BACKEND": "cgpaw"
+  },
+  "resources": {
+    "CPU_quota_cores": 4,
+    "memory_limit_bytes": 34359738368,
+    "memory_soft_guard_bytes": 27917287424,
+    "workspace_available_bytes_at_build": null,
+    "walltime_seconds_per_point": 18000,
+    "disk_stop_guard_bytes": 4294967296,
+    "checkpoint_policy": "One rotating full-wavefunction single-precision checkpoint every 20 SCF iterations; preserve prior good checkpoint until the new one is hashed and atomically installed; resume only after SHA and geometry validation.",
+    "estimated_checkpoint_bytes": 3200000000,
+    "resource_estimate_basis": "120 atoms and 14 k-points compared with archived 96-atom 24-kpoint checkpoint 2,422,680,386 bytes; quadratic atom/k-point scaling estimates 2.65 GB, rounded up to 3.2 GB. Estimate only; actual checkpoint and memory measured at runtime."
+  },
+  "authorization": {
+    "authorized_by_current_user": true,
+    "scope": "Build and calculate only this one deterministic fixed-geometry response point; preserve the source reference, do not change any data role, and do not run relaxation, MD, fitting, or other DFT points.",
+    "c_approval_required": false
+  }
+}
