@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T04:43:50+00:00",
+  "updated_utc": "2026-10-23T04:53:25+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V19 fit and post-fit diagnostics complete; the candidate fails interface force/separation gates and Ti3SiC2 pure-phase Ti/C force checks. Follow-up reconciliation verified all 12 inherited train36 rows against their source inputs and archived GPAW outputs (exact geometry, forces, energies, hashes, settings, and SCF). Train/dev numerical methods remain mismatched (train TTT Gamma vs dev TTF 6x6x1 slab); one V17 rank-recovery k-mesh caveat remains. All dev3 labels share COD 9009647; second source family not yet found. No test/sealed labels opened.",
+  "current_stage": "V19 train36/dev3 fit and post-fit diagnostics complete; candidate fails interface force/separation gates and Ti3SiC2 pure-phase Ti/C force checks. The 12 inherited train36 rows are source-reconciled 12/12. Fixed-parent AgSi dipole and 26-to-36 A vacuum controls pass; target-slab k-mesh/smearing convergence is still unverified. Second-source search found no qualified Ti3SiC2 parent: network structure endpoints returned tunnel HTTP 403 and three public fixture repositories yielded no reduced-formula hit. V19's active rank-recovery row is the verified Gamma archive; the older V16 value differs but original SCF/output is unverified. No test/sealed labels opened.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -68,8 +68,8 @@
     "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 51; elapsed 11267s; updated 2026-10-10T02:48:16.813091+00:00",
     "v19_V18_pure_phase_force_screen_window_a": "completed; selected V18 epoch79 model CPU-inferred on SHA-verified Ag k8x8x8 and Ti3SiC2 k10x10x2 pure-phase numerical controls; Ag force RMSE 1.73e-5 eV/A PASS, Ti3SiC2 2.889 eV/A FAIL; diagnostic only, no DFT/MPI or training.",
     "v19_AgSi_force_error_localization_window_b": "completed; B report bundle f576c99 published and SHA256 verified. Both public references reproduce force-vector RMSE 2.63375/2.63351 eV/A and Ag-Si separation-force absolute error 1.71714/1.71553 eV/A. Largest residuals are remote Ti framework sites with opposite z errors; four Ti +/-0.03 A geometry probes remain unowned, unlabeled, and launch-disabled.",
-    "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19": "completed; SCF 51; 10,699.7 s; archive verifier PASS; published 7692a6e",
-    "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19": "running; SCF iteration 20; updated 2026-10-10T07:36:03.313237+00:00",
+    "AgSi_parent_26A_dipoleOFF_k6x6x1_sigma0p10_v19": "completed; archive verification PASS; matched 26 A dipole ON/OFF comparison passes energy/force budgets; no training role.",
+    "AgSi_parent_36A_dipoleON_k6x6x1_sigma0p10_v19": "completed; archive verification PASS; matched 26-to-36 A dipole-ON comparison passes energy/force budgets; no training role.",
     "AgSi_rigid_Ag_z_m020_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 59; elapsed 13699s; updated 2026-10-11T01:25:37.104057+00:00",
     "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 68; elapsed 15766s; updated 2026-10-11T01:25:40.550849+00:00",
     "AgC_v19_independent_dev_01": "completed; SCF iteration 59; elapsed 12573s; updated 2026-10-22T20:12:41.146313+00:00",
@@ -80,8 +80,10 @@
     "v19_training": "completed; 80 epochs and epoch79 export verified; development force/separation gates FAIL; report at coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023",
     "v19_postfit_pure_phase_diagnostic": "completed; V19 force-vector RMSE 1.73e-5 eV/A on Ag fcc control and 3.00-3.02 eV/A on Ti3SiC2 baseline/four Ti/C perturbation controls; all 26 pure-phase archives SHA/SCF checks PASS; roles unchanged; report at coordination/reports/window-a/v19_postfit_pure_phase_controls_20261023",
     "v19_train36_energy_method_lineage_audit": "completed; historical audit report published; its 12 inherited-row gap is superseded by v19_inherited_train36_archive_reconciliation (12/12 source/output checks PASS). Remaining findings: train TTT Gamma vs dev TTF slab settings; separate V17 rank-recovery k-mesh convergence caveat.",
-    "v19_independent_Ti3SiC2_parent_search": "still blocked; local CIF inventory contains only COD 9009647 source family; OPTIMADE providers and COD direct download return tunnel HTTP 403; no independent parent fabricated.",
-    "v19_inherited_train36_archive_reconciliation": "completed; 12/12 inherited rows mapped to source inputs/outputs; SHA256, exact atom geometry/IDs/forces, energy, PBE/PW500/Gamma/sigma0.1 method, and SCF checks PASS. 9 archives cgpaw domain4, 3 V12 contact logs serial domain1. No DFT/MPI run. Report: coordination/reports/window-a/v19_inherited_train36_archive_reconciliation_20261023"
+    "v19_independent_Ti3SiC2_parent_search": "blocked; local COD 9009647 family only; Materials Project/OQMD/NOMAD OPTIMADE and COD direct endpoints returned tunnel HTTP 403; Pymatgen (88 CIF/MCIF), test-files (110), and COD tools (1516) fixtures contained no Ti3SiC2 reduced-formula match. No replacement fabricated. Report: coordination/reports/window-a/v19_remaining_data_source_and_method_review_20261023",
+    "v19_inherited_train36_archive_reconciliation": "completed; 12/12 inherited rows mapped to source inputs/outputs; SHA256, exact atom geometry/IDs/forces, energy, PBE/PW500/Gamma/sigma0.1 method, and SCF checks PASS. 9 archives cgpaw domain4, 3 V12 contact logs serial domain1. No DFT/MPI run. Report: coordination/reports/window-a/v19_inherited_train36_archive_reconciliation_20261023",
+    "v19_fixed_parent_slab_boundary_controls": "completed read-only comparison; 26 A dipole OFF/ON and 26-to-36 A dipole ON both pass on the frozen AgSi parent; TTF slab mesh and smearing ladders remain unverified. Report: coordination/reports/window-a/v19_boundary_dipole_comparison/report.json",
+    "v19_rank_recovery_legacy_label_comparison": "completed read-only; current train36 Gamma label matches archive exactly; legacy V16 same-geometry energy differs by -4.53754 eV/cell and force-vector RMSE 2.75555 eV/A, but original source output/SCF/getter unverified; not attributable solely to k-mesh."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -178,16 +180,16 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
-  "next_action": "Keep the current V19 model out of dynamics and do not refit to dev3. The 12 inherited train rows are now source-reconciled; do not recompute them. Next, find a source-verified second Ti3SiC2 parent and define a consistent slab target (PBC, kmesh, smearing, dipole, vacuum) before registering any new labels. Preserve COD 9009647 dev family outside fitting and keep the V17 rank-recovery k-mesh issue explicit. Register new hash-verified DFT only after source and numerical settings pass review; obtain B's independent data-entry audit before the next approved split. No test/sealed data.",
+  "next_action": "Keep the current V19 model out of dynamics and do not fit to dev3. Do not recompute the 12 source-reconciled train labels or replace the verified Gamma rank-recovery output with the unverified legacy V16 values. The hard blocker is a source-verified second Ti3SiC2 parent with an independent crystallographic source family; current data endpoints are inaccessible through the network tunnel. Once a source is available, audit exact/near duplicates against train36 and dev3, settle fixed slab boundary/kmesh/smearing/vacuum settings, register labels, obtain B's independent audit, then approve a new split and run preflight before fitting. No test/sealed data.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-    "job": "v19_inherited_train36_archive_reconciliation",
-    "state": "reconciliation_complete_next_blocked_on_source_and_target_method",
-    "iteration": 12,
-    "note": "All 12 inherited train36 rows were reconciled to archived source outputs with exact train/output geometry and force identity; energy, hash, PBE/PW 500 eV Gamma sigma 0.10, and SCF checks pass. Nine logs show cgpaw domain4; three V12 contacts show serial domain1. Next: qualify second Ti3SiC2 source and settle consistent slab method. V19 candidate remains FAIL; no DFT, training, test/sealed access.",
+    "job": "v19_second_parent_source_search_and_numerical_target_review",
+    "state": "blocked_on_independent_crystal_source",
+    "iteration": 3,
+    "note": "12 inherited train36 rows source-reconciled 12/12; fixed-parent AgSi dipole and vacuum controls pass. Three public structure fixture repositories have no Ti3SiC2 reduced-formula hit; direct Materials Project/OQMD/NOMAD/COD requests fail tunnel HTTP403. TTF slab k-mesh/smearing ladder remains unverified. Current V19 candidate remains FAIL; no DFT/MPI/training or test/sealed access. See v19_remaining_data_source_and_method_review_20261023.",
     "withheld_labels_opened": false,
-    "updated_utc": "2026-10-23T04:43:50+00:00"
+    "updated_utc": "2026-10-23T04:53:25+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",

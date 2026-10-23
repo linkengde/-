@@ -1,5 +1,7 @@
 # V19 train36 inherited archive reconciliation
 
+> **Further follow-up:** The separate V17 rank-recovery row is clarified in [the remaining-gap review](../v19_remaining_data_source_and_method_review_20261023/README.md). V19 uses the archived Gamma relabel exactly; its historical V16 value differs substantially but lacks original SCF/output provenance, so the difference cannot be assigned to k-point sampling alone.
+
 ## Result
 
 The 12 V19 train36 rows previously marked as lacking independently verified original settings were reconciled to their existing source inputs, GPAW outputs, summaries, logs, and archive manifests. **All 12 passed** input/output/summary SHA-256 checks, exact geometry and atom-ID checks, exact training-force comparison, energy comparison, and SCF convergence checks. No DFT or MPI job was run.

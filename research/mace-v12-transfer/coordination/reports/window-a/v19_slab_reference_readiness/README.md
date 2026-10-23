@@ -1,5 +1,7 @@
 # AgSi slab reference readiness audit (window A)
 
+> **Follow-up:** After this read-only readiness snapshot, the registered frozen AgSi parent was calculated at 26 Å with dipole ON/OFF and at 36 Å with dipole ON. Both matched pairs pass the fixed-geometry energy and force-vector budgets; the earlier recommendation to run those controls is complete. See [the later comparison report](../v19_boundary_dipole_comparison/README.md). The nonperiodic-z slab k-mesh and smearing ladders are still unverified.
+
 **Scope.** Read-only revalidation of existing CIF-derived slab archives and disabled vacuum proposals, to decide the next numerical-reference point. No new DFT was run for this audit. The analysis script rechecks per-archive SHA256 inventories, archive verification status, convergence, source hashes, exact geometry/ID correspondence, and the reported energy/force metrics.
 
 ## Existing paired controls
