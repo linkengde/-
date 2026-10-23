@@ -125,7 +125,16 @@ if args.resume:
     assert np.allclose(restart_atoms.positions, atoms.positions, atol=1e-12, rtol=0)
     assert np.allclose(restart_atoms.cell.array, atoms.cell.array, atol=1e-12, rtol=0)
     assert np.array_equal(restart_atoms.pbc, atoms.pbc)
-    calc.set(maxiter=max(0, method["maxiter"] - prior_iterations))
+    # GPAW 26.7's new ASE frontend does not expose maxiter through
+    # ASECalculator.set().  Resume from the same serialized SCF state and set
+    # only the remaining iteration budget on its SCF loop.  Across the initial
+    # run and all resumes, the total hard ceiling remains method["maxiter"].
+    remaining_iterations = int(method["maxiter"]) - prior_iterations
+    assert remaining_iterations > 0, "checkpoint already reached maxiter"
+    assert calc.dft.scf_loop.maxiter == int(method["maxiter"]), (
+        "checkpoint SCF maxiter differs from the locked configuration")
+    calc.dft.scf_loop.maxiter = remaining_iterations
+    assert calc.dft.scf_loop.maxiter == remaining_iterations
     atoms.calc = calc
 else:
     assert not checkpoint_latest.exists(), "checkpoint exists; use --resume after verification"
