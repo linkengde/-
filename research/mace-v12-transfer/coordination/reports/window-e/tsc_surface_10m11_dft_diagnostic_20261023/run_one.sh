@@ -23,7 +23,7 @@ else
   echo "Only optional flag is --resume" >&2; exit 2
 fi
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
-exec mpiexec -n 4 "$GPAW_BIN" python "$HERE/run_fixed_geometry.py" \
+exec mpiexec -n 4 "$GPAW_BIN" python "$HERE/run_fixed_geometry.py" -- \
   --structure-id "$TASK_ID" --input "$INPUT" --run-dir "$RUN_DIR" \
   --config "$CONFIG" --config-sha256 "$CONFIG_SHA" --lock "$LOCK" "${RESUME[@]}" \
   >"$RUN_DIR/stdout_$STAMP.log" 2>"$RUN_DIR/stderr_$STAMP.log"
