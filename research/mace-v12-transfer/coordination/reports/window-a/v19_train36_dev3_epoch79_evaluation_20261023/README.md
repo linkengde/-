@@ -42,6 +42,10 @@ These differences confound source-geometry generalization with periodic-boundary
 
 No new DFT or training was started as part of this evaluation and diagnosis. The B audit's shared-source limitation remains in force; test/sealed data remain unopened.
 
+The existing pure-phase archive inventory was then checked against V19. Ag passes its selected fcc control, while Ti₃SiC₂ baseline and four ±0.20 Å Ti/C controls show roughly 3.00–3.02 eV/Å force-vector RMSE, dominated by Ti/C. These six host controls share COD 9009647 with dev3 and retain a control-only role, so they cannot be moved into training while dev3 is kept as a source-independent check. Details: `../v19_postfit_pure_phase_controls_20261023/README.md`.
+
+The train36 source audit found 12 inherited rows with no independent check of the original energy getter or run settings, and one rank-recovery row with unresolved k-point convergence. All rows store `REF_energy`, but these lineage gaps and the Gamma/TTT versus 6×6×1/TTF development mismatch must be resolved before another energy-and-force fit. Details: `../v19_train36_energy_method_lineage_audit_20261023/README.md`.
+
 ## Reproduction files
 
 - `training_verification.json`: all-epoch and epoch-79 identity checks plus dev3 metrics.

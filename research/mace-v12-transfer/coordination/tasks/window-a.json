@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T04:27:09+00:00",
+  "updated_utc": "2026-10-23T04:36:43+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V19 train36/dev3 fixed CPU fit completed; all epochs 0-79 and epoch79 export identity verified. Development screening FAIL: force-vector RMSE 2.300/2.750/2.505 eV/A and separation-force error 0.106/1.555/0.653 eV/A (AgC/AgSi/AgTi). Train/dev diagnostic identifies PBC/k-point/composition/source-method mismatch; no test/sealed data opened.",
+  "current_stage": "V19 train36/dev3 fit and all post-fit diagnostics are complete; candidate FAILs interface gates and also misses Ti3SiC2 pure-phase Ti/C forces by about 3.0 eV/A. Read-only lineage audit finds 12 inherited train rows without original energy-getter/method verification and one unresolved k-mesh label. Local CIF copies are the same COD 9009647 source; external OPTIMADE/GitHub API access returned 403. No test/sealed labels opened.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -77,7 +77,10 @@
     "AgTi_v19_independent_dev_01": "completed; SCF iteration 76; elapsed 13201s; updated 2026-10-23T02:42:35.653858+00:00",
     "v19_dataset_entry_independent_audit_window_b": "completed; B report published at a13259d; audit.py rerun by A and all checks PASS; shared COD 9009647 source-family limitation recorded.",
     "A_APPROVED_V19_DATASET": "approved and assembled; train36/dev3/test0; SHA256 inventory verified; preflight_v19.py PASS.",
-    "v19_training": "completed; epochs 0-79; exit 0; epoch79 identity and 80-checkpoint coverage verified; dev force and separation gates FAIL; report published in coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023"
+    "v19_training": "completed; 80 epochs and epoch79 export verified; development force/separation gates FAIL; report at coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023",
+    "v19_postfit_pure_phase_diagnostic": "completed; V19 force-vector RMSE 1.73e-5 eV/A on Ag fcc control and 3.00-3.02 eV/A on Ti3SiC2 baseline/four Ti/C perturbation controls; all 26 pure-phase archives SHA/SCF checks PASS; roles unchanged; report at coordination/reports/window-a/v19_postfit_pure_phase_controls_20261023",
+    "v19_train36_energy_method_lineage_audit": "completed; 12 inherited rows have unverified original getter/settings; 24 rows trace to archived labels, with one k-mesh convergence caveat; train is TTT Gamma-point metadata versus dev TTF 6x6x1 slab; report at coordination/reports/window-a/v19_train36_energy_method_lineage_audit_20261023",
+    "v19_independent_Ti3SiC2_parent_search": "blocked in this pass; only two CIF copies of COD 9009647 exist locally and normalize to identical bytes; unauthenticated external OPTIMADE/GitHub API requests returned HTTP 403; no substitute source invented"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -85,7 +88,7 @@
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
     "v15": "Training completed, selected epoch74; independently scored fresh registry probes FAIL. Energy gates pass; force-vector gates fail all; AgC/AgTi separation gates fail. No production MD/TTM.",
     "v16": "First local-registry screen FAIL; full vectorRMSE0.12950/0.09615/0.10529 (AgC/Si/Ti). No production MD/TTM.",
-    "v19_residual_response": "completed fixed 80-epoch candidate; epoch79 identity verified; development force-vector and separation-force gates FAIL; not qualified for production/MD/impact."
+    "v19_residual_response": "completed fixed 80-epoch candidate; epoch79 identity verified; dev force and separation gates FAIL; Ti3SiC2 pure-phase Ti/C residuals remain about 3.0 eV/A; not qualified for production/MD/impact."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -174,21 +177,16 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
-  "next_action": "Do not promote or use V19 for dynamics. Complete read-only audit of train36 energy-key/reference lineage and existing archive-verified pure-phase/Ti3SiC2 backbone data. Find a source-verified second Ti3SiC2 CIF family; design source-separated AgC/AgSi/AgTi data roles and method-matched slab inputs after numerical settings are reconciled. Register only hash-verified DFT labels; require B independent entry audit before A approves a versioned dataset and runs the frozen preflight/fit. Keep current dev source family out of fitting; do not open test/sealed labels.",
+  "next_action": "Do not use V19 for dynamics or refit against current dev3. Continue source recovery for the 12 inherited train labels and source-verified search for a second Ti3SiC2 parent; preserve the COD 9009647 dev family outside fitting. Reconcile native/free energy provenance and slab k-point/smearing/dipole/vacuum settings. If the original 12 DFT outputs or a new CIF source remain inaccessible, publish that exact blocker. Register new hash-verified DFT only after a valid source and numerical settings are available; obtain B independent audit before the next approved split. No test/sealed data.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-    "job": "v19_residual_response_training",
-    "state": "completed",
-    "iteration": 79,
-    "completed_epochs": 80,
-    "total_epochs": 80,
-    "validation_force_component_RMSE_eV_A": 1.45779,
-    "development_force_vector_RMSE_eV_A": 2.5249626,
-    "development_force_gate_pass": false,
-    "development_separation_gate_pass": false,
-    "note": "Normal exit. All epoch logs/checkpoints 0-79 verified at completion; final exported model exactly matches epoch79 checkpoint tensors. Train/dev diagnostic found clear PBC/k-mesh/composition shift. Report: coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023. No test/sealed data opened.",
-    "updated_utc": "2026-10-23T04:27:09+00:00"
+    "job": "v19_postfit_data_and_source_audit",
+    "state": "blocked_on_source_recovery",
+    "iteration": 0,
+    "note": "V19 fit/verification, interface dev screen, pure-phase control inference, and train36 energy/method lineage audit are published. Need original records for 12 inherited labels and a second Ti3SiC2 source family. Local copies are same COD 9009647; OPTIMADE and GitHub API egress HTTP403. No DFT, training, test/sealed access.",
+    "withheld_labels_opened": false,
+    "updated_utc": "2026-10-23T04:36:43+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
