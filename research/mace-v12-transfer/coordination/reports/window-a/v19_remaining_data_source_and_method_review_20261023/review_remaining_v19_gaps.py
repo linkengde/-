@@ -97,6 +97,15 @@ def main() -> None:
         "independent_parent_search": {
             "qualified_second_Ti3SiC2_parent_found": False,
             "local_checkout": "Only CIF copies identifying COD 9009647 were found; existing local audit normalized both copies to the same CIF bytes and publication/source family.",
+            "hidden_workspace_cif_inventory": {
+                "scope": "/workspace including hidden directories and installed environments",
+                "unique_ASE_mineral_fixture_CIFs": 8,
+                "environment_copies": 3,
+                "additional_project_CIFs": 2,
+                "other_CIF_or_MCIF_files_found": 0,
+                "reduced_Ti3SiC2_matches": 0,
+                "note": "The eight ASE fixture CIFs were parsed; their formulas are Ni2Sb2, CSi, H4Al2F6O4Pb2, CoAsS, Co2As2S2, Ni3S2, MoS3, and SiO2. The two project CIFs both identify COD 9009647."
+            },
             "external_requests": {
                 "materials_project_optimade": {"url": "https://optimade.materialsproject.org/v1/structures?filter=chemical_formula_reduced%3D%22Ti3SiC2%22", "result": "Tunnel connection failed: HTTP 403 Forbidden"},
                 "oqmd_optimade": {"url": "https://oqmd.org/optimade/v1/structures?filter=chemical_formula_reduced%3D%22Ti3SiC2%22", "result": "Tunnel connection failed: HTTP 403 Forbidden"},

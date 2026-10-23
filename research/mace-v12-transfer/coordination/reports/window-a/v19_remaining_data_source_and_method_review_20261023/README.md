@@ -28,7 +28,7 @@ The V16 metadata declares 1×4×2, but the original DFT output identity, SCF log
 
 ## Second-parent source search
 
-The local project search still finds only copies of COD 9009647, which are the same crystallographic source family. This review also inspected public source fixtures at fixed Git revisions:
+The full `/workspace` CIF/MCIF inventory, including hidden directories and installed environments, contains only two project CIF copies (both COD 9009647) plus eight unique ASE mineral-test CIFs copied across three virtual environments. The eight fixtures were parsed and none is Ti₃SiC₂. This review also inspected public source fixtures at fixed Git revisions:
 
 | Repository | Revision | CIF/MCIF files scanned | Reduced Ti₃SiC₂ matches |
 |---|---|---:|---:|
