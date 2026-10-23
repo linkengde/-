@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T02:44:23.993669+00:00",
+  "updated_utc": "2026-10-23T03:06:22.613341+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "AgC, AgSi, and AgTi V19 independent-development fixed-geometry labels are complete, archive-verified, uploaded, and marked completed; B independent entry audit is assigned.",
+  "current_stage": "B independent dataset-entry audit passed with shared-source limitation; A approved and assembled train36/dev3/test0; V19 preflight passed; training launch is next.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -74,7 +74,10 @@
     "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "completed; SCF iteration 68; elapsed 15766s; updated 2026-10-11T01:25:40.550849+00:00",
     "AgC_v19_independent_dev_01": "completed; SCF iteration 59; elapsed 12573s; updated 2026-10-22T20:12:41.146313+00:00",
     "AgSi_v19_independent_dev_01": "completed; SCF iteration 57; elapsed 10007s; updated 2026-10-22T23:00:39.163065+00:00",
-    "AgTi_v19_independent_dev_01": "completed; SCF iteration 76; elapsed 13201s; updated 2026-10-23T02:42:35.653858+00:00"
+    "AgTi_v19_independent_dev_01": "completed; SCF iteration 76; elapsed 13201s; updated 2026-10-23T02:42:35.653858+00:00",
+    "v19_dataset_entry_independent_audit_window_b": "completed; B report published at a13259d; audit.py rerun by A and all checks PASS; shared COD 9009647 source-family limitation recorded.",
+    "A_APPROVED_V19_DATASET": "approved and assembled; train36/dev3/test0; SHA256 inventory verified; preflight_v19.py PASS.",
+    "v19_training": "ready to launch; fixed recipe seed45, CPU, 80 epochs; waiting for status publication."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -164,20 +167,22 @@
     "research/mace-v12-transfer/coordination/reports/window-a/v19_slab_reference_readiness",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
     "research/mace-v12-transfer/coordination/reports/window-a/v19_V18_pure_phase_force_screen",
-    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev"
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev",
+    "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response",
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_approved_dataset_preflight"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
-  "task_boundary": "A may run only the three registered independent-development labels in pbe_interface_v19_independent_dev. Do not run or modify B-owned calculations. Do not open sealed test data.",
-  "next_action": "Wait for B’s independent read-only audit of the three published development labels. After reviewing it, record A approval for A_APPROVED_V19_DATASET (train36/dev3/test0) only if the audit passes; then run preflight_v19.py and train the existing 80-epoch V19 candidate only if preflight passes. Do not open sealed/test data.",
+  "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
+  "next_action": "Publish this approval, dataset, environment lock, and pre-launch status to main. Then run the existing fixed V19 80-epoch training script. Verify all epochs 0-79 and epoch79 model/tensor identity before freezing; do not open sealed/test data.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-    "job": "AgTi_v19_independent_dev_01",
-    "state": "completed",
-    "iteration": 76,
-    "elapsed_s": 13200.8467,
-    "note": "SCF converged at 76 iterations; archive verification PASS and published to main at cf87510.",
-    "updated_utc": "2026-10-23T02:42:35.653858+00:00"
+    "job": "v19_residual_response_training",
+    "state": "prelaunch_status_publishing",
+    "iteration": 0,
+    "elapsed_s": 0.0,
+    "note": "B audit PASS_WITH_SHARED_SOURCE_LIMITATION; A approval recorded; dataset integrity checks and preflight PASS. Training launch follows status publication.",
+    "updated_utc": "2026-10-23T03:06:22.613341+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",

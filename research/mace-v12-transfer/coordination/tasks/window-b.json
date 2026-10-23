@@ -233,9 +233,9 @@
   },
   "owner_instance": "0627a3b9-21e0-4d27-97fb-1f28181c8cec",
   "status": "claimed",
-  "next_action": "Window B: independently audit the three A-owned V19 development labels and their dataset-entry/geometry-role evidence under the assigned instructions. Publish the audit report and SHA256 manifest. Do not run DFT/MPI, MACE inference/training, or open any sealed/test data; A will approve or reject A_APPROVED_V19_DATASET after the report.",
+  "next_action": "No additional B action is registered for this V19 audit. The report is available for future review; no DFT/MPI or MACE training was run in B.",
   "startup_instructions": "research/mace-v12-transfer/coordination/START_WINDOW_B.md",
-  "updated_utc": "2026-10-23T02:44:23Z",
+  "updated_utc": "2026-10-23T03:06:22.613341+00:00",
   "labels": {
     "AgTi_registry_probe_v13_01": "completed",
     "AgC_registry_strain_acq_v14_01": "completed",
@@ -303,7 +303,7 @@
     "updated_utc": "2026-10-10T16:26:49.484620+00:00"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_parallel_targeted_acquisition",
-  "current_stage": "A has completed and uploaded the AgC, AgSi, and AgTi V19 independent-development labels; B is assigned a read-only independent dataset-entry audit.",
+  "current_stage": "V19 independent dataset-entry audit completed and published; A reviewed the PASS report with its shared-source limitation and recorded the approved train36/dev3/test0 split.",
   "standing_work_instruction": "While this B session is active, complete assigned queued work in order, publish each stage, synchronize main and continue without asking the user for another per-task command. A replenishes the queue before it runs empty. Read B_CONTINUOUS_WORK.md. Never rerun completed work or claim A jobs. User authorized A to assign follow-up work and proceed independently if B does not respond. Lack of chat response or stale progress alone does not prove a live remote DFT has stopped. Read-only design/audit may fall back to A without waiting; numerical takeover requires checking live/publication status and explicit owner-bound registration, never bypass guards or erase identity.",
   "task_id": "window-b",
   "auto_complete_after_labels": false,
@@ -671,7 +671,7 @@
       "instruction": "This geometry/source-preparation task replaces the stale queued launch of Ti3SiC2_baseline_k10x10x4_v19. That label is already completed and independently archive-verified; do not launch, restart, or alter it. Using the completed V18 training coverage audit, prepare a source-verified, launch-disabled DFT data proposal for (a) four fixed-cell Ti3SiC2 backbone response points: +/-0.02 A along z on one symmetry-distinct Ti and one C in the verified baseline geometry, and (b) one parent plus +/-0.10 A rigid Ag-layer normal separations for each Ag-Ti, Ag-Si, and Ag-C chemistry, only where an allowed public source geometry with provenance is verified. Audit source-family novelty against the V18 train-only provenance report; do not open dev/test/holdout/sealed structures or labels. Preserve atom IDs/order, framework geometry, and rigid-layer transformations; reject overlaps and duplicate geometries with periodic species-aware distance checks. For any chemistry lacking a verified source family, document the blocker and do not invent a structure. Since A is still reviewing slab mesh/smearing/vacuum reference settings, mark interface numerical settings pending and keep every proposal launch_enabled=false, owner=null, and unlabelled. Bulk Ti3SiC2 proposals may cite the already verified baseline and its method hash but do not run them. Publish a README, proposal extxyz/JSON, source/novelty ledger, and SHA256SUMS only under research/mace-v12-transfer/coordination/reports/window-b/v19_Ti3SiC2_backbone_and_interface_acquisition_design_window_b. No DFT/MPI, MACE inference/training, dataset integration, input-manifest mutation, label enabling, or A-owned calculation edits."
     },
     "v19_dataset_entry_independent_audit": {
-      "status": "assigned_queued",
+      "status": "completed",
       "assigned_utc": "2026-10-23T02:44:23Z",
       "report_directory": "research/mace-v12-transfer/coordination/reports/window-b/v19_dataset_entry_independent_audit",
       "mode": "read-only independent audit; no DFT/MPI, no MACE inference/training, no sealed/test access",
@@ -696,7 +696,10 @@
         "dataset edits",
         "sealed/test data access"
       ],
-      "decision_use": "A reviews B report before creating A_APPROVED_V19_DATASET train36/dev3/test0."
+      "decision_use": "A reviews B report before creating A_APPROVED_V19_DATASET train36/dev3/test0.",
+      "completed_utc": "2026-10-23T03:06:22.613341+00:00",
+      "published_commit": "a13259dc663d793ab78f61763284ca557b3496a9",
+      "evidence": "Read-only audit reproduced by A; all report SHA256 checks and six audit checks PASS; shared COD 9009647 source-family limitation acknowledged in A approval."
     }
   },
   "independent_mesh_reaudit": {
