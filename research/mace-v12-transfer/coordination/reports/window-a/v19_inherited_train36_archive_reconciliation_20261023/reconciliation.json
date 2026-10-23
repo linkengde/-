@@ -1,0 +1,925 @@
+{
+  "historical_source_class_counts": {
+    "v12_contact": 4,
+    "v12_distance_scan": 3,
+    "v13_lateral_holdout_now_train": 2,
+    "v14_acquisition": 3
+  },
+  "limitations": [
+    "Exact source method/getter and numerical results are recovered for these 12 labels, resolving the earlier missing-archive lineage flag.",
+    "Execution backend differs across the historical archives: three V12 contact calculations used serial GPAW; the remaining nine use four-domain cgpaw. MPI rank count was not separately recorded in the three serial summaries.",
+    "This does not establish slab-method consistency: train36 is fully periodic Gamma-point data, while dev3 is TTF 6x6x1 slab data with sigma 0.10 eV and xy dipole correction.",
+    "Historical V12 distance-scan and V13 holdout labels are now train36 members; they are not independent V19 development data.",
+    "The single V17 rank-recovery row still has an unresolved source-versus-replacement k-point convergence issue; it is outside this 12-row reconciliation."
+  ],
+  "method_summary": "All 12 source summaries record GPAW 26.7.0, PBE plane waves, 500 eV, Gamma (1x1x1), and Fermi smearing 0.10 eV. Archived logs show nine runs using the cgpaw backend with domain=4 and three runs using the serial backend with domain=1; this execution difference does not alter the recorded DFT method. The four run scripts call atoms.get_potential_energy() and store it as PW_PBE_energy_eV/energy_eV_cell; none calls get_free_energy(), and the archived extxyz files do not store a separate free-energy value.",
+  "row_count": 12,
+  "rows": [
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -206.96630897705558,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -206.96630897705558,
+        "train_REF_energy_eV_cell": -206.96630897705558,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "96c5b90d65eb728c46a24dde01aa5214a755f384039f00c873c71959311e74a7",
+        "manifest_input_sha256": "96c5b90d65eb728c46a24dde01aa5214a755f384039f00c873c71959311e74a7",
+        "manifest_output_sha256": "6f537e628145510f8ac02688568462d16cbbe6908b3c7d2a00f8a13232de0269",
+        "manifest_summary_sha256": "b968fd4429e3a5290e6508f8c50a14740b86c52171b6da6cc25fae481903606d",
+        "output_match": true,
+        "output_sha256": "6f537e628145510f8ac02688568462d16cbbe6908b3c7d2a00f8a13232de0269",
+        "summary_match": true,
+        "summary_sha256": "b968fd4429e3a5290e6508f8c50a14740b86c52171b6da6cc25fae481903606d",
+        "summary_source_sha256": "96c5b90d65eb728c46a24dde01aa5214a755f384039f00c873c71959311e74a7"
+      },
+      "historical_source_class": "v12_contact",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgSi_d2p2.extxyz",
+      "label": "AgSi_d2p2",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgSi_d2p2/AgSi_d2p2_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 47,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgSi_d2p2/summary.json",
+      "train36_index": 0,
+      "train_config_type": "AgSi_d2p2_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -207.4892339444743,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -207.4892339444743,
+        "train_REF_energy_eV_cell": -207.4892339444743,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 1,
+        "gpaw_mpi_backend_from_log": "serial",
+        "summary_mpi_ranks": null
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "cb415a64a4c868da0a429a9d37cc0581a47a7bc12d1355d0bb0fb2e430602494",
+        "manifest_input_sha256": "cb415a64a4c868da0a429a9d37cc0581a47a7bc12d1355d0bb0fb2e430602494",
+        "manifest_output_sha256": "150ee2efd506361d19bcd6d85f12ba6addbd0ef37741b7147b966b312351fe7e",
+        "manifest_summary_sha256": "45f7b55c2ca2cb0a7eabab5c845e7f7b106d7b1828f45f43fe15afec0dc77dbe",
+        "output_match": true,
+        "output_sha256": "150ee2efd506361d19bcd6d85f12ba6addbd0ef37741b7147b966b312351fe7e",
+        "summary_match": true,
+        "summary_sha256": "45f7b55c2ca2cb0a7eabab5c845e7f7b106d7b1828f45f43fe15afec0dc77dbe",
+        "summary_source_sha256": "cb415a64a4c868da0a429a9d37cc0581a47a7bc12d1355d0bb0fb2e430602494"
+      },
+      "historical_source_class": "v12_contact",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgSi_d2p8.extxyz",
+      "label": "AgSi_d2p8",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgSi_d2p8/AgSi_d2p8_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 49,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgSi_d2p8/summary.json",
+      "train36_index": 1,
+      "train_config_type": "AgSi_d2p8_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -259.15835431517127,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -259.15835431517127,
+        "train_REF_energy_eV_cell": -259.15835431517127,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 1,
+        "gpaw_mpi_backend_from_log": "serial",
+        "summary_mpi_ranks": null
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "ed7ccf2a4976f2a9afc41cbf38e109d172c2104667934af35e09829c86359f10",
+        "manifest_input_sha256": "ed7ccf2a4976f2a9afc41cbf38e109d172c2104667934af35e09829c86359f10",
+        "manifest_output_sha256": "838320b53e7378a89ef8261991177b5c72e7fa75ced91aa5f89a5d4eeefd616d",
+        "manifest_summary_sha256": "c765986237329fb015d1ca24ffb8b7a5ec1fcdc33bb61ed172fceae5fb402d5d",
+        "output_match": true,
+        "output_sha256": "838320b53e7378a89ef8261991177b5c72e7fa75ced91aa5f89a5d4eeefd616d",
+        "summary_match": true,
+        "summary_sha256": "c765986237329fb015d1ca24ffb8b7a5ec1fcdc33bb61ed172fceae5fb402d5d",
+        "summary_source_sha256": "ed7ccf2a4976f2a9afc41cbf38e109d172c2104667934af35e09829c86359f10"
+      },
+      "historical_source_class": "v12_contact",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgC_d2p0.extxyz",
+      "label": "AgC_d2p0",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgC_d2p0/AgC_d2p0_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 61,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgC_d2p0/summary.json",
+      "train36_index": 2,
+      "train_config_type": "AgC_d2p0_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -258.9332034547212,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -258.9332034547212,
+        "train_REF_energy_eV_cell": -258.9332034547212,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 1,
+        "gpaw_mpi_backend_from_log": "serial",
+        "summary_mpi_ranks": null
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "a9f0ea09afcc2812256cfcbd3633e4d2613c29e106a6c73187a2a9958dcd9ed8",
+        "manifest_input_sha256": "a9f0ea09afcc2812256cfcbd3633e4d2613c29e106a6c73187a2a9958dcd9ed8",
+        "manifest_output_sha256": "a469ea52ca2926d03d0881c6af6cc779ce81ada7fe4fc95abe7b0c4e0522a01f",
+        "manifest_summary_sha256": "79d21870e90b17272a3f7cf7415c92083965eddff9c5d03e8d7b599ba2e21b41",
+        "output_match": true,
+        "output_sha256": "a469ea52ca2926d03d0881c6af6cc779ce81ada7fe4fc95abe7b0c4e0522a01f",
+        "summary_match": true,
+        "summary_sha256": "79d21870e90b17272a3f7cf7415c92083965eddff9c5d03e8d7b599ba2e21b41",
+        "summary_source_sha256": "a9f0ea09afcc2812256cfcbd3633e4d2613c29e106a6c73187a2a9958dcd9ed8"
+      },
+      "historical_source_class": "v12_contact",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/AgC_d2p4.extxyz",
+      "label": "AgC_d2p4",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgC_d2p4/AgC_d2p4_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 61,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/AgC_d2p4/summary.json",
+      "train36_index": 3,
+      "train_config_type": "AgC_d2p4_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -259.0564822554769,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -259.0564822554769,
+        "train_REF_energy_eV_cell": -259.0564822554769,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "63b5bc33dabab88ead78de5ccfc0c403ed7a0db906ae24722e6e9b30e37ff5d2",
+        "manifest_input_sha256": "63b5bc33dabab88ead78de5ccfc0c403ed7a0db906ae24722e6e9b30e37ff5d2",
+        "manifest_output_sha256": "c08c555553e7406bfd90b827d722ff5406c5df15edcf755eba6f6d6b5fa2813e",
+        "manifest_summary_sha256": "f84eada01569fd2358db069e6573b01f4e455512276c54e255bbcd2c1bbb62fe",
+        "output_match": true,
+        "output_sha256": "c08c555553e7406bfd90b827d722ff5406c5df15edcf755eba6f6d6b5fa2813e",
+        "summary_match": true,
+        "summary_sha256": "f84eada01569fd2358db069e6573b01f4e455512276c54e255bbcd2c1bbb62fe",
+        "summary_source_sha256": "63b5bc33dabab88ead78de5ccfc0c403ed7a0db906ae24722e6e9b30e37ff5d2"
+      },
+      "historical_source_class": "v12_distance_scan",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgC_validation_d2p30.extxyz",
+      "label": "AgC_validation_d2p30",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgC_validation_d2p30/AgC_validation_d2p30_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 60,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgC_validation_d2p30/summary.json",
+      "train36_index": 4,
+      "train_config_type": "AgC_validation_d2p30_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -207.52808183257918,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -207.52808183257918,
+        "train_REF_energy_eV_cell": -207.52808183257918,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "e41850562f973c8f588deb1d14f2c7aeabd13c083d3928951e0d1b09be5f4cd0",
+        "manifest_input_sha256": "e41850562f973c8f588deb1d14f2c7aeabd13c083d3928951e0d1b09be5f4cd0",
+        "manifest_output_sha256": "1e66a16de50d7cedc1e720199988b584711a14f734fcb59cd9b268738da589ed",
+        "manifest_summary_sha256": "99fd7961ac10718f77c3cb89276c40748ba226cfa5d79b2c5af8490fc9e44c3d",
+        "output_match": true,
+        "output_sha256": "1e66a16de50d7cedc1e720199988b584711a14f734fcb59cd9b268738da589ed",
+        "summary_match": true,
+        "summary_sha256": "99fd7961ac10718f77c3cb89276c40748ba226cfa5d79b2c5af8490fc9e44c3d",
+        "summary_source_sha256": "e41850562f973c8f588deb1d14f2c7aeabd13c083d3928951e0d1b09be5f4cd0"
+      },
+      "historical_source_class": "v12_distance_scan",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgSi_validation_d2p60.extxyz",
+      "label": "AgSi_validation_d2p60",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgSi_validation_d2p60/AgSi_validation_d2p60_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 49,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgSi_validation_d2p60/summary.json",
+      "train36_index": 5,
+      "train_config_type": "AgSi_validation_d2p60_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -177.01645998197077,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -177.01645998197077,
+        "train_REF_energy_eV_cell": -177.01645998197077,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "996b73776e1193ac85146561e2a6e643bb590916b5f31ae00b7b5d052f97bbc2",
+        "manifest_input_sha256": "996b73776e1193ac85146561e2a6e643bb590916b5f31ae00b7b5d052f97bbc2",
+        "manifest_output_sha256": "5213d9578c8e4e1febe02b19f0d5a066cc903f1cb80a0743795d318daf223af4",
+        "manifest_summary_sha256": "c2aeaa720eebde45f7e36e7c2136ac003177afa43388137605f055114de025d4",
+        "output_match": true,
+        "output_sha256": "5213d9578c8e4e1febe02b19f0d5a066cc903f1cb80a0743795d318daf223af4",
+        "summary_match": true,
+        "summary_sha256": "c2aeaa720eebde45f7e36e7c2136ac003177afa43388137605f055114de025d4",
+        "summary_source_sha256": "996b73776e1193ac85146561e2a6e643bb590916b5f31ae00b7b5d052f97bbc2"
+      },
+      "historical_source_class": "v12_distance_scan",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/inputs/validation_distance_scans/AgTi_validation_d2p60.extxyz",
+      "label": "AgTi_validation_d2p60",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgTi_validation_d2p60/AgTi_validation_d2p60_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 37,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_energy_additions_v12/calculations/validation_distance_scans/AgTi_validation_d2p60/summary.json",
+      "train36_index": 6,
+      "train_config_type": "AgTi_validation_d2p60_periodic_PW_PBE_energy_force"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -258.955519609678,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -258.955519609678,
+        "train_REF_energy_eV_cell": -258.955519609678,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "6b9aa1c30203841d9fa673e91cbd5e671c495bc8f7ff1ff4fb83af6141d2b846",
+        "manifest_input_sha256": "6b9aa1c30203841d9fa673e91cbd5e671c495bc8f7ff1ff4fb83af6141d2b846",
+        "manifest_output_sha256": "9705f7bbcaf53b5a093a8937f38af9672df59cf8332526227887a19504a37867",
+        "manifest_summary_sha256": "6d63b349c83d1aa6efdf84e1e5eace519376343c1dfb3c805701f54c1f6e3e07",
+        "output_match": true,
+        "output_sha256": "9705f7bbcaf53b5a093a8937f38af9672df59cf8332526227887a19504a37867",
+        "summary_match": true,
+        "summary_sha256": "6d63b349c83d1aa6efdf84e1e5eace519376343c1dfb3c805701f54c1f6e3e07",
+        "summary_source_sha256": "6b9aa1c30203841d9fa673e91cbd5e671c495bc8f7ff1ff4fb83af6141d2b846"
+      },
+      "historical_source_class": "v13_lateral_holdout_now_train",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/inputs/AgC_lateral_registry_holdout_v13.extxyz",
+      "label": "AgC_lateral_registry_holdout_v13",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/calculations/AgC_lateral_registry_holdout_v13/AgC_lateral_registry_holdout_v13_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 62,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/calculations/AgC_lateral_registry_holdout_v13/summary.json",
+      "train36_index": 7,
+      "train_config_type": "AgC_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -207.5444919019102,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -207.5444919019102,
+        "train_REF_energy_eV_cell": -207.5444919019102,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "91c9495684f8497d7dd28f4b4075c0749b285627ff383aeff638d166b3672e4b",
+        "manifest_input_sha256": "91c9495684f8497d7dd28f4b4075c0749b285627ff383aeff638d166b3672e4b",
+        "manifest_output_sha256": "3f7f7ff729e6cabef85404578f936f178104e7a8377251080f7f908c9acc4bae",
+        "manifest_summary_sha256": "14ac18ed4713dbaf94e332b83ac012de7351e9589f03c60779fa4ec0c2306d17",
+        "output_match": true,
+        "output_sha256": "3f7f7ff729e6cabef85404578f936f178104e7a8377251080f7f908c9acc4bae",
+        "summary_match": true,
+        "summary_sha256": "14ac18ed4713dbaf94e332b83ac012de7351e9589f03c60779fa4ec0c2306d17",
+        "summary_source_sha256": "91c9495684f8497d7dd28f4b4075c0749b285627ff383aeff638d166b3672e4b"
+      },
+      "historical_source_class": "v13_lateral_holdout_now_train",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/inputs/AgSi_lateral_registry_holdout_v13.extxyz",
+      "label": "AgSi_lateral_registry_holdout_v13",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/calculations/AgSi_lateral_registry_holdout_v13/AgSi_lateral_registry_holdout_v13_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 46,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v13_holdouts/calculations/AgSi_lateral_registry_holdout_v13/summary.json",
+      "train36_index": 8,
+      "train_config_type": "AgSi_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -176.57984627488767,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -176.57984627488767,
+        "train_REF_energy_eV_cell": -176.57984627488767,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "a30b698b2f3af74784ebb0c33ad31207c8d67681d7531b3b4ac98e0148df6694",
+        "manifest_input_sha256": "a30b698b2f3af74784ebb0c33ad31207c8d67681d7531b3b4ac98e0148df6694",
+        "manifest_output_sha256": "e2ff4802857525b0b20e1cc885a62909ab6382da5e0bc0048de3f339df1b14b1",
+        "manifest_summary_sha256": "4f5df0dbaf020867d592bb6d13a51467e3840322fe7c4868e2eb2af31a912669",
+        "output_match": true,
+        "output_sha256": "e2ff4802857525b0b20e1cc885a62909ab6382da5e0bc0048de3f339df1b14b1",
+        "summary_match": true,
+        "summary_sha256": "4f5df0dbaf020867d592bb6d13a51467e3840322fe7c4868e2eb2af31a912669",
+        "summary_source_sha256": "a30b698b2f3af74784ebb0c33ad31207c8d67681d7531b3b4ac98e0148df6694"
+      },
+      "historical_source_class": "v14_acquisition",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgTi_registry_probe_v13_01.extxyz",
+      "label": "AgTi_registry_probe_v13_01",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgTi_registry_probe_v13_01/AgTi_registry_probe_v13_01_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 38,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgTi_registry_probe_v13_01/summary.json",
+      "train36_index": 9,
+      "train_config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -257.5833982481984,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -257.5833982481984,
+        "train_REF_energy_eV_cell": -257.5833982481984,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "ce992b93cf32ebcee7cd65ff7c23dec91dc8e28616893ed414818253ebe1d260",
+        "manifest_input_sha256": "ce992b93cf32ebcee7cd65ff7c23dec91dc8e28616893ed414818253ebe1d260",
+        "manifest_output_sha256": "7df6a624cddd1bfba65e5438e92138cff1f823a93d87db6b57184cff0afcd0d1",
+        "manifest_summary_sha256": "702667d0ceec97e5a3e31a4c431916e4e65ba22f9ae2ddd19aabdd78c746c701",
+        "output_match": true,
+        "output_sha256": "7df6a624cddd1bfba65e5438e92138cff1f823a93d87db6b57184cff0afcd0d1",
+        "summary_match": true,
+        "summary_sha256": "702667d0ceec97e5a3e31a4c431916e4e65ba22f9ae2ddd19aabdd78c746c701",
+        "summary_source_sha256": "ce992b93cf32ebcee7cd65ff7c23dec91dc8e28616893ed414818253ebe1d260"
+      },
+      "historical_source_class": "v14_acquisition",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgC_registry_strain_acq_v14_01.extxyz",
+      "label": "AgC_registry_strain_acq_v14_01",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgC_registry_strain_acq_v14_01/AgC_registry_strain_acq_v14_01_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 58,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgC_registry_strain_acq_v14_01/summary.json",
+      "train36_index": 10,
+      "train_config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train"
+    },
+    {
+      "checks": {
+        "energy": true,
+        "geometry": true,
+        "hashes": true,
+        "method": true,
+        "scf": true,
+        "summary_geometry": true
+      },
+      "current_role": "approved_train36",
+      "energy": {
+        "free_energy_stored_in_output": false,
+        "output_PW_PBE_energy_eV_cell": -208.69345818474375,
+        "output_summary_abs_difference_eV": 0.0,
+        "summary_energy_eV_cell": -208.69345818474375,
+        "train_REF_energy_eV_cell": -208.69345818474375,
+        "train_summary_abs_difference_eV": 0.0
+      },
+      "execution": {
+        "domain_parallelization_from_log": 4,
+        "gpaw_mpi_backend_from_log": "cgpaw",
+        "summary_mpi_ranks": 4
+      },
+      "geometry": {
+        "input_output_atomic_numbers": true,
+        "input_output_cell_exact": true,
+        "input_output_lammps_ids": true,
+        "input_output_pbc_equal": true,
+        "input_output_positions_exact": true,
+        "train_output_atomic_numbers": true,
+        "train_output_cell_exact": true,
+        "train_output_force_exact": true,
+        "train_output_force_max_abs_eV_A": 0.0,
+        "train_output_lammps_ids": true,
+        "train_output_pbc_equal": true,
+        "train_output_positions_exact": true
+      },
+      "hashes": {
+        "input_match": true,
+        "input_sha256": "0fd6ed880bdcaf84ec95fc6adc7e247f34256ac28b1191040be3e9679ae147eb",
+        "manifest_input_sha256": "0fd6ed880bdcaf84ec95fc6adc7e247f34256ac28b1191040be3e9679ae147eb",
+        "manifest_output_sha256": "253b01b10ea9ca60a89e4199bce6e30ed15356b9802b12c6509215a8b0c437ec",
+        "manifest_summary_sha256": "83d309ba3c84aaca49bde75dcd736ac83c74924bdc5c8b268af46d1751b38dec",
+        "output_match": true,
+        "output_sha256": "253b01b10ea9ca60a89e4199bce6e30ed15356b9802b12c6509215a8b0c437ec",
+        "summary_match": true,
+        "summary_sha256": "83d309ba3c84aaca49bde75dcd736ac83c74924bdc5c8b268af46d1751b38dec",
+        "summary_source_sha256": "0fd6ed880bdcaf84ec95fc6adc7e247f34256ac28b1191040be3e9679ae147eb"
+      },
+      "historical_source_class": "v14_acquisition",
+      "input_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/inputs/AgSi_registry_strain_acq_v14_01.extxyz",
+      "label": "AgSi_registry_strain_acq_v14_01",
+      "output_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgSi_registry_strain_acq_v14_01/AgSi_registry_strain_acq_v14_01_PW_PBE.extxyz",
+      "progress_status": "complete",
+      "scf_iterations": 49,
+      "source_method": {
+        "GPAW_version": "26.7.0",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "parallel": {
+          "sl_auto": true
+        },
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "smearing_eV": 0.1,
+        "xc": "PBE"
+      },
+      "status": "PASS",
+      "summary_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v14_parallel_acquisition/calculations/AgSi_registry_strain_acq_v14_01/summary.json",
+      "train36_index": 11,
+      "train_config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train"
+    }
+  ],
+  "scope": "Reconciles exactly the 12 formerly unresolved approved V19 train36 rows. Reads no valid/dev/test/sealed files beyond the already approved train.extxyz and exact source archives. No GPAW/MPI run.",
+  "status": "PASS",
+  "train36_sha256": "a247f7619e613297a1c11d7dc97abec888aa0bbb8cc6889bcbbe05825ade0c9c"
+}
