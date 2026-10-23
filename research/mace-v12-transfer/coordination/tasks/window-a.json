@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T03:06:22.613341+00:00",
+  "updated_utc": "2026-10-23T03:08:28.588773+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "B independent dataset-entry audit passed with shared-source limitation; A approved and assembled train36/dev3/test0; V19 preflight passed; training launch is next.",
+  "current_stage": "V19 fixed-recipe CPU training is running after A_APPROVED_V19_DATASET and preflight PASS; epoch 0 completed.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -77,7 +77,7 @@
     "AgTi_v19_independent_dev_01": "completed; SCF iteration 76; elapsed 13201s; updated 2026-10-23T02:42:35.653858+00:00",
     "v19_dataset_entry_independent_audit_window_b": "completed; B report published at a13259d; audit.py rerun by A and all checks PASS; shared COD 9009647 source-family limitation recorded.",
     "A_APPROVED_V19_DATASET": "approved and assembled; train36/dev3/test0; SHA256 inventory verified; preflight_v19.py PASS.",
-    "v19_training": "ready to launch; fixed recipe seed45, CPU, 80 epochs; waiting for status publication."
+    "v19_training": "running; epoch 0/79 completed; initial validation force RMSE 0.27679 eV/A; output: research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response/runs/v19_train36_dev3_20261023_A"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -173,16 +173,16 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
-  "next_action": "Publish this approval, dataset, environment lock, and pre-launch status to main. Then run the existing fixed V19 80-epoch training script. Verify all epochs 0-79 and epoch79 model/tensor identity before freezing; do not open sealed/test data.",
+  "next_action": "Continue the registered 80-epoch run while monitoring logs and disk. After completion verify every epoch 0-79, final epoch79 export identity, model integrity, and publish the run artifacts/status. Do not open sealed/test data.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
     "job": "v19_residual_response_training",
-    "state": "prelaunch_status_publishing",
+    "state": "running",
     "iteration": 0,
-    "elapsed_s": 0.0,
-    "note": "B audit PASS_WITH_SHARED_SOURCE_LIMITATION; A approval recorded; dataset integrity checks and preflight PASS. Training launch follows status publication.",
-    "updated_utc": "2026-10-23T03:06:22.613341+00:00"
+    "elapsed_s": 57.0,
+    "note": "Epoch 0 completed; validation force RMSE 0.27679 eV/A. Fixed seed45 CPU recipe, 4 threads; no test file used.",
+    "updated_utc": "2026-10-23T03:08:28.588773+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
