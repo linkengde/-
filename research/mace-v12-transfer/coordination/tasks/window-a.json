@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T04:55:00+00:00",
+  "updated_utc": "2026-10-23T06:32:03.973462+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V19 train36/dev3 fit and post-fit diagnostics complete; candidate fails interface force/separation gates and Ti3SiC2 pure-phase Ti/C force checks. The 12 inherited train36 rows are source-reconciled 12/12. Fixed-parent AgSi dipole and 26-to-36 A vacuum controls pass; target-slab k-mesh/smearing convergence is still unverified. Second-source search found no qualified Ti3SiC2 parent: network structure endpoints returned tunnel HTTP 403 and three public fixture repositories yielded no reduced-formula hit. V19's active rank-recovery row is the verified Gamma archive; the older V16 value differs but original SCF/output is unverified. No test/sealed labels opened.",
+  "current_stage": "V20 preparation: four fixed-geometry AgSi TTF slab k-mesh/smearing controls registered; independent Ti3SiC2 source search remains blocked. V19 remains rejected for dynamics.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -84,7 +84,11 @@
     "v19_inherited_train36_archive_reconciliation": "completed; 12/12 inherited rows mapped to source inputs/outputs; SHA256, exact atom geometry/IDs/forces, energy, PBE/PW500/Gamma/sigma0.1 method, and SCF checks PASS. 9 archives cgpaw domain4, 3 V12 contact logs serial domain1. No DFT/MPI run. Report: coordination/reports/window-a/v19_inherited_train36_archive_reconciliation_20261023",
     "v19_fixed_parent_slab_boundary_controls": "completed read-only comparison; 26 A dipole OFF/ON and 26-to-36 A dipole ON both pass on the frozen AgSi parent; TTF slab mesh and smearing ladders remain unverified. Report: coordination/reports/window-a/v19_boundary_dipole_comparison/report.json",
     "v19_rank_recovery_legacy_label_comparison": "completed read-only; current train36 Gamma label matches archive exactly; legacy V16 same-geometry energy differs by -4.53754 eV/cell and force-vector RMSE 2.75555 eV/A, but original source output/SCF/getter unverified; not attributable solely to k-mesh.",
-    "v19_git_history_CIF_inventory": "completed read-only; full clone searched across work and origin/main; only the two COD 9009647 CIF paths exist in all history; no deleted or alternate parent CIF found."
+    "v19_git_history_CIF_inventory": "completed read-only; full clone searched across work and origin/main; only the two COD 9009647 CIF paths exist in all history; no deleted or alternate parent CIF found.",
+    "AgSi_slab_k4x4x1_sigma0p10_v20": "queued; registered for fixed-geometry TTF slab numerical control; not training data",
+    "AgSi_slab_k8x8x1_sigma0p10_v20": "queued; registered for fixed-geometry TTF slab numerical control; not training data",
+    "AgSi_slab_k6x6x1_sigma0p05_v20": "queued; registered for fixed-geometry TTF slab numerical control; not training data",
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "queued; registered for fixed-geometry TTF slab numerical control; not training data"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -133,7 +137,11 @@
     "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "completed",
     "AgC_v19_independent_dev_01": "completed",
     "AgSi_v19_independent_dev_01": "completed",
-    "AgTi_v19_independent_dev_01": "completed"
+    "AgTi_v19_independent_dev_01": "completed",
+    "AgSi_slab_k4x4x1_sigma0p10_v20": "queued",
+    "AgSi_slab_k8x8x1_sigma0p10_v20": "queued",
+    "AgSi_slab_k6x6x1_sigma0p05_v20": "queued",
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -177,11 +185,12 @@
     "research/mace-v12-transfer/coordination/reports/window-a/v19_V18_pure_phase_force_screen",
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev",
     "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response",
-    "research/mace-v12-transfer/coordination/reports/window-a/v19_approved_dataset_preflight"
+    "research/mace-v12-transfer/coordination/reports/window-a/v19_approved_dataset_preflight",
+    "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
-  "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
-  "next_action": "Keep the current V19 model out of dynamics and do not fit to dev3. Do not recompute the 12 source-reconciled train labels or replace the verified Gamma rank-recovery output with the unverified legacy V16 values. The hard blocker is a source-verified second Ti3SiC2 parent with an independent crystallographic source family; current data endpoints are inaccessible through the network tunnel. Once a source is available, audit exact/near duplicates against train36 and dev3, settle fixed slab boundary/kmesh/smearing/vacuum settings, register labels, obtain B's independent audit, then approve a new split and run preflight before fitting. No test/sealed data.",
+  "task_boundary": "A may run only the four labels registered under pbe_interface_v20_slab_method_controls, one four-rank job at a time, after hash/owner/disk preflight. These are numerical controls, not training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and a versioned A approval.",
+  "next_action": "Run the four registered fixed-geometry TTF slab numerical controls sequentially; compare 4x4x1/6x6x1/8x8x1 at sigma 0.10 and 6x6x1 sigma 0.05/0.10/0.20 with native/free energies and forces separate. Keep all results control-only. Continue seeking/uploading a source-verified independent Ti3SiC2 parent; after receipt, deduplicate, make new source-family-split AgC/AgSi/AgTi labels under a frozen method, obtain B audit, approve a new versioned dataset, then preflight/train. No recomputing the 12 reconciled labels or opening test/sealed data.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
@@ -217,7 +226,11 @@
     "AgSi_rigid_Ag_z_p020_k6x6x1_sigma0p10_dipoleXY_v19": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan",
     "AgC_v19_independent_dev_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev",
     "AgSi_v19_independent_dev_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev",
-    "AgTi_v19_independent_dev_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev"
+    "AgTi_v19_independent_dev_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev",
+    "AgSi_slab_k4x4x1_sigma0p10_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_slab_k8x8x1_sigma0p10_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_slab_k6x6x1_sigma0p05_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [
