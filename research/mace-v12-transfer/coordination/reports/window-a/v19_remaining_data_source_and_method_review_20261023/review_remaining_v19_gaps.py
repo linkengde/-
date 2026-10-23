@@ -106,6 +106,15 @@ def main() -> None:
                 "reduced_Ti3SiC2_matches": 0,
                 "note": "The eight ASE fixture CIFs were parsed; their formulas are Ni2Sb2, CSi, H4Al2F6O4Pb2, CoAsS, Co2As2S2, Ni3S2, MoS3, and SiO2. The two project CIFs both identify COD 9009647."
             },
+            "git_history_inventory": {
+                "repository_was_shallow": False,
+                "refs_scanned": ["work", "origin/main"],
+                "distinct_CIF_MCIF_paths_in_all_history": [
+                    "research/mace-v12-transfer/exports/window_b_local_data_recovery_20261015/source/Ti3SiC2_COD_9009647_user_uploaded_original.cif",
+                    "research/mace-v12-transfer/periodic_interface_v4/v19_cif_parent_structures/source/Ti3SiC2_COD_9009647.cif"
+                ],
+                "additional_or_deleted_independent_parent_path_found": False
+            },
             "external_requests": {
                 "materials_project_optimade": {"url": "https://optimade.materialsproject.org/v1/structures?filter=chemical_formula_reduced%3D%22Ti3SiC2%22", "result": "Tunnel connection failed: HTTP 403 Forbidden"},
                 "oqmd_optimade": {"url": "https://oqmd.org/optimade/v1/structures?filter=chemical_formula_reduced%3D%22Ti3SiC2%22", "result": "Tunnel connection failed: HTTP 403 Forbidden"},

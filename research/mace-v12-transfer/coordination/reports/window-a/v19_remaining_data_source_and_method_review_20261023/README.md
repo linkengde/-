@@ -30,6 +30,8 @@ The V16 metadata declares 1×4×2, but the original DFT output identity, SCF log
 
 The full `/workspace` CIF/MCIF inventory, including hidden directories and installed environments, contains only two project CIF copies (both COD 9009647) plus eight unique ASE mineral-test CIFs copied across three virtual environments. The eight fixtures were parsed and none is Ti₃SiC₂. This review also inspected public source fixtures at fixed Git revisions:
 
+The repository is a full clone, not shallow. Searching all reachable history across `work` and `origin/main` found only those same two CIF paths; no deleted or alternate parent CIF is recorded in Git history.
+
 | Repository | Revision | CIF/MCIF files scanned | Reduced Ti₃SiC₂ matches |
 |---|---|---:|---:|
 | `materialsproject/pymatgen` | `c6507866179a6c37ee7d0df6cbb79896a2ebba52` | 88 | 0 |
