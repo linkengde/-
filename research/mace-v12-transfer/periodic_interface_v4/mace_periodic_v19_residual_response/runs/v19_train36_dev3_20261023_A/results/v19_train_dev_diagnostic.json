@@ -1,0 +1,2430 @@
+{
+  "models": {
+    "foundation": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model",
+      "sha256": "2f2be696351ac9e94fbe01cdfb6f017679acdbd2db7645209ef55fec9826b012"
+    },
+    "v19_epoch79": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response/runs/v19_train36_dev3_20261023_A/models/MACE_periodic_v19_residual_response.model",
+      "sha256": "64808b67b8c50dcaef544f31b5e67ba8de46b0c670f48d9e16bc188bfab0a4d5"
+    }
+  },
+  "scope": "approved train36 and dev3 only; no test or sealed data opened",
+  "split_method_context": {
+    "development_energy_convention": "GPAW native extrapolated total energy (force_consistent=False); free energy separately recorded",
+    "development_method": "GPAW PW-PBE 500 eV, 6x6x1, sigma 0.10 eV",
+    "development_pbc": "T T F",
+    "development_source_group_count": 1,
+    "training_pbc": "T T T",
+    "training_source_method": "GPAW PW-PBE 500 eV, Gamma single point"
+  },
+  "splits": {
+    "dev": {
+      "aggregates": {
+        "foundation": {
+          "energy_RMSE_of_structure_meV_atom": 624.5630786088849,
+          "force_component_RMSE_eV_A": 0.2233157348792714,
+          "force_vector_RMSE_eV_A": 0.38679419894047934,
+          "per_species_force_vector_RMSE_eV_A": {
+            "Ag": 0.4145918718616734,
+            "C": 0.3270355097047293,
+            "Si": 0.26645999075859755,
+            "Ti": 0.44781499311413087
+          }
+        },
+        "v19_epoch79": {
+          "energy_RMSE_of_structure_meV_atom": 663.8123836315012,
+          "force_component_RMSE_eV_A": 1.457787848652375,
+          "force_vector_RMSE_eV_A": 2.5249626205224427,
+          "per_species_force_vector_RMSE_eV_A": {
+            "Ag": 0.3794116910139629,
+            "C": 2.4577771446676215,
+            "Si": 0.7120594902328952,
+            "Ti": 3.0973102959804937
+          }
+        }
+      },
+      "composition_elements": [
+        "Ag",
+        "Ti",
+        "Si",
+        "C"
+      ],
+      "composition_matrix_rank": 1,
+      "composition_matrix_singular_values": [
+        52.30678732248809,
+        8.330608640746339e-16,
+        1.2017631245662874e-31
+      ],
+      "formula_counts": {
+        "C16Ag4Si8Ti24": 3
+      },
+      "frames": [
+        {
+          "cell_A": [
+            [
+              6.115,
+              0.0,
+              0.0
+            ],
+            [
+              -3.0575,
+              5.295745344142,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              34.0058765
+            ]
+          ],
+          "config_type": "AgC_v19_independent_dev_01",
+          "counts": {
+            "Ag": 4,
+            "C": 16,
+            "Si": 8,
+            "Ti": 24
+          },
+          "formula": "C16Ag4Si8Ti24",
+          "foundation": {
+            "energy_error_eV_cell": -33.323501625124436,
+            "energy_error_meV_atom": -640.8365697139315,
+            "force_component_RMSE_eV_A": 0.2888399883525398,
+            "force_vector_RMSE_eV_A": 0.5002855350842017,
+            "force_vector_max_eV_A": 1.0096147001035214,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.4014418316945775,
+              "C": 0.45873762980639743,
+              "Si": 0.18165510125775283,
+              "Ti": 0.6034345405159988
+            }
+          },
+          "n_atoms": 52,
+          "pbc": [
+            true,
+            true,
+            false
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -34.958320576133985,
+            "energy_error_meV_atom": -672.2753956948843,
+            "force_component_RMSE_eV_A": 1.327710429094303,
+            "force_vector_RMSE_eV_A": 2.299661920930408,
+            "force_vector_max_eV_A": 4.352132553887981,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.17427526332382928,
+              "C": 2.0430584091479873,
+              "Si": 0.44487068864602725,
+              "Ti": 2.933349677362746
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              6.115,
+              0.0,
+              0.0
+            ],
+            [
+              -3.0575,
+              5.295745344142,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              34.2058765
+            ]
+          ],
+          "config_type": "AgSi_v19_independent_dev_01",
+          "counts": {
+            "Ag": 4,
+            "C": 16,
+            "Si": 8,
+            "Ti": 24
+          },
+          "formula": "C16Ag4Si8Ti24",
+          "foundation": {
+            "energy_error_eV_cell": -31.574886240838055,
+            "energy_error_meV_atom": -607.2093507853472,
+            "force_component_RMSE_eV_A": 0.1147175301703293,
+            "force_vector_RMSE_eV_A": 0.19869659077382593,
+            "force_vector_max_eV_A": 0.48107984686131583,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.48107556830554704,
+              "C": 0.13795448645450437,
+              "Si": 0.13526156786871893,
+              "Ti": 0.16787570311097175
+            }
+          },
+          "n_atoms": 52,
+          "pbc": [
+            true,
+            true,
+            false
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -33.852320854642926,
+            "energy_error_meV_atom": -651.0061702815947,
+            "force_component_RMSE_eV_A": 1.5876266403570067,
+            "force_vector_RMSE_eV_A": 2.7498500045482164,
+            "force_vector_max_eV_A": 4.72814431899362,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.5197874154995358,
+              "C": 2.9107922913876267,
+              "Si": 0.7845651518122908,
+              "Ti": 3.238046341316655
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              6.115,
+              0.0,
+              0.0
+            ],
+            [
+              -3.0575,
+              5.295745344142,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              34.2058765
+            ]
+          ],
+          "config_type": "AgTi_v19_independent_dev_01",
+          "counts": {
+            "Ag": 4,
+            "C": 16,
+            "Si": 8,
+            "Ti": 24
+          },
+          "formula": "C16Ag4Si8Ti24",
+          "foundation": {
+            "energy_error_eV_cell": -32.50987486896571,
+            "energy_error_meV_atom": -625.1899013262637,
+            "force_component_RMSE_eV_A": 0.2302631141414781,
+            "force_vector_RMSE_eV_A": 0.3988274128020717,
+            "force_vector_max_eV_A": 0.8490896034795266,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.35081336061572127,
+              "C": 0.30229955423417165,
+              "Si": 0.402129969624184,
+              "Ti": 0.4574924128230648
+            }
+          },
+          "n_atoms": 52,
+          "pbc": [
+            true,
+            true,
+            false
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -34.734186203005265,
+            "energy_error_meV_atom": -667.9651192885628,
+            "force_component_RMSE_eV_A": 1.4463965232046523,
+            "force_vector_RMSE_eV_A": 2.5052322660814346,
+            "force_vector_max_eV_A": 4.518212731016743,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.36236565664525594,
+              "C": 2.339915821511459,
+              "Si": 0.8412096919541275,
+              "Ti": 3.112958202508028
+            }
+          }
+        }
+      ],
+      "n_frames": 3,
+      "pbc_counts": {
+        "(True, True, False)": 3
+      },
+      "source_method_counts": {
+        "GPAW 26.7.0 PBE/PW 500 eV, 6x6x1, Fermi-Dirac sigma 0.10 eV, xy dipole": 3
+      }
+    },
+    "train": {
+      "aggregates": {
+        "foundation": {
+          "energy_RMSE_of_structure_meV_atom": 594.0815389796111,
+          "force_component_RMSE_eV_A": 0.48128305239090885,
+          "force_vector_RMSE_eV_A": 0.8336066995628879,
+          "per_species_force_vector_RMSE_eV_A": {
+            "Ag": 0.2937911443080057,
+            "C": 0.9774764227111152,
+            "Si": 0.5922313631630988,
+            "Ti": 1.1022758931486722
+          }
+        },
+        "v19_epoch79": {
+          "energy_RMSE_of_structure_meV_atom": 20.951967909612897,
+          "force_component_RMSE_eV_A": 0.11720578259143598,
+          "force_vector_RMSE_eV_A": 0.2030063703892389,
+          "per_species_force_vector_RMSE_eV_A": {
+            "Ag": 0.035196437759120736,
+            "C": 0.2402833920149969,
+            "Si": 0.03067912536243927,
+            "Ti": 0.2892057441326735
+          }
+        }
+      },
+      "composition_elements": [
+        "Ag",
+        "Ti",
+        "Si",
+        "C"
+      ],
+      "composition_matrix_rank": 4,
+      "composition_matrix_singular_values": [
+        152.75938680389953,
+        70.88767679137968,
+        11.504320473262029,
+        0.3970300567692325
+      ],
+      "formula_counts": {
+        "C11Ag28SiTi9": 9,
+        "C13Ag17Si8Ti13": 14,
+        "C13Ag2Si10Ti23": 12,
+        "C8Ag10Si2Ti12": 1
+      },
+      "frames": [
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgSi_d2p2_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.11302484045035,
+            "energy_error_meV_atom": -512.0200949107912,
+            "force_component_RMSE_eV_A": 0.39956968972988277,
+            "force_vector_RMSE_eV_A": 0.6920750037766891,
+            "force_vector_max_eV_A": 1.562206821653488,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.3080156005765681,
+              "C": 0.8004893643985642,
+              "Si": 0.638916750729443,
+              "Ti": 0.9289617104183199
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.024690381534156813,
+            "energy_error_meV_atom": -0.48412512812072184,
+            "force_component_RMSE_eV_A": 0.016272661340824574,
+            "force_vector_RMSE_eV_A": 0.02818507621667005,
+            "force_vector_max_eV_A": 0.06563393274009516,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.027158415873636304,
+              "C": 0.021812044047839846,
+              "Si": 0.034127912524778335,
+              "Ti": 0.03097493829735938
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgSi_d2p8_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.243207760569135,
+            "energy_error_meV_atom": -514.5727011876301,
+            "force_component_RMSE_eV_A": 0.39127702001643916,
+            "force_vector_RMSE_eV_A": 0.6777116785026173,
+            "force_vector_max_eV_A": 1.554762004335341,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.27954225402497107,
+              "C": 0.8000186996448193,
+              "Si": 0.5184326192442258,
+              "Ti": 0.9456351245851795
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.00912795458938831,
+            "energy_error_meV_atom": -0.17897950175271196,
+            "force_component_RMSE_eV_A": 0.01930106119586244,
+            "force_vector_RMSE_eV_A": 0.033430418631229857,
+            "force_vector_max_eV_A": 0.07020091262013434,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.02222111049293641,
+              "C": 0.03150782360536657,
+              "Si": 0.04226392441831156,
+              "Ti": 0.04057987642648256
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgC_d2p0_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.94814575425977,
+            "energy_error_meV_atom": -811.4197032137453,
+            "force_component_RMSE_eV_A": 0.5409851189858371,
+            "force_vector_RMSE_eV_A": 0.9370137122221645,
+            "force_vector_max_eV_A": 2.0775031562010042,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 1.0549942208124643,
+              "C": 1.1172322163479924,
+              "Si": 0.5817741607018045,
+              "Ti": 0.9396207923861125
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.20079038705239327,
+            "energy_error_meV_atom": -4.1831330635915265,
+            "force_component_RMSE_eV_A": 0.027731225934630874,
+            "force_vector_RMSE_eV_A": 0.0480318922749524,
+            "force_vector_max_eV_A": 0.12221454936068661,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.030306197429673776,
+              "C": 0.05469784634171711,
+              "Si": 0.032332824189342205,
+              "Ti": 0.05088514556085543
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgC_d2p4_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -39.24231338268481,
+            "energy_error_meV_atom": -817.5481954726002,
+            "force_component_RMSE_eV_A": 0.5323628608450797,
+            "force_vector_RMSE_eV_A": 0.9220795230463981,
+            "force_vector_max_eV_A": 2.084038610354178,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.9527585092303876,
+              "C": 1.050817021911272,
+              "Si": 0.5885452868993502,
+              "Ti": 0.9595493636687714
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.2185326643180474,
+            "energy_error_meV_atom": -4.552763839959321,
+            "force_component_RMSE_eV_A": 0.024297165347913558,
+            "force_vector_RMSE_eV_A": 0.04208392486248823,
+            "force_vector_max_eV_A": 0.09153282376906846,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.027941023704549192,
+              "C": 0.04259959685622213,
+              "Si": 0.02430480779086218,
+              "Ti": 0.04843222571577472
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgC_validation_d2p30_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -39.206171095732714,
+            "energy_error_meV_atom": -816.7952311610983,
+            "force_component_RMSE_eV_A": 0.5311299125237487,
+            "force_vector_RMSE_eV_A": 0.9199439939107461,
+            "force_vector_max_eV_A": 2.0798477455604174,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.9393630220062498,
+              "C": 1.0546571224205752,
+              "Si": 0.5862700766686313,
+              "Ti": 0.954631740839507
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.21516043011303054,
+            "energy_error_meV_atom": -4.482508960688136,
+            "force_component_RMSE_eV_A": 0.02108361267549816,
+            "force_vector_RMSE_eV_A": 0.03651788836106601,
+            "force_vector_max_eV_A": 0.07596143675728786,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.029114563113312182,
+              "C": 0.03639976431103025,
+              "Si": 0.02355043197651448,
+              "Ti": 0.04146496436166103
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgSi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.21573074901403,
+            "energy_error_meV_atom": -514.0339362551771,
+            "force_component_RMSE_eV_A": 0.3914506742496584,
+            "force_vector_RMSE_eV_A": 0.6780124564575023,
+            "force_vector_max_eV_A": 1.5562965409225142,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.28388251511601065,
+              "C": 0.799894496486028,
+              "Si": 0.5379173955318282,
+              "Ti": 0.9381684685165956
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.010891010917930544,
+            "energy_error_meV_atom": -0.21354923368491263,
+            "force_component_RMSE_eV_A": 0.015397958479106251,
+            "force_vector_RMSE_eV_A": 0.02667004641864803,
+            "force_vector_max_eV_A": 0.04911145443725351,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.019544221072677264,
+              "C": 0.024431043004611304,
+              "Si": 0.03375304045771456,
+              "Ti": 0.03151157324508199
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_validation_d2p60_periodic_PW_PBE_energy_force",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.74607282167321,
+            "energy_error_meV_atom": -341.75658819741244,
+            "force_component_RMSE_eV_A": 0.31623780633689597,
+            "force_vector_RMSE_eV_A": 0.5477399478496309,
+            "force_vector_max_eV_A": 1.2918326093380892,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.22635301647957076,
+              "C": 0.6688736254560667,
+              "Si": 0.4936046495203949,
+              "Ti": 0.9487639597530135
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.0831829386443701,
+            "energy_error_meV_atom": -1.697610992742247,
+            "force_component_RMSE_eV_A": 0.02014800681028201,
+            "force_vector_RMSE_eV_A": 0.0348973714666522,
+            "force_vector_max_eV_A": 0.10957911961114733,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.021144218872438354,
+              "C": 0.03031377363915253,
+              "Si": 0.009949072664389796,
+              "Ti": 0.06407301288278082
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgC_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.88238185136407,
+            "energy_error_meV_atom": -810.0496219034181,
+            "force_component_RMSE_eV_A": 0.5282574796319655,
+            "force_vector_RMSE_eV_A": 0.9149687942008454,
+            "force_vector_max_eV_A": 2.1391545625532196,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.8923415423265398,
+              "C": 1.0412888342966449,
+              "Si": 0.5802878316755649,
+              "Ti": 0.9584521199515846
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.20175869523581014,
+            "energy_error_meV_atom": -4.2033061507460445,
+            "force_component_RMSE_eV_A": 0.03523152989020258,
+            "force_vector_RMSE_eV_A": 0.06102279979821242,
+            "force_vector_max_eV_A": 0.18028463674331943,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.07259226162808226,
+              "C": 0.06369848755647893,
+              "Si": 0.037448470722076396,
+              "Ti": 0.06640813300068733
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgSi_lateral_registry_holdout_v13_periodic_PW_PBE_energy_force_v14_train",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.230885011771534,
+            "energy_error_meV_atom": -514.3310786621869,
+            "force_component_RMSE_eV_A": 0.3915544736934939,
+            "force_vector_RMSE_eV_A": 0.6781922423680228,
+            "force_vector_max_eV_A": 1.6201090290584164,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.2579479698868456,
+              "C": 0.8075227163594321,
+              "Si": 0.5828332002025247,
+              "Ti": 0.9253392084655148
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.008737432703156855,
+            "energy_error_meV_atom": -0.1713222098658207,
+            "force_component_RMSE_eV_A": 0.018959585984864753,
+            "force_vector_RMSE_eV_A": 0.032838966216256565,
+            "force_vector_max_eV_A": 0.07607901921352617,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.025927525172299223,
+              "C": 0.028554635902037814,
+              "Si": 0.03073802341763409,
+              "Ti": 0.04421266663681296
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_registry_probe_v13_01_periodic_PW_PBE_energy_force_v14_train",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.807905761548824,
+            "energy_error_meV_atom": -343.0184849295678,
+            "force_component_RMSE_eV_A": 0.3117109260374834,
+            "force_vector_RMSE_eV_A": 0.5398991611712657,
+            "force_vector_max_eV_A": 1.3016066555969623,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.22275854750397245,
+              "C": 0.6560098704754089,
+              "Si": 0.473484602742068,
+              "Ti": 0.9390089109162766
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.07950121287800016,
+            "energy_error_meV_atom": -1.622473732204085,
+            "force_component_RMSE_eV_A": 0.013194566274231692,
+            "force_vector_RMSE_eV_A": 0.022853659170804074,
+            "force_vector_max_eV_A": 0.04188795615182348,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.016083039041129774,
+              "C": 0.024114470301908355,
+              "Si": 0.011162767266839568,
+              "Ti": 0.03625283016154893
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.766382526061875,
+            "energy_error_meV_atom": -807.6329692929557,
+            "force_component_RMSE_eV_A": 0.5052524359849563,
+            "force_vector_RMSE_eV_A": 0.875122889773886,
+            "force_vector_max_eV_A": 1.9422122791873937,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.6164836097338368,
+              "C": 0.9949974644185556,
+              "Si": 0.5815413383686813,
+              "Ti": 0.9266127350368901
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.22953824131286638,
+            "energy_error_meV_atom": -4.7820466940180495,
+            "force_component_RMSE_eV_A": 0.015685190836205717,
+            "force_vector_RMSE_eV_A": 0.027167547454722062,
+            "force_vector_max_eV_A": 0.05131967033844001,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.029801649185902283,
+              "C": 0.03302607387456002,
+              "Si": 0.018854811143636335,
+              "Ti": 0.026306665234446032
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_registry_strain_acq_v14_01_periodic_PW_PBE_energy_force_v14_train",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.00895316239442,
+            "energy_error_meV_atom": -509.97947377243963,
+            "force_component_RMSE_eV_A": 0.41119555428637217,
+            "force_vector_RMSE_eV_A": 0.712211591870443,
+            "force_vector_max_eV_A": 1.6905999529262565,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.2761819214943039,
+              "C": 0.8468804239934902,
+              "Si": 0.6168653076728018,
+              "Ti": 0.9689386291534551
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.023961923994789913,
+            "energy_error_meV_atom": 0.46984164695666497,
+            "force_component_RMSE_eV_A": 0.012779209199230663,
+            "force_vector_RMSE_eV_A": 0.022134239613619097,
+            "force_vector_max_eV_A": 0.037921549051530286,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.020736660478321393,
+              "C": 0.022792256798819854,
+              "Si": 0.020900765550205577,
+              "Ti": 0.02390354273707868
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.711150388977956,
+            "energy_error_meV_atom": -806.4822997703741,
+            "force_component_RMSE_eV_A": 0.5237003330782795,
+            "force_vector_RMSE_eV_A": 0.9070755848323239,
+            "force_vector_max_eV_A": 2.2352620018885814,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.5710143479895523,
+              "C": 1.031784946019498,
+              "Si": 0.5827336813106934,
+              "Ti": 0.9692285394640321
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.23177542079093882,
+            "energy_error_meV_atom": -4.828654599811226,
+            "force_component_RMSE_eV_A": 0.034654941929299965,
+            "force_vector_RMSE_eV_A": 0.06002412015489655,
+            "force_vector_max_eV_A": 0.13609601828154555,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.031060036257914824,
+              "C": 0.06535992745512657,
+              "Si": 0.043450079738523315,
+              "Ti": 0.06480588154333289
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -25.699931846557348,
+            "energy_error_meV_atom": -503.9202322854382,
+            "force_component_RMSE_eV_A": 0.4181797442139374,
+            "force_vector_RMSE_eV_A": 0.7243085636746968,
+            "force_vector_max_eV_A": 1.7025693744434924,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.2796696525892741,
+              "C": 0.855367236341779,
+              "Si": 0.6351957050411943,
+              "Ti": 0.9878816353683595
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.03976877447277616,
+            "energy_error_meV_atom": 0.7797798916230619,
+            "force_component_RMSE_eV_A": 0.030838672226314926,
+            "force_vector_RMSE_eV_A": 0.05341414713394068,
+            "force_vector_max_eV_A": 0.12903503258515947,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.03194488932928037,
+              "C": 0.06337605508888086,
+              "Si": 0.04005518285581245,
+              "Ti": 0.06967417441362558
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_residual_shell_v15_01_periodic_PW_PBE_energy_force_v15_draft_train",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.795141206895323,
+            "energy_error_meV_atom": -342.75798381419025,
+            "force_component_RMSE_eV_A": 0.30841074437211846,
+            "force_vector_RMSE_eV_A": 0.5341830788526463,
+            "force_vector_max_eV_A": 1.1782600533306893,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.22830482610799466,
+              "C": 0.6538922687040603,
+              "Si": 0.45713436095069054,
+              "Ti": 0.9195700680011235
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.08568981505732154,
+            "energy_error_meV_atom": -1.748771735863705,
+            "force_component_RMSE_eV_A": 0.023301544905100325,
+            "force_vector_RMSE_eV_A": 0.04035945967048148,
+            "force_vector_max_eV_A": 0.09359118050610049,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.022558802994788116,
+              "C": 0.05260365657253584,
+              "Si": 0.01345654461458475,
+              "Ti": 0.06231332525799207
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -39.20570054178205,
+            "energy_error_meV_atom": -816.7854279537927,
+            "force_component_RMSE_eV_A": 0.5071102628617506,
+            "force_vector_RMSE_eV_A": 0.8783407403161608,
+            "force_vector_max_eV_A": 1.9871059923381302,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.7267853603127936,
+              "C": 0.9933992225836441,
+              "Si": 0.5808551552296264,
+              "Ti": 0.9271707937655711
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.23783492092530878,
+            "energy_error_meV_atom": -4.954894185943933,
+            "force_component_RMSE_eV_A": 0.023352484471805893,
+            "force_vector_RMSE_eV_A": 0.04044768958813107,
+            "force_vector_max_eV_A": 0.08518396708820998,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.04249468859306186,
+              "C": 0.04561971382254163,
+              "Si": 0.019532386916946056,
+              "Ti": 0.0437616827634392
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.09438697058326,
+            "energy_error_meV_atom": -511.6546464820247,
+            "force_component_RMSE_eV_A": 0.41914224822685414,
+            "force_vector_RMSE_eV_A": 0.7259756695275577,
+            "force_vector_max_eV_A": 1.7464358270260079,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.30034726761633734,
+              "C": 0.8786325532423221,
+              "Si": 0.6418314499461456,
+              "Ti": 0.9613296929895794
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.04069537926446287,
+            "energy_error_meV_atom": 0.7979486130286838,
+            "force_component_RMSE_eV_A": 0.021376914245853362,
+            "force_vector_RMSE_eV_A": 0.037025901582860954,
+            "force_vector_max_eV_A": 0.09244764145193234,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.030215435305524004,
+              "C": 0.04055136350819697,
+              "Si": 0.04439271153036924,
+              "Ti": 0.03643031387801613
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_widespan_registry_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.731442672485855,
+            "energy_error_meV_atom": -341.4580137242012,
+            "force_component_RMSE_eV_A": 0.3131304139940031,
+            "force_vector_RMSE_eV_A": 0.54235778643269,
+            "force_vector_max_eV_A": 1.303444629454329,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.21327371657193117,
+              "C": 0.6858869562684501,
+              "Si": 0.48225808332465075,
+              "Ti": 0.9269079136899631
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.08053700230706795,
+            "energy_error_meV_atom": -1.6436122919809786,
+            "force_component_RMSE_eV_A": 0.022358566259832402,
+            "force_vector_RMSE_eV_A": 0.03872617274642497,
+            "force_vector_max_eV_A": 0.08256936259514794,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.03201278131813171,
+              "C": 0.04426043417738046,
+              "Si": 0.021961211682194472,
+              "Ti": 0.050288121459863826
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.70143494169906,
+            "energy_error_meV_atom": -806.2798946187304,
+            "force_component_RMSE_eV_A": 0.5083815483684445,
+            "force_vector_RMSE_eV_A": 0.8805426714046805,
+            "force_vector_max_eV_A": 1.9867889377350618,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.48499168517959124,
+              "C": 0.9917943489746865,
+              "Si": 0.5766529934943724,
+              "Ti": 0.9471653360765041
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.21383580325749563,
+            "energy_error_meV_atom": -4.4549125678644925,
+            "force_component_RMSE_eV_A": 0.02890798782319542,
+            "force_vector_RMSE_eV_A": 0.05007010365435691,
+            "force_vector_max_eV_A": 0.14118507456864493,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.05220338589796075,
+              "C": 0.06303490976020627,
+              "Si": 0.025033110500015634,
+              "Ti": 0.04976710201847501
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.075680763972173,
+            "energy_error_meV_atom": -511.28785811710145,
+            "force_component_RMSE_eV_A": 0.4166913601132378,
+            "force_vector_RMSE_eV_A": 0.7217306067911075,
+            "force_vector_max_eV_A": 1.745239856336247,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.26219733628383146,
+              "C": 0.8720050274274752,
+              "Si": 0.6273946327026211,
+              "Ti": 0.9751861278274246
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.025540988977837742,
+            "energy_error_meV_atom": 0.5008037054477988,
+            "force_component_RMSE_eV_A": 0.026739059736266845,
+            "force_vector_RMSE_eV_A": 0.04631341000983343,
+            "force_vector_max_eV_A": 0.09565617004116274,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.04614131532166612,
+              "C": 0.04495266278107285,
+              "Si": 0.049933447990108425,
+              "Ti": 0.04555785351565111
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_widespan_distance_acq_v16_01_PW_PBE_v16_train",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.94060256679623,
+            "energy_error_meV_atom": -345.72658299584145,
+            "force_component_RMSE_eV_A": 0.3073201422043331,
+            "force_vector_RMSE_eV_A": 0.5322941004871974,
+            "force_vector_max_eV_A": 1.1932181439479828,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.2125259408830851,
+              "C": 0.6754085803741269,
+              "Si": 0.48775658906112257,
+              "Ti": 0.9044936582827893
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.10335858198789083,
+            "energy_error_meV_atom": -2.109358816079405,
+            "force_component_RMSE_eV_A": 0.016908514041972685,
+            "force_vector_RMSE_eV_A": 0.02928640540118849,
+            "force_vector_max_eV_A": 0.060209190604790366,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.024191516900138973,
+              "C": 0.034359599163674745,
+              "Si": 0.03267561221280576,
+              "Ti": 0.03588013930935646
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_framework_neighbor_p_acq_v17_01",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.74764923461112,
+            "energy_error_meV_atom": -807.2426923877316,
+            "force_component_RMSE_eV_A": 0.5045535432370669,
+            "force_vector_RMSE_eV_A": 0.8739123720255002,
+            "force_vector_max_eV_A": 1.9404019865082678,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.6106126957024789,
+              "C": 0.9989424424233618,
+              "Si": 0.5789236073213341,
+              "Ti": 0.9228725671366036
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.2289208196602317,
+            "energy_error_meV_atom": -4.769183742921494,
+            "force_component_RMSE_eV_A": 0.018335353958441415,
+            "force_vector_RMSE_eV_A": 0.03175776463077966,
+            "force_vector_max_eV_A": 0.062294323169304826,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.032840296944297825,
+              "C": 0.03804428339972361,
+              "Si": 0.019351620823166705,
+              "Ti": 0.03209569218332563
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_transverse_Ag_p_acq_v17_01",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.05399578323039,
+            "energy_error_meV_atom": -510.8626624162822,
+            "force_component_RMSE_eV_A": 0.4135343276617033,
+            "force_vector_RMSE_eV_A": 0.7162624661839059,
+            "force_vector_max_eV_A": 1.7234441128888438,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.27653498596680537,
+              "C": 0.8604109384297736,
+              "Si": 0.6271249296499822,
+              "Ti": 0.9645379352934252
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.031493709889730326,
+            "energy_error_meV_atom": 0.6175237233280456,
+            "force_component_RMSE_eV_A": 0.014669695700611182,
+            "force_vector_RMSE_eV_A": 0.025408658285033286,
+            "force_vector_max_eV_A": 0.04923933444306345,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.02344430896678473,
+              "C": 0.026857364414373672,
+              "Si": 0.025687524677727523,
+              "Ti": 0.026203147818886073
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_framework_neighbor_p_acq_v17_01",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.032003129145266,
+            "energy_error_meV_atom": -510.4314339048091,
+            "force_component_RMSE_eV_A": 0.41025570232367814,
+            "force_vector_RMSE_eV_A": 0.7105837205194637,
+            "force_vector_max_eV_A": 1.6908432004721434,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.27555700828435314,
+              "C": 0.8471491728556271,
+              "Si": 0.6024547849114358,
+              "Ti": 0.9698269313713711
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.02445254395851748,
+            "energy_error_meV_atom": 0.4794616462454408,
+            "force_component_RMSE_eV_A": 0.014642408996097207,
+            "force_vector_RMSE_eV_A": 0.02536139632644396,
+            "force_vector_max_eV_A": 0.062033950393650686,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.021407392461535467,
+              "C": 0.023612325797308417,
+              "Si": 0.03190035601883915,
+              "Ti": 0.027207769144480053
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_framework_neighbor_p_acq_v17_01",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.78585730870077,
+            "energy_error_meV_atom": -342.5685165040973,
+            "force_component_RMSE_eV_A": 0.313290427525537,
+            "force_vector_RMSE_eV_A": 0.5426349379992051,
+            "force_vector_max_eV_A": 1.3168219142230442,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.22121089444466166,
+              "C": 0.6587476960458847,
+              "Si": 0.4716932108903077,
+              "Ti": 0.9464608674918648
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.08062302051374104,
+            "energy_error_meV_atom": -1.6453677655865517,
+            "force_component_RMSE_eV_A": 0.014256851010164827,
+            "force_vector_RMSE_eV_A": 0.024693590305545153,
+            "force_vector_max_eV_A": 0.05292824333295583,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.017243592429403976,
+              "C": 0.026001005449854335,
+              "Si": 0.014253010463245765,
+              "Ti": 0.03931865804569141
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.139999999999997,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.139999999999997,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.139999999999997
+            ]
+          ],
+          "config_type": "AgC_framework_neighbor_m_acq_v17_01",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.779441411120615,
+            "energy_error_meV_atom": -807.9050293983461,
+            "force_component_RMSE_eV_A": 0.5064008517541084,
+            "force_vector_RMSE_eV_A": 0.8771120042342707,
+            "force_vector_max_eV_A": 1.9448969478260822,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.6259296471498842,
+              "C": 0.993544191318571,
+              "Si": 0.5843952037608082,
+              "Ti": 0.9300813029716969
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.2287999216111416,
+            "energy_error_meV_atom": -4.76666503356545,
+            "force_component_RMSE_eV_A": 0.015227973151804897,
+            "force_vector_RMSE_eV_A": 0.02637562319522085,
+            "force_vector_max_eV_A": 0.053818083319333104,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.029515556649043977,
+              "C": 0.03159514699261296,
+              "Si": 0.01977161922196051,
+              "Ti": 0.025335599149821978
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_transverse_Ag_m_acq_v17_01",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -25.95142237014585,
+            "energy_error_meV_atom": -508.85141902246767,
+            "force_component_RMSE_eV_A": 0.41131866420740293,
+            "force_vector_RMSE_eV_A": 0.712424824508584,
+            "force_vector_max_eV_A": 1.6479924492496036,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.29956665389894094,
+              "C": 0.838333227994514,
+              "Si": 0.6060365651717063,
+              "Ti": 0.9721010645275919
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.019610912162619343,
+            "energy_error_meV_atom": 0.3845276894631244,
+            "force_component_RMSE_eV_A": 0.015384473470023953,
+            "force_vector_RMSE_eV_A": 0.026646689697776952,
+            "force_vector_max_eV_A": 0.04478853277437029,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.02280642013575996,
+              "C": 0.026906332435467896,
+              "Si": 0.029169345540784722,
+              "Ti": 0.029288914801831465
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_framework_neighbor_m_acq_v17_01",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -25.98007859162317,
+            "energy_error_meV_atom": -509.41330571810136,
+            "force_component_RMSE_eV_A": 0.41236550690810275,
+            "force_vector_RMSE_eV_A": 0.7142380092537288,
+            "force_vector_max_eV_A": 1.6904217750310513,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.27671206138538157,
+              "C": 0.8466085844813698,
+              "Si": 0.6346527437529695,
+              "Ti": 0.9677602191528166
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.025392741646840022,
+            "energy_error_meV_atom": 0.49789689503607887,
+            "force_component_RMSE_eV_A": 0.01294493609867288,
+            "force_vector_RMSE_eV_A": 0.022421287023633874,
+            "force_vector_max_eV_A": 0.04173472221620859,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.020935042420601322,
+              "C": 0.023436353886091423,
+              "Si": 0.021886336777335442,
+              "Ti": 0.023558795346966692
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_framework_neighbor_m_acq_v17_01",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -16.829961200200017,
+            "energy_error_meV_atom": -343.46859592244937,
+            "force_component_RMSE_eV_A": 0.30985471516364965,
+            "force_vector_RMSE_eV_A": 0.5366841096282239,
+            "force_vector_max_eV_A": 1.2829852046179788,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.22416291263387497,
+              "C": 0.6530597575500615,
+              "Si": 0.47537812789576317,
+              "Ti": 0.9303014829675134
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.07893899605585375,
+            "energy_error_meV_atom": -1.6109999195072193,
+            "force_component_RMSE_eV_A": 0.013337079367982773,
+            "force_vector_RMSE_eV_A": 0.023100499089924773,
+            "force_vector_max_eV_A": 0.05092847441075826,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.015750912102329,
+              "C": 0.026347772703854702,
+              "Si": 0.008236813898179478,
+              "Ti": 0.035741920392729276
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.373244997441823,
+              -5.228439678057898e-06,
+              0.11265358847449992
+            ],
+            [
+              5.68672706787917e-07,
+              3.0777657855652616,
+              -3.832747861670718e-07
+            ],
+            [
+              -0.021172479839407045,
+              -6.37382335627868e-07,
+              5.33255944900097
+            ]
+          ],
+          "config_type": "Ti_gap_2p3_rank_recovery_v17_01",
+          "counts": {
+            "Ag": 10,
+            "C": 8,
+            "Si": 2,
+            "Ti": 12
+          },
+          "formula": "C8Ag10Si2Ti12",
+          "foundation": {
+            "energy_error_eV_cell": -10.68849031121141,
+            "energy_error_meV_atom": -334.01532222535656,
+            "force_component_RMSE_eV_A": 1.6844666287134207,
+            "force_vector_RMSE_eV_A": 2.9175817845859044,
+            "force_vector_max_eV_A": 6.062375467955694,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.21139692157689677,
+              "C": 3.2870513845588554,
+              "Si": 0.021742033358559818,
+              "Ti": 3.9317890815073584
+            }
+          },
+          "n_atoms": 32,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 3.9864764652888596,
+            "energy_error_meV_atom": 124.57738954027687,
+            "force_component_RMSE_eV_A": 0.8556247479392968,
+            "force_vector_RMSE_eV_A": 1.4819855356441758,
+            "force_vector_max_eV_A": 2.493121526543133,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.16227427039984624,
+              "C": 1.76675374559182,
+              "Si": 0.02115677392636674,
+              "Ti": 1.9374687331771316
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.14,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.14,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.14
+            ]
+          ],
+          "config_type": "AgC_residual_mode_m_06_v19_acq",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.5976317059004,
+            "energy_error_meV_atom": -804.1173272062583,
+            "force_component_RMSE_eV_A": 0.5172224378096669,
+            "force_vector_RMSE_eV_A": 0.8958555411009771,
+            "force_vector_max_eV_A": 1.9248982658902647,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.5414849577140624,
+              "C": 1.005920508040673,
+              "Si": 0.5990088711611974,
+              "Ti": 0.959932654757518
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.2048586321200503,
+            "energy_error_meV_atom": -4.267888169167715,
+            "force_component_RMSE_eV_A": 0.02376248247161129,
+            "force_vector_RMSE_eV_A": 0.041157826954795626,
+            "force_vector_max_eV_A": 0.08210314504560891,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.06604594396823393,
+              "C": 0.05154720459605453,
+              "Si": 0.028400568353876287,
+              "Ti": 0.036102426971016
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.14,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.14,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.14
+            ]
+          ],
+          "config_type": "AgC_residual_mode_p_06_v19_acq",
+          "counts": {
+            "Ag": 2,
+            "C": 13,
+            "Si": 10,
+            "Ti": 23
+          },
+          "formula": "C13Ag2Si10Ti23",
+          "foundation": {
+            "energy_error_eV_cell": -38.737322364351456,
+            "energy_error_meV_atom": -807.027549257322,
+            "force_component_RMSE_eV_A": 0.5283046484268125,
+            "force_vector_RMSE_eV_A": 0.9150504929500523,
+            "force_vector_max_eV_A": 1.9267143901879724,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.7636626614343275,
+              "C": 1.0140423135079695,
+              "Si": 0.5920739654040611,
+              "Ti": 0.9813853278707573
+            }
+          },
+          "n_atoms": 48,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.1989025614381319,
+            "energy_error_meV_atom": -4.143803363294414,
+            "force_component_RMSE_eV_A": 0.029080328552197773,
+            "force_vector_RMSE_eV_A": 0.050368606553202425,
+            "force_vector_max_eV_A": 0.13234291136908904,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.07677619043612047,
+              "C": 0.06170133777916945,
+              "Si": 0.0284188081503515,
+              "Ti": 0.047739630680208346
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_residual_mode_m_03_v19_acq",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.09844375975962,
+            "energy_error_meV_atom": -511.73419136783565,
+            "force_component_RMSE_eV_A": 0.42439977742172197,
+            "force_vector_RMSE_eV_A": 0.7350819772153452,
+            "force_vector_max_eV_A": 1.7803782291609713,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.2972729453320085,
+              "C": 0.8974806415638742,
+              "Si": 0.6565851750609106,
+              "Ti": 0.9661720042548869
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.03852278149363997,
+            "energy_error_meV_atom": 0.7553486567380386,
+            "force_component_RMSE_eV_A": 0.017012818108278562,
+            "force_vector_RMSE_eV_A": 0.0294670653434663,
+            "force_vector_max_eV_A": 0.06124284388902148,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.02815888566548303,
+              "C": 0.022153176307127147,
+              "Si": 0.02799274990031715,
+              "Ti": 0.037370640865223695
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              27.86,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              27.86,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              27.86
+            ]
+          ],
+          "config_type": "AgSi_residual_mode_p_03_v19_acq",
+          "counts": {
+            "Ag": 17,
+            "C": 13,
+            "Si": 8,
+            "Ti": 13
+          },
+          "formula": "C13Ag17Si8Ti13",
+          "foundation": {
+            "energy_error_eV_cell": -26.078362601143454,
+            "energy_error_meV_atom": -511.34044315967554,
+            "force_component_RMSE_eV_A": 0.42582990967324885,
+            "force_vector_RMSE_eV_A": 0.7375590389365329,
+            "force_vector_max_eV_A": 1.7783994426070893,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.29882225060998735,
+              "C": 0.8994386640617579,
+              "Si": 0.6550805946627579,
+              "Ti": 0.9717445088247327
+            }
+          },
+          "n_atoms": 51,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": 0.04134486814442084,
+            "energy_error_meV_atom": 0.8106836891062911,
+            "force_component_RMSE_eV_A": 0.01878823033388622,
+            "force_vector_RMSE_eV_A": 0.032542169522597704,
+            "force_vector_max_eV_A": 0.06829655806053438,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.028358243207623358,
+              "C": 0.024386108087197836,
+              "Si": 0.03317288464526568,
+              "Ti": 0.04279019629927324
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_residual_mode_m_03_v19_acq",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -17.071557340227486,
+            "energy_error_meV_atom": -348.3991293923977,
+            "force_component_RMSE_eV_A": 0.29601537727832256,
+            "force_vector_RMSE_eV_A": 0.5127136732677244,
+            "force_vector_max_eV_A": 1.1037885307558488,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.20582301622119117,
+              "C": 0.6673663373497738,
+              "Si": 0.437362983141204,
+              "Ti": 0.8566264935666882
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.11572771589294462,
+            "energy_error_meV_atom": -2.361790120264176,
+            "force_component_RMSE_eV_A": 0.020367463846820987,
+            "force_vector_RMSE_eV_A": 0.035277482204016206,
+            "force_vector_max_eV_A": 0.061601973024874225,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.03232914502965883,
+              "C": 0.03936597409275212,
+              "Si": 0.030855376426221433,
+              "Ti": 0.039040067928743226
+            }
+          }
+        },
+        {
+          "cell_A": [
+            [
+              28.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              28.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              28.0
+            ]
+          ],
+          "config_type": "AgTi_residual_mode_p_03_v19_acq",
+          "counts": {
+            "Ag": 28,
+            "C": 11,
+            "Si": 1,
+            "Ti": 9
+          },
+          "formula": "C11Ag28SiTi9",
+          "foundation": {
+            "energy_error_eV_cell": -17.02607969808048,
+            "energy_error_meV_atom": -347.47101424654045,
+            "force_component_RMSE_eV_A": 0.30331462620301697,
+            "force_vector_RMSE_eV_A": 0.5253563432623877,
+            "force_vector_max_eV_A": 1.2157733785681406,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.20412882560349851,
+              "C": 0.703156873761093,
+              "Si": 0.440494531935198,
+              "Ti": 0.8643870019046228
+            }
+          },
+          "n_atoms": 49,
+          "pbc": [
+            true,
+            true,
+            true
+          ],
+          "v19_epoch79": {
+            "energy_error_eV_cell": -0.11611991433602498,
+            "energy_error_meV_atom": -2.3697941701229586,
+            "force_component_RMSE_eV_A": 0.023668215714144677,
+            "force_vector_RMSE_eV_A": 0.04099455214139868,
+            "force_vector_max_eV_A": 0.0794638161184899,
+            "per_species_force_vector_RMSE_eV_A": {
+              "Ag": 0.03461494457250066,
+              "C": 0.04216760540562622,
+              "Si": 0.03071290065159726,
+              "Ti": 0.05607060076634461
+            }
+          }
+        }
+      ],
+      "n_frames": 36,
+      "pbc_counts": {
+        "(True, True, True)": 36
+      },
+      "source_method_counts": {
+        "GPAW 26.7.0 PW-PBE 500 eV Gamma single point": 27,
+        "GPAW26.7 PW-PBE500 Gamma Fermi0.1": 9
+      }
+    }
+  },
+  "status": "DIAGNOSTIC_ONLY"
+}

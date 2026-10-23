@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-  "updated_utc": "2026-10-23T03:57:30.458493+00:00",
+  "updated_utc": "2026-10-23T04:27:09+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V19 CPU training is 76.25% complete (epochs 0-60). Dev force RMSE at epoch60 is 1.42427 eV/A; enter final 20 epochs, then verify all epoch records and epoch79 export.",
+  "current_stage": "V19 train36/dev3 fixed CPU fit completed; all epochs 0-79 and epoch79 export identity verified. Development screening FAIL: force-vector RMSE 2.300/2.750/2.505 eV/A and separation-force error 0.106/1.555/0.653 eV/A (AgC/AgSi/AgTi). Train/dev diagnostic identifies PBC/k-point/composition/source-method mismatch; no test/sealed data opened.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -77,14 +77,15 @@
     "AgTi_v19_independent_dev_01": "completed; SCF iteration 76; elapsed 13201s; updated 2026-10-23T02:42:35.653858+00:00",
     "v19_dataset_entry_independent_audit_window_b": "completed; B report published at a13259d; audit.py rerun by A and all checks PASS; shared COD 9009647 source-family limitation recorded.",
     "A_APPROVED_V19_DATASET": "approved and assembled; train36/dev3/test0; SHA256 inventory verified; preflight_v19.py PASS.",
-    "v19_training": "running; 61/80 epochs completed (last epoch 60); validation force RMSE 1.42427 eV/A; output run v19_train36_dev3_20261023_A."
+    "v19_training": "completed; epochs 0-79; exit 0; epoch79 identity and 80-checkpoint coverage verified; dev force and separation gates FAIL; report published in coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
-    "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
+    "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/\u00c5 for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
     "v15": "Training completed, selected epoch74; independently scored fresh registry probes FAIL. Energy gates pass; force-vector gates fail all; AgC/AgTi separation gates fail. No production MD/TTM.",
-    "v16": "First local-registry screen FAIL; full vectorRMSE0.12950/0.09615/0.10529 (AgC/Si/Ti). No production MD/TTM."
+    "v16": "First local-registry screen FAIL; full vectorRMSE0.12950/0.09615/0.10529 (AgC/Si/Ti). No production MD/TTM.",
+    "v19_residual_response": "completed fixed 80-epoch candidate; epoch79 identity verified; development force-vector and separation-force gates FAIL; not qualified for production/MD/impact."
   },
   "labels": {
     "AgC_registry_holdout_v14_01": "completed",
@@ -173,16 +174,21 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may assemble the A-approved train36/dev3 dataset, run its preflight, and run only the existing fixed 80-epoch V19 candidate after preflight PASS. Do not run or modify B-owned calculations. Do not open sealed/test data.",
-  "next_action": "Continue the registered 80-epoch run and monitor validation metrics/disk. After completion verify every epoch 0-79 and epoch79 export identity, then publish and report the model screening metrics. Do not open sealed/test data.",
+  "next_action": "Do not promote or use V19 for dynamics. Complete read-only audit of train36 energy-key/reference lineage and existing archive-verified pure-phase/Ti3SiC2 backbone data. Find a source-verified second Ti3SiC2 CIF family; design source-separated AgC/AgSi/AgTi data roles and method-matched slab inputs after numerical settings are reconciled. Register only hash-verified DFT labels; require B independent entry audit before A approves a versioned dataset and runs the frozen preflight/fit. Keep current dev source family out of fitting; do not open test/sealed labels.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
     "job": "v19_residual_response_training",
-    "state": "running",
-    "iteration": 60,
-    "elapsed_s": 3600.0,
-    "note": "61 epochs complete; validation force RMSE remains far above target. Disk and memory checked; no test file used.",
-    "updated_utc": "2026-10-23T03:57:30.458493+00:00"
+    "state": "completed",
+    "iteration": 79,
+    "completed_epochs": 80,
+    "total_epochs": 80,
+    "validation_force_component_RMSE_eV_A": 1.45779,
+    "development_force_vector_RMSE_eV_A": 2.5249626,
+    "development_force_gate_pass": false,
+    "development_separation_gate_pass": false,
+    "note": "Normal exit. All epoch logs/checkpoints 0-79 verified at completion; final exported model exactly matches epoch79 checkpoint tensors. Train/dev diagnostic found clear PBC/k-mesh/composition shift. Report: coordination/reports/window-a/v19_train36_dev3_epoch79_evaluation_20261023. No test/sealed data opened.",
+    "updated_utc": "2026-10-23T04:27:09+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
