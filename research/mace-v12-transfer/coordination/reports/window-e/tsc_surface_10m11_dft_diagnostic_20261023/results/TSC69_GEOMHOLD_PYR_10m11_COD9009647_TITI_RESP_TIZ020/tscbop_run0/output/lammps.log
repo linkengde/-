@@ -1,0 +1,45 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+read_data /tmp/e-tsc69-fresh/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_10m11_dft_diagnostic_20261023/results/TSC69_GEOMHOLD_PYR_10m11_COD9009647_TITI_RESP_TIZ020/tscbop_run0/output/atoms.data
+Reading data file ...
+  triclinic box = (0 0 0) to (3.0575 17.821307 34.040275) with tilt (1.52875 -19.87375 -5.1144389)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  69 atoms
+  read_data CPU = 0.002 seconds
+pair_style tersoff
+pair_coeff * * /tmp/e-tsc69-fresh/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_10m11_dft_diagnostic_20261023/results/TSC69_GEOMHOLD_PYR_10m11_COD9009647_TITI_RESP_TIZ020/tscbop_run0/output/TSCBOP.source.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe
+dump forces all custom 1 forces.dump id type x y z fx fy fz
+dump_modify forces sort id format line "%d %d %.16g %.16g %.16g %.16g %.16g %.16g"
+run 0 post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.8838
+  ghost atom cutoff = 5.8838
+  binsize = 2.9419, bins = 9 8 12
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair tersoff, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.094 | 3.094 | 3.094 Mbytes
+   Step        Atoms        PotEng    
+         0          69  -424.46113    
+Loop time of 2.032e-06 on 1 procs for 0 steps with 69 atoms
+
+undump forces
+Total wall time: 0:00:00

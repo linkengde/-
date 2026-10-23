@@ -1,0 +1,15 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+read_data /tmp/e-tsc69-fresh/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_10m11_dft_diagnostic_20261023/results/TSC69_GEOMHOLD_PYR_10m11_COD9009647_TITI_RESP_TIZ020/tscbop_run0/output/atoms.data
+pair_style tersoff
+pair_coeff * * /tmp/e-tsc69-fresh/research/mace-v12-transfer/coordination/reports/window-e/tsc_surface_10m11_dft_diagnostic_20261023/results/TSC69_GEOMHOLD_PYR_10m11_COD9009647_TITI_RESP_TIZ020/tscbop_run0/output/TSCBOP.source.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe
+dump forces all custom 1 forces.dump id type x y z fx fy fz
+dump_modify forces sort id format line "%d %d %.16g %.16g %.16g %.16g %.16g %.16g"
+run 0 post no
+undump forces
