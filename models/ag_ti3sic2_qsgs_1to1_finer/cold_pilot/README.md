@@ -15,3 +15,7 @@ lmp -in cold_pilot/in.fixed_skeleton_ag_cold_0p005ps_from_step200 -log cold_pilo
 The result is conditional on the frozen-scaffold approximation and current potentials. Fifty steps only screen immediate instability; they do not validate a weakly mobile backbone, thermal equilibrium, or authorize local heating. Assess Ag temperature/force drift and the backbone's physical forces before using it as a starting state.
 
 The 50-step trajectory and released-scaffold `run 0` logs are archived as `log.cold_pilot_0p005ps` and `log.physical_force_run0`. Compressed mobile-Ag coordinate snapshots at the initial relaxed state and the 50-step endpoint are archived alongside them.
+
+For an early weak-restraint comparison from the same Ag-relaxed snapshot, run the parameterized `in.spring_cold_0p005ps` with `-var K 1` and `-var K 10`. These 50-step runs keep the bottom fixed, integrate the mobile region with NVE, thermostat the original bath layer, and restrain the mobile Ti/Si/C atoms with `spring/self`. At each endpoint the spring and dynamical fixes are removed before a `run 0` force check. They are short transient screens only; they do not establish equilibrium.
+
+The K=1/K=10 comparison, result logs, and compressed endpoint Ag snapshots are archived in [RESULTS_WEAK_SPRINGS_20261024.md](RESULTS_WEAK_SPRINGS_20261024.md).
