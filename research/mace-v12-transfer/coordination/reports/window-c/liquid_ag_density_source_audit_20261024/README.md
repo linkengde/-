@@ -6,11 +6,15 @@
 
 **Korobeinikov et al. (2018):** I. I. Korobeinikov, D. Chebykin, X. Yu, S. Seetharaman, and O. Volkova, “Density of tin, silver and copper,” *Archives of Materials Science and Engineering* 92(1) (2018), 28–32. DOI: [10.5604/01.3001.0012.5509](https://doi.org/10.5604/01.3001.0012.5509). Crossref and OpenAlex identify the same article. The abstract describes Archimedean measurements of liquid-metal densities from 700 to 1520°C, a range that includes 1250 K (976.85°C). It reports deviations of 0.5–1% from literature values depending on the metal; that is an agreement statement, not a pointwise measurement uncertainty. OpenAlex marks the article closed-access, so the silver table and uncertainty still need full-text inspection.
 
+**Assael et al. (2012):** “Reference data for the density and viscosity of liquid antimony, bismuth, lead, nickel and silver,” *High Temperatures–High Pressures*. OpenAlex record [W2608312387](https://openalex.org/W2608312387) lists M. J. Assael, Jiangtao Wu, Erhard Kaschnitz, Konstantinos D. Antoniadis, W. A. Wakeham, Agni E. Kalyva, R. Michael Banish, and I. Egry, and points to the Aristotle University of Thessaloniki institutional repository record at `https://ikee.lib.auth.gr/record/217743`. OpenAlex supplies no DOI or PDF and marks the record closed-access. Crossref's exact-title search did not identify a matching DOI. Because the title describes reference data for liquid silver, this is the highest-priority repository lead to inspect after access is available; no numerical value has been inferred from the title.
+
 ## Current audit status
 
-**Status: promising citations identified; the liquid-density gate is still open.** A fresh request to the IOP article page and PDF returned HTTP tunnel error 403. The ArchivesMSE PDF endpoint returned HTTP 200 with `text/html` rather than a PDF; its HTML title was “Publishers Panel.” OpenAlex marks that article closed-access. No silver table, equation, 1250 K interpolation, numerical density, or pointwise uncertainty was extracted. The existing model-derived density anchor remains unchanged, and no liquid-Ag candidate volumes were rescaled.
+**Status: promising citations identified; the liquid-density gate is still open.** A fresh request to the IOP article page and PDF returned HTTP tunnel error 403. The ArchivesMSE PDF endpoint returned HTTP 200 with `text/html` rather than a PDF; its HTML title was “Publishers Panel.” OpenAlex marks that article closed-access. The Assael et al. 2012 OpenAlex record identifies an institutional-repository lead, but its access status is closed and no PDF is listed. No silver table, equation, 1250 K interpolation, numerical density, or pointwise uncertainty was extracted. The existing model-derived density anchor remains unchanged, and no liquid-Ag candidate volumes were rescaled.
 
 The cloud-environment configuration draft now includes `iopscience.iop.org` and `archivesmse.org`, but the draft is not active until it is reviewed, saved, and published in environment settings. Once active, retry the publisher PDFs and record the exact silver data row, 1250 K value or interpolation method, and uncertainty before changing candidate volumes.
+
+The draft also includes `ikee.lib.auth.gr`, the host for the Assael et al. institutional-repository record. This host is not active until the draft is published. After publication, inspect the repository record for an author manuscript or other permitted full text before treating it as an actionable reference.
 
 ## Reproduction notes
 
@@ -20,4 +24,7 @@ The cloud-environment configuration draft now includes `iopscience.iop.org` and 
 - Crossref API record: `https://api.crossref.org/works/10.5604%2F01.3001.0012.5509`
 - OpenAlex API record: `https://api.openalex.org/works/https://doi.org/10.5604/01.3001.0012.5509`
 - Publisher PDF URL (latest request: HTTP 200 `text/html`, title “Publishers Panel”; OpenAlex says closed access): `https://archivesmse.org/gicid/pdf/01.3001.0012.5509`
+- OpenAlex API record for Assael et al. 2012: `https://api.openalex.org/works/W2608312387`
+- OpenAlex public record for Assael et al. 2012: `https://openalex.org/W2608312387`
+- Institutional-repository landing page for Assael et al. 2012 (not yet accessed): `https://ikee.lib.auth.gr/record/217743`
 - Search results alone are not accepted as a numerical reference; no value has been inferred from the abstract.
