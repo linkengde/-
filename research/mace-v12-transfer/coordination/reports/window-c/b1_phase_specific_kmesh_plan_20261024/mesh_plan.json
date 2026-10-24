@@ -1,0 +1,472 @@
+{
+  "report_date": "2026-10-24",
+  "status": "PREPARED_DISABLED; WAITING_FOR_WINDOW_A_V20_OWNER_AND_DFT_METHOD_FREEZE",
+  "git": {
+    "branch": "work",
+    "head": "1f359592024444bcf5776e4c7b5cdc1a7aa6dccd",
+    "origin_main": "1f359592024444bcf5776e4c7b5cdc1a7aa6dccd",
+    "head_matches_origin_main": true
+  },
+  "dft_launched": false,
+  "training_or_dataset_integration": false,
+  "common_proposed_method": {
+    "code": "GPAW 26.7.0",
+    "ase": "3.29.0",
+    "xc": "PBE",
+    "paw_data": "1.2.1",
+    "plane_wave_cutoff_eV": 500,
+    "fermi_smearing_eV": 0.1,
+    "scf_targets": "energy/density/eigenstates 1e-5",
+    "training_energy_key": "free_energy_eV",
+    "native_extrapolated_energy": "retain separately; never place under free_energy_eV"
+  },
+  "common_method_status": "PROPOSAL_ONLY; sigma awaits registered Window A V20 completion; no B1 DFT is authorized by this plan.",
+  "acceptance": {
+    "absolute_free_energy_delta_meV_per_atom_max": 2.0,
+    "force_vector_RMS_eV_per_A_max": 0.01,
+    "maximum_atom_force_difference_eV_per_A_max": 0.03,
+    "if_gamma_to_2x2x2_fails": "Run a 3x3x3 point on the exact same liquid snapshot; do not silently accept or mix mesh settings."
+  },
+  "planned_mesh_pairs": [
+    {
+      "id": "Ag32_seed9073_k6_to_k8",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073.extxyz",
+        "sha256": "e4e088805d3a98c86692f844e1ee38dc736b609bef184832ef2329ed31b8f7f3",
+        "atoms": 32,
+        "cell_lengths_A": [
+          8.172,
+          8.172,
+          8.172
+        ],
+        "cell_angles_deg": [
+          90.0,
+          90.0,
+          90.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          0.768868,
+          0.768868,
+          0.768868
+        ],
+        "lineage_group": "B1_SOLID_AG_COD9013045_SUH1988"
+      },
+      "meshes": [
+        [
+          6,
+          6,
+          6
+        ],
+        [
+          8,
+          8,
+          8
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "coarse": [
+          0.12815,
+          0.12815,
+          0.12815
+        ],
+        "fine": [
+          0.09611,
+          0.09611,
+          0.09611
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "Ag B1 32-atom cubic cell (8.172 A) is nearly identical to the archived Ag 32-cell (8.180 A); prior controls cover the same phase/shape. The B1 displacement is ~0.086 A max MIC, so explicitly test this larger displaced geometry."
+    },
+    {
+      "id": "Ag64_seed9073_k5_to_k7",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073.extxyz",
+        "sha256": "7bee9567320c5e726530143f499f2de1aaa47b238652cefa01f9c5f5c5b7645a",
+        "atoms": 64,
+        "cell_lengths_A": [
+          11.556953,
+          11.556953,
+          11.556953
+        ],
+        "cell_angles_deg": [
+          60.0,
+          60.0,
+          60.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          0.665859,
+          0.665859,
+          0.665859
+        ],
+        "lineage_group": "B1_SOLID_AG_COD9013045_SUH1988"
+      },
+      "meshes": [
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          7,
+          7,
+          7
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "coarse": [
+          0.13317,
+          0.13317,
+          0.13317
+        ],
+        "fine": [
+          0.09512,
+          0.09512,
+          0.09512
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "The 64-atom fcc primitive-supercell has a different reciprocal basis. Meshes map approximately to the archived Ag cubic k6-to-k8 pair by matching reciprocal spacing."
+    },
+    {
+      "id": "Ti3SiC2_72_seed9073_k5x8x2_to_k7x10x2",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073.extxyz",
+        "sha256": "2d78d378fa40fc079da79fefaa4c27e4f914bf4c4463a7d4181f0357c3705114",
+        "atoms": 72,
+        "cell_lengths_A": [
+          9.1776,
+          6.1184,
+          17.636
+        ],
+        "cell_angles_deg": [
+          90.0,
+          90.0,
+          120.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          0.790533,
+          1.1858,
+          0.35627
+        ],
+        "lineage_group": "B1_Ti3SiC2_Bai2010_ALPHA"
+      },
+      "meshes": [
+        [
+          5,
+          8,
+          2
+        ],
+        [
+          7,
+          10,
+          2
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "coarse": [
+          0.15811,
+          0.14823,
+          0.17814
+        ],
+        "fine": [
+          0.11293,
+          0.11858,
+          0.17814
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "Map the verified COD-derived 48-atom 8x8x2-to-10x10x2 control to the Bai 72-atom 3x2x1 cell using reciprocal-vector lengths. The selected displacement is ~0.085 A max."
+    },
+    {
+      "id": "Ti3SiC2_96_seed9073_k8x8x2_to_k10x10x2",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073.extxyz",
+        "sha256": "7689c4d32884beb0a6b6930b88de8f597ceadb160c5bcb2fcb097d04ca819530",
+        "atoms": 96,
+        "cell_lengths_A": [
+          6.1184,
+          6.1184,
+          35.272
+        ],
+        "cell_angles_deg": [
+          90.0,
+          90.0,
+          120.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          1.1858,
+          1.1858,
+          0.178135
+        ],
+        "lineage_group": "B1_Ti3SiC2_Bai2010_ALPHA"
+      },
+      "meshes": [
+        [
+          8,
+          8,
+          2
+        ],
+        [
+          10,
+          10,
+          2
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "coarse": [
+          0.14822,
+          0.14822,
+          0.08907
+        ],
+        "fine": [
+          0.11858,
+          0.11858,
+          0.08907
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "The Bai 96-atom 2x2x2 cell doubles c relative to the prior 48-atom cell. k_z=2 preserves the reciprocal spacing of old k_z=4; matched in-plane pair maps directly. Selected displacement is ~0.087 A max."
+    },
+    {
+      "id": "liquid_Ag_1250K_seed501_Gamma_to_2x2x2",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref.extxyz",
+        "sha256": "638306bb521aec530a22629734a175f6d88219ba5463c866cb4263bb778f5c95",
+        "atoms": 64,
+        "cell_lengths_A": [
+          12.029937,
+          12.029937,
+          12.029937
+        ],
+        "cell_angles_deg": [
+          60.0,
+          60.0,
+          60.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          0.639679,
+          0.639679,
+          0.639679
+        ],
+        "lineage_group": "B1_LIQUID_AG_EAM_SEED_501"
+      },
+      "meshes": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          2
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "gamma": [
+          0.52193,
+          0.52193,
+          0.52193
+        ],
+        "2x2x2": [
+          0.26097,
+          0.26097,
+          0.26097
+        ],
+        "conditional_3x3x3": [
+          0.17398,
+          0.17398,
+          0.17398
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "Representative 64-atom liquid snapshot at the source-reference density and lower in-range temperature. A 3x3x3 point is conditional on failure."
+    },
+    {
+      "id": "liquid_Ag_1600K_seed902_Gamma_to_2x2x2",
+      "status": "PROPOSED_DISABLED",
+      "input": {
+        "config_type": "Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref",
+        "path": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref.extxyz",
+        "sha256": "50224453d7bf32bd24bf09a942d24b8a136fe9c1e3d26af0406a32bfd33b15aa",
+        "atoms": 64,
+        "cell_lengths_A": [
+          12.183847,
+          12.183847,
+          12.183847
+        ],
+        "cell_angles_deg": [
+          60.0,
+          60.0,
+          60.0
+        ],
+        "reciprocal_vector_norms_A^-1": [
+          0.631598,
+          0.631598,
+          0.631598
+        ],
+        "lineage_group": "B1_LIQUID_AG_EAM_SEED_902"
+      },
+      "meshes": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          2
+        ]
+      ],
+      "reciprocal_spacing_A^-1": {
+        "gamma": [
+          0.51534,
+          0.51534,
+          0.51534
+        ],
+        "2x2x2": [
+          0.25767,
+          0.25767,
+          0.25767
+        ],
+        "conditional_3x3x3": [
+          0.17178,
+          0.17178,
+          0.17178
+        ]
+      },
+      "comparison_rule": "Same frozen geometry and method; only k-point mesh may differ.",
+      "rationale": "Independent EAM seed at the upper in-range temperature; checks whether the liquid k-point conclusion transfers across the intended thermal range. A 3x3x3 point is conditional on failure."
+    }
+  ],
+  "existing_numerical_evidence": {
+    "Ag_baseline_k6_to_k8": {
+      "source_report": "coordination/reports/window-b/v19_Ag_k8_baseline_and_volume_curve/report.json",
+      "native_delta_meV_atom": 1.3697197701,
+      "free_delta_meV_atom": 0.7990410247,
+      "force_vector_RMS_eV_A": 1.268595e-05,
+      "max_atom_force_difference_eV_A": 2.052135e-05,
+      "checks": "PASS"
+    },
+    "Ag_baseline_k4_to_k6": {
+      "source_report": "coordination/reports/window-b/v19_Ag_bulk_k4_k6_comparison/report.json",
+      "native_delta_meV_atom": -1.1957869858,
+      "free_delta_meV_atom": -0.4605470526,
+      "force_vector_RMS_eV_A": 3.698804e-05,
+      "max_atom_force_difference_eV_A": 5.740829e-05,
+      "checks": "PASS"
+    },
+    "Ag_displacement_p01_k4_to_k6": {
+      "source_report": "coordination/reports/window-b/v19_Ag_displaced_k4_k6_comparison/report.json",
+      "native_delta_meV_atom": -1.1958073914,
+      "free_delta_meV_atom": -0.460541869,
+      "force_vector_RMS_eV_A": 0.000272774,
+      "max_atom_force_difference_eV_A": 0.0005714567,
+      "checks": "PASS"
+    },
+    "Ag_volume_m02_k6_to_k8": {
+      "native_delta_meV_atom": 1.3621692774,
+      "free_delta_meV_atom": 0.813557303,
+      "force_vector_RMS_eV_A": 1.48074e-05,
+      "max_atom_force_difference_eV_A": 1.71038e-05,
+      "checks": "PASS"
+    },
+    "Ag_volume_p02_k6_to_k8": {
+      "native_delta_meV_atom": 1.3444485316,
+      "free_delta_meV_atom": 0.7694312492,
+      "force_vector_RMS_eV_A": 3.99594e-05,
+      "max_atom_force_difference_eV_A": 4.8282e-05,
+      "checks": "PASS"
+    },
+    "Ag_shear_m005_k6_to_k8": {
+      "native_delta_meV_atom": 1.3546676861,
+      "free_delta_meV_atom": 0.7904650003,
+      "force_vector_RMS_eV_A": 3.50416e-05,
+      "max_atom_force_difference_eV_A": 5.23133e-05,
+      "checks": "PASS"
+    },
+    "Ag_shear_p005_k6_to_k8": {
+      "native_delta_meV_atom": 1.3546676855,
+      "free_delta_meV_atom": 0.7904649997,
+      "force_vector_RMS_eV_A": 3.50416e-05,
+      "max_atom_force_difference_eV_A": 5.23133e-05,
+      "checks": "PASS"
+    },
+    "Ti3SiC2_48atom_kz2_k8_to_k10": {
+      "source_report": "coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison/k8x8x2_k10x10x2_comparison.json",
+      "native_delta_meV_atom": -0.0093685798,
+      "free_delta_meV_atom": -0.0097525262,
+      "force_vector_RMS_eV_A": 0.0065097123,
+      "max_atom_force_difference_eV_A": 0.0096283497,
+      "checks": "PASS"
+    },
+    "Ti3SiC2_48atom_kz4_k8_to_k10": {
+      "source_report": "coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison/k8x8x4_k10x10x4_comparison.json",
+      "native_delta_meV_atom": -0.0351209483,
+      "free_delta_meV_atom": -0.0166895859,
+      "force_vector_RMS_eV_A": 0.0046179827,
+      "max_atom_force_difference_eV_A": 0.0071052112,
+      "checks": "PASS"
+    }
+  },
+  "archive_manifest_verification": {
+    "status": "PASS",
+    "label_count": 17,
+    "labels": [
+      "Ag_baseline_k4x4x4_v19",
+      "Ag_baseline_k6x6x6_v19",
+      "Ag_baseline_k8x8x8_v19",
+      "Ag_displacement_p01_k4x4x4_v19",
+      "Ag_displacement_p01_k6x6x6_v19",
+      "Ag_volume_m02_k6x6x6_v19",
+      "Ag_volume_m02_k8x8x8_v19",
+      "Ag_volume_p02_k6x6x6_v19",
+      "Ag_volume_p02_k8x8x8_v19",
+      "Ag_shear_m005_k6x6x6_v19",
+      "Ag_shear_m005_k8x8x8_v19",
+      "Ag_shear_p005_k6x6x6_v19",
+      "Ag_shear_p005_k8x8x8_v19",
+      "Ti3SiC2_baseline_k8x8x2_v19",
+      "Ti3SiC2_baseline_k10x10x2_v19",
+      "Ti3SiC2_baseline_k8x8x4_v19",
+      "Ti3SiC2_baseline_k10x10x4_v19"
+    ],
+    "scope": "SHA256SUMS files for every cited archived Ag and Ti3SiC2 k-mesh endpoint were rechecked locally."
+  },
+  "window_a_owner_snapshot": {
+    "updated_utc": "2026-10-24T03:28:13.980616+00:00",
+    "owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
+    "sigma_0p05": "running; SCF iteration 50; updated 2026-10-24T03:28:13.980616+00:00",
+    "sigma_0p20": "queued; run after sigma0.05 archive verification.",
+    "live_telemetry_available": false,
+    "interpretation": "Stale task-card snapshot only; do not infer current runtime state or take ownership."
+  },
+  "gate_to_execution": [
+    "Window A owner publishes completion and SHA-verified archives for both V20 sigma controls.",
+    "Freeze the common B1 finite-smearing method and confirm exact PAW/setup hashes.",
+    "Register and resource-check the listed same-geometry mesh pairs.",
+    "Run/compare pairs and archive energy, forces, input hash, method, SCF log, and verification manifest.",
+    "Only after all pair gates pass, consider a B1 label pilot; maintain training-candidate-only roles and the free_energy_eV target."
+  ],
+  "source_reports": [
+    "coordination/reports/window-b/v19_Ag_k8_baseline_and_volume_curve/report.json",
+    "coordination/reports/window-b/v19_Ag_bulk_k4_k6_comparison/report.json",
+    "coordination/reports/window-b/v19_Ag_displaced_k4_k6_comparison/report.json",
+    "coordination/reports/window-b/v19_Ag_volume_k6_k8_controls/report.json",
+    "coordination/reports/window-b/v19_Ag_shear_k6_k8_controls/report.json",
+    "coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison/k8x8x2_k10x10x2_comparison.json",
+    "coordination/reports/window-a/v19_Ti3SiC2_bulk_mesh_comparison/k8x8x4_k10x10x4_comparison.json"
+  ]
+}
