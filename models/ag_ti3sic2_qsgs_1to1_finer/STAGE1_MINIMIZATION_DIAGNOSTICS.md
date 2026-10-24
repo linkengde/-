@@ -85,9 +85,13 @@ In a separate copy, all three Morse `D0` values were ramped through 0, 10%, 25%,
 
 FIRE was then extended for 100 iterations from that endpoint under the exact original potential. It again stopped at the iteration cap: maximum mobile force increased to 7.522 eV/Å (Ag 3.993; skeleton 7.522), minimum Ag–C distance was 2.029 Å, minimum Ti–C distance 1.813 Å, and tracked C–C distance 2.534 Å. The homotopy path therefore did not yield a usable full-potential state. Intermediate `D0` values were used only to generate a minimization path and were not treated as candidate material parameters.
 
+## Test H: extend the strong-restraint check
+
+To see whether the 35-step K=100 result was only iteration-limited, the full original potential was minimized from the original geometry for 200 FIRE iterations with a K=100 eV/Å² harmonic restraint on the mobile skeleton. With the spring active, the maximum Ag force was still 3.820 eV/Å and the net skeleton maximum was 0.416 eV/Å. After removing the spring, the physical mobile-skeleton maximum was 5.679 eV/Å; the Ag maximum remained 3.820 eV/Å. Minimum Ag–C was 1.970 Å. This stronger, longer constraint test still fails the Ag force gate, so no constrained cold MD pilot was started.
+
 ## Decision
 
-The current geometry/potential combination does **not** pass the Stage 1 gate for heating. No tested full-potential endpoint reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only CG/FIRE with a rigid skeleton leave maximum Ag forces of 4.081/3.806 eV/Å; harmonic restraints do not remove the raw forces when released; the skeleton-only relaxation causes severe Ag–Si contacts when the original Morse terms return; and staged `D0` continuation followed by full-potential FIRE ends at 7.522 eV/Å with further C–C contraction. The tests stop at iteration limits, so they do not prove that no lower-force basin exists, but none has found a state that meets the gate.
+The current geometry/potential combination does **not** pass the Stage 1 gate for heating. No tested full-potential endpoint reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only CG/FIRE with a rigid skeleton leave maximum Ag forces of 4.081/3.806 eV/Å; a 200-step K=100 spring test still leaves Ag at 3.820 eV/Å; the skeleton-only relaxation causes severe Ag–Si contacts when the original Morse terms return; and staged `D0` continuation followed by full-potential FIRE ends at 7.522 eV/Å with further C–C contraction. The tests stop at iteration limits, so they do not prove that no lower-force basin exists, but none has found a state that meets the gate.
 
 Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these minimized coordinates. A timestep of 0.5 fs cannot correct this static force/geometry problem. Keep the original model and potential intact. Under the accepted constraint of retaining the current potential, any next calculation would have to be explicitly labeled as a restraint-dependent sensitivity demonstration, not evidence that an unconstrained composite has a stable Ag melt pool. The Stage 1 acceptance checks should be revisited before heating is authorized.
 
@@ -101,5 +105,6 @@ Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these
 - Test D skeleton-only diagnostic: `testD_skeleton_only/`
 - Test E restored-interface `run 0`: `testE_restore_interface/`
 - Tests F/G continuation inputs, logs, dumps, and endpoint metrics: `testF_morse_continuation/`, `testG_full_potential_extend/`, `full_potential_continuation_metrics.json`
+- Test H K=100 spring FIRE input, log, and endpoint: `testH_k100_spring_fire/`
 - Local distance/coordination and layer-force summaries: `local_structure_audit.json`, `skeleton_coordination_audit.json`, `layer_force_decomposition.json`
 - Parsed restraint geometry metrics: `stage1_restraint_geometry_metrics.json`
