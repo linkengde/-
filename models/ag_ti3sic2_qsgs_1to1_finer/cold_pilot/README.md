@@ -19,3 +19,5 @@ The 50-step trajectory and released-scaffold `run 0` logs are archived as `log.c
 For an early weak-restraint comparison from the same Ag-relaxed snapshot, run the parameterized `in.spring_cold_0p005ps` with `-var K 1` and `-var K 10`. These 50-step runs keep the bottom fixed, integrate the mobile region with NVE, thermostat the original bath layer, and restrain the mobile Ti/Si/C atoms with `spring/self`. At each endpoint the spring and dynamical fixes are removed before a `run 0` force check. They are short transient screens only; they do not establish equilibrium.
 
 The K=1/K=10 comparison, result logs, and compressed endpoint Ag snapshots are archived in [RESULTS_WEAK_SPRINGS_20261024.md](RESULTS_WEAK_SPRINGS_20261024.md).
+
+The later 25 fs no-source checks extend the K=10 weak-spring case and compare a fully rigid scaffold. Results, inputs, logs, and endpoint Ag snapshots are recorded in [the K=10 extension](RESULTS_COLD_K10_0P025PS_20261025.md) and [the rigid-scaffold comparison](RESULTS_RIGID_SCAFFOLD_0P025PS_20261025.md). Neither case establishes an equilibrated composite cold baseline; no TTM or heat source was used.

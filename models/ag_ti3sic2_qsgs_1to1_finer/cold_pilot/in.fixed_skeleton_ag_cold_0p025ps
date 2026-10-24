@@ -1,0 +1,40 @@
+# No-source Ag cold stability screen with a rigid Ti3SiC2 scaffold.
+# This is a constrained comparison, not a production baseline or melt test.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group skeleton type 1 2 3
+group ag type 4
+group fixed union skeleton bottom
+group mobile_ag subtract ag bottom
+fix freeze fixed setforce 0.0 0.0 0.0
+# Same Ag-only FIRE-200 coordinates as the archived 5 fs rigid-scaffold screen.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+reset_timestep 0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_ag mobile_ag reduce max v_fmag
+compute t_ag mobile_ag temp
+compute disp mobile_ag displace/atom
+variable disp2 atom c_disp[4]*c_disp[4]
+compute msd_origin mobile_ag reduce ave v_disp2
+compute maxdisp_ag mobile_ag reduce max c_disp[4]
+velocity mobile_ag create 300.0 958321 mom yes rot no dist gaussian
+timestep 0.0001
+fix ag_nvt mobile_ag nvt temp 300.0 300.0 0.1
+thermo 25
+thermo_style custom step time c_t_ag pe ke etotal c_f_ag c_msd_origin c_maxdisp_ag
+thermo_modify temp t_ag flush yes
+run 250
+# Remove thermostat before checking pair forces at the endpoint configuration.
+unfix ag_nvt
+thermo_style custom step pe c_f_ag c_msd_origin c_maxdisp_ag
+thermo_modify flush yes
+run 0
+write_dump mobile_ag custom cold_pilot/final_mobile_ag_rigid_scaffold_0p025ps.dump id type x y z vx vy vz modify sort id
+print "RIGID_SCAFFOLD_AG_COLD_NO_SOURCE_0P025PS_DONE"

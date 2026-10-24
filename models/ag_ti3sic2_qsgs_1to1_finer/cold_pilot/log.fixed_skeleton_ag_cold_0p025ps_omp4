@@ -1,0 +1,191 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# No-source Ag cold stability screen with a rigid Ti3SiC2 scaffold.
+# This is a constrained comparison, not a production baseline or melt test.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  917378 atoms
+  read_data CPU = 1.576 seconds
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+117618 atoms in group bottom
+group skeleton type 1 2 3
+704382 atoms in group skeleton
+group ag type 4
+212996 atoms in group ag
+group fixed union skeleton bottom
+737015 atoms in group fixed
+group mobile_ag subtract ag bottom
+180363 atoms in group mobile_ag
+fix freeze fixed setforce 0.0 0.0 0.0
+# Same Ag-only FIRE-200 coordinates as the archived 5 fs rigid-scaffold screen.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  917378 atoms before read
+  180363 atoms in snapshot
+  0 atoms purged
+  180363 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  917378 atoms after read
+reset_timestep 0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_ag mobile_ag reduce max v_fmag
+compute t_ag mobile_ag temp
+compute disp mobile_ag displace/atom
+variable disp2 atom c_disp[4]*c_disp[4]
+compute msd_origin mobile_ag reduce ave v_disp2
+compute maxdisp_ag mobile_ag reduce max c_disp[4]
+velocity mobile_ag create 300.0 958321 mom yes rot no dist gaussian
+timestep 0.0001
+fix ag_nvt mobile_ag nvt temp 300.0 300.0 0.1
+thermo 25
+thermo_style custom step time c_t_ag pe ke etotal c_f_ag c_msd_origin c_maxdisp_ag
+thermo_modify temp t_ag flush yes
+WARNING: Temperature for thermo pressure is not for group all (src/src/thermo.cpp:569)
+run 250
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1141 | 1141 | 1141 Mbytes
+   Step          Time          c_t_ag         PotEng         KinEng         TotEng         c_f_ag      c_msd_origin   c_maxdisp_ag 
+         0   0              300           -4931397.9      6994.0855     -4924403.9      3.8063828      0              0            
+        25   0.0025         300.27213     -4931404.3      7000.4297     -4924403.9      3.8271986      4.3360046e-05  0.020748548  
+        50   0.005          301.03257     -4931422        7018.1583     -4924403.9      3.8472603      0.00017346405  0.041357813  
+        75   0.0075         302.30942     -4931451.9      7047.9265     -4924403.9      3.8670788      0.00039037449  0.061811292  
+       100   0.01           304.14922     -4931494.9      7090.8188     -4924404.1      3.8867094      0.00069420282  0.082090585  
+       125   0.0125         306.61586     -4931552.7      7148.3251     -4924404.3      3.9071277      0.0010851345   0.1021756    
+       150   0.015          309.78927     -4931627.1      7222.3087     -4924404.8      3.9260479      0.0015634633   0.12204495   
+       175   0.0175         313.76344     -4931720.6      7314.9611     -4924405.6      3.9435628      0.0021296345   0.14167598   
+       200   0.02           318.64402     -4931835.6      7428.745      -4924406.8      3.9584869      0.0027842948   0.16104496   
+       225   0.0225         324.54557     -4931975        7566.3314     -4924408.7      3.9692218      0.00352835     0.18012715   
+       250   0.025          331.58841     -4932141.9      7730.5256     -4924411.3      3.9735373      0.0043630261   0.20379445   
+Loop time of 499.217 on 4 procs for 250 steps with 917378 atoms
+
+Performance: 0.004 ns/day, 5546.854 hours/ns, 0.501 timesteps/s, 459.409 katom-step/s
+387.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 494.21     | 494.21     | 494.21     |   0.0 | 99.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.5928     | 0.5928     | 0.5928     |   0.0 |  0.12
+Output  | 0.28381    | 0.28381    | 0.28381    |   0.0 |  0.06
+Modify  | 3.4815     | 3.4815     | 3.4815     |   0.0 |  0.70
+Other   |            | 0.6528     |            |       |  0.13
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122144 ave      122144 max      122144 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+# Remove thermostat before checking pair forces at the endpoint configuration.
+unfix ag_nvt
+thermo_style custom step pe c_f_ag c_msd_origin c_maxdisp_ag
+WARNING: New thermo_style command, previous thermo_modify settings will be lost (src/src/output.cpp:912)
+thermo_modify flush yes
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Per MPI rank memory allocation (min/avg/max) = 1191 | 1191 | 1191 Mbytes
+   Step         PotEng         c_f_ag      c_msd_origin   c_maxdisp_ag 
+       250  -4932141.9      3.9735373      0.0043630261   0.20379445   
+Loop time of 2.073e-06 on 4 procs for 0 steps with 917378 atoms
+
+289.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.073e-06  |            |       |100.00
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122153 ave      122153 max      122153 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile_ag custom cold_pilot/final_mobile_ag_rigid_scaffold_0p025ps.dump id type x y z vx vy vz modify sort id
+print "RIGID_SCAFFOLD_AG_COLD_NO_SOURCE_0P025PS_DONE"
+RIGID_SCAFFOLD_AG_COLD_NO_SOURCE_0P025PS_DONE
+Total wall time: 0:08:28
