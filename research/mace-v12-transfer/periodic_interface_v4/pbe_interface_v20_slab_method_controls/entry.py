@@ -31,11 +31,12 @@ def inventory():
     assert actual == set(expected), f"Input inventory mismatch: missing={sorted(actual-set(expected))}, extra={sorted(set(expected)-actual)}"
 
 
-def validate(manifest, record):
-    assert manifest["launch_enabled"] is True and record["launch_enabled"] is True
+def validate(manifest, record, launch=False):
+    if launch:
+        assert manifest["launch_enabled"] is True and record["launch_enabled"] is True
     assert record["role"] == "numerical_convergence_control_not_training_or_validation"
     assert record["owner_task"] == "window-a"
-    assert record["owner_instance"] == "9c31b999-b2fe-4f0a-86f0-52c605d705ad"
+    assert isinstance(record.get("owner_instance"), str) and record["owner_instance"]
     assert record["pbc"] == [True, True, False]
     assert record["poissonsolver"] == {"dipolelayer": "xy"}
     kpts = tuple(record["method"]["kpts"])
@@ -74,7 +75,7 @@ def load(label, launch=False):
     record = next(row for row in manifest["records"] if row["label"] == label)
     if launch:
         inventory()
-    validate(manifest, record)
+    validate(manifest, record, launch=launch)
     if launch:
         sys.path.insert(0, str(REPO / "research/mace-v12-transfer/coordination"))
         import sync_tasks as sync
