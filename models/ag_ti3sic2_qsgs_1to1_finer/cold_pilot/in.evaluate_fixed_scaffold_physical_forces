@@ -1,0 +1,24 @@
+# Evaluate physical forces after releasing the scaffold at the 50-step endpoint.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group skeleton type 1 2 3
+group ag type 4
+group mobile_ag subtract ag bottom
+group mobile_skeleton subtract skeleton bottom
+fix hold_bottom bottom setforce 0.0 0.0 0.0
+read_dump cold_pilot/final_mobile_ag_0p005ps.dump.gz 50 x y z box no replace yes
+reset_timestep 0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_ag mobile_ag reduce max v_fmag
+compute f_skeleton mobile_skeleton reduce max v_fmag
+thermo_style custom step pe fmax c_f_ag c_f_skeleton
+thermo_modify flush yes
+run 0
+print "FIXED_SCAFFOLD_RELEASED_PHYSICAL_FORCE_CHECK_DONE"

@@ -1,0 +1,214 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+# No-source early cold stability check from the archived fixed-scaffold relaxation.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  917378 atoms
+  read_data CPU = 1.587 seconds
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+117618 atoms in group bottom
+group skeleton type 1 2 3
+704382 atoms in group skeleton
+group ag type 4
+212996 atoms in group ag
+group fixed union skeleton bottom
+737015 atoms in group fixed
+group mobile_ag subtract ag bottom
+180363 atoms in group mobile_ag
+fix freeze fixed setforce 0.0 0.0 0.0
+# Group membership is assigned from original model coordinates before Ag is read in.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  917378 atoms before read
+  180363 atoms in snapshot
+  0 atoms purged
+  180363 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  917378 atoms after read
+reset_timestep 0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_ag mobile_ag reduce max v_fmag
+compute t_ag mobile_ag temp
+velocity mobile_ag create 300.0 958321 mom yes rot no dist gaussian
+timestep 0.0001
+fix ag_nvt mobile_ag nvt temp 300.0 300.0 0.1
+compute disp mobile_ag displace/atom
+variable disp2 atom c_disp[4]*c_disp[4]
+compute msd_origin mobile_ag reduce ave v_disp2
+thermo 100
+thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_msd_origin
+thermo_modify flush yes
+run 50
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1142 | 1142 | 1142 Mbytes
+   Step          Time           Temp          c_t_ag         PotEng         KinEng         TotEng         Press          c_f_ag      c_msd_origin
+         0   0              58.981858      300           -4931397.9      6994.0855     -4924403.9     -40927.647      3.8063828      0
+        50   0.005          59.184867      301.03257     -4931422        7018.1583     -4924403.9     -40910.319      3.8472603      0.00017346405
+Loop time of 389.295 on 4 procs for 50 steps with 917378 atoms
+
+Performance: 0.001 ns/day, 21627.516 hours/ns, 0.128 timesteps/s, 117.825 katom-step/s
+100.0% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 387.88     | 387.88     | 387.88     |   0.0 | 99.64
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.12217    | 0.12217    | 0.12217    |   0.0 |  0.03
+Output  | 0.028494   | 0.028494   | 0.028494   |   0.0 |  0.01
+Modify  | 1.0828     | 1.0828     | 1.0828     |   0.0 |  0.28
+Other   |            | 0.1802     |            |       |  0.05
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122144 ave      122144 max      122144 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+# Evaluate the more expensive CNA structure diagnostic only at the endpoint.
+compute cna all cna/atom 3.35
+variable cna_unknown atom c_cna==5
+compute n_unknown mobile_ag reduce sum v_cna_unknown
+variable cna_fraction equal c_n_unknown/count(mobile_ag)
+thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_msd_origin c_n_unknown v_cna_fraction
+WARNING: New thermo_style command, previous thermo_modify settings will be lost (src/src/output.cpp:912)
+run 0
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  6 neighbor lists, perpetual/occasional/extra = 5 1 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) compute cna/atom, occasional, copy from (6)
+      attributes: full, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1201 | 1201 | 1201 Mbytes
+   Step          Time           Temp          c_t_ag         PotEng         KinEng         TotEng         Press          c_f_ag      c_msd_origin   c_n_unknown   v_cna_fraction
+WARNING: Too many neighbors in CNA for 65177 atoms (src/src/compute_cna_atom.cpp:177)
+WARNING: Too many common neighbors in CNA: 90x (src/src/compute_cna_atom.cpp:347)
+        50   0.005          59.184867      301.03257     -4931422        7018.1583     -4924403.9     -40910.319      3.8472603      0.00017346405  135801         0.75293159
+Loop time of 1.252e-06 on 4 procs for 0 steps with 917378 atoms
+
+399.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.252e-06  |            |       |100.00
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122134 ave      122134 max      122134 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  8.83336e+07 ave 8.83336e+07 max 8.83336e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 88333590
+Ave neighs/atom = 96.289196
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile_ag custom cold_pilot/final_mobile_ag_0p005ps.dump id type x y z c_cna c_disp[4] modify sort id
+print "FIXED_SKELETON_AG_COLD_0P005PS_DONE"
+FIXED_SKELETON_AG_COLD_0P005PS_DONE
+Total wall time: 0:06:56

@@ -56,6 +56,8 @@ lmp -in in.layered_static_check -log log.layered_static_check
 
 后续静态诊断还发现，牛顿层中距离所有 Ag 至少 8 Å 的 84,154 个 Ti 和 56,429 个 C，受力中位数仍有 2.675 和 2.041 eV/Å，且 Morse 力为零；因此骨架内部几何/势能也存在明显重排需求。Ag 固定、Morse 暂置零的骨架 FIRE 弛豫后，一恢复原界面势，`run 0` 最大 Ag/骨架力升到 18.705/16.522 eV/Å，出现 1.930 Å 的 Ag–Si 接触。将 Morse 参数从 0 逐级升至原值后，完整势下最大力为 4.556 eV/Å；再延长 100 次 FIRE 后，牛顿层最大力升至 7.522 eV/Å，追踪 C–C 对缩短到 2.534 Å。另用原始完整势和 K=100 eV/Å² 骨架弹簧做 200 次 FIRE，Ag 最大力仍为 3.820 eV/Å；解除弹簧后骨架最大物理力为 5.679 eV/Å。之后做了干净的0.1 fs、0.025 ps K=100冷态敏感性短跑，917,378个原子均保留；有效restart和末帧逐原子核对一致。另做0.025 ps受限冷态续跑，Ag升至约537 K而骨架约96 K，说明基线仍未平衡，不能为加热放行。详情见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md) 和 [STAGE2_COLD_K100_PILOT.md](STAGE2_COLD_K100_PILOT.md)。目前不启动TTM热源测试或正式熔池计算；强约束下的熔化不能作为无约束复合材料稳定熔池的证据。
 
+另做了从已松弛 Ag 坐标开始的刚性骨架 300 K 无源早期检查：50 步（0.005 ps，0.1 fs）后 Ag 温度为 301.03 K，Ag 最大力 3.847 eV/Å；仅解除骨架约束的终点 `run 0` 显示活动骨架最大物理力仍为 6.355 eV/Å。测试时长不足以证明平衡，CNA 还出现高邻居数警告；它只说明刚性骨架下 5 fs 短跑完成，不能作为稳定熔池初态。输入、坐标快照、日志和判断见 [固定骨架冷态检查](cold_pilot/RESULTS_20261024.md)。
+
 独立的无热源步长对照使用 0.5 fs 和 0.25 fs 分别运行至 0.05 ps，未丢失原子，但两组均升温至约 615–669 K，牛顿层最大力约 50 eV/Å，追踪 C–C 距离缩短至约 2.165 Å。该短跑说明异常演化不能简单归因于 0.5 fs 步长；它不构成 0.5 fs 对 TTM 或高温过程的验证。记录见 `/workspace/runs/ag_ti3sic2_selected/baseline/COLD_BASELINE_STEP_SIZE_COMPARISON.md` 和 `/workspace/runs/ag_ti3sic2_selected/baseline/RIGID_SKELETON_CONTROL.md`。
 
 当前模型使用 `boundary p p f`。仓库参考的 LAMMPS `fix ttm/mod` 明确拒绝非周期边界，且其原生热源形式也不是所需的横向高斯乘深度指数形式。正式 TTM 还需要可处理自由表面、Ag 选择性耦合和指定热源分布的实现。若改用 z 周期加真空，必须先解决逸出原子穿越盒顶后绕回底面的影响；不能只把边界改成周期就开始计算。

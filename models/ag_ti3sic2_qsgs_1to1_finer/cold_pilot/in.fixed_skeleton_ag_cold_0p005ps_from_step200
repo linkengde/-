@@ -1,0 +1,40 @@
+# No-source early cold stability check from the archived fixed-scaffold relaxation.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group skeleton type 1 2 3
+group ag type 4
+group fixed union skeleton bottom
+group mobile_ag subtract ag bottom
+fix freeze fixed setforce 0.0 0.0 0.0
+# Group membership is assigned from original model coordinates before Ag is read in.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+reset_timestep 0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_ag mobile_ag reduce max v_fmag
+compute t_ag mobile_ag temp
+velocity mobile_ag create 300.0 958321 mom yes rot no dist gaussian
+timestep 0.0001
+fix ag_nvt mobile_ag nvt temp 300.0 300.0 0.1
+compute disp mobile_ag displace/atom
+variable disp2 atom c_disp[4]*c_disp[4]
+compute msd_origin mobile_ag reduce ave v_disp2
+thermo 100
+thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_msd_origin
+thermo_modify flush yes
+run 50
+# Evaluate the more expensive CNA structure diagnostic only at the endpoint.
+compute cna all cna/atom 3.35
+variable cna_unknown atom c_cna==5
+compute n_unknown mobile_ag reduce sum v_cna_unknown
+variable cna_fraction equal c_n_unknown/count(mobile_ag)
+thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_msd_origin c_n_unknown v_cna_fraction
+run 0
+write_dump mobile_ag custom cold_pilot/final_mobile_ag_0p005ps.dump id type x y z c_cna c_disp[4] modify sort id
+print "FIXED_SKELETON_AG_COLD_0P005PS_DONE"
