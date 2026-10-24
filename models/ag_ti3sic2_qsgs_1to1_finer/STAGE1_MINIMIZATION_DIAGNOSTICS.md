@@ -24,6 +24,10 @@ To identify its force source, I compared `run 0` forces with the full potential 
 
 Initial minimum pair distances from the force-dump coordinates are Ag–Ti 2.3323 Å, Ag–Si 2.3320 Å, Ag–C 2.3315 Å, Ti–C 2.0871 Å, Ti–Si 2.6803 Å, and C–C 3.0564 Å. The tracked C pair 497966–498104 initially sits 3.0971 Å apart; both have Ti atom 498108 at about 2.176 Å, while their nearest Ag atoms are about 3.245 Å (C 497966) and 2.519 Å (C 498104). These minima alone do not establish a defect, but they provide reference values for the relaxations below.
 
+For all Ag atoms, the median nearest-neighbor distances are 4.312 Å to Ti, 5.373 Å to Si, and 4.720 Å to C. Using each pair's Morse `r0` only as a reference, the initial counts below `r0` are 254 Ag–Ti pairs, 1,435 Ag–Si pairs, and zero Ag–C pairs. These are distance statistics, not a universal overlap criterion.
+
+The skeleton also has substantial internal geometric force away from Ag. In the Newton layer, 84,154 Ti and 56,429 C atoms have no Ag within the 8 Å Morse cutoff; their median force magnitudes are still 2.675 and 2.041 eV/Å, respectively, and the Morse contribution is zero. Geometric neighbor counts (not bond orders) within 2.30 Å give Ti–C counts `0: 5,098; 1: 19,427; 2: 45,292; 3: 183,095; 4: 10,935; 5: 16,413; 6: 71,931`. For C–Ti at the same cutoff the counts are `0: 18; 1: 3,460; 2: 10,214; 3: 18,355; 4: 22,798; 5: 33,152; 6: 146,797`. The force and coordination patterns show that the initial QSGS skeleton needs internal relaxation as well as interface treatment; high force cannot be assigned to Morse alone.
+
 ## Test A: freeze Ti/Si/C and relax Ag
 
 All Ti, Si, and C atoms were frozen; the bottom 0–20 Å slab was also fixed, leaving 180,363 Ag atoms mobile. CG was capped at 200 iterations (`dmax = 0.02 Å`). The run stopped at the iteration limit.
@@ -67,9 +71,23 @@ Only the bottom slab was fixed. FIRE was capped at 35 iterations (`dmax = 0.01 �
 
 This short FIRE control also did not converge. It follows the same tendency of the tracked C–C pair to shorten. An earlier longer CG audit in `POST_MIN_FORCE_AUDIT.md` reached 2.144 Å for that pair and a maximum force near 14.916 eV/Å; that earlier result is a separate run and is not combined with this test.
 
+## Test D: relax only the skeleton with Ag fixed and Morse disabled
+
+As a diagnostic, Ag was fixed and all Morse `D0` values were set to zero in memory; Ti/Si/C outside the original bottom slab were relaxed for 100 FIRE iterations. The source potential file was not changed. The maximum skeleton force fell from 3.550 to 2.195 eV/Å; at the endpoint the median and 95th-percentile mobile-skeleton forces were 0.037 and 0.175 eV/Å, with 146 of 619,397 mobile skeleton atoms above 1 eV/Å. Mean/p95/maximum skeleton displacement was 0.084/0.195/0.829 Å. However, the tracked C–C pair shortened from 3.096 to 2.815 Å, and the minimum Ti–C distance became 1.898 Å. This is a diagnostic state, not a candidate composite structure, because its Ag–skeleton interactions were disabled.
+
+## Test E: restore the original interface potential on Test D coordinates
+
+The original Ag coordinates were retained, the relaxed skeleton coordinates were loaded by atom ID, the full Morse potential was restored, and only `run 0` was performed. Groups were defined from the original coordinates before replacing the skeleton coordinates, so the original layer membership was preserved. Maximum forces were 18.705 eV/Å on Ag 804829 and 16.522 eV/Å on Si 331960; that Ag–Si pair is only 1.930 Å apart, versus an Ag–Si Morse `r0` of 2.404 Å. Separating out internal skeleton relaxation and then restoring the interface potential creates severe contacts, so this relaxed skeleton cannot be re-used with the original Ag coordinates.
+
+## Tests F/G: ramp the cross interaction to the original value, then extend FIRE
+
+In a separate copy, all three Morse `D0` values were ramped through 0, 10%, 25%, 50%, 75%, and 100% of their original values, with 30 FIRE iterations at each level. The final stage used the exact original calibration-v0 values. It stopped at the 30-iteration cap with maximum mobile force 4.556 eV/Å (Ag 4.100; skeleton 4.556), minimum Ag–C distance 2.044 Å, and tracked C–C distance 2.671 Å.
+
+FIRE was then extended for 100 iterations from that endpoint under the exact original potential. It again stopped at the iteration cap: maximum mobile force increased to 7.522 eV/Å (Ag 3.993; skeleton 7.522), minimum Ag–C distance was 2.029 Å, minimum Ti–C distance 1.813 Å, and tracked C–C distance 2.534 Å. The homotopy path therefore did not yield a usable full-potential state. Intermediate `D0` values were used only to generate a minimization path and were not treated as candidate material parameters.
+
 ## Decision
 
-The current geometry/potential combination does **not** pass the Stage 1 gate for heating. None of the tests reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only relaxation with a rigid skeleton gives maximum Ag forces of 4.081 eV/Å with CG and 3.806 eV/Å with FIRE; their shortest Ag–C distances are 1.919 and 1.968 Å. Both runs stop at their iteration limits, so they do not prove that no lower-force basin exists, but the present starting configuration has not met the gate. Harmonic restraints reduce displacement only while they are applied; raw forces return when removed. The unconstrained FIRE control and prior CG audit both shorten the tracked C–C pair.
+The current geometry/potential combination does **not** pass the Stage 1 gate for heating. No tested full-potential endpoint reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only CG/FIRE with a rigid skeleton leave maximum Ag forces of 4.081/3.806 eV/Å; harmonic restraints do not remove the raw forces when released; the skeleton-only relaxation causes severe Ag–Si contacts when the original Morse terms return; and staged `D0` continuation followed by full-potential FIRE ends at 7.522 eV/Å with further C–C contraction. The tests stop at iteration limits, so they do not prove that no lower-force basin exists, but none has found a state that meets the gate.
 
 Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these minimized coordinates. A timestep of 0.5 fs cannot correct this static force/geometry problem. Keep the original model and potential intact. Under the accepted constraint of retaining the current potential, any next calculation would have to be explicitly labeled as a restraint-dependent sensitivity demonstration, not evidence that an unconstrained composite has a stable Ag melt pool. The Stage 1 acceptance checks should be revisited before heating is authorized.
 
@@ -80,4 +98,8 @@ Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these
 - Ag-only FIRE cross-check: `testA_ag_only_fire/`
 - Test B inputs, logs, and final coordinate dumps: `testB_k1/`, `testB_k10/`, `testB_k100/`
 - Test C input, log, and final coordinate dump: `testC_unconstrained_fire/`
+- Test D skeleton-only diagnostic: `testD_skeleton_only/`
+- Test E restored-interface `run 0`: `testE_restore_interface/`
+- Tests F/G continuation inputs, logs, dumps, and endpoint metrics: `testF_morse_continuation/`, `testG_full_potential_extend/`, `full_potential_continuation_metrics.json`
+- Local distance/coordination and layer-force summaries: `local_structure_audit.json`, `skeleton_coordination_audit.json`, `layer_force_decomposition.json`
 - Parsed restraint geometry metrics: `stage1_restraint_geometry_metrics.json`
