@@ -1,0 +1,778 @@
+{
+  "schema": "B1_PHASE_KMESH_EXECUTION_PACK_V1",
+  "created_utc": "2026-10-24",
+  "status": "PREPARED_DISABLED_WAITING_V20_OWNER_AND_METHOD_FREEZE",
+  "source_mesh_plan": "coordination/reports/window-c/b1_phase_specific_kmesh_plan_20261024/mesh_plan.json",
+  "source_role_ledger": "coordination/reports/window-c/b1_candidate_role_freeze_20261024/role_ledger.csv",
+  "global_launch_enabled": false,
+  "global_dft_authorized": false,
+  "training_enabled": false,
+  "dataset_integration_enabled": false,
+  "required_owner_task": "window-a",
+  "required_gate": "both registered V20 sigma controls completed and independently archive-verified; common B1 method frozen",
+  "provisional_method": {
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "PAW_data_version": "1.2.1",
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "scf_thresholds": "energy/density/eigenstates 1e-5",
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "maxiter": 160,
+    "energy_keys": {
+      "native": "energy (force_consistent=False)",
+      "force_consistent": "free_energy"
+    },
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    }
+  },
+  "energy_target": "free_energy_eV",
+  "acceptance": {
+    "absolute_free_energy_delta_meV_per_atom_max": 2.0,
+    "force_vector_RMS_eV_per_A_max": 0.01,
+    "maximum_atom_force_difference_eV_per_A_max": 0.03,
+    "if_gamma_to_2x2x2_fails": "Run a 3x3x3 point on the exact same liquid snapshot; do not silently accept or mix mesh settings."
+  },
+  "record_count": 12,
+  "records": [
+    {
+      "label": "B1_Ag32_s9073_k6__to_8_k6x6x6",
+      "pair_id": "Ag32_seed9073_k6_to_k8",
+      "pair_member": "coarse",
+      "phase": "solid_Ag",
+      "config_type": "Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073.extxyz",
+      "input_sha256": "e4e088805d3a98c86692f844e1ee38dc736b609bef184832ef2329ed31b8f7f3",
+      "natoms": 32,
+      "kpts": [
+        6,
+        6,
+        6
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          6,
+          6,
+          6
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_Ag32_s9073_k6__to_8_k8x8x8",
+      "pair_id": "Ag32_seed9073_k6_to_k8",
+      "pair_member": "fine",
+      "phase": "solid_Ag",
+      "config_type": "Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag32_COD9013045_cubic_2x2x2_displacement_seed_9073.extxyz",
+      "input_sha256": "e4e088805d3a98c86692f844e1ee38dc736b609bef184832ef2329ed31b8f7f3",
+      "natoms": 32,
+      "kpts": [
+        8,
+        8,
+        8
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          8,
+          8,
+          8
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_Ag64_s9073_k5__to_7_k5x5x5",
+      "pair_id": "Ag64_seed9073_k5_to_k7",
+      "pair_member": "coarse",
+      "phase": "solid_Ag",
+      "config_type": "Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073.extxyz",
+      "input_sha256": "7bee9567320c5e726530143f499f2de1aaa47b238652cefa01f9c5f5c5b7645a",
+      "natoms": 64,
+      "kpts": [
+        5,
+        5,
+        5
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          5,
+          5,
+          5
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_Ag64_s9073_k5__to_7_k7x7x7",
+      "pair_id": "Ag64_seed9073_k5_to_k7",
+      "pair_member": "fine",
+      "phase": "solid_Ag",
+      "config_type": "Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/ag_solid_cod9013045_reference_candidates_20261024/candidates/Ag64_COD9013045_primitive_4x4x4_displacement_seed_9073.extxyz",
+      "input_sha256": "7bee9567320c5e726530143f499f2de1aaa47b238652cefa01f9c5f5c5b7645a",
+      "natoms": 64,
+      "kpts": [
+        7,
+        7,
+        7
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          7,
+          7,
+          7
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_TSC72_s9073_k5x8x2__to_7x10x2_k5x8x2",
+      "pair_id": "Ti3SiC2_72_seed9073_k5x8x2_to_k7x10x2",
+      "pair_member": "coarse",
+      "phase": "Ti3SiC2",
+      "config_type": "Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073.extxyz",
+      "input_sha256": "2d78d378fa40fc079da79fefaa4c27e4f914bf4c4463a7d4181f0357c3705114",
+      "natoms": 72,
+      "kpts": [
+        5,
+        8,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          5,
+          8,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_TSC72_s9073_k5x8x2__to_7x10x2_k7x10x2",
+      "pair_id": "Ti3SiC2_72_seed9073_k5x8x2_to_k7x10x2",
+      "pair_member": "fine",
+      "phase": "Ti3SiC2",
+      "config_type": "Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC72_SX3_SY2_SZ1_displacement_seed_9073.extxyz",
+      "input_sha256": "2d78d378fa40fc079da79fefaa4c27e4f914bf4c4463a7d4181f0357c3705114",
+      "natoms": 72,
+      "kpts": [
+        7,
+        10,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          7,
+          10,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_TSC96_s9073_k8x8x2__to_10x10x2_k8x8x2",
+      "pair_id": "Ti3SiC2_96_seed9073_k8x8x2_to_k10x10x2",
+      "pair_member": "coarse",
+      "phase": "Ti3SiC2",
+      "config_type": "Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073.extxyz",
+      "input_sha256": "7689c4d32884beb0a6b6930b88de8f597ceadb160c5bcb2fcb097d04ca819530",
+      "natoms": 96,
+      "kpts": [
+        8,
+        8,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          8,
+          8,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_TSC96_s9073_k8x8x2__to_10x10x2_k10x10x2",
+      "pair_id": "Ti3SiC2_96_seed9073_k8x8x2_to_k10x10x2",
+      "pair_member": "fine",
+      "phase": "Ti3SiC2",
+      "config_type": "Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/independent_ti3sic2_bai2010_candidate_20261024/supercell_candidates/Bai2010_TSC96_SX2_SY2_SZ2_displacement_seed_9073.extxyz",
+      "input_sha256": "7689c4d32884beb0a6b6930b88de8f597ceadb160c5bcb2fcb097d04ca819530",
+      "natoms": 96,
+      "kpts": [
+        10,
+        10,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_AgL_1250_s501_Gamma",
+      "pair_id": "liquid_Ag_1250K_seed501_Gamma_to_2x2x2",
+      "pair_member": "coarse",
+      "phase": "liquid_Ag",
+      "config_type": "Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref.extxyz",
+      "input_sha256": "638306bb521aec530a22629734a175f6d88219ba5463c866cb4263bb778f5c95",
+      "natoms": 64,
+      "kpts": [
+        1,
+        1,
+        1
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_AgL_1250_s501_k2x2x2",
+      "pair_id": "liquid_Ag_1250K_seed501_Gamma_to_2x2x2",
+      "pair_member": "fine",
+      "phase": "liquid_Ag",
+      "config_type": "Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref/Ag_liquid_1250K_rho1.00_seed501_Abdullaev2020ref.extxyz",
+      "input_sha256": "638306bb521aec530a22629734a175f6d88219ba5463c866cb4263bb778f5c95",
+      "natoms": 64,
+      "kpts": [
+        2,
+        2,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_AgL_1600_s902_Gamma",
+      "pair_id": "liquid_Ag_1600K_seed902_Gamma_to_2x2x2",
+      "pair_member": "coarse",
+      "phase": "liquid_Ag",
+      "config_type": "Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref.extxyz",
+      "input_sha256": "50224453d7bf32bd24bf09a942d24b8a136fe9c1e3d26af0406a32bfd33b15aa",
+      "natoms": 64,
+      "kpts": [
+        1,
+        1,
+        1
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    },
+    {
+      "label": "B1_AgL_1600_s902_k2x2x2",
+      "pair_id": "liquid_Ag_1600K_seed902_Gamma_to_2x2x2",
+      "pair_member": "fine",
+      "phase": "liquid_Ag",
+      "config_type": "Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref",
+      "input": "research/mace-v12-transfer/coordination/reports/window-c/abdullaev2020_liquid_ag_density_rescaled_20261024/candidates/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref/Ag_liquid_1600K_rho1.00_seed902_Abdullaev2020ref.extxyz",
+      "input_sha256": "50224453d7bf32bd24bf09a942d24b8a136fe9c1e3d26af0406a32bfd33b15aa",
+      "natoms": 64,
+      "kpts": [
+        2,
+        2,
+        2
+      ],
+      "pbc": [
+        true,
+        true,
+        true
+      ],
+      "poissonsolver": {},
+      "method": {
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "smearing_eV": 0.1,
+        "scf_thresholds": "energy/density/eigenstates 1e-5",
+        "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+        "maxiter": 160,
+        "energy_keys": {
+          "native": "energy (force_consistent=False)",
+          "force_consistent": "free_energy"
+        },
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {}
+      },
+      "energy_target": "free_energy_eV",
+      "native_energy_retained_separately": true,
+      "candidate_role": "TRAINING_CANDIDATE_ONLY",
+      "dataset_integration_enabled": false,
+      "launch_enabled": false,
+      "dft_authorized": false
+    }
+  ],
+  "conditional_jobs": {
+    "status": "NOT_REGISTERED",
+    "rule": "For each liquid snapshot whose Gamma vs 2x2x2 pair fails, add a 3x3x3 record on the same input, after reviewing that pair."
+  },
+  "source_mesh_plan_sha256": "f375d433dd6b60e6bab2f8608daa04944b93565a3904c432f65aaa8c9c1aa0a3",
+  "source_role_ledger_sha256": "225266d9d414087065a782db3591e15ef5047cdce620468803f2154afee4f738",
+  "owner_status_snapshot": {
+    "updated_utc": "2026-10-24T03:28:13.980616+00:00",
+    "live_telemetry_available": false,
+    "sigma0p05_last_recorded": "running at SCF iteration 50",
+    "sigma0p20_last_recorded": "queued",
+    "meaning": "Historical task-card values only; must refresh from registered Window A owner before any launch."
+  }
+}
