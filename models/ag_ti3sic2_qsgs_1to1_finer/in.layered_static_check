@@ -1,0 +1,83 @@
+# Layer definitions for the selected Ag-Ti3SiC2 QSGS geometry.
+# Static-only audit: no integration, thermostat, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# Material surface from geometry_report.json: z = 158.6115 A.
+# Fixed and thermostat slabs are disjoint; remaining material is Newtonian.
+region r_fixed block INF INF INF INF 0.0 20.0 units box
+region r_bath block INF INF INF INF 20.0 40.0 units box
+region r_newton block INF INF INF INF 40.0 158.6115 units box
+region r_material block INF INF INF INF 0.0 158.6115 units box
+
+# Vacuum observation zones. They contain no atoms in the initial geometry;
+# later ejecta are identified from trajectory coordinates, not these static groups.
+region r_sputter block INF INF INF INF 158.6115 208.6115 units box
+region r_evap block INF INF INF INF 208.6115 258.6115 units box
+
+group fixed region r_fixed
+group bath region r_bath
+group newton region r_newton
+group material region r_material
+group sputter_initial region r_sputter
+group evap_initial region r_evap
+
+group skeleton type 1 2 3
+group ag type 4
+group fixed_skeleton intersect fixed skeleton
+group fixed_ag intersect fixed ag
+group bath_skeleton intersect bath skeleton
+group bath_ag intersect bath ag
+group newton_skeleton intersect newton skeleton
+group newton_ag intersect newton ag
+
+group solid_layers union fixed bath newton
+group layer_overlap_fb intersect fixed bath
+group layer_overlap_fn intersect fixed newton
+group layer_overlap_bn intersect bath newton
+group material_unassigned subtract material solid_layers
+group solid_outside subtract solid_layers material
+
+variable n_all equal count(all)
+variable n_material equal count(material)
+variable n_fixed equal count(fixed)
+variable n_bath equal count(bath)
+variable n_newton equal count(newton)
+variable n_ag equal count(ag)
+variable n_skeleton equal count(skeleton)
+variable n_fixed_ag equal count(fixed_ag)
+variable n_fixed_skeleton equal count(fixed_skeleton)
+variable n_bath_ag equal count(bath_ag)
+variable n_bath_skeleton equal count(bath_skeleton)
+variable n_newton_ag equal count(newton_ag)
+variable n_newton_skeleton equal count(newton_skeleton)
+variable n_sputter_initial equal count(sputter_initial)
+variable n_evap_initial equal count(evap_initial)
+variable n_overlap_fb equal count(layer_overlap_fb)
+variable n_overlap_fn equal count(layer_overlap_fn)
+variable n_overlap_bn equal count(layer_overlap_bn)
+variable n_material_unassigned equal count(material_unassigned)
+variable n_solid_outside equal count(solid_outside)
+
+print "LAYER_AUDIT atoms_all=${n_all} atoms_material=${n_material} fixed=${n_fixed} bath=${n_bath} newton=${n_newton}"
+print "LAYER_AUDIT fixed_Ag=${n_fixed_ag} fixed_skeleton=${n_fixed_skeleton} bath_Ag=${n_bath_ag} bath_skeleton=${n_bath_skeleton}"
+print "LAYER_AUDIT newton_Ag=${n_newton_ag} newton_skeleton=${n_newton_skeleton}"
+print "LAYER_AUDIT initial_sputter_zone=${n_sputter_initial} initial_evap_zone=${n_evap_initial}"
+print "LAYER_AUDIT overlap_fixed_bath=${n_overlap_fb} overlap_fixed_newton=${n_overlap_fn} overlap_bath_newton=${n_overlap_bn} material_unassigned=${n_material_unassigned} solid_outside_material=${n_solid_outside}"
+
+# Run-zero only, reporting unmasked conservative forces.
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax_all all reduce max v_fn
+compute fmax_fixed fixed reduce max v_fn
+compute fmax_bath bath reduce max v_fn
+compute fmax_newton newton reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe fmax c_fmax_all c_fmax_fixed c_fmax_bath c_fmax_newton
+run 0
+print "LAYERED_STATIC_CHECK_COMPLETE"
