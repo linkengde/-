@@ -1,10 +1,10 @@
 {
   "task_id": "window-a",
   "status": "claimed",
-  "owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
-  "updated_utc": "2026-10-24T03:28:13.980616+00:00",
+  "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
+  "updated_utc": "2026-10-24T14:29:43.803510+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V20 slab-control ownership transferred to the current instance. k4x4x1 and k8x8x1 sigma0.10 archives are complete and retained; sigma0.05 and sigma0.20 remain queued.",
+  "current_stage": "User-directed fresh restart of both registered V20 smearing controls; run sigma0.05, verify/archive, then sigma0.20 sequentially.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -87,8 +87,8 @@
     "v19_git_history_CIF_inventory": "completed read-only; full clone searched across work and origin/main; only the two COD 9009647 CIF paths exist in all history; no deleted or alternate parent CIF found.",
     "AgSi_slab_k4x4x1_sigma0p10_v20": "completed; SCF iteration 67; elapsed 8481s; archive verification PASS; commit 572f143.",
     "AgSi_slab_k8x8x1_sigma0p10_v20": "completed; SCF iteration 51; elapsed 21530s; archive verification PASS; commit 572f143.",
-    "AgSi_slab_k6x6x1_sigma0p05_v20": "running; SCF iteration 50; updated 2026-10-24T03:28:13.980616+00:00",
-    "AgSi_slab_k6x6x1_sigma0p20_v20": "queued; run after sigma0.05 archive verification."
+    "AgSi_slab_k6x6x1_sigma0p05_v20": "queued for a fresh run in the current owner instance per user instruction.",
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "queued for a fresh run after sigma0.05 archive verification per user instruction."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -190,16 +190,16 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may run only the four labels registered under pbe_interface_v20_slab_method_controls, one four-rank job at a time, after hash/owner/disk preflight. These are numerical controls, not training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and a versioned A approval.",
-  "next_action": "Run AgSi_slab_k6x6x1_sigma0p05_v20, verify/archive/publish it, then run AgSi_slab_k6x6x1_sigma0p20_v20 sequentially. Compare the four registered controls with native/free energies and forces separate. Keep results numerical-control-only; no training, test access, or unrelated DFT.",
+  "next_action": "Run AgSi_slab_k6x6x1_sigma0p05_v20 from the registered queue, verify/archive/publish it, then run AgSi_slab_k6x6x1_sigma0p20_v20; compare both against the retained sigma0.10 baseline. No other DFT or dataset changes.",
   "live_progress": {
     "task_id": "window-a",
-    "owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
+    "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
     "job": "AgSi_slab_k6x6x1_sigma0p05_v20",
-    "state": "running",
-    "iteration": 50,
+    "state": "queued",
+    "iteration": 0,
     "elapsed_s": null,
-    "note": "Slab k-mesh/smearing SCF active; four MPI ranks",
-    "updated_utc": "2026-10-24T03:28:13.980616+00:00"
+    "note": "Fresh sequential rerun of both registered sigma controls requested by user; start sigma0.05 first.",
+    "updated_utc": "2026-10-24T14:29:43.803510+00:00"
   },
   "label_result_directories": {
     "AgC_residual_shell_v15_01": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v15_targeted_acquisition",
@@ -239,14 +239,21 @@
       "handover_id": "v19_four_meshes_completed_20261008",
       "transferred_utc": "2026-10-08T11:55:59.379644+00:00",
       "reason": "User requested two fresh environments after both owners finished/published mesh pilots"
+    },
+    {
+      "owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
+      "transferred_to": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
+      "handover_id": "window-a_20261024_user_directed_rerun",
+      "transferred_utc": "2026-10-24T14:29:43.803510+00:00",
+      "reason": "User explicitly instructed to disregard prior attempts and rerun both registered sigma0.05 and sigma0.20 controls."
     }
   ],
-  "claimed_utc": "2026-10-24T01:19:32+00:00",
+  "claimed_utc": "2026-10-24T14:29:43.803510+00:00",
   "handover_consumed": "v19_four_meshes_completed_20261008",
   "owner_transfer": {
-    "from_owner_instance": "9c31b999-b2fe-4f0a-86f0-52c605d705ad",
-    "to_owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
-    "record": "research/mace-v12-transfer/coordination/owner_transfers/window-a_20261024.json",
-    "scope": "remaining two queued V20 slab smearing controls"
+    "from_owner_instance": "caf1a62d-14f8-4265-a9b7-16a8e591488a",
+    "to_owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
+    "record": "research/mace-v12-transfer/coordination/owner_transfers/window-a_20261024_user_directed_rerun.json",
+    "scope": "Only the two registered unfinished V20 sigma controls; completed sigma0.10 controls and archives retained."
   }
 }
