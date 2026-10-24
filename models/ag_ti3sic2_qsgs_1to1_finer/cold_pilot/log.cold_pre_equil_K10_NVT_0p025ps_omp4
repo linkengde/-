@@ -1,0 +1,200 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Cold pre-equilibration diagnostic, all mobile atoms NVT at 300 K.
+# No TTM or external source; K=10 is an artificial scaffold restraint.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  917378 atoms
+  read_data CPU = 1.628 seconds
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+117618 atoms in group bottom
+group skeleton type 1 2 3
+704382 atoms in group skeleton
+group ag type 4
+212996 atoms in group ag
+group mobile subtract all bottom
+799760 atoms in group mobile
+group mobile_skeleton subtract skeleton bottom
+619397 atoms in group mobile_skeleton
+group mobile_ag subtract ag bottom
+180363 atoms in group mobile_ag
+fix freeze bottom setforce 0.0 0.0 0.0
+# Same Ag-relaxed coordinates as the archived K=10 cold screens.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  917378 atoms before read
+  180363 atoms in snapshot
+  0 atoms purged
+  180363 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  917378 atoms after read
+reset_timestep 0
+fix skeleton_spring mobile_skeleton spring/self 10.0
+fix_modify skeleton_spring energy yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_mobile mobile reduce max v_fmag
+compute f_ag mobile_ag reduce max v_fmag
+compute f_skeleton mobile_skeleton reduce max v_fmag
+compute t_mobile mobile temp
+compute t_ag mobile_ag temp
+compute t_skeleton mobile_skeleton temp
+compute disp_ag mobile_ag displace/atom
+compute disp_skeleton mobile_skeleton displace/atom
+compute maxdisp_ag mobile_ag reduce max c_disp_ag[4]
+compute maxdisp_skeleton mobile_skeleton reduce max c_disp_skeleton[4]
+thermo 25
+thermo_style custom step time c_t_mobile c_t_ag c_t_skeleton pe ke etotal c_f_mobile c_f_ag c_f_skeleton c_maxdisp_ag c_maxdisp_skeleton
+thermo_modify temp t_mobile flush yes
+WARNING: Temperature for thermo pressure is not for group all (src/src/thermo.cpp:569)
+velocity mobile create 300.0 319877 mom yes rot no dist gaussian
+timestep 0.0001
+fix integrate mobile nvt temp 300.0 300.0 0.1
+run 250
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1197 | 1197 | 1197 Mbytes
+   Step          Time        c_t_mobile       c_t_ag      c_t_skeleton      PotEng         KinEng         TotEng       c_f_mobile       c_f_ag      c_f_skeleton   c_maxdisp_ag  c_maxdisp_skeleton
+         0   0              300            299.43367      300.16539     -4931397.9      31013.089     -4900384.9      6.0840737      3.8063828      6.0840737      0              0            
+        25   0.0025         307.78533      299.63647      310.1587      -4932202.9      31817.913     -4900385        5.2488095      3.8891211      5.2488095      0.019892992    0.061148672  
+        50   0.005          326.88889      300.35112      334.61696     -4934179.3      33792.781     -4900386.5      5.0556005      3.9586883      5.0556005      0.039633437    0.12063268   
+        75   0.0075         346.6361       301.66036      359.73315     -4936226.2      35834.188     -4900392        5.2965827      3.991244       5.2965827      0.059148045    0.17126864   
+       100   0.01           355.68375      303.69822      370.82199     -4937174        36769.506     -4900404.5      5.3615647      4.0173058      5.3615647      0.07836327     0.22003409   
+       125   0.0125         348.28694      306.64669      360.41273     -4936428.4      36004.847     -4900423.5      5.2893999      4.0615378      5.2893999      0.097207873    0.28036899   
+       150   0.015          328.01741      310.7225       333.05405     -4934353.2      33909.444     -4900443.7      5.0529952      4.0780116      5.0529952      0.11561545     0.3328525    
+       175   0.0175         306.73957      316.12154      304.00813     -4932169.3      31709.806     -4900459.5      4.7192386      4.0594798      4.7192386      0.13483183     0.39190623   
+       200   0.02           298.556        322.95447      291.45189     -4931333.8      30863.813     -4900470        4.7951655      4.1539528      4.7951655      0.15564299     0.44156456   
+       225   0.0225         311.20001      331.2379       305.36568     -4932648.6      32170.912     -4900477.7      5.135864       4.333038       5.135864       0.17684321     0.49096815   
+       250   0.025          339.9356       340.9106       339.65223     -4935627.6      35141.51      -4900486.1      5.4980969      4.4437623      5.4980969      0.20150671     0.53799961   
+Loop time of 500.846 on 4 procs for 250 steps with 917378 atoms
+
+Performance: 0.004 ns/day, 5564.950 hours/ns, 0.499 timesteps/s, 457.915 katom-step/s
+386.7% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 493.75     | 493.75     | 493.75     |   0.0 | 98.58
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.60701    | 0.60701    | 0.60701    |   0.0 |  0.12
+Output  | 0.88487    | 0.88487    | 0.88487    |   0.0 |  0.18
+Modify  | 4.972      | 4.972      | 4.972      |   0.0 |  0.99
+Other   |            | 0.6317     |            |       |  0.13
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122144 ave      122144 max      122144 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+# Remove NVT and spring before the physical pair-force audit.
+unfix integrate
+unfix skeleton_spring
+thermo_style custom step pe c_f_ag c_f_skeleton c_maxdisp_ag c_maxdisp_skeleton
+WARNING: New thermo_style command, previous thermo_modify settings will be lost (src/src/output.cpp:912)
+thermo_modify flush yes
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Per MPI rank memory allocation (min/avg/max) = 1259 | 1259 | 1259 Mbytes
+   Step         PotEng         c_f_ag      c_f_skeleton   c_maxdisp_ag  c_maxdisp_skeleton
+       250  -4964519.4      4.4437623      4.2712415      0.20150671     0.53799961   
+Loop time of 1.632e-06 on 4 procs for 0 steps with 917378 atoms
+
+367.6% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.632e-06  |            |       |100.00
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         122166 ave      122166 max      122166 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile custom cold_pilot/final_mobile_pre_equil_K10_NVT_0p025ps.dump id type x y z vx vy vz modify sort id
+print "COLD_PRE_EQUIL_K10_NVT_0P025PS_DONE"
+COLD_PRE_EQUIL_K10_NVT_0P025PS_DONE
+Total wall time: 0:08:31
