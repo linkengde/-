@@ -19,4 +19,4 @@ This read-only reassessment consolidates the new source findings and keeps the p
 
 No DFT, MACE training, MD, or TTM was started in this reassessment. The next useful gate is source/role review of the Ag and liquid geometry packages, plus legal verification of Bai et al.'s numerical table. After that, the data owner must freeze roles, a single energy target and phase-specific numerical settings, and obtain an owner-bound pilot registration. The 30-label batch in the earlier plan remains a proposal, not an approved job list.
 
-The cloud-environment draft needs `link.springer.com` and `www.sciencedirect.com` added before those official PDF routes can be retried through this environment. The domain update will remain a draft until the environment is published; no paywall or account status is inferred from the present tunnel rejection.
+The cloud-environment draft now includes `link.springer.com` and `www.sciencedirect.com` (revision 21). Those official PDF routes can be retried after the user publishes that draft. No paywall or account status is inferred from the present tunnel rejection.
