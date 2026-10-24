@@ -16,17 +16,14 @@ region r_bath block INF INF INF INF 20.0 40.0 units box
 region r_newton block INF INF INF INF 40.0 158.6115 units box
 region r_material block INF INF INF INF 0.0 158.6115 units box
 
-# Vacuum observation zones. They contain no atoms in the initial geometry;
-# later ejecta are identified from trajectory coordinates, not these static groups.
-region r_sputter block INF INF INF INF 158.6115 208.6115 units box
-region r_evap block INF INF INF INF 208.6115 258.6115 units box
+# Free-surface vacuum buffer. It contains no atoms in the initial geometry.
+region r_vacuum block INF INF INF INF 158.6115 258.6115 units box
 
 group fixed region r_fixed
 group bath region r_bath
 group newton region r_newton
 group material region r_material
-group sputter_initial region r_sputter
-group evap_initial region r_evap
+group vacuum_initial region r_vacuum
 
 group skeleton type 1 2 3
 group ag type 4
@@ -57,8 +54,7 @@ variable n_bath_ag equal count(bath_ag)
 variable n_bath_skeleton equal count(bath_skeleton)
 variable n_newton_ag equal count(newton_ag)
 variable n_newton_skeleton equal count(newton_skeleton)
-variable n_sputter_initial equal count(sputter_initial)
-variable n_evap_initial equal count(evap_initial)
+variable n_vacuum_initial equal count(vacuum_initial)
 variable n_overlap_fb equal count(layer_overlap_fb)
 variable n_overlap_fn equal count(layer_overlap_fn)
 variable n_overlap_bn equal count(layer_overlap_bn)
@@ -68,7 +64,7 @@ variable n_solid_outside equal count(solid_outside)
 print "LAYER_AUDIT atoms_all=${n_all} atoms_material=${n_material} fixed=${n_fixed} bath=${n_bath} newton=${n_newton}"
 print "LAYER_AUDIT fixed_Ag=${n_fixed_ag} fixed_skeleton=${n_fixed_skeleton} bath_Ag=${n_bath_ag} bath_skeleton=${n_bath_skeleton}"
 print "LAYER_AUDIT newton_Ag=${n_newton_ag} newton_skeleton=${n_newton_skeleton}"
-print "LAYER_AUDIT initial_sputter_zone=${n_sputter_initial} initial_evap_zone=${n_evap_initial}"
+print "LAYER_AUDIT initial_vacuum_buffer=${n_vacuum_initial}"
 print "LAYER_AUDIT overlap_fixed_bath=${n_overlap_fb} overlap_fixed_newton=${n_overlap_fn} overlap_bath_newton=${n_overlap_bn} material_unassigned=${n_material_unassigned} solid_outside_material=${n_solid_outside}"
 
 # Run-zero only, reporting unmasked conservative forces.
