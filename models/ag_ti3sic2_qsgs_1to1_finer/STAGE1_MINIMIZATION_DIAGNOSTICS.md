@@ -20,7 +20,9 @@ The current cross-interface Morse terms remain explicitly marked calibration ver
 
 The initial structure contains 917,378 atoms. A `run 0` force dump gives a maximum force-vector magnitude of 3.98780 eV/Å on Ag atom 717010 at `(16.4184, 256.9870, 53.1700) Å`; its force is `(3.1563, −2.1644, −1.1205) eV/Å`. Nearby atoms include C 50510 at 2.3898 Å, C 42643 at 2.5047 Å, C 50504 at 2.5940 Å, and Ag 717000 at 2.8885 Å.
 
-Initial minimum pair distances from the force-dump coordinates are Ag–Ti 2.3323 Å, Ag–Si 2.3320 Å, Ag–C 2.3315 Å, Ti–C 2.0871 Å, Ti–Si 2.6803 Å, and C–C 3.0564 Å. These minima alone do not establish a defect, but they provide reference values for the relaxations below.
+To identify its force source, I compared `run 0` forces with the full potential against a second in-memory `run 0` where only the three Morse `D0` values were set to zero, then matched both dumps by atom ID. For Ag 717010, the full force is `(3.1563, −2.1644, −1.1205) eV/Å`; the EAM contribution is `(-0.5343, -0.5303, 1.0748) eV/Å`; the Morse contribution is `(3.6907, -1.6341, -2.1953) eV/Å`. Their vector magnitudes are 3.9878, 1.3122, and 4.5946 eV/Å, respectively. The cross-interface Morse force is the dominant source at this maximum-force Ag atom, while the Ag–Ag EAM force partly cancels it. The largest Morse-only force belongs to Ag 863396 and is 4.7537 eV/Å; this is a cross-force maximum, not the full-force maximum.
+
+Initial minimum pair distances from the force-dump coordinates are Ag–Ti 2.3323 Å, Ag–Si 2.3320 Å, Ag–C 2.3315 Å, Ti–C 2.0871 Å, Ti–Si 2.6803 Å, and C–C 3.0564 Å. The tracked C pair 497966–498104 initially sits 3.0971 Å apart; both have Ti atom 498108 at about 2.176 Å, while their nearest Ag atoms are about 3.245 Å (C 497966) and 2.519 Å (C 498104). These minima alone do not establish a defect, but they provide reference values for the relaxations below.
 
 ## Test A: freeze Ti/Si/C and relax Ag
 
