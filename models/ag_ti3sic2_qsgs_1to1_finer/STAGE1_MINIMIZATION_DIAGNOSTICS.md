@@ -38,6 +38,8 @@ All Ti, Si, and C atoms were frozen; the bottom 0–20 Å slab was also fixed, l
 
 Fixing the skeleton did not produce a low-force Ag configuration. The minimum Ag–C separation moved below the Ag–C Morse equilibrium distance, while the maximum Ag force remained above its initial value.
 
+As a follow-up, the same fixed-skeleton Ag-only test was repeated from the original geometry with FIRE for 200 iterations (`dmax = 0.01 Å`). It also stopped at the iteration limit: energy changed from −4,883,783.94 to −4,931,398.01 eV, the maximum mobile-Ag force was 3.8059 eV/Å, mean and maximum Ag displacements were 0.263 and 1.542 Å, and the minimum Ag–C distance was 1.9682 Å. FIRE reaches a different local configuration from CG, but neither method produces a screened low-force state within 200 iterations.
+
 ## Test B: harmonic skeleton restraints
 
 Each spring constant was tested from the original geometry in an independent copy. The bottom slab was fixed; all other atoms were minimized for 35 CG iterations (`dmax = 0.02 Å`). The spring was then removed and `run 0` was used to report the physical, unrestrained forces at those coordinates. All three minimizations stopped at their iteration caps.
@@ -67,7 +69,7 @@ This short FIRE control also did not converge. It follows the same tendency of t
 
 ## Decision
 
-The current geometry/potential combination does **not** pass the Stage 1 gate for heating. None of the tests reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only relaxation with a rigid skeleton still leaves a maximum Ag force of 4.081 eV/Å and creates an Ag–C contact at 1.919 Å. Harmonic restraints reduce displacement only while they are applied; raw forces return when removed. The unconstrained FIRE control and prior CG audit both shorten the tracked C–C pair.
+The current geometry/potential combination does **not** pass the Stage 1 gate for heating. None of the tests reaches the project screening target of less than 1 eV/Å for the maximum force on moving atoms. Ag-only relaxation with a rigid skeleton gives maximum Ag forces of 4.081 eV/Å with CG and 3.806 eV/Å with FIRE; their shortest Ag–C distances are 1.919 and 1.968 Å. Both runs stop at their iteration limits, so they do not prove that no lower-force basin exists, but the present starting configuration has not met the gate. Harmonic restraints reduce displacement only while they are applied; raw forces return when removed. The unconstrained FIRE control and prior CG audit both shorten the tracked C–C pair.
 
 Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these minimized coordinates. A timestep of 0.5 fs cannot correct this static force/geometry problem. Keep the original model and potential intact. Under the accepted constraint of retaining the current potential, any next calculation would have to be explicitly labeled as a restraint-dependent sensitivity demonstration, not evidence that an unconstrained composite has a stable Ag melt pool. The Stage 1 acceptance checks should be revisited before heating is authorized.
 
@@ -75,6 +77,7 @@ Do not start the Ag TTM heat-source pilot or the 100 ps melt-pool run from these
 
 - Initial force snapshot and input: `/workspace/runs/ag_ti3sic2_selected/baseline/stage1_interface_diagnostics/`
 - Test A input, log, minimized data, and Ag dump: `testA_ag_only/`
+- Ag-only FIRE cross-check: `testA_ag_only_fire/`
 - Test B inputs, logs, and final coordinate dumps: `testB_k1/`, `testB_k10/`, `testB_k100/`
 - Test C input, log, and final coordinate dump: `testC_unconstrained_fire/`
 - Parsed restraint geometry metrics: `stage1_restraint_geometry_metrics.json`

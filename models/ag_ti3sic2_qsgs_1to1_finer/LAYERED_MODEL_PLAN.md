@@ -49,7 +49,7 @@ lmp -in in.layered_static_check -log log.layered_static_check
 
 按当前研究范围，保留仓库现有 EAM + TSCBOP/Tersoff + Morse calibration-v0，不把彻底解决界面势作为前提；预期结果只能解释为当前候选势下的探索性观察。当前分层静态力检查通过几何分层核验，但没有通过力学基线验收。
 
-2026-10-24 的 Stage 1 松弛筛查未通过：初始最大力 Ag 原子 717010 的力主要来自 Ag–骨架 Morse 交叉项；固定 Ti/Si/C、仅松弛 Ag 200 次 CG 后，Ag 最大力仍为 4.081 eV/Å，最短 Ag–C 距离缩至 1.919 Å；骨架谐和约束 K=1、10、100 eV/Å² 的对照在解除约束后，骨架最大物理力仍为 3.111、3.252、3.492 eV/Å，Ag 最大力仍为 3.704–3.833 eV/Å；35 次 FIRE 对照也未收敛，追踪的 C–C 距离缩短至 2.907 Å。完整数据与每组输入见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md)。因此目前不启动 TTM 热源测试或正式熔池计算；继续把骨架强约束下的熔化当作“稳定复合材料熔池”会掩盖未平衡的界面力。
+2026-10-24 的 Stage 1 松弛筛查未通过：初始最大力 Ag 原子 717010 的力主要来自 Ag–骨架 Morse 交叉项；固定 Ti/Si/C、仅松弛 Ag 200 次 CG 后，Ag 最大力仍为 4.081 eV/Å，最短 Ag–C 距离缩至 1.919 Å；另做固定骨架 Ag-only FIRE 200 次后，最大力仍为 3.806 eV/Å，最短 Ag–C 距离为 1.968 Å。骨架谐和约束 K=1、10、100 eV/Å² 的对照在解除约束后，骨架最大物理力仍为 3.111、3.252、3.492 eV/Å，Ag 最大力仍为 3.704–3.833 eV/Å；35 次 FIRE 对照也未收敛，追踪的 C–C 距离缩短至 2.907 Å。完整数据与每组输入见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md)。因此目前不启动 TTM 热源测试或正式熔池计算；继续把骨架强约束下的熔化当作“稳定复合材料熔池”会掩盖未平衡的界面力。
 
 独立的无热源步长对照使用 0.5 fs 和 0.25 fs 分别运行至 0.05 ps，未丢失原子，但两组均升温至约 615–669 K，牛顿层最大力约 50 eV/Å，追踪 C–C 距离缩短至约 2.165 Å。该短跑说明异常演化不能简单归因于 0.5 fs 步长；它不构成 0.5 fs 对 TTM 或高温过程的验证。记录见 `/workspace/runs/ag_ti3sic2_selected/baseline/COLD_BASELINE_STEP_SIZE_COMPARISON.md` 和 `/workspace/runs/ag_ti3sic2_selected/baseline/RIGID_SKELETON_CONTROL.md`。
 
