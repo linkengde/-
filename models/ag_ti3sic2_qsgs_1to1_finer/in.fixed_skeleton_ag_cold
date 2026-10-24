@@ -15,15 +15,8 @@ group mobile_ag subtract ag bottom
 fix freeze fixed setforce 0.0 0.0 0.0
 variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
 compute f_ag mobile_ag reduce max v_fmag
-compute t_ag mobile_ag temp
-compute cna all cna/atom 3.35
-variable cna_unknown atom c_cna==5
-compute n_unknown mobile_ag reduce sum v_cna_unknown
-compute disp mobile_ag displace/atom
-variable disp2 atom c_disp[4]*c_disp[4]
-compute msd_origin mobile_ag reduce ave v_disp2
 thermo 100
-thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_n_unknown c_msd_origin
+thermo_style custom step atoms pe fmax c_f_ag
 thermo_modify flush yes
 min_style fire
 min_modify dmax 0.01
@@ -31,6 +24,14 @@ minimize 1.0e-8 0.05 200 5000
 velocity mobile_ag create 300.0 958321 mom yes rot no dist gaussian
 timestep 0.0001
 fix ag_nvt mobile_ag nvt temp 300.0 300.0 0.1
+compute t_ag mobile_ag temp
+compute cna all cna/atom 3.35
+variable cna_unknown atom c_cna==5
+compute n_unknown mobile_ag reduce sum v_cna_unknown
+compute disp mobile_ag displace/atom
+variable disp2 atom c_disp[4]*c_disp[4]
+compute msd_origin mobile_ag reduce ave v_disp2
+thermo_style custom step time temp c_t_ag pe ke etotal press c_f_ag c_n_unknown c_msd_origin
 run 500
 write_dump mobile_ag custom final_mobile_ag.dump id type x y z vx vy vz modify sort id
 print "FIXED_SKELETON_AG_COLD_0P05PS_DONE"
