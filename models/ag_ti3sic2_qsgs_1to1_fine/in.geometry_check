@@ -1,0 +1,16 @@
+# Static conservative-force check only; no integration or heating.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+# No setforce: report the actual potential forces, including the bottom layer.
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fnmax all reduce max v_fn
+compute fnsum all reduce sum v_fn
+thermo 1
+thermo_style custom step atoms pe fmax c_fnmax c_fnsum
+run 0
+print "GEOMETRY_STATIC_CHECK_COMPLETE"

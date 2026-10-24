@@ -1,0 +1,14 @@
+# Geometry, original classical potential and bottom constraint only.
+# No minimization, MD, heat source or TTM is launched by this file.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+region fixed_bottom block INF INF INF INF INF 10.0 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+velocity fixed set 0.0 0.0 0.0
+fix freeze fixed setforce 0.0 0.0 0.0
+# The static diagnostic intentionally does not apply this fix, so bottom forces
+# are included in the published maximum-force result.
