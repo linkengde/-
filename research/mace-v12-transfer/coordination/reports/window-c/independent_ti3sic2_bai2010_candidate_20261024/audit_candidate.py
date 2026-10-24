@@ -49,6 +49,26 @@ def main() -> None:
     cif_hash = sha256(CIF)
     claimed_hashes = re.findall(r"[0-9a-f]{64}", SOURCE_AUDIT.read_text(encoding="utf-8"))
     sg = atoms.info.get("spacegroup")
+    frac = atoms.get_scaled_positions(wrap=True)
+    ti_4f_z = [
+        float(frac[i, 2]) for i, atom in enumerate(atoms)
+        if atom.symbol == "Ti" and i not in ti_2a and 0.0 < frac[i, 2] < 0.5
+    ]
+    carbon_z = [float(frac[i, 2]) for i in carbon if frac[i, 2] > 0.5]
+    source_parameters = {
+        "a_angstrom": float(atoms.cell.lengths()[0]),
+        "c_angstrom": float(atoms.cell.lengths()[2]),
+        "zTi2": min(ti_4f_z) if ti_4f_z else None,
+        "zC": min(carbon_z) if carbon_z else None,
+        "matches_Bai2010_Table1": bool(
+            np.isclose(atoms.cell.lengths()[0], 3.0592, atol=5e-5)
+            and np.isclose(atoms.cell.lengths()[2], 17.6360, atol=5e-5)
+            and bool(ti_4f_z)
+            and np.isclose(min(ti_4f_z), 0.1351, atol=5e-5)
+            and bool(carbon_z)
+            and np.isclose(min(carbon_z), 0.5726, atol=5e-5)
+        ),
+    }
     checks = {
         "cif_sha256": cif_hash,
         "matches_hash_in_user_audit": cif_hash in claimed_hashes,
@@ -76,6 +96,7 @@ def main() -> None:
             for site in atoms.info.get("occupancy", {}).values()
             for occ in site.values()
         ),
+        "Bai2010_Table1_parameters": source_parameters,
     }
 
     geometry_checks_passed = (
@@ -90,6 +111,7 @@ def main() -> None:
             "C_4f": 4,
         }
         and checks["all_expanded_site_occupancies_full"]
+        and source_parameters["matches_Bai2010_Table1"]
         and not checks["overlap_pairs"]
     )
     result = {
@@ -99,14 +121,16 @@ def main() -> None:
             "paper": "Y. Bai et al., Chemical bonding and elastic properties of Ti3AC2 phases (A = Si, Ge, and Sn): A first-principle study, Solid State Sciences 12 (2010), 1220-1225.",
             "doi": "10.1016/j.solidstatesciences.2010.03.007",
             "bibliographic_metadata_check": "Crossref and OpenAlex metadata agree on title, authorship, journal, and 2010 publication year.",
-            "parameter_check_limit": "The exact table values could not be independently checked against the closed-access full text during this audit.",
+            "parameter_evidence": "User-supplied accepted manuscript, Table 1 (printed page 18; PDF page 20), visually checked. SHA256 is recorded in ../provided_primary_papers_audit_20261024/README.md.",
+            "parameter_check": "Candidate CIF parameters are checked against the values transcribed from the supplied Table 1 in the checks object.",
+            "parameter_check_limit": "The accepted manuscript PDF is user-supplied; no publisher-hosted source-original CIF was obtained.",
             "independence_scope": "Independent computational paper relative to COD 9009647; same alpha-Ti3SiC2 structure type, not a distinct experimental record or polymorph.",
             "cif_origin": "Reconstructed derivative supplied by the user; not a downloaded source-original CIF.",
         },
         "checks": checks,
         "limitations": [
             "No original source CIF was supplied or downloaded; this check verifies the supplied reconstructed derivative only.",
-            "The CIF hash matches the hash stated in the user's audit report, but does not prove that the source paper's parameters were transcribed correctly.",
+            "The CIF is a reconstructed derivative; source-paper values are checked, but no publisher-hosted source-original CIF was obtained.",
             "No DFT calculation, relaxation, model training, or independent validation was performed.",
         ],
     }

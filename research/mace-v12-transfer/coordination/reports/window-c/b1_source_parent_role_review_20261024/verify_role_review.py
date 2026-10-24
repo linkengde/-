@@ -107,8 +107,9 @@ def main() -> None:
         "status": "INTEGRITY_PASS_SOURCE_PARENT_ROLE_REVIEW_COMPLETE_ROLES_NOT_FROZEN",
         "verification": {
             "reviewed_geometry_candidate_count": len(solid) + len(bai) + len(liquid),
-            "source_review_eligible_geometry_count": len(solid) + len(liquid),
-            "conditionally_held_ti3sic2_geometry_count": len(bai),
+            "geometry_source_verified_candidate_count": len(solid) + len(bai),
+            "density_reference_only_candidate_count": len(liquid),
+            "conditionally_held_ti3sic2_geometry_count": 0,
             "solid_ag_cod9013045_count": len(solid),
             "ti3sic2_bai2010_count": len(bai),
             "liquid_ag_abdullaev2020_count": len(liquid),
@@ -130,7 +131,7 @@ def main() -> None:
             "dft_method_frozen": gate.get("dft_method_frozen"),
             "groups": [
                 {"group": "COD9013045_fcc_Ag_293K", "count": len(solid), "recommendation": "keep all COD-derived supercells and displacement variants together; geometry candidates only"},
-                {"group": "Bai2010_Ti3SiC2_alpha_phase", "count": len(bai), "recommendation": "one source family across both supercells; hold source eligibility pending verification of the paper's numerical table"},
+                {"group": "Bai2010_Ti3SiC2_alpha_phase", "count": len(bai), "recommendation": "one source family across both supercells; source parameters verified; geometry candidates only"},
                 {"group": "Ag_liquid_EAM_seed501", "count": 6, "recommendation": "keep all temperatures and density-ratio copies together; geometry lineage is EAM-derived"},
                 {"group": "Ag_liquid_EAM_seed902", "count": 6, "recommendation": "keep all temperatures and density-ratio copies together; geometry lineage is EAM-derived"},
             ],
@@ -155,8 +156,9 @@ def main() -> None:
         },
     }
     assert result["verification"]["reviewed_geometry_candidate_count"] == 24
-    assert result["verification"]["source_review_eligible_geometry_count"] == 18
-    assert result["verification"]["conditionally_held_ti3sic2_geometry_count"] == 6
+    assert result["verification"]["geometry_source_verified_candidate_count"] == 12
+    assert result["verification"]["density_reference_only_candidate_count"] == 12
+    assert result["verification"]["conditionally_held_ti3sic2_geometry_count"] == 0
     assert result["role_recommendation"]["energy_target_frozen"] is False
     assert result["role_recommendation"]["dft_method_frozen"] is False
     OUT.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")

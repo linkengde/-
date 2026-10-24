@@ -1,12 +1,12 @@
 # Independent-source Ti₃SiC₂ geometry candidate
 
-The supplied CIF is a reconstructed derivative based on Bai et al.'s 2010 DFT study. Crossref and OpenAlex confirm the article's title, authorship, journal, and year. The article is closed access, so I could not independently inspect the paper's numerical tables; the parameter-to-paper link remains dependent on the supplied audit's transcription.
+The supplied CIF is a reconstructed derivative based on Bai et al.'s 2010 DFT study. The user supplied the accepted manuscript, and visual inspection of Table 1 (printed p. 18; PDF p. 20) confirmed `P6₃/mmc`, `a = 3.0592 Å`, `c = 17.636 Å`, `zTi2 = 0.1351`, and `zC = 0.5726`. These values match the CIF exactly. The file fingerprint and extracted findings are recorded in [the supplied-paper audit](../provided_primary_papers_audit_20261024/README.md).
 
 The CIF's SHA256 exactly matches the value in the supplied audit report: `cb361a88ab35948e9fc8e0e8f86b0ec7030ae0934c3bbf7c33ef68b674d3d3a5`. It is a generated derivative, not an original CIF downloaded from the paper or a crystallographic database. `source_audit_user_provided.md` preserves the source audit that accompanied it.
 
 Parsing the supplied CIF with ASE expands it to 12 atoms (Ti₆Si₂C₄, two Ti₃SiC₂ formula units) in space group 194. The parsed volume and site-resolved nearest-neighbor distances agree with the supplied audit to its stated precision, and no atom pairs are closer than 0.5 Å.
 
-This qualifies as a candidate with computational provenance independent of COD 9009647. It remains the same α-Ti₃SiC₂ structure type, so it is not a separate polymorph or independent experimental record. It has no training or validation role assigned.
+This qualifies as a candidate with computational provenance independent of COD 9009647. It remains the same α-Ti₃SiC₂ structure type, so it is not a separate polymorph or independent experimental record. The source-table gate is now cleared; it still has no training or validation role assigned.
 
 Run `audit_candidate.py` with the workspace MACE environment's ASE installation to recheck the supplied CIF and regenerate `geometry_audit.json` without rewriting the source file.
 
