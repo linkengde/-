@@ -47,10 +47,12 @@ lmp -in in.layered_static_check -log log.layered_static_check
 
 ## 当前路线与限制
 
-按当前研究范围，保留仓库现有 EAM + TSCBOP/Tersoff + Morse calibration-v0，不再以解决界面势作为开工前提；结果限定为当前势下的探索性熔池与凝固观察。已有弛豫审计显示，100 次 CG 后没有收敛，局部 C–C 距离被压缩至约 2.144 Å，移动原子最大力升至约 14.916 eV/Å。
+按当前研究范围，保留仓库现有 EAM + TSCBOP/Tersoff + Morse calibration-v0，不把彻底解决界面势作为前提；预期结果只能解释为当前候选势下的探索性观察。当前分层静态力检查通过几何分层核验，但没有通过力学基线验收。
 
-当前势下的无热源短跑到 0.025 ps 后停止：Ag 牛顿层约 398 K、骨架约 439 K，牛顿层最大力矢量模升至 8.84 eV/Å。该结果未通过 300 K 稳定性验证，尚不能直接开始热源测试。下一步是继续无热源分层基线并监测温度、力和局部键距；若这些量持续恶化，就停止并将本结构/势组合标记为不可继续加热。短跑记录见 `/workspace/runs/ag_ti3sic2_selected/baseline/CURRENT_POTENTIAL_COLD_PILOT.md`。
+2026-10-24 的 Stage 1 松弛筛查未通过：固定 Ti/Si/C、仅松弛 Ag 200 次 CG 后，Ag 最大力仍为 4.081 eV/Å，最短 Ag–C 距离缩至 1.919 Å；骨架谐和约束 K=1、10、100 eV/Å² 的对照在解除约束后，骨架最大物理力仍为 3.111、3.252、3.492 eV/Å，Ag 最大力仍为 3.704–3.833 eV/Å；35 次 FIRE 对照也未收敛，追踪的 C–C 距离缩短至 2.907 Å。完整数据与每组输入见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md)。因此目前不启动 TTM 热源测试或正式熔池计算；继续把骨架强约束下的熔化当作“稳定复合材料熔池”会掩盖未平衡的界面力。
+
+独立的无热源步长对照使用 0.5 fs 和 0.25 fs 分别运行至 0.05 ps，未丢失原子，但两组均升温至约 615–669 K，牛顿层最大力约 50 eV/Å，追踪 C–C 距离缩短至约 2.165 Å。该短跑说明异常演化不能简单归因于 0.5 fs 步长；它不构成 0.5 fs 对 TTM 或高温过程的验证。记录见 `/workspace/runs/ag_ti3sic2_selected/baseline/COLD_BASELINE_STEP_SIZE_COMPARISON.md` 和 `/workspace/runs/ag_ti3sic2_selected/baseline/RIGID_SKELETON_CONTROL.md`。
 
 当前模型使用 `boundary p p f`。仓库参考的 LAMMPS `fix ttm/mod` 明确拒绝非周期边界，且其原生热源形式也不是所需的横向高斯乘深度指数形式。正式 TTM 还需要可处理自由表面、Ag 选择性耦合和指定热源分布的实现。若改用 z 周期加真空，必须先解决逸出原子穿越盒顶后绕回底面的影响；不能只把边界改成周期就开始计算。
 
-因此，本分层输入是可以复核的几何配置，不代表势函数已验证或 TTM 加热已就绪。
+因此，本分层输入是可以复核的几何配置，不代表势函数已验证、冷态起始状态稳定或 TTM 加热已就绪。现阶段保留模型和势文件原样，不从未通过 Stage 1 的状态开始加热。
