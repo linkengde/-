@@ -1,0 +1,48 @@
+# Cold pre-equilibration diagnostic, all mobile atoms NVT at 300 K.
+# No TTM or external source; K=10 is an artificial scaffold restraint.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group skeleton type 1 2 3
+group ag type 4
+group mobile subtract all bottom
+group mobile_skeleton subtract skeleton bottom
+group mobile_ag subtract ag bottom
+fix freeze bottom setforce 0.0 0.0 0.0
+# Same Ag-relaxed coordinates as the archived K=10 cold screens.
+read_dump cold_pilot/ag_only_fire_mobile_step200.dump.gz 200 x y z box no replace yes
+reset_timestep 0
+fix skeleton_spring mobile_skeleton spring/self 10.0
+fix_modify skeleton_spring energy yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_mobile mobile reduce max v_fmag
+compute f_ag mobile_ag reduce max v_fmag
+compute f_skeleton mobile_skeleton reduce max v_fmag
+compute t_mobile mobile temp
+compute t_ag mobile_ag temp
+compute t_skeleton mobile_skeleton temp
+compute disp_ag mobile_ag displace/atom
+compute disp_skeleton mobile_skeleton displace/atom
+compute maxdisp_ag mobile_ag reduce max c_disp_ag[4]
+compute maxdisp_skeleton mobile_skeleton reduce max c_disp_skeleton[4]
+thermo 50
+thermo_style custom step time c_t_mobile c_t_ag c_t_skeleton pe ke etotal c_f_mobile c_f_ag c_f_skeleton c_maxdisp_ag c_maxdisp_skeleton
+thermo_modify temp t_mobile flush yes
+velocity mobile create 300.0 319877 mom yes rot no dist gaussian
+timestep 0.0001
+fix integrate mobile nvt temp 300.0 300.0 0.1
+run 1000
+# Remove NVT and spring before the physical pair-force audit.
+unfix integrate
+unfix skeleton_spring
+thermo_style custom step pe c_f_ag c_f_skeleton c_maxdisp_ag c_maxdisp_skeleton
+thermo_modify flush yes
+run 0
+write_dump mobile custom cold_pilot/final_mobile_pre_equil_K10_NVT_0p1ps.dump id type x y z vx vy vz modify sort id
+print "COLD_PRE_EQUIL_K10_NVT_0P1PS_DONE"
