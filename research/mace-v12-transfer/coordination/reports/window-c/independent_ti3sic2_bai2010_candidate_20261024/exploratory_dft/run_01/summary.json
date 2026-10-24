@@ -1,0 +1,55 @@
+{
+  "status": "SCF_CONVERGED_EXPLORATORY_ONLY",
+  "input_file": "Ti3SiC2_Bai2010_DFT_candidate.cif",
+  "input_sha256": "cb361a88ab35948e9fc8e0e8f86b0ec7030ae0934c3bbf7c33ef68b674d3d3a5",
+  "atoms": 12,
+  "formula": "C4Si2Ti6",
+  "cell_lengths_A": [
+    3.0592,
+    3.0591999999999997,
+    17.636
+  ],
+  "cell_angles_deg": [
+    90.0,
+    90.0,
+    119.99999999999999
+  ],
+  "volume_A3": 142.93759251442458,
+  "energy_native_eV_cell": -97.45905655802686,
+  "free_energy_eV_cell": -97.52060778989423,
+  "energy_per_atom_native_eV": -8.121588046502238,
+  "free_energy_per_atom_eV": -8.12671731582452,
+  "fmax_eV_A": 0.13506352643035197,
+  "rms_force_eV_A": 0.0986588310398715,
+  "scf_iterations": 32,
+  "scf_converged": true,
+  "elapsed_s": 177.5392873287201,
+  "method": {
+    "code": "GPAW 26.7.0",
+    "xc": "PBE",
+    "basis": "plane-wave",
+    "cutoff_eV": 500,
+    "kpts": [
+      12,
+      12,
+      2
+    ],
+    "smearing_eV": 0.1,
+    "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "mpi_ranks": 4,
+    "geometry": "fixed; single point only",
+    "kpoint_note": "12x12x2 approximately matches the reciprocal spacing of the existing 2x2x1 Ti3SiC2 control at 6x6x2; it is not a convergence claim."
+  },
+  "role": "exploratory_only_not_training_or_validation",
+  "limitations": [
+    "The Bai2010 numerical parameters are not yet independently checked against the paper full text.",
+    "One fixed-geometry point does not establish k-point or cutoff convergence.",
+    "This result is not included in any train/dev/test dataset or B1 role ledger."
+  ]
+}
