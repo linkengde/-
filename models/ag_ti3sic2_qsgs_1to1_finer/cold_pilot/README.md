@@ -21,3 +21,5 @@ For an early weak-restraint comparison from the same Ag-relaxed snapshot, run th
 The K=1/K=10 comparison, result logs, and compressed endpoint Ag snapshots are archived in [RESULTS_WEAK_SPRINGS_20261024.md](RESULTS_WEAK_SPRINGS_20261024.md).
 
 The later 25 fs no-source checks extend the K=10 weak-spring case and compare a fully rigid scaffold. Results, inputs, logs, and endpoint Ag snapshots are recorded in [the K=10 extension](RESULTS_COLD_K10_0P025PS_20261025.md) and [the rigid-scaffold comparison](RESULTS_RIGID_SCAFFOLD_0P025PS_20261025.md). Neither case establishes an equilibrated composite cold baseline; no TTM or heat source was used.
+
+A planned 0.1 ps K=10 extension was manually stopped at 0.03 ps when all monitored temperatures and the maximum backbone displacement continued rising. The partial log and the stop assessment are in [the early-stop report](RESULTS_COLD_K10_0P1PS_EARLY_STOP_20261025.md); no endpoint restart or dump was produced.

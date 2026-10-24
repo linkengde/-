@@ -61,6 +61,8 @@ lmp -in in.layered_static_check -log log.layered_static_check
 
 2026-10-25 又将无源冷态筛查延长到 0.025 ps：K=10 弱骨架弹簧下活动区末温约339 K，撤除弹簧后活动 Ag/骨架最大物理力约4.277/4.274 eV/Å，最大骨架位移约0.538 Å；刚性骨架下 Ag 末温约331.6 K、MSD约0.00436 Å²、最大位移约0.204 Å。两条轨迹均完成且没有丢原子，但只有25 fs，温度仍有漂移，不能验收为平衡冷态起点。刚性骨架只作为数值对照，不能代表骨架热响应；详情见 [K=10 弱约束延长筛查](cold_pilot/RESULTS_COLD_K10_0P025PS_20261025.md) 和 [刚性骨架延长筛查](cold_pilot/RESULTS_RIGID_SCAFFOLD_0P025PS_20261025.md)。当前冷态准入仍未通过，不接入 TTM 加热。
 
+将 K=10 无源筛查原计划延至0.1 ps时，第0.03 ps活动区/Ag/骨架/恒温层温度为约379/363/384/358 K，骨架最大位移约0.594 Å，较前一输出窗口仍上升，因此在第300步提前停止。它不是完整0.1 ps轨迹，但进一步说明当前冷态起点未达到稳态；部分日志与判断见 [提前停止记录](cold_pilot/RESULTS_COLD_K10_0P1PS_EARLY_STOP_20261025.md)。目前仍不接入TTM加热。
+
 独立的无热源步长对照使用 0.5 fs 和 0.25 fs 分别运行至 0.05 ps，未丢失原子，但两组均升温至约 615–669 K，牛顿层最大力约 50 eV/Å，追踪 C–C 距离缩短至约 2.165 Å。该短跑说明异常演化不能简单归因于 0.5 fs 步长；它不构成 0.5 fs 对 TTM 或高温过程的验证。记录见 `/workspace/runs/ag_ti3sic2_selected/baseline/COLD_BASELINE_STEP_SIZE_COMPARISON.md` 和 `/workspace/runs/ag_ti3sic2_selected/baseline/RIGID_SKELETON_CONTROL.md`。
 
 当前模型使用 `boundary p p f`。仓库参考的 LAMMPS `fix ttm/mod` 明确拒绝非周期边界，且其原生热源形式也不是所需的横向高斯乘深度指数形式。正式 TTM 还需要可处理自由表面、Ag 选择性耦合和指定热源分布的实现。若改用 z 周期加真空，必须先解决逸出原子穿越盒顶后绕回底面的影响；不能只把边界改成周期就开始计算。
