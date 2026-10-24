@@ -6,6 +6,10 @@ The source and lineage review is complete as a proposal review. It confirms 24 c
 
 All 24 files have audited lineage and source/reference claims. Twelve files have directly source-supported crystal geometry parameters (six COD/Suh solid-Ag files and six Bai Ti₃SiC₂ files); the remaining twelve liquid-Ag files use the Abdullaev experimental density reference, while their atomic coordinates remain EAM-generated snapshots. Bai et al.'s table values `a = 3.0592 Å`, `c = 17.636 Å`, `zTi2 = 0.1351`, and `zC = 0.5726` match the reconstructed CIF. The six Ag files remain one COD/Suh experimental lineage, not separate independent records. This review does not freeze training roles, assign dev/test data, authorize DFT, or integrate candidates into a dataset.
 
+## Follow-up role decision
+
+The 24-file roster has since been frozen as a training-candidate-only pool, with no dev/test assignments. This is a candidate-role decision, not an assignment to an existing dataset. The per-file lineage and role ledger is in [the B1 role and energy decision](../b1_candidate_role_freeze_20261024/README.md). DFT remains disabled until V20 owner controls and phase-specific method gates are complete.
+
 ## Candidate source and grouping decisions
 
 | Candidate family | Count | Evidence and limitation | Parent/split rule |
@@ -22,7 +26,7 @@ The older 30-row `B1_ROLE_FREEZE_DRAFT.csv` is not the current source-reviewed s
 - The 24 candidates are not 24 independent sources. Parent groups, source lineages, and close structural relationships must remain intact in any later split. The Ti₃SiC₂ COD and Bai source families share the same α-MAX phase and must not be placed on opposite sides of a validation split.
 - The V20 Window A card snapshot is dated `2026-10-24T03:28:13Z`: it records the `k6×6×1, σ=0.05 eV` slab control running at SCF iteration 50, with `σ=0.20 eV` queued after its archive verification. The card is not live telemetry; execution and task-card updates remain with its registered owner.
 - The project-wide DFT method and energy target are still unfrozen. The V19 `free_energy_eV` sidecar resolves availability for the 36 training candidates only; it does not select a project-wide target or authorize training.
-- The supplied-paper check is recorded in [the full-text audit](../provided_primary_papers_audit_20261024/README.md). The next admissible action is owner review of this candidate grouping. Only after the V20 controls and the method/energy policy gates are complete should an owner-bound pilot be registered. No DFT or training was started in this review.
+- The supplied-paper check is recorded in [the full-text audit](../provided_primary_papers_audit_20261024/README.md). The next admissible action is to complete the V20 owner controls, resolve phase-specific method settings, and register the budgeted B1 pilot. No DFT or training was started in this review.
 
 ## Reproduction and evidence
 
