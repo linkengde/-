@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Static Ag-mask/grid sensitivity check for the candidate TTM heat source.
 
-This script does not generate a LAMMPS TTM field or run MD. It compares a
-per-Ag-atom quadrature with finite-volume cell-centre occupancy estimates for
-the current geometry. The bulk FCC Ag atomic volume is an explicit proxy.
+This script does not generate a LAMMPS input or run MD. It builds candidate
+Ag fill/source fields from the current atom coordinates using the same
+conservative mapping as the reference solver. Bulk FCC Ag atomic volume is an
+explicit proxy.
 """
 
 from __future__ import annotations
@@ -14,6 +15,8 @@ import math
 from pathlib import Path
 
 import numpy as np
+
+from ag_ttm_reference import build_ag_grid_fields
 
 
 LX = 299.635
@@ -59,13 +62,6 @@ def read_newton_ag(path: Path, z_surface: float, z_min: float) -> np.ndarray:
     return np.asarray(xyz, dtype=np.float64)
 
 
-def gaussian_cell_average(lo: np.ndarray, hi: np.ndarray, center: float, width: float) -> np.ndarray:
-    scale = width * math.sqrt(math.pi) / 2.0
-    erf_hi = np.fromiter((math.erf((v - center) / width) for v in hi), dtype=np.float64)
-    erf_lo = np.fromiter((math.erf((v - center) / width) for v in lo), dtype=np.float64)
-    return scale * (erf_hi - erf_lo) / (hi - lo)
-
-
 def power_density(xyz: np.ndarray, z_surface: float) -> np.ndarray:
     dx = (xyz[:, 0] - LX / 2.0 + LX / 2.0) % LX - LX / 2.0
     dy = (xyz[:, 1] - LY / 2.0 + LY / 2.0) % LY - LY / 2.0
@@ -105,37 +101,29 @@ def main() -> None:
         f"atom-quadrature Newton-Ag power={p_atom:.6f} eV/ps "
         f"({100.0 * p_atom / p_continuum:.4f}% of continuum)"
     )
-    print("grid_A dimensions occupied_cells power_eV_per_ps error_vs_atom_pct fAg_gt1 max_fAg")
+    print("grid_A dimensions active_cells raw_fAg_gt1 bounded_fAg_gt1 moved_A3 max_fAg power_eV_per_ps power_error_pct")
 
     for nominal_h in args.grid_candidates:
         lengths = np.asarray([LX, LY, args.z_surface], dtype=np.float64)
         n = np.ceil(lengths / nominal_h).astype(int)
         d = lengths / n
-        ijk = np.minimum((xyz / d).astype(int), n - 1)
-        key = (ijk[:, 0] * n[1] + ijk[:, 1]) * n[2] + ijk[:, 2]
-        occupied, counts = np.unique(key, return_counts=True)
-        ix = occupied // (n[1] * n[2])
-        iy = (occupied // n[2]) % n[1]
-        iz = occupied % n[2]
-
-        xlo, xhi = ix * d[0], (ix + 1) * d[0]
-        ylo, yhi = iy * d[1], (iy + 1) * d[1]
-        zlo, zhi = iz * d[2], (iz + 1) * d[2]
-        gx = gaussian_cell_average(xlo, xhi, LX / 2.0, R_A)
-        gy = gaussian_cell_average(ylo, yhi, LY / 2.0, R_A)
-        gz = LSKIN_A * (
-            np.exp(-(args.z_surface - zhi) / LSKIN_A)
-            - np.exp(-(args.z_surface - zlo) / LSKIN_A)
-        ) / d[2]
-        q_cell_average = (I0_EV_PS_A2 / LSKIN_A) * gx * gy * gz
-        p_grid = atom_volume * float(np.dot(counts, q_cell_average))
-        f_ag_proxy = counts * atom_volume / float(np.prod(d))
-        max_f = float(f_ag_proxy.max())
+        cell_volume = float(np.prod(d))
+        mapped = build_ag_grid_fields(xyz, q_atom, tuple(n), tuple(d), atom_volume)
+        p_grid = float(mapped.source_power_eV_ps.sum())
         error_pct = 100.0 * (p_grid / p_atom - 1.0)
+        volume_error = abs(float(mapped.fraction_ag.sum() * cell_volume) - len(xyz) * atom_volume)
+        if volume_error > max(len(xyz) * atom_volume * 1.0e-12, 1.0e-8):
+            raise RuntimeError(f"Ag volume is not conserved for {nominal_h:g} A grid")
+        if abs(error_pct) > 1.0e-9:
+            raise RuntimeError(f"Source power is not conserved for {nominal_h:g} A grid")
+        if float(mapped.fraction_ag.max()) > 1.0 + 1.0e-12:
+            raise RuntimeError(f"Ag volume fraction exceeds one for {nominal_h:g} A grid")
+        active = int(np.count_nonzero(mapped.fraction_ag))
         dims = "x".join(str(v) for v in n)
         print(
-            f"{nominal_h:g} {dims} {len(occupied)} {p_grid:.6f} "
-            f"{error_pct:+.3f} {(f_ag_proxy > 1.0).sum()} {max_f:.3f}"
+            f"{nominal_h:g} {dims} {active} {mapped.raw_overfilled_cells} "
+            f"0 {mapped.redistributed_ag_volume_A3:.3f} {mapped.fraction_ag.max():.6f} "
+            f"{p_grid:.6f} {error_pct:+.3e}"
         )
 
 
