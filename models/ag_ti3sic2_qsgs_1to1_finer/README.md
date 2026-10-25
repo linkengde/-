@@ -82,3 +82,7 @@ lmp -in in.geometry_check
 构建和绘图依赖分别见requirements-build.txt、requirements-visualization.txt，使用独立Python环境。
 build_model.py在脚本所在目录重建文件；在独立副本中运行以保留本快照，使用现有checkout、不需Git worktree。
 in.model只定义结构、势和底部约束，不启动动力学。SHA256SUMS.txt核对交付文件。
+
+## 后续局部熔化—凝固路线
+
+由于复合体系原子冷态基线和界面势尚未通过验证，后续改用分开的多尺度路线：纯Ag原子模型提供熔化/凝固机制参照，QSGS几何进入连续介质热传导与焓法模型。新完成的纯Ag真实MD TTM参考耦合短测和QSGS体积分数网格映射分别见[纯Ag TTM试验](pure_ag_classifier/TTM_MD_PILOT.md)及[QSGS连续相变几何输入](phase_field_qsgs/README.md)。短测仅验证能量交接，几何映射仅验证相体积守恒；尚未运行QSGS相变、熔池或凝固计算。

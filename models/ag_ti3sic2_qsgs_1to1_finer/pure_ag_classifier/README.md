@@ -24,6 +24,8 @@ The combined criterion rejects the 300 K solid and the strained 1500 K fixed-vol
 
 The measured NPT density is lower than expected from experimental liquid Ag, so it is a property of this EAM calibration and a reminder that the potential is only a structural reference here. The 1.0 Å displacement threshold and 3.98 Å cutoff remain provisional; connected-pool behavior and thresholds must be checked on composite trajectories.
 
+The separate [pure-Ag TTM–MD reference pilot](TTM_MD_PILOT.md) checks short real LAMMPS atom timesteps with source-driven electron-grid updates at two grid resolutions. It verifies numerical energy handoff only; it does not produce a melt pool or validate the composite.
+
 The research target is a **microscopic local Ag melt pool and local resolidification** inside the Ag–Ti₃SiC₂ microstructure. The continuous Ti₃SiC₂ scaffold is intended to confine liquid Ag migration and pool growth, then constrain the local freezing morphology after heat-off. This homogeneous, fully periodic pure-Ag run is only used to check phase metrics; it is not a model of whole-composite melting. Given the known limitations of the Ag–Ti/Si/C cross potential and the Ti₃SiC₂ potential for weld-like thermal cycling, later composite results must be described as conditional on the current potentials, not as validated quantitative confinement or interface-welding predictions.
 
 Plots and processed data: [NPT curves](calibration_1600K_npt.png), [time series CSV](analysis_1600K_npt_series.csv), and [RDF CSV](analysis_1600K_npt_rdf.csv).
