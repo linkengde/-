@@ -22,13 +22,14 @@ By default x/y are periodic and z is insulated. `--bottom-sink` adds an ideal 30
 
 The full model test suite passes **51 tests**. The nine double-temperature tests cover 0D energy exchange, 1D electron and lattice diffusion, conductivity partition, active-cell enthalpy inversion, QSGS source/coupling accounting, sampled interval accounting, diffusion steps above the explicit stability bounds, and bottom-sink energy removal. Electron and lattice diffusion conserve energy for insulated boundaries to solver tolerance. In synthetic sink tests, both channels remove energy and the external loss closes the total-energy ledger.
 
-For a 0.1 ps Case A heating run, three outer time steps were compared. The energy input is 8.63925×10⁻¹⁷ J in all cases and the total-energy residual remains below 1.1×10⁻³⁰ J. Cumulative electron-to-lattice transfer varies by less than 0.05%, and peak lattice temperature by 0.0214 K. The electron peak remains time-step sensitive: 0.5 and 0.3125 fs differ by 2.29%, and 0.3125 and 0.15625 fs differ by 1.66%. Thus the thermal energy ledger is stable, but the local electron peak has not converged to 1%.
+For a 0.1 ps Case A heating run, four outer time steps were compared. The energy input is 8.63925×10⁻¹⁷ J in all cases and the total-energy residual remains below 1.1×10⁻³⁰ J. Cumulative electron-to-lattice transfer varies by about 0.05%, and peak lattice temperature by 0.0278 K. Electron-peak differences decrease with refinement: 0.5 vs 0.3125 fs differ by 2.29%, 0.3125 vs 0.15625 fs by 1.66%, and 0.15625 vs 0.078125 fs by 0.78%. This is promising for the short transient, but it does not establish convergence near melting or over 10 ps.
 
 | Outer step | Peak \(T_e\) | Peak \(T_l\) | Electron-to-lattice transfer | Max Ag liquid fraction |
 |---:|---:|---:|---:|---:|
 | 0.5 fs | 1088.19 K | 300.628 K | 3.62412×10⁻¹⁸ J | 0 |
 | 0.3125 fs | 1063.80 K | 300.617 K | 3.62486×10⁻¹⁸ J | 0 |
 | 0.15625 fs | 1046.17 K | 300.606 K | 3.62561×10⁻¹⁸ J | 0 |
+| 0.078125 fs | 1038.06 K | 300.600 K | 3.62594×10⁻¹⁸ J | 0 |
 
 ## 10 Å QSGS pilot: 5 fs heat, then 5 fs source-off cooling
 
@@ -64,6 +65,7 @@ The longer screening commands use `--cool-ps 0` to save a heating-only history. 
 python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.1 --cool-ps 0 --dt-fs 0.5 --sample-ps 0.01 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat0p1ps_dt0p5fs.csv
 python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.1 --cool-ps 0 --dt-fs 0.3125 --sample-ps 0.01 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat0p1ps_dt0p3125fs.csv
 python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.1 --cool-ps 0 --dt-fs 0.15625 --sample-ps 0.01 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat0p1ps_dt0p15625fs.csv
+python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.1 --cool-ps 0 --dt-fs 0.078125 --sample-ps 0.01 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat0p1ps_dt0p078125fs.csv
 python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 1 --cool-ps 0 --dt-fs 0.3125 --sample-ps 0.1 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat1ps_dt0p3125fs.csv
 python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 5 --cool-ps 0 --dt-fs 0.3125 --sample-ps 0.25 --output phase_field_qsgs/qsgs_ttm_enthalpy_10A_BCA_heat5ps_dt0p3125fs.csv
 ```

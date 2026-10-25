@@ -102,6 +102,7 @@ class QSGSDoubleTemperatureGrid:
         self.electron_diffusion_energy_J = 0.0
         self.lattice_diffusion_energy_J = 0.0
         self.initial_total_energy_J = self.total_energy_J
+        self.field_snapshots: dict[float, dict[str, np.ndarray]] = {}
         # Diagnostic bound for the actual two-temperature lattice conductivity
         # split. The implicit update does not subcycle to satisfy this limit.
         self.lattice_diffusion_timestep_ps = self._explicit_lattice_stability_limit_ps()
@@ -585,6 +586,7 @@ class QSGSDoubleTemperatureGrid:
         dt_ps: float,
         heat_on: bool,
         sample_interval_ps: float | None = None,
+        snapshot_times_ps: tuple[float, ...] | list[float] = (),
     ) -> list[dict[str, float]]:
         if duration_ps <= 0.0 or dt_ps <= 0.0:
             raise ValueError("duration_ps and dt_ps must be positive")
@@ -592,6 +594,22 @@ class QSGSDoubleTemperatureGrid:
         if sample_interval_ps <= 0.0:
             raise ValueError("sample_interval_ps must be positive")
         end_ps = self.time_ps + duration_ps
+        snapshots = sorted(float(value) for value in snapshot_times_ps)
+        tolerance = max(1.0e-12, dt_ps * 1.0e-9)
+        if any(not np.isfinite(value) for value in snapshots):
+            raise ValueError("snapshot_times_ps must contain only finite values")
+        if any(value < self.time_ps - tolerance or value > end_ps + tolerance for value in snapshots):
+            raise ValueError("Snapshot times must lie within this run interval")
+
+        def capture_snapshot(target_ps: float) -> None:
+            self.field_snapshots[float(target_ps)] = {
+                "electron_temperature_K": self.electron.temperature_K.copy(),
+                "lattice_temperature_K": self.lattice.state.temperature_K.copy(),
+                "ag_liquid_fraction": self.lattice.state.ag_liquid_fraction.copy(),
+            }
+
+        while snapshots and abs(snapshots[0] - self.time_ps) <= tolerance:
+            capture_snapshot(snapshots.pop(0))
         next_sample = self.time_ps + sample_interval_ps
         sample_start_ps = self.time_ps
         accumulated: dict[str, float] = {
@@ -604,8 +622,15 @@ class QSGSDoubleTemperatureGrid:
         }
         rows: list[dict[str, float]] = []
         while self.time_ps < end_ps - max(1.0e-15, duration_ps * 1.0e-13):
-            step = min(dt_ps, end_ps - self.time_ps, next_sample - self.time_ps)
+            step_limits = [dt_ps, end_ps - self.time_ps, next_sample - self.time_ps]
+            if snapshots:
+                step_limits.append(snapshots[0] - self.time_ps)
+            step = min(step_limits)
+            if step <= tolerance * 1.0e-6:
+                raise RuntimeError("Snapshot schedule produced a non-positive integration step")
             row = self.advance(step, heat_on=heat_on)
+            while snapshots and abs(self.time_ps - snapshots[0]) <= tolerance:
+                capture_snapshot(snapshots.pop(0))
             for name in accumulated:
                 accumulated[name] += row[name]
             if self.time_ps >= next_sample - max(1.0e-15, duration_ps * 1.0e-13) or self.time_ps >= end_ps - 1.0e-15:
@@ -630,6 +655,59 @@ def write_csv(path: Path, rows: list[dict[str, float]]) -> None:
         writer.writerows(rows)
 
 
+def field_snapshot_metrics(
+    time_ps: float,
+    fields: dict[str, np.ndarray],
+    ag_fraction: np.ndarray,
+    spacing_A: np.ndarray,
+    size_A: np.ndarray,
+) -> dict[str, float]:
+    """Summarize Ag-weighted temperatures and half-rise hotspot geometry."""
+    ag = np.asarray(ag_fraction, dtype=float)
+    active = ag > 0.0
+    total_ag_weight = float(ag.sum())
+    x = (np.arange(ag.shape[0]) + 0.5) * spacing_A[0]
+    y = (np.arange(ag.shape[1]) + 0.5) * spacing_A[1]
+    z = (np.arange(ag.shape[2]) + 0.5) * spacing_A[2]
+    cx, cy = size_A[0] / 2.0, size_A[1] / 2.0
+    xrel = (x - cx + size_A[0] / 2.0) % size_A[0] - size_A[0] / 2.0
+    yrel = (y - cy + size_A[1] / 2.0) % size_A[1] - size_A[1] / 2.0
+    radius2 = xrel[:, None, None] ** 2 + yrel[None, :, None] ** 2
+    depth = size_A[2] - z[None, None, :]
+    summary: dict[str, float] = {"time_ps": float(time_ps)}
+    for label, key in (("electron", "electron_temperature_K"), ("lattice", "lattice_temperature_K")):
+        temperature = np.asarray(fields[key], dtype=float)
+        peak = float(temperature[active].max()) if np.any(active) else 300.0
+        mean = float(np.sum(ag * temperature) / total_ag_weight) if total_ag_weight > 0.0 else 300.0
+        threshold = 300.0 + 0.5 * max(peak - 300.0, 0.0)
+        hot = active & (temperature >= threshold) if peak > 300.0 else np.zeros_like(active)
+        hot_weight = float(ag[hot].sum())
+        if hot_weight > 0.0:
+            radius_rms = float(np.sqrt(np.sum(ag * radius2 * hot) / hot_weight))
+            hot_depth = np.broadcast_to(depth, ag.shape)[hot]
+            depth_min = float(hot_depth.min())
+            depth_max = float(hot_depth.max())
+            depth_extent = depth_max - depth_min
+        else:
+            radius_rms = depth_min = depth_max = depth_extent = 0.0
+        summary[f"{label}_peak_K"] = peak
+        summary[f"{label}_ag_weighted_mean_K"] = mean
+        summary[f"{label}_half_rise_threshold_K"] = threshold
+        summary[f"{label}_half_rise_hotspot_diameter_2rms_A"] = 2.0 * radius_rms
+        summary[f"{label}_half_rise_hotspot_depth_extent_A"] = depth_extent
+        summary[f"{label}_half_rise_hotspot_min_depth_A"] = depth_min
+        summary[f"{label}_half_rise_hotspot_max_depth_A"] = depth_max
+        summary[f"{label}_half_rise_hotspot_ag_volume_fraction"] = (
+            hot_weight / total_ag_weight if total_ag_weight > 0.0 else 0.0
+        )
+    liquid = np.asarray(fields["ag_liquid_fraction"], dtype=float)
+    summary["max_ag_liquid_fraction"] = float(liquid[active].max()) if np.any(active) else 0.0
+    summary["ag_liquid_volume_fraction"] = (
+        float(np.sum(ag * liquid) / total_ag_weight) if total_ag_weight > 0.0 else 0.0
+    )
+    return summary
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spacing", choices=("5A", "10A"), default="10A")
@@ -641,10 +719,20 @@ def main() -> None:
     parser.add_argument("--sample-ps", type=float, default=0.005)
     parser.add_argument("--bottom-sink", action="store_true",
                         help="apply a 300 K ideal isothermal sink at the bottom z face")
+    parser.add_argument("--snapshot-ps", default="",
+                        help="comma-separated heating times at which to save 3D Te, Tl, and Ag liquid fields")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
     if args.heat_ps <= 0.0 or args.cool_ps < 0.0:
         parser.error("--heat-ps must be positive and --cool-ps must be non-negative")
+    try:
+        snapshot_times_ps = tuple(
+            float(value.strip()) for value in args.snapshot_ps.split(",") if value.strip()
+        )
+    except ValueError:
+        parser.error("--snapshot-ps must be a comma-separated list of numbers")
+    if any(value < 0.0 or value > args.heat_ps for value in snapshot_times_ps):
+        parser.error("--snapshot-ps values must lie within the heating interval")
     projected = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
     model = QSGSDoubleTemperatureGrid(
         projected,
@@ -652,11 +740,44 @@ def main() -> None:
         bottom_sink_temperature_K=300.0 if args.bottom_sink else None,
     )
     dt_ps = args.dt_fs * 1.0e-3
-    rows = model.run(args.heat_ps, dt_ps, heat_on=True, sample_interval_ps=args.sample_ps)
+    rows = model.run(
+        args.heat_ps,
+        dt_ps,
+        heat_on=True,
+        sample_interval_ps=args.sample_ps,
+        snapshot_times_ps=snapshot_times_ps,
+    )
     if args.cool_ps > 0.0:
         rows += model.run(args.cool_ps, dt_ps, heat_on=False, sample_interval_ps=args.sample_ps)
     output = args.output or DATA_DIR / f"qsgs_ttm_enthalpy_{args.spacing}_BC{args.boundary}.csv"
     write_csv(output, rows)
+    field_output = None
+    snapshot_metrics = []
+    if model.field_snapshots:
+        field_output = output.with_name(f"{output.stem}_fields.npz")
+        arrays: dict[str, np.ndarray] = {
+            "ag_fraction": model.lattice.ag_fraction,
+            "skeleton_fraction": model.lattice.sc_fraction,
+            "spacing_A": model.lattice.spacing_A,
+            "size_A": model.lattice.size_A,
+            "x_centers_A": (np.arange(model.lattice.temperature_shape[0]) + 0.5) * model.lattice.spacing_A[0],
+            "y_centers_A": (np.arange(model.lattice.temperature_shape[1]) + 0.5) * model.lattice.spacing_A[1],
+            "z_centers_A": (np.arange(model.lattice.temperature_shape[2]) + 0.5) * model.lattice.spacing_A[2],
+        }
+        for snapshot_time, fields in sorted(model.field_snapshots.items()):
+            label = f"t_{snapshot_time:.9g}ps"
+            for name, field in fields.items():
+                arrays[f"{label}_{name}"] = field
+            snapshot_metrics.append(
+                field_snapshot_metrics(
+                    snapshot_time,
+                    fields,
+                    model.lattice.ag_fraction,
+                    model.lattice.spacing_A,
+                    model.lattice.size_A,
+                )
+            )
+        np.savez_compressed(field_output, **arrays)
     summary = {
         "status": "CONTINUUM_TWO_TEMPERATURE_ENTHALPY_SHORT_PILOT",
         "integration": "conservative semi-implicit finite-volume diffusion with implicit local electron-lattice exchange",
@@ -704,6 +825,9 @@ def main() -> None:
             "No stable-pool controller is enabled in this short numerical pilot.",
         ],
         "time_history_csv": output.name,
+        "field_snapshots_npz": field_output.name if field_output is not None else None,
+        "field_snapshot_times_ps": sorted(model.field_snapshots),
+        "field_snapshot_spatial_metrics": snapshot_metrics,
     }
     output.with_suffix(".json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))

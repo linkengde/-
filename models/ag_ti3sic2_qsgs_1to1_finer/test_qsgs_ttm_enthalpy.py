@@ -9,7 +9,7 @@ import numpy as np
 MODEL_DIR = Path(__file__).resolve().parent
 PHASE_DIR = MODEL_DIR / "phase_field_qsgs"
 sys.path.insert(0, str(PHASE_DIR))
-from qsgs_ttm_enthalpy import EV_J, QSGSDoubleTemperatureGrid  # noqa: E402
+from qsgs_ttm_enthalpy import EV_J, QSGSDoubleTemperatureGrid, field_snapshot_metrics  # noqa: E402
 from qsgs_enthalpy_solver import QSGSEnthalpyGrid  # noqa: E402
 
 
@@ -186,6 +186,31 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
             self.assertLess(lattice_record["lattice_diffusion_net_J"], 0.0)
             self.assertLess(lattice_model.total_energy_J, initial_total)
             self.assertLess(abs(lattice_record["energy_balance_residual_J"]), 1.0e-28)
+
+    def test_run_captures_exact_3d_fields_and_hotspot_metrics(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.ones((2, 2, 2)), directory)
+            model = QSGSDoubleTemperatureGrid(geometry, "A", peak_flux_eV_ps_A2=0.0)
+            model.run(
+                0.001,
+                0.0005,
+                heat_on=False,
+                sample_interval_ps=0.001,
+                snapshot_times_ps=(0.0005, 0.001),
+            )
+            self.assertEqual(sorted(model.field_snapshots), [0.0005, 0.001])
+            snapshot = model.field_snapshots[0.0005]
+            self.assertEqual(snapshot["electron_temperature_K"].shape, (2, 2, 2))
+            metrics = field_snapshot_metrics(
+                0.0005,
+                snapshot,
+                model.lattice.ag_fraction,
+                model.lattice.spacing_A,
+                model.lattice.size_A,
+            )
+            self.assertEqual(metrics["time_ps"], 0.0005)
+            self.assertEqual(metrics["ag_liquid_volume_fraction"], 0.0)
+            self.assertGreaterEqual(metrics["electron_peak_K"], 300.0)
 
     def test_sampled_run_aggregates_energy_over_the_reported_interval(self):
         with tempfile.TemporaryDirectory() as directory:
