@@ -1,0 +1,196 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Layer definitions for the selected Ag-Ti3SiC2 QSGS geometry.
+# Static-only audit: no integration, thermostat, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  917378 atoms
+  read_data CPU = 1.547 seconds
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# Material surface from geometry_report.json: z = 158.6115 A.
+# Fixed and thermostat slabs are disjoint; remaining material is Newtonian.
+region r_fixed block INF INF INF INF 0.0 20.0 units box
+region r_bath block INF INF INF INF 20.0 40.0 units box
+region r_newton block INF INF INF INF 40.0 158.6115 units box
+region r_material block INF INF INF INF 0.0 158.6115 units box
+
+# Free-surface vacuum buffer. It contains no atoms in the initial geometry.
+region r_vacuum block INF INF INF INF 158.6115 258.6115 units box
+
+group fixed region r_fixed
+117618 atoms in group fixed
+group bath region r_bath
+119063 atoms in group bath
+group newton region r_newton
+680697 atoms in group newton
+group material region r_material
+917378 atoms in group material
+group vacuum_initial region r_vacuum
+0 atoms in group vacuum_initial
+
+group skeleton type 1 2 3
+704382 atoms in group skeleton
+group ag type 4
+212996 atoms in group ag
+group fixed_skeleton intersect fixed skeleton
+84985 atoms in group fixed_skeleton
+group fixed_ag intersect fixed ag
+32633 atoms in group fixed_ag
+group bath_skeleton intersect bath skeleton
+93405 atoms in group bath_skeleton
+group bath_ag intersect bath ag
+25658 atoms in group bath_ag
+group newton_skeleton intersect newton skeleton
+525992 atoms in group newton_skeleton
+group newton_ag intersect newton ag
+154705 atoms in group newton_ag
+
+group solid_layers union fixed bath newton
+917378 atoms in group solid_layers
+group layer_overlap_fb intersect fixed bath
+0 atoms in group layer_overlap_fb
+group layer_overlap_fn intersect fixed newton
+0 atoms in group layer_overlap_fn
+group layer_overlap_bn intersect bath newton
+0 atoms in group layer_overlap_bn
+group material_unassigned subtract material solid_layers
+0 atoms in group material_unassigned
+group solid_outside subtract solid_layers material
+0 atoms in group solid_outside
+
+variable n_all equal count(all)
+variable n_material equal count(material)
+variable n_fixed equal count(fixed)
+variable n_bath equal count(bath)
+variable n_newton equal count(newton)
+variable n_ag equal count(ag)
+variable n_skeleton equal count(skeleton)
+variable n_fixed_ag equal count(fixed_ag)
+variable n_fixed_skeleton equal count(fixed_skeleton)
+variable n_bath_ag equal count(bath_ag)
+variable n_bath_skeleton equal count(bath_skeleton)
+variable n_newton_ag equal count(newton_ag)
+variable n_newton_skeleton equal count(newton_skeleton)
+variable n_vacuum_initial equal count(vacuum_initial)
+variable n_overlap_fb equal count(layer_overlap_fb)
+variable n_overlap_fn equal count(layer_overlap_fn)
+variable n_overlap_bn equal count(layer_overlap_bn)
+variable n_material_unassigned equal count(material_unassigned)
+variable n_solid_outside equal count(solid_outside)
+
+print "LAYER_AUDIT atoms_all=${n_all} atoms_material=${n_material} fixed=${n_fixed} bath=${n_bath} newton=${n_newton}"
+LAYER_AUDIT atoms_all=917378 atoms_material=917378 fixed=117618 bath=119063 newton=680697
+print "LAYER_AUDIT fixed_Ag=${n_fixed_ag} fixed_skeleton=${n_fixed_skeleton} bath_Ag=${n_bath_ag} bath_skeleton=${n_bath_skeleton}"
+LAYER_AUDIT fixed_Ag=32633 fixed_skeleton=84985 bath_Ag=25658 bath_skeleton=93405
+print "LAYER_AUDIT newton_Ag=${n_newton_ag} newton_skeleton=${n_newton_skeleton}"
+LAYER_AUDIT newton_Ag=154705 newton_skeleton=525992
+print "LAYER_AUDIT initial_vacuum_buffer=${n_vacuum_initial}"
+LAYER_AUDIT initial_vacuum_buffer=0
+print "LAYER_AUDIT overlap_fixed_bath=${n_overlap_fb} overlap_fixed_newton=${n_overlap_fn} overlap_bath_newton=${n_overlap_bn} material_unassigned=${n_material_unassigned} solid_outside_material=${n_solid_outside}"
+LAYER_AUDIT overlap_fixed_bath=0 overlap_fixed_newton=0 overlap_bath_newton=0 material_unassigned=0 solid_outside_material=0
+
+# Run-zero only, reporting unmasked conservative forces.
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax_all all reduce max v_fn
+compute fmax_fixed fixed reduce max v_fn
+compute fmax_bath bath reduce max v_fn
+compute fmax_newton newton reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe fmax c_fmax_all c_fmax_fixed c_fmax_bath c_fmax_newton
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1107 | 1107 | 1107 Mbytes
+   Step        Atoms        PotEng          Fmax        c_fmax_all    c_fmax_fixed   c_fmax_bath   c_fmax_newton 
+         0      917378  -4883783.9      3.7445167      3.9877933      3.7156707      3.6154366      3.9877933    
+Loop time of 2.4767e-05 on 4 procs for 0 steps with 917378 atoms
+
+113.1% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.477e-05  |            |       |100.00
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         121603 ave      121603 max      121603 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+print "LAYERED_STATIC_CHECK_COMPLETE"
+LAYERED_STATIC_CHECK_COMPLETE
+Total wall time: 0:00:05
