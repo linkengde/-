@@ -48,6 +48,8 @@ The 5 ps Case A heating check at 0.3125 fs injects 4.31962×10⁻¹⁵ J; cumula
 
 The 10 Å QSGS projection contains about 92.8% mixed Ag/scaffold cells. This preserves volume fractions but can blur narrow channels and create apparent cross-face connectivity. Any first liquid region found on this grid requires a 5 Å geometry/connectivity check before it is called a connected pool.
 
+An exact local-face audit now compares the 5 Å and 10 Å finite-volume neighbor links with direct Ag contact in the binary QSGS source geometry. The coarse solver treats two adjacent cells as conducting whenever both have positive Ag fraction. Of these positive links, 8.4–10.8% at 10 Å and 4.4–6.7% at 5 Å have no direct Ag area across that shared face in the source geometry. The solver-link graph and direct-contact graph nevertheless each have one Ag-connected component at both resolutions. Thus volume averaging adds local links but does not add a new domain-spanning Ag component here; the local heat-flow error remains unquantified. Reproduce with `python phase_field_qsgs/audit_coarse_ag_face_connectivity.py --spacing 10A` and `--spacing 5A`; machine-readable details are in the matching `qsgs_ag_face_connectivity_*.json` files.
+
 ## Reproduction
 
 Run from the model directory:

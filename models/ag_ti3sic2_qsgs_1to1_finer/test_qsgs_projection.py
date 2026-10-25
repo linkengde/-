@@ -9,6 +9,7 @@ sys.path.insert(0, str(PHASE_DIR))
 
 from qsgs_projection import _overlap_weights, project_phase_mask  # noqa: E402
 from analyze_projected_connectivity import _component_metrics  # noqa: E402
+from audit_coarse_ag_face_connectivity import audit_face_connectivity  # noqa: E402
 
 
 class QSGSProjectionTests(unittest.TestCase):
@@ -62,6 +63,23 @@ class QSGSProjectionTests(unittest.TestCase):
         open_z_pair[1, 1, -1] = True
         open_z_metrics = _component_metrics(open_z_pair)
         self.assertEqual(open_z_metrics["component_count"], 2)
+
+    def test_coarse_face_audit_detects_link_without_source_ag_contact(self):
+        source_ag = np.zeros((6, 1, 1), dtype=bool)
+        source_ag[[1, 4], 0, 0] = True
+        coarse_ag = np.array([[[1.0 / 3.0]], [[1.0 / 3.0]]])
+        metrics = audit_face_connectivity(
+            source_ag,
+            coarse_ag,
+            np.array([6.0, 1.0, 1.0]),
+            np.array([3.0, 1.0, 1.0]),
+        )
+        x_result = metrics["axis_results"][0]
+        self.assertEqual(x_result["coarse_positive_conductance_faces"], 2)
+        self.assertEqual(x_result["faces_with_actual_qsgs_ag_contact"], 0)
+        self.assertEqual(x_result["coarse_positive_faces_without_actual_ag_contact"], 2)
+        self.assertEqual(metrics["coarse_solver_connectivity"]["component_count"], 1)
+        self.assertEqual(metrics["direct_source_ag_contact_connectivity"]["component_count"], 2)
 
 
 if __name__ == "__main__":

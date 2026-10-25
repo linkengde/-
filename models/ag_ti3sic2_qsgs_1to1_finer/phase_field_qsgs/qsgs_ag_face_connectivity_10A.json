@@ -1,0 +1,64 @@
+{
+  "status": "LOCAL_FACE_CONNECTIVITY_DIAGNOSTIC",
+  "source_ag_shape_xyz": [
+    100,
+    100,
+    50
+  ],
+  "coarse_grid_shape_xyz": [
+    30,
+    31,
+    16
+  ],
+  "source_ag_volume_fraction": 0.416654,
+  "coarse_ag_volume_fraction": 0.41665399999999997,
+  "mixed_cell_fraction": 0.9128360215053763,
+  "coarse_conductance_rule": "neighboring cells conduct when both projected Ag volume fractions are positive",
+  "reference_contact_rule": "positive exact area where binary source QSGS Ag occupies both sides of the shared coarse face",
+  "periodicity": {
+    "x": true,
+    "y": true,
+    "z": false
+  },
+  "active_coarse_ag_cells": 13898,
+  "coarse_solver_connectivity": {
+    "component_count": 1,
+    "largest_component_fraction": 1.0
+  },
+  "direct_source_ag_contact_connectivity": {
+    "component_count": 1,
+    "largest_component_fraction": 1.0
+  },
+  "axis_results": [
+    {
+      "axis": "x",
+      "coarse_positive_conductance_faces": 13172,
+      "faces_with_actual_qsgs_ag_contact": 11746,
+      "coarse_positive_faces_without_actual_ag_contact": 1426,
+      "false_positive_fraction": 0.10825994533859702,
+      "mean_actual_ag_contact_area_fraction": 0.4343577285150319
+    },
+    {
+      "axis": "y",
+      "coarse_positive_conductance_faces": 13179,
+      "faces_with_actual_qsgs_ag_contact": 12054,
+      "coarse_positive_faces_without_actual_ag_contact": 1125,
+      "false_positive_fraction": 0.08536307762349192,
+      "mean_actual_ag_contact_area_fraction": 0.4650161620760301
+    },
+    {
+      "axis": "z",
+      "coarse_positive_conductance_faces": 12340,
+      "faces_with_actual_qsgs_ag_contact": 11301,
+      "coarse_positive_faces_without_actual_ag_contact": 1039,
+      "false_positive_fraction": 0.08419773095623986,
+      "mean_actual_ag_contact_area_fraction": 0.45020591572123175
+    }
+  ],
+  "limitations": [
+    "A false-positive local face link does not by itself quantify the global heat-flow error.",
+    "This compares geometry topology only; it does not modify the conservative volume-fraction solver.",
+    "The QSGS binary mask is treated as piecewise constant and aligned with the saved source grid."
+  ],
+  "spacing_label": "10A"
+}
