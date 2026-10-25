@@ -3,6 +3,10 @@
 **蓝色＝Ti₃SiC₂ 骨架，灰色＝Ag。** 根据第二次“再细一点”的要求生成。
 [上一细化版](../ag_ti3sic2_qsgs_1to1_fine/)和[最初版](../ag_ti3sic2_qsgs_1to1/)完整保留。
 
+![Ag–Ti₃SiC₂ QSGS双连续模型三维剖切图](morphology_3d.png)
+
+三维图从仓库中的 `qsgs_morphology.npz` 生成；为清楚显示内部两相，显示体素做了降采样并切去一个角，原始QSGS几何和原子模型未修改。可运行 `python render_model_3d_png.py` 重新生成。
+
 ![左为上一细化版，右为本次再细化版](morphology_comparison.png)
 
 ![实际原子中部截面](atomic_xy_slice.png)
