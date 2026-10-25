@@ -85,4 +85,4 @@ in.model只定义结构、势和底部约束，不启动动力学。SHA256SUMS.t
 
 ## 后续局部熔化—凝固路线
 
-由于复合体系原子冷态基线和界面势尚未通过验证，后续改用分开的多尺度路线：纯Ag原子模型提供熔化/凝固机制参照，QSGS几何进入连续介质热传导与焓法模型。新完成的纯Ag真实MD TTM参考耦合短测和QSGS体积分数网格映射分别见[纯Ag TTM试验](pure_ag_classifier/TTM_MD_PILOT.md)及[QSGS连续相变几何输入](phase_field_qsgs/README.md)。短测仅验证能量交接，几何映射仅验证相体积守恒；尚未运行QSGS相变、熔池或凝固计算。
+由于复合体系原子冷态基线和界面势尚未通过验证，后续改用分开的多尺度路线：纯Ag原子模型提供熔化/凝固机制参照，QSGS几何进入连续介质热传导与焓法模型。已完成的纯Ag真实MD TTM参考耦合短测见[纯Ag TTM试验](pure_ag_classifier/TTM_MD_PILOT.md)；QSGS网格映射、候选焓函数及一维Stefan测试见[连续相变模块记录](phase_field_qsgs/README.md)。新增QSGS三维焓法有限体积原型并完成两个骨架热边界的短时筛查，数值能量收支通过；尚未建立稳定熔池，也未接入双温电子—晶格耦合。详见[QSGS焓法试验报告](phase_field_qsgs/QSGS_ENTHALPY_PILOT.md)。

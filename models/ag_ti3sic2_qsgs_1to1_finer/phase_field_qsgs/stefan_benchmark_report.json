@@ -1,0 +1,40 @@
+{
+  "status": "AG_ENTHALPY_ONE_PHASE_STEFAN_BENCHMARK",
+  "model": "1D finite-volume enthalpy conduction; fixed-temperature boundary at Tm+100 K; initial solid at Tm; insulated far boundary",
+  "fixed_density_kg_m3": 10490.0,
+  "results": [
+    {
+      "dx_m": 4e-05,
+      "cell_count": 250,
+      "end_time_s": 0.01,
+      "time_steps": 3469,
+      "boundary_temperature_K": 1335.08,
+      "analytical_lambda": 0.3677698779167313,
+      "analytical_interface_m": 0.0005393321270233761,
+      "numerical_liquid_equivalent_length_m": 0.0005386944841415952,
+      "relative_interface_error": -0.0011822824004571384,
+      "boundary_energy_input_J_m2": 678023.6623446041,
+      "enthalpy_change_J_m2": 678023.6623446057,
+      "energy_balance_residual_J_m2": 1.5133991837501526e-09
+    },
+    {
+      "dx_m": 2e-05,
+      "cell_count": 500,
+      "end_time_s": 0.01,
+      "time_steps": 13873,
+      "boundary_temperature_K": 1335.08,
+      "analytical_lambda": 0.3677698779167313,
+      "analytical_interface_m": 0.0005393321270233761,
+      "numerical_liquid_equivalent_length_m": 0.0005397170582983624,
+      "relative_interface_error": 0.0007137184226551198,
+      "boundary_energy_input_J_m2": 678238.2692169102,
+      "enthalpy_change_J_m2": 678238.2692169109,
+      "energy_balance_residual_J_m2": 6.984919309616089e-10
+    }
+  ],
+  "limitations": [
+    "The benchmark validates latent-heat bookkeeping and front propagation, not the QSGS composite or its scaffold boundary.",
+    "It uses the first-pass candidate Cp/k interpolation and fixed solid-reference density.",
+    "The one-phase similarity solution assumes the solid ahead of the front remains at Tm."
+  ]
+}

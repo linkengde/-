@@ -15,9 +15,13 @@ The 10 Å map is highly mixed at cell scale, so 5 Å is the more useful starting
 
 ## Still required before a physical phase-change run
 
-The repository does not currently contain a selected and sourced Ag lattice enthalpy model (solid/liquid heat capacity and latent heat in a consistent unit convention), nor a validated thermal transport law for the composite phase-field grid. It also does not determine heat transfer through the Ti₃SiC₂ scaffold. The next solver prototype should take these as explicit parameters and compare declared limiting boundary cases, such as zero heat flux through the scaffold versus a prescribed thermal sink. Those assumptions must remain visible in the output; they are not substitutes for an atomistic Ag–Ti₃SiC₂ interface.
+The first-pass Ag enthalpy model and a 1-D Stefan test now use the candidate anchors in [`thermophysical_candidates.csv`](thermophysical_candidates.csv) and [`thermophysical_candidates.json`](thermophysical_candidates.json). It uses (T_m=1235.08\) K, (L_f=11.297\) kJ/mol, a linearly interpolated solid (C_p(T)) between the supplied 300 K and melting-point anchors, a single-anchor constant liquid (C_p), and a piecewise-linear candidate (k(T)). Density is held at 10,490 kg/m³, so the model does not include melt expansion. The exact source tables and complete citations are not yet archived in the repository; treat these as the user-specified baseline candidates, not as an independently verified property database.
 
-No heating, melting, or solidification result is produced by this directory yet.
+The 1-D finite-volume one-phase Stefan benchmark uses a hot Dirichlet boundary, an initially solid Ag domain at (T_m), and an insulated far boundary. At 0.01 s, the 40 µm and 20 µm grids put the front within 0.12% and 0.08% of the similarity solution; the enthalpy balance residual is below (1.6\times10^{-9}) J/m². This checks the implemented latent-heat plateau and conduction discretization for that benchmark only.
+
+The Ti₃SiC₂ anchors are also first-pass values. With formula mass 195.708 g/mol, 110–155 J/(mol·K) converts to **562–792 J/(kg·K)**; this corrects the 656–924 J/(kg·K) conversion in the supplied summary. The candidate scaffold table stops at 1473.15 K and the code rejects higher temperatures rather than extrapolating.
+
+The first QSGS 3-D finite-volume enthalpy solver is now implemented in [`qsgs_enthalpy_solver.py`](qsgs_enthalpy_solver.py). Its limited validation and short exploratory results for both scaffold boundary assumptions are documented in [`QSGS_ENTHALPY_PILOT.md`](QSGS_ENTHALPY_PILOT.md). The runs use direct single-temperature lattice heating; they are not TTM-MD and do not establish a stable melt pool. Cases A and B remain limiting assumptions, not measured Ag–Ti₃SiC₂ interface properties.
 
 ## Reproduce
 
@@ -26,7 +30,9 @@ From the model directory:
 ```bash
 python phase_field_qsgs/project_qsgs_mask.py
 python phase_field_qsgs/analyze_projected_connectivity.py
-python -m unittest -v test_qsgs_projection.py
+python phase_field_qsgs/stefan_benchmark.py
+python -m unittest -v test_qsgs_projection.py test_thermophysical_model.py test_qsgs_enthalpy_solver.py
+python phase_field_qsgs/qsgs_enthalpy_solver.py --spacing 5A --boundary A --heat-ps 0.1 --cool-ps 0.1
 ```
 
 The compressed 5 Å and 10 Å maps and their numeric report are stored beside this file as `qsgs_phase_fractions_5A.npz`, `qsgs_phase_fractions_10A.npz`, and `qsgs_projection_report.json`.

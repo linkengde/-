@@ -1,0 +1,47 @@
+{
+  "status": "FIRST_PASS_CANDIDATE_VALUES_FROM_USER_PROVIDED_SUMMARY",
+  "source_scope": {
+    "ag_thermodynamics": "The user-provided summary attributes Ag heat capacity, melting point, latent heat, and density anchors to NIST/CDC thermophysical tables.",
+    "ag_thermal_conductivity": "The user-provided summary attributes solid and liquid conductivity anchors to NIST recommended data; the liquid value is described there as tentative.",
+    "ti3sic2": "The user-provided summary attributes Ti3SiC2 conductivity and molar-heat-capacity anchors to Barsoum et al.",
+    "provenance_limit": "The exact bibliographic records and source tables are not yet archived in this checkout. These values are implementation candidates pending source-table attachment and citation audit."
+  },
+  "ag": {
+    "molar_mass_kg_mol": 0.1078682,
+    "melting_temperature_K": 1235.08,
+    "latent_heat_fusion_J_mol": 11297.0,
+    "latent_heat_fusion_J_kg": 104729.66082682385,
+    "solid_reference_density_kg_m3": 10490.0,
+    "liquid_density_at_melting_kg_m3": 9346.0,
+    "thermal_density_policy": "Use fixed solid reference density for the first enthalpy-volume solver; do not claim thermal expansion or liquid-volume change is modeled.",
+    "solid_cp_interpolation": "Piecewise linear in temperature through thermophysical_candidates.csv anchors at 300 K and Tm.",
+    "liquid_cp_interpolation": "Constant at the single supplied melting-point anchor; no temperature trend is inferred.",
+    "solid_conductivity_interpolation": "Piecewise linear between 300 K and Tm anchors.",
+    "liquid_conductivity_interpolation": "Constant at the single supplied melting-point anchor; tentative source status remains attached."
+  },
+  "ti3sic2": {
+    "molar_mass_kg_mol": 0.195708,
+    "density_kg_m3": 4520.0,
+    "heat_capacity_interpolation": "Piecewise linear in temperature between 300 K and 1473.15 K anchors.",
+    "conductivity_interpolation": "Piecewise linear in temperature between 300 K and 1473.15 K anchors.",
+    "specific_heat_conversion_check_J_kg_K": {
+      "110_J_mol_K": 562.0618472418092,
+      "155_J_mol_K": 791.9962392952766,
+      "note": "Corrected by dividing by Ti3SiC2 formula molar mass 195.708 g/mol; the 656–924 J/(kg K) conversion in the supplied summary is inconsistent with this formula mass."
+    }
+  },
+  "source": {
+    "peak_flux_eV_ps_A2": 5.0,
+    "gaussian_radius_A": 30.0,
+    "gaussian_definition": "exp(-r^2/R^2)",
+    "absorption_depth_A": 20.0,
+    "peak_flux_W_m2": 80108831700000.0,
+    "peak_volumetric_rate_W_m3": 40054415850000000000000.0,
+    "note": "The conversion uses 1 eV = 1.602176634e-19 J, 1 ps = 1e-12 s, and 1 Angstrom = 1e-10 m. Source power remains weighted by Ag volume fraction and is not renormalized after masking."
+  },
+  "boundary_cases": {
+    "A": "Adiabatic scaffold: no heat flux through the Ag/skeleton boundary; pure geometric confinement baseline.",
+    "B": "Ideal thermal contact: shared temperature and continuous heat flux with a dynamically conducting and heat-storing Ti3SiC2 phase; zero added interface resistance."
+  },
+  "extrapolation_policy": "Stop if Ti3SiC2 exceeds 1473.15 K until higher-temperature data are added. Ag solid anchors are restricted to 300 K through Tm; liquid Cp and conductivity are constant single-anchor assumptions, not sourced temperature curves."
+}
