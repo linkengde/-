@@ -1,0 +1,140 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# No-source 25 fs Ag cold-stability probe after 300 Ag-only FIRE iterations.
+# Skeleton and bottom slab are fixed; this is not a heating or TTM run.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.580 seconds
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_continue_200.dump.gz 300 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  916534 atoms before read
+  916534 atoms in snapshot
+  0 atoms purged
+  916534 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  916534 atoms after read
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+113501 atoms in group bottom
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+group mobile_Ag subtract Ag bottom
+179244 atoms in group mobile_Ag
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+compute T_Ag mobile_Ag temp
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+velocity mobile_Ag create 300.0 508327 mom yes rot no dist gaussian
+timestep 0.0005
+fix thermostat mobile_Ag nvt temp 300.0 300.0 0.1
+thermo 10
+thermo_style custom step c_T_Ag pe ke etotal c_f_Ag
+thermo_modify flush yes
+run 50
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 61 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1101 | 1101 | 1101 Mbytes
+   Step         c_T_Ag         PotEng         KinEng         TotEng         c_f_Ag
+       300   300           -4907344.9      6950.6929     -4900394.2      3.8454599
+       310   301.9414      -4907389.9      6995.6731     -4900394.3      3.8443064
+       320   307.76333     -4907525.2      7130.5612     -4900394.6      3.8390563
+       330   317.69402     -4907756.6      7360.6452     -4900396        3.8241086
+       340   332.09576     -4908094        7694.3187     -4900399.7      3.7893515
+       350   351.44018     -4908550.1      8142.5092     -4900407.6      3.7185239
+Loop time of 103.45 on 4 procs for 50 steps with 916534 atoms
+
+Performance: 0.021 ns/day, 1149.443 hours/ns, 0.483 timesteps/s, 442.984 katom-step/s
+387.5% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 102.41     | 102.41     | 102.41     |   0.0 | 99.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.11045    | 0.11045    | 0.11045    |   0.0 |  0.11
+Output  | 0.07613    | 0.07613    | 0.07613    |   0.0 |  0.07
+Modify  | 0.72937    | 0.72937    | 0.72937    |   0.0 |  0.71
+Other   |            | 0.1225     |            |       |  0.12
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         120655 ave      120655 max      120655 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile_Ag custom potential_validation/relaxed_backbone_candidate/rigid_skeleton_Ag_NVT_after300_0p025ps_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "RIGID_SKELETON_AG_NVT_AFTER300_0P025PS_DONE_NO_SOURCE"
+RIGID_SKELETON_AG_NVT_AFTER300_0P025PS_DONE_NO_SOURCE
+Total wall time: 0:01:49

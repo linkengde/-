@@ -1,0 +1,191 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Continue static Ag-only relaxation from the archived 100-FIRE-step endpoint.
+# Keep Ti3SiC2 rigid; no dynamics, thermostat, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.625 seconds
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_100.dump.gz 100 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  916534 atoms before read
+  916534 atoms in snapshot
+  0 atoms purged
+  916534 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  916534 atoms after read
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+113499 atoms in group bottom
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+group moving_Ag subtract Ag bottom
+179246 atoms in group moving_Ag
+group moving_skeleton subtract skeleton bottom
+623789 atoms in group moving_skeleton
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag moving_Ag reduce max v_fn
+compute f_skeleton moving_skeleton reduce max v_fn
+thermo 20
+thermo_style custom step atoms pe press c_f_Ag c_f_skeleton
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 200 4000
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 61 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.002    20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 1099 | 1099 | 1099 Mbytes
+   Step        Atoms        PotEng         Press          c_f_Ag      c_f_skeleton
+       100      916534  -4896480.6     -51620.692      3.5651214      0
+       120      916534  -4897488.6     -51763.653      3.546302       0
+       140      916534  -4898662.8     -51919.129      3.4988403      0
+       160      916534  -4899804.4     -52059.52       3.4996009      0
+       180      916534  -4900925.5     -52187.74       3.5774048      0
+       200      916534  -4902033.5     -52305.603      3.6504174      0
+       220      916534  -4903134.7     -52414.49       3.716717       0
+       240      916534  -4904221.4     -52514.218      3.7729838      0
+       260      916534  -4905283.9     -52604.591      3.8154566      0
+       280      916534  -4906324.5     -52686.535      3.8408624      0
+       300      916534  -4907345       -52760.754      3.8454775      0
+Loop time of 428.377 on 4 procs for 200 steps with 916534 atoms
+
+385.5% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -4896480.59073445  -4907294.40909923  -4907344.96735611
+  Force two-norm initial, final = 319.65692 292.73038
+  Force max component initial, final = 3.4533609 3.4983284
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 200 201
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 422.59     | 422.59     | 422.59     |   0.0 | 98.65
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.50412    | 0.50412    | 0.50412    |   0.0 |  0.12
+Output  | 0.37436    | 0.37436    | 0.37436    |   0.0 |  0.09
+Modify  | 1.3873     | 1.3873     | 1.3873     |   0.0 |  0.32
+Other   |            | 3.524      |            |       |  0.82
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         120648 ave      120648 max      120648 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix freeze_skeleton
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Per MPI rank memory allocation (min/avg/max) = 1117 | 1117 | 1117 Mbytes
+   Step        Atoms        PotEng         Press          c_f_Ag      c_f_skeleton
+       300      916534  -4907345       -52760.754      3.8454775      3.6996034
+Loop time of 1.643e-06 on 4 procs for 0 steps with 916534 atoms
+
+365.2% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.643e-06  |            |       |100.00
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         120655 ave      120655 max      120655 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_continue_200.dump id type x y z fx fy fz modify sort id
+print "AG_ONLY_RIGID_SKELETON_CONTINUE_200_DONE"
+AG_ONLY_RIGID_SKELETON_CONTINUE_200_DONE
+Total wall time: 0:07:19

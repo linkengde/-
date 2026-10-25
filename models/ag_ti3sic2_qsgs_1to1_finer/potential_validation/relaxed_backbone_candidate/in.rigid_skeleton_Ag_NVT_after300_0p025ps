@@ -1,0 +1,29 @@
+# No-source 25 fs Ag cold-stability probe after 300 Ag-only FIRE iterations.
+# Skeleton and bottom slab are fixed; this is not a heating or TTM run.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_continue_200.dump.gz 300 x y z box no replace yes
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+compute T_Ag mobile_Ag temp
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+velocity mobile_Ag create 300.0 508327 mom yes rot no dist gaussian
+timestep 0.0005
+fix thermostat mobile_Ag nvt temp 300.0 300.0 0.1
+thermo 10
+thermo_style custom step c_T_Ag pe ke etotal c_f_Ag
+thermo_modify flush yes
+run 50
+write_dump mobile_Ag custom potential_validation/relaxed_backbone_candidate/rigid_skeleton_Ag_NVT_after300_0p025ps_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "RIGID_SKELETON_AG_NVT_AFTER300_0P025PS_DONE_NO_SOURCE"
