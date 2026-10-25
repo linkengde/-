@@ -18,6 +18,8 @@ new = json.loads((ROOT / "input_manifest.json").read_text())["records"]
 labels = {r["label"]: r for r in new}
 old_label = "AgSi_rigid_Ag_z_parent_k6x6x1_sigma0p10_dipoleXY_v19"
 old_root = REPO / "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_gap_scan"
+dev_label = "AgSi_v19_independent_dev_01"
+dev_root = REPO / "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_independent_dev"
 
 
 def get(label):
@@ -27,17 +29,27 @@ def get(label):
         summary = json.loads((folder / "summary.json").read_text())
         atoms = read(folder / (label + "_PW_PBE.extxyz"))
         method = summary["method"]
-        return summary, atoms, method, folder
+        return summary, atoms, method, folder, labels[label]["input_sha256"]
     if label == old_label:
         folder = old_root / "calculations" / label
         subprocess.run([sys.executable, str(old_root / "verify_result.py"), label, str(folder)], check=True, stdout=subprocess.DEVNULL)
         summary = json.loads((folder / "summary.json").read_text())
         atoms = read(folder / (label + "_PW_PBE.extxyz"))
-        return summary, atoms, summary["method"], folder
+        source_manifest = json.loads((old_root / "input_manifest.json").read_text())
+        record = next(r for r in source_manifest["records"] if r["label"] == label)
+        return summary, atoms, summary["method"], folder, record.get("input_sha256", record.get("source_sha256"))
+    if label == dev_label:
+        folder = dev_root / "calculations" / label
+        subprocess.run([sys.executable, str(dev_root / "verify_result.py"), label, str(folder)], check=True, stdout=subprocess.DEVNULL)
+        summary = json.loads((folder / "summary.json").read_text())
+        atoms = read(folder / (label + "_PW_PBE.extxyz"))
+        source_manifest = json.loads((dev_root / "input_manifest.json").read_text())
+        record = next(r for r in source_manifest["records"] if r["label"] == label)
+        return summary, atoms, summary["method"], folder, record["input_sha256"]
     raise SystemExit("Label is not in this scan or its registered baseline: " + label)
 
 
-(sa, aa, ma, da), (sb, ab, mb, db) = get(sys.argv[1]), get(sys.argv[2])
+(sa, aa, ma, da, ha), (sb, ab, mb, db, hb) = get(sys.argv[1]), get(sys.argv[2])
 assert np.array_equal(aa.numbers, ab.numbers)
 assert np.array_equal(aa.positions, ab.positions) and np.array_equal(aa.cell.array, ab.cell.array)
 assert np.array_equal(aa.pbc, ab.pbc) and np.array_equal(aa.arrays["lammps_id"], ab.arrays["lammps_id"])
@@ -67,7 +79,8 @@ result = {
     "status": "PASS_WITHIN_PROVISIONAL_BUDGET" if all(checks.values()) else "SENSITIVITY_EXCEEDS_BUDGET",
     "labels": [sys.argv[1], sys.argv[2]],
     "methods": [ma, mb],
-    "input_geometry_sha256": "73eff17b1913b653017647e9af9c9681e340f0b8067936419f3377963a3bc02c",
+    "input_geometry_sha256": ha if ha == hb else None,
+    "input_geometry_file_sha256": {sys.argv[1]: ha, sys.argv[2]: hb},
     "metrics": metrics,
     "budgets": budgets,
     "checks": checks,

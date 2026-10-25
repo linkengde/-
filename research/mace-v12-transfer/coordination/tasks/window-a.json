@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
-  "updated_utc": "2026-10-25T05:36:06.398835+00:00",
+  "updated_utc": "2026-10-25T05:45:24.250079+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V20 four-control review complete: 6x6x1 sigma 0.10 eV retained provisionally; 8x8x1 passes pairwise budgets, 4x4x1 narrowly exceeds force-RMS, and sigma 0.05/0.20 exceed free-energy/force budgets. Read-only audit confirms sigma 0.10 eV across V19 train36/dev3; k-point/PBC mismatch remains.",
+  "current_stage": "Exact-development-geometry numerical controls registered after confirming the V20 parent has c=44.2058765 A while V19 AgSi development uses c=34.2058765 A. The four new labels are controls only.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -88,7 +88,11 @@
     "AgSi_slab_k4x4x1_sigma0p10_v20": "completed; SCF iteration 67; elapsed 8481s; archive verification PASS; commit 572f143.",
     "AgSi_slab_k8x8x1_sigma0p10_v20": "completed; SCF iteration 51; elapsed 21530s; archive verification PASS; commit 572f143.",
     "AgSi_slab_k6x6x1_sigma0p05_v20": "completed; SCF iteration 59; elapsed 14694s; updated 2026-10-25T00:52:40.618862+00:00",
-    "AgSi_slab_k6x6x1_sigma0p20_v20": "completed; SCF iteration 54; elapsed 11612s; archive verification PASS; published at f433ff8a."
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "completed; SCF iteration 54; elapsed 11612s; archive verification PASS; published at f433ff8a.",
+    "AgSi_dev34_k6x6x1_sigma0p05_v21": "queued; exact V19 development geometry control; compare with AgSi_v19_independent_dev_01",
+    "AgSi_dev34_k6x6x1_sigma0p20_v21": "queued; exact V19 development geometry control; compare with AgSi_v19_independent_dev_01",
+    "AgSi_dev34_k4x4x1_sigma0p10_v21": "queued; exact V19 development geometry control; compare with AgSi_v19_independent_dev_01",
+    "AgSi_dev34_k8x8x1_sigma0p10_v21": "queued; exact V19 development geometry control; compare with AgSi_v19_independent_dev_01"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -141,7 +145,11 @@
     "AgSi_slab_k4x4x1_sigma0p10_v20": "completed",
     "AgSi_slab_k8x8x1_sigma0p10_v20": "completed",
     "AgSi_slab_k6x6x1_sigma0p05_v20": "completed",
-    "AgSi_slab_k6x6x1_sigma0p20_v20": "completed"
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "completed",
+    "AgSi_dev34_k6x6x1_sigma0p05_v21": "queued",
+    "AgSi_dev34_k6x6x1_sigma0p20_v21": "queued",
+    "AgSi_dev34_k4x4x1_sigma0p10_v21": "queued",
+    "AgSi_dev34_k8x8x1_sigma0p10_v21": "queued"
   },
   "result_directory": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v17_main_targeted_acquisition",
   "allowed_publish_paths": [
@@ -189,8 +197,8 @@
     "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls"
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
-  "task_boundary": "A may run only the four labels registered under pbe_interface_v20_slab_method_controls, one four-rank job at a time, after hash/owner/disk preflight. These are numerical controls, not training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and a versioned A approval.",
-  "next_action": "Await a separately assigned plan for the remaining V19 train/development k-point and periodicity mismatch. Keep current labels unchanged; no additional DFT or dataset edits under this assignment.",
+  "task_boundary": "A may run only the eight labels registered under pbe_interface_v20_slab_method_controls: the original four 44.2058765 A controls and four follow-up controls using the byte-identical approved 34.2058765 A AgSi development input. Run one four-rank job at a time after hash/owner/disk preflight. All eight labels are numerical controls, never training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and versioned A approval.",
+  "next_action": "Run the four newly registered exact-development-geometry labels sequentially, verify/archive each, and compare with the existing AgSi_v19_independent_dev_01 baseline. Keep all controls out of training/validation and do not change the approved dataset.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
@@ -230,7 +238,11 @@
     "AgSi_slab_k4x4x1_sigma0p10_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
     "AgSi_slab_k8x8x1_sigma0p10_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
     "AgSi_slab_k6x6x1_sigma0p05_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
-    "AgSi_slab_k6x6x1_sigma0p20_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls"
+    "AgSi_slab_k6x6x1_sigma0p20_v20": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_dev34_k6x6x1_sigma0p05_v21": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_dev34_k6x6x1_sigma0p20_v21": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_dev34_k4x4x1_sigma0p10_v21": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls",
+    "AgSi_dev34_k8x8x1_sigma0p10_v21": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v20_slab_method_controls"
   },
   "handover_ready": "v19_four_meshes_completed_20261008",
   "owner_history": [

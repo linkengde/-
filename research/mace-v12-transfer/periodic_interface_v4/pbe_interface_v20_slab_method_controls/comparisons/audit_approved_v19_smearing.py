@@ -132,7 +132,7 @@ def main() -> None:
         "training_rows": rows,
         "development_rows": [{"label": item["label"], "method": item["method"]} for item in dev],
         "source_sha256": {path.relative_to(REPO).as_posix(): sha256(path) for path in inputs},
-        "interpretation": "The approved V19 train36 and dev3 both use 0.10 eV smearing. The training labels use Gamma and full periodicity, while dev3 uses 6x6x1 and a nonperiodic-z slab. The V20 smearing comparison supports keeping 0.10 eV as the current width reference but does not resolve the remaining mesh/PBC mismatch.",
+        "interpretation": "The approved V19 train36 and dev3 both use 0.10 eV smearing. The training labels use Gamma and full periodicity, while dev3 uses 6x6x1 and a nonperiodic-z slab. The original V20 controls used a different 44.2058765 A c-axis cell from the 34.2058765 A dev3 input; their sensitivity result is adjacent evidence only. Exact-development-geometry controls are separately registered.",
         "dataset_changed": False,
     }
     out = HERE / "approved_v19_smearing_consistency.json"

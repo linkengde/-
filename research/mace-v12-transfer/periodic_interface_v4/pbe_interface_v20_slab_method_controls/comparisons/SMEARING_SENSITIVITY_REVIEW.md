@@ -6,6 +6,8 @@ Review date: 2026-10-25
 
 This review compares the restarted, fixed-geometry `6x6x1` controls at Fermi smearing `0.05 eV` and `0.20 eV` against the retained V19 `0.10 eV` baseline. The three records use the same 52-atom AgSi slab geometry, PBE, 500 eV plane-wave cutoff, PAW setups, SCF thresholds and mixer, and xy dipole correction. Both V20 archives passed `verify_result.py`; the comparison script also verified the archives and exact geometry identity before computing the differences.
 
+These controls use the V20 parent with `c = 44.2058765 Å` and about 26 Å of vacuum. The approved V19 AgSi development geometry uses `c = 34.2058765 Å` and about 16 Å of vacuum. The results below establish sensitivity for the V20 control parent; exact-development-geometry checks are registered separately.
+
 The reported deltas are absolute differences from the `0.10 eV` baseline. The provisional limits are 2 meV/atom for each energy convention, 0.01 eV/Å for force-vector RMS, and 0.02 eV/Å for the marked Ag–Si pair-force projection.
 
 | Smearing | Native energy delta (meV/atom) | Free-energy delta (meV/atom) | Force-vector RMS (eV/Å) | Maximum atom force-vector difference (eV/Å) | Absolute marked-pair projection delta (eV/Å) | Budget result |
