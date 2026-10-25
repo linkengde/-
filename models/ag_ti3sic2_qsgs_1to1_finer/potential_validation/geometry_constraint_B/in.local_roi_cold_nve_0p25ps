@@ -1,0 +1,42 @@
+# Local-ROI cold baseline for geometry-only Model B.
+# Exploratory assumptions: rigid ceramic plus fixed Ag outside r=75 A.
+# No heat source or TTM. The test is bounded at 0.25 ps.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+include potential_validation/geometry_constraint_B/potential.geometry_wca_fixed_skeleton.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable cx equal 150.9777894974
+variable cy equal 152.1002576369
+variable lz equal 159.3915614456
+region r_local cylinder z ${cx} ${cy} 75.0 20.0 ${lz} units box
+region r_source cylinder z ${cx} ${cy} 30.0 40.0 ${lz} units box
+group Ag type 4
+group skeleton type 1 2 3
+group local_Ag region r_local
+group mobile_Ag intersect Ag local_Ag
+group fixed_Ag subtract Ag mobile_Ag
+group source_Ag region r_source
+group source_core intersect Ag source_Ag
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix freeze_fixed_Ag fixed_Ag setforce 0.0 0.0 0.0
+mass 4 107.8682
+velocity mobile_Ag create 300.0 190427 mom yes rot no dist gaussian
+timestep 0.0005
+compute T_local mobile_Ag temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax mobile_Ag reduce max v_fmag
+thermo 50
+thermo_style custom step time c_T_local pe ke etotal c_fmax
+thermo_modify flush yes
+fix integrate mobile_Ag nve
+run 0
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/local_roi_cold_start.dump id type x y z vx vy vz fx fy fz modify sort id
+run 500
+run 0 pre no post no
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/local_roi_cold_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "LOCAL_ROI_COLD_NVE_0P25PS_DONE_NO_HEAT"

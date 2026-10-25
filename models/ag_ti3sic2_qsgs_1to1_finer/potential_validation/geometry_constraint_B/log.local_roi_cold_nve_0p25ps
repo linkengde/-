@@ -1,0 +1,192 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Local-ROI cold baseline for geometry-only Model B.
+# Exploratory assumptions: rigid ceramic plus fixed Ag outside r=75 A.
+# No heat source or TTM. The test is bounded at 0.25 ps.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.562 seconds
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  916534 atoms before read
+  916534 atoms in snapshot
+  0 atoms purged
+  916534 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  916534 atoms after read
+include potential_validation/geometry_constraint_B/potential.geometry_wca_fixed_skeleton.inc
+# EXPLORATORY B MODEL FOR A RIGID GEOMETRIC SCAFFOLD ONLY.
+# Ti/Si/C positions are fixed by the matching input, so their internal TSCBOP
+# energy is constant and their internal forces do not affect mobile Ag. This
+# include omits those fixed-fixed calculations while preserving all Ag forces.
+# It is not a flexible-ceramic or physical Ag/MAX interface potential.
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable cx equal 150.9777894974
+variable cy equal 152.1002576369
+variable lz equal 159.3915614456
+region r_local cylinder z ${cx} ${cy} 75.0 20.0 ${lz} units box
+region r_local cylinder z 150.9777894974 ${cy} 75.0 20.0 ${lz} units box
+region r_local cylinder z 150.9777894974 152.1002576369 75.0 20.0 ${lz} units box
+region r_local cylinder z 150.9777894974 152.1002576369 75.0 20.0 159.3915614456 units box
+region r_source cylinder z ${cx} ${cy} 30.0 40.0 ${lz} units box
+region r_source cylinder z 150.9777894974 ${cy} 30.0 40.0 ${lz} units box
+region r_source cylinder z 150.9777894974 152.1002576369 30.0 40.0 ${lz} units box
+region r_source cylinder z 150.9777894974 152.1002576369 30.0 40.0 159.3915614456 units box
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+group local_Ag region r_local
+154965 atoms in group local_Ag
+group mobile_Ag intersect Ag local_Ag
+33963 atoms in group mobile_Ag
+group fixed_Ag subtract Ag mobile_Ag
+178837 atoms in group fixed_Ag
+group source_Ag region r_source
+21705 atoms in group source_Ag
+group source_core intersect Ag source_Ag
+3432 atoms in group source_core
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix freeze_fixed_Ag fixed_Ag setforce 0.0 0.0 0.0
+mass 4 107.8682
+velocity mobile_Ag create 300.0 190427 mom yes rot no dist gaussian
+timestep 0.0005
+compute T_local mobile_Ag temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax mobile_Ag reduce max v_fmag
+thermo 50
+thermo_style custom step time c_T_local pe ke etotal c_fmax
+thermo_modify flush yes
+fix integrate mobile_Ag nve
+run 0
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 80 81 69
+  4 neighbor lists, perpetual/occasional/extra = 4 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair zero, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair lj/cut, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 432.1 | 432.1 | 432.1 Mbytes
+   Step          Time        c_T_local        PotEng         KinEng         TotEng         c_fmax    
+       100   0.1            300           -537983.48      1316.9799     -536666.5       1.34757      
+Loop time of 2.514e-06 on 4 procs for 0 steps with 916534 atoms
+
+198.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.514e-06  |            |       |100.00
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          86842 ave       86842 max       86842 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/local_roi_cold_start.dump id type x y z vx vy vz fx fy fz modify sort id
+run 500
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Per MPI rank memory allocation (min/avg/max) = 439.8 | 439.8 | 439.8 Mbytes
+   Step          Time        c_T_local        PotEng         KinEng         TotEng         c_fmax    
+       100   0.1            300           -537983.48      1316.9799     -536666.5       1.34757      
+       150   0.125          250.8886      -537767.88      1101.3841     -536666.49      1.6259363    
+       200   0.15           156.97101     -537355.57      689.09223     -536666.48      2.2781513    
+       250   0.175          129.79003     -537236.25      569.76954     -536666.48      2.7410115    
+       300   0.2            176.20048     -537440         773.5083      -536666.49      2.4350379    
+       350   0.225          209.76378     -537587.34      920.84893     -536666.49      2.3048582    
+       400   0.25           208.81595     -537583.18      916.68806     -536666.49      3.2416875    
+       450   0.275          212.39067     -537598.87      932.38081     -536666.49      3.0548918    
+       500   0.3            230.4742      -537678.26      1011.7663     -536666.49      3.8487732    
+       550   0.325          235.60331     -537700.77      1034.2827     -536666.49      3.1366067    
+       600   0.35           224.97438     -537654.11      987.62246     -536666.49      3.5421071    
+Loop time of 29.1678 on 4 procs for 500 steps with 916534 atoms
+
+Performance: 0.741 ns/day, 32.409 hours/ns, 17.142 timesteps/s, 15.711 Matom-step/s
+395.2% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 22.541     | 22.541     | 22.541     |   0.0 | 77.28
+Neigh   | 0.68894    | 0.68894    | 0.68894    |   0.0 |  2.36
+Comm    | 0.51764    | 0.51764    | 0.51764    |   0.0 |  1.77
+Output  | 0.067648   | 0.067648   | 0.067648   |   0.0 |  0.23
+Modify  | 4.0272     | 4.0272     | 4.0272     |   0.0 | 13.81
+Other   |            | 1.325      |            |       |  4.54
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          86842 ave       86842 max       86842 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 2
+Dangerous builds = 0
+run 0 pre no post no
+   Step          Time        c_T_local        PotEng         KinEng         TotEng         c_fmax    
+       600   0.35           224.97438     -537654.11      987.62246     -536666.49      3.5421071    
+Loop time of 1.372e-06 on 4 procs for 0 steps with 916534 atoms
+
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/local_roi_cold_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "LOCAL_ROI_COLD_NVE_0P25PS_DONE_NO_HEAT"
+LOCAL_ROI_COLD_NVE_0P25PS_DONE_NO_HEAT
+Total wall time: 0:00:32
