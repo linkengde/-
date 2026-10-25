@@ -643,6 +643,8 @@ def main() -> None:
                         help="apply a 300 K ideal isothermal sink at the bottom z face")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
+    if args.heat_ps <= 0.0 or args.cool_ps < 0.0:
+        parser.error("--heat-ps must be positive and --cool-ps must be non-negative")
     projected = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
     model = QSGSDoubleTemperatureGrid(
         projected,
@@ -651,7 +653,8 @@ def main() -> None:
     )
     dt_ps = args.dt_fs * 1.0e-3
     rows = model.run(args.heat_ps, dt_ps, heat_on=True, sample_interval_ps=args.sample_ps)
-    rows += model.run(args.cool_ps, dt_ps, heat_on=False, sample_interval_ps=args.sample_ps)
+    if args.cool_ps > 0.0:
+        rows += model.run(args.cool_ps, dt_ps, heat_on=False, sample_interval_ps=args.sample_ps)
     output = args.output or DATA_DIR / f"qsgs_ttm_enthalpy_{args.spacing}_BC{args.boundary}.csv"
     write_csv(output, rows)
     summary = {
@@ -684,6 +687,15 @@ def main() -> None:
         "electron_temperature_max_K": float(model.electron.temperature_K[model.lattice.ag_fraction > 0.0].max()),
         "lattice_temperature_max_K": float(model.lattice.state.temperature_K.max()),
         "ag_liquid_volume_fraction": model.lattice._liquid_ag_volume_fraction(),
+        "electron_temperature_peak_over_run_K": max(
+            row["max_electron_temperature_K"] for row in rows
+        ),
+        "lattice_temperature_peak_over_run_K": max(
+            row["max_lattice_temperature_K"] for row in rows
+        ),
+        "max_ag_liquid_fraction_over_run": max(
+            row["max_ag_liquid_fraction"] for row in rows
+        ),
         "limitations": [
             "This is a continuum two-temperature enthalpy reference solver, not atomistic TTM-MD.",
             "Ag electron properties are cross-paper candidate fits over 300–20000 K; low-temperature extension is disabled.",

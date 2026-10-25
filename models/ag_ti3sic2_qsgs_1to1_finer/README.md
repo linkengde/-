@@ -85,4 +85,4 @@ in.model只定义结构、势和底部约束，不启动动力学。SHA256SUMS.t
 
 ## 后续局部熔化—凝固路线
 
-由于复合体系原子冷态基线和界面势尚未通过验证，后续改用分开的多尺度路线：纯Ag原子模型提供熔化/凝固机制参照，QSGS几何进入连续介质双温—焓法模型。纯Ag真实MD TTM参考耦合短测见[纯Ag TTM试验](pure_ag_classifier/TTM_MD_PILOT.md)；QSGS网格映射、焓函数、一维Stefan基准与单温筛查见[连续相变模块记录](phase_field_qsgs/README.md)。双温—焓求解器现使用守恒半隐式导热和隐式逐格电子—晶格交换，并修正Ag总热导率重复计入；通过0D、1D及10 Å QSGS短时能量收支检查。尚未建立稳定熔池，也未运行100 ps计算。方法、短测数据与残余限制见[QSGS双温焓法报告](phase_field_qsgs/QSGS_TTM_ENTHALPY_PILOT.md)。
+由于复合体系原子冷态基线和界面势尚未通过验证，后续改用分开的多尺度路线：纯Ag原子模型提供熔化/凝固机制参照，QSGS几何进入连续介质双温—焓法模型。纯Ag真实MD TTM参考耦合短测见[纯Ag TTM试验](pure_ag_classifier/TTM_MD_PILOT.md)；QSGS网格映射、焓函数、一维Stefan基准与单温筛查见[连续相变模块记录](phase_field_qsgs/README.md)。双温—焓求解器现使用守恒半隐式导热和隐式逐格电子—晶格交换，并修正Ag总热导率重复计入；通过0D、1D及10 Å QSGS短时能量收支检查。边界 A、无底部热沉条件下已完成0.1、1和5 ps加热筛查，仍未形成 Ag 液相；尚未运行100 ps计算。方法、筛查数据与残余限制见[QSGS双温焓法报告](phase_field_qsgs/QSGS_TTM_ENTHALPY_PILOT.md)。
