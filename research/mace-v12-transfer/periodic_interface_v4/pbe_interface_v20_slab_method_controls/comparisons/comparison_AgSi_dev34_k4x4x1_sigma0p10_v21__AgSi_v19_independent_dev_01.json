@@ -1,0 +1,97 @@
+{
+  "status": "SENSITIVITY_EXCEEDS_BUDGET",
+  "labels": [
+    "AgSi_dev34_k4x4x1_sigma0p10_v21",
+    "AgSi_v19_independent_dev_01"
+  ],
+  "methods": [
+    {
+      "xc": "PBE",
+      "basis": "plane wave",
+      "cutoff_eV": 500,
+      "parallel": {
+        "sl_auto": true
+      },
+      "scf_thresholds": "energy/density/eigenstates 1e-5",
+      "mixer": "Pulay beta=0.05, nmaxold=8, weight=100",
+      "GPAW_version": "26.7.0",
+      "PAW_data_version": "1.2.1",
+      "PAW_setup_sha256": {
+        "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+        "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+        "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+        "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+      },
+      "energy_keys": {
+        "native": "energy (force_consistent=False)",
+        "force_consistent": "free_energy"
+      },
+      "maxiter": 160,
+      "ASE_version": "3.29.0",
+      "kpts": [
+        4,
+        4,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "poissonsolver": {
+        "dipolelayer": "xy"
+      }
+    },
+    {
+      "xc": "PBE",
+      "basis": "PW",
+      "cutoff_eV": 500,
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "smearing_eV": 0.1
+    }
+  ],
+  "input_geometry_sha256": "bca0a8fc1a2ef4e83eebe62d18f0b77480e33692be8886d9910dfd8622dd4b92",
+  "input_geometry_file_sha256": {
+    "AgSi_dev34_k4x4x1_sigma0p10_v21": "bca0a8fc1a2ef4e83eebe62d18f0b77480e33692be8886d9910dfd8622dd4b92",
+    "AgSi_v19_independent_dev_01": "bca0a8fc1a2ef4e83eebe62d18f0b77480e33692be8886d9910dfd8622dd4b92"
+  },
+  "metrics": {
+    "native_energy_delta_meV_atom": 0.6438278572121502,
+    "free_energy_delta_meV_atom": 0.5375476080768766,
+    "force_vector_difference_RMS_eV_A": 0.010061789961647872,
+    "maximum_atom_force_vector_difference_eV_A": 0.017074804784480865,
+    "marked_Ag_Si_pair_projection_delta_eV_A": -0.015744044971385308
+  },
+  "budgets": {
+    "native_energy_meV_per_atom": 2.0,
+    "free_energy_meV_per_atom": 2.0,
+    "force_vector_rms_eV_A": 0.01,
+    "marked_pair_projection_eV_A": 0.02
+  },
+  "checks": {
+    "native_energy": true,
+    "free_energy": true,
+    "force_vector_RMS": false,
+    "marked_pair_projection": true
+  },
+  "archives_sha256": {
+    "AgSi_dev34_k4x4x1_sigma0p10_v21": {
+      "progress.json": "ac2ea19fab960e015788e2d981650f47ad031ff7875b24add8432c5079217a0f",
+      "AgSi_dev34_k4x4x1_sigma0p10_v21_PW_PBE.extxyz": "877c4fb221bf877f8ecbc3a45a88f34a7edcb96d1ad4ebfe5d0fa4adbe877c6c",
+      "gpaw.log": "b22b38f54531136559f9321787164d7598b9a240679decb69a273f4a740a84fa",
+      "summary.json": "b482ebf4366567c8f004b2886ed77c8c1dd473a3e9b46d75f0e08c9118c2901a"
+    },
+    "AgSi_v19_independent_dev_01": {
+      "AgSi_v19_independent_dev_01_PW_PBE.extxyz": "73f274501b4bb34073271541d79d41007eaff35e3a1804a7b81946d1d7253553",
+      "gpaw.log": "d1fc36b474bf8c241453f3900c9dc8c2adabf428f79208cb4db889f2a78c4dba",
+      "progress.json": "f9ed687682175527c9f911c33185a18785c5608b4b5746b3203bfb2a1c157790",
+      "summary.json": "85d220763cc0cceca326e7b64e195b89c4dbb1c0af29236458d61bd151499695"
+    }
+  },
+  "role": "numerical_method_control_only_not_training_or_independent_validation"
+}
