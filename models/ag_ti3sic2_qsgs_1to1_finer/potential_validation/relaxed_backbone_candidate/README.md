@@ -17,6 +17,7 @@ All LAMMPS checks below use the existing Ag EAM + Ti–Si–C TSCBOP + Ag-cross 
 | Check | Outcome | Interpretation |
 |---|---|---|
 | Initial full-potential `run 0` | Maximum force on mobile atoms 3.7801 eV/Å | High residual forces remain in the as-built candidate. |
+| Same-coordinate force decomposition | With the three Ag–Ti/Si/C Morse terms diagnostically set to `D0=0`, Ag max force falls from 3.7801 to 1.8506 eV/Å and its p95 falls from 1.7403 to 1.0411 eV/Å. The cross-force component exceeds 1 eV/Å on 27.3% of Ag atoms; 54.1% of Ag atoms lie within 4 Å of the skeleton. | The current cross Morse terms strongly affect the interfacial Ag force tail, but are not the only residual-force source. The no-cross test is a diagnostic decomposition only; `D0=0` is not a proposed production setting. |
 | Full-mobile FIRE minimization, first 100 steps | Maximum mobile force 3.6145 eV/Å; one C atom falls outside the 3.25 Å skeleton connectivity cutoff | Iteration cap reached; not converged. |
 | Continued full-mobile FIRE, total 200 steps | Maximum mobile force 3.7726 eV/Å; skeleton 8 components (12 atoms outside largest), Ag 5 components (10 outside largest); minimum Ti–C 1.8846 Å and Ag–C 2.0984 Å | Further relaxation worsens local connectivity; reject as a cold baseline. |
 | Ag-only FIRE with the entire skeleton fixed, 100 steps | Ag maximum force 3.5640 eV/Å; after releasing the constraint, skeleton maximum force 3.4959 eV/Å | A rigid scaffold preserves phase connectivity in this short static screen but does not remove large residual forces. |
@@ -34,7 +35,7 @@ The full-mobile FIRE endpoint is not a safe restart: it contains broken phase co
 - `relaxed_parent_basis.json`: parent basis and cell transformation.
 - `build_candidate.py`, `derive_relaxed_parent_basis.py`, `validate_geometry.py`: build and validation scripts.
 - `in.*`, `log.*`, `*_metrics*.json`: LAMMPS test inputs, logs, and summaries.
-- `initial_forces.dump.gz`, `mobile_minimized_100.dump.gz`, `mobile_minimized_200.dump.gz`, `ag_only_rigid_skeleton_100.dump.gz`, `rigid_skeleton_Ag_NVT_0p025ps_final.dump.gz`: compressed diagnostic snapshots. No large all-atom trajectory is archived.
+- `initial_forces.dump.gz`, `forces_no_cross_morse.dump.gz`, `mobile_minimized_100.dump.gz`, `mobile_minimized_200.dump.gz`, `ag_only_rigid_skeleton_100.dump.gz`, `rigid_skeleton_Ag_NVT_0p025ps_final.dump.gz`: compressed diagnostic snapshots. `cross_morse_force_decomposition.json` is computed from the same-coordinate full and zero-cross-force snapshots by `analyze_cross_morse_forces.py`. No large all-atom trajectory is archived.
 - `SHA256SUMS.txt`: checksums for the archived candidate files (excluding the checksum file itself).
 
 The candidate's parent CIF and potential files are shared repository inputs: `research/mace-v12-transfer/periodic_interface_v4/v19_cif_parent_structures/source/Ti3SiC2_COD_9009647.cif`, `potential_validation/ti3sic2_bulk_tscbop/`, and `potential.interface_calibration_v0.inc` in the parent model directory. The potential is unchanged.
@@ -54,6 +55,11 @@ The builder emits raw `.data` and `.extxyz` files. After geometry validation, co
 ```bash
 gzip -f potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data
 OMP_NUM_THREADS=4 /workspace/.venvs/lammps/bin/lmp -sf omp -in potential_validation/relaxed_backbone_candidate/in.static_force_check -log potential_validation/relaxed_backbone_candidate/log.static_force_check
+OMP_NUM_THREADS=4 /workspace/.venvs/lammps/bin/lmp -sf omp -in potential_validation/relaxed_backbone_candidate/in.static_no_cross_morse -log potential_validation/relaxed_backbone_candidate/log.static_no_cross_morse
+gzip -f potential_validation/relaxed_backbone_candidate/forces_no_cross_morse.dump
+python potential_validation/relaxed_backbone_candidate/analyze_cross_morse_forces.py
 ```
+
+The second `run 0` input sets the three cross-Morse well depths to zero after including the unchanged calibration-v0 file, solely to subtract force vectors at identical coordinates and estimate the cross-term contribution. Never use that diagnostic input for dynamics.
 
 The archived partial NVT logs end at the stated manual-stop points. The NVT input requests 0.1 ps; reproducing the original stopping point requires stopping that test manually when its trend becomes unacceptable. It is intentionally not presented as a successful equilibration protocol.

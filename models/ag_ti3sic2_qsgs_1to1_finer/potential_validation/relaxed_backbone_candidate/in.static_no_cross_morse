@@ -1,0 +1,36 @@
+# Static full-potential force check of the separate TSCBOP-relaxed-parent QSGS candidate.
+# No minimization, MD, thermostat, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+# Diagnostic only: zero the three Ag-skeleton Morse terms; repository potential file is untouched.
+pair_coeff 1 4 morse 0.0 2.0 2.33708864 8.0
+pair_coeff 2 4 morse 0.0 2.0 2.40407837 8.0
+pair_coeff 3 4 morse 0.0 2.0 2.15255924 8.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group mobile subtract all bottom
+group Ag type 4
+group Ti type 1
+group Si type 2
+group C type 3
+group mobile_Ti intersect mobile Ti
+group mobile_Si intersect mobile Si
+group mobile_C intersect mobile C
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_all all reduce max v_fn
+compute f_mobile mobile reduce max v_fn
+compute f_ag Ag reduce max v_fn
+compute f_mobile_Ti mobile_Ti reduce max v_fn
+compute f_mobile_Si mobile_Si reduce max v_fn
+compute f_mobile_C mobile_C reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe press c_f_all c_f_mobile c_f_ag c_f_mobile_Ti c_f_mobile_Si c_f_mobile_C
+dump force_dump all custom 1 potential_validation/relaxed_backbone_candidate/forces_no_cross_morse.dump id type x y z fx fy fz
+dump_modify force_dump sort id
+run 0
+print "RELAXED_PARENT_QSGS_NO_CROSS_MORSE_RUN0_DIAGNOSTIC"

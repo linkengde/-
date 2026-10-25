@@ -63,6 +63,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 随后已按 TSCBOP 零压弛豫晶胞另建一个独立 QSGS 候选，原始模型未改动。新候选几何仍通过双连续与约1:1质量比检查，但两段共200步全体系 FIRE 弛豫后出现少量断连；固定整个骨架再做 Ag-only 弛豫，也没有消除高受力。更严格的刚性骨架、无热源 300 K NVT 短测中，Ag 温度升至约1067 K（80 fs），最大 Ag 力升至约11.5 eV/Å。因此新候选也**未通过冷态基线**，没有接入 TTM 或施加热源。方法、日志和指标见[弛豫母相 QSGS 候选记录](potential_validation/relaxed_backbone_candidate/README.md)。
 
+补充的同坐标 `run 0` 力分解显示，关闭交叉 Morse 项仅用于诊断时，Ag 的最大力由3.780降至1.851 eV/Å，95分位由1.740降至1.041 eV/Å；约27.3%的 Ag 原子交叉项力大于1 eV/Å。交叉项显著影响界面力尾部，但去掉该项后仍有残余力，故不能把问题归结成单一参数，也没有把诊断参数用于任何动力学。分解数据和可复算脚本也收录在上述候选目录中。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py
