@@ -1,0 +1,28 @@
+# B-route 25 fs no-source Ag stability probe; fixed skeleton and bottom slab.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+include potential_validation/geometry_constraint_B/potential.geometry_wca_candidate.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+compute T_Ag mobile_Ag temp
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+velocity mobile_Ag create 300.0 190427 mom yes rot no dist gaussian
+timestep 0.0005
+fix thermostat mobile_Ag nvt temp 300.0 300.0 0.1
+thermo 10
+thermo_style custom step c_T_Ag pe ke etotal c_f_Ag
+thermo_modify flush yes
+run 50
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/ag_nvt_0p025ps_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "GEOMETRY_CONSTRAINT_B_AG_NVT_0P025PS_COMPLETE_NO_SOURCE"

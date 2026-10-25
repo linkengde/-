@@ -71,6 +71,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 继续逐对计算后，最高力 Ag 的交叉作用由多个 C/Ti 近邻合成；最大单个 Ag–C 原子对的力约1.35 eV/Å，解析的 Morse 对力总和与 LAMMPS 力差残差小于1.1×10⁻⁵ eV/Å。这支持“界面多近邻累积”是当前校准版下高力尾部的直接来源，不支持把它简化成一个异常短接触。
 
+已完成一次有限的 B 路线试验：固定 Ti₃SiC₂ 骨架，用 WCA 纯排斥壁取代 Ag–骨架 Morse 项，保留 Ag EAM。100步静态优化后移动 Ag 最大力降至1.45 eV/Å且仍连续；连续100 fs无热源NVT未发生温度/受力爆发，但温度降至184 K、Ag 有63个原子离开最大连通分量，因此仍未达到冷态验收。该模型只验证几何约束可行性，不代表真实界面；没有进行TTM或熔池计算。完整设置、结果和复现输入见[几何约束型 Model B 试验](potential_validation/geometry_constraint_B/README.md)。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py

@@ -1,0 +1,28 @@
+# B route: relax Ag in a rigid Ti3SiC2 geometric obstacle; no TTM/heating.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+include potential_validation/geometry_constraint_B/potential.geometry_wca_candidate.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+compute f_skeleton skeleton reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press c_f_Ag c_f_skeleton
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 100 2000
+unfix freeze_skeleton
+run 0
+write_dump all custom potential_validation/geometry_constraint_B/ag_minimized_100.dump id type x y z fx fy fz modify sort id
+print "GEOMETRY_CONSTRAINT_B_AG_MINIMIZE_100_COMPLETE"

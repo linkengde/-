@@ -1,0 +1,175 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# B route: relax Ag in a rigid Ti3SiC2 geometric obstacle; no TTM/heating.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.495 seconds
+include potential_validation/geometry_constraint_B/potential.geometry_wca_candidate.inc
+# EXPLORATORY GEOMETRIC-CONFINEMENT MODEL B — NOT A PHYSICAL Ag/MAX INTERFACE POTENTIAL
+# Type 1 Ti, 2 Si, 3 C, 4 Ag. Ceramic is intended to be held fixed in the test inputs.
+# Ag-ag remains the repository EAM; Ti-Si-C remains repository TSCBOP.
+# Ag-skeleton is WCA-only repulsion. rc reuses calibration-v0 Morse r0 solely as
+# a provisional contact distance; epsilon=0.5 eV is an exploration parameter.
+pair_style hybrid eam tersoff lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+# WCA: rc=2^(1/6)*sigma; shifted LJ is zero-energy, zero-force at rc.
+# No attraction, adhesion or interfacial heat-transfer physics is represented.
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+113499 atoms in group bottom
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+group mobile_Ag subtract Ag bottom
+179246 atoms in group mobile_Ag
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+compute f_skeleton skeleton reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press c_f_Ag c_f_skeleton
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 100 2000
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 80 81 69
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair lj/cut, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.002    20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 828 | 828 | 828 Mbytes
+   Step        Atoms        PotEng         Press          c_f_Ag      c_f_skeleton
+         0      916534  -4752046.2     -33512.865      2.1354904      0
+        10      916534  -4752180.3     -33462.482      2.0535205      0
+        20      916534  -4752515.3     -33329.808      1.8553598      0
+        30      916534  -4752863.2     -33179.908      1.7469746      0
+        40      916534  -4753182.3     -33029.244      1.713384       0
+        50      916534  -4753473.3     -32879.07       1.6772925      0
+        60      916534  -4753738.1     -32729.795      1.6388976      0
+        70      916534  -4753978.7     -32581.848      1.5971898      0
+        80      916534  -4754196.5     -32435.663      1.5520713      0
+        90      916534  -4754393.2     -32291.64       1.5034811      0
+       100      916534  -4754570.5     -32150.132      1.4516775      0
+Loop time of 203.143 on 4 procs for 100 steps with 916534 atoms
+
+385.8% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -4752046.16167809  -4754553.63463395  -4754570.53688471
+  Force two-norm initial, final = 186.12552 107.95141
+  Force max component initial, final = 1.8493944 1.4320475
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 100 101
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 199.72     | 199.72     | 199.72     |   0.0 | 98.32
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.20188    | 0.20188    | 0.20188    |   0.0 |  0.10
+Output  | 0.40489    | 0.40489    | 0.40489    |   0.0 |  0.20
+Modify  | 0.67034    | 0.67034    | 0.67034    |   0.0 |  0.33
+Other   |            | 2.142      |            |       |  1.05
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          86842 ave       86842 max       86842 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix freeze_skeleton
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Per MPI rank memory allocation (min/avg/max) = 843.5 | 843.5 | 843.5 Mbytes
+   Step        Atoms        PotEng         Press          c_f_Ag      c_f_skeleton
+       100      916534  -4754570.5     -32150.132      1.4516775      3.4172193
+Loop time of 2.053e-06 on 4 procs for 0 steps with 916534 atoms
+
+341.0% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.053e-06  |            |       |100.00
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          86842 ave       86842 max       86842 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom potential_validation/geometry_constraint_B/ag_minimized_100.dump id type x y z fx fy fz modify sort id
+print "GEOMETRY_CONSTRAINT_B_AG_MINIMIZE_100_COMPLETE"
+GEOMETRY_CONSTRAINT_B_AG_MINIMIZE_100_COMPLETE
+Total wall time: 0:03:31
