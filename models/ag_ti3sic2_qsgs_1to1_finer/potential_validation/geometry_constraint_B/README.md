@@ -33,6 +33,8 @@ A separate 0.25 ps sensitivity run used the paper-example peak flux of 15 eV/(ps
 
 The agreed single 0.25 ps no-source gate was then run with start/end mobile-Ag snapshots. Total potential energy rose by 1681.8 eV while kinetic energy fell by 1681.8 eV; maximum mobile-Ag force rose from 1.45 to 4.68 eV/Å. CNA unknown fraction was already 71% at the initial composite snapshot, so it is not a standalone liquid indicator here. The cold-state gate failed, and the planned 1 ps heating pilot was not started. Details and snapshots are in [the cold diagnostic report](B_COLD_DIAGNOSTIC_0P25PS.md).
 
+One bounded 1 ps NVT baseline-preparation attempt followed. The temperature returned near 300 K, but maximum Ag force rose to 7.45 eV/Å and the final-quarter potential energy continued to change by about 988 eV. The provisional pure-Ag liquid flag produced only small disconnected clusters and is not calibrated for this composite. The cold gate therefore failed after the single permitted preparation attempt; the current B initial state is rejected for melting interpretation, and no further relaxation or heating was started. See [the final cold-baseline decision](B_COLD_BASELINE_1PS_DECISION.md).
+
 For the rigid-scaffold version only, a second include omits internal TSCBOP calculations among fixed Ti/Si/C atoms while preserving the Ag EAM and Ag–skeleton WCA forces. The per-Ag static force difference was at roundoff (`1×10⁻¹³ eV/Å` max), and a 20-step NVT comparison produced identical mobile-Ag positions, velocities, and forces. The LAMMPS pair loop fell from 39.8 s to 1.28 s for those 20 steps. The accelerated 0.05 ps TTM pilot took 64.551 s. This optimization is only equivalent under the rigid geometric-obstacle assumption; it removes the ceramic's internal energy constant and cannot model ceramic response. See [the fixed-scaffold equivalence report](B_FIXED_SCAFFOLD_ACCELERATION.md).
 
 ## Files
@@ -51,6 +53,7 @@ For the rigid-scaffold version only, a second include omits internal TSCBOP calc
 - `B_TTM_SOURCE_SENSITIVITY_3X.md`, `log.b_ttm_source_sensitivity_3x_0p25ps`: three-times-source sensitivity check.
 - `b_cold_diagnostic_0p25ps.py`, `analyze_b_cold_diagnostic.py`, `cold_diagnostic_metrics.json`, `cold_diagnostic_start.dump.gz`, `cold_diagnostic_final.dump.gz`, and `log.b_cold_diagnostic_0p25ps`: the single bounded cold-state gate and its analyzed start/end snapshots.
 - `B_COLD_DIAGNOSTIC_0P25PS.md`: cold-state gate results and decision.
+- `in.ag_bounded_nvt_1ps`, `log.ag_bounded_nvt_1ps`, `cold_nvt_1ps_start.dump.gz`, `cold_nvt_1ps_final.dump.gz`, `cold_nvt_1ps_metrics.json`, and `B_COLD_BASELINE_1PS_DECISION.md`: the one bounded NVT preparation attempt and final no-go decision.
 - `B_FIXED_SCAFFOLD_ACCELERATION.md`: equivalence and timing record for the fixed-scaffold optimization.
 - `SHA256SUMS.txt` and `SHA256SUMS_TTM_PILOT.txt`: checksums for the archived files, excluding the checksum manifests themselves.
 

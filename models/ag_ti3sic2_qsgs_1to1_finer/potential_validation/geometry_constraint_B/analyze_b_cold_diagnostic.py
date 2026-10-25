@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import gzip
+import argparse
 import json
 from pathlib import Path
 import sys
@@ -86,8 +87,18 @@ def displacement_stats(displacement: np.ndarray) -> dict[str, float]:
 
 
 def main() -> None:
-    step0, start, columns0 = read_dump(HERE / "cold_diagnostic_start.dump.gz")
-    step1, final, columns1 = read_dump(HERE / "cold_diagnostic_final.dump.gz")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--start", type=Path, default=HERE / "cold_diagnostic_start.dump.gz")
+    parser.add_argument("--final", type=Path, default=HERE / "cold_diagnostic_final.dump.gz")
+    parser.add_argument("--output", type=Path, default=HERE / "cold_diagnostic_metrics.json")
+    parser.add_argument("--timestep-ps", type=float, default=0.0005)
+    parser.add_argument(
+        "--label",
+        default="BOUNDED_NO_SOURCE_COLD_DIAGNOSTIC; NOT AN EQUILIBRATION",
+    )
+    args = parser.parse_args()
+    step0, start, columns0 = read_dump(args.start)
+    step1, final, columns1 = read_dump(args.final)
     ids = start[:, columns0["id"]]
     if not np.array_equal(ids, final[:, columns1["id"]]):
         raise ValueError("Atom IDs differ between start and final snapshots")
@@ -108,9 +119,12 @@ def main() -> None:
 
     start_state = summarize_state(start, columns0, hot_core)
     final_state = summarize_state(final, columns1, hot_core)
+    duration_ps = float((step1 - step0) * args.timestep_ps)
+    final_cna = final[:, columns1["c_cna"]]
+    provisional_liquid_flag = (final_cna == 5) & (displacement >= 1.0)
     report = {
-        "status": "BOUNDED_NO_SOURCE_COLD_DIAGNOSTIC; NOT AN EQUILIBRATION",
-        "duration_ps": float((step1 - step0) * 0.0005),
+        "status": args.label,
+        "duration_ps": duration_ps,
         "start_step": int(step0),
         "final_step": int(step1),
         "hot_core_definition": "initial Ag within r_xy<=30 A and surface depth 0-60 A",
@@ -129,14 +143,38 @@ def main() -> None:
             "pe_sum_hot_core_eV": final_state["pe_sum_hot_core_eV"]
             - start_state["pe_sum_hot_core_eV"],
         },
+        "provisional_1ps_liquid_flag": (
+            {
+                "window_ps": duration_ps,
+                "fraction_all_mobile_ag": float(np.mean(provisional_liquid_flag)),
+                "fraction_hot_core": float(np.mean(provisional_liquid_flag[hot_core])),
+                "valid_window_length": duration_ps >= 0.999,
+                "composite_calibrated": False,
+                "largest_flagged_cluster_all_mobile_ag": largest_connected_cluster(
+                    xyz1,
+                    provisional_liquid_flag,
+                    (LX, LY, MATERIAL_LZ),
+                    cutoff_A=3.98,
+                    periodic_xy=True,
+                ).largest_cluster_atoms,
+                "largest_flagged_cluster_hot_core": largest_connected_cluster(
+                    xyz1,
+                    provisional_liquid_flag & hot_core,
+                    (LX, LY, MATERIAL_LZ),
+                    cutoff_A=3.98,
+                    periodic_xy=True,
+                ).largest_cluster_atoms,
+            }
+            if duration_ps >= 0.999
+            else None
+        ),
         "interpretation_limits": [
-            "CNA disorder over 0.25 ps is not a liquid classification; the provisional liquid flag requires a 1 ps displacement window.",
+            "CNA unknown alone is not a liquid classification in this composite; the combined 1 ps flag is calibrated only on pure Ag and remains provisional here.",
             "The 3.98 A Ag connectivity cutoff is a geometric reference from pure-Ag calibration, not proof of a liquid pool.",
             "The geometry-only WCA obstacle and rigid ceramic are exploratory assumptions.",
         ],
     }
-    output = HERE / "cold_diagnostic_metrics.json"
-    output.write_text(json.dumps(report, indent=2) + "\n")
+    args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
 
 

@@ -1,0 +1,202 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# One finite 1 ps baseline preparation attempt for geometry-constrained B.
+# This is a single gate, not an open-ended relaxation sequence.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.559 seconds
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  916534 atoms before read
+  916534 atoms in snapshot
+  0 atoms purged
+  916534 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  916534 atoms after read
+include potential_validation/geometry_constraint_B/potential.geometry_wca_fixed_skeleton.inc
+# EXPLORATORY B MODEL FOR A RIGID GEOMETRIC SCAFFOLD ONLY.
+# Ti/Si/C positions are fixed by the matching input, so their internal TSCBOP
+# energy is constant and their internal forces do not affect mobile Ag. This
+# include omits those fixed-fixed calculations while preserving all Ag forces.
+# It is not a flexible-ceramic or physical Ag/MAX interface potential.
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+113499 atoms in group bottom
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+group mobile_Ag subtract Ag bottom
+179246 atoms in group mobile_Ag
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+mass 4 107.8682
+velocity mobile_Ag create 300.0 190427 mom yes rot no dist gaussian
+timestep 0.0005
+compute T_Ag mobile_Ag temp
+compute cna all cna/atom 3.35
+compute peatom all pe/atom
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax mobile_Ag reduce max v_fmag
+thermo 100
+thermo_style custom step time c_T_Ag pe ke etotal c_fmax
+thermo_modify flush yes
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 80 81 69
+  5 neighbor lists, perpetual/occasional/extra = 4 1 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair zero, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair lj/cut, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) compute cna/atom, occasional
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+  (5) neighbor class addition, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 525.1 | 525.1 | 525.1 Mbytes
+   Step          Time          c_T_Ag         PotEng         KinEng         TotEng         c_fmax    
+       100   0.1            300           -537983.48      6950.7704     -531032.71      1.4517368    
+Loop time of 2.333e-06 on 4 procs for 0 steps with 916534 atoms
+
+214.3% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.333e-06  |            |       |100.00
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          86842 ave       86842 max       86842 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:            0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/cold_nvt_1ps_start.dump id type x y z vx vy vz c_cna c_peatom modify sort id
+WARNING: Too many neighbors in CNA for 63645 atoms (src/src/compute_cna_atom.cpp:177)
+fix nvt mobile_Ag nvt temp 300.0 300.0 0.1
+run 2000
+Hybrid pair style last /omp style lj/cut
+Last active /omp style is pair_style lj/cut
+Per MPI rank memory allocation (min/avg/max) = 723 | 723 | 723 Mbytes
+   Step          Time          c_T_Ag         PotEng         KinEng         TotEng         c_fmax    
+       100   0.1            300           -537983.48      6950.7704     -531032.71      1.4517368    
+       200   0.15           160.78112     -534699.37      3725.1756     -530974.19      2.2830041    
+       300   0.2            183.98212     -535098.23      4262.725      -530835.5       2.7197882    
+       400   0.25           218.92773     -535708.08      5072.388      -530635.69      3.5263713    
+       500   0.3            247.06223     -536147.34      5724.2429     -530423.1       4.3119999    
+       600   0.35           247.9346      -535956.91      5744.455      -530212.45      4.6821386    
+       700   0.4            270.97289     -536275.12      6278.2346     -529996.89      4.4204321    
+       800   0.45           281.14216     -536322.17      6513.8487     -529808.32      6.6342369    
+       900   0.5            295.66959     -536484.13      6850.4382     -529633.69      5.7238416    
+      1000   0.55           307.04787     -536635.23      7114.0642     -529521.17      5.4075059    
+      1100   0.6            313.81369     -536777.69      7270.8231     -529506.87      6.1294426    
+      1200   0.65           316.03426     -536955.87      7322.2719     -529633.6       7.7489686    
+      1300   0.7            317.43371     -537171.98      7354.696      -529817.29      7.2512979    
+      1400   0.75           320.65918     -537450.25      7429.4278     -530020.82      6.4451616    
+      1500   0.8            318.81731     -537614.51      7386.753      -530227.76      6.4687799    
+      1600   0.85           319.74461     -537843.75      7408.2379     -530435.51      5.7680127    
+      1700   0.9            319.56175     -538047.61      7404.0011     -530643.61      6.0989662    
+      1800   0.95           320.6976      -538285.57      7430.3179     -530855.25      5.7242419    
+      1900   1              318.25576     -538439.8       7373.7423     -531066.06      6.0927484    
+      2000   1.05           318.67793     -538656.8       7383.5237     -531273.27      5.355075     
+      2100   1.1            317.32259     -538831.44      7352.1216     -531479.32      7.4531918    
+Loop time of 139.31 on 4 procs for 2000 steps with 916534 atoms
+
+Performance: 0.620 ns/day, 38.697 hours/ns, 14.357 timesteps/s, 13.158 Matom-step/s
+392.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 98.219     | 98.219     | 98.219     |   0.0 | 70.50
+Neigh   | 4.5829     | 4.5829     | 4.5829     |   0.0 |  3.29
+Comm    | 1.9761     | 1.9761     | 1.9761     |   0.0 |  1.42
+Output  | 0.24643    | 0.24643    | 0.24643    |   0.0 |  0.18
+Modify  | 28.987     | 28.987     | 28.987     |   0.0 | 20.81
+Other   |            | 5.298      |            |       |  3.80
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          87079 ave       87079 max       87079 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  2.81228e+07 ave 2.81228e+07 max 2.81228e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 28122846
+Ave neighs/atom = 30.683909
+Neighbor list builds = 12
+Dangerous builds = 0
+unfix nvt
+run 0 pre no post no
+   Step          Time          c_T_Ag         PotEng         KinEng         TotEng         c_fmax    
+      2100   1.1            317.32259     -538831.44      7352.1216     -531479.32      7.4531918    
+Loop time of 1.763e-06 on 4 procs for 0 steps with 916534 atoms
+
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/cold_nvt_1ps_final.dump id type x y z vx vy vz c_cna c_peatom modify sort id
+WARNING: Too many neighbors in CNA for 63599 atoms (src/src/compute_cna_atom.cpp:177)
+WARNING: Too many common neighbors in CNA: 1x (src/src/compute_cna_atom.cpp:347)
+print "BOUNDED_MODEL_B_NVT_BASELINE_1PS_DONE_NO_HEAT"
+BOUNDED_MODEL_B_NVT_BASELINE_1PS_DONE_NO_HEAT
+Total wall time: 0:02:25

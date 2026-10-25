@@ -1,0 +1,37 @@
+# One finite 1 ps baseline preparation attempt for geometry-constrained B.
+# This is a single gate, not an open-ended relaxation sequence.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+include potential_validation/geometry_constraint_B/potential.geometry_wca_fixed_skeleton.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+mass 4 107.8682
+velocity mobile_Ag create 300.0 190427 mom yes rot no dist gaussian
+timestep 0.0005
+compute T_Ag mobile_Ag temp
+compute cna all cna/atom 3.35
+compute peatom all pe/atom
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax mobile_Ag reduce max v_fmag
+thermo 100
+thermo_style custom step time c_T_Ag pe ke etotal c_fmax
+thermo_modify flush yes
+run 0
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/cold_nvt_1ps_start.dump id type x y z vx vy vz c_cna c_peatom modify sort id
+fix nvt mobile_Ag nvt temp 300.0 300.0 0.1
+run 2000
+unfix nvt
+run 0 pre no post no
+write_dump mobile_Ag custom potential_validation/geometry_constraint_B/cold_nvt_1ps_final.dump id type x y z vx vy vz c_cna c_peatom modify sort id
+print "BOUNDED_MODEL_B_NVT_BASELINE_1PS_DONE_NO_HEAT"
