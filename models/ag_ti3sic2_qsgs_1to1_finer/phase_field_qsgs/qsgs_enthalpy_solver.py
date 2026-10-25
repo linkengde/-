@@ -21,6 +21,7 @@ from thermophysical_model import AgEnthalpy, Ti3SiC2ThermalProperties
 DATA_DIR = Path(__file__).resolve().parent
 ANGSTROM3_TO_M3 = 1.0e-30
 EV_PER_PS_ANGSTROM2_TO_W_M2 = 1.602176634e-19 / 1.0e-12 / 1.0e-20
+PHASE_FRACTION_ROUNDOFF_TOL = 1.0e-12
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,7 @@ class QSGSEnthalpyGrid:
         gaussian_radius_A: float = 30.0,
         absorption_depth_A: float = 20.0,
         source_center_xy_A: tuple[float, float] | None = None,
+        tile_xy: int = 1,
     ) -> None:
         if boundary_case not in {"A", "B"}:
             raise ValueError("boundary_case must be A (adiabatic scaffold) or B (ideal contact)")
@@ -50,6 +52,27 @@ class QSGSEnthalpyGrid:
             self.sc_fraction = np.asarray(archive["skeleton_fraction"], dtype=float)
             self.size_A = np.asarray(archive["size_A"], dtype=float)
             self.spacing_A = np.asarray(archive["spacing_A"], dtype=float)
+        # Overlap projection can leave machine-epsilon phase slivers at
+        # nominally empty/full cells. They have negligible volume but can
+        # create extreme per-cell temperatures because source and capacity
+        # scale with the same near-zero fraction.
+        self.ag_fraction = np.where(
+            self.ag_fraction < PHASE_FRACTION_ROUNDOFF_TOL,
+            0.0,
+            np.where(
+                self.ag_fraction > 1.0 - PHASE_FRACTION_ROUNDOFF_TOL,
+                1.0,
+                self.ag_fraction,
+            ),
+        )
+        self.sc_fraction = 1.0 - self.ag_fraction
+        if not isinstance(tile_xy, (int, np.integer)) or tile_xy <= 0:
+            raise ValueError("tile_xy must be a positive integer")
+        self.tile_xy = int(tile_xy)
+        if self.tile_xy > 1:
+            self.ag_fraction = np.tile(self.ag_fraction, (self.tile_xy, self.tile_xy, 1))
+            self.sc_fraction = np.tile(self.sc_fraction, (self.tile_xy, self.tile_xy, 1))
+            self.size_A = self.size_A * np.asarray([self.tile_xy, self.tile_xy, 1.0])
         if self.ag_fraction.ndim != 3 or self.sc_fraction.shape != self.ag_fraction.shape:
             raise ValueError("Projected phase fractions must be matching three-dimensional arrays")
         if not np.allclose(self.ag_fraction + self.sc_fraction, 1.0, atol=2.0e-12):

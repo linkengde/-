@@ -10,6 +10,7 @@ sys.path.insert(0, str(PHASE_DIR))
 from qsgs_projection import _overlap_weights, project_phase_mask  # noqa: E402
 from analyze_projected_connectivity import _component_metrics  # noqa: E402
 from audit_coarse_ag_face_connectivity import audit_face_connectivity  # noqa: E402
+from qsgs_face_contacts import exact_face_contact_fractions  # noqa: E402
 
 
 class QSGSProjectionTests(unittest.TestCase):
@@ -80,6 +81,30 @@ class QSGSProjectionTests(unittest.TestCase):
         self.assertEqual(x_result["coarse_positive_faces_without_actual_ag_contact"], 2)
         self.assertEqual(metrics["coarse_solver_connectivity"]["component_count"], 1)
         self.assertEqual(metrics["direct_source_ag_contact_connectivity"]["component_count"], 2)
+
+    def test_exact_face_contact_fraction_blocks_coarse_false_link(self):
+        source_ag = np.zeros((6, 1, 1), dtype=bool)
+        source_ag[[1, 4], 0, 0] = True
+        coarse_ag = np.array([[[1.0 / 3.0]], [[1.0 / 3.0]]])
+        contact_x, _, _ = exact_face_contact_fractions(
+            source_ag,
+            coarse_ag,
+            np.array([6.0, 1.0, 1.0]),
+            np.array([3.0, 1.0, 1.0]),
+        )
+        np.testing.assert_array_equal(contact_x, np.zeros_like(coarse_ag))
+
+    def test_exact_face_contact_fraction_preserves_continuous_ag_link(self):
+        source_ag = np.ones((4, 2, 2), dtype=bool)
+        coarse_ag = np.ones((2, 1, 1), dtype=float)
+        contact_x, contact_y, _ = exact_face_contact_fractions(
+            source_ag,
+            coarse_ag,
+            np.array([4.0, 2.0, 2.0]),
+            np.array([2.0, 2.0, 2.0]),
+        )
+        np.testing.assert_allclose(contact_x, 1.0)
+        np.testing.assert_allclose(contact_y, 1.0)
 
 
 if __name__ == "__main__":

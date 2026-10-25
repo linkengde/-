@@ -22,7 +22,7 @@ if str(MODEL_DIR) not in sys.path:
     sys.path.insert(0, str(MODEL_DIR))
 
 from ag_ttm_reference import AgParameters, AgTTMGrid
-from qsgs_enthalpy_solver import DATA_DIR, QSGSEnthalpyGrid
+from qsgs_enthalpy_solver import DATA_DIR, PHASE_FRACTION_ROUNDOFF_TOL, QSGSEnthalpyGrid
 
 
 EV_J = 1.602176634e-19
@@ -49,6 +49,8 @@ class QSGSDoubleTemperatureGrid:
         initial_electron_temperature_K: float | np.ndarray = 300.0,
         ag_lattice_conductivity_W_m_K: float = 0.0,
         bottom_sink_temperature_K: float | None = None,
+        face_contacts_npz: Path | None = None,
+        tile_xy: int = 1,
     ) -> None:
         self.lattice = QSGSEnthalpyGrid(
             projected_npz,
@@ -56,6 +58,7 @@ class QSGSDoubleTemperatureGrid:
             peak_flux_eV_ps_A2,
             gaussian_radius_A,
             absorption_depth_A,
+            tile_xy=tile_xy,
         )
         if not np.isfinite(ag_lattice_conductivity_W_m_K) or ag_lattice_conductivity_W_m_K < 0.0:
             raise ValueError("Ag lattice conductivity must be finite and non-negative")
@@ -70,6 +73,56 @@ class QSGSDoubleTemperatureGrid:
         self.bottom_sink_temperature_K = (
             None if bottom_sink_temperature_K is None else float(bottom_sink_temperature_K)
         )
+        self.face_contacts_npz = None if face_contacts_npz is None else Path(face_contacts_npz)
+        self.electron_face_contact_fractions: tuple[np.ndarray, np.ndarray, np.ndarray] | None = None
+        if self.face_contacts_npz is not None:
+            if self.bottom_sink_temperature_K is not None:
+                raise ValueError(
+                    "Exact face contacts currently support insulated z boundaries only; "
+                    "a bottom-sink surface contact fraction is not provided"
+                )
+            with np.load(projected_npz, allow_pickle=False) as projected, np.load(
+                self.face_contacts_npz, allow_pickle=False
+            ) as contacts:
+                base_ag = np.asarray(projected["ag_fraction"], dtype=float)
+                contact_ag = np.asarray(contacts["ag_fraction"], dtype=float)
+                contact_spacing = np.asarray(contacts["spacing_A"], dtype=float)
+                contact_size = np.asarray(contacts["size_A"], dtype=float)
+                if contact_ag.shape != base_ag.shape or not np.allclose(
+                    contact_ag, base_ag, rtol=0.0, atol=2.0e-12
+                ):
+                    raise ValueError("Face-contact file does not match the projected Ag geometry")
+                if not np.allclose(contact_spacing, self.lattice.spacing_A, rtol=0.0, atol=1.0e-10):
+                    raise ValueError("Face-contact grid spacing does not match the projected geometry")
+                if not np.allclose(
+                    contact_size,
+                    np.asarray(projected["size_A"], dtype=float),
+                    rtol=0.0,
+                    atol=1.0e-8,
+                ):
+                    raise ValueError("Face-contact domain size does not match the projected geometry")
+                base_contacts = tuple(
+                    np.asarray(contacts[name], dtype=float)
+                    for name in ("contact_x", "contact_y", "contact_z")
+                )
+            if any(values.shape != base_ag.shape for values in base_contacts):
+                raise ValueError("Each face-contact field must match the base projected grid")
+            if any(
+                np.any(~np.isfinite(values))
+                or np.any((values < -1.0e-12) | (values > 1.0 + 1.0e-12))
+                for values in base_contacts
+            ):
+                raise ValueError("Face-contact fractions must be finite and lie in [0,1]")
+            base_contacts = tuple(np.clip(values, 0.0, 1.0) for values in base_contacts)
+            self.electron_face_contact_fractions = tuple(
+                np.tile(values, (self.lattice.tile_xy, self.lattice.tile_xy, 1))
+                for values in base_contacts
+            )
+            if self.ag_lattice_conductivity_W_m_K > 0.0:
+                raise ValueError(
+                    "Geometry-corrected contacts currently apply to electron conduction only; "
+                    "set Ag lattice conductivity to zero for this comparison"
+                )
         if not (300.0 <= initial_lattice_temperature_K <= self.lattice.melting_temperature_K):
             raise ValueError("Initial lattice temperature must be within [300 K, Ag Tm]")
         initial_lattice = np.full(
@@ -113,6 +166,7 @@ class QSGSDoubleTemperatureGrid:
         spacing: np.ndarray,
         cell_volume: float,
         bottom_sink_temperature_K: float | None = None,
+        face_contact_fractions: tuple[np.ndarray, np.ndarray, np.ndarray] | None = None,
     ):
         """Return a symmetric conservative graph Laplacian for x/y-periodic, z-insulated cells.
 
@@ -123,6 +177,13 @@ class QSGSDoubleTemperatureGrid:
         """
         k = np.asarray(conductivity, dtype=float)
         shape = k.shape
+        if face_contact_fractions is not None:
+            if bottom_sink_temperature_K is not None:
+                raise ValueError("Face-contact fractions are not defined for a z-boundary sink")
+            if len(face_contact_fractions) != 3 or any(
+                np.asarray(contact).shape != shape for contact in face_contact_fractions
+            ):
+                raise ValueError("Each face-contact fraction field must match conductivity shape")
         ncell = int(k.size)
         rows: list[np.ndarray] = []
         cols: list[np.ndarray] = []
@@ -138,6 +199,8 @@ class QSGSDoubleTemperatureGrid:
                 denom = k + kr
                 face_k = np.divide(2.0 * k * kr, denom, out=np.zeros_like(k), where=denom > 0.0)
                 conductance = face_k * cell_volume / spacing[axis] ** 2
+                if face_contact_fractions is not None:
+                    conductance *= face_contact_fractions[axis]
                 i = left.ravel()
                 j = right.ravel()
                 g = conductance.ravel()
@@ -150,6 +213,8 @@ class QSGSDoubleTemperatureGrid:
                 denom = kl + kh
                 face_k = np.divide(2.0 * kl * kh, denom, out=np.zeros_like(kl), where=denom > 0.0)
                 conductance = face_k * cell_volume / spacing[axis] ** 2
+                if face_contact_fractions is not None:
+                    conductance *= face_contact_fractions[axis][low_t]
                 i = indices[low_t].ravel()
                 j = indices[high_t].ravel()
                 g = conductance.ravel()
@@ -211,12 +276,23 @@ class QSGSDoubleTemperatureGrid:
             self.lattice.ag_fraction.ravel()[active]
             * self.electron.cell_volume_A3
         )
-        full_k = self.lattice.ag_fraction * self.parameters.ke(self.electron.temperature_K)
+        if self.electron_face_contact_fractions is None:
+            full_k = self.lattice.ag_fraction * self.parameters.ke(self.electron.temperature_K)
+        else:
+            # Face areas already encode the exact QSGS Ag contact fraction.
+            # Conductivity is therefore intrinsic ke on Ag-bearing cells; using
+            # phi*ke here as well would count the volume fraction twice.
+            full_k = np.where(
+                self.lattice.ag_fraction > 0.0,
+                self.parameters.ke(self.electron.temperature_K),
+                0.0,
+            )
         operator = self._finite_volume_laplacian(
             full_k,
             self.electron.spacing_A,
             self.electron.cell_volume_A3,
             self.bottom_sink_temperature_K,
+            self.electron_face_contact_fractions,
         )
         operator_full, boundary_power_full = operator
         operator = operator_full[active][:, active].tocsr()
@@ -258,9 +334,17 @@ class QSGSDoubleTemperatureGrid:
             alpha = 1.0
             while alpha >= 1.0 / 128.0:
                 trial = t + alpha * delta
-                if np.any(trial < params.Tmin) or np.any(trial > params.Tmax):
+                # Round-off in the sparse solve can put an unchanged 300 K
+                # cell a few ulps below the tabulated lower bound. Accept and
+                # clamp only that negligible undershoot; larger excursions
+                # still trigger a shorter Newton line-search step.
+                bound_tolerance_K = 1.0e-9
+                if np.any(trial < params.Tmin - bound_tolerance_K) or np.any(
+                    trial > params.Tmax + bound_tolerance_K
+                ):
                     alpha *= 0.5
                     continue
+                trial = np.clip(trial, params.Tmin, params.Tmax)
                 trial_energy, _ = energy_and_capacity(trial)
                 trial_residual = trial_energy - e0 + dt_ps * (operator @ trial - boundary_power)
                 if float(np.linalg.norm(trial_residual)) < old_norm:
@@ -661,11 +745,12 @@ def field_snapshot_metrics(
     ag_fraction: np.ndarray,
     spacing_A: np.ndarray,
     size_A: np.ndarray,
+    roi_xyz: tuple[slice, slice, slice] | None = None,
 ) -> dict[str, float]:
     """Summarize Ag-weighted temperatures and half-rise hotspot geometry."""
     ag = np.asarray(ag_fraction, dtype=float)
-    active = ag > 0.0
-    total_ag_weight = float(ag.sum())
+    active = ag >= PHASE_FRACTION_ROUNDOFF_TOL
+    total_ag_weight = float(ag[active].sum())
     x = (np.arange(ag.shape[0]) + 0.5) * spacing_A[0]
     y = (np.arange(ag.shape[1]) + 0.5) * spacing_A[1]
     z = (np.arange(ag.shape[2]) + 0.5) * spacing_A[2]
@@ -678,7 +763,11 @@ def field_snapshot_metrics(
     for label, key in (("electron", "electron_temperature_K"), ("lattice", "lattice_temperature_K")):
         temperature = np.asarray(fields[key], dtype=float)
         peak = float(temperature[active].max()) if np.any(active) else 300.0
-        mean = float(np.sum(ag * temperature) / total_ag_weight) if total_ag_weight > 0.0 else 300.0
+        mean = (
+            float(np.sum(ag[active] * temperature[active]) / total_ag_weight)
+            if total_ag_weight > 0.0
+            else 300.0
+        )
         threshold = 300.0 + 0.5 * max(peak - 300.0, 0.0)
         hot = active & (temperature >= threshold) if peak > 300.0 else np.zeros_like(active)
         hot_weight = float(ag[hot].sum())
@@ -700,10 +789,21 @@ def field_snapshot_metrics(
         summary[f"{label}_half_rise_hotspot_ag_volume_fraction"] = (
             hot_weight / total_ag_weight if total_ag_weight > 0.0 else 0.0
         )
+        if roi_xyz is not None:
+            roi_ag = ag[roi_xyz]
+            roi_temp = temperature[roi_xyz]
+            roi_total = float(roi_ag.sum())
+            roi_active = roi_ag >= PHASE_FRACTION_ROUNDOFF_TOL
+            roi_hot = roi_active & (roi_temp >= threshold) if peak > 300.0 else np.zeros_like(roi_active)
+            summary[f"{label}_central_tile_half_rise_hotspot_ag_volume_fraction"] = (
+                float(roi_ag[roi_hot].sum() / roi_total) if roi_total > 0.0 else 0.0
+            )
     liquid = np.asarray(fields["ag_liquid_fraction"], dtype=float)
     summary["max_ag_liquid_fraction"] = float(liquid[active].max()) if np.any(active) else 0.0
     summary["ag_liquid_volume_fraction"] = (
-        float(np.sum(ag * liquid) / total_ag_weight) if total_ag_weight > 0.0 else 0.0
+        float(np.sum(ag[active] * liquid[active]) / total_ag_weight)
+        if total_ag_weight > 0.0
+        else 0.0
     )
     return summary
 
@@ -719,6 +819,10 @@ def main() -> None:
     parser.add_argument("--sample-ps", type=float, default=0.005)
     parser.add_argument("--bottom-sink", action="store_true",
                         help="apply a 300 K ideal isothermal sink at the bottom z face")
+    parser.add_argument("--face-contacts", type=Path, default=None,
+                        help="use exact QSGS Ag contact fractions for electron conduction links")
+    parser.add_argument("--tile-xy", type=int, default=1,
+                        help="repeat the projected QSGS geometry this many times in periodic x/y (odd values center the source on a tile)")
     parser.add_argument("--snapshot-ps", default="",
                         help="comma-separated heating times at which to save 3D Te, Tl, and Ag liquid fields")
     parser.add_argument("--output", type=Path, default=None)
@@ -738,6 +842,8 @@ def main() -> None:
         projected,
         args.boundary,
         bottom_sink_temperature_K=300.0 if args.bottom_sink else None,
+        face_contacts_npz=args.face_contacts,
+        tile_xy=args.tile_xy,
     )
     dt_ps = args.dt_fs * 1.0e-3
     rows = model.run(
@@ -768,6 +874,11 @@ def main() -> None:
             label = f"t_{snapshot_time:.9g}ps"
             for name, field in fields.items():
                 arrays[f"{label}_{name}"] = field
+            roi = None
+            if model.lattice.tile_xy > 1:
+                nx, ny = np.load(projected, allow_pickle=False)["ag_fraction"].shape[:2]
+                center = model.lattice.tile_xy // 2
+                roi = (slice(center * nx, (center + 1) * nx), slice(center * ny, (center + 1) * ny), slice(None))
             snapshot_metrics.append(
                 field_snapshot_metrics(
                     snapshot_time,
@@ -775,6 +886,7 @@ def main() -> None:
                     model.lattice.ag_fraction,
                     model.lattice.spacing_A,
                     model.lattice.size_A,
+                    roi_xyz=roi,
                 )
             )
         np.savez_compressed(field_output, **arrays)
@@ -786,6 +898,12 @@ def main() -> None:
         "bottom_sink_temperature_K": model.bottom_sink_temperature_K,
         "grid_spacing_label": args.spacing,
         "grid_shape_xyz": list(model.lattice.temperature_shape),
+        "domain_size_A": model.lattice.size_A.tolist(),
+        "xy_tile_count": model.lattice.tile_xy,
+        "electron_conduction_geometry_correction": (
+            "exact source-QSGS Ag face-contact area fractions" if model.electron_face_contact_fractions is not None else "legacy volume-fraction harmonic links"
+        ),
+        "face_contacts_npz": model.face_contacts_npz.name if model.face_contacts_npz is not None else None,
         "source_power_grid_integral_W": model.actual_source_power_W,
         "heat_duration_ps": args.heat_ps,
         "cool_duration_ps": args.cool_ps,

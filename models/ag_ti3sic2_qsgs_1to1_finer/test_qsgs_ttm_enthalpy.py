@@ -10,7 +10,8 @@ MODEL_DIR = Path(__file__).resolve().parent
 PHASE_DIR = MODEL_DIR / "phase_field_qsgs"
 sys.path.insert(0, str(PHASE_DIR))
 from qsgs_ttm_enthalpy import EV_J, QSGSDoubleTemperatureGrid, field_snapshot_metrics  # noqa: E402
-from qsgs_enthalpy_solver import QSGSEnthalpyGrid  # noqa: E402
+from qsgs_enthalpy_solver import PHASE_FRACTION_ROUNDOFF_TOL, QSGSEnthalpyGrid  # noqa: E402
+from qsgs_face_contacts import exact_face_contact_fractions  # noqa: E402
 
 
 class QSGSDoubleTemperatureTests(unittest.TestCase):
@@ -211,6 +212,100 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
             self.assertEqual(metrics["time_ps"], 0.0005)
             self.assertEqual(metrics["ag_liquid_volume_fraction"], 0.0)
             self.assertGreaterEqual(metrics["electron_peak_K"], 300.0)
+
+    def test_xy_tile_keeps_the_original_qsgs_geometry_at_the_center(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.asarray([[[1.0]], [[0.5]]]), directory)
+            base = QSGSDoubleTemperatureGrid(geometry, "A", peak_flux_eV_ps_A2=0.0)
+            tiled = QSGSDoubleTemperatureGrid(
+                geometry, "A", peak_flux_eV_ps_A2=0.0, tile_xy=3
+            )
+            self.assertEqual(tiled.lattice.temperature_shape, (6, 3, 1))
+            self.assertEqual(tiled.lattice.size_A.tolist(), [60.0, 30.0, 10.0])
+            np.testing.assert_array_equal(tiled.lattice.ag_fraction[2:4, 1:2, :], base.lattice.ag_fraction)
+            np.testing.assert_allclose(
+                tiled.lattice.source_W_m3[2:4, 1:2, :], base.lattice.source_W_m3, rtol=0.0, atol=1.0e-12
+            )
+
+    def test_roundoff_only_phase_slivers_are_removed_from_thermal_domain(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.asarray([1.0e-16, 0.5]).reshape(2, 1, 1), directory)
+            model = QSGSEnthalpyGrid(geometry, "A", peak_flux_eV_ps_A2=0.0)
+            self.assertEqual(model.ag_fraction[0, 0, 0], 0.0)
+            self.assertEqual(model.sc_fraction[0, 0, 0], 1.0)
+            self.assertEqual(model.ag_fraction[1, 0, 0], 0.5)
+            self.assertLessEqual(PHASE_FRACTION_ROUNDOFF_TOL, 1.0e-12)
+
+    def test_exact_face_contacts_remove_spurious_electron_link_conservatively(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.full((2, 1, 1), 1.0 / 3.0), directory)
+            source_ag = np.zeros((6, 1, 1), dtype=bool)
+            source_ag[[1, 4], 0, 0] = True
+            coarse_ag = np.full((2, 1, 1), 1.0 / 3.0)
+            size_A = np.asarray([20.0, 10.0, 10.0])
+            spacing_A = np.asarray([10.0, 10.0, 10.0])
+            contacts = exact_face_contact_fractions(source_ag, coarse_ag, size_A, spacing_A)
+            self.assertEqual(float(np.sum(contacts[0])), 0.0)
+            face_file = Path(directory) / "contacts.npz"
+            np.savez_compressed(
+                face_file,
+                contact_x=contacts[0],
+                contact_y=contacts[1],
+                contact_z=contacts[2],
+                ag_fraction=coarse_ag,
+                size_A=size_A,
+                spacing_A=spacing_A,
+            )
+            temperatures = np.asarray([1200.0, 300.0]).reshape(2, 1, 1)
+            corrected = QSGSDoubleTemperatureGrid(
+                geometry,
+                "A",
+                peak_flux_eV_ps_A2=0.0,
+                initial_electron_temperature_K=temperatures,
+                face_contacts_npz=face_file,
+            )
+            legacy = QSGSDoubleTemperatureGrid(
+                geometry,
+                "A",
+                peak_flux_eV_ps_A2=0.0,
+                initial_electron_temperature_K=temperatures,
+            )
+            corrected_initial_energy = corrected.electron_energy_J
+            corrected._implicit_electron_diffusion(1.0)
+            np.testing.assert_array_equal(corrected.electron.temperature_K, temperatures)
+            self.assertAlmostEqual(corrected.electron_energy_J, corrected_initial_energy, delta=1.0e-28)
+            legacy._implicit_electron_diffusion(1.0)
+            self.assertGreater(float(legacy.electron.temperature_K[1, 0, 0]), 300.0)
+
+    def test_exact_face_contact_operator_conserves_electron_energy(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.ones((5, 1, 1)), directory)
+            spacing_A = np.full(3, 10.0)
+            size_A = np.asarray([50.0, 10.0, 10.0])
+            face_file = Path(directory) / "contacts.npz"
+            np.savez_compressed(
+                face_file,
+                contact_x=np.ones((5, 1, 1)),
+                contact_y=np.zeros((5, 1, 1)),
+                contact_z=np.zeros((5, 1, 1)),
+                ag_fraction=np.ones((5, 1, 1)),
+                size_A=size_A,
+                spacing_A=spacing_A,
+            )
+            initial_temperature = np.asarray([1200.0, 300.0, 300.0, 300.0, 300.0]).reshape(5, 1, 1)
+            model = QSGSDoubleTemperatureGrid(
+                geometry,
+                "A",
+                peak_flux_eV_ps_A2=0.0,
+                initial_electron_temperature_K=initial_temperature,
+                face_contacts_npz=face_file,
+            )
+            initial_energy = model.electron_energy_J
+            record = model.advance(1.0e-4, heat_on=False, coupling_on=False)
+            self.assertLess(float(model.electron.temperature_K[0, 0, 0]), 1200.0)
+            self.assertGreater(float(model.electron.temperature_K[1, 0, 0]), 300.0)
+            self.assertAlmostEqual(model.electron_energy_J, initial_energy, delta=1.0e-28)
+            self.assertLess(abs(record["energy_balance_residual_J"]), 1.0e-28)
 
     def test_sampled_run_aggregates_energy_over_the_reported_interval(self):
         with tempfile.TemporaryDirectory() as directory:
