@@ -61,6 +61,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 后续静态力定位显示，QSGS 骨架体素内部仍有大量 Ti/C 原子承受约 2.67/2.04 eV/Å 的力，与未经弛豫的母相 CIF 在同一 TSCBOP 下的受力吻合。分箱方法和限制见[骨架力空间定位记录](potential_validation/qsgs_force_localization/README.md)。另一个保留完整势函数、固定 Ag 的 100 步骨架弛豫虽降低了多数骨架原子的力，但最大骨架力仍为3.32 eV/Å，Ag释放约束后最大力为4.05 eV/Å，并有两个 C 原子脱离3.25 Å连通分量。因此候选未通过，当前模型仍不能加热；下一步应从与 TSCBOP 平衡晶格相容的 parent basis 重建一个独立候选，再复核界面间距、质量比、连通性和冷态受力。
 
+随后已按 TSCBOP 零压弛豫晶胞另建一个独立 QSGS 候选，原始模型未改动。新候选几何仍通过双连续与约1:1质量比检查，但两段共200步全体系 FIRE 弛豫后出现少量断连；固定整个骨架再做 Ag-only 弛豫，也没有消除高受力。更严格的刚性骨架、无热源 300 K NVT 短测中，Ag 温度升至约1067 K（80 fs），最大 Ag 力升至约11.5 eV/Å。因此新候选也**未通过冷态基线**，没有接入 TTM 或施加热源。方法、日志和指标见[弛豫母相 QSGS 候选记录](potential_validation/relaxed_backbone_candidate/README.md)。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py

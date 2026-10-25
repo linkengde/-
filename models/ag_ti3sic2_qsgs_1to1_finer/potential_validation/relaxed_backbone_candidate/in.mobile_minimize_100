@@ -1,0 +1,36 @@
+# Static candidate screen: relax all atoms above the 0-20 A fixed bottom slab.
+# Full original EAM + TSCBOP + calibration-v0 Morse terms; no MD or heat.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group mobile subtract all bottom
+group Ag type 4
+group Ti type 1
+group Si type 2
+group C type 3
+group mobile_Ti intersect mobile Ti
+group mobile_Si intersect mobile Si
+group mobile_C intersect mobile C
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_mobile mobile reduce max v_fn
+compute f_ag Ag reduce max v_fn
+compute f_mobile_Ti mobile_Ti reduce max v_fn
+compute f_mobile_Si mobile_Si reduce max v_fn
+compute f_mobile_C mobile_C reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press c_f_mobile c_f_ag c_f_mobile_Ti c_f_mobile_Si c_f_mobile_C
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 100 2000
+run 0
+write_data potential_validation/relaxed_backbone_candidate/mobile_minimized_100.data
+write_dump all custom potential_validation/relaxed_backbone_candidate/mobile_minimized_100.dump id type x y z fx fy fz modify sort id
+print "RELAXED_PARENT_MOBILE_MINIMIZE_100_DONE"

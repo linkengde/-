@@ -1,0 +1,30 @@
+# No-source cold screen at the agreed 0.5 fs timestep.
+# The archived reproduction input omits the original diagnostic trajectory dump.
+# Ti3SiC2 scaffold and 0-20 A bottom slab are fixed; only Ag above 20 A is NVT.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_100.dump.gz 100 x y z box no replace yes
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+compute T_Ag mobile_Ag temp
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_Ag mobile_Ag reduce max v_fn
+velocity mobile_Ag create 300.0 381920 mom yes rot no dist gaussian
+timestep 0.0005
+fix thermostat mobile_Ag nvt temp 300.0 300.0 0.1
+thermo 10
+thermo_style custom step c_T_Ag pe ke etotal c_f_Ag
+thermo_modify flush yes
+run 50
+write_dump all custom potential_validation/relaxed_backbone_candidate/rigid_skeleton_Ag_NVT_0p025ps_final.dump id type x y z fx fy fz modify sort id
+print "RIGID_SKELETON_AG_NVT_0P025PS_DONE_NO_SOURCE"
