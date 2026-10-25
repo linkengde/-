@@ -1,0 +1,26 @@
+# Unconstrained run-0 force snapshot at the 300-step Ag-only FIRE endpoint.
+# No dynamics, thermostat, TTM or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_continue_200.dump.gz 300 x y z box no replace yes
+include potential.interface_calibration_v0.inc
+# Diagnostic only: zero Ag-skeleton Morse D0 values; do not use for dynamics.
+pair_coeff 1 4 morse 0.0 2.0 2.33708864 8.0
+pair_coeff 2 4 morse 0.0 2.0 2.40407837 8.0
+pair_coeff 3 4 morse 0.0 2.0 2.15255924 8.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group Ag type 4
+group skeleton type 1 2 3
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_all all reduce max v_fn
+compute f_Ag Ag reduce max v_fn
+compute f_skeleton skeleton reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe c_f_all c_f_Ag c_f_skeleton
+dump force_dump all custom 1 potential_validation/relaxed_backbone_candidate/forces_after300_NO_CROSS.dump id type x y z fx fy fz
+dump_modify force_dump sort id
+run 0
+print "RELAXED_PARENT_QSGS_AFTER300_RUN0_ZERO_CROSS_DIAGNOSTIC"

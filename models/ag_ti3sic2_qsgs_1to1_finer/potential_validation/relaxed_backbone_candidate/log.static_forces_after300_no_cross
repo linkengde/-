@@ -1,0 +1,131 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Unconstrained run-0 force snapshot at the 300-step Ag-only FIRE endpoint.
+# No dynamics, thermostat, TTM or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  916534 atoms
+  read_data CPU = 1.584 seconds
+read_dump potential_validation/relaxed_backbone_candidate/ag_only_rigid_skeleton_continue_200.dump.gz 300 x y z box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  916534 atoms before read
+  916534 atoms in snapshot
+  0 atoms purged
+  916534 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  916534 atoms after read
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+# Diagnostic only: zero Ag-skeleton Morse D0 values; do not use for dynamics.
+pair_coeff 1 4 morse 0.0 2.0 2.33708864 8.0
+pair_coeff 2 4 morse 0.0 2.0 2.40407837 8.0
+pair_coeff 3 4 morse 0.0 2.0 2.15255924 8.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group Ag type 4
+212800 atoms in group Ag
+group skeleton type 1 2 3
+703734 atoms in group skeleton
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_all all reduce max v_fn
+compute f_Ag Ag reduce max v_fn
+compute f_skeleton skeleton reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe c_f_all c_f_Ag c_f_skeleton
+dump force_dump all custom 1 potential_validation/relaxed_backbone_candidate/forces_after300_NO_CROSS.dump id type x y z fx fy fz
+dump_modify force_dump sort id
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 61 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1101 | 1101 | 1101 Mbytes
+   Step        Atoms        PotEng        c_f_all         c_f_Ag      c_f_skeleton
+       300      916534  -4747485        3.4170847      2.11118        3.4170847
+Loop time of 3.225e-06 on 4 procs for 0 steps with 916534 atoms
+
+248.1% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 3.225e-06  |            |       |100.00
+
+Nlocal:         916534 ave      916534 max      916534 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         120655 ave      120655 max      120655 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+print "RELAXED_PARENT_QSGS_AFTER300_RUN0_ZERO_CROSS_DIAGNOSTIC"
+RELAXED_PARENT_QSGS_AFTER300_RUN0_ZERO_CROSS_DIAGNOSTIC
+Total wall time: 0:00:07

@@ -67,6 +67,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 后续将 Ag-only 刚性骨架 FIRE 优化延长200步后，Ag受力95分位小幅下降，但最大力升至3.845 eV/Å，且153个 Ag 原子离开最大连通分量。该末态的无热源、300 K 目标 NVT 测试运行25 fs后升至351.44 K，势能减少约1205 eV、动能增加约1192 eV，说明结构仍在明显释放势能。该候选仍未通过冷态验收，不进行局部熔池计算；细节见候选报告。
 
+逐原子定位显示，最高移动 Ag 力位于材料内部 Ag/C 界面（Ag id 767369，z=123.224 Å，最近 C 间距2.349 Å），不在顶部自由表面；离骨架超过8 Å的 Ag 原子最大力约0.20 eV/Å。交叉 Morse 诊断项解释了最高 Ag 原子力的大部分，同时 Ti 骨架最大力中仍有较大部分来自无交叉诊断下的骨架内力。详见候选目录中的 `high_force_localization_after300.json` 和复现脚本。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py
