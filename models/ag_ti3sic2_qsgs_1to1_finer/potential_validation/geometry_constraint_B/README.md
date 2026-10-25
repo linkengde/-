@@ -23,9 +23,9 @@ The 100 fs test is the bounded B-route acceptance attempt. The earlier two 25 fs
 
 ## Conclusion
 
-The geometry-obstacle route reduces the static Ag force tail relative to the Morse-based candidate and avoids the rapid no-source temperature rise observed in the Morse test. It is therefore a useful exploratory model for testing geometric confinement. However, this exact WCA parameterization has not established a stable 300 K baseline, and its interface strength is arbitrary. Do not start TTM heating or claim a physical melt pool from this trial. The model also cannot represent ceramic thermal response or Ag–ceramic adhesion/heat transfer because the skeleton is rigid and cross interactions are purely repulsive.
+The geometry-obstacle route reduces the static Ag force tail relative to the Morse-based candidate and avoids the rapid no-source temperature rise observed in the Morse test. It is therefore a useful exploratory model for testing geometric confinement. However, this exact WCA parameterization has not established a stable 300 K baseline, and its interface strength is arbitrary. The model also cannot represent ceramic thermal response or Ag–ceramic adhesion/heat transfer because the skeleton is rigid and cross interactions are purely repulsive.
 
-No local melting, TTM, heat source, automatic shutoff, or cooling/solidification run was performed. The B-route trial is complete at the stated finite endpoint; no additional FIRE/NVT extensions are included.
+A separate 0.05 ps reference TTM–MD pilot was subsequently run through the LAMMPS Python API. It completed 100 actual 0.5 fs MD steps with the Gaussian-times-exponential Ag electron source and energy handoff, but Ag temperature fell to 159 K and no liquid-pool analysis or heat-off controller was active. The cumulative energy-ledger residual was 4.75 eV (3.24% of source energy), and the Python reference required hundreds of electron substeps per MD step. This demonstrates an integration path, not a stable cold baseline or physical melt pool; see [the TTM–MD pilot report](B_TTM_MD_PILOT_0P05PS.md). No 100 ps or cooling/solidification run was performed.
 
 ## Files
 
@@ -34,6 +34,7 @@ No local melting, TTM, heat source, automatic shutoff, or cooling/solidification
 - `log.*`, `static_screen_metrics.json`, `nvt_0p1ps_metrics.json`: logs and machine-readable summaries.
 - `initial_forces.dump.gz`, `ag_minimized_100.dump.gz`, `ag_nvt_0p1ps_continuous_final.dump.gz`: compressed snapshots.
 - `analyze_*.py`: reproducible force, displacement, WCA-contact, and connectivity analyses.
+- `b_ttm_reference_md_pilot.py`, `log.b_ttm_reference_md_pilot`, and `B_TTM_MD_PILOT_0P05PS.md`: bounded actual-MD/reference-TTM coupling pilot.
 - `SHA256SUMS.txt`: checksums for the archived files other than the checksum list itself.
 
 The QSGS data and Ag/Ti–Si–C intra-phase potentials are shared with the parent validation directory. This B trial uses the separate relaxed-parent geometry candidate, not the canonical 917,378-atom model.
@@ -52,3 +53,5 @@ OMP_NUM_THREADS=4 /workspace/.venvs/lammps/bin/lmp -sf omp -in potential_validat
 gzip -f potential_validation/geometry_constraint_B/ag_nvt_0p1ps_continuous_final.dump
 python potential_validation/geometry_constraint_B/analyze_geometry_constraint_B_nvt_0p1ps.py
 ```
+
+The separately documented Python reference TTM–MD pilot requires a LAMMPS-linked `mpi4py` build matching the environment's MPICH library. Its reproduction command and exact limits are recorded in [the pilot report](B_TTM_MD_PILOT_0P05PS.md); it is not a production-length run.
