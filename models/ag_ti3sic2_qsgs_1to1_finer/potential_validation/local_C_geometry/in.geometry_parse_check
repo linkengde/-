@@ -1,0 +1,23 @@
+# Syntax/group-count check only: zero pair forces, no dynamics or potential test.
+units metal
+atom_style atomic
+boundary f f f
+atom_modify sort 0 0
+read_data potential_validation/local_C_geometry/C_local_crop.data.gz
+pair_style zero 8.0
+pair_coeff * *
+group Ti type 1
+group Si type 2
+group C type 3
+group Ag type 4
+region planned_inner block 20.0 140.0 20.0 140.0 20.0 159.39156145 units box
+group inner region planned_inner
+thermo 1
+thermo_style custom step atoms pe
+run 0
+variable nTi equal count(Ti)
+variable nSi equal count(Si)
+variable nC equal count(C)
+variable nAg equal count(Ag)
+variable nInner equal count(inner)
+print "GEOMETRY_PARSE_COUNTS Ti=${nTi} Si=${nSi} C=${nC} Ag=${nAg} inner=${nInner}"
