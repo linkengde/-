@@ -25,6 +25,8 @@ The first QSGS 3-D finite-volume enthalpy solver is implemented in [`qsgs_enthal
 
 `audit_coarse_ag_face_connectivity.py` checks local Ag heat-conduction links introduced by volume averaging. At 10 Å, 91.28% of cells are mixed and 8.4–10.8% of coarse faces with positive Ag fractions on both sides have no direct Ag contact across that face in the saved binary QSGS geometry. At 5 Å, the corresponding values are 63.11% mixed cells and 4.4–6.7% such faces. The coarse solver graph and the direct source-contact graph each remain one Ag-connected component at both resolutions, so these extra local links do not create a new domain-spanning Ag component in this geometry. The audit integrates the piecewise-constant source geometry over each coarse face exactly; it does not quantify global heat-flow error. Machine-readable results are in `qsgs_ag_face_connectivity_10A.json` and `qsgs_ag_face_connectivity_5A.json`.
 
+The 10 Å, Case A, no-bottom-sink 10 ps heating-only screening is archived in `qsgs_ttm_enthalpy_10A_BCA_heat10ps_dt0p3125fs.csv/.json`; its 1, 5, and 10 ps three-dimensional fields are in the matching `_fields.npz`, with a cut-plane overview in `_fields_slices.png`. It stayed fully solid, while the half-rise temperature region covered all Ag volume by 1 ps. This is a domain-wide heating response, not a stable local melt pool; see `QSGS_TTM_ENTHALPY_PILOT.md` for metrics and limitations.
+
 ## Reproduce
 
 From the model directory:
