@@ -31,7 +31,7 @@
 - 熔池关热判据先采用操作性试行值：最大连通液态 Ag 团簇持续存在至少 3 ps，且最近 2 ps 的熔池体积没有持续增长；骨架仍保持贯通且结构指标没有持续恶化。液态判定不只依靠温度，需结合局部结构序参量或扩散性指标。
 - 安全停止条件：出现持续表面下陷、骨架失去贯通、局部结构快速破坏或原子逸出时，停止当前预检并回退热源幅值。上述持续时间和容差需在小规模预检中做敏感性检查，不当作材料常数。
 
-热源参数与模型坐标的静态核对见 [TTM_SOURCE_STATIC_PREFLIGHT.md](TTM_SOURCE_STATIC_PREFLIGHT.md)；原子坐标到候选网格的源功率离散比较见 [TTM_GRID_DISCRETIZATION_PREFLIGHT.md](TTM_GRID_DISCRETIZATION_PREFLIGHT.md) 和 [preflight_ttm_grid.py](preflight_ttm_grid.py)。这些静态预检本身没有运行 TTM。后续已建立独立 Python 参考求解器并完成单步能量账本 smoke test，但尚未接入 LAMMPS 原子积分，也未完成实际 MD 中的长期能量守恒及局部熔池/凝固验证。
+热源参数与模型坐标的静态核对见 [TTM_SOURCE_STATIC_PREFLIGHT.md](TTM_SOURCE_STATIC_PREFLIGHT.md)；原子坐标到候选网格的源功率离散比较见 [TTM_GRID_DISCRETIZATION_PREFLIGHT.md](TTM_GRID_DISCRETIZATION_PREFLIGHT.md) 和 [preflight_ttm_grid.py](preflight_ttm_grid.py)。这些静态预检本身没有运行 TTM。之后建立了独立 Python 参考求解器并完成单步能量账本 smoke test。2026-10-25 又通过 LAMMPS Python API 在单独的刚性几何约束 Model B 上做了0.05 ps真实 MD–TTM 联调；温度/能量结果与无热源结构释放相混，未形成熔池。修正账本重复计入后，累计残差约0.10133 eV，与无源 NVE 漂移0.10129 eV相当。这不是原始 Morse 主模型的加热验证，也不是生产级 LAMMPS TTM fix；详见 [B 路线 TTM–MD 试验](potential_validation/geometry_constraint_B/B_TTM_MD_PILOT_0P05PS.md)。
 
 ## 核验方式和结果
 
@@ -55,7 +55,7 @@ lmp -in in.layered_static_check -log log.layered_static_check
 
 2026-10-24 的 Stage 1 松弛筛查未通过：初始最大力 Ag 原子 717010 的力主要来自 Ag–骨架 Morse 交叉项；固定 Ti/Si/C、仅松弛 Ag 200 次 CG 后，Ag 最大力仍为 4.081 eV/Å、最短 Ag–C 距离为 1.919 Å；固定骨架 Ag-only FIRE 200 次后仍为 3.806 eV/Å、最短 Ag–C 为 1.968 Å。骨架谐和约束 K=1、10、100 eV/Å² 在解除约束后，骨架最大物理力仍为 3.111、3.252、3.492 eV/Å，Ag 最大力为 3.704–3.833 eV/Å。
 
-后续静态诊断还发现，牛顿层中距离所有 Ag 至少 8 Å 的 84,154 个 Ti 和 56,429 个 C，受力中位数仍有 2.675 和 2.041 eV/Å，且 Morse 力为零；因此骨架内部几何/势能也存在明显重排需求。Ag 固定、Morse 暂置零的骨架 FIRE 弛豫后，一恢复原界面势，`run 0` 最大 Ag/骨架力升到 18.705/16.522 eV/Å，出现 1.930 Å 的 Ag–Si 接触。将 Morse 参数从 0 逐级升至原值后，完整势下最大力为 4.556 eV/Å；再延长 100 次 FIRE 后，牛顿层最大力升至 7.522 eV/Å，追踪 C–C 对缩短到 2.534 Å。另用原始完整势和 K=100 eV/Å² 骨架弹簧做 200 次 FIRE，Ag 最大力仍为 3.820 eV/Å；解除弹簧后骨架最大物理力为 5.679 eV/Å。之后做了干净的0.1 fs、0.025 ps K=100冷态敏感性短跑，917,378个原子均保留；有效restart和末帧逐原子核对一致。另做0.025 ps受限冷态续跑，Ag升至约537 K而骨架约96 K，说明基线仍未平衡，不能为加热放行。详情见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md) 和 [STAGE2_COLD_K100_PILOT.md](STAGE2_COLD_K100_PILOT.md)。目前不启动TTM热源测试或正式熔池计算；强约束下的熔化不能作为无约束复合材料稳定熔池的证据。
+后续静态诊断还发现，牛顿层中距离所有 Ag 至少 8 Å 的 84,154 个 Ti 和 56,429 个 C，受力中位数仍有 2.675 和 2.041 eV/Å，且 Morse 力为零；因此骨架内部几何/势能也存在明显重排需求。Ag 固定、Morse 暂置零的骨架 FIRE 弛豫后，一恢复原界面势，`run 0` 最大 Ag/骨架力升到 18.705/16.522 eV/Å，出现 1.930 Å 的 Ag–Si 接触。将 Morse 参数从 0 逐级升至原值后，完整势下最大力为 4.556 eV/Å；再延长 100 次 FIRE 后，牛顿层最大力升至 7.522 eV/Å，追踪 C–C 对缩短到 2.534 Å。另用原始完整势和 K=100 eV/Å² 骨架弹簧做 200 次 FIRE，Ag 最大力仍为 3.820 eV/Å；解除弹簧后骨架最大物理力为 5.679 eV/Å。之后做了干净的0.1 fs、0.025 ps K=100冷态敏感性短跑，917,378个原子均保留；有效restart和末帧逐原子核对一致。另做0.025 ps受限冷态续跑，Ag升至约537 K而骨架约96 K，说明主路线基线仍未平衡，不能为主模型加热放行。详情见 [STAGE1_MINIMIZATION_DIAGNOSTICS.md](STAGE1_MINIMIZATION_DIAGNOSTICS.md) 和 [STAGE2_COLD_K100_PILOT.md](STAGE2_COLD_K100_PILOT.md)。原始 Morse 主模型仍不启动正式加热；B 只完成短时参考联调，未形成稳定熔池，强约束几何模型不能作为真实柔性复合材料熔化/凝固的定量证据。
 
 另做了从已松弛 Ag 坐标开始的刚性骨架 300 K 无源早期检查：50 步（0.005 ps，0.1 fs）后 Ag 温度为 301.03 K，Ag 最大力 3.847 eV/Å；仅解除骨架约束的终点 `run 0` 显示活动骨架最大物理力仍为 6.355 eV/Å。测试时长不足以证明平衡，CNA 还出现高邻居数警告；它只说明刚性骨架下 5 fs 短跑完成，不能作为稳定熔池初态。输入、坐标快照、日志和判断见 [固定骨架冷态检查](cold_pilot/RESULTS_20261024.md)。
 

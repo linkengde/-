@@ -25,17 +25,23 @@ The 100 fs test is the bounded B-route acceptance attempt. The earlier two 25 fs
 
 The geometry-obstacle route reduces the static Ag force tail relative to the Morse-based candidate and avoids the rapid no-source temperature rise observed in the Morse test. It is therefore a useful exploratory model for testing geometric confinement. However, this exact WCA parameterization has not established a stable 300 K baseline, and its interface strength is arbitrary. The model also cannot represent ceramic thermal response or Ag–ceramic adhesion/heat transfer because the skeleton is rigid and cross interactions are purely repulsive.
 
-A separate 0.05 ps reference TTM–MD pilot was subsequently run through the LAMMPS Python API. It completed 100 actual 0.5 fs MD steps with the Gaussian-times-exponential Ag electron source and energy handoff, but Ag temperature fell to 159 K and no liquid-pool analysis or heat-off controller was active. The cumulative energy-ledger residual was 4.75 eV (3.24% of source energy), and the Python reference required hundreds of electron substeps per MD step. This demonstrates an integration path, not a stable cold baseline or physical melt pool; see [the TTM–MD pilot report](B_TTM_MD_PILOT_0P05PS.md). No 100 ps or cooling/solidification run was performed.
+A separate 0.05 ps reference TTM–MD pilot was subsequently run through the LAMMPS Python API. It completed 100 actual 0.5 fs MD steps with the Gaussian-times-exponential Ag electron source and energy handoff, but Ag temperature fell to 159 K and no liquid-pool analysis or heat-off controller was active. After correcting a bookkeeping error that double-counted prior energy transfers, the combined-energy residual was 0.10133 eV, matching the 0.10129 eV no-source NVE drift. The Python reference required hundreds of electron substeps per MD step. This demonstrates an integration path, not a stable cold baseline or physical melt pool; see [the TTM–MD pilot report](B_TTM_MD_PILOT_0P05PS.md). No 100 ps or cooling/solidification run was performed.
+
+For the rigid-scaffold version only, a second include omits internal TSCBOP calculations among fixed Ti/Si/C atoms while preserving the Ag EAM and Ag–skeleton WCA forces. The per-Ag static force difference was at roundoff (`1×10⁻¹³ eV/Å` max), and a 20-step NVT comparison produced identical mobile-Ag positions, velocities, and forces. The LAMMPS pair loop fell from 39.8 s to 1.28 s for those 20 steps. The accelerated 0.05 ps TTM pilot took 64.551 s. This optimization is only equivalent under the rigid geometric-obstacle assumption; it removes the ceramic's internal energy constant and cannot model ceramic response. See [the fixed-scaffold equivalence report](B_FIXED_SCAFFOLD_ACCELERATION.md).
 
 ## Files
 
 - `potential.geometry_wca_candidate.inc`: separate WCA candidate potential. The existing Morse include is untouched.
+- `potential.geometry_wca_fixed_skeleton.inc`: faster rigid-obstacle variant that omits interactions among fixed ceramic atoms; see its equivalence limits in the acceleration report.
 - `in.static_force_check`, `in.ag_minimize_100`, `in.ag_nvt_0p1ps_continuous`: exact LAMMPS inputs.
+- `in.fixed_skeleton_force_check`, `in.nvt20_full_skeleton`, `in.nvt20_fixed_skeleton` and matching logs: force-equivalence/performance checks for the rigid-scaffold reduction.
 - `log.*`, `static_screen_metrics.json`, `nvt_0p1ps_metrics.json`: logs and machine-readable summaries.
 - `initial_forces.dump.gz`, `ag_minimized_100.dump.gz`, `ag_nvt_0p1ps_continuous_final.dump.gz`: compressed snapshots.
 - `analyze_*.py`: reproducible force, displacement, WCA-contact, and connectivity analyses.
 - `b_ttm_reference_md_pilot.py`, `log.b_ttm_reference_md_pilot`, and `B_TTM_MD_PILOT_0P05PS.md`: bounded actual-MD/reference-TTM coupling pilot.
-- `SHA256SUMS.txt`: checksums for the archived files other than the checksum list itself.
+- `b_nve_energy_baseline.py`, `log.b_nve_energy_baseline`: no-source NVE energy-drift control for the TTM pilot.
+- `B_FIXED_SCAFFOLD_ACCELERATION.md`: equivalence and timing record for the fixed-scaffold optimization.
+- `SHA256SUMS.txt` and `SHA256SUMS_TTM_PILOT.txt`: checksums for the archived files, excluding the checksum manifests themselves.
 
 The QSGS data and Ag/Ti–Si–C intra-phase potentials are shared with the parent validation directory. This B trial uses the separate relaxed-parent geometry candidate, not the canonical 917,378-atom model.
 

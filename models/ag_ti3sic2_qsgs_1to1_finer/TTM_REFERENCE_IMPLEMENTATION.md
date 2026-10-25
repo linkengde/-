@@ -1,6 +1,6 @@
 # Ag-only TTM reference implementation
 
-Status: numerical reference and unit-tested operator prototype. It is **not yet a LAMMPS fix or a production MD input**. No composite MD or heating trajectory has been run with this code.
+Status: numerical reference and unit-tested operator prototype. It is **not a compiled LAMMPS fix or a production MD input**. A bounded 0.05 ps exploratory Model B composite MD/TTM pilot has now been run through the LAMMPS Python API; it did not form a stable melt pool and does not validate the primary Morse-interface model. See [the archived B pilot](potential_validation/geometry_constraint_B/B_TTM_MD_PILOT_0P05PS.md).
 
 ## What it implements
 
@@ -22,8 +22,8 @@ The supplied Ag table begins at 300 K. To permit local kinetic-temperature fluct
 1. The deterministic mean-field transfer conserves energy but omits Langevin fluctuations. It is a TTM-MD operator candidate, not a drop-in equivalent to `fix ttm`.
 2. The 300 K table values are cross-paper fitted candidates, not a self-consistent validated parameter set.
 3. The controller consumes liquid-cluster size, pool volume, skeleton connectivity/damage, surface recession, and escaped-atom metrics. The CNA-plus-1-ps-displacement liquid flag has been checked against repository-EAM pure Ag solid/liquid references (see [classifier calibration](pure_ag_classifier/README.md)); the classifier and cluster metric still need validation on composite trajectories, and the online trajectory-to-controller monitor is not yet implemented.
-4. A one-step 10 Å geometry smoke test at 0.5 fs required 348 explicit electron substeps. This proves only numerical operation and energy accounting; it also shows that a Python reference solver is too costly for a 100 ps production trajectory. Production needs a compiled LAMMPS fix or a validated implicit/accelerated implementation.
-5. The composite cold baseline and current calibration-v0 interface potential have not passed force/equilibrium checks. The Ti₃SiC₂ potential is also not validated for weld-like thermal cycling. The intended observable is a microscopic local Ag melt pool, confinement of molten Ag by the continuous Ti₃SiC₂ scaffold, and local resolidification after heat-off, not bulk melting. The composite trajectory can only be interpreted conditionally on these potentials; pure-Ag calibration does not validate the interface binding or backbone response.
+4. The one-step 10 Å synthetic-velocity smoke test at 0.5 fs required 348 explicit electron substeps. The later 0.05 ps Model B API pilot used actual LAMMPS MD steps and required 242–351 electron substeps per step. After vectorizing lattice-energy handoff and omitting fixed-fixed ceramic calculations under the rigid-obstacle assumption, that pilot took 64.6 s; a simple linear estimate is about 36 h for 100 ps on the same four-thread setup. This is only a planning estimate. With corrected bookkeeping, its combined-energy residual (0.10133 eV) matches the 0.10129 eV no-source NVE drift. High-temperature performance and long-run accuracy remain unvalidated.
+5. The primary Morse-interface composite cold baseline has not passed force/equilibrium checks. Model B is a separate rigid geometric-obstacle exploration using repulsive WCA cross terms; its no-source baseline also did not reach a 300 K plateau. The Ti₃SiC₂ potential is not validated for weld-like thermal cycling. The intended observable is a microscopic local Ag melt pool, confinement of molten Ag by the continuous Ti₃SiC₂ scaffold, and local resolidification after heat-off, not bulk melting. Neither the B pilot nor pure-Ag calibration validates real interface binding, ceramic response, or the primary composite's melting behavior.
 
 ## Reproduction
 

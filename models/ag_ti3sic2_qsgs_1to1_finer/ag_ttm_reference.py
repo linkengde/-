@@ -603,16 +603,27 @@ def rescale_lattice_kinetic(
     atom_transfer = np.sum(
         normalized_reverse * target.ravel()[mapping.cell_ids], axis=1
     )
-    for atom, delta in enumerate(atom_transfer):
-        if delta == 0.0:
-            continue
-        kinetic = 0.5 * M_VV2E_METAL * float(mass[atom] * np.sum(velocity[atom] ** 2))
-        new_kinetic = kinetic + delta
-        if new_kinetic < -1.0e-12:
-            raise ValueError(f"Atom {atom} would have negative lattice kinetic energy")
-        if kinetic <= 0.0:
-            raise ValueError(f"Atom {atom} has zero kinetic energy; cannot rescale")
-        velocity[atom] *= np.sqrt(max(new_kinetic, 0.0) / kinetic)
+    kinetic = 0.5 * M_VV2E_METAL * mass * np.einsum("ij,ij->i", velocity, velocity)
+    new_kinetic = kinetic + atom_transfer
+    active_transfer = atom_transfer != 0.0
+    negative = np.flatnonzero(active_transfer & (new_kinetic < -1.0e-12))
+    if negative.size:
+        raise ValueError(
+            f"Atom {int(negative[0])} would have negative lattice kinetic energy"
+        )
+    zero_kinetic = np.flatnonzero(active_transfer & (kinetic <= 0.0))
+    if zero_kinetic.size:
+        raise ValueError(
+            f"Atom {int(zero_kinetic[0])} has zero kinetic energy; cannot rescale"
+        )
+    scale_squared = np.ones_like(kinetic)
+    np.divide(
+        np.maximum(new_kinetic, 0.0),
+        kinetic,
+        out=scale_squared,
+        where=active_transfer,
+    )
+    velocity *= np.sqrt(scale_squared)[:, None]
 
     before_atom = 0.5 * M_VV2E_METAL * mass * np.sum(
         np.asarray(velocities_A_ps, dtype=float) ** 2, axis=1

@@ -1,0 +1,25 @@
+# Geometry-constrained Model B exploratory run-0; no dynamics or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+include potential_validation/geometry_constraint_B/potential.geometry_wca_fixed_skeleton.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group Ag type 4
+group skeleton type 1 2 3
+group mobile_Ag subtract Ag bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_all all reduce max v_fn
+compute f_Ag mobile_Ag reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe press c_f_all c_f_Ag
+thermo_modify flush yes
+dump force_dump all custom 1 /tmp/initial_forces_fixed_skeleton.dump id type x y z fx fy fz
+dump_modify force_dump sort id
+run 0
+print "GEOMETRY_CONSTRAINT_B_STATIC_FORCE_CHECK_COMPLETE"
