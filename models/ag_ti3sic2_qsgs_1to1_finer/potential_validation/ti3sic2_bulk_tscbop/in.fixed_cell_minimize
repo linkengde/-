@@ -1,0 +1,23 @@
+# CIF-derived pristine periodic Ti3SiC2; coordinates relax at fixed source cell.
+# No Ag, interface, QSGS truncation, MD, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p p
+read_data potential_validation/ti3sic2_bulk_tscbop/ti3sic2_bulk_3x3x2.data
+pair_style tersoff
+pair_coeff * * potentials/TSCBOP.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fn
+compute fmean all reduce ave v_fn
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz lx ly lz c_fmax c_fmean
+run 0
+write_dump all custom potential_validation/ti3sic2_bulk_tscbop/initial_forces.dump id type x y z fx fy fz modify sort id
+min_style fire
+min_modify dmax 0.005
+minimize 1.0e-8 1.0e-4 2000 20000
+run 0
+write_data potential_validation/ti3sic2_bulk_tscbop/fixed_cell_minimized.data
+write_dump all custom potential_validation/ti3sic2_bulk_tscbop/fixed_cell_forces.dump id type x y z fx fy fz modify sort id

@@ -1,0 +1,152 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Same CIF-derived periodic crystal; relax atomic coordinates and orthogonal cell
+# to zero normal stress, as a TSCBOP lattice-compatibility diagnostic.
+# This is a separate test and its endpoint is not substituted into the QSGS model.
+units metal
+atom_style atomic
+boundary p p p
+read_data potential_validation/ti3sic2_bulk_tscbop/ti3sic2_bulk_3x3x2.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (9.1725 15.887236 35.247)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  432 atoms
+  read_data CPU = 0.001 seconds
+pair_style tersoff
+pair_coeff * * potentials/TSCBOP.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz lx ly lz c_fmax
+fix relax all box/relax aniso 0.0 vmax 0.0005
+min_style cg
+minimize 1.0e-8 1.0e-4 3000 30000
+Last active /omp style is pair_style tersoff/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.8838
+  ghost atom cutoff = 5.8838
+  binsize = 2.9419, bins = 4 6 12
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair tersoff/omp, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+WARNING: Energy due to 3 extra global DOFs will be included in minimizer energies
+ (src/src/min.cpp:222)
+Per MPI rank memory allocation (min/avg/max) = 6.88 | 6.88 | 6.88 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz             Lx             Ly             Lz           c_fmax    
+         0         432  -2805.2987      48513.051      43326.671      43324.965      58887.518      9.1725         15.887236      35.247         2.6748798    
+        10         432  -2806.7703      22101.458      19101.288      19100.053      28103.032      9.2053476      15.944127      35.423235      2.6187934    
+        20         432  -2807.4055      74.069789     -441.61919     -441.90525      1105.7338      9.2309442      15.988456      35.59947       2.5564247    
+        30         432  -2810.0254      1934.5946      1799.3022      1799.3143      2205.1673      9.2237221      15.975946      35.60295       2.4247166    
+        40         432  -2811.9064      1843.4953      1714.2256      1714.2416      2102.0188      9.2223476      15.973566      35.60295       2.3235752    
+        50         432  -2813.5211      1716.5728      1596.3287      1596.3429      1957.0467      9.2213023      15.971757      35.60295       2.232628     
+        60         432  -2814.9252      1562.5578      1453.0931      1453.1059      1781.4743      9.2205132      15.970391      35.60295       2.1500233    
+        70         432  -2816.1802      1386.6489      1289.4528      1289.4642      1581.0298      9.2199133      15.969352      35.60295       2.0730727    
+        80         432  -2817.3423      1188.0164      1104.6939      1104.704       1354.6512      9.2194567      15.968562      35.60295       1.9988841    
+        90         432  -2818.4685      958.99201      891.73141      891.74029      1093.5043      9.2191155      15.967972      35.60295       1.9239524    
+       100         432  -2819.6446      676.7843       629.43801      629.44555      771.46934      9.218879       15.967562      35.60295       1.8420906    
+       110         432  -2821.1777      233.38111      217.66251      217.66828      264.81255      9.2187826      15.967396      35.60295       1.7289502    
+       120         432  -2824.2151     -960.44828     -889.99238     -889.98935     -1101.3631      9.219489       15.968621      35.60295       1.4766185    
+       130         432  -2824.9356     -1333.1881     -1234.7695     -1234.7678     -1530.027       9.2199104      15.969351      35.60295       1.4093309    
+       140         432  -2825.6081     -1722.6871     -1595.3465     -1595.3455     -1977.3693      9.2204221      15.970238      35.60295       1.3431447    
+       150         432  -2826.3789     -2224.334      -2059.4371     -2059.4369     -2554.1281      9.2211683      15.971531      35.60295       1.2625364    
+       160         432  -2827.9909      2122.7774      1978.6853      1978.6826      2410.9642      9.2156061      15.961897      35.566213      1.075539     
+       170         432  -2828.5623      1504.7994      1397.6344      1397.6409      1719.1227      9.2168552      15.964061      35.566213      0.99841065   
+       180         432  -2829.059       936.3191       872.1937       872.19519      1064.5684      9.2180559      15.966141      35.566213      0.92551954   
+       190         432  -2829.7093      51.001403      52.786407      52.779192      47.438609      9.2200403      15.969578      35.566213      0.81912465   
+       200         432  -2830.9186      166.99138      710.64035      447.31124     -656.97745      9.2200468      15.971229      35.563         0.561158     
+       210         432  -2831.1303      1317.3647      1219.8345      1206.0786      1526.1811      9.2217112      15.972558      35.538164      0.50350312   
+       220         432  -2831.3256      393.78483      1256.703       123.53637     -198.88489      9.2203185      15.97712       35.54998       0.44014534   
+       230         432  -2831.5114     -409.31202     -356.5281      -408.94798     -462.45999      9.2259968      15.980222      35.539804      0.37356834   
+       240         432  -2831.6437     -1770.8027     -2773.9484      158.76403     -2697.2237      9.2327632      15.973261      35.554169      0.31255752   
+       250         432  -2831.7573      317.39001     -120.45928     -201.04624      1273.6756      9.2292113      15.985966      35.511528      0.25933761   
+       260         432  -2831.8395     -588.39295     -396.49513     -1501.0077      132.32394      9.2294494      15.992783      35.514265      0.21027957   
+       270         432  -2831.9764     -1673.4028     -3358.7246     -286.21008     -1375.2736      9.2419104      15.988177      35.499575      0.11220427   
+       280         432  -2832.0693      12.30699       777.65187      809.55963     -1550.2905      9.2338896      15.993365      35.489299      0.042037859  
+       290         432  -2832.1074     -69.98104       417.71695     -94.97964      -532.68043      9.2413641      16.009727      35.431251      0.0041282412 
+       293         432  -2832.108       20.820235      31.832129     -12.238307      42.866882      9.2435381      16.010553      35.420347      0.0058475007 
+Loop time of 0.560764 on 4 procs for 293 steps with 432 atoms
+
+397.8% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+      -2805.2987008134  -2832.10796499789  -2832.10797991611
+  Force two-norm initial, final = 275.41858 0.19168772
+  Force max component initial, final = 188.78658 0.13956557
+  Final line search alpha, max atom move = 0.0015692222 0.00021900938
+  Iterations, force evaluations = 293 312
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.53505    | 0.53505    | 0.53505    |   0.0 | 95.41
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0028459  | 0.0028459  | 0.0028459  |   0.0 |  0.51
+Output  | 0.0016344  | 0.0016344  | 0.0016344  |   0.0 |  0.29
+Modify  | 0.0025293  | 0.0025293  | 0.0025293  |   0.0 |  0.45
+Other   |            | 0.01871    |            |       |  3.34
+
+Nlocal:            432 ave         432 max         432 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1649 ave        1649 max        1649 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        30528 ave       30528 max       30528 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 30528
+Ave neighs/atom = 70.666667
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix relax
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style tersoff/omp
+Per MPI rank memory allocation (min/avg/max) = 5.88 | 5.88 | 5.88 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz             Lx             Ly             Lz           c_fmax    
+       293         432  -2832.108       20.820235      31.832129     -12.238307      42.866882      9.2435381      16.010553      35.420347      0.0058475007 
+Loop time of 7.61e-07 on 4 procs for 0 steps with 432 atoms
+
+131.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 7.61e-07   |            |       |100.00
+
+Nlocal:            432 ave         432 max         432 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1649 ave        1649 max        1649 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        30528 ave       30528 max       30528 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 30528
+Ave neighs/atom = 70.666667
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data potential_validation/ti3sic2_bulk_tscbop/zero_pressure_minimized.data
+System init for write_data ...
+Last active /omp style is pair_style tersoff/omp
+write_dump all custom potential_validation/ti3sic2_bulk_tscbop/zero_pressure_forces.dump id type x y z fx fy fz modify sort id
+Total wall time: 0:00:00

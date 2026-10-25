@@ -1,0 +1,22 @@
+# Same CIF-derived periodic crystal; relax atomic coordinates and orthogonal cell
+# to zero normal stress, as a TSCBOP lattice-compatibility diagnostic.
+# This is a separate test and its endpoint is not substituted into the QSGS model.
+units metal
+atom_style atomic
+boundary p p p
+read_data potential_validation/ti3sic2_bulk_tscbop/ti3sic2_bulk_3x3x2.data
+pair_style tersoff
+pair_coeff * * potentials/TSCBOP.tersoff Ti Si C
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz lx ly lz c_fmax
+fix relax all box/relax aniso 0.0 vmax 0.0005
+min_style cg
+minimize 1.0e-8 1.0e-4 3000 30000
+unfix relax
+run 0
+write_data potential_validation/ti3sic2_bulk_tscbop/zero_pressure_minimized.data
+write_dump all custom potential_validation/ti3sic2_bulk_tscbop/zero_pressure_forces.dump id type x y z fx fy fz modify sort id

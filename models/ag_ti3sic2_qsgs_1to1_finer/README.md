@@ -57,6 +57,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 **仍为未弛豫初始几何，未验证300 K稳定性，未运行MD、加热或TTM。**
 细颈力学稳定性和生产级势验证不在这次几何检查结论内。
 
+另有一个与 Ag/界面分开的 Ti₃SiC₂ 母相 TSCBOP 静态晶胞检查，输入、日志和结果见[独立检查记录](potential_validation/ti3sic2_bulk_tscbop/README.md)。母相晶体可在该势下弛豫到低力状态；各向异性零压弛豫后的晶胞比 CIF 初始尺寸大约 0.5–0.8%。这项结果不等于 QSGS 骨架或复合冷态基线通过，也没有将弛豫晶胞代入复合模型。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py
