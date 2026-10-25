@@ -71,6 +71,10 @@ def parse_ag(path: Path):
 def trilinear_periodic_xy(phi: np.ndarray, xyz: np.ndarray, spacing: np.ndarray, lz: float):
     nx, ny, nz = phi.shape
     ijk = xyz / spacing[None, :] - 0.5
+    # Clamp the free-surface coordinate itself before interpolation. Clamping
+    # only the integer index while retaining its old fractional part blends
+    # the first/last z voxels and overcounts wall penetration at z boundaries.
+    ijk[:, 2] = np.clip(ijk[:, 2], 0.0, nz - 1.0)
     base = np.floor(ijk).astype(np.int64)
     frac = ijk - base
     base[:, 0] %= nx
@@ -111,8 +115,34 @@ def main():
     if parity_violations:
         raise ValueError(f"Ag sites violate the FCC basis parity: {parity_violations}")
 
-    xyz = lattice_indices * (AG_EAM_A0_A / 2.0)
-    size = FCC_CELLS_XYZ.astype(float) * AG_EAM_A0_A
+    phase_path = OUT / "fcc_lattice_phase_search.json"
+    phase_result = json.loads(phase_path.read_text()) if phase_path.exists() else {
+        "selected": {"orientation": "identity", "dx_A": 0.0, "dy_A": 0.0}
+    }
+    phase = phase_result["selected"]
+    orientation = phase["orientation"]
+    half_a = AG_EAM_A0_A / 2.0
+    cells = FCC_CELLS_XYZ.copy()
+    if orientation == "identity":
+        output_indices = lattice_indices.copy()
+    elif orientation == "rotate_z_90":
+        output_indices = np.column_stack((lattice_indices[:, 1], 2 * FCC_CELLS_XYZ[0] - lattice_indices[:, 0], lattice_indices[:, 2]))
+        cells = FCC_CELLS_XYZ[[1, 0, 2]]
+    elif orientation == "rotate_z_180":
+        output_indices = np.column_stack((2 * FCC_CELLS_XYZ[0] - lattice_indices[:, 0], 2 * FCC_CELLS_XYZ[1] - lattice_indices[:, 1], lattice_indices[:, 2]))
+    elif orientation == "rotate_z_270":
+        output_indices = np.column_stack((2 * FCC_CELLS_XYZ[1] - lattice_indices[:, 1], lattice_indices[:, 0], lattice_indices[:, 2]))
+        cells = FCC_CELLS_XYZ[[1, 0, 2]]
+    else:
+        raise ValueError(f"Unknown FCC phase-search orientation: {orientation}")
+    transformed_parity_violations = int(np.count_nonzero(np.mod(output_indices.sum(axis=1), 2)))
+    if transformed_parity_violations:
+        raise ValueError(f"FCC transformation changed lattice parity for {transformed_parity_violations} sites")
+
+    size = cells.astype(float) * AG_EAM_A0_A
+    xyz = output_indices * half_a
+    xyz[:, 0] = np.mod(xyz[:, 0] + float(phase["dx_A"]), size[0])
+    xyz[:, 1] = np.mod(xyz[:, 1] + float(phase["dy_A"]), size[1])
     vacuum_z = bounds[2][1] - geom["material_dimensions_A"][2]
     bounds = {0: (0.0, float(size[0])), 1: (0.0, float(size[1])), 2: (0.0, float(size[2] + vacuum_z))}
     lx, ly, lz = size
@@ -168,12 +198,18 @@ def main():
         "qsgs_mask_size_A": [float(x) for x in size],
         "qsgs_mask_voxel_size_A": [float(x) for x in spacing],
         "lattice_reconstruction": {
-            "method": "preserve the original Ag FCC site occupancy and remap integer site indices onto cubic Ag_u3.eam equilibrium lattice",
+            "method": "preserve all Ag sites, remap to cubic Ag_u3.eam lattice, then apply the selected bounded in-plane orientation/translation",
             "Ag_u3_eam_equilibrium_a0_A": AG_EAM_A0_A,
-            "fcc_cells_xyz": [int(x) for x in FCC_CELLS_XYZ],
+            "fcc_cells_xyz": [int(x) for x in cells],
+            "selected_orientation": orientation,
+            "selected_translation_xy_A": [float(phase["dx_A"]), float(phase["dy_A"])],
+            "phase_search_result": phase_path.name if phase_path.exists() else None,
             "parent_effective_a_xyz_A": [float(x) for x in parent_lattice_a],
-            "parent_to_new_box_scale_xyz": [float(AG_EAM_A0_A / x) for x in parent_lattice_a],
+            "parent_to_new_box_scale_xyz": ([float(AG_EAM_A0_A / parent_lattice_a[1]), float(AG_EAM_A0_A / parent_lattice_a[0]), 1.0]
+                                             if orientation in ("rotate_z_90", "rotate_z_270")
+                                             else [float(AG_EAM_A0_A / parent_lattice_a[0]), float(AG_EAM_A0_A / parent_lattice_a[1]), 1.0]),
             "fcc_parity_violations": parity_violations,
+            "transformed_fcc_parity_violations": transformed_parity_violations,
             "max_parent_site_mapping_error_A": float(np.max(np.abs(lattice_error))),
             "atomic_occupancy_preserved": True,
             "Ag_atom_count_preserved": int(len(ids)),

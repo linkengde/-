@@ -297,12 +297,13 @@ def load_ag_id_map():
 def main():
     stiffnesses = (0.0, 1.0, 5.0, 10.0)
     fire_mode = "--fire" in sys.argv
-    nvt_steps = 1000 if fire_mode else 4000
+    # The selected phase-candidate gets one bounded 2 ps cold screen after FIRE.
+    nvt_steps = 4000
     dt_ps = 0.0005
-    suffix = "fire_gate" if fire_mode else "cold_gate_2ps"
+    suffix = "fire_gate_phase_candidate" if fire_mode else "cold_gate_2ps"
     log = HERE / f"log.ag_mask_{suffix}"
-    dump_start = HERE / ("ag_mask_fire_nvt_start.dump" if fire_mode else "ag_mask_cold_start.dump")
-    dump_end = HERE / ("ag_mask_fire_nvt_final.dump" if fire_mode else "ag_mask_cold_final.dump")
+    dump_start = HERE / ("ag_mask_phase_fire_nvt_start.dump" if fire_mode else "ag_mask_cold_start.dump")
+    dump_end = HERE / ("ag_mask_phase_fire_nvt_final.dump" if fire_mode else "ag_mask_cold_final.dump")
 
     lmp = lammps(cmdargs=["-screen", "none", "-log", str(log), "-sf", "omp"])
     commands = [
@@ -351,8 +352,8 @@ def main():
 
     mask.k = 5.0
     minimization = None
-    min_start_dump = HERE / "ag_mask_fire_min_start.dump"
-    min_end_dump = HERE / "ag_mask_fire_min_end.dump"
+    min_start_dump = HERE / ("ag_mask_phase_fire_min_start.dump" if fire_mode else "ag_mask_fire_min_start.dump")
+    min_end_dump = HERE / ("ag_mask_phase_fire_min_end.dump" if fire_mode else "ag_mask_fire_min_end.dump")
     if fire_mode:
         lmp.command(f"write_dump all custom {min_start_dump} id type x y z vx vy vz fx fy fz modify sort id")
         lmp.command("min_style fire")
@@ -393,6 +394,8 @@ def main():
         "status": "AG_ONLY_EAM_QSGS_GEOMETRIC_MASK_BOUNDED_FIRE_COLD_GATE" if fire_mode else "AG_ONLY_EAM_QSGS_GEOMETRIC_MASK_COLD_NVT_GATE",
         "atom_model": "Ag atoms only with Ag_u3.eam; Ti/Si/C excluded from LAMMPS",
         "geometry_constraint": "QSGS ceramic occupancy signed-distance penalty via fix external; no Ag-Ti/Si/C pair terms",
+        "fcc_phase_candidate": json.loads((HERE / "fcc_lattice_phase_search.json").read_text())["selected"]
+        if (HERE / "fcc_lattice_phase_search.json").exists() else None,
         "dt_fs": dt_ps * 1000.0,
         "nvt_duration_ps": nvt_steps * dt_ps,
         "wall_clearance_A": mask.clearance,
@@ -418,10 +421,16 @@ def main():
             "The NVT run is a finite screening test, not proof of a converged 300 K baseline.",
             "No melting or solidification claim is made by this cold gate.",
         ],
-        "outputs": {"log": log.name, "start_dump": dump_start.name, "end_dump": dump_end.name},
+        "outputs": {
+            "log": log.name,
+            "start_dump": dump_start.name,
+            "end_dump": dump_end.name,
+            "bounded_fire_min_start_dump": min_start_dump.name if fire_mode else None,
+            "bounded_fire_min_end_dump": min_end_dump.name if fire_mode else None,
+        },
     }
-    metrics_path = HERE / ("ag_mask_fire_gate_metrics.json" if fire_mode else "ag_mask_cold_gate_metrics.json")
-    history_path = HERE / ("geometry_wall_callback_history_fire.json" if fire_mode else "geometry_wall_callback_history.json")
+    metrics_path = HERE / ("ag_mask_phase_fire_gate_metrics.json" if fire_mode else "ag_mask_cold_gate_metrics.json")
+    history_path = HERE / ("geometry_wall_callback_history_phase_fire.json" if fire_mode else "geometry_wall_callback_history.json")
     metrics_path.write_text(json.dumps(result, indent=2) + "\n")
     history_path.write_text(json.dumps(mask.history, indent=2) + "\n")
     print(json.dumps(result, indent=2))

@@ -1,5 +1,5 @@
 {
-  "status": "AG_ONLY_QSGS_MASK_REBUILT_ON_EAM_FCC_LATTICE_COLD_GATE_NOT_PASSED_NO_TTM",
+  "status": "AG_ONLY_QSGS_MASK_REBUILT_ON_EAM_FCC_LATTICE_NOT_COLD_VALIDATED",
   "source_data": "potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz",
   "source_data_sha256": "60d380ab5b35586aa03765590ce6f41565887ecbad410fa85cec423cac15b059",
   "source_geometry_sha256": "82ae82246b3658ca82a297b386ff50f475a16611c4797f37b1d30bec00b63770",
@@ -22,13 +22,19 @@
     3.1902
   ],
   "lattice_reconstruction": {
-    "method": "preserve the original Ag FCC site occupancy and remap integer site indices onto cubic Ag_u3.eam equilibrium lattice",
+    "method": "preserve all Ag sites, remap to cubic Ag_u3.eam lattice, then apply the selected bounded in-plane orientation/translation",
     "Ag_u3_eam_equilibrium_a0_A": 4.09,
     "fcc_cells_xyz": [
       73,
       74,
       39
     ],
+    "selected_orientation": "identity",
+    "selected_translation_xy_A": [
+      0.06390625,
+      0.031953125
+    ],
+    "phase_search_result": "fcc_lattice_phase_search.json",
     "parent_effective_a_xyz_A": [
       4.136377794448572,
       4.11081777397195,
@@ -40,6 +46,7 @@
       1.0
     ],
     "fcc_parity_violations": 0,
+    "transformed_fcc_parity_violations": 0,
     "max_parent_site_mapping_error_A": 1.1368683772161603e-13,
     "atomic_occupancy_preserved": true,
     "Ag_atom_count_preserved": 212800
@@ -54,23 +61,12 @@
     "wall_stiffness_eV_A2": 5.0,
     "force_form": "F_geom = k * max(0, clearance - phi) * grad(phi)",
     "energy_form": "U_geom = 0.5 * k * max(0, clearance - phi)^2",
-    "initial_atoms_with_wall_force": 488,
-    "initial_atoms_inside_skeleton_voxels": 488,
-    "initial_phi_min_A": -1.4024424584474153,
-    "initial_phi_p01_A": 0.5237326551737853,
-    "initial_phi_median_A": 2.7523545135311553,
-    "initial_phi_p99_A": 9.35637071613599
-  },
-  "cold_gate_verdict": {
-    "status": "NOT_PASSED",
-    "test": "Ag-only EAM, 0.5 fs timestep, 2 ps NVT at 300 K, no TTM or heat source",
-    "final_temperature_K": 308.1087488754632,
-    "potential_energy_slope_last_0p5ps_eV_per_ps": -3374.8724886876807,
-    "rms_displacement_A": 1.2647414063328266,
-    "mobile_force_p95_eV_A": 1.028419285044602,
-    "largest_connected_ag_fraction": 0.9997133458646617,
-    "ag_atoms_inside_mask_final": 791,
-    "report": "ag_mask_cold_gate_metrics.json"
+    "initial_atoms_with_wall_force": 169,
+    "initial_atoms_inside_skeleton_voxels": 169,
+    "initial_phi_min_A": -1.0460736870184364,
+    "initial_phi_p01_A": 0.6254454505791769,
+    "initial_phi_median_A": 2.761314211142737,
+    "initial_phi_p99_A": 9.409215801811277
   },
   "interpretation_limits": [
     "Ti/Si/C atoms and all Ag-Ti/Si/C cross-potential forces are absent.",
