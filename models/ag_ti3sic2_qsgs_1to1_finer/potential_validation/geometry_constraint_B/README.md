@@ -27,6 +27,8 @@ The geometry-obstacle route reduces the static Ag force tail relative to the Mor
 
 A separate 0.05 ps reference TTM–MD pilot was subsequently run through the LAMMPS Python API. It completed 100 actual 0.5 fs MD steps with the Gaussian-times-exponential Ag electron source and energy handoff, but Ag temperature fell to 159 K and no liquid-pool analysis or heat-off controller was active. After correcting a bookkeeping error that double-counted prior energy transfers, the combined-energy residual was 0.10133 eV, matching the 0.10129 eV no-source NVE drift. The Python reference required hundreds of electron substeps per MD step. This demonstrates an integration path, not a stable cold baseline or physical melt pool; see [the TTM–MD pilot report](B_TTM_MD_PILOT_0P05PS.md). No 100 ps or cooling/solidification run was performed.
 
+An extended 0.25 ps run with a matching 500-step no-source control also completed. The source-weighted Ag lattice temperature in the heated region ended at 253 K, and the whole Newton-layer Ag kinetic temperature ended at 229 K; no stable pool formed. Its energy residual (0.05890 eV) differed from the NVE drift (0.05795 eV) by 0.00095 eV. See [the extended pilot report](B_TTM_MD_PILOT_0P25PS.md) and its captured logs.
+
 For the rigid-scaffold version only, a second include omits internal TSCBOP calculations among fixed Ti/Si/C atoms while preserving the Ag EAM and Ag–skeleton WCA forces. The per-Ag static force difference was at roundoff (`1×10⁻¹³ eV/Å` max), and a 20-step NVT comparison produced identical mobile-Ag positions, velocities, and forces. The LAMMPS pair loop fell from 39.8 s to 1.28 s for those 20 steps. The accelerated 0.05 ps TTM pilot took 64.551 s. This optimization is only equivalent under the rigid geometric-obstacle assumption; it removes the ceramic's internal energy constant and cannot model ceramic response. See [the fixed-scaffold equivalence report](B_FIXED_SCAFFOLD_ACCELERATION.md).
 
 ## Files
@@ -40,6 +42,8 @@ For the rigid-scaffold version only, a second include omits internal TSCBOP calc
 - `analyze_*.py`: reproducible force, displacement, WCA-contact, and connectivity analyses.
 - `b_ttm_reference_md_pilot.py`, `log.b_ttm_reference_md_pilot`, and `B_TTM_MD_PILOT_0P05PS.md`: bounded actual-MD/reference-TTM coupling pilot.
 - `b_nve_energy_baseline.py`, `log.b_nve_energy_baseline`: no-source NVE energy-drift control for the TTM pilot.
+- `log.b_ttm_reference_md_pilot_0p25ps`, `log.b_nve_energy_baseline_0p25ps`: 500-step extended pilot and matched no-source control.
+- `B_TTM_MD_PILOT_0P25PS.md`: extended local-temperature and energy-ledger results.
 - `B_FIXED_SCAFFOLD_ACCELERATION.md`: equivalence and timing record for the fixed-scaffold optimization.
 - `SHA256SUMS.txt` and `SHA256SUMS_TTM_PILOT.txt`: checksums for the archived files, excluding the checksum manifests themselves.
 

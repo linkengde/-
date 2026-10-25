@@ -31,7 +31,7 @@
 - 熔池关热判据先采用操作性试行值：最大连通液态 Ag 团簇持续存在至少 3 ps，且最近 2 ps 的熔池体积没有持续增长；骨架仍保持贯通且结构指标没有持续恶化。液态判定不只依靠温度，需结合局部结构序参量或扩散性指标。
 - 安全停止条件：出现持续表面下陷、骨架失去贯通、局部结构快速破坏或原子逸出时，停止当前预检并回退热源幅值。上述持续时间和容差需在小规模预检中做敏感性检查，不当作材料常数。
 
-热源参数与模型坐标的静态核对见 [TTM_SOURCE_STATIC_PREFLIGHT.md](TTM_SOURCE_STATIC_PREFLIGHT.md)；原子坐标到候选网格的源功率离散比较见 [TTM_GRID_DISCRETIZATION_PREFLIGHT.md](TTM_GRID_DISCRETIZATION_PREFLIGHT.md) 和 [preflight_ttm_grid.py](preflight_ttm_grid.py)。这些静态预检本身没有运行 TTM。之后建立了独立 Python 参考求解器并完成单步能量账本 smoke test。2026-10-25 又通过 LAMMPS Python API 在单独的刚性几何约束 Model B 上做了0.05 ps真实 MD–TTM 联调；温度/能量结果与无热源结构释放相混，未形成熔池。修正账本重复计入后，累计残差约0.10133 eV，与无源 NVE 漂移0.10129 eV相当。这不是原始 Morse 主模型的加热验证，也不是生产级 LAMMPS TTM fix；详见 [B 路线 TTM–MD 试验](potential_validation/geometry_constraint_B/B_TTM_MD_PILOT_0P05PS.md)。
+热源参数与模型坐标的静态核对见 [TTM_SOURCE_STATIC_PREFLIGHT.md](TTM_SOURCE_STATIC_PREFLIGHT.md)；原子坐标到候选网格的源功率离散比较见 [TTM_GRID_DISCRETIZATION_PREFLIGHT.md](TTM_GRID_DISCRETIZATION_PREFLIGHT.md) 和 [preflight_ttm_grid.py](preflight_ttm_grid.py)。这些静态预检本身没有运行 TTM。之后建立了独立 Python 参考求解器并完成单步能量账本 smoke test。2026-10-25 又通过 LAMMPS Python API 在单独的刚性几何约束 Model B 上做了真实 MD–TTM 联调：0.05 ps 和延长至0.25 ps的试跑均未形成熔池；0.25 ps末端热源加权局部晶格温度约253 K。修正账本重复计入后，0.25 ps累计残差约0.05890 eV，与同长度无源 NVE 漂移0.05795 eV相差约0.00095 eV。这不是原始 Morse 主模型的加热验证，也不是生产级 LAMMPS TTM fix；详见 [B 路线 TTM–MD 试验](potential_validation/geometry_constraint_B/B_TTM_MD_PILOT_0P25PS.md)。
 
 ## 核验方式和结果
 
