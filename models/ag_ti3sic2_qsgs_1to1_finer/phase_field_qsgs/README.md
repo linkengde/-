@@ -21,7 +21,7 @@ The 1-D finite-volume one-phase Stefan benchmark uses a hot Dirichlet boundary, 
 
 The Ti₃SiC₂ anchors are also first-pass values. With formula mass 195.708 g/mol, 110–155 J/(mol·K) converts to **562–792 J/(kg·K)**; this corrects the 656–924 J/(kg·K) conversion in the supplied summary. The candidate scaffold table stops at 1473.15 K and the code rejects higher temperatures rather than extrapolating.
 
-The first QSGS 3-D finite-volume enthalpy solver is implemented in [`qsgs_enthalpy_solver.py`](qsgs_enthalpy_solver.py); the Ag electron equation and electron–lattice coupling are added in [`qsgs_ttm_enthalpy.py`](qsgs_ttm_enthalpy.py). The single-temperature checks are recorded in [`QSGS_ENTHALPY_PILOT.md`](QSGS_ENTHALPY_PILOT.md), and the coupled checks in [`QSGS_TTM_ENTHALPY_PILOT.md`](QSGS_TTM_ENTHALPY_PILOT.md). The coupled runs include electron and lattice conduction, preserve energy in 0D/1D and short 3D tests, and have not established a stable melt pool. These are continuum two-temperature/enthalpy calculations, not TTM-MD. Cases A and B remain limiting assumptions, not measured Ag–Ti₃SiC₂ interface properties.
+The first QSGS 3-D finite-volume enthalpy solver is implemented in [`qsgs_enthalpy_solver.py`](qsgs_enthalpy_solver.py); the Ag electron equation and electron–lattice coupling are added in [`qsgs_ttm_enthalpy.py`](qsgs_ttm_enthalpy.py). The single-temperature checks are recorded in [`QSGS_ENTHALPY_PILOT.md`](QSGS_ENTHALPY_PILOT.md), and the coupled checks in [`QSGS_TTM_ENTHALPY_PILOT.md`](QSGS_TTM_ENTHALPY_PILOT.md). The coupled solver uses conservative semi-implicit diffusion and implicit local electron–lattice exchange. It keeps Ag total conductivity in the independent single-temperature baseline, while the two-temperature model assigns Ag conduction to electrons and defaults Ag lattice conductivity to zero. Short 0D/1D/3D tests preserve the energy ledger, but no stable melt pool has been established. These are continuum two-temperature/enthalpy calculations, not TTM-MD. Cases A and B remain limiting assumptions, not measured Ag–Ti₃SiC₂ interface properties.
 
 ## Reproduce
 
@@ -33,7 +33,7 @@ python phase_field_qsgs/analyze_projected_connectivity.py
 python phase_field_qsgs/stefan_benchmark.py
 python -m unittest -v test_qsgs_projection.py test_thermophysical_model.py test_qsgs_enthalpy_solver.py test_qsgs_ttm_enthalpy.py
 python phase_field_qsgs/qsgs_enthalpy_solver.py --spacing 5A --boundary A --heat-ps 0.1 --cool-ps 0.1
-python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.005 --cool-ps 0.005 --dt-fs 5 --sample-ps 0.005
+python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.005 --cool-ps 0.005 --dt-fs 0.5 --sample-ps 0.005
 ```
 
 The compressed 5 Å and 10 Å maps and their numeric report are stored beside this file as `qsgs_phase_fractions_5A.npz`, `qsgs_phase_fractions_10A.npz`, and `qsgs_projection_report.json`.

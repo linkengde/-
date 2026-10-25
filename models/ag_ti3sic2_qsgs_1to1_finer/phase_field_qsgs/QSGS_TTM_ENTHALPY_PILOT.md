@@ -1,45 +1,51 @@
 # QSGS continuum two-temperature–enthalpy pilot
 
-## Status and scope
+## Status
 
-The finite-volume QSGS enthalpy model is now coupled to an Ag-only electron-temperature field. This is a **continuum two-temperature model**, not atomistic TTM-MD. The 0D, 1D, and short 3D numerical checks pass their energy ledgers. No Ag has melted in the completed coupled pilot, and no stable-pool controller or 100 ps run has been attempted.
+The 3D QSGS continuum solver now uses a conservative semi-implicit two-temperature/enthalpy update. The earlier concern about counting the full Ag thermal conductivity in both electron and lattice equations has been corrected. The updated 10 Å, 10 fs pilot remains fully solid; it is a numerical and energy-transfer check, not a melt-pool result or a production run.
 
-The old single-temperature QSGS enthalpy pilot remains a separate method check. It directly heated the lattice and its boundary-A transient melt is not evidence from this two-temperature calculation.
+This is a continuum calculation, not atomistic TTM-MD. The Ag–Ti₃SiC₂ interface is not modeled atomistically and Cases A/B remain thermal-boundary limits rather than measured interface properties.
 
-## Coupled equations and implementation
+## Conductivity partition and equations
 
-The electron grid reuses `AgParameters` and `AgTTMGrid` from `ag_ttm_reference.py`. It evolves tabulated electron internal energy (U_e(T_e)), electron conduction (k_e(T_e)), source input, and (G_{e-ph}(T_e)(T_e-T_l)) exchange. The table `Ag_TTM_hybrid_figure_fit_300_20000K.csv` covers 300–20,000 K; low-temperature and high-temperature extrapolation are disabled. These are cross-paper candidate fits, not a validated Ag–Ti₃SiC₂ property set.
+- The independent single-temperature enthalpy model retains the Ag total conductivity table (about 429 W/(m·K) at 300 K).
+- In the two-temperature model, Ag electrons use the candidate `ke(Te)` table. Ag lattice conductivity defaults to 0 W/(m·K) so the full total Ag conductivity is not counted a second time. This is an explicit first approximation; no unsupported `k_total - ke` subtraction is used.
+- Case A treats the scaffold as adiabatic. Case B adds Ti₃SiC₂ sensible heat capacity and conductivity to the shared lattice-temperature field; only the scaffold fraction conducts in this lattice equation.
 
-The QSGS Ag fraction weights electron capacity, conduction, coupling, and source exactly once. The source is converted to the grid-integrated eV/ps field from the already Ag-masked (Q_e), preserving the specified (\exp(-r^2/R^2)\exp(-d/l_{skin})\) shape, (R=30) Å, (l_{skin}=20) Å, and (I_0=5\) eV/(ps·Å²); no post-mask power renormalization is done. The 10 Å grid integral is 0.863925 mW.
+The electron equation is advanced in tabulated internal energy with a conservative finite-volume operator. A backward-Euler/Newton-CG solve treats electron diffusion; the tabulated `Ue(Te)` secant slope supplies its local energy capacity. Lattice diffusion is backward Euler in enthalpy with a Newton-GMRES solve, preserving the Ag latent-heat plateau. The conductivity is frozen within each diffusion half-step, so this is semi-implicit and still needs time-step convergence checks. Local electron–lattice exchange is solved cell-by-cell by a bracketed implicit root; each cell transfers equal and opposite energy. The heat source and diffusion are applied as balanced half-steps around that exchange.
 
-The exchanged lattice energy is applied with the opposite sign to Ag electron energy. The lattice enthalpy also receives the conservative finite-volume lattice-conduction operator. Case A has Ag-only capacity/conduction and an adiabatic geometric scaffold; case B includes the Ti₃SiC₂ capacity/conduction with shared cell temperature. They remain limiting boundary assumptions rather than measured interface heat transfer. x/y are periodic and z faces are insulated; an external substrate heat sink, radiation, and convection remain absent.
+The specified source is unchanged: Ag-masked \(\exp(-r^2/R^2)\exp(-d/l_{skin})\), with \(R=30\) Å, \(l_{skin}=20\) Å and peak flux \(I_0=5\) eV/(ps·Å²). The 10 Å QSGS grid integrates to 0.863925 mW; no post-mask renormalization is applied. The Ag electron parameter table spans 300–20,000 K and extrapolation remains disabled.
 
-Both the lattice and electron explicit solvers subcycle internally. On the 10 Å grid, the cold-state lattice conduction bounds are 0.2107 fs for case A and 0.4213 fs for case B. In addition, the reused electron solver applies its Ce/ke/G stability and source-temperature limits. This preserves stability but makes long calculations expensive.
+By default x/y are periodic and z is insulated. `--bottom-sink` adds an ideal 300 K Dirichlet bath at the bottom z face to both the Ag electron conduction path and any conducting lattice phase; energy removed by the bath is recorded as a negative diffusion contribution in the balance. This is a boundary-condition sensitivity case, not a measured substrate interface.
 
-## Numerical checks
+## Verification
 
-The full repository suite passes **47 tests**. Five new tests cover zero-dimensional electron-to-lattice exchange, 1D electron diffusion, 1D lattice diffusion, sampled interval accounting, and the 3D QSGS source/coupling ledger for both boundaries. Earlier Ag enthalpy tests also cover the latent-heat plateau and a 1D Stefan benchmark. These checks validate implementation-level conservation and bounded stepping, not the physical accuracy of the candidate property tables.
+The full model test suite passes **51 tests**. The nine double-temperature tests cover 0D energy exchange, 1D electron and lattice diffusion, conductivity partition, active-cell enthalpy inversion, QSGS source/coupling accounting, sampled interval accounting, diffusion steps above the explicit stability bounds, and bottom-sink energy removal. Electron and lattice diffusion conserve energy for insulated boundaries to solver tolerance. In synthetic sink tests, both channels remove energy and the external loss closes the total-energy ledger.
 
-The matched 10 Å QSGS pilot used 5 fs outer intervals with internal subcycling: 5 fs heat followed by 5 fs with the source off.
+For the 10 Å grid, a 10 fs heat/cool run at 0.5 fs outer steps was compared with 0.3125 fs. The final peak electron temperature changed from about 339.24 K to 339.95 K (about 0.21%); cumulative electron-to-lattice transfer changed by about 0.11% for Case A. Case B is similarly close. This is a preliminary refinement check, not proof of convergence for melting or longer transients.
 
-| Boundary | Grid source power | Energy injected | Electron-to-lattice energy | Peak (T_e) at heat-off | Peak (T_l) at heat-off | Peak (T_l) at 10 fs | Final Ag liquid fraction | Total-energy residual |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| A: scaffold adiabatic | 0.863925 mW | 4.31962×10⁻¹⁸ J | 3.58855×10⁻²⁰ J | 727.270 K | 300.01785 K | 300.02165 K | 0 | −9.04×10⁻³¹ J |
-| B: ideal contact | 0.863925 mW | 4.31962×10⁻¹⁸ J | 3.58860×10⁻²⁰ J | 727.270 K | 300.01194 K | 300.01124 K | 0 | −9.06×10⁻³¹ J |
+## 10 Å QSGS pilot: 5 fs heat, then 5 fs source-off cooling
 
-The integrated electron and lattice diffusion terms are near zero, consistent with the periodic x/y and insulated z boundaries. At this very short interval, both cases remain solid; the difference between A and B is small. This does not contradict the much larger differences in the earlier single-temperature runs, which use a different heat-input model and must not be compared as if they were the same physics.
+| Boundary | Peak \(T_e\) at heat-off | Peak \(T_l\) at heat-off | Peak \(T_e\) after 10 fs | Peak \(T_l\) after 10 fs | Energy input | Final Ag liquid fraction | Total-energy residual |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| A: scaffold adiabatic | 805.759 K | 300.01985 K | 339.950 K | 300.02588 K | 4.31962×10⁻¹⁸ J | 0 | −1.99×10⁻³³ J |
+| B: ideal thermal contact | 805.759 K | 300.01659 K | 339.950 K | 300.02095 K | 4.31962×10⁻¹⁸ J | 0 | −1.53×10⁻³³ J |
 
-The A run takes 3,478 internal electron substeps during each 5 fs sampled interval. Linear scaling would put a 100 ps calculation near 70 million electron substeps at this grid resolution, before moving to 5 Å. The current Python explicit reference is therefore a verification tool, not yet a practical production solver.
+The total source-off electron-to-lattice transfer through 10 fs is 3.5773×10⁻²⁰ J in A and 3.5773×10⁻²⁰ J in B. Net insulated-boundary diffusion is at round-off scale. Neither case approaches Ag melting; no stable-pool controller or 100 ps run has been attempted.
 
-Reproduce the short matched pilot from the model directory:
+The 0.5 fs Case A 10 fs pilot takes about 4 s in this Python implementation on the current environment. Linear scaling would put a 100 ps, 10 Å run at roughly 11 hours per boundary case, before adding the controller or refining to 5 Å. This rough estimate is not a production performance guarantee.
+
+## Reproduction
+
+Run from the model directory:
 
 ```bash
-python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.005 --cool-ps 0.005 --dt-fs 5 --sample-ps 0.005
-python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary B --heat-ps 0.005 --cool-ps 0.005 --dt-fs 5 --sample-ps 0.005
+python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary A --heat-ps 0.005 --cool-ps 0.005 --dt-fs 0.5 --sample-ps 0.005
+python phase_field_qsgs/qsgs_ttm_enthalpy.py --spacing 10A --boundary B --heat-ps 0.005 --cool-ps 0.005 --dt-fs 0.5 --sample-ps 0.005
 ```
 
-The reproducible time histories and summaries are `qsgs_ttm_enthalpy_10A_BCA.csv/.json` and `qsgs_ttm_enthalpy_10A_BCB.csv/.json`.
+The histories and machine-readable summaries are `qsgs_ttm_enthalpy_10A_BCA.csv/.json` and `qsgs_ttm_enthalpy_10A_BCB.csv/.json`. To evaluate the ideal bottom sink, add `--bottom-sink`; sink and insulated results must be reported separately.
 
-## Next gates
+## Remaining gates
 
-Before interpreting melt-pool lifetimes or attempting the requested 100 ps: (1) complete electron-table provenance review; (2) test timestep convergence; (3) add a separate bottom heat-sink boundary case because the current closed z boundaries only redistribute energy; and (4) replace or accelerate the explicit grid kernels for the long run. Only after those checks should a liquid-cluster persistence/volume-plateau heat-off controller be connected. No conclusion about real interface heat transfer or a stable pool follows from this pilot.
+The solver implementation and boundary accounting now pass short numerical checks. Before interpreting melt-pool size or lifetime, the next gates are (1) refine time-step accuracy over longer heating intervals, (2) test the 5 Å grid against the 10 Å result, (3) assess candidate property-table provenance and high-temperature behavior, and (4) build and validate the spatially connected liquid-pool heat-off controller. These pilots do not establish physical accuracy of the candidate Ag parameters or real Ag–Ti₃SiC₂ heat transfer.

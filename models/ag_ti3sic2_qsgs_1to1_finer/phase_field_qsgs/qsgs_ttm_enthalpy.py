@@ -14,6 +14,8 @@ from pathlib import Path
 import sys
 
 import numpy as np
+from scipy.sparse import coo_matrix, diags, eye
+from scipy.sparse.linalg import cg, gmres
 
 MODEL_DIR = Path(__file__).resolve().parents[1]
 if str(MODEL_DIR) not in sys.path:
@@ -24,7 +26,6 @@ from qsgs_enthalpy_solver import DATA_DIR, QSGSEnthalpyGrid
 
 
 EV_J = 1.602176634e-19
-J_M3_TO_EV_A3 = 1.0e-30 / EV_J
 DEFAULT_ELECTRON_TABLE = DATA_DIR.parent / "ttm_data" / "Ag_TTM_hybrid_figure_fit_300_20000K.csv"
 
 
@@ -46,10 +47,9 @@ class QSGSDoubleTemperatureGrid:
         absorption_depth_A: float = 20.0,
         initial_lattice_temperature_K: float = 300.0,
         initial_electron_temperature_K: float | np.ndarray = 300.0,
-        coupling_safety: float = 0.1,
+        ag_lattice_conductivity_W_m_K: float = 0.0,
+        bottom_sink_temperature_K: float | None = None,
     ) -> None:
-        if not 0.0 < coupling_safety < 0.5:
-            raise ValueError("coupling_safety must lie in (0, 0.5)")
         self.lattice = QSGSEnthalpyGrid(
             projected_npz,
             boundary_case,
@@ -57,10 +57,19 @@ class QSGSDoubleTemperatureGrid:
             gaussian_radius_A,
             absorption_depth_A,
         )
-        # This is the cold-state, worst-case explicit lattice conduction bound
-        # for the implemented k/Cp curves; it remains conservative as the
-        # material heats because conductivity falls while heat capacity rises.
-        self.lattice_diffusion_timestep_ps = self.lattice.stable_timestep_s() * 1.0e12
+        if not np.isfinite(ag_lattice_conductivity_W_m_K) or ag_lattice_conductivity_W_m_K < 0.0:
+            raise ValueError("Ag lattice conductivity must be finite and non-negative")
+        # The single-temperature enthalpy model retains total Ag conductivity.
+        # In this two-temperature model, total conductivity must not be reused
+        # in the lattice equation: Ag electron conduction is already explicit.
+        self.ag_lattice_conductivity_W_m_K = float(ag_lattice_conductivity_W_m_K)
+        if bottom_sink_temperature_K is not None and (
+            not np.isfinite(bottom_sink_temperature_K) or bottom_sink_temperature_K <= 0.0
+        ):
+            raise ValueError("Bottom sink temperature must be finite and positive")
+        self.bottom_sink_temperature_K = (
+            None if bottom_sink_temperature_K is None else float(bottom_sink_temperature_K)
+        )
         if not (300.0 <= initial_lattice_temperature_K <= self.lattice.melting_temperature_K):
             raise ValueError("Initial lattice temperature must be within [300 K, Ag Tm]")
         initial_lattice = np.full(
@@ -73,7 +82,6 @@ class QSGSDoubleTemperatureGrid:
             self.lattice.enthalpy_density_J_m3
         )
         self.parameters = AgParameters.from_csv(electron_table, allow_low_temperature_extension=False)
-        self.max_g_eV_ps_A3_K = float(self.parameters.g(self.parameters.temperature_K).max())
         self.electron = AgTTMGrid(
             self.parameters,
             self.lattice.ag_fraction,
@@ -88,13 +96,398 @@ class QSGSDoubleTemperatureGrid:
         self.electron.temperature_K[self.lattice.ag_fraction > 0.0] = initial_te[
             self.lattice.ag_fraction > 0.0
         ]
-        self.coupling_safety = coupling_safety
         self.time_ps = 0.0
         self.injected_energy_J = 0.0
         self.coupling_energy_J = 0.0
         self.electron_diffusion_energy_J = 0.0
         self.lattice_diffusion_energy_J = 0.0
         self.initial_total_energy_J = self.total_energy_J
+        # Diagnostic bound for the actual two-temperature lattice conductivity
+        # split. The implicit update does not subcycle to satisfy this limit.
+        self.lattice_diffusion_timestep_ps = self._explicit_lattice_stability_limit_ps()
+
+    @staticmethod
+    def _finite_volume_laplacian(
+        conductivity: np.ndarray,
+        spacing: np.ndarray,
+        cell_volume: float,
+        bottom_sink_temperature_K: float | None = None,
+    ):
+        """Return a symmetric conservative graph Laplacian for x/y-periodic, z-insulated cells.
+
+        The internal-face operator is positive semidefinite with zero row sum.
+        An optional z=0 Dirichlet sink adds boundary conductance to the diagonal
+        and its fixed-temperature contribution to the returned power vector.
+        Thus integrated conductive power is ``-K @ T + boundary_power``.
+        """
+        k = np.asarray(conductivity, dtype=float)
+        shape = k.shape
+        ncell = int(k.size)
+        rows: list[np.ndarray] = []
+        cols: list[np.ndarray] = []
+        values: list[np.ndarray] = []
+        indices = np.arange(ncell, dtype=np.int64).reshape(shape)
+        for axis in range(3):
+            if shape[axis] <= 1:
+                continue
+            if axis < 2:
+                left = indices
+                right = np.roll(indices, -1, axis=axis)
+                kr = np.roll(k, -1, axis=axis)
+                denom = k + kr
+                face_k = np.divide(2.0 * k * kr, denom, out=np.zeros_like(k), where=denom > 0.0)
+                conductance = face_k * cell_volume / spacing[axis] ** 2
+                i = left.ravel()
+                j = right.ravel()
+                g = conductance.ravel()
+            else:
+                low = [slice(None)] * 3
+                high = [slice(None)] * 3
+                low[axis], high[axis] = slice(0, -1), slice(1, None)
+                low_t, high_t = tuple(low), tuple(high)
+                kl, kh = k[low_t], k[high_t]
+                denom = kl + kh
+                face_k = np.divide(2.0 * kl * kh, denom, out=np.zeros_like(kl), where=denom > 0.0)
+                conductance = face_k * cell_volume / spacing[axis] ** 2
+                i = indices[low_t].ravel()
+                j = indices[high_t].ravel()
+                g = conductance.ravel()
+            valid = (g > 0.0) & (i != j)
+            i, j, g = i[valid], j[valid], g[valid]
+            rows.extend((i, i, j, j))
+            cols.extend((i, j, i, j))
+            values.extend((g, -g, -g, g))
+        if not rows:
+            from scipy.sparse import csr_matrix
+            operator = csr_matrix((ncell, ncell), dtype=float)
+            boundary_power = np.zeros(ncell, dtype=float)
+            if bottom_sink_temperature_K is not None and shape[2] > 0:
+                bottom_ids = indices[:, :, 0].ravel()
+                bottom_k = k[:, :, 0].ravel()
+                conductance = 2.0 * bottom_k * cell_volume / spacing[2] ** 2
+                valid = conductance > 0.0
+                if np.any(valid):
+                    ids = bottom_ids[valid]
+                    g = conductance[valid]
+                    operator = coo_matrix(
+                        (g, (ids, ids)), shape=(ncell, ncell)
+                    ).tocsr()
+                    boundary_power[ids] = g * float(bottom_sink_temperature_K)
+            return operator, boundary_power
+        operator = coo_matrix(
+            (np.concatenate(values), (np.concatenate(rows), np.concatenate(cols))),
+            shape=(ncell, ncell),
+        ).tocsr()
+        boundary_power = np.zeros(ncell, dtype=float)
+        if bottom_sink_temperature_K is not None and shape[2] > 0:
+            # Cell centres are half a cell from the z=0 isothermal boundary.
+            bottom_ids = indices[:, :, 0].ravel()
+            bottom_k = k[:, :, 0].ravel()
+            conductance = 2.0 * bottom_k * cell_volume / spacing[2] ** 2
+            valid = conductance > 0.0
+            if np.any(valid):
+                ids = bottom_ids[valid]
+                g = conductance[valid]
+                operator = operator + coo_matrix(
+                    (g, (ids, ids)), shape=(ncell, ncell)
+                ).tocsr()
+                boundary_power[ids] = g * float(bottom_sink_temperature_K)
+        return operator, boundary_power
+
+    def _implicit_electron_diffusion(self, dt_ps: float) -> float:
+        """Backward-Euler electron diffusion in tabulated internal-energy variables.
+
+        A conservative finite-volume matrix and Newton/CG solve are used. The
+        returned value is the net electron-energy change (zero for insulated
+        boundaries, up to the nonlinear-solver tolerance).
+        """
+        active = self.lattice.ag_fraction.ravel() > 0.0
+        if not np.any(active):
+            return 0.0
+        te0 = self.electron.temperature_K.ravel().copy()
+        e0 = self.electron.electron_energy_eV.ravel()[active]
+        fvol = (
+            self.lattice.ag_fraction.ravel()[active]
+            * self.electron.cell_volume_A3
+        )
+        full_k = self.lattice.ag_fraction * self.parameters.ke(self.electron.temperature_K)
+        operator = self._finite_volume_laplacian(
+            full_k,
+            self.electron.spacing_A,
+            self.electron.cell_volume_A3,
+            self.bottom_sink_temperature_K,
+        )
+        operator_full, boundary_power_full = operator
+        operator = operator_full[active][:, active].tocsr()
+        boundary_power = boundary_power_full[active]
+        if operator.nnz == 0:
+            return 0.0
+        params = self.parameters
+        temperatures = params.temperature_K
+        ue_values = params.ue_eV_A3
+
+        def energy_and_capacity(t: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+            u = params.ue(t)
+            ix = np.clip(np.searchsorted(temperatures, t, side="right") - 1, 0, len(temperatures) - 2)
+            slope = (ue_values[ix + 1] - ue_values[ix]) / (temperatures[ix + 1] - temperatures[ix])
+            return fvol * u, fvol * slope
+
+        t = te0[active].copy()
+        scale = max(1.0e-12, float(np.max(np.abs(e0))))
+        for _ in range(20):
+            energy, capacity = energy_and_capacity(t)
+            residual = energy - e0 + dt_ps * (operator @ t - boundary_power)
+            if float(np.max(np.abs(residual))) <= max(2.0e-13, scale * 2.0e-10):
+                break
+            jacobian = diags(capacity) + dt_ps * operator
+            diagonal = np.asarray(jacobian.diagonal())
+            preconditioner = diags(1.0 / np.maximum(diagonal, 1.0e-30))
+            delta, info = cg(
+                jacobian,
+                -residual,
+                M=preconditioner,
+                rtol=1.0e-10,
+                atol=max(1.0e-14, scale * 1.0e-12),
+                maxiter=min(3000, max(200, 4 * len(t))),
+            )
+            if info != 0:
+                raise RuntimeError(f"Implicit electron diffusion CG did not converge (info={info})")
+            old_norm = float(np.linalg.norm(residual))
+            accepted = False
+            alpha = 1.0
+            while alpha >= 1.0 / 128.0:
+                trial = t + alpha * delta
+                if np.any(trial < params.Tmin) or np.any(trial > params.Tmax):
+                    alpha *= 0.5
+                    continue
+                trial_energy, _ = energy_and_capacity(trial)
+                trial_residual = trial_energy - e0 + dt_ps * (operator @ trial - boundary_power)
+                if float(np.linalg.norm(trial_residual)) < old_norm:
+                    t = trial
+                    accepted = True
+                    break
+                alpha *= 0.5
+            if not accepted:
+                raise RuntimeError("Implicit electron diffusion Newton line search failed")
+        else:
+            raise RuntimeError("Implicit electron diffusion Newton solve did not converge")
+        self.electron.temperature_K.ravel()[active] = t
+        e1 = self.electron.electron_energy_eV.ravel()[active]
+        return float((e1 - e0).sum() * EV_J)
+
+    def _set_electron_energy(self, energy_eV: np.ndarray) -> None:
+        active = self.electron.f_ag > 0.0
+        fvol = self.electron.f_ag[active] * self.electron.cell_volume_A3
+        density = np.asarray(energy_eV, dtype=float)[active] / fvol
+        self.electron.temperature_K[active] = self.parameters.temperature_from_ue(density)
+
+    def _active_lattice_temperature_from_enthalpy(self, h_density: np.ndarray, active: np.ndarray) -> np.ndarray:
+        """Invert the cell enthalpy law for Ag-bearing cells without full-grid allocation."""
+        h = np.asarray(h_density, dtype=float)
+        af = self.lattice.ag_fraction.ravel()[active]
+        sf = self.lattice.sc_fraction.ravel()[active]
+        solid_tm = self.lattice._solid_at_tm_J_m3.ravel()[active]
+        latent = self.lattice._latent_volumetric_J_m3.ravel()[active]
+        c0 = self.lattice._solid_capacity_at_300_J_m3_K.ravel()[active]
+        slope = self.lattice._solid_capacity_slope_J_m3_K2.ravel()[active]
+        temp = np.full_like(h, 300.0)
+        below = h < 0.0
+        temp[below] = 300.0 + h[below] / c0[below]
+        solid = (h >= 0.0) & (h < solid_tm) & (c0 > 0.0)
+        if np.any(solid):
+            target = h[solid]
+            c = c0[solid]
+            sl = slope[solid]
+            delta = target / c
+            curved = np.abs(sl) > 1.0e-18
+            delta[curved] = 2.0 * target[curved] / (
+                c[curved] + np.sqrt(c[curved] ** 2 + 2.0 * sl[curved] * target[curved])
+            )
+            temp[solid] = 300.0 + delta
+        liquidus = solid_tm + latent
+        plateau = (h >= solid_tm) & (h <= liquidus) & (latent > 0.0)
+        temp[plateau] = self.lattice.melting_temperature_K
+        above = (h > liquidus) & (c0 > 0.0)
+        if np.any(above):
+            d_h = h[above] - liquidus[above]
+            c_tm = af[above] * self.lattice.ag.reference_density_kg_m3 * float(
+                self.lattice.ag.liquid_cp_J_kg_K[0]
+            )
+            liquid_slope = np.zeros_like(c_tm)
+            if self.lattice.boundary_case == "B":
+                sc_cp_tm = float(self.lattice.sc.cp_J_kg_K(self.lattice.melting_temperature_K))
+                sc_slope = (
+                    self.lattice.sc.cp_mass_J_kg_K[1] - self.lattice.sc.cp_mass_J_kg_K[0]
+                ) / (self.lattice.sc.temperature_K[1] - self.lattice.sc.temperature_K[0])
+                c_tm += sf[above] * self.lattice.sc.density_kg_m3 * sc_cp_tm
+                liquid_slope = sf[above] * self.lattice.sc.density_kg_m3 * sc_slope
+            delta = d_h / c_tm
+            curved = np.abs(liquid_slope) > 1.0e-18
+            delta[curved] = 2.0 * d_h[curved] / (
+                c_tm[curved] + np.sqrt(c_tm[curved] ** 2 + 2.0 * liquid_slope[curved] * d_h[curved])
+            )
+            temp[above] = self.lattice.melting_temperature_K + delta
+        if self.lattice.boundary_case == "B" and np.any(
+            temp > self.lattice.sc.temperature_K[-1] + 1.0e-9
+        ):
+            raise ValueError("Ti3SiC2 candidate table exceeds 1473.15 K")
+        return temp
+
+    def _implicit_local_coupling(self, dt_ps: float) -> float:
+        """Solve each Ag-cell electron/lattice exchange implicitly and conservatively."""
+        if dt_ps <= 0.0:
+            return 0.0
+        active_mask = self.lattice.ag_fraction > 0.0
+        if not np.any(active_mask):
+            return 0.0
+        active = active_mask.ravel()
+        fvol = self.lattice.ag_fraction.ravel()[active] * self.electron.cell_volume_A3
+        te0 = self.electron.temperature_K.ravel()[active].copy()
+        ee0 = self.electron.electron_energy_eV.ravel()[active]
+        h0 = self.lattice.enthalpy_density_J_m3.ravel()[active] * self.lattice.cell_volume_m3
+        total_J = ee0 * EV_J + h0
+        tl0 = self.lattice.state.temperature_K.ravel()[active]
+        low = np.minimum(te0, tl0)
+        high = np.maximum(te0, tl0)
+        active_ids = np.flatnonzero(active)
+
+        def residual_at(te: np.ndarray) -> np.ndarray:
+            ee = fvol * self.parameters.ue(te)
+            h_trial = (total_J - ee * EV_J) / self.lattice.cell_volume_m3
+            tl = self._active_lattice_temperature_from_enthalpy(h_trial, active)
+            return ee - ee0 + dt_ps * fvol * self.parameters.g(te) * (te - tl)
+
+        f_low = residual_at(low)
+        f_high = residual_at(high)
+        if np.any(f_low > 1.0e-11) or np.any(f_high < -1.0e-11):
+            raise RuntimeError("Implicit electron-lattice coupling root is not bracketed")
+        for _ in range(40):
+            mid = 0.5 * (low + high)
+            f_mid = residual_at(mid)
+            positive = f_mid > 0.0
+            high = np.where(positive, mid, high)
+            low = np.where(positive, low, mid)
+            if float(np.max(high - low)) <= 1.0e-5:
+                break
+        te1 = 0.5 * (low + high)
+        ee1 = fvol * self.parameters.ue(te1)
+        h1 = total_J - ee1 * EV_J
+        self.electron.temperature_K.ravel()[active] = te1
+        h_full = self.lattice.enthalpy_density_J_m3.ravel().copy()
+        h_full[active_ids] = h1 / self.lattice.cell_volume_m3
+        self.lattice.enthalpy_density_J_m3 = h_full.reshape(self.lattice.temperature_shape)
+        self.lattice.state = self.lattice.state_from_enthalpy_density(
+            self.lattice.enthalpy_density_J_m3
+        )
+        return float((ee0 - ee1).sum() * EV_J)
+
+    def _lattice_conductivity(self) -> np.ndarray:
+        state = self.lattice.state
+        k = self.lattice.ag_fraction * self.ag_lattice_conductivity_W_m_K
+        if self.lattice.boundary_case == "B":
+            k = k + self.lattice.sc_fraction * np.asarray(
+                self.lattice.sc.conductivity_W_m_K(state.temperature_K)
+            )
+        return np.asarray(k, dtype=float)
+
+    def _explicit_lattice_stability_limit_ps(self) -> float:
+        k = self._lattice_conductivity()
+        capacity = self.lattice.sensible_capacity_J_m3_K()
+        inverse_spacing2 = 1.0 / (self.lattice.spacing_A * 1.0e-10) ** 2
+        face_sum = np.zeros(self.lattice.temperature_shape, dtype=float)
+        for axis in range(3):
+            if axis < 2:
+                right_k = np.roll(k, -1, axis=axis)
+                left_k = np.roll(k, 1, axis=axis)
+            else:
+                right_k = np.concatenate((k[:, :, 1:], np.zeros_like(k[:, :, :1])), axis=2)
+                left_k = np.concatenate((np.zeros_like(k[:, :, :1]), k[:, :, :-1]), axis=2)
+            right = np.divide(2.0 * k * right_k, k + right_k, out=np.zeros_like(k), where=(k + right_k) > 0.0)
+            left = np.divide(2.0 * k * left_k, k + left_k, out=np.zeros_like(k), where=(k + left_k) > 0.0)
+            face_sum += (right + left) * inverse_spacing2[axis]
+        if self.bottom_sink_temperature_K is not None:
+            face_sum[:, :, 0] += 2.0 * k[:, :, 0] * inverse_spacing2[2]
+        rate = np.divide(face_sum, capacity, out=np.zeros_like(face_sum), where=capacity > 0.0)
+        max_rate = float(rate.max())
+        return np.inf if max_rate <= 0.0 else 0.45 / max_rate * 1.0e12
+
+    def _implicit_lattice_diffusion(self, dt_s: float) -> float:
+        """Backward-Euler enthalpy diffusion with a conservative face operator."""
+        if dt_s <= 0.0:
+            return 0.0
+        volume = self.lattice.cell_volume_m3
+        h0 = self.lattice.enthalpy_density_J_m3.ravel().copy() * volume
+        k = self._lattice_conductivity()
+        operator = self._finite_volume_laplacian(
+            k,
+            self.lattice.spacing_A * 1.0e-10,
+            volume,
+            self.bottom_sink_temperature_K,
+        )
+        operator, boundary_power = operator
+        if operator.nnz == 0:
+            return 0.0
+        h = h0.copy()
+        n = h.size
+        identity = eye(n, format="csr")
+        scale = max(1.0e-24, float(np.max(np.abs(h0))))
+
+        def evaluate(h_cell: np.ndarray):
+            h_density = (h_cell / volume).reshape(self.lattice.temperature_shape)
+            state = self.lattice.state_from_enthalpy_density(h_density)
+            temp = state.temperature_K.ravel()
+            residual = h_cell - h0 + dt_s * (operator @ temp - boundary_power)
+            capacity = self.lattice.sensible_capacity_J_m3_K(state).ravel() * volume
+            solid_tm = self.lattice._solid_at_tm_J_m3.ravel()
+            latent = self.lattice._latent_volumetric_J_m3.ravel()
+            h_density_flat = h_cell / volume
+            plateau = (latent > 0.0) & (h_density_flat > solid_tm) & (h_density_flat < solid_tm + latent)
+            dtdh = np.divide(1.0, capacity, out=np.zeros_like(capacity), where=capacity > 0.0)
+            dtdh[plateau] = 0.0
+            return residual, temp, dtdh
+
+        for _ in range(20):
+            residual, temp, dtdh = evaluate(h)
+            if float(np.max(np.abs(residual))) <= max(1.0e-30, scale * 1.0e-10):
+                break
+            jacobian = identity + dt_s * (operator @ diags(dtdh))
+            diagonal = np.maximum(np.abs(jacobian.diagonal()), 1.0e-12)
+            preconditioner = diags(1.0 / diagonal)
+            delta, info = gmres(
+                jacobian,
+                -residual,
+                M=preconditioner,
+                rtol=1.0e-9,
+                atol=max(1.0e-32, scale * 1.0e-12),
+                restart=50,
+                maxiter=300,
+            )
+            if info != 0:
+                raise RuntimeError(f"Implicit lattice diffusion GMRES did not converge (info={info})")
+            old_norm = float(np.linalg.norm(residual))
+            accepted = False
+            alpha = 1.0
+            while alpha >= 1.0 / 128.0:
+                trial = h + alpha * delta
+                try:
+                    trial_residual, _, _ = evaluate(trial)
+                except ValueError:
+                    alpha *= 0.5
+                    continue
+                if float(np.linalg.norm(trial_residual)) < old_norm:
+                    h = trial
+                    accepted = True
+                    break
+                alpha *= 0.5
+            if not accepted:
+                raise RuntimeError("Implicit lattice diffusion Newton line search failed")
+        else:
+            raise RuntimeError("Implicit lattice diffusion Newton solve did not converge")
+        self.lattice.enthalpy_density_J_m3 = (h / volume).reshape(self.lattice.temperature_shape)
+        self.lattice.state = self.lattice.state_from_enthalpy_density(
+            self.lattice.enthalpy_density_J_m3
+        )
+        return float(h.sum() - h0.sum())
 
     def _source_eV_ps(self) -> np.ndarray:
         return self.lattice.source_W_m3 * self.lattice.cell_volume_m3 * 1.0e-12 / EV_J
@@ -115,23 +508,6 @@ class QSGSDoubleTemperatureGrid:
     def total_energy_J(self) -> float:
         return self.electron_energy_J + self.lattice_energy_J
 
-    def _maximum_coupling_step_ps(self, coupling_on: bool) -> float:
-        if not coupling_on:
-            return np.inf
-        active = self.lattice.ag_fraction > 0.0
-        g_max = self.max_g_eV_ps_A3_K
-        if g_max <= 0.0:
-            return np.inf
-        capacity_eV_A3_K = self.lattice.sensible_capacity_J_m3_K() * J_M3_TO_EV_A3
-        rate = np.divide(
-            self.lattice.ag_fraction * g_max,
-            capacity_eV_A3_K,
-            out=np.zeros_like(capacity_eV_A3_K),
-            where=capacity_eV_A3_K > 0.0,
-        )
-        max_rate = float(rate.max())
-        return np.inf if max_rate <= 0.0 else self.coupling_safety / max_rate
-
     def advance(
         self,
         dt_ps: float,
@@ -141,47 +517,26 @@ class QSGSDoubleTemperatureGrid:
         if not np.isfinite(dt_ps) or dt_ps <= 0.0:
             raise ValueError("dt_ps must be finite and positive")
         initial_total = self.total_energy_J
-        source_increment_J = 0.0
-        coupling_increment_J = 0.0
+        source_rate = self.electron.source_power if heat_on else np.zeros_like(self.electron.source_power)
+        source_half_eV = source_rate * (0.5 * dt_ps)
+        source_increment_J = float(source_rate.sum() * dt_ps * EV_J)
         diffusion_increment_J = 0.0
         lattice_diffusion_increment_J = 0.0
-        t_end = self.time_ps + dt_ps
-        substeps = 0
-        while self.time_ps < t_end - max(1.0e-15, dt_ps * 1.0e-13):
-            subdt = min(
-                t_end - self.time_ps,
-                self._maximum_coupling_step_ps(coupling_on),
-                self.lattice_diffusion_timestep_ps,
-            )
-            if not np.isfinite(subdt) or subdt <= 0.0:
-                raise RuntimeError("Coupled TTM step selection produced a non-positive timestep")
-            lattice_temperature = self.lattice.state.temperature_K
-            record = self.electron.advance(
-                subdt,
-                lattice_temperature_K=lattice_temperature,
-                heat_on=heat_on,
-                coupling_on=coupling_on,
-            )
-            lattice_diffusion = self.lattice.diffusion_power_density_W_m3(
-                self.lattice.state.temperature_K,
-                self.lattice.conductivity_W_m_K(),
-            )
-            transfer_J_m3 = (
-                record.lattice_energy_per_cell_eV * EV_J / self.lattice.cell_volume_m3
-            )
-            accepted_dt_s = record.elapsed_ps * 1.0e-12
-            self.lattice.enthalpy_density_J_m3 += accepted_dt_s * lattice_diffusion + transfer_J_m3
-            self.lattice.state = self.lattice.state_from_enthalpy_density(
-                self.lattice.enthalpy_density_J_m3
-            )
-            self.time_ps += record.elapsed_ps
-            source_increment_J += record.source_to_electron_eV * EV_J
-            coupling_increment_J += record.electron_to_lattice_eV * EV_J
-            diffusion_increment_J += record.diffusion_net_eV * EV_J
-            lattice_diffusion_increment_J += float(
-                lattice_diffusion.sum() * accepted_dt_s * self.lattice.cell_volume_m3
-            )
-            substeps += record.substeps
+        coupling_increment_J = 0.0
+
+        # Symmetric operator splitting: source/diffusion half steps surround
+        # a fully implicit, cell-conservative electron-lattice exchange step.
+        self._set_electron_energy(self.electron.electron_energy_eV + source_half_eV)
+        diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
+        lattice_diffusion_increment_J += self._implicit_lattice_diffusion(0.5 * dt_ps * 1.0e-12)
+        if coupling_on:
+            coupling_increment_J = self._implicit_local_coupling(dt_ps)
+        lattice_diffusion_increment_J += self._implicit_lattice_diffusion(0.5 * dt_ps * 1.0e-12)
+        diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
+        self._set_electron_energy(self.electron.electron_energy_eV + source_half_eV)
+        self.time_ps += dt_ps
+        self.electron.time_ps += dt_ps
+        substeps = 1
 
         self.injected_energy_J += source_increment_J
         self.coupling_energy_J += coupling_increment_J
@@ -197,14 +552,19 @@ class QSGSDoubleTemperatureGrid:
         )
         active = self.lattice.ag_fraction > 0.0
         ag_weight_sum = float(self.lattice.ag_fraction.sum())
+        max_electron_temperature = (
+            float(self.electron.temperature_K[active].max()) if np.any(active) else self.parameters.Tmin
+        )
+        mean_electron_temperature = (
+            float(np.sum(self.lattice.ag_fraction * self.electron.temperature_K) / ag_weight_sum)
+            if ag_weight_sum > 0.0 else self.parameters.Tmin
+        )
         return {
             "time_ps": self.time_ps,
             "dt_ps": dt_ps,
             "electron_substeps": float(substeps),
-            "max_electron_temperature_K": float(self.electron.temperature_K[active].max()),
-            "mean_electron_temperature_K": float(
-                np.sum(self.lattice.ag_fraction * self.electron.temperature_K) / ag_weight_sum
-            ),
+            "max_electron_temperature_K": max_electron_temperature,
+            "mean_electron_temperature_K": mean_electron_temperature,
             "max_lattice_temperature_K": float(self.lattice.state.temperature_K.max()),
             "mean_ag_lattice_temperature_K": self.lattice._ag_weighted_mean_temperature(),
             "max_ag_liquid_fraction": float(self.lattice.state.ag_liquid_fraction.max()),
@@ -276,13 +636,19 @@ def main() -> None:
     parser.add_argument("--boundary", choices=("A", "B"), required=True)
     parser.add_argument("--heat-ps", type=float, default=0.01)
     parser.add_argument("--cool-ps", type=float, default=0.01)
-    parser.add_argument("--dt-fs", type=float, default=5.0,
-                        help="outer coupling step; lattice and electron diffusion subcycle internally")
+    parser.add_argument("--dt-fs", type=float, default=0.5,
+                        help="outer operator-splitting step; diffusion and local coupling are implicit")
     parser.add_argument("--sample-ps", type=float, default=0.005)
+    parser.add_argument("--bottom-sink", action="store_true",
+                        help="apply a 300 K ideal isothermal sink at the bottom z face")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
     projected = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
-    model = QSGSDoubleTemperatureGrid(projected, args.boundary)
+    model = QSGSDoubleTemperatureGrid(
+        projected,
+        args.boundary,
+        bottom_sink_temperature_K=300.0 if args.bottom_sink else None,
+    )
     dt_ps = args.dt_fs * 1.0e-3
     rows = model.run(args.heat_ps, dt_ps, heat_on=True, sample_interval_ps=args.sample_ps)
     rows += model.run(args.cool_ps, dt_ps, heat_on=False, sample_interval_ps=args.sample_ps)
@@ -290,7 +656,10 @@ def main() -> None:
     write_csv(output, rows)
     summary = {
         "status": "CONTINUUM_TWO_TEMPERATURE_ENTHALPY_SHORT_PILOT",
+        "integration": "conservative semi-implicit finite-volume diffusion with implicit local electron-lattice exchange",
+        "ag_lattice_conductivity_W_m_K": model.ag_lattice_conductivity_W_m_K,
         "boundary_case": args.boundary,
+        "bottom_sink_temperature_K": model.bottom_sink_temperature_K,
         "grid_spacing_label": args.spacing,
         "grid_shape_xyz": list(model.lattice.temperature_shape),
         "source_power_grid_integral_W": model.actual_source_power_W,
@@ -319,7 +688,7 @@ def main() -> None:
             "This is a continuum two-temperature enthalpy reference solver, not atomistic TTM-MD.",
             "Ag electron properties are cross-paper candidate fits over 300–20000 K; low-temperature extension is disabled.",
             "Ti3SiC2 boundary cases A/B are limiting assumptions, not measured interface heat transfer.",
-            "x/y are periodic and z faces insulated; no external substrate heat sink, convection, or radiation is included.",
+            "x/y are periodic; z is insulated unless --bottom-sink requests an ideal 300 K bottom bath.",
             "No stable-pool controller is enabled in this short numerical pilot.",
         ],
         "time_history_csv": output.name,
