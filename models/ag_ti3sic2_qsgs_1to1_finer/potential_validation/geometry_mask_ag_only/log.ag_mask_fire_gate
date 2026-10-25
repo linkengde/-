@@ -1,0 +1,281 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_mask_ag_only/Ag_only_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (301.95558 304.20052 259.39156)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  212800 atoms
+  read_data CPU = 0.297 seconds
+pair_style eam
+pair_coeff * * /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+Reading eam potential file /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam with DATE: 2007-06-11
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+33554 atoms in group bottom
+group mobile subtract all bottom
+179246 atoms in group mobile
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix geom mobile external pf/callback 1 1
+fix_modify geom energy yes
+timestep 0.0005
+compute Tmobile mobile temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax mobile reduce max v_fmag
+thermo 20
+thermo_style custom step time c_Tmobile pe ke etotal c_fmax
+thermo_modify flush yes
+run 0 pre yes post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 80 81 69
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/omp, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 96.66 | 96.66 | 96.66 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              0             -535466.66      0             -535466.66      1.8505555
+Loop time of 1.422e-06 on 4 procs for 0 steps with 212800 atoms
+
+run 0 pre yes post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/omp
+Per MPI rank memory allocation (min/avg/max) = 98.54 | 98.54 | 98.54 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              0             -535461.79      0             -535461.79      2.2962958
+Loop time of 1.412e-06 on 4 procs for 0 steps with 212800 atoms
+
+run 0 pre yes post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/omp
+Per MPI rank memory allocation (min/avg/max) = 98.54 | 98.54 | 98.54 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              0             -535442.28      0             -535442.28      6.9279742
+Loop time of 1.111e-06 on 4 procs for 0 steps with 212800 atoms
+
+run 0 pre yes post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/omp
+Per MPI rank memory allocation (min/avg/max) = 98.54 | 98.54 | 98.54 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              0             -535417.9       0             -535417.9       12.728545
+Loop time of 1.172e-06 on 4 procs for 0 steps with 212800 atoms
+
+write_dump all custom /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_mask_ag_only/ag_mask_fire_min_start.dump id type x y z vx vy vz fx fy fz modify sort id
+min_style fire
+min_modify dmax 0.05
+minimize 0.0 5.0e-2 1000 5000
+Last active /omp style is pair_style eam/omp
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 98.54 | 98.54 | 98.54 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              0             -535442.28      0             -535442.28      6.9279742
+        20   0.01           3.8701502     -535567.53      89.668419     -535477.86      6.7636715
+        40   0.12231818     52.032085     -537033.54      1205.5436     -535828         3.8874817
+        60   0.3            50.429374     -539919.64      1168.41       -538751.23      0.54043334
+        80   0.4            42.077803     -540606.87      974.9105      -539631.96      1.0973137
+       100   0.5            44.48575      -541276.82      1030.7008     -540246.12      1.0431839
+       120   0.6            45.263446     -541886.2       1048.7194     -540837.48      1.0150271
+       140   0.7            45.366319     -542464.66      1051.1029     -541413.55      1.0336726
+       160   0.8            42.796627     -543057.88      991.56509     -542066.32      0.92109851
+       180   0.9            39.947824     -543650.71      925.5605      -542725.15      1.4064132
+       200   1              34.896032     -544192.9       808.51437     -543384.39      1.2127057
+       220   1.1            31.481052     -544705.56      729.39188     -543976.16      2.1500015
+       240   1.2            30.005828     -545170.61      695.21207     -544475.4       1.7287274
+       260   1.3            29.15336      -545587.46      675.46105     -544912         1.6610591
+       280   1.4            28.799794     -545960.37      667.2692      -545293.1       1.9400136
+       300   1.5            28.668427     -546289.42      664.22552     -545625.2       1.8778097
+       320   1.6            29.240897     -546589.31      677.48921     -545911.82      2.4272243
+       340   1.7            30.237373     -546863.75      700.57678     -546163.17      2.3363982
+       360   1.8            31.89858      -547123.32      739.06568     -546384.25      2.287328
+       380   1.9            33.762576     -547363.37      782.25306     -546581.12      2.0557415
+       400   2              35.562444     -547579.21      823.9546      -546755.25      2.7456475
+       420   2.1            38.158443     -547792.87      884.10192     -546908.77      2.2389336
+       440   2.2            40.9018       -547993.42      947.66341     -547045.75      2.2196819
+       460   2.3            43.306382     -548170.14      1003.3757     -547166.77      3.1814234
+       480   2.4            45.773407     -548333.47      1060.5348     -547272.94      3.328633
+       500   2.5            48.378745     -548487.18      1120.8985     -547366.28      2.2330261
+       520   2.6            51.590906     -548642.36      1195.3218     -547447.04      2.1788146
+       540   2.7            54.420189     -548778.23      1260.8741     -547517.36      3.6844386
+       560   1.4            8.4398288     -549062.2       195.54437     -548866.66      0.95602966
+       580   2.9            18.843486     -549520.89      436.58915     -549084.3       0.54051537
+       600   3              21.96764      -549784.79      508.9734      -549275.82      0.547598
+       620   3.1            23.84621      -549946.97      552.49843     -549394.47      0.61384716
+       640   3.2            23.518924     -550094.02      544.91548     -549549.11      0.7915818
+       660   3.3            20.24988      -550239.7       469.17422     -549770.52      0.70943542
+       680   3.4            17.008168     -550350.41      394.06625     -549956.34      0.65436564
+       700   3.5            14.0416       -550454.68      325.33313     -550129.35      0.73469075
+       720   3.6            10.604008     -550570.89      245.68676     -550325.21      0.87898166
+       740   3.7            8.4567727     -550662.32      195.93695     -550466.38      1.0674963
+       760   3.8            7.1093607     -550749.47      164.71845     -550584.75      1.0487322
+       780   3.9            6.2752256     -550825.21      145.39218     -550679.82      1.0406359
+       800   4              6.0327252     -550894.98      139.77363     -550755.2       0.82957997
+       820   4.1            5.8890172     -550958.14      136.44402     -550821.7       1.0625071
+       840   4.2            5.9194557     -551017.35      137.14926     -550880.2       1.098018
+       860   4.3            6.0843053     -551073.56      140.9687      -550932.59      1.5034903
+       880   4.4            6.4166489     -551128.08      148.66884     -550979.42      1.1128063
+       900   4.5            6.9194939     -551182.29      160.31938     -551021.98      1.4845682
+       920   4.6            7.450183      -551234.25      172.61504     -551061.64      1.2629534
+       940   4.7            8.0057428     -551283.68      185.48693     -551098.19      1.3074739
+       960   4.8            8.8162761     -551335.64      204.26637     -551131.38      0.98779526
+       980   4.9            9.6737068     -551386.2       224.13238     -551162.07      1.722027
+      1000   5              10.430362     -551431.95      241.6635      -551190.29      1.4913805
+Loop time of 164.598 on 4 procs for 1000 steps with 212800 atoms
+
+340.0% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -535442.281194585  -551429.760700935  -551431.953872292
+  Force two-norm initial, final = 186.55316 19.823314
+  Force max component initial, final = 4.7944162 1.2689811
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 1000 1002
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 97.499     | 97.499     | 97.499     |   0.0 | 59.23
+Neigh   | 3.8326     | 3.8326     | 3.8326     |   0.0 |  2.33
+Comm    | 0.31194    | 0.31194    | 0.31194    |   0.0 |  0.19
+Output  | 0.44736    | 0.44736    | 0.44736    |   0.0 |  0.27
+Modify  | 58.322     | 58.322     | 58.322     |   0.0 | 35.43
+Other   |            | 4.184      |            |       |  2.54
+
+Nlocal:         212800 ave      212800 max      212800 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          23224 ave       23224 max       23224 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    6.42792e+06 ave 6.42792e+06 max 6.42792e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 6427924
+Ave neighs/atom = 30.20641
+Neighbor list builds = 43
+Dangerous builds = 0
+write_dump all custom /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_mask_ag_only/ag_mask_fire_min_end.dump id type x y z vx vy vz fx fy fz modify sort id
+reset_timestep 0
+velocity mobile create 300.0 190427 mom yes rot no dist gaussian
+run 0 pre yes post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/omp
+Per MPI rank memory allocation (min/avg/max) = 101.6 | 101.6 | 101.6 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              300           -551431.95      6950.7704     -544481.18      1.4913805
+Loop time of 1.022e-06 on 4 procs for 0 steps with 212800 atoms
+
+write_dump all custom /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_mask_ag_only/ag_mask_fire_nvt_start.dump id type x y z vx vy vz fx fy fz modify sort id
+fix nvt mobile nvt temp 300.0 300.0 0.1
+run 1000
+Last active /omp style is pair_style eam/omp
+Per MPI rank memory allocation (min/avg/max) = 101.6 | 101.6 | 101.6 Mbytes
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+         0   0              300           -551431.95      6950.7704     -544481.18      1.4913805
+        20   0.01           286.764       -551124.77      6644.1023     -544480.67      1.5002913
+        40   0.02           250.56472     -550279.41      5805.3928     -544474.02      1.5058328
+        60   0.03           200.83697     -549109.38      4653.239      -544456.14      2.2077637
+        80   0.04           150.05174     -547914.27      3476.584      -544437.68      2.6065695
+       100   0.05           110.97965     -546989.25      2571.3136     -544417.94      2.5263927
+       120   0.06           91.515227     -546519.41      2120.3378     -544399.07      2.0360289
+       140   0.07           92.257897     -546517.17      2137.5449     -544379.62      1.8080165
+       160   0.08           107.22654     -546841.29      2484.3568     -544356.94      1.5286317
+       180   0.09           127.40049     -547281.18      2951.7718     -544329.41      1.8541057
+       200   0.1            144.73275     -547650.63      3353.3471     -544297.28      1.9595137
+       220   0.11           154.68666     -547845.97      3583.9715     -544262         1.7883792
+       240   0.12           156.76969     -547857.4       3632.2337     -544225.16      1.8942238
+       260   0.13           153.57035     -547746.02      3558.1074     -544187.91      2.0902658
+       280   0.14           149.06069     -547604.37      3453.6222     -544150.75      2.0858235
+       300   0.15           146.85221     -547516         3402.4534     -544113.54      1.8332428
+       320   0.16           148.91308     -547525.89      3450.2022     -544075.69      1.6914431
+       340   0.17           155.08283     -547629.58      3593.1505     -544036.43      1.6864853
+       360   0.18           163.43825     -547782.03      3786.7392     -543995.29      1.6499296
+       380   0.19           171.2542      -547920.16      3967.8288     -543952.33      1.7059686
+       400   0.2            176.12701     -547988.78      4080.7281     -543908.05      1.6294702
+       420   0.21           176.83331     -547960.22      4097.0925     -543863.13      1.7253164
+       440   0.22           173.67724     -547842.16      4023.9688     -543818.19      1.6763491
+       460   0.23           168.2785      -547672.54      3898.8841     -543773.66      1.8066365
+       480   0.24           162.93557     -547504.73      3775.0925     -543729.63      1.9272441
+       500   0.25           159.7953      -547388.22      3702.3348     -543685.89      1.9642653
+       520   0.26           160.10534     -547351.42      3709.5182     -543641.9       1.9405297
+       540   0.27           163.8269      -547392.8       3795.7439     -543597.06      1.8675891
+       560   0.28           169.7434      -547483.75      3932.8246     -543550.92      1.7687532
+       580   0.29           176.00107     -547581.21      4077.8101     -543503.4       1.7262421
+       600   0.3            180.83218     -547644.5       4189.7433     -543454.75      1.6794379
+       620   0.31           183.15853     -547649.07      4243.643      -543405.43      1.9407906
+       640   0.32           182.8727      -547592.88      4237.0206     -543355.86      2.1582004
+       660   0.33           180.75559     -547494.31      4187.9687     -543306.34      2.1065816
+       680   0.34           178.11391     -547383.74      4126.763      -543256.97      1.9812064
+       700   0.35           176.29096     -547292.19      4084.5267     -543207.67      1.8896032
+       720   0.36           176.221       -547241.08      4082.9056     -543158.17      1.8493432
+       740   0.37           178.16321     -547236.07      4127.9053     -543108.16      1.8592519
+       760   0.38           181.69013     -547267         4209.6212     -543057.38      1.8574855
+       780   0.39           185.9061      -547313.04      4307.3021     -543005.73      2.213358
+       800   0.4            189.79908     -547350.79      4397.4993     -542953.29      2.2507412
+       820   0.41           192.58039     -547362.21      4461.9402     -542900.27      2.2603247
+       840   0.42           193.91382     -547339.74      4492.8348     -542846.9       2.4062262
+       860   0.43           193.97512     -547287.63      4494.255      -542793.38      2.4247309
+       880   0.44           193.3475      -547219.5       4479.7137     -542739.79      2.1578119
+       900   0.45           192.79043     -547152.91      4466.8067     -542686.11      2.035058
+       920   0.46           192.97195     -547103.24      4471.0124     -542632.23      1.9435886
+       940   0.47           194.24777     -547078.58      4500.5721     -542578.01      2.032267
+       960   0.48           196.56305     -547077.52      4554.2155     -542523.3       1.9895935
+       980   0.49           199.50092     -547090.34      4622.2837     -542468.06      2.1089452
+      1000   0.5            202.45336     -547103         4690.6893     -542412.31      2.1286562
+Loop time of 164.147 on 4 procs for 1000 steps with 212800 atoms
+
+Performance: 0.263 ns/day, 91.193 hours/ns, 6.092 timesteps/s, 1.296 Matom-step/s
+344.8% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 85.39      | 85.39      | 85.39      |   0.0 | 52.02
+Neigh   | 0.28182    | 0.28182    | 0.28182    |   0.0 |  0.17
+Comm    | 0.23106    | 0.23106    | 0.23106    |   0.0 |  0.14
+Output  | 0.5303     | 0.5303     | 0.5303     |   0.0 |  0.32
+Modify  | 77.113     | 77.113     | 77.113     |   0.0 | 46.98
+Other   |            | 0.6008     |            |       |  0.37
+
+Nlocal:         212800 ave      212800 max      212800 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          23234 ave       23234 max       23234 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    6.57258e+06 ave 6.57258e+06 max 6.57258e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 6572580
+Ave neighs/atom = 30.886184
+Neighbor list builds = 3
+Dangerous builds = 0
+unfix nvt
+run 0 pre no post no
+   Step          Time        c_Tmobile        PotEng         KinEng         TotEng         c_fmax
+      1000   0.5            202.45336     -547103         4690.6893     -542412.31      2.1286562
+Loop time of 1.472e-06 on 4 procs for 0 steps with 212800 atoms
+
+write_dump all custom /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_mask_ag_only/ag_mask_fire_nvt_final.dump id type x y z vx vy vz fx fy fz modify sort id
+Total wall time: 0:05:32
