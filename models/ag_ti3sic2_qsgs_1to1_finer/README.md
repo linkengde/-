@@ -59,6 +59,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 另有一个与 Ag/界面分开的 Ti₃SiC₂ 母相 TSCBOP 静态晶胞检查，输入、日志和结果见[独立检查记录](potential_validation/ti3sic2_bulk_tscbop/README.md)。母相晶体可在该势下弛豫到低力状态；各向异性零压弛豫后的晶胞比 CIF 初始尺寸大约 0.5–0.8%。这项结果不等于 QSGS 骨架或复合冷态基线通过，也没有将弛豫晶胞代入复合模型。
 
+后续静态力定位显示，QSGS 骨架体素内部仍有大量 Ti/C 原子承受约 2.67/2.04 eV/Å 的力，与未经弛豫的母相 CIF 在同一 TSCBOP 下的受力吻合。分箱方法和限制见[骨架力空间定位记录](potential_validation/qsgs_force_localization/README.md)。另一个保留完整势函数、固定 Ag 的 100 步骨架弛豫虽降低了多数骨架原子的力，但最大骨架力仍为3.32 eV/Å，Ag释放约束后最大力为4.05 eV/Å，并有两个 C 原子脱离3.25 Å连通分量。因此候选未通过，当前模型仍不能加热；下一步应从与 TSCBOP 平衡晶格相容的 parent basis 重建一个独立候选，再复核界面间距、质量比、连通性和冷态受力。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py

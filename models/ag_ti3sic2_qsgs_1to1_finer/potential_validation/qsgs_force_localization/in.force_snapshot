@@ -1,0 +1,17 @@
+# Static force snapshot for correlating QSGS backbone forces with morphology depth.
+# No integration, thermostat, TTM, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe press c_fmax
+dump forces all custom 1 potential_validation/qsgs_force_localization/initial_forces.dump id type x y z fx fy fz
+dump_modify forces sort id
+run 0
+print "QSGS_FORCE_SNAPSHOT_COMPLETE"

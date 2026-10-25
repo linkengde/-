@@ -1,0 +1,31 @@
+# Static candidate: keep all Ag fixed, relax the Ti/Si/C skeleton with all
+# original EAM + TSCBOP + calibration-v0 Morse terms active.
+# The bottom slab remains fixed. No MD, TTM, thermostat, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+include potential.interface_calibration_v0.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group ag type 4
+group skeleton type 1 2 3
+group moving_skeleton subtract skeleton bottom
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_ag ag setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_skel moving_skeleton reduce max v_fn
+compute f_ag ag reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz c_f_skel c_f_ag
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 100 2000
+unfix freeze_ag
+run 0
+write_data potential_validation/qsgs_force_localization/fixed_ag_skeleton_minimized.data
+write_dump all custom potential_validation/qsgs_force_localization/fixed_ag_skeleton_minimized.dump id type x y z fx fy fz modify sort id
+print "FIXED_AG_FULL_POTENTIAL_SKELETON_MINIMIZE_DONE"

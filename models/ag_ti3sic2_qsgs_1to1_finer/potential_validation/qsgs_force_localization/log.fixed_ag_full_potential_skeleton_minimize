@@ -1,0 +1,183 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Static candidate: keep all Ag fixed, relax the Ti/Si/C skeleton with all
+# original EAM + TSCBOP + calibration-v0 Morse terms active.
+# The bottom slab remains fixed. No MD, TTM, thermostat, or heat source.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  917378 atoms
+  read_data CPU = 1.520 seconds
+include potential.interface_calibration_v0.inc
+# CALIBRATION VERSION 0 - NOT YET A PRODUCTION POTENTIAL
+# Atom types: 1 Ti, 2 Si, 3 C, 4 Ag
+
+pair_style hybrid eam tersoff morse 8.0
+
+# Phase-internal interactions
+pair_coeff 4 4 eam potentials/Ag_u3.eam
+Reading eam potential file potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff potentials/TSCBOP.tersoff Ti Si C NULL
+
+# Cross-interface Morse starting values fitted to a single-plane HCP surrogate
+# of the reported Ag(111)/Ti3SiC2(0001) DFT adhesion targets.
+# pair_coeff i j morse D0[eV] alpha[1/A] r0[A] cutoff[A]
+pair_coeff 1 4 morse 0.94814194 2.00000000 2.33708864 8.0
+pair_coeff 2 4 morse 0.93944948 2.00000000 2.40407837 8.0
+pair_coeff 3 4 morse 1.35077230 2.00000000 2.15255924 8.0
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+117618 atoms in group bottom
+group ag type 4
+212996 atoms in group ag
+group skeleton type 1 2 3
+704382 atoms in group skeleton
+group moving_skeleton subtract skeleton bottom
+619397 atoms in group moving_skeleton
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+fix freeze_ag ag setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute f_skel moving_skeleton reduce max v_fn
+compute f_ag ag reduce max v_fn
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz c_f_skel c_f_ag
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.002
+minimize 1.0e-7 0.05 100 2000
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 60 61 52
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.002    20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 1107 | 1107 | 1107 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz          c_f_skel        c_f_ag    
+         0      917378  -4883783.9     -35721.759     -38186.536     -37597.56      -31381.183      3.7573295      0            
+        10      917378  -4891952.3     -35801.763     -38766.787     -38187.576     -30450.926      3.4047766      0            
+        20      917378  -4899917.9     -35749.239     -39136.952     -38567.974     -29542.792      3.2952454      0            
+        30      917378  -4905939.9     -35630.099     -39261.57      -38700.875     -28927.853      3.2630352      0            
+        40      917378  -4910279.1     -35476.968     -39216.649     -38662.522     -28551.735      3.2302064      0            
+        50      917378  -4913447.6     -35316.531     -39069.718     -38521.077     -28358.798      3.2380512      0            
+        60      917378  -4915822.5     -35168.084     -38867.247     -38323.467     -28313.539      3.2631234      0            
+        70      917378  -4917659.3     -35042.552     -38640.785     -38101.5       -28385.371      3.2846652      0            
+        80      917378  -4919128.3     -34944.604     -38411.97      -37876.906     -28544.937      3.3022327      0            
+        90      917378  -4920343       -34877.292     -38195.58      -37664.432     -28771.865      3.3153735      0            
+       100      917378  -4921379.5     -34842.464     -38000.96      -37473.328     -29053.103      3.3235488      0            
+Loop time of 194.093 on 4 procs for 100 steps with 917378 atoms
+
+388.0% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -4883783.94239256  -4921282.23957576  -4921379.51111861
+  Force two-norm initial, final = 1403.5819 366.31288
+  Force max component initial, final = 3.7445167 2.8922675
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 100 101
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 190.94     | 190.94     | 190.94     |   0.0 | 98.38
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.26781    | 0.26781    | 0.26781    |   0.0 |  0.14
+Output  | 0.41307    | 0.41307    | 0.41307    |   0.0 |  0.21
+Modify  | 0.59516    | 0.59516    | 0.59516    |   0.0 |  0.31
+Other   |            | 1.878      |            |       |  0.97
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         121603 ave      121603 max      121603 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix freeze_ag
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Per MPI rank memory allocation (min/avg/max) = 1125 | 1125 | 1125 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz          c_f_skel        c_f_ag    
+       100      917378  -4921379.5     -34842.464     -38000.96      -37473.328     -29053.103      3.3235488      4.0549028    
+Loop time of 1.713e-06 on 4 procs for 0 steps with 917378 atoms
+
+408.6% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.713e-06  |            |       |100.00
+
+Nlocal:         917378 ave      917378 max      917378 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:         121603 ave      121603 max      121603 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data potential_validation/qsgs_force_localization/fixed_ag_skeleton_minimized.data
+System init for write_data ...
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+write_dump all custom potential_validation/qsgs_force_localization/fixed_ag_skeleton_minimized.dump id type x y z fx fy fz modify sort id
+print "FIXED_AG_FULL_POTENTIAL_SKELETON_MINIMIZE_DONE"
+FIXED_AG_FULL_POTENTIAL_SKELETON_MINIMIZE_DONE
+Total wall time: 0:03:24
