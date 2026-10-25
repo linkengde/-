@@ -29,6 +29,8 @@ A separate 0.05 ps reference TTM–MD pilot was subsequently run through the LAM
 
 An extended 0.25 ps run with a matching 500-step no-source control also completed. The source-weighted Ag lattice temperature in the heated region ended at 253 K, and the whole Newton-layer Ag kinetic temperature ended at 229 K; no stable pool formed. Its energy residual (0.05890 eV) differed from the NVE drift (0.05795 eV) by 0.00095 eV. See [the extended pilot report](B_TTM_MD_PILOT_0P25PS.md) and its captured logs.
 
+A separate 0.25 ps sensitivity run used the paper-example peak flux of 15 eV/(ps·Å²), three times the nominal project value. It raised the maximum electron temperature to 2585 K, but the source-weighted Ag lattice temperature ended at 255 K and no stable pool formed. The geometry, parameter table, and 500-step duration were unchanged; see [the source sensitivity report](B_TTM_SOURCE_SENSITIVITY_3X.md).
+
 For the rigid-scaffold version only, a second include omits internal TSCBOP calculations among fixed Ti/Si/C atoms while preserving the Ag EAM and Ag–skeleton WCA forces. The per-Ag static force difference was at roundoff (`1×10⁻¹³ eV/Å` max), and a 20-step NVT comparison produced identical mobile-Ag positions, velocities, and forces. The LAMMPS pair loop fell from 39.8 s to 1.28 s for those 20 steps. The accelerated 0.05 ps TTM pilot took 64.551 s. This optimization is only equivalent under the rigid geometric-obstacle assumption; it removes the ceramic's internal energy constant and cannot model ceramic response. See [the fixed-scaffold equivalence report](B_FIXED_SCAFFOLD_ACCELERATION.md).
 
 ## Files
@@ -44,6 +46,7 @@ For the rigid-scaffold version only, a second include omits internal TSCBOP calc
 - `b_nve_energy_baseline.py`, `log.b_nve_energy_baseline`: no-source NVE energy-drift control for the TTM pilot.
 - `log.b_ttm_reference_md_pilot_0p25ps`, `log.b_nve_energy_baseline_0p25ps`: 500-step extended pilot and matched no-source control.
 - `B_TTM_MD_PILOT_0P25PS.md`: extended local-temperature and energy-ledger results.
+- `B_TTM_SOURCE_SENSITIVITY_3X.md`, `log.b_ttm_source_sensitivity_3x_0p25ps`: three-times-source sensitivity check.
 - `B_FIXED_SCAFFOLD_ACCELERATION.md`: equivalence and timing record for the fixed-scaffold optimization.
 - `SHA256SUMS.txt` and `SHA256SUMS_TTM_PILOT.txt`: checksums for the archived files, excluding the checksum manifests themselves.
 
