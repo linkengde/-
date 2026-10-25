@@ -69,6 +69,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 逐原子定位显示，最高移动 Ag 力位于材料内部 Ag/C 界面（Ag id 767369，z=123.224 Å，最近 C 间距2.349 Å），不在顶部自由表面；离骨架超过8 Å的 Ag 原子最大力约0.20 eV/Å。交叉 Morse 诊断项解释了最高 Ag 原子力的大部分，同时 Ti 骨架最大力中仍有较大部分来自无交叉诊断下的骨架内力。详见候选目录中的 `high_force_localization_after300.json` 和复现脚本。
 
+继续逐对计算后，最高力 Ag 的交叉作用由多个 C/Ti 近邻合成；最大单个 Ag–C 原子对的力约1.35 eV/Å，解析的 Morse 对力总和与 LAMMPS 力差残差小于1.1×10⁻⁵ eV/Å。这支持“界面多近邻累积”是当前校准版下高力尾部的直接来源，不支持把它简化成一个异常短接触。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py
