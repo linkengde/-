@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
-  "updated_utc": "2026-10-26T02:07:31.214932+00:00",
+  "updated_utc": "2026-10-26T03:51:52+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V21 exact-development-geometry controls, train/dev method bridge audit, and B1 source/role readiness review completed. B1 mesh execution pack validates but remains launch-disabled.",
+  "current_stage": "B1 phase-specific mesh task running; active endpoint B1_Ag32_s9073_k6__to_8_k6x6x6 (4 MPI ranks, sequential).",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -95,11 +95,12 @@
     "AgSi_dev34_k8x8x1_sigma0p10_v21": "completed; SCF iteration 63; archive verification PASS; exact-geometry comparison recorded",
     "v21_exact_dev34_method_controls": "completed; four converged archives verified and compared; V21 review published",
     "v21_train_dev_method_bridge_audit": "completed; read-only method/geometry split audit; no dataset or labels changed",
-    "v21_b1_source_role_readiness_review": "completed read-only; Bai source lineage and training-candidate role supported; B1 mesh pack preflight PASS but disabled; stale SHA256SUMS entries flagged in Bai candidate package (README.md, audit_candidate.py, geometry_audit.json)"
+    "v21_b1_source_role_readiness_review": "completed read-only; Bai source lineage and training-candidate role supported; B1 mesh pack preflight PASS but disabled; stale SHA256SUMS entries flagged in Bai candidate package (README.md, audit_candidate.py, geometry_audit.json)",
+    "b1_phase_specific_mesh_task_20261026": "running; active label B1_Ag32_s9073_k6__to_8_k6x6x6; 12 mandatory endpoints + up to 2 conditional; four MPI ranks, one at a time."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
-    "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/Å for AgC/AgSi/AgTi).",
+    "v13": "trained 80 epochs; selected epoch 72; independent acquisition screen FAIL_SCREENING (force-vector RMSE misses 0.05 eV/\u00c5 for AgC/AgSi/AgTi).",
     "v14": "training completed at optimizer epoch 79; selected checkpoint epoch 71; evaluation SCREEN_FAIL. Holdout force-vector RMSE misses for all three interfaces; no production MD/TTM.",
     "v15": "Training completed, selected epoch74; independently scored fresh registry probes FAIL. Energy gates pass; force-vector gates fail all; AgC/AgTi separation gates fail. No production MD/TTM.",
     "v16": "First local-registry screen FAIL; full vectorRMSE0.12950/0.09615/0.10529 (AgC/Si/Ti). No production MD/TTM.",
@@ -201,7 +202,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may run only the eight labels registered under pbe_interface_v20_slab_method_controls: the original four 44.2058765 A controls and four follow-up controls using the byte-identical approved 34.2058765 A AgSi development input. Run one four-rank job at a time after hash/owner/disk preflight. All eight labels are numerical controls, never training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and versioned A approval.",
-  "next_action": "Resolve the stale SHA256SUMS inventory in the Bai candidate package with its responsible report owner; then prepare a separate versioned A-owned B1 phase-specific mesh task with explicit labels/resources. Do not launch B1 DFT or change datasets under the current eight-label boundary.",
+  "next_action": "Execute the separately registered B1 mesh task sequentially with four MPI ranks; verify every archive and pair comparison; keep all outputs as numerical controls. Do not train or alter the approved V19 dataset before a separate source/method/split review.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
@@ -270,5 +271,6 @@
     "to_owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
     "record": "research/mace-v12-transfer/coordination/owner_transfers/window-a_20261024_user_directed_rerun.json",
     "scope": "Only the two registered unfinished V20 sigma controls; completed sigma0.10 controls and archives retained."
-  }
+  },
+  "active_followup_task": "research/mace-v12-transfer/coordination/tasks/window-a-b1-kmesh-20261026.json"
 }

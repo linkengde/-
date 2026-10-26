@@ -1,0 +1,55 @@
+{
+  "task_id": "window-a-b1-kmesh-20261026",
+  "status": "running",
+  "owner_window": "window-a",
+  "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
+  "updated_utc": "2026-10-26T03:51:52+00:00",
+  "version": 1,
+  "current_stage": "Running B1_Ag32_s9073_k6__to_8_k6x6x6 with four MPI ranks; first mandatory endpoint.",
+  "task_manifest": "research/mace-v12-transfer/coordination/reports/window-a/b1_phase_specific_mesh_task_20261026/task_manifest.json",
+  "scope": "Fixed-geometry phase-specific k-point convergence controls for the listed B1 training-candidate geometries only.",
+  "global_dft_authorized": true,
+  "global_launch_enabled": true,
+  "training_enabled": false,
+  "dataset_integration_enabled": false,
+  "method_decision": {
+    "status": "FROZEN_FOR_THIS_MESH_TASK_ONLY",
+    "basis": "The completed Window A V20 smearing controls and V21 exact-development-geometry controls support retaining sigma=0.10 eV as the common reference for the controlled comparisons. This does not claim a universal method conversion or finalize the successor-model training recipe.",
+    "comparison_invariant": "Within every same-geometry pair, vary k-points only; all other method settings, input bytes, cell, positions, atom order, and PBC remain identical."
+  },
+  "resource_cap": {
+    "mpi_ranks_per_endpoint": 4,
+    "maximum_concurrent_endpoints": 1,
+    "gpu_count": 0,
+    "mandatory_endpoints": 12,
+    "conditional_endpoints_maximum": 2,
+    "absolute_endpoint_maximum": 14,
+    "automatic_retries": 0,
+    "execution_order": "Sequential; run each coarse/fine pair and compare it before moving to the next pair."
+  },
+  "acceptance": {
+    "absolute_free_energy_difference_meV_per_atom_max": 2.0,
+    "force_vector_rms_difference_eV_per_A_max": 0.01,
+    "maximum_atom_force_vector_difference_eV_per_A_max": 0.03,
+    "comparison": "Same input geometry; compare fine mesh against coarse mesh using free_energy and forces. Preserve native extrapolated energy as a separate diagnostic."
+  },
+  "labels": {
+    "B1_Ag32_s9073_k6__to_8_k6x6x6": "running",
+    "B1_Ag32_s9073_k6__to_8_k8x8x8": "registered; not yet started",
+    "B1_Ag64_s9073_k5__to_7_k5x5x5": "registered; not yet started",
+    "B1_Ag64_s9073_k5__to_7_k7x7x7": "registered; not yet started",
+    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k5x8x2": "registered; not yet started",
+    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k7x10x2": "registered; not yet started",
+    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k8x8x2": "registered; not yet started",
+    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k10x10x2": "registered; not yet started",
+    "B1_AgL_1250_s501_Gamma": "registered; not yet started",
+    "B1_AgL_1250_s501_k2x2x2": "registered; not yet started",
+    "B1_AgL_1600_s902_Gamma": "registered; not yet started",
+    "B1_AgL_1600_s902_k2x2x2": "registered; not yet started"
+  },
+  "conditional_labels": {
+    "B1_AgL_1250_s501_k3x3x3_conditional": "registered conditionally; launch disabled unless its Gamma-to-2x2x2 pair misses a threshold",
+    "B1_AgL_1600_s902_k3x3x3_conditional": "registered conditionally; launch disabled unless its Gamma-to-2x2x2 pair misses a threshold"
+  },
+  "next_action": "Run verify_task.py and source-pack verifier, then execute the sequential registered queue. Keep every output outside training/dev/test and stop for review on any SCF, hash, or archive verification failure."
+}
