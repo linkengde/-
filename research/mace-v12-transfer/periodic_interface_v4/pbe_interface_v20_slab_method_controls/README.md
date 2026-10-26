@@ -57,3 +57,7 @@ The second comparison label is read from the existing, independently archived V1
 ## Exact-geometry review results
 
 The completed V21 exact-development-geometry controls and comparisons are documented in [`comparisons/V21_EXACT_DEV_GEOMETRY_REVIEW.md`](comparisons/V21_EXACT_DEV_GEOMETRY_REVIEW.md).
+
+## Train/development method bridge audit
+
+The read-only method audit of the approved V19 train36/dev3 split is documented in [`comparisons/V21_TRAIN_DEV_METHOD_BRIDGE_AUDIT.md`](comparisons/V21_TRAIN_DEV_METHOD_BRIDGE_AUDIT.md).
