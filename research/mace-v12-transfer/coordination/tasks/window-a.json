@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
-  "updated_utc": "2026-10-26T02:04:38.234850+00:00",
+  "updated_utc": "2026-10-26T02:07:31.214932+00:00",
   "auto_complete_after_labels": false,
-  "current_stage": "V21 exact-development-geometry controls and read-only train/dev method-bridge audit completed; all controls remain method-only.",
+  "current_stage": "V21 exact-development-geometry controls, train/dev method bridge audit, and B1 source/role readiness review completed. B1 mesh execution pack validates but remains launch-disabled.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -94,7 +94,8 @@
     "AgSi_dev34_k4x4x1_sigma0p10_v21": "completed; SCF iteration 58; archive verification PASS; exact-geometry comparison recorded",
     "AgSi_dev34_k8x8x1_sigma0p10_v21": "completed; SCF iteration 63; archive verification PASS; exact-geometry comparison recorded",
     "v21_exact_dev34_method_controls": "completed; four converged archives verified and compared; V21 review published",
-    "v21_train_dev_method_bridge_audit": "completed; read-only method/geometry split audit; no dataset or labels changed"
+    "v21_train_dev_method_bridge_audit": "completed; read-only method/geometry split audit; no dataset or labels changed",
+    "v21_b1_source_role_readiness_review": "completed read-only; Bai source lineage and training-candidate role supported; B1 mesh pack preflight PASS but disabled; stale SHA256SUMS entries flagged in Bai candidate package (README.md, audit_candidate.py, geometry_audit.json)"
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -200,7 +201,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may run only the eight labels registered under pbe_interface_v20_slab_method_controls: the original four 44.2058765 A controls and four follow-up controls using the byte-identical approved 34.2058765 A AgSi development input. Run one four-rank job at a time after hash/owner/disk preflight. All eight labels are numerical controls, never training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and versioned A approval.",
-  "next_action": "Use the source-verified independent Ti3SiC2 parent and B-side audit to design a separate approved data-acquisition task before adding model data or training. Keep the current V19 split and all existing labels unchanged.",
+  "next_action": "Resolve the stale SHA256SUMS inventory in the Bai candidate package with its responsible report owner; then prepare a separate versioned A-owned B1 phase-specific mesh task with explicit labels/resources. Do not launch B1 DFT or change datasets under the current eight-label boundary.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
