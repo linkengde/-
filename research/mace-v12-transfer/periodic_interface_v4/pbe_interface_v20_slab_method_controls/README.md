@@ -53,3 +53,7 @@ Then compare verified outputs with the frozen baseline or another new label. For
 ```
 
 The second comparison label is read from the existing, independently archived V19 gap-scan package. New controls do not alter or replace the V19 model or its dataset.
+
+## Exact-geometry review results
+
+The completed V21 exact-development-geometry controls and comparisons are documented in [`comparisons/V21_EXACT_DEV_GEOMETRY_REVIEW.md`](comparisons/V21_EXACT_DEV_GEOMETRY_REVIEW.md).
