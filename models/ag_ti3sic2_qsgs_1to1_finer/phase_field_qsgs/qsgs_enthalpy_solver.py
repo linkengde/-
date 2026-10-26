@@ -16,6 +16,7 @@ from pathlib import Path
 import numpy as np
 
 from thermophysical_model import AgEnthalpy, Ti3SiC2ThermalProperties
+from qsgs_source_integration import integrate_qsgs_source_power_W
 
 
 DATA_DIR = Path(__file__).resolve().parent
@@ -42,6 +43,7 @@ class QSGSEnthalpyGrid:
         absorption_depth_A: float = 20.0,
         source_center_xy_A: tuple[float, float] | None = None,
         tile_xy: int = 1,
+        source_geometry_npz: Path | None = None,
     ) -> None:
         if boundary_case not in {"A", "B"}:
             raise ValueError("boundary_case must be A (adiabatic scaffold) or B (ideal contact)")
@@ -66,6 +68,14 @@ class QSGSEnthalpyGrid:
             ),
         )
         self.sc_fraction = 1.0 - self.ag_fraction
+        self.source_geometry_npz = None if source_geometry_npz is None else Path(source_geometry_npz)
+        source_ag_mask = None
+        if self.source_geometry_npz is not None:
+            with np.load(self.source_geometry_npz, allow_pickle=False) as source_geometry:
+                source_ag_mask = ~np.asarray(source_geometry["skeleton"], dtype=bool)
+                source_size_A = np.asarray(source_geometry["size_A"], dtype=float)
+            if not np.allclose(source_size_A, self.size_A, rtol=0.0, atol=1.0e-8):
+                raise ValueError("Binary QSGS source geometry size does not match projected domain")
         if not isinstance(tile_xy, (int, np.integer)) or tile_xy <= 0:
             raise ValueError("tile_xy must be a positive integer")
         self.tile_xy = int(tile_xy)
@@ -73,6 +83,8 @@ class QSGSEnthalpyGrid:
             self.ag_fraction = np.tile(self.ag_fraction, (self.tile_xy, self.tile_xy, 1))
             self.sc_fraction = np.tile(self.sc_fraction, (self.tile_xy, self.tile_xy, 1))
             self.size_A = self.size_A * np.asarray([self.tile_xy, self.tile_xy, 1.0])
+            if source_ag_mask is not None:
+                source_ag_mask = np.tile(source_ag_mask, (self.tile_xy, self.tile_xy, 1))
         if self.ag_fraction.ndim != 3 or self.sc_fraction.shape != self.ag_fraction.shape:
             raise ValueError("Projected phase fractions must be matching three-dimensional arrays")
         if not np.allclose(self.ag_fraction + self.sc_fraction, 1.0, atol=2.0e-12):
@@ -88,20 +100,45 @@ class QSGSEnthalpyGrid:
         self.absorption_depth_A = float(absorption_depth_A)
         self.cell_volume_m3 = float(np.prod(self.spacing_A) * ANGSTROM3_TO_M3)
         self.temperature_shape = self.ag_fraction.shape
-        x = (np.arange(self.temperature_shape[0]) + 0.5) * self.spacing_A[0]
-        y = (np.arange(self.temperature_shape[1]) + 0.5) * self.spacing_A[1]
-        z = (np.arange(self.temperature_shape[2]) + 0.5) * self.spacing_A[2]
-        cx, cy = source_center_xy_A or (self.size_A[0] / 2.0, self.size_A[1] / 2.0)
-        rr2 = (x[:, None, None] - cx) ** 2 + (y[None, :, None] - cy) ** 2
-        depth = self.size_A[2] - z[None, None, :]
-        spatial = np.exp(-rr2 / self.gaussian_radius_A**2) * np.exp(-depth / self.absorption_depth_A)
-        self.source_W_m3 = (
-            self.ag_fraction
-            * self.peak_flux_W_m2
-            / (self.absorption_depth_A * 1.0e-10)
-            * spatial
-        )
-        self.actual_source_power_W = float(self.source_W_m3.sum() * self.cell_volume_m3)
+        self.source_power_in_roundoff_only_cells_W = 0.0
+        if source_ag_mask is None:
+            x = (np.arange(self.temperature_shape[0]) + 0.5) * self.spacing_A[0]
+            y = (np.arange(self.temperature_shape[1]) + 0.5) * self.spacing_A[1]
+            z = (np.arange(self.temperature_shape[2]) + 0.5) * self.spacing_A[2]
+            cx, cy = source_center_xy_A or (self.size_A[0] / 2.0, self.size_A[1] / 2.0)
+            rr2 = (x[:, None, None] - cx) ** 2 + (y[None, :, None] - cy) ** 2
+            depth = self.size_A[2] - z[None, None, :]
+            spatial = np.exp(-rr2 / self.gaussian_radius_A**2) * np.exp(-depth / self.absorption_depth_A)
+            self.source_W_m3 = (
+                self.ag_fraction
+                * self.peak_flux_W_m2
+                / (self.absorption_depth_A * 1.0e-10)
+                * spatial
+            )
+            self.actual_source_power_W = float(self.source_W_m3.sum() * self.cell_volume_m3)
+            self.source_cell_power_W = self.source_W_m3 * self.cell_volume_m3
+            self.source_integration_method = "cell-center source times projected Ag fraction"
+        else:
+            integrated_cell_power_W = integrate_qsgs_source_power_W(
+                source_ag_mask,
+                self.temperature_shape,
+                self.size_A,
+                self.peak_flux_W_m2,
+                self.gaussian_radius_A,
+                self.absorption_depth_A,
+                source_center_xy_A,
+            )
+            active_ag_cell = self.ag_fraction >= PHASE_FRACTION_ROUNDOFF_TOL
+            self.source_power_in_roundoff_only_cells_W = float(
+                integrated_cell_power_W[~active_ag_cell].sum()
+            )
+            self.source_cell_power_W = np.where(active_ag_cell, integrated_cell_power_W, 0.0)
+            self.source_W_m3 = self.source_cell_power_W / self.cell_volume_m3
+            self.actual_source_power_W = float(self.source_cell_power_W.sum())
+            self.source_integration_method = (
+                "exact separable integral over binary QSGS Ag voxels; contributions to "
+                "round-off-only projected cells are omitted"
+            )
         self._solid_at_tm_J_m3 = self._solid_volumetric_enthalpy(
             np.full(self.temperature_shape, self.ag.melting_temperature_K)
         )

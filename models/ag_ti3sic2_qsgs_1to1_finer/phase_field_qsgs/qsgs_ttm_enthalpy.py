@@ -51,6 +51,7 @@ class QSGSDoubleTemperatureGrid:
         bottom_sink_temperature_K: float | None = None,
         face_contacts_npz: Path | None = None,
         tile_xy: int = 1,
+        source_geometry_npz: Path | None = None,
     ) -> None:
         self.lattice = QSGSEnthalpyGrid(
             projected_npz,
@@ -59,6 +60,7 @@ class QSGSDoubleTemperatureGrid:
             gaussian_radius_A,
             absorption_depth_A,
             tile_xy=tile_xy,
+            source_geometry_npz=source_geometry_npz,
         )
         if not np.isfinite(ag_lattice_conductivity_W_m_K) or ag_lattice_conductivity_W_m_K < 0.0:
             raise ValueError("Ag lattice conductivity must be finite and non-negative")
@@ -739,6 +741,18 @@ def write_csv(path: Path, rows: list[dict[str, float]]) -> None:
         writer.writerows(rows)
 
 
+def _weighted_quantile(values: np.ndarray, weights: np.ndarray, quantile: float) -> float:
+    valid = (weights > 0.0) & np.isfinite(values)
+    v = np.asarray(values[valid], dtype=float)
+    w = np.asarray(weights[valid], dtype=float)
+    if v.size == 0:
+        return 300.0
+    order = np.argsort(v)
+    cumulative = np.cumsum(w[order])
+    index = min(int(np.searchsorted(cumulative, quantile * cumulative[-1])), v.size - 1)
+    return float(v[order[index]])
+
+
 def field_snapshot_metrics(
     time_ps: float,
     fields: dict[str, np.ndarray],
@@ -746,6 +760,8 @@ def field_snapshot_metrics(
     spacing_A: np.ndarray,
     size_A: np.ndarray,
     roi_xyz: tuple[slice, slice, slice] | None = None,
+    gaussian_radius_A: float = 30.0,
+    absorption_depth_A: float = 20.0,
 ) -> dict[str, float]:
     """Summarize Ag-weighted temperatures and half-rise hotspot geometry."""
     ag = np.asarray(ag_fraction, dtype=float)
@@ -759,6 +775,7 @@ def field_snapshot_metrics(
     yrel = (y - cy + size_A[1] / 2.0) % size_A[1] - size_A[1] / 2.0
     radius2 = xrel[:, None, None] ** 2 + yrel[None, :, None] ** 2
     depth = size_A[2] - z[None, None, :]
+    source_zone = (radius2 <= gaussian_radius_A**2) & (depth <= absorption_depth_A)
     summary: dict[str, float] = {"time_ps": float(time_ps)}
     for label, key in (("electron", "electron_temperature_K"), ("lattice", "lattice_temperature_K")):
         temperature = np.asarray(fields[key], dtype=float)
@@ -781,6 +798,15 @@ def field_snapshot_metrics(
             radius_rms = depth_min = depth_max = depth_extent = 0.0
         summary[f"{label}_peak_K"] = peak
         summary[f"{label}_ag_weighted_mean_K"] = mean
+        for quantile in (0.5, 0.9, 0.99, 0.999):
+            summary[f"{label}_ag_weighted_q{quantile:g}_K"] = _weighted_quantile(
+                temperature, ag, quantile
+            )
+        for delta_K in (1.0, 5.0, 10.0, 50.0, 100.0):
+            raised = active & (temperature >= 300.0 + delta_K)
+            summary[f"{label}_ag_volume_fraction_above_300_plus_{delta_K:g}K"] = (
+                float(ag[raised].sum() / total_ag_weight) if total_ag_weight > 0.0 else 0.0
+            )
         summary[f"{label}_half_rise_threshold_K"] = threshold
         summary[f"{label}_half_rise_hotspot_diameter_2rms_A"] = 2.0 * radius_rms
         summary[f"{label}_half_rise_hotspot_depth_extent_A"] = depth_extent
@@ -788,6 +814,18 @@ def field_snapshot_metrics(
         summary[f"{label}_half_rise_hotspot_max_depth_A"] = depth_max
         summary[f"{label}_half_rise_hotspot_ag_volume_fraction"] = (
             hot_weight / total_ag_weight if total_ag_weight > 0.0 else 0.0
+        )
+        outside = active & ~source_zone
+        outside_weight = float(ag[outside].sum())
+        summary[f"{label}_outside_source_ag_weighted_mean_K"] = (
+            float(np.sum(ag[outside] * temperature[outside]) / outside_weight)
+            if outside_weight > 0.0
+            else 300.0
+        )
+        summary[f"{label}_outside_source_ag_volume_fraction_above_5K_rise"] = (
+            float(ag[outside & (temperature >= 305.0)].sum() / outside_weight)
+            if outside_weight > 0.0
+            else 0.0
         )
         if roi_xyz is not None:
             roi_ag = ag[roi_xyz]
@@ -821,6 +859,9 @@ def main() -> None:
                         help="apply a 300 K ideal isothermal sink at the bottom z face")
     parser.add_argument("--face-contacts", type=Path, default=None,
                         help="use exact QSGS Ag contact fractions for electron conduction links")
+    parser.add_argument("--source-geometry", type=Path,
+                        default=DATA_DIR.parent / "qsgs_morphology.npz",
+                        help="binary QSGS geometry used to integrate heat input over actual Ag voxels")
     parser.add_argument("--tile-xy", type=int, default=1,
                         help="repeat the projected QSGS geometry this many times in periodic x/y (odd values center the source on a tile)")
     parser.add_argument("--snapshot-ps", default="",
@@ -844,6 +885,7 @@ def main() -> None:
         bottom_sink_temperature_K=300.0 if args.bottom_sink else None,
         face_contacts_npz=args.face_contacts,
         tile_xy=args.tile_xy,
+        source_geometry_npz=args.source_geometry,
     )
     dt_ps = args.dt_fs * 1.0e-3
     rows = model.run(
@@ -864,6 +906,8 @@ def main() -> None:
         arrays: dict[str, np.ndarray] = {
             "ag_fraction": model.lattice.ag_fraction,
             "skeleton_fraction": model.lattice.sc_fraction,
+            "electron_source_power_W_per_cell": model.lattice.source_cell_power_W,
+            "electron_source_density_W_m3": model.lattice.source_W_m3,
             "spacing_A": model.lattice.spacing_A,
             "size_A": model.lattice.size_A,
             "x_centers_A": (np.arange(model.lattice.temperature_shape[0]) + 0.5) * model.lattice.spacing_A[0],
@@ -887,6 +931,8 @@ def main() -> None:
                     model.lattice.spacing_A,
                     model.lattice.size_A,
                     roi_xyz=roi,
+                    gaussian_radius_A=model.lattice.gaussian_radius_A,
+                    absorption_depth_A=model.lattice.absorption_depth_A,
                 )
             )
         np.savez_compressed(field_output, **arrays)
@@ -897,13 +943,20 @@ def main() -> None:
         "boundary_case": args.boundary,
         "bottom_sink_temperature_K": model.bottom_sink_temperature_K,
         "grid_spacing_label": args.spacing,
+        "dt_fs": args.dt_fs,
         "grid_shape_xyz": list(model.lattice.temperature_shape),
         "domain_size_A": model.lattice.size_A.tolist(),
         "xy_tile_count": model.lattice.tile_xy,
+        "source_peak_flux_W_m2": model.lattice.peak_flux_W_m2,
+        "source_gaussian_radius_A": model.lattice.gaussian_radius_A,
+        "source_absorption_depth_A": model.lattice.absorption_depth_A,
         "electron_conduction_geometry_correction": (
             "exact source-QSGS Ag face-contact area fractions" if model.electron_face_contact_fractions is not None else "legacy volume-fraction harmonic links"
         ),
         "face_contacts_npz": model.face_contacts_npz.name if model.face_contacts_npz is not None else None,
+        "source_geometry_npz": model.lattice.source_geometry_npz.name if model.lattice.source_geometry_npz is not None else None,
+        "source_integration_method": model.lattice.source_integration_method,
+        "source_power_in_roundoff_only_cells_W": model.lattice.source_power_in_roundoff_only_cells_W,
         "source_power_grid_integral_W": model.actual_source_power_W,
         "heat_duration_ps": args.heat_ps,
         "cool_duration_ps": args.cool_ps,

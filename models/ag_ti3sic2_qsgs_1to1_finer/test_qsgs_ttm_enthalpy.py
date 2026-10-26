@@ -212,6 +212,9 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
             self.assertEqual(metrics["time_ps"], 0.0005)
             self.assertEqual(metrics["ag_liquid_volume_fraction"], 0.0)
             self.assertGreaterEqual(metrics["electron_peak_K"], 300.0)
+            self.assertEqual(metrics["electron_ag_weighted_q0.5_K"], 300.0)
+            self.assertEqual(metrics["electron_ag_volume_fraction_above_300_plus_5K"], 0.0)
+            self.assertEqual(metrics["electron_outside_source_ag_weighted_mean_K"], 300.0)
 
     def test_xy_tile_keeps_the_original_qsgs_geometry_at_the_center(self):
         with tempfile.TemporaryDirectory() as directory:
