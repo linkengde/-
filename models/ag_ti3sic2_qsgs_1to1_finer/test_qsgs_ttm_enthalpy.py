@@ -48,6 +48,49 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
                 self.assertGreater(model.lattice_energy_J, 0.0)
                 self.assertLess(abs(record["energy_balance_residual_J"]), 1.0e-29)
 
+    def test_transport_ablation_separates_source_diffusion_and_coupling(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.ones((4, 4, 4)), directory)
+            source_only = QSGSDoubleTemperatureGrid(geometry, "A")
+            source_record = source_only.advance(
+                0.001, coupling_on=False, electron_diffusion_on=False
+            )
+            self.assertEqual(source_record["electron_to_lattice_energy_J"], 0.0)
+            self.assertEqual(source_record["electron_diffusion_net_J"], 0.0)
+            self.assertEqual(source_only.lattice_energy_J, 0.0)
+            self.assertLess(abs(source_record["energy_balance_residual_J"]), 1.0e-28)
+
+            conduction_only = QSGSDoubleTemperatureGrid(geometry, "A")
+            conduction_record = conduction_only.advance(
+                0.001, coupling_on=False, electron_diffusion_on=True
+            )
+            self.assertEqual(conduction_record["electron_to_lattice_energy_J"], 0.0)
+            self.assertAlmostEqual(
+                conduction_only.electron_energy_J,
+                source_only.electron_energy_J,
+                delta=1.0e-28,
+            )
+            self.assertEqual(conduction_only.lattice_energy_J, 0.0)
+            self.assertLess(abs(conduction_record["energy_balance_residual_J"]), 1.0e-28)
+            self.assertGreater(
+                float(np.max(np.abs(
+                    conduction_only.electron.temperature_K - source_only.electron.temperature_K
+                ))),
+                1.0e-8,
+            )
+
+            coupled = QSGSDoubleTemperatureGrid(geometry, "A")
+            coupled_record = coupled.advance(
+                0.001, coupling_on=True, electron_diffusion_on=False
+            )
+            self.assertGreater(coupled_record["electron_to_lattice_energy_J"], 0.0)
+            self.assertAlmostEqual(
+                coupled.lattice_energy_J,
+                coupled_record["electron_to_lattice_energy_J"],
+                delta=1.0e-28,
+            )
+            self.assertLess(abs(coupled_record["energy_balance_residual_J"]), 1.0e-28)
+
     def test_one_dimensional_electron_diffusion_is_conservative(self):
         with tempfile.TemporaryDirectory() as directory:
             geometry = self.make_geometry(np.ones((5, 1, 1)), directory)

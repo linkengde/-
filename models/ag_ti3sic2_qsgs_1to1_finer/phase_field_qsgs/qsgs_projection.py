@@ -38,13 +38,15 @@ def project_phase_mask(
     skeleton_mask: np.ndarray,
     size_A: np.ndarray,
     requested_spacing_A: float,
+    target_shape_xyz: tuple[int, int, int] | np.ndarray | None = None,
 ) -> ProjectedMask:
     """Map a binary skeleton voxel field to conservative Ag/ceramic fractions.
 
     The input axes are x, y, z, matching the QSGS generator. Each target cell
-    spans the full material box along each axis; the returned grid therefore
-    has uniform spacing no larger than ``requested_spacing_A``. This is a
-    geometric volume projection only; it does not infer interface physics.
+    spans the full material box along each axis. By default, the returned grid
+    has uniform spacing no larger than ``requested_spacing_A``; an optional
+    explicit target shape permits exactly nested grids. This is a geometric
+    volume projection only; it does not infer interface physics.
     """
     skeleton = np.asarray(skeleton_mask, dtype=bool)
     size = np.asarray(size_A, dtype=float)
@@ -56,7 +58,12 @@ def project_phase_mask(
         raise ValueError("requested_spacing_A must be finite and positive")
 
     source_shape = np.asarray(skeleton.shape, dtype=int)
-    target_shape = np.ceil(size / requested_spacing_A).astype(int)
+    if target_shape_xyz is None:
+        target_shape = np.ceil(size / requested_spacing_A).astype(int)
+    else:
+        target_shape = np.asarray(target_shape_xyz, dtype=int)
+        if target_shape.shape != (3,) or np.any(target_shape <= 0):
+            raise ValueError("target_shape_xyz must contain three positive grid counts")
     spacing = size / target_shape
     wx, wy, wz = (
         _overlap_weights(int(source_shape[axis]), int(target_shape[axis]), float(size[axis]))

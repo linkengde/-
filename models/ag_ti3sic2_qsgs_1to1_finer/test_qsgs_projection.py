@@ -11,6 +11,7 @@ from qsgs_projection import _overlap_weights, project_phase_mask  # noqa: E402
 from analyze_projected_connectivity import _component_metrics  # noqa: E402
 from audit_coarse_ag_face_connectivity import audit_face_connectivity  # noqa: E402
 from qsgs_face_contacts import exact_face_contact_fractions  # noqa: E402
+from generate_nested_qsgs_grids import coarsen_face_contacts_2x  # noqa: E402
 
 
 class QSGSProjectionTests(unittest.TestCase):
@@ -105,6 +106,32 @@ class QSGSProjectionTests(unittest.TestCase):
         )
         np.testing.assert_allclose(contact_x, 1.0)
         np.testing.assert_allclose(contact_y, 1.0)
+
+    def test_nested_phase_projection_coarsens_exactly_to_coarse_projection(self):
+        rng = np.random.default_rng(20261026)
+        skeleton = rng.random((9, 7, 5)) < 0.43
+        size_A = np.asarray([30.0, 31.0, 16.0])
+        coarse = project_phase_mask(skeleton, size_A, 10.0, (3, 4, 2))
+        fine = project_phase_mask(skeleton, size_A, 5.0, (6, 8, 4))
+        fine_ag_coarsened = fine.ag_fraction.reshape(3, 2, 4, 2, 2, 2).mean(axis=(1, 3, 5))
+        np.testing.assert_allclose(fine_ag_coarsened, coarse.ag_fraction, rtol=0.0, atol=2.0e-15)
+
+    def test_nested_face_contact_areas_coarsen_exactly(self):
+        rng = np.random.default_rng(20261027)
+        source_ag = rng.random((8, 8, 8)) < 0.6
+        size_A = np.asarray([8.0, 8.0, 8.0])
+        coarse = project_phase_mask(~source_ag, size_A, 4.0, (2, 2, 2))
+        fine = project_phase_mask(~source_ag, size_A, 2.0, (4, 4, 4))
+        coarse_contacts = exact_face_contact_fractions(
+            source_ag, coarse.ag_fraction, size_A, coarse.spacing_A
+        )
+        fine_contacts = exact_face_contact_fractions(
+            source_ag, fine.ag_fraction, size_A, fine.spacing_A
+        )
+        for actual, expected in zip(
+            coarsen_face_contacts_2x(fine_contacts), coarse_contacts
+        ):
+            np.testing.assert_allclose(actual, expected, rtol=0.0, atol=2.0e-15)
 
 
 if __name__ == "__main__":

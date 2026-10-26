@@ -608,6 +608,7 @@ class QSGSDoubleTemperatureGrid:
         dt_ps: float,
         heat_on: bool = True,
         coupling_on: bool = True,
+        electron_diffusion_on: bool = True,
     ) -> dict[str, float]:
         if not np.isfinite(dt_ps) or dt_ps <= 0.0:
             raise ValueError("dt_ps must be finite and positive")
@@ -622,12 +623,14 @@ class QSGSDoubleTemperatureGrid:
         # Symmetric operator splitting: source/diffusion half steps surround
         # a fully implicit, cell-conservative electron-lattice exchange step.
         self._set_electron_energy(self.electron.electron_energy_eV + source_half_eV)
-        diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
+        if electron_diffusion_on:
+            diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
         lattice_diffusion_increment_J += self._implicit_lattice_diffusion(0.5 * dt_ps * 1.0e-12)
         if coupling_on:
             coupling_increment_J = self._implicit_local_coupling(dt_ps)
         lattice_diffusion_increment_J += self._implicit_lattice_diffusion(0.5 * dt_ps * 1.0e-12)
-        diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
+        if electron_diffusion_on:
+            diffusion_increment_J += self._implicit_electron_diffusion(0.5 * dt_ps)
         self._set_electron_energy(self.electron.electron_energy_eV + source_half_eV)
         self.time_ps += dt_ps
         self.electron.time_ps += dt_ps
@@ -681,6 +684,8 @@ class QSGSDoubleTemperatureGrid:
         heat_on: bool,
         sample_interval_ps: float | None = None,
         snapshot_times_ps: tuple[float, ...] | list[float] = (),
+        coupling_on: bool = True,
+        electron_diffusion_on: bool = True,
     ) -> list[dict[str, float]]:
         if duration_ps <= 0.0 or dt_ps <= 0.0:
             raise ValueError("duration_ps and dt_ps must be positive")
@@ -729,7 +734,12 @@ class QSGSDoubleTemperatureGrid:
             step = min(step_limits)
             if step <= tolerance * 1.0e-6:
                 raise RuntimeError("Snapshot schedule produced a non-positive integration step")
-            row = self.advance(step, heat_on=heat_on)
+            row = self.advance(
+                step,
+                heat_on=heat_on,
+                coupling_on=coupling_on,
+                electron_diffusion_on=electron_diffusion_on,
+            )
             while snapshots and abs(self.time_ps - snapshots[0]) <= tolerance:
                 capture_snapshot(snapshots.pop(0))
             for name in accumulated:
@@ -864,6 +874,8 @@ def field_snapshot_metrics(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spacing", choices=("5A", "10A"), default="10A")
+    parser.add_argument("--projected-grid", type=Path, default=None,
+                        help="optional custom phase-fraction NPZ, e.g. the strictly nested 5 Å diagnostic grid")
     parser.add_argument("--boundary", choices=("A", "B"), required=True)
     parser.add_argument("--heat-ps", type=float, default=0.01)
     parser.add_argument("--cool-ps", type=float, default=0.01)
@@ -874,6 +886,10 @@ def main() -> None:
                         help="apply a 300 K ideal isothermal sink at the bottom z face")
     parser.add_argument("--face-contacts", type=Path, default=None,
                         help="use exact QSGS Ag contact fractions for electron conduction links")
+    parser.add_argument("--disable-electron-diffusion", action="store_true",
+                        help="diagnostic ablation: deposit the source without electron conduction")
+    parser.add_argument("--disable-coupling", action="store_true",
+                        help="diagnostic ablation: disable electron-to-lattice energy exchange")
     parser.add_argument("--source-geometry", type=Path,
                         default=DATA_DIR.parent / "qsgs_morphology.npz",
                         help="binary QSGS geometry used to integrate heat input over actual Ag voxels")
@@ -893,7 +909,7 @@ def main() -> None:
         parser.error("--snapshot-ps must be a comma-separated list of numbers")
     if any(value < 0.0 or value > args.heat_ps for value in snapshot_times_ps):
         parser.error("--snapshot-ps values must lie within the heating interval")
-    projected = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
+    projected = args.projected_grid or DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
     model = QSGSDoubleTemperatureGrid(
         projected,
         args.boundary,
@@ -907,6 +923,8 @@ def main() -> None:
         args.heat_ps,
         dt_ps,
         heat_on=True,
+        coupling_on=not args.disable_coupling,
+        electron_diffusion_on=not args.disable_electron_diffusion,
         sample_interval_ps=args.sample_ps,
         snapshot_times_ps=snapshot_times_ps,
     )
@@ -958,6 +976,7 @@ def main() -> None:
         "boundary_case": args.boundary,
         "bottom_sink_temperature_K": model.bottom_sink_temperature_K,
         "grid_spacing_label": args.spacing,
+        "projected_phase_grid_npz": projected.name,
         "dt_fs": args.dt_fs,
         "grid_shape_xyz": list(model.lattice.temperature_shape),
         "domain_size_A": model.lattice.size_A.tolist(),
@@ -969,6 +988,8 @@ def main() -> None:
             "exact source-QSGS Ag face-contact area fractions" if model.electron_face_contact_fractions is not None else "legacy volume-fraction harmonic links"
         ),
         "face_contacts_npz": model.face_contacts_npz.name if model.face_contacts_npz is not None else None,
+        "electron_diffusion_enabled": not args.disable_electron_diffusion,
+        "electron_lattice_coupling_enabled": not args.disable_coupling,
         "source_geometry_npz": model.lattice.source_geometry_npz.name if model.lattice.source_geometry_npz is not None else None,
         "source_integration_method": model.lattice.source_integration_method,
         "source_power_in_roundoff_only_cells_W": model.lattice.source_power_in_roundoff_only_cells_W,

@@ -33,6 +33,8 @@ The subsequent source/grid audit replaces thermal-cell-center source sampling wi
 
 The matched 0.02 ps follow-up saves 1, 5, and 20 fs fields on both 5 Å and 10 Å grids and conservatively remaps electron energy, lattice enthalpy, and cumulative local electron-to-lattice transfer. Source and energy ledgers pass, and the common-grid hotspot diameter agrees closely, but electron high-tail and local energy/enthalpy maps still exceed the 5% spatial screen. No liquid Ag appears. The grid comparison is therefore still not converged and the runs stop at 0.02 ps; see [`QSGS_MATCHED_GRID_LOCALIZATION_0p02ps.md`](QSGS_MATCHED_GRID_LOCALIZATION_0p02ps.md) and `qsgs_localization_matched_0p02ps_grid_analysis.json`.
 
+The subsequent strict-nesting audit creates a new 60×62×32 fine grid aligned 2:1 with the 30×31×16 coarse grid, preserving the earlier 60×61×32 projection unchanged. Phase fraction, exact source integrals, and Ag face-contact areas now coarsen to roundoff. A 20 fs source-only ablation maps to the coarse electron-energy field essentially exactly, but enabling electron diffusion yields a 10.72% common-Ag excess-energy difference; full coupling gives a 9.88% lattice-enthalpy difference and still no liquid Ag. Geometry mapping was not the main remaining error, so the 5% spatial gate remains failed and heating is not extended. See [`QSGS_NESTED_GRID_TRANSPORT_ABLATION_0p02ps.md`](QSGS_NESTED_GRID_TRANSPORT_ABLATION_0p02ps.md), the nested grid generator, and `nested_grid_diagnostics/nested_grid_20fs_mode_comparison.json`.
+
 ## Reproduce
 
 From the model directory:

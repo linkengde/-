@@ -39,6 +39,19 @@ class QSGSSourceIntegrationTests(unittest.TestCase):
         expected = peak_flux_W_m2 / (depth_A * 1.0e-10) * ix * iy * iz * 1.0e-30
         self.assertAlmostEqual(float(powers.sum()), expected, delta=expected * 2.0e-14)
 
+    def test_exact_source_integrals_coarsen_on_strictly_nested_grids(self):
+        rng = np.random.default_rng(20261028)
+        source_ag = rng.random((8, 8, 8)) < 0.5
+        size_A = np.asarray([8.0, 8.0, 8.0])
+        coarse = integrate_qsgs_source_power_W(
+            source_ag, (2, 2, 2), size_A, 8.0e13, 3.0, 2.0
+        )
+        fine = integrate_qsgs_source_power_W(
+            source_ag, (4, 4, 4), size_A, 8.0e13, 3.0, 2.0
+        )
+        fine_coarsened = fine.reshape(2, 2, 2, 2, 2, 2).sum(axis=(1, 3, 5))
+        np.testing.assert_allclose(fine_coarsened, coarse, rtol=3.0e-14, atol=0.0)
+
     def test_exact_qsgs_source_power_is_independent_of_grid_and_lateral_tile(self):
         source_geometry = MODEL_DIR / "qsgs_morphology.npz"
         grid_10A = PHASE_DIR / "qsgs_phase_fractions_10A.npz"
