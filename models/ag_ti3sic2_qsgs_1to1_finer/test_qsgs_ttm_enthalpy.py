@@ -27,6 +27,60 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
         )
         return path
 
+    def test_optional_component_backend_runs_with_native_geometry_and_closes_energy(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "qsgs_binary.npz"
+            skeleton = np.zeros((4, 4, 3), dtype=bool)
+            skeleton[1, 1, 1] = True
+            np.savez_compressed(source, skeleton=skeleton, size_A=np.asarray([12.0, 12.0, 9.0]))
+            model = QSGSDoubleTemperatureGrid(
+                Path(directory) / "unused_projected_grid.npz",
+                "A",
+                source_geometry_npz=source,
+                transport_backend="component",
+                component_coarse_voxels=(2, 1, 1),
+            )
+            self.assertEqual(model.transport_backend, "component")
+            self.assertAlmostEqual(model.actual_source_power_W, model._component_backend.source_power_W)
+            initial = model.total_energy_J
+            record = model.advance(1.0e-4, heat_on=False)
+            self.assertAlmostEqual(model.total_energy_J, initial, delta=1.0e-28)
+            self.assertLess(abs(record["energy_balance_residual_J"]), 1.0e-28)
+            self.assertEqual(record["ag_liquid_volume_fraction"], 0.0)
+
+    def test_component_coarsening_preserves_native_ag_volume_and_exact_source_power(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "qsgs_binary.npz"
+            skeleton = np.zeros((6, 5, 4), dtype=bool)
+            skeleton[1:3, 2, 1:3] = True
+            skeleton[4, 0:2, 2] = True
+            np.savez_compressed(source, skeleton=skeleton, size_A=np.asarray([18.0, 15.0, 12.0]))
+            coarse = QSGSDoubleTemperatureGrid(
+                Path(directory) / "unused_projected_grid.npz",
+                "A",
+                source_geometry_npz=source,
+                transport_backend="component",
+                component_coarse_voxels=(2, 1, 1),
+            )
+            native = QSGSDoubleTemperatureGrid(
+                Path(directory) / "unused_projected_grid.npz",
+                "A",
+                source_geometry_npz=source,
+                transport_backend="component",
+                component_coarse_voxels=(1, 1, 1),
+            )
+            coarse_graph = coarse._component_backend.graph
+            native_graph = native._component_backend.graph
+            self.assertEqual(int(coarse_graph.voxel_count.sum()), int((~skeleton).sum()))
+            self.assertEqual(int(native_graph.voxel_count.sum()), int((~skeleton).sum()))
+            self.assertAlmostEqual(
+                coarse.actual_source_power_W,
+                native.actual_source_power_W,
+                delta=1.0e-15,
+            )
+            self.assertEqual(coarse_graph.periodic_axes, (0, 1))
+            self.assertEqual(native_graph.periodic_axes, (0, 1))
+
     def test_zero_dimensional_electron_lattice_exchange_conserves_energy(self):
         for boundary, fraction in (("A", 1.0), ("B", 0.5)):
             with tempfile.TemporaryDirectory() as directory:

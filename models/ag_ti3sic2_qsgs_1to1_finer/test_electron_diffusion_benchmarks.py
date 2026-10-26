@@ -143,6 +143,19 @@ class ElectronDiffusionBenchmarkTests(unittest.TestCase):
         result = component_effective_conductance(graph, 0)
         self.assertEqual(result["effective_k_over_intrinsic_k"], 0.0)
 
+    def test_component_graph_adds_real_periodic_xy_seam_contacts(self):
+        ag = np.ones((4, 3, 2), dtype=bool)
+        graph = build_component_graph(
+            ag,
+            np.asarray([4.0, 6.0, 4.0]),
+            coarse_voxels=(2, 1, 1),
+            periodic_axes=(0, 1),
+        )
+        self.assertEqual(int(graph.voxel_count.sum()), int(ag.sum()))
+        self.assertEqual(graph.periodic_axes, (0, 1))
+        np.testing.assert_array_equal(np.bincount(graph.edge_axis, minlength=3), [12, 12, 6])
+        np.testing.assert_allclose(graph.edge_conductance, 2.0, rtol=0.0, atol=1.0e-12)
+
     def test_qsgs_component_graph_matches_voxel_conductance_in_all_sampled_axes(self):
         with np.load(QSGS_SOURCE, allow_pickle=False) as data:
             full_ag = ~np.asarray(data["skeleton"], dtype=bool)

@@ -23,6 +23,7 @@ if str(MODEL_DIR) not in sys.path:
 
 from ag_ttm_reference import AgParameters, AgTTMGrid
 from qsgs_enthalpy_solver import DATA_DIR, PHASE_FRACTION_ROUNDOFF_TOL, QSGSEnthalpyGrid
+from qsgs_component_ttm_backend import QSGSComponentTTMBackend
 
 
 EV_J = 1.602176634e-19
@@ -56,7 +57,53 @@ class QSGSDoubleTemperatureGrid:
         face_contacts_npz: Path | None = None,
         tile_xy: int = 1,
         source_geometry_npz: Path | None = None,
+        transport_backend: str = "projected",
+        component_coarse_voxels: tuple[int, int, int] = (2, 1, 1),
+        component_preconditioner: str = "jacobi",
     ) -> None:
+        if transport_backend not in {"projected", "component"}:
+            raise ValueError("transport_backend must be 'projected' or 'component'")
+        self.transport_backend = transport_backend
+        self._component_backend: QSGSComponentTTMBackend | None = None
+        if transport_backend == "component":
+            if boundary_case != "A":
+                raise ValueError("The component transport backend currently supports boundary case A only")
+            if bottom_sink_temperature_K is not None:
+                raise ValueError("The component transport backend currently requires an insulated z boundary")
+            if face_contacts_npz is not None:
+                raise ValueError("The component graph uses native Ag contacts; face_contacts_npz is not applicable")
+            if ag_lattice_conductivity_W_m_K != 0.0:
+                raise ValueError("The component transport backend currently uses the established zero Ag lattice conductivity")
+            if not np.isscalar(initial_electron_temperature_K):
+                raise ValueError("Component backend initialization currently requires a scalar electron temperature")
+            geometry_path = source_geometry_npz or DATA_DIR.parent / "qsgs_morphology.npz"
+            self._component_backend = QSGSComponentTTMBackend(
+                geometry_path,
+                electron_table,
+                boundary_case=boundary_case,
+                peak_flux_eV_ps_A2=peak_flux_eV_ps_A2,
+                gaussian_radius_A=gaussian_radius_A,
+                absorption_depth_A=absorption_depth_A,
+                tile_xy=tile_xy,
+                coarse_voxels=component_coarse_voxels,
+                linear_preconditioner=component_preconditioner,
+                initial_electron_temperature_K=float(initial_electron_temperature_K),
+                initial_lattice_temperature_K=initial_lattice_temperature_K,
+            )
+            self.parameters = self._component_backend.parameters
+            self.bottom_sink_temperature_K = None
+            self.face_contacts_npz = None
+            self.electron_face_contact_fractions = None
+            self.ag_lattice_conductivity_W_m_K = 0.0
+            self.time_ps = 0.0
+            self.injected_energy_J = 0.0
+            self.coupling_energy_J = 0.0
+            self.electron_diffusion_energy_J = 0.0
+            self.lattice_diffusion_energy_J = 0.0
+            self.initial_total_energy_J = self._component_backend.initial_total_energy_J
+            self.field_snapshots = self._component_backend.field_snapshots
+            self.lattice_diffusion_timestep_ps = np.inf
+            return
         self.lattice = QSGSEnthalpyGrid(
             projected_npz,
             boundary_case,
@@ -593,18 +640,26 @@ class QSGSDoubleTemperatureGrid:
 
     @property
     def actual_source_power_W(self) -> float:
+        if self._component_backend is not None:
+            return self._component_backend.source_power_W
         return float(self.electron.source_power.sum() * EV_J / 1.0e-12)
 
     @property
     def electron_energy_J(self) -> float:
+        if self._component_backend is not None:
+            return self._component_backend.electron_energy_J
         return float(self.electron.electron_energy_eV.sum() * EV_J)
 
     @property
     def lattice_energy_J(self) -> float:
+        if self._component_backend is not None:
+            return self._component_backend.lattice_energy_J
         return float(self.lattice.enthalpy_density_J_m3.sum() * self.lattice.cell_volume_m3)
 
     @property
     def total_energy_J(self) -> float:
+        if self._component_backend is not None:
+            return self._component_backend.total_energy_J
         return self.electron_energy_J + self.lattice_energy_J
 
     def advance(
@@ -614,6 +669,19 @@ class QSGSDoubleTemperatureGrid:
         coupling_on: bool = True,
         electron_diffusion_on: bool = True,
     ) -> dict[str, float]:
+        if self._component_backend is not None:
+            row = self._component_backend.advance(
+                dt_ps,
+                heat_on=heat_on,
+                coupling_on=coupling_on,
+                electron_diffusion_on=electron_diffusion_on,
+            )
+            self.time_ps = self._component_backend.time_ps
+            self.injected_energy_J = self._component_backend.injected_energy_J
+            self.coupling_energy_J = self._component_backend.coupling_energy_J
+            self.electron_diffusion_energy_J = self._component_backend.electron_diffusion_energy_J
+            self.lattice_diffusion_energy_J = self._component_backend.lattice_diffusion_energy_J
+            return row
         if not np.isfinite(dt_ps) or dt_ps <= 0.0:
             raise ValueError("dt_ps must be finite and positive")
         initial_total = self.total_energy_J
@@ -691,6 +759,23 @@ class QSGSDoubleTemperatureGrid:
         coupling_on: bool = True,
         electron_diffusion_on: bool = True,
     ) -> list[dict[str, float]]:
+        if self._component_backend is not None:
+            rows = self._component_backend.run(
+                duration_ps,
+                dt_ps,
+                heat_on=heat_on,
+                sample_interval_ps=sample_interval_ps,
+                snapshot_times_ps=snapshot_times_ps,
+                coupling_on=coupling_on,
+                electron_diffusion_on=electron_diffusion_on,
+            )
+            self.time_ps = self._component_backend.time_ps
+            self.field_snapshots = self._component_backend.field_snapshots
+            self.injected_energy_J = self._component_backend.injected_energy_J
+            self.coupling_energy_J = self._component_backend.coupling_energy_J
+            self.electron_diffusion_energy_J = self._component_backend.electron_diffusion_energy_J
+            self.lattice_diffusion_energy_J = self._component_backend.lattice_diffusion_energy_J
+            return rows
         if duration_ps <= 0.0 or dt_ps <= 0.0:
             raise ValueError("duration_ps and dt_ps must be positive")
         sample_interval_ps = dt_ps if sample_interval_ps is None else sample_interval_ps
@@ -899,6 +984,12 @@ def main() -> None:
                         help="binary QSGS geometry used to integrate heat input over actual Ag voxels")
     parser.add_argument("--tile-xy", type=int, default=1,
                         help="repeat the projected QSGS geometry this many times in periodic x/y (odd values center the source on a tile)")
+    parser.add_argument("--transport-backend", choices=("projected", "component"), default="projected",
+                        help="projected mixed-cell transport (existing) or native-QSGS connected-component graph")
+    parser.add_argument("--component-coarse-voxels", default="2,1,1",
+                        help="component-graph block size in native QSGS voxels, comma-separated")
+    parser.add_argument("--component-preconditioner", choices=("jacobi", "amg"), default="jacobi",
+                        help="CG preconditioner for the component graph; AMG requires pyamg")
     parser.add_argument("--snapshot-ps", default="",
                         help="comma-separated heating times at which to save 3D Te, Tl, and Ag liquid fields")
     parser.add_argument("--output", type=Path, default=None)
@@ -914,6 +1005,12 @@ def main() -> None:
     if any(value < 0.0 or value > args.heat_ps for value in snapshot_times_ps):
         parser.error("--snapshot-ps values must lie within the heating interval")
     projected = args.projected_grid or DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
+    try:
+        component_coarse_voxels = tuple(int(value.strip()) for value in args.component_coarse_voxels.split(","))
+    except ValueError:
+        parser.error("--component-coarse-voxels must be three comma-separated positive integers")
+    if len(component_coarse_voxels) != 3 or any(value <= 0 for value in component_coarse_voxels):
+        parser.error("--component-coarse-voxels must be three comma-separated positive integers")
     model = QSGSDoubleTemperatureGrid(
         projected,
         args.boundary,
@@ -921,6 +1018,9 @@ def main() -> None:
         face_contacts_npz=args.face_contacts,
         tile_xy=args.tile_xy,
         source_geometry_npz=args.source_geometry,
+        transport_backend=args.transport_backend,
+        component_coarse_voxels=component_coarse_voxels,
+        component_preconditioner=args.component_preconditioner,
     )
     dt_ps = args.dt_fs * 1.0e-3
     rows = model.run(
@@ -934,70 +1034,173 @@ def main() -> None:
     )
     if args.cool_ps > 0.0:
         rows += model.run(args.cool_ps, dt_ps, heat_on=False, sample_interval_ps=args.sample_ps)
-    output = args.output or DATA_DIR / f"qsgs_ttm_enthalpy_{args.spacing}_BC{args.boundary}.csv"
+    if args.output is not None:
+        output = args.output
+    elif args.transport_backend == "component":
+        component_label = "x".join(str(v) for v in component_coarse_voxels)
+        output = DATA_DIR / f"qsgs_ttm_enthalpy_component_{component_label}_BC{args.boundary}.csv"
+    else:
+        output = DATA_DIR / f"qsgs_ttm_enthalpy_{args.spacing}_BC{args.boundary}.csv"
     write_csv(output, rows)
     field_output = None
     snapshot_metrics = []
     if model.field_snapshots:
         field_output = output.with_name(f"{output.stem}_fields.npz")
-        arrays: dict[str, np.ndarray] = {
-            "ag_fraction": model.lattice.ag_fraction,
-            "skeleton_fraction": model.lattice.sc_fraction,
-            "electron_source_power_W_per_cell": model.lattice.source_cell_power_W,
-            "electron_source_density_W_m3": model.lattice.source_W_m3,
-            "spacing_A": model.lattice.spacing_A,
-            "size_A": model.lattice.size_A,
-            "x_centers_A": (np.arange(model.lattice.temperature_shape[0]) + 0.5) * model.lattice.spacing_A[0],
-            "y_centers_A": (np.arange(model.lattice.temperature_shape[1]) + 0.5) * model.lattice.spacing_A[1],
-            "z_centers_A": (np.arange(model.lattice.temperature_shape[2]) + 0.5) * model.lattice.spacing_A[2],
-        }
-        for snapshot_time, fields in sorted(model.field_snapshots.items()):
-            label = f"t_{snapshot_time:.9g}ps"
-            for name, field in fields.items():
-                arrays[f"{label}_{name}"] = field
+        if model.transport_backend == "component":
+            backend = model._component_backend
+            assert backend is not None
+            ag_field = backend.source_ag.astype(float)
+            spacing_A = backend.spacing_A
+            size_A = backend.size_A
+            shape_xyz = backend.source_ag.shape
+            source_power = backend.source_voxel_power_W
+            arrays: dict[str, np.ndarray] = {
+                "ag_fraction": ag_field,
+                "skeleton_fraction": 1.0 - ag_field,
+                "electron_source_power_W_per_cell": source_power,
+                "electron_source_density_W_m3": source_power / (backend.voxel_volume_A3 * 1.0e-30),
+                "spacing_A": spacing_A,
+                "size_A": size_A,
+                "x_centers_A": (np.arange(shape_xyz[0]) + 0.5) * spacing_A[0],
+                "y_centers_A": (np.arange(shape_xyz[1]) + 0.5) * spacing_A[1],
+                "z_centers_A": (np.arange(shape_xyz[2]) + 0.5) * spacing_A[2],
+            }
+            center = backend.tile_xy // 2
+            nx, ny, _ = backend.base_shape_xyz
+            roi = (
+                slice(center * nx, (center + 1) * nx),
+                slice(center * ny, (center + 1) * ny),
+                slice(None),
+            ) if backend.tile_xy > 1 else None
+            source_integration_method = "exact separable integral on native binary Ag voxels"
+            source_roundoff_power_W = 0.0
+            gaussian_radius_A = backend.gaussian_radius_A
+            absorption_depth_A = backend.absorption_depth_A
+        else:
+            arrays = {
+                "ag_fraction": model.lattice.ag_fraction,
+                "skeleton_fraction": model.lattice.sc_fraction,
+                "electron_source_power_W_per_cell": model.lattice.source_cell_power_W,
+                "electron_source_density_W_m3": model.lattice.source_W_m3,
+                "spacing_A": model.lattice.spacing_A,
+                "size_A": model.lattice.size_A,
+                "x_centers_A": (np.arange(model.lattice.temperature_shape[0]) + 0.5) * model.lattice.spacing_A[0],
+                "y_centers_A": (np.arange(model.lattice.temperature_shape[1]) + 0.5) * model.lattice.spacing_A[1],
+                "z_centers_A": (np.arange(model.lattice.temperature_shape[2]) + 0.5) * model.lattice.spacing_A[2],
+            }
+            ag_field = model.lattice.ag_fraction
+            spacing_A = model.lattice.spacing_A
+            size_A = model.lattice.size_A
             roi = None
             if model.lattice.tile_xy > 1:
                 nx, ny = np.load(projected, allow_pickle=False)["ag_fraction"].shape[:2]
                 center = model.lattice.tile_xy // 2
                 roi = (slice(center * nx, (center + 1) * nx), slice(center * ny, (center + 1) * ny), slice(None))
+            source_integration_method = model.lattice.source_integration_method
+            source_roundoff_power_W = model.lattice.source_power_in_roundoff_only_cells_W
+            gaussian_radius_A = model.lattice.gaussian_radius_A
+            absorption_depth_A = model.lattice.absorption_depth_A
+        for snapshot_time, fields in sorted(model.field_snapshots.items()):
+            label = f"t_{snapshot_time:.9g}ps"
+            for name, field in fields.items():
+                arrays[f"{label}_{name}"] = field
             snapshot_metrics.append(
                 field_snapshot_metrics(
                     snapshot_time,
                     fields,
-                    model.lattice.ag_fraction,
-                    model.lattice.spacing_A,
-                    model.lattice.size_A,
+                    ag_field,
+                    spacing_A,
+                    size_A,
                     roi_xyz=roi,
-                    gaussian_radius_A=model.lattice.gaussian_radius_A,
-                    absorption_depth_A=model.lattice.absorption_depth_A,
+                    gaussian_radius_A=gaussian_radius_A,
+                    absorption_depth_A=absorption_depth_A,
                 )
             )
         np.savez_compressed(field_output, **arrays)
+    if model.transport_backend == "component":
+        backend = model._component_backend
+        assert backend is not None
+        grid_shape_xyz = list(backend.source_ag.shape)
+        domain_size_A = backend.size_A.tolist()
+        tile_count = backend.tile_xy
+        source_peak_flux = backend.peak_flux_W_m2
+        gaussian_radius = backend.gaussian_radius_A
+        absorption_depth = backend.absorption_depth_A
+        source_method = "exact separable integral over native binary Ag voxels; summed to connected component nodes"
+        source_roundoff_power = 0.0
+        max_te = float(backend.electron_temperature_K.max())
+        max_tl = float(backend.lattice_temperature_K.max())
+        liquid_volume_fraction = float(
+            np.dot(backend.node_volume_A3, backend.lattice_liquid_fraction)
+            / backend.node_volume_A3.sum()
+        )
+        backend_metrics = {
+            "component_node_count": int(backend.graph.voxel_count.size),
+            "native_ag_voxel_count": int(backend.graph.voxel_count.sum()),
+            "graph_edge_count": int(backend.graph.edge_i.size),
+            "periodic_axes": list(backend.graph.periodic_axes),
+            "component_block_voxels_xyz": list(backend.coarse_voxels),
+            "linear_preconditioner": backend.linear_preconditioner,
+            "graph_build_seconds": backend.graph_build_seconds,
+            "amg_setup_seconds": backend.amg_setup_seconds,
+            "total_diffusion_cg_iterations": backend.total_diffusion_cg_iterations,
+            "total_diffusion_solve_seconds": backend.total_diffusion_solve_seconds,
+            "last_diffusion_solve_seconds": backend.last_diffusion_solve_seconds,
+            "last_diffusion_cg_iterations": backend.last_diffusion_cg_iterations,
+        }
+        limitations = [
+            "Continuum dual-temperature enthalpy model; not atomistic TTM-MD.",
+            "Ag electron properties are candidate fits over 300–20000 K; extrapolation is disabled.",
+            "Boundary A treats Ti3SiC2 as an adiabatic geometric obstacle with no heat capacity or cross-phase transport.",
+            "Native QSGS Ag voxel graph is periodic in x/y and insulated in z.",
+            "No stable-pool controller is enabled in this short numerical pilot.",
+        ]
+    else:
+        grid_shape_xyz = list(model.lattice.temperature_shape)
+        domain_size_A = model.lattice.size_A.tolist()
+        tile_count = model.lattice.tile_xy
+        source_peak_flux = model.lattice.peak_flux_W_m2
+        gaussian_radius = model.lattice.gaussian_radius_A
+        absorption_depth = model.lattice.absorption_depth_A
+        source_method = model.lattice.source_integration_method
+        source_roundoff_power = model.lattice.source_power_in_roundoff_only_cells_W
+        max_te = float(model.electron.temperature_K[model.lattice.ag_fraction > 0.0].max())
+        max_tl = float(model.lattice.state.temperature_K.max())
+        liquid_volume_fraction = model.lattice._liquid_ag_volume_fraction()
+        backend_metrics = {
+            "electron_conduction_geometry_correction": (
+                "exact source-QSGS Ag face-contact area fractions" if model.electron_face_contact_fractions is not None else "legacy volume-fraction harmonic links"
+            ),
+            "face_contacts_npz": model.face_contacts_npz.name if model.face_contacts_npz is not None else None,
+        }
+        limitations = [
+            "This is a continuum two-temperature enthalpy reference solver, not atomistic TTM-MD.",
+            "Ag electron properties are cross-paper candidate fits over 300–20000 K; low-temperature extension is disabled.",
+            "Ti3SiC2 boundary cases A/B are limiting assumptions, not measured interface heat transfer.",
+            "x/y are periodic; z is insulated unless --bottom-sink requests an ideal 300 K bottom bath.",
+            "No stable-pool controller is enabled in this short numerical pilot.",
+        ]
     summary = {
         "status": "CONTINUUM_TWO_TEMPERATURE_ENTHALPY_SHORT_PILOT",
-        "integration": "conservative semi-implicit finite-volume diffusion with implicit local electron-lattice exchange",
+        "integration": "conservative diffusion with implicit local electron-lattice exchange",
+        "transport_backend": model.transport_backend,
         "ag_lattice_conductivity_W_m_K": model.ag_lattice_conductivity_W_m_K,
         "boundary_case": args.boundary,
         "bottom_sink_temperature_K": model.bottom_sink_temperature_K,
         "grid_spacing_label": args.spacing,
-        "projected_phase_grid_npz": projected.name,
+        "projected_phase_grid_npz": projected.name if model.transport_backend == "projected" else None,
         "dt_fs": args.dt_fs,
-        "grid_shape_xyz": list(model.lattice.temperature_shape),
-        "domain_size_A": model.lattice.size_A.tolist(),
-        "xy_tile_count": model.lattice.tile_xy,
-        "source_peak_flux_W_m2": model.lattice.peak_flux_W_m2,
-        "source_gaussian_radius_A": model.lattice.gaussian_radius_A,
-        "source_absorption_depth_A": model.lattice.absorption_depth_A,
-        "electron_conduction_geometry_correction": (
-            "exact source-QSGS Ag face-contact area fractions" if model.electron_face_contact_fractions is not None else "legacy volume-fraction harmonic links"
-        ),
-        "face_contacts_npz": model.face_contacts_npz.name if model.face_contacts_npz is not None else None,
+        "grid_shape_xyz": grid_shape_xyz,
+        "domain_size_A": domain_size_A,
+        "xy_tile_count": tile_count,
+        "source_peak_flux_W_m2": source_peak_flux,
+        "source_gaussian_radius_A": gaussian_radius,
+        "source_absorption_depth_A": absorption_depth,
+        "source_integration_method": source_method,
+        "source_power_in_roundoff_only_cells_W": source_roundoff_power,
+        "source_power_grid_integral_W": model.actual_source_power_W,
         "electron_diffusion_enabled": not args.disable_electron_diffusion,
         "electron_lattice_coupling_enabled": not args.disable_coupling,
-        "source_geometry_npz": model.lattice.source_geometry_npz.name if model.lattice.source_geometry_npz is not None else None,
-        "source_integration_method": model.lattice.source_integration_method,
-        "source_power_in_roundoff_only_cells_W": model.lattice.source_power_in_roundoff_only_cells_W,
-        "source_power_grid_integral_W": model.actual_source_power_W,
         "heat_duration_ps": args.heat_ps,
         "cool_duration_ps": args.cool_ps,
         "total_time_ps": model.time_ps,
@@ -1016,25 +1219,14 @@ def main() -> None:
             - model.electron_diffusion_energy_J
             - model.lattice_diffusion_energy_J
         ),
-        "electron_temperature_max_K": float(model.electron.temperature_K[model.lattice.ag_fraction > 0.0].max()),
-        "lattice_temperature_max_K": float(model.lattice.state.temperature_K.max()),
-        "ag_liquid_volume_fraction": model.lattice._liquid_ag_volume_fraction(),
-        "electron_temperature_peak_over_run_K": max(
-            row["max_electron_temperature_K"] for row in rows
-        ),
-        "lattice_temperature_peak_over_run_K": max(
-            row["max_lattice_temperature_K"] for row in rows
-        ),
-        "max_ag_liquid_fraction_over_run": max(
-            row["max_ag_liquid_fraction"] for row in rows
-        ),
-        "limitations": [
-            "This is a continuum two-temperature enthalpy reference solver, not atomistic TTM-MD.",
-            "Ag electron properties are cross-paper candidate fits over 300–20000 K; low-temperature extension is disabled.",
-            "Ti3SiC2 boundary cases A/B are limiting assumptions, not measured interface heat transfer.",
-            "x/y are periodic; z is insulated unless --bottom-sink requests an ideal 300 K bottom bath.",
-            "No stable-pool controller is enabled in this short numerical pilot.",
-        ],
+        "electron_temperature_max_K": max_te,
+        "lattice_temperature_max_K": max_tl,
+        "ag_liquid_volume_fraction": liquid_volume_fraction,
+        "electron_temperature_peak_over_run_K": max(row["max_electron_temperature_K"] for row in rows),
+        "lattice_temperature_peak_over_run_K": max(row["max_lattice_temperature_K"] for row in rows),
+        "max_ag_liquid_fraction_over_run": max(row["max_ag_liquid_fraction"] for row in rows),
+        "backend_metrics": backend_metrics,
+        "limitations": limitations,
         "time_history_csv": output.name,
         "field_snapshots_npz": field_output.name if field_output is not None else None,
         "field_snapshot_times_ps": sorted(model.field_snapshots),

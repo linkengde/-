@@ -41,6 +41,7 @@ class ComponentGraph:
     source_size_A: np.ndarray
     source_spacing_A: np.ndarray
     coarse_voxels: tuple[int, int, int]
+    periodic_axes: tuple[int, ...]
 
 
 def build_component_graph(
@@ -48,6 +49,7 @@ def build_component_graph(
     size_A: np.ndarray,
     coarse_voxels: tuple[int, int, int] = (3, 3, 3),
     intrinsic_k: float = 1.0,
+    periodic_axes: tuple[int, ...] = (),
 ) -> ComponentGraph:
     """Partition each coarse cell into Ag components and build real face links."""
     ag = np.asarray(source_ag, dtype=bool)
@@ -61,11 +63,14 @@ def build_component_graph(
         raise ValueError("coarse_voxels must contain three positive group sizes")
     if not np.isfinite(intrinsic_k) or intrinsic_k <= 0.0:
         raise ValueError("intrinsic_k must be finite and positive")
+    periodic = tuple(sorted(set(int(axis) for axis in periodic_axes)))
+    if any(axis not in (0, 1, 2) for axis in periodic):
+        raise ValueError("periodic_axes may contain only 0, 1, or 2")
 
     pitch = size / np.asarray(ag.shape, dtype=float)
     component_id = np.full(ag.shape, -1, dtype=np.int64)
-    component_block: list[tuple[int, int, int]] = []
-    voxel_count: list[int] = []
+    component_block: np.ndarray | list[tuple[int, int, int]] = []
+    voxel_count: np.ndarray | list[int] = []
     block_counts = np.ceil(np.asarray(ag.shape) / groups).astype(int)
     block_widths = [
         np.minimum(groups[axis], ag.shape[axis] - np.arange(block_counts[axis]) * groups[axis])
@@ -79,21 +84,47 @@ def build_component_graph(
     ]
 
     node_count = 0
-    for bx in range(block_counts[0]):
-        for by in range(block_counts[1]):
-            for bz in range(block_counts[2]):
-                starts = np.asarray([bx, by, bz]) * groups
-                stops = np.minimum(starts + groups, np.asarray(ag.shape))
-                region = tuple(slice(int(starts[a]), int(stops[a])) for a in range(3))
-                local_labels, nlocal = label(ag[region], structure=_SIX_NEIGHBOR)
-                if nlocal == 0:
-                    continue
-                active = local_labels > 0
-                component_id[region][active] = local_labels[active] + node_count - 1
-                counts = np.bincount(local_labels.ravel(), minlength=nlocal + 1)[1:]
-                voxel_count.extend(int(value) for value in counts)
-                component_block.extend([(bx, by, bz)] * nlocal)
-                node_count += nlocal
+    if tuple(groups) == (1, 1, 1):
+        # Native-voxel reference: each occupied voxel is its own thermal node.
+        component_id[ag] = np.arange(int(ag.sum()), dtype=np.int64)
+        node_count = int(ag.sum())
+        voxel_count = np.ones(node_count, dtype=np.int64)
+        component_block = np.argwhere(ag).astype(np.int32, copy=False)
+    elif tuple(groups) == (2, 1, 1):
+        # The production coarse grouping pairs only adjacent x voxels. A pair
+        # is either empty or one 6-connected Ag component, so vectorize rather
+        # than calling ndimage.label millions of times on tiny blocks.
+        nx, ny, nz = ag.shape
+        slots = np.zeros((block_counts[0], ny, nz, 2), dtype=bool)
+        slots[..., 0] = ag[0::2, :, :]
+        if nx > 1:
+            slots[: ag[1::2, :, :].shape[0], :, :, 1] = ag[1::2, :, :]
+        block_active = slots.any(axis=-1)
+        block_id = np.full(block_active.shape, -1, dtype=np.int64)
+        block_id[block_active] = np.arange(int(block_active.sum()), dtype=np.int64)
+        component_id[0::2, :, :] = np.where(slots[..., 0], block_id, -1)
+        if nx > 1:
+            component_id[1::2, :, :] = np.where(slots[: component_id[1::2].shape[0], ..., 1], block_id[: component_id[1::2].shape[0]], -1)
+        counts = slots.sum(axis=-1)
+        voxel_count = counts[block_active].astype(np.int64, copy=False)
+        component_block = np.argwhere(block_active).astype(np.int32, copy=False)
+        node_count = int(voxel_count.size)
+    else:
+        for bx in range(block_counts[0]):
+            for by in range(block_counts[1]):
+                for bz in range(block_counts[2]):
+                    starts = np.asarray([bx, by, bz]) * groups
+                    stops = np.minimum(starts + groups, np.asarray(ag.shape))
+                    region = tuple(slice(int(starts[a]), int(stops[a])) for a in range(3))
+                    local_labels, nlocal = label(ag[region], structure=_SIX_NEIGHBOR)
+                    if nlocal == 0:
+                        continue
+                    active = local_labels > 0
+                    component_id[region][active] = local_labels[active] + node_count - 1
+                    counts = np.bincount(local_labels.ravel(), minlength=nlocal + 1)[1:]
+                    voxel_count.extend(int(value) for value in counts)
+                    component_block.extend([(bx, by, bz)] * nlocal)
+                    node_count += nlocal
 
     if node_count == 0:
         raise ValueError("QSGS source region contains no Ag voxels")
@@ -102,6 +133,7 @@ def build_component_graph(
     edge_j_parts: list[np.ndarray] = []
     edge_axis_parts: list[np.ndarray] = []
     edge_g_parts: list[np.ndarray] = []
+    blocks = np.asarray(component_block, dtype=int)
     for axis in range(3):
         low = [slice(None)] * 3
         high = [slice(None)] * 3
@@ -110,25 +142,55 @@ def build_component_graph(
         ids_low = component_id[low_t].ravel()
         ids_high = component_id[high_t].ravel()
         valid = (ids_low >= 0) & (ids_high >= 0) & (ids_low != ids_high)
-        if not np.any(valid):
-            continue
-        pairs = np.column_stack((ids_low[valid], ids_high[valid]))
-        # Keep node ordering stable while combining parallel voxel contacts.
-        pairs.sort(axis=1)
-        unique_pairs, counts = np.unique(pairs, axis=0, return_counts=True)
         voxel_face_area = float(np.prod(np.delete(pitch, axis)))
-        contact_area = counts.astype(float) * voxel_face_area
-        blocks = np.asarray(component_block, dtype=int)
-        block_i = blocks[unique_pairs[:, 0], axis]
-        block_j = blocks[unique_pairs[:, 1], axis]
-        separation = np.abs(block_centers[axis][block_j] - block_centers[axis][block_i])
-        if np.any(separation <= 0.0):
-            raise RuntimeError("A component edge did not cross a coarse-cell boundary")
-        conductance = intrinsic_k * contact_area / separation
-        edge_i_parts.append(unique_pairs[:, 0])
-        edge_j_parts.append(unique_pairs[:, 1])
-        edge_axis_parts.append(np.full(unique_pairs.shape[0], axis, dtype=np.int8))
-        edge_g_parts.append(conductance)
+        if np.any(valid):
+            pairs = np.column_stack((ids_low[valid], ids_high[valid]))
+            # Native voxels have at most one face per node pair and direction.
+            if tuple(groups) == (1, 1, 1):
+                unique_pairs = pairs
+                counts = np.ones(len(pairs), dtype=np.int64)
+            else:
+                # Multiple native faces can connect the same pair of component nodes.
+                pairs.sort(axis=1)
+                unique_pairs, counts = np.unique(pairs, axis=0, return_counts=True)
+            contact_area = counts.astype(float) * voxel_face_area
+            block_i = blocks[unique_pairs[:, 0], axis]
+            block_j = blocks[unique_pairs[:, 1], axis]
+            separation = np.abs(block_centers[axis][block_j] - block_centers[axis][block_i])
+            if np.any(separation <= 0.0):
+                raise RuntimeError("A component edge did not cross a coarse-cell boundary")
+            conductance = intrinsic_k * contact_area / separation
+            edge_i_parts.append(unique_pairs[:, 0])
+            edge_j_parts.append(unique_pairs[:, 1])
+            edge_axis_parts.append(np.full(unique_pairs.shape[0], axis, dtype=np.int8))
+            edge_g_parts.append(conductance)
+
+        if axis in periodic and ag.shape[axis] > 1:
+            ids_first = np.take(component_id, 0, axis=axis).ravel()
+            ids_last = np.take(component_id, -1, axis=axis).ravel()
+            seam_valid = (ids_first >= 0) & (ids_last >= 0) & (ids_first != ids_last)
+            if np.any(seam_valid):
+                seam_pairs = np.column_stack((ids_first[seam_valid], ids_last[seam_valid]))
+                if tuple(groups) == (1, 1, 1):
+                    seam_unique = seam_pairs
+                    seam_counts = np.ones(len(seam_pairs), dtype=np.int64)
+                else:
+                    seam_pairs.sort(axis=1)
+                    seam_unique, seam_counts = np.unique(seam_pairs, axis=0, return_counts=True)
+                seam_area = seam_counts.astype(float) * voxel_face_area
+                seam_block_i = blocks[seam_unique[:, 0], axis]
+                seam_block_j = blocks[seam_unique[:, 1], axis]
+                seam_distance = (
+                    block_centers[axis][0]
+                    + size[axis]
+                    - block_centers[axis][-1]
+                )
+                if seam_distance <= 0.0:
+                    raise RuntimeError("Periodic component centres have invalid separation")
+                edge_i_parts.append(seam_unique[:, 0])
+                edge_j_parts.append(seam_unique[:, 1])
+                edge_axis_parts.append(np.full(seam_unique.shape[0], axis, dtype=np.int8))
+                edge_g_parts.append(intrinsic_k * seam_area / seam_distance)
 
     if edge_i_parts:
         edge_i = np.concatenate(edge_i_parts).astype(np.int64, copy=False)
@@ -170,6 +232,7 @@ def build_component_graph(
         source_size_A=size,
         source_spacing_A=pitch,
         coarse_voxels=tuple(int(v) for v in groups),
+        periodic_axes=periodic,
     )
 
 
