@@ -7,20 +7,176 @@
     100,
     50
   ],
-  "roi_shape_voxels_xyz": [
-    24,
-    24,
-    16
+  "roi_cases": [
+    {
+      "name": "regression_1",
+      "start": [
+        36,
+        60,
+        18
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "prior regression window"
+    },
+    {
+      "name": "regression_2",
+      "start": [
+        56,
+        12,
+        0
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "prior regression window"
+    },
+    {
+      "name": "regression_3",
+      "start": [
+        64,
+        76,
+        0
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "prior regression window"
+    },
+    {
+      "name": "low_fill_through",
+      "start": [
+        32,
+        32,
+        32
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "lower-Ag, through-connected path"
+    },
+    {
+      "name": "high_fill_through",
+      "start": [
+        8,
+        8,
+        32
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "higher-Ag, through-connected network"
+    },
+    {
+      "name": "low_fill_all_axis",
+      "start": [
+        36,
+        28,
+        32
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "low-volume-fraction network spanning x/y/z"
+    },
+    {
+      "name": "high_fill_all_axis",
+      "start": [
+        28,
+        0,
+        28
+      ],
+      "shape": [
+        24,
+        24,
+        16
+      ],
+      "motif": "high-volume-fraction network spanning x/y/z"
+    },
+    {
+      "name": "isolated_islands_1",
+      "start": [
+        80,
+        56,
+        38
+      ],
+      "shape": [
+        12,
+        12,
+        8
+      ],
+      "motif": "disconnected Ag islands; no axis spans"
+    },
+    {
+      "name": "isolated_islands_2",
+      "start": [
+        0,
+        88,
+        34
+      ],
+      "shape": [
+        12,
+        12,
+        8
+      ],
+      "motif": "disconnected Ag islands; no axis spans"
+    }
   ],
+  "component_graph_groupings": {
+    "component_lumped_3x3x3": [
+      3,
+      3,
+      3
+    ],
+    "component_lumped_2x2x2": [
+      2,
+      2,
+      2
+    ],
+    "component_lumped_1x1x2": [
+      1,
+      1,
+      2
+    ],
+    "component_lumped_1x2x1": [
+      1,
+      2,
+      1
+    ],
+    "component_lumped_2x1x1": [
+      2,
+      1,
+      1
+    ]
+  },
   "intrinsic_k_is_arbitrary_normalized_value": 1.0,
-  "boundary_conditions": "unit temperature difference on opposing x faces; all other faces insulated; no periodic wrap",
+  "boundary_conditions": "unit temperature difference on opposing faces of the tested x/y/z axis; remaining faces insulated; no periodic wrap",
   "interpretation": "geometry-only resistor-network comparison; not interface transport or a measured composite conductivity",
   "regions": {
     "roi_1": {
+      "motif": "prior regression window",
       "roi_start_voxels_xyz": [
         36,
         60,
         18
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
       ],
       "roi_size_A": [
         71.91239999999999,
@@ -33,68 +189,410 @@
         3.1722300000000003
       ],
       "roi_ag_volume_fraction": 0.4966362847222222,
-      "grids": {
-        "source_voxel_reference": {
-          "active_cells": 4577,
-          "conducting_faces": 10875,
-          "hot_face_ag_area_fraction": 0.4583333333333333,
-          "cold_face_ag_area_fraction": 0.2526041666666667,
-          "effective_conductance_over_k": 7.505657295396112,
-          "effective_k_over_intrinsic_k": 0.14678939242610886,
-          "hot_cold_flux_relative_balance": 1.4171738440735272e-09,
-          "linear_residual_linf": 4.030789035880389e-10
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 4577,
+            "conducting_faces": 10875,
+            "hot_face_ag_area_fraction": 0.4583333333333333,
+            "cold_face_ag_area_fraction": 0.2526041666666667,
+            "effective_conductance_over_k": 7.505657295396104,
+            "effective_k_over_intrinsic_k": 0.1467893924261087,
+            "hot_cold_flux_relative_balance": 2.593064530514475e-12,
+            "linear_residual_linf": 3.880451515669847e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 395,
+            "active_boundary_nodes": 391,
+            "conducting_edges": 738,
+            "effective_conductance_over_k": 8.240915408858665,
+            "effective_k_over_intrinsic_k": 0.16116895806624768,
+            "hot_cold_flux_relative_balance": 7.253369884316887e-13,
+            "linear_residual_linf": 8.109068971862143e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.09796052291297146
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 886,
+            "active_boundary_nodes": 881,
+            "conducting_edges": 1845,
+            "effective_conductance_over_k": 7.99212635610772,
+            "effective_k_over_intrinsic_k": 0.15630334903851079,
+            "hot_cold_flux_relative_balance": 4.032968626213636e-12,
+            "linear_residual_linf": 8.821388064461644e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.06481365209813275
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2675,
+            "active_boundary_nodes": 2670,
+            "conducting_edges": 6001,
+            "effective_conductance_over_k": 7.626598703025833,
+            "effective_k_over_intrinsic_k": 0.1491546637203384,
+            "hot_cold_flux_relative_balance": 1.049752397749806e-12,
+            "linear_residual_linf": 8.538059148577304e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.016113366607333948
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2693,
+            "active_boundary_nodes": 2688,
+            "conducting_edges": 6111,
+            "effective_conductance_over_k": 7.655690635141852,
+            "effective_k_over_intrinsic_k": 0.1497236194921975,
+            "hot_cold_flux_relative_balance": 4.153353229727957e-12,
+            "linear_residual_linf": 8.109957150281843e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.019989367198763038
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2711,
+            "active_boundary_nodes": 2706,
+            "conducting_edges": 6159,
+            "effective_conductance_over_k": 7.7952441383410065,
+            "effective_k_over_intrinsic_k": 0.1524528906458517,
+            "hot_cold_flux_relative_balance": 3.644322903805091e-12,
+            "linear_residual_linf": 2.949196442614266e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.03858247606409249
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 728,
+            "hot_face_ag_area_fraction": 0.4583333333333334,
+            "cold_face_ag_area_fraction": 0.25260416666666663,
+            "effective_conductance_over_k": 8.963378973930588,
+            "effective_k_over_intrinsic_k": 0.17529829858809085,
+            "hot_cold_flux_relative_balance": 9.607736080845424e-13,
+            "linear_residual_linf": 7.51576578750246e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49663628472222215,
+            "relative_effective_k_error_vs_voxel_reference": 0.19421639187132037
+          },
+          "projected_5A": {
+            "active_cells": 1963,
+            "conducting_faces": 4870,
+            "hot_face_ag_area_fraction": 0.4583333333333333,
+            "cold_face_ag_area_fraction": 0.25260416666666663,
+            "effective_conductance_over_k": 11.001915951416102,
+            "effective_k_over_intrinsic_k": 0.21516630649018392,
+            "hot_cold_flux_relative_balance": 1.238873855145544e-12,
+            "linear_residual_linf": 5.362821298149356e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4966362847222222,
+            "relative_effective_k_error_vs_voxel_reference": 0.46581645263294497
+          }
         },
-        "projected_10A": {
-          "active_cells": 337,
-          "conducting_faces": 728,
-          "hot_face_ag_area_fraction": 0.4583333333333334,
-          "cold_face_ag_area_fraction": 0.25260416666666663,
-          "effective_conductance_over_k": 8.963378973930592,
-          "effective_k_over_intrinsic_k": 0.1752982985880909,
-          "hot_cold_flux_relative_balance": 4.4333637724238704e-10,
-          "linear_residual_linf": 1.3628902451046088e-09,
-          "grid_shape_xyz": [
-            8,
-            8,
-            6
-          ],
-          "actual_spacing_A_xyz": [
-            8.989049999999999,
-            9.05572453848255,
-            8.459280000000001
-          ],
-          "ag_volume_fraction": 0.49663628472222215,
-          "relative_effective_k_error_vs_voxel_reference": 0.19421639187131937
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 4577,
+            "conducting_faces": 10875,
+            "hot_face_ag_area_fraction": 0.3567708333333333,
+            "cold_face_ag_area_fraction": 0.3151041666666667,
+            "effective_conductance_over_k": 10.354651348644488,
+            "effective_k_over_intrinsic_k": 0.2055229083879691,
+            "hot_cold_flux_relative_balance": 1.0066646942164032e-12,
+            "linear_residual_linf": 4.857003688130135e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 395,
+            "active_boundary_nodes": 390,
+            "conducting_edges": 738,
+            "effective_conductance_over_k": 11.673494785278631,
+            "effective_k_over_intrinsic_k": 0.23169979543891905,
+            "hot_cold_flux_relative_balance": 2.733887971313567e-12,
+            "linear_residual_linf": 6.778577699151356e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.12736724706880553
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 886,
+            "active_boundary_nodes": 879,
+            "conducting_edges": 1844,
+            "effective_conductance_over_k": 10.956105181082737,
+            "effective_k_over_intrinsic_k": 0.21746078410601358,
+            "hot_cold_flux_relative_balance": 1.4746084659939952e-12,
+            "linear_residual_linf": 6.836309296431864e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.05808537749723325
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2675,
+            "active_boundary_nodes": 2667,
+            "conducting_edges": 5999,
+            "effective_conductance_over_k": 10.517652566971789,
+            "effective_k_over_intrinsic_k": 0.20875821620601503,
+            "hot_cold_flux_relative_balance": 4.3907087118379975e-12,
+            "linear_residual_linf": 6.929568030500377e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.015741835513239155
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2693,
+            "active_boundary_nodes": 2686,
+            "conducting_edges": 6110,
+            "effective_conductance_over_k": 10.706669612926738,
+            "effective_k_over_intrinsic_k": 0.2125098956891344,
+            "hot_cold_flux_relative_balance": 3.445976469638884e-13,
+            "linear_residual_linf": 2.3350210653916292e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.03399614843896541
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2711,
+            "active_boundary_nodes": 2703,
+            "conducting_edges": 6157,
+            "effective_conductance_over_k": 10.479120593474661,
+            "effective_k_over_intrinsic_k": 0.20799341949848568,
+            "hot_cold_flux_relative_balance": 7.991055835192083e-12,
+            "linear_residual_linf": 7.501776977392183e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.012020611862172322
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 728,
+            "hot_face_ag_area_fraction": 0.3567708333333333,
+            "cold_face_ag_area_fraction": 0.31510416666666663,
+            "effective_conductance_over_k": 13.120106095742598,
+            "effective_k_over_intrinsic_k": 0.26041266599562846,
+            "hot_cold_flux_relative_balance": 1.1823779598486819e-12,
+            "linear_residual_linf": 6.4150906808890795e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49663628472222215,
+            "relative_effective_k_error_vs_voxel_reference": 0.2670736709507974
+          },
+          "projected_5A": {
+            "active_cells": 1963,
+            "conducting_faces": 4870,
+            "hot_face_ag_area_fraction": 0.35677083333333337,
+            "cold_face_ag_area_fraction": 0.3151041666666667,
+            "effective_conductance_over_k": 14.748970225591616,
+            "effective_k_over_intrinsic_k": 0.29274295719169396,
+            "hot_cold_flux_relative_balance": 1.7410716868770392e-12,
+            "linear_residual_linf": 6.763922755226304e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4966362847222222,
+            "relative_effective_k_error_vs_voxel_reference": 0.4243811528741024
+          }
         },
-        "projected_5A": {
-          "active_cells": 1963,
-          "conducting_faces": 4870,
-          "hot_face_ag_area_fraction": 0.4583333333333333,
-          "cold_face_ag_area_fraction": 0.25260416666666663,
-          "effective_conductance_over_k": 11.001915951416091,
-          "effective_k_over_intrinsic_k": 0.2151663064901837,
-          "hot_cold_flux_relative_balance": 5.799505480583201e-10,
-          "linear_residual_linf": 4.954321397576678e-10,
-          "grid_shape_xyz": [
-            15,
-            15,
-            11
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 4577,
+            "conducting_faces": 10875,
+            "hot_face_ag_area_fraction": 0.5486111111111112,
+            "cold_face_ag_area_fraction": 0.5381944444444444,
+            "effective_conductance_over_k": 30.167580340136336,
+            "effective_k_over_intrinsic_k": 0.29390579893312685,
+            "hot_cold_flux_relative_balance": 1.6966540038473468e-12,
+            "linear_residual_linf": 1.1218692641534744e-11
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 395,
+            "active_boundary_nodes": 386,
+            "conducting_edges": 737,
+            "effective_conductance_over_k": 32.96898652568642,
+            "effective_k_over_intrinsic_k": 0.32119832666710885,
+            "hot_cold_flux_relative_balance": 1.9903135814114647e-12,
+            "linear_residual_linf": 1.6611267916744055e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.09286148089984415
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 886,
+            "active_boundary_nodes": 874,
+            "conducting_edges": 1842,
+            "effective_conductance_over_k": 31.542046274171373,
+            "effective_k_over_intrinsic_k": 0.30729644889226465,
+            "hot_cold_flux_relative_balance": 2.7175257490700483e-12,
+            "linear_residual_linf": 1.2667422666368111e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.04556102672266297
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2675,
+            "active_boundary_nodes": 2662,
+            "conducting_edges": 5997,
+            "effective_conductance_over_k": 30.778262175240453,
+            "effective_k_over_intrinsic_k": 0.29985532921088104,
+            "hot_cold_flux_relative_balance": 6.647574174175168e-13,
+            "linear_residual_linf": 4.0243364196612674e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.020242983634044937
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2693,
+            "active_boundary_nodes": 2680,
+            "conducting_edges": 6107,
+            "effective_conductance_over_k": 30.599240875355967,
+            "effective_k_over_intrinsic_k": 0.2981112251900957,
+            "hot_cold_flux_relative_balance": 3.1571172222036176e-12,
+            "linear_residual_linf": 1.0448752973957198e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.014308755636106788
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2711,
+            "active_boundary_nodes": 2697,
+            "conducting_edges": 6154,
+            "effective_conductance_over_k": 30.586020234072315,
+            "effective_k_over_intrinsic_k": 0.29798242390424284,
+            "hot_cold_flux_relative_balance": 1.7216467439762082e-12,
+            "linear_residual_linf": 1.016331463432607e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.013870515607089328
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 728,
+            "hot_face_ag_area_fraction": 0.5486111111111112,
+            "cold_face_ag_area_fraction": 0.5381944444444444,
+            "effective_conductance_over_k": 39.11015698648862,
+            "effective_k_over_intrinsic_k": 0.38102830276450345,
+            "hot_cold_flux_relative_balance": 7.833924772166022e-13,
+            "linear_residual_linf": 1.4512835377900046e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49663628472222215,
+            "relative_effective_k_error_vs_voxel_reference": 0.29643002672158847
+          },
+          "projected_5A": {
+            "active_cells": 1963,
+            "conducting_faces": 4870,
+            "hot_face_ag_area_fraction": 0.5486111111111112,
+            "cold_face_ag_area_fraction": 0.5381944444444444,
+            "effective_conductance_over_k": 38.80492160318039,
+            "effective_k_over_intrinsic_k": 0.37805456578651625,
+            "hot_cold_flux_relative_balance": 6.24026423306047e-13,
+            "linear_residual_linf": 6.080469461267057e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4966362847222222,
+            "relative_effective_k_error_vs_voxel_reference": 0.2863120331713359
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
           ],
-          "actual_spacing_A_xyz": [
-            4.79416,
-            4.82971975385736,
-            4.614152727272728
+          "component_nodes": 395,
+          "source_ag_voxels": 4577,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 738,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 9.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
           ],
-          "ag_volume_fraction": 0.4966362847222222,
-          "relative_effective_k_error_vs_voxel_reference": 0.46581645263294175
+          "component_nodes": 886,
+          "source_ag_voxels": 4577,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 1846,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 6.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 2675,
+          "source_ag_voxels": 4577,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6002,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 2693,
+          "source_ag_voxels": 4577,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6112,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 2711,
+          "source_ag_voxels": 4577,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6160,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
         }
       }
     },
     "roi_2": {
+      "motif": "prior regression window",
       "roi_start_voxels_xyz": [
         56,
         12,
         0
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
       ],
       "roi_size_A": [
         71.91239999999999,
@@ -107,68 +605,410 @@
         3.1722300000000003
       ],
       "roi_ag_volume_fraction": 0.4958767361111111,
-      "grids": {
-        "source_voxel_reference": {
-          "active_cells": 4570,
-          "conducting_faces": 10790,
-          "hot_face_ag_area_fraction": 0.5546875,
-          "cold_face_ag_area_fraction": 0.3307291666666667,
-          "effective_conductance_over_k": 10.475577275214018,
-          "effective_k_over_intrinsic_k": 0.20487261315336486,
-          "hot_cold_flux_relative_balance": 1.1826934067837576e-10,
-          "linear_residual_linf": 5.292977167670188e-10
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 4570,
+            "conducting_faces": 10790,
+            "hot_face_ag_area_fraction": 0.5546875,
+            "cold_face_ag_area_fraction": 0.3307291666666667,
+            "effective_conductance_over_k": 10.475577275214032,
+            "effective_k_over_intrinsic_k": 0.20487261315336514,
+            "hot_cold_flux_relative_balance": 9.560427647491138e-13,
+            "linear_residual_linf": 5.74384984020071e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 397,
+            "active_boundary_nodes": 390,
+            "conducting_edges": 742,
+            "effective_conductance_over_k": 11.770606884981756,
+            "effective_k_over_intrinsic_k": 0.2301997233730428,
+            "hot_cold_flux_relative_balance": 4.148643310602635e-13,
+            "linear_residual_linf": 1.1811884803591965e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.12362369879432403
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 885,
+            "active_boundary_nodes": 878,
+            "conducting_edges": 1817,
+            "effective_conductance_over_k": 11.013401361219461,
+            "effective_k_over_intrinsic_k": 0.21539092856663206,
+            "hot_cold_flux_relative_balance": 3.5500035595606786e-13,
+            "linear_residual_linf": 1.0380085679884132e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.051340758783571715
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2692,
+            "active_boundary_nodes": 2683,
+            "conducting_edges": 6008,
+            "effective_conductance_over_k": 10.592053256326327,
+            "effective_k_over_intrinsic_k": 0.20715055335591023,
+            "hot_cold_flux_relative_balance": 6.600427172750401e-12,
+            "linear_residual_linf": 1.3692186273672746e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.011118812648911056
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2669,
+            "active_boundary_nodes": 2659,
+            "conducting_edges": 5995,
+            "effective_conductance_over_k": 10.640423414009987,
+            "effective_k_over_intrinsic_k": 0.20809653660274657,
+            "hot_cold_flux_relative_balance": 8.726005726084215e-12,
+            "linear_residual_linf": 9.704237413643568e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.015736234334884226
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2705,
+            "active_boundary_nodes": 2695,
+            "conducting_edges": 6099,
+            "effective_conductance_over_k": 10.74957430717053,
+            "effective_k_over_intrinsic_k": 0.21023121883765636,
+            "hot_cold_flux_relative_balance": 1.4242814795538374e-12,
+            "linear_residual_linf": 3.608890963846534e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.0261557931136449
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 724,
+            "hot_face_ag_area_fraction": 0.5546875,
+            "cold_face_ag_area_fraction": 0.3307291666666667,
+            "effective_conductance_over_k": 13.449960450187135,
+            "effective_k_over_intrinsic_k": 0.2630431213331821,
+            "hot_cold_flux_relative_balance": 1.5841979883524152e-12,
+            "linear_residual_linf": 1.333511079337768e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49587673611111116,
+            "relative_effective_k_error_vs_voxel_reference": 0.2839350134918776
+          },
+          "projected_5A": {
+            "active_cells": 1964,
+            "conducting_faces": 4840,
+            "hot_face_ag_area_fraction": 0.5546875,
+            "cold_face_ag_area_fraction": 0.33072916666666663,
+            "effective_conductance_over_k": 15.393484177971228,
+            "effective_k_over_intrinsic_k": 0.30105293925307913,
+            "hot_cold_flux_relative_balance": 1.4526133028654838e-12,
+            "linear_residual_linf": 7.335465568303334e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4958767361111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.4694640470452465
+          }
         },
-        "projected_10A": {
-          "active_cells": 337,
-          "conducting_faces": 724,
-          "hot_face_ag_area_fraction": 0.5546875,
-          "cold_face_ag_area_fraction": 0.3307291666666667,
-          "effective_conductance_over_k": 13.44996045018713,
-          "effective_k_over_intrinsic_k": 0.263043121333182,
-          "hot_cold_flux_relative_balance": 1.0800717177896517e-10,
-          "linear_residual_linf": 1.4880175980280796e-09,
-          "grid_shape_xyz": [
-            8,
-            8,
-            6
-          ],
-          "actual_spacing_A_xyz": [
-            8.989049999999999,
-            9.05572453848255,
-            8.459280000000001
-          ],
-          "ag_volume_fraction": 0.49587673611111116,
-          "relative_effective_k_error_vs_voxel_reference": 0.2839350134918788
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 4570,
+            "conducting_faces": 10790,
+            "hot_face_ag_area_fraction": 0.3776041666666667,
+            "cold_face_ag_area_fraction": 0.4114583333333333,
+            "effective_conductance_over_k": 10.835342151277418,
+            "effective_k_over_intrinsic_k": 0.21506383530729023,
+            "hot_cold_flux_relative_balance": 3.0065140189339216e-12,
+            "linear_residual_linf": 5.281108883536945e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 397,
+            "active_boundary_nodes": 394,
+            "conducting_edges": 744,
+            "effective_conductance_over_k": 11.953809247693332,
+            "effective_k_over_intrinsic_k": 0.237263579446598,
+            "hot_cold_flux_relative_balance": 6.091185273101677e-13,
+            "linear_residual_linf": 7.154832282196821e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.10322397583763007
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 885,
+            "active_boundary_nodes": 882,
+            "conducting_edges": 1819,
+            "effective_conductance_over_k": 11.424556961955062,
+            "effective_k_over_intrinsic_k": 0.22675878644358213,
+            "hot_cold_flux_relative_balance": 2.7228680355105702e-12,
+            "linear_residual_linf": 7.511546940008884e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.054378975989067505
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2692,
+            "active_boundary_nodes": 2689,
+            "conducting_edges": 6012,
+            "effective_conductance_over_k": 11.06033955693712,
+            "effective_k_over_intrinsic_k": 0.21952966613383787,
+            "hot_cold_flux_relative_balance": 1.2854743232506073e-11,
+            "linear_residual_linf": 8.760103753502335e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.020765140825126246
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2669,
+            "active_boundary_nodes": 2666,
+            "conducting_edges": 6000,
+            "effective_conductance_over_k": 11.046616107440151,
+            "effective_k_over_intrinsic_k": 0.21925727808727158,
+            "hot_cold_flux_relative_balance": 1.7553530484175188e-12,
+            "linear_residual_linf": 3.001154880166723e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.019498595726192742
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2705,
+            "active_boundary_nodes": 2702,
+            "conducting_edges": 6104,
+            "effective_conductance_over_k": 11.077006936019643,
+            "effective_k_over_intrinsic_k": 0.2198604863719035,
+            "hot_cold_flux_relative_balance": 3.961480141446268e-12,
+            "linear_residual_linf": 6.731837309814637e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.02230338288982739
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 724,
+            "hot_face_ag_area_fraction": 0.37760416666666674,
+            "cold_face_ag_area_fraction": 0.4114583333333333,
+            "effective_conductance_over_k": 12.985347066801905,
+            "effective_k_over_intrinsic_k": 0.25773791948539904,
+            "hot_cold_flux_relative_balance": 8.094279933112261e-13,
+            "linear_residual_linf": 8.485601110663765e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49587673611111116,
+            "relative_effective_k_error_vs_voxel_reference": 0.1984251983469684
+          },
+          "projected_5A": {
+            "active_cells": 1964,
+            "conducting_faces": 4840,
+            "hot_face_ag_area_fraction": 0.3776041666666668,
+            "cold_face_ag_area_fraction": 0.4114583333333333,
+            "effective_conductance_over_k": 14.599505488574856,
+            "effective_k_over_intrinsic_k": 0.28977632640724477,
+            "hot_cold_flux_relative_balance": 4.732326239796331e-12,
+            "linear_residual_linf": 6.006972697036872e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4958767361111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.3473968135702727
+          }
         },
-        "projected_5A": {
-          "active_cells": 1964,
-          "conducting_faces": 4840,
-          "hot_face_ag_area_fraction": 0.5546875,
-          "cold_face_ag_area_fraction": 0.33072916666666663,
-          "effective_conductance_over_k": 15.39348417797123,
-          "effective_k_over_intrinsic_k": 0.3010529392530792,
-          "hot_cold_flux_relative_balance": 2.94526463493038e-10,
-          "linear_residual_linf": 7.558824677289522e-10,
-          "grid_shape_xyz": [
-            15,
-            15,
-            11
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 4570,
+            "conducting_faces": 10790,
+            "hot_face_ag_area_fraction": 0.4670138888888889,
+            "cold_face_ag_area_fraction": 0.5572916666666666,
+            "effective_conductance_over_k": 26.24581244722943,
+            "effective_k_over_intrinsic_k": 0.25569821606438825,
+            "hot_cold_flux_relative_balance": 3.904683041713096e-12,
+            "linear_residual_linf": 6.030675958612619e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 397,
+            "active_boundary_nodes": 391,
+            "conducting_edges": 742,
+            "effective_conductance_over_k": 28.405514855113687,
+            "effective_k_over_intrinsic_k": 0.27673898415020387,
+            "hot_cold_flux_relative_balance": 2.1607311759008006e-12,
+            "linear_residual_linf": 1.0271783423831948e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.08228750442481488
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 885,
+            "active_boundary_nodes": 879,
+            "conducting_edges": 1817,
+            "effective_conductance_over_k": 27.59076676907564,
+            "effective_k_over_intrinsic_k": 0.26880135095402535,
+            "hot_cold_flux_relative_balance": 8.043923728985324e-13,
+            "linear_residual_linf": 1.1828482637810112e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.051244529943601784
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2692,
+            "active_boundary_nodes": 2684,
+            "conducting_edges": 6008,
+            "effective_conductance_over_k": 26.833103257599646,
+            "effective_k_over_intrinsic_k": 0.26141986072006834,
+            "hot_cold_flux_relative_balance": 2.477343936177387e-12,
+            "linear_residual_linf": 4.9471537977296975e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.022376552890143373
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2669,
+            "active_boundary_nodes": 2660,
+            "conducting_edges": 5995,
+            "effective_conductance_over_k": 26.584312364288024,
+            "effective_k_over_intrinsic_k": 0.25899603071973004,
+            "hot_cold_flux_relative_balance": 3.4628662040829906e-12,
+            "linear_residual_linf": 1.1053158388563133e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.01289729238670698
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2705,
+            "active_boundary_nodes": 2696,
+            "conducting_edges": 6099,
+            "effective_conductance_over_k": 26.735140260270562,
+            "effective_k_over_intrinsic_k": 0.26046546223430106,
+            "hot_cold_flux_relative_balance": 5.335354623735068e-12,
+            "linear_residual_linf": 8.1512574467979e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.01864403374919265
+          },
+          "projected_10A": {
+            "active_cells": 337,
+            "conducting_faces": 724,
+            "hot_face_ag_area_fraction": 0.46701388888888884,
+            "cold_face_ag_area_fraction": 0.5572916666666666,
+            "effective_conductance_over_k": 35.325275544190895,
+            "effective_k_over_intrinsic_k": 0.3441543277349022,
+            "hot_cold_flux_relative_balance": 7.89485770427915e-13,
+            "linear_residual_linf": 1.7661261342283296e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.49587673611111116,
+            "relative_effective_k_error_vs_voxel_reference": 0.3459394947371846
+          },
+          "projected_5A": {
+            "active_cells": 1964,
+            "conducting_faces": 4840,
+            "hot_face_ag_area_fraction": 0.4670138888888889,
+            "cold_face_ag_area_fraction": 0.5572916666666666,
+            "effective_conductance_over_k": 35.69085806000147,
+            "effective_k_over_intrinsic_k": 0.34771599294549704,
+            "hot_cold_flux_relative_balance": 1.2030559043942774e-12,
+            "linear_residual_linf": 8.945955087824586e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4958767361111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.3598686697835134
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
           ],
-          "actual_spacing_A_xyz": [
-            4.79416,
-            4.82971975385736,
-            4.614152727272728
+          "component_nodes": 397,
+          "source_ag_voxels": 4570,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 744,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 9.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
           ],
-          "ag_volume_fraction": 0.4958767361111111,
-          "relative_effective_k_error_vs_voxel_reference": 0.46946404704524874
+          "component_nodes": 885,
+          "source_ag_voxels": 4570,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 1819,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 6.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 2692,
+          "source_ag_voxels": 4570,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6012,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 2669,
+          "source_ag_voxels": 4570,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6000,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 2705,
+          "source_ag_voxels": 4570,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6104,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
         }
       }
     },
     "roi_3": {
+      "motif": "prior regression window",
       "roi_start_voxels_xyz": [
         64,
         76,
         0
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
       ],
       "roi_size_A": [
         71.91239999999999,
@@ -181,60 +1021,2892 @@
         3.1722300000000003
       ],
       "roi_ag_volume_fraction": 0.4964192708333333,
-      "grids": {
-        "source_voxel_reference": {
-          "active_cells": 4575,
-          "conducting_faces": 10950,
-          "hot_face_ag_area_fraction": 0.21875,
-          "cold_face_ag_area_fraction": 0.4088541666666667,
-          "effective_conductance_over_k": 10.116418763016645,
-          "effective_k_over_intrinsic_k": 0.19784849018648548,
-          "hot_cold_flux_relative_balance": 1.4936547902753338e-10,
-          "linear_residual_linf": 4.0262015943426377e-10
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 4575,
+            "conducting_faces": 10950,
+            "hot_face_ag_area_fraction": 0.21875,
+            "cold_face_ag_area_fraction": 0.4088541666666667,
+            "effective_conductance_over_k": 10.11641876301664,
+            "effective_k_over_intrinsic_k": 0.19784849018648537,
+            "hot_cold_flux_relative_balance": 5.166778997962918e-12,
+            "linear_residual_linf": 4.197753256107717e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 380,
+            "active_boundary_nodes": 366,
+            "conducting_edges": 711,
+            "effective_conductance_over_k": 11.1767826674363,
+            "effective_k_over_intrinsic_k": 0.218586204040782,
+            "hot_cold_flux_relative_balance": 1.646543321434006e-13,
+            "linear_residual_linf": 5.473843600611872e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.10481613397580113
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 872,
+            "active_boundary_nodes": 857,
+            "conducting_edges": 1803,
+            "effective_conductance_over_k": 10.930965898772435,
+            "effective_k_over_intrinsic_k": 0.2137787244690127,
+            "hot_cold_flux_relative_balance": 1.2326144598405538e-12,
+            "linear_residual_linf": 5.69400082639504e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.08051734065552897
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2659,
+            "active_boundary_nodes": 2642,
+            "conducting_edges": 5993,
+            "effective_conductance_over_k": 10.407100774323018,
+            "effective_k_over_intrinsic_k": 0.20353340679665827,
+            "hot_cold_flux_relative_balance": 4.63244525701817e-13,
+            "linear_residual_linf": 5.977884853791693e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.028733687099732143
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2645,
+            "conducting_edges": 6050,
+            "effective_conductance_over_k": 10.310766236129737,
+            "effective_k_over_intrinsic_k": 0.2016493761549028,
+            "hot_cold_flux_relative_balance": 4.035872249142383e-12,
+            "linear_residual_linf": 5.81756864903582e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.019211094129830585
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2646,
+            "conducting_edges": 6080,
+            "effective_conductance_over_k": 10.392901692659308,
+            "effective_k_over_intrinsic_k": 0.2032557129867233,
+            "hot_cold_flux_relative_balance": 2.650288626437719e-12,
+            "linear_residual_linf": 1.9168000520153328e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.027330119098413406
+          },
+          "projected_10A": {
+            "active_cells": 333,
+            "conducting_faces": 716,
+            "hot_face_ag_area_fraction": 0.21875,
+            "cold_face_ag_area_fraction": 0.4088541666666667,
+            "effective_conductance_over_k": 12.564088299228722,
+            "effective_k_over_intrinsic_k": 0.2457179718241366,
+            "hot_cold_flux_relative_balance": 8.173389619685532e-13,
+            "linear_residual_linf": 7.756906228451044e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.24195019932945183
+          },
+          "projected_5A": {
+            "active_cells": 1910,
+            "conducting_faces": 4718,
+            "hot_face_ag_area_fraction": 0.21875,
+            "cold_face_ag_area_fraction": 0.4088541666666667,
+            "effective_conductance_over_k": 13.433106302918661,
+            "effective_k_over_intrinsic_k": 0.26271350196208226,
+            "hot_cold_flux_relative_balance": 3.5118242586751975e-12,
+            "linear_residual_linf": 4.051203816857196e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.3278519422334601
+          }
         },
-        "projected_10A": {
-          "active_cells": 333,
-          "conducting_faces": 716,
-          "hot_face_ag_area_fraction": 0.21875,
-          "cold_face_ag_area_fraction": 0.4088541666666667,
-          "effective_conductance_over_k": 12.564088299228715,
-          "effective_k_over_intrinsic_k": 0.24571797182413646,
-          "hot_cold_flux_relative_balance": 6.886430679153629e-11,
-          "linear_residual_linf": 7.931117984583125e-10,
-          "grid_shape_xyz": [
-            8,
-            8,
-            6
-          ],
-          "actual_spacing_A_xyz": [
-            8.989049999999999,
-            9.05572453848255,
-            8.459280000000001
-          ],
-          "ag_volume_fraction": 0.4964192708333333,
-          "relative_effective_k_error_vs_voxel_reference": 0.24195019932945042
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 4575,
+            "conducting_faces": 10950,
+            "hot_face_ag_area_fraction": 0.3307291666666667,
+            "cold_face_ag_area_fraction": 0.5833333333333334,
+            "effective_conductance_over_k": 11.78303723221737,
+            "effective_k_over_intrinsic_k": 0.2338740340036711,
+            "hot_cold_flux_relative_balance": 7.341789419306853e-13,
+            "linear_residual_linf": 4.461986335968504e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 380,
+            "active_boundary_nodes": 376,
+            "conducting_edges": 715,
+            "effective_conductance_over_k": 13.084338953227842,
+            "effective_k_over_intrinsic_k": 0.25970274666499626,
+            "hot_cold_flux_relative_balance": 3.061706027744852e-12,
+            "linear_residual_linf": 9.483969165557937e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.11043856480843758
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 872,
+            "active_boundary_nodes": 869,
+            "conducting_edges": 1809,
+            "effective_conductance_over_k": 12.471503739493915,
+            "effective_k_over_intrinsic_k": 0.24753896912692905,
+            "hot_cold_flux_relative_balance": 6.765579486963763e-13,
+            "linear_residual_linf": 7.385869693621316e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.05842861171601227
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2659,
+            "active_boundary_nodes": 2656,
+            "conducting_edges": 6001,
+            "effective_conductance_over_k": 12.096031877358833,
+            "effective_k_over_intrinsic_k": 0.24008646623469493,
+            "hot_cold_flux_relative_balance": 3.657264727553222e-12,
+            "linear_residual_linf": 7.029932191926491e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.026563155065458498
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2661,
+            "conducting_edges": 6061,
+            "effective_conductance_over_k": 11.966096065546704,
+            "effective_k_over_intrinsic_k": 0.2375074527026868,
+            "hot_cold_flux_relative_balance": 2.7151350293915767e-13,
+            "linear_residual_linf": 2.7400304247748863e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.015535793507365902
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2661,
+            "conducting_edges": 6089,
+            "effective_conductance_over_k": 11.94815091374044,
+            "effective_k_over_intrinsic_k": 0.23715127076410614,
+            "hot_cold_flux_relative_balance": 3.0547658999839984e-12,
+            "linear_residual_linf": 6.446621014788434e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.014012828633997028
+          },
+          "projected_10A": {
+            "active_cells": 333,
+            "conducting_faces": 716,
+            "hot_face_ag_area_fraction": 0.3307291666666667,
+            "cold_face_ag_area_fraction": 0.5833333333333334,
+            "effective_conductance_over_k": 13.923878788065558,
+            "effective_k_over_intrinsic_k": 0.2763662404663583,
+            "hot_cold_flux_relative_balance": 2.0840863217880708e-12,
+            "linear_residual_linf": 8.811840146449867e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.18168843173937058
+          },
+          "projected_5A": {
+            "active_cells": 1910,
+            "conducting_faces": 4718,
+            "hot_face_ag_area_fraction": 0.3307291666666667,
+            "cold_face_ag_area_fraction": 0.5833333333333334,
+            "effective_conductance_over_k": 15.106839954150786,
+            "effective_k_over_intrinsic_k": 0.2998460864966824,
+            "hot_cold_flux_relative_balance": 1.4341996364508911e-12,
+            "linear_residual_linf": 4.17582635137137e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.2820836984920511
+          }
         },
-        "projected_5A": {
-          "active_cells": 1910,
-          "conducting_faces": 4718,
-          "hot_face_ag_area_fraction": 0.21875,
-          "cold_face_ag_area_fraction": 0.4088541666666667,
-          "effective_conductance_over_k": 13.433106302918674,
-          "effective_k_over_intrinsic_k": 0.2627135019620825,
-          "hot_cold_flux_relative_balance": 1.3655015276092502e-10,
-          "linear_residual_linf": 4.23950652361782e-10,
-          "grid_shape_xyz": [
-            15,
-            15,
-            11
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 4575,
+            "conducting_faces": 10950,
+            "hot_face_ag_area_fraction": 0.6475694444444444,
+            "cold_face_ag_area_fraction": 0.5208333333333334,
+            "effective_conductance_over_k": 26.838140213263454,
+            "effective_k_over_intrinsic_k": 0.2614689329513136,
+            "hot_cold_flux_relative_balance": 2.0827969664836164e-12,
+            "linear_residual_linf": 6.719069745031447e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 380,
+            "active_boundary_nodes": 370,
+            "conducting_edges": 712,
+            "effective_conductance_over_k": 28.71184489131757,
+            "effective_k_over_intrinsic_k": 0.2797233857168066,
+            "hot_cold_flux_relative_balance": 3.3540114660722257e-12,
+            "linear_residual_linf": 1.885391842648687e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.06981499698433397
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 872,
+            "active_boundary_nodes": 860,
+            "conducting_edges": 1803,
+            "effective_conductance_over_k": 28.20415789693588,
+            "effective_k_over_intrinsic_k": 0.27477727635008387,
+            "hot_cold_flux_relative_balance": 2.962299668355928e-12,
+            "linear_residual_linf": 1.028332974328805e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.05089837346469111
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 2659,
+            "active_boundary_nodes": 2645,
+            "conducting_edges": 5993,
+            "effective_conductance_over_k": 27.421626672739087,
+            "effective_k_over_intrinsic_k": 0.26715351395202086,
+            "hot_cold_flux_relative_balance": 1.4805982302171222e-12,
+            "linear_residual_linf": 3.7694292132073315e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.021740942361843506
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2649,
+            "conducting_edges": 6051,
+            "effective_conductance_over_k": 27.161396728188734,
+            "effective_k_over_intrinsic_k": 0.2646182396974384,
+            "hot_cold_flux_relative_balance": 2.911087247340417e-12,
+            "linear_residual_linf": 1.1799450305716164e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.012044668980659368
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 2665,
+            "active_boundary_nodes": 2650,
+            "conducting_edges": 6081,
+            "effective_conductance_over_k": 27.290297536653675,
+            "effective_k_over_intrinsic_k": 0.2658740479083678,
+            "hot_cold_flux_relative_balance": 8.878432804507425e-14,
+            "linear_residual_linf": 1.1823431123048067e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.016847565434760268
+          },
+          "projected_10A": {
+            "active_cells": 333,
+            "conducting_faces": 716,
+            "hot_face_ag_area_fraction": 0.6475694444444444,
+            "cold_face_ag_area_fraction": 0.5208333333333333,
+            "effective_conductance_over_k": 34.743050728133824,
+            "effective_k_over_intrinsic_k": 0.3384820382177253,
+            "hot_cold_flux_relative_balance": 4.695632902450126e-13,
+            "linear_residual_linf": 1.4382273150204128e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.29454017499184804
+          },
+          "projected_5A": {
+            "active_cells": 1910,
+            "conducting_faces": 4718,
+            "hot_face_ag_area_fraction": 0.6475694444444444,
+            "cold_face_ag_area_fraction": 0.5208333333333333,
+            "effective_conductance_over_k": 34.803499368622,
+            "effective_k_over_intrinsic_k": 0.3390709553856515,
+            "hot_cold_flux_relative_balance": 2.8849625989271675e-12,
+            "linear_residual_linf": 1.1473488825686218e-11,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.4964192708333333,
+            "relative_effective_k_error_vs_voxel_reference": 0.29679251587716404
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
           ],
-          "actual_spacing_A_xyz": [
-            4.79416,
-            4.82971975385736,
-            4.614152727272728
+          "component_nodes": 380,
+          "source_ag_voxels": 4575,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 716,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 9.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
           ],
-          "ag_volume_fraction": 0.4964192708333333,
-          "relative_effective_k_error_vs_voxel_reference": 0.3278519422334604
+          "component_nodes": 872,
+          "source_ag_voxels": 4575,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 1809,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 6.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 2659,
+          "source_ag_voxels": 4575,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6001,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 2665,
+          "source_ag_voxels": 4575,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6062,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 2665,
+          "source_ag_voxels": 4575,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 6090,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_4": {
+      "motif": "lower-Ag, through-connected path",
+      "roi_start_voxels_xyz": [
+        32,
+        32,
+        32
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
+      ],
+      "roi_size_A": [
+        71.91239999999999,
+        72.4457963078604,
+        50.755680000000005
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.2544487847222222,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 2345,
+            "conducting_faces": 4297,
+            "hot_face_ag_area_fraction": 0.3776041666666667,
+            "cold_face_ag_area_fraction": 0.2682291666666667,
+            "effective_conductance_over_k": 0.8727714391441472,
+            "effective_k_over_intrinsic_k": 0.017068936701574885,
+            "hot_cold_flux_relative_balance": 2.754659297952462e-11,
+            "linear_residual_linf": 5.999645225074346e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 364,
+            "active_boundary_nodes": 337,
+            "conducting_edges": 476,
+            "effective_conductance_over_k": 0.8690502939778023,
+            "effective_k_over_intrinsic_k": 0.01699616164449465,
+            "hot_cold_flux_relative_balance": 4.643759656349101e-13,
+            "linear_residual_linf": 8.894218694877054e-12,
+            "relative_effective_k_error_vs_voxel_reference": -0.004263596400443552
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 656,
+            "active_boundary_nodes": 628,
+            "conducting_edges": 992,
+            "effective_conductance_over_k": 0.8849653293678483,
+            "effective_k_over_intrinsic_k": 0.017307414647849583,
+            "hot_cold_flux_relative_balance": 6.3537855697173e-11,
+            "linear_residual_linf": 9.65094670846156e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.013971458822780383
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1583,
+            "active_boundary_nodes": 1546,
+            "conducting_edges": 2693,
+            "effective_conductance_over_k": 0.866093235638521,
+            "effective_k_over_intrinsic_k": 0.01693832996101799,
+            "hot_cold_flux_relative_balance": 8.820310760167266e-11,
+            "linear_residual_linf": 1.1143256456458417e-11,
+            "relative_effective_k_error_vs_voxel_reference": -0.007651720950189292
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1566,
+            "active_boundary_nodes": 1527,
+            "conducting_edges": 2681,
+            "effective_conductance_over_k": 0.9108622766358442,
+            "effective_k_over_intrinsic_k": 0.01781388556779044,
+            "hot_cold_flux_relative_balance": 2.023373540735147e-11,
+            "linear_residual_linf": 1.2784440173163603e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.04364354260841701
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1576,
+            "active_boundary_nodes": 1538,
+            "conducting_edges": 2675,
+            "effective_conductance_over_k": 0.8589124757828785,
+            "effective_k_over_intrinsic_k": 0.016797894642046778,
+            "hot_cold_flux_relative_balance": 3.6709083520303794e-11,
+            "linear_residual_linf": 3.3724134596013755e-12,
+            "relative_effective_k_error_vs_voxel_reference": -0.015879258577548024
+          },
+          "projected_10A": {
+            "active_cells": 277,
+            "conducting_faces": 466,
+            "hot_face_ag_area_fraction": 0.3776041666666667,
+            "cold_face_ag_area_fraction": 0.26822916666666663,
+            "effective_conductance_over_k": 2.1451263140988326,
+            "effective_k_over_intrinsic_k": 0.041952593348083045,
+            "hot_cold_flux_relative_balance": 1.2878035762447984e-11,
+            "linear_residual_linf": 9.823253321883385e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 1.4578328504910467
+          },
+          "projected_5A": {
+            "active_cells": 1466,
+            "conducting_faces": 3194,
+            "hot_face_ag_area_fraction": 0.37760416666666663,
+            "cold_face_ag_area_fraction": 0.2682291666666666,
+            "effective_conductance_over_k": 2.5322414951678853,
+            "effective_k_over_intrinsic_k": 0.049523469554075675,
+            "hot_cold_flux_relative_balance": 2.7661383412638032e-11,
+            "linear_residual_linf": 7.069012042393297e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 1.901379882058285
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 2345,
+            "conducting_faces": 4297,
+            "hot_face_ag_area_fraction": 0.2734375,
+            "cold_face_ag_area_fraction": 0.4401041666666667,
+            "effective_conductance_over_k": 1.8533757500363286,
+            "effective_k_over_intrinsic_k": 0.036786479974824496,
+            "hot_cold_flux_relative_balance": 8.121614717130525e-13,
+            "linear_residual_linf": 6.2798655164897355e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 364,
+            "active_boundary_nodes": 344,
+            "conducting_edges": 477,
+            "effective_conductance_over_k": 2.1459179288489434,
+            "effective_k_over_intrinsic_k": 0.042592964171281056,
+            "hot_cold_flux_relative_balance": 9.050991848705297e-12,
+            "linear_residual_linf": 1.1173284519827575e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.15784288685490794
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 656,
+            "active_boundary_nodes": 635,
+            "conducting_edges": 993,
+            "effective_conductance_over_k": 1.9653118818793536,
+            "effective_k_over_intrinsic_k": 0.03900822927332591,
+            "hot_cold_flux_relative_balance": 4.560287082790466e-12,
+            "linear_residual_linf": 8.270717444247566e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.06039581117905024
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1583,
+            "active_boundary_nodes": 1553,
+            "conducting_edges": 2694,
+            "effective_conductance_over_k": 1.8815124930076508,
+            "effective_k_over_intrinsic_k": 0.03734494834361104,
+            "hot_cold_flux_relative_balance": 1.3689965068445426e-11,
+            "linear_residual_linf": 1.1171508162988175e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.015181348396713699
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1566,
+            "active_boundary_nodes": 1536,
+            "conducting_edges": 2684,
+            "effective_conductance_over_k": 1.9456989399114106,
+            "effective_k_over_intrinsic_k": 0.0386189444254277,
+            "hot_cold_flux_relative_balance": 1.2040651148988588e-11,
+            "linear_residual_linf": 4.171996081936413e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.049813530728063334
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1576,
+            "active_boundary_nodes": 1547,
+            "conducting_edges": 2678,
+            "effective_conductance_over_k": 1.8646277154944202,
+            "effective_k_over_intrinsic_k": 0.03700981310195394,
+            "hot_cold_flux_relative_balance": 3.5381328019900404e-11,
+            "linear_residual_linf": 9.646616838665523e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.006071065437146668
+          },
+          "projected_10A": {
+            "active_cells": 277,
+            "conducting_faces": 466,
+            "hot_face_ag_area_fraction": 0.2734375,
+            "cold_face_ag_area_fraction": 0.4401041666666667,
+            "effective_conductance_over_k": 2.804231716535592,
+            "effective_k_over_intrinsic_k": 0.055659417084248694,
+            "hot_cold_flux_relative_balance": 2.3374518941269274e-13,
+            "linear_residual_linf": 1.042499420123022e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 0.5130400386865022
+          },
+          "projected_5A": {
+            "active_cells": 1466,
+            "conducting_faces": 3194,
+            "hot_face_ag_area_fraction": 0.27343750000000006,
+            "cold_face_ag_area_fraction": 0.4401041666666667,
+            "effective_conductance_over_k": 3.8374096610692017,
+            "effective_k_over_intrinsic_k": 0.07616631093255279,
+            "hot_cold_flux_relative_balance": 1.0134499000391768e-11,
+            "linear_residual_linf": 6.163958232718869e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 1.070497394278512
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 2345,
+            "conducting_faces": 4297,
+            "hot_face_ag_area_fraction": 0.2829861111111111,
+            "cold_face_ag_area_fraction": 0.3246527777777778,
+            "effective_conductance_over_k": 4.505168637515943,
+            "effective_k_over_intrinsic_k": 0.04389132879762162,
+            "hot_cold_flux_relative_balance": 3.318370601246911e-12,
+            "linear_residual_linf": 6.731060153697399e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 364,
+            "active_boundary_nodes": 360,
+            "conducting_edges": 485,
+            "effective_conductance_over_k": 4.88272296499558,
+            "effective_k_over_intrinsic_k": 0.04756962864823737,
+            "hot_cold_flux_relative_balance": 1.2220194891910774e-12,
+            "linear_residual_linf": 1.2438050589480554e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.08380470474193223
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 656,
+            "active_boundary_nodes": 652,
+            "conducting_edges": 1002,
+            "effective_conductance_over_k": 4.812645707510659,
+            "effective_k_over_intrinsic_k": 0.04688690527049447,
+            "hot_cold_flux_relative_balance": 5.297535511019254e-12,
+            "linear_residual_linf": 1.0325074129013956e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.0682498469500693
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1583,
+            "active_boundary_nodes": 1579,
+            "conducting_edges": 2713,
+            "effective_conductance_over_k": 4.647014506230903,
+            "effective_k_over_intrinsic_k": 0.04527325346310659,
+            "hot_cold_flux_relative_balance": 3.4412744839204842e-12,
+            "linear_residual_linf": 4.646949491871055e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.03148514076338124
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1566,
+            "active_boundary_nodes": 1562,
+            "conducting_edges": 2702,
+            "effective_conductance_over_k": 4.626620970470713,
+            "effective_k_over_intrinsic_k": 0.045074570693289094,
+            "hot_cold_flux_relative_balance": 1.7409492811244938e-11,
+            "linear_residual_linf": 1.1580070236050233e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.02695844322971579
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1576,
+            "active_boundary_nodes": 1572,
+            "conducting_edges": 2696,
+            "effective_conductance_over_k": 4.584307115845359,
+            "effective_k_over_intrinsic_k": 0.044662330563010604,
+            "hot_cold_flux_relative_balance": 6.353227653125013e-12,
+            "linear_residual_linf": 9.803713396649982e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.017566152279052456
+          },
+          "projected_10A": {
+            "active_cells": 277,
+            "conducting_faces": 466,
+            "hot_face_ag_area_fraction": 0.2829861111111111,
+            "cold_face_ag_area_fraction": 0.3246527777777778,
+            "effective_conductance_over_k": 9.273053628955703,
+            "effective_k_over_intrinsic_k": 0.09034215554046122,
+            "hot_cold_flux_relative_balance": 5.423096224353921e-13,
+            "linear_residual_linf": 1.4241469115106042e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 1.0583144328352319
+          },
+          "projected_5A": {
+            "active_cells": 1466,
+            "conducting_faces": 3194,
+            "hot_face_ag_area_fraction": 0.28298611111111116,
+            "cold_face_ag_area_fraction": 0.32465277777777773,
+            "effective_conductance_over_k": 9.513493585326543,
+            "effective_k_over_intrinsic_k": 0.09268462705046827,
+            "hot_cold_flux_relative_balance": 3.711427834588364e-12,
+            "linear_residual_linf": 7.412848113119708e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.2544487847222222,
+            "relative_effective_k_error_vs_voxel_reference": 1.1116842344379114
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 364,
+          "source_ag_voxels": 2345,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 485,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 3.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 656,
+          "source_ag_voxels": 2345,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 1002,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 3.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 1583,
+          "source_ag_voxels": 2345,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2713,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 1566,
+          "source_ag_voxels": 2345,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2702,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 1576,
+          "source_ag_voxels": 2345,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2696,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_5": {
+      "motif": "higher-Ag, through-connected network",
+      "roi_start_voxels_xyz": [
+        8,
+        8,
+        32
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
+      ],
+      "roi_size_A": [
+        71.91239999999999,
+        72.4457963078604,
+        50.755680000000005
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.5857204861111112,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 5398,
+            "conducting_faces": 13105,
+            "hot_face_ag_area_fraction": 0.5546875,
+            "cold_face_ag_area_fraction": 0.3723958333333333,
+            "effective_conductance_over_k": 12.693181534626403,
+            "effective_k_over_intrinsic_k": 0.24824266977457057,
+            "hot_cold_flux_relative_balance": 2.9040143067235768e-12,
+            "linear_residual_linf": 7.033040816395442e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 419,
+            "active_boundary_nodes": 416,
+            "conducting_edges": 809,
+            "effective_conductance_over_k": 14.336846818159582,
+            "effective_k_over_intrinsic_k": 0.28038810605364467,
+            "hot_cold_flux_relative_balance": 2.4295845317730025e-12,
+            "linear_residual_linf": 1.312461250790875e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.12949198583895913
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 993,
+            "active_boundary_nodes": 990,
+            "conducting_edges": 2130,
+            "effective_conductance_over_k": 13.275333599667304,
+            "effective_k_over_intrinsic_k": 0.25962791487220843,
+            "hot_cold_flux_relative_balance": 1.5385339122427736e-12,
+            "linear_residual_linf": 9.882761276003293e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.04586336872696709
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3086,
+            "active_boundary_nodes": 3083,
+            "conducting_edges": 7130,
+            "effective_conductance_over_k": 12.927922137981174,
+            "effective_k_over_intrinsic_k": 0.2528335309327693,
+            "hot_cold_flux_relative_balance": 2.3765511244844624e-12,
+            "linear_residual_linf": 8.263612016889965e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.018493440963907096
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3119,
+            "active_boundary_nodes": 3116,
+            "conducting_edges": 7226,
+            "effective_conductance_over_k": 12.902739161072255,
+            "effective_k_over_intrinsic_k": 0.2523410232503031,
+            "hot_cold_flux_relative_balance": 5.690707146753439e-12,
+            "linear_residual_linf": 8.342659896243276e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.016509464224882267
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3125,
+            "active_boundary_nodes": 3122,
+            "conducting_edges": 7261,
+            "effective_conductance_over_k": 12.826646636377642,
+            "effective_k_over_intrinsic_k": 0.25085286904494897,
+            "hot_cold_flux_relative_balance": 9.61117649446625e-13,
+            "linear_residual_linf": 3.2152058793144533e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.010514708340627815
+          },
+          "projected_10A": {
+            "active_cells": 363,
+            "conducting_faces": 806,
+            "hot_face_ag_area_fraction": 0.5546875,
+            "cold_face_ag_area_fraction": 0.3723958333333333,
+            "effective_conductance_over_k": 16.05383852910207,
+            "effective_k_over_intrinsic_k": 0.3139675995118004,
+            "hot_cold_flux_relative_balance": 1.7245905176324747e-12,
+            "linear_residual_linf": 9.747758156208874e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.585720486111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.2647608076279341
+          },
+          "projected_5A": {
+            "active_cells": 2156,
+            "conducting_faces": 5446,
+            "hot_face_ag_area_fraction": 0.5546874999999999,
+            "cold_face_ag_area_fraction": 0.37239583333333337,
+            "effective_conductance_over_k": 18.091421599079343,
+            "effective_k_over_intrinsic_k": 0.35381695168554694,
+            "hot_cold_flux_relative_balance": 9.8619823750302e-13,
+            "linear_residual_linf": 5.2375881409716385e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.5857204861111112,
+            "relative_effective_k_error_vs_voxel_reference": 0.4252866036562066
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 5398,
+            "conducting_faces": 13105,
+            "hot_face_ag_area_fraction": 0.4921875,
+            "cold_face_ag_area_fraction": 0.6614583333333334,
+            "effective_conductance_over_k": 15.252482545821188,
+            "effective_k_over_intrinsic_k": 0.3027368539419021,
+            "hot_cold_flux_relative_balance": 2.7985003992443855e-12,
+            "linear_residual_linf": 9.85350689930442e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 419,
+            "active_boundary_nodes": 409,
+            "conducting_edges": 806,
+            "effective_conductance_over_k": 16.765279012214734,
+            "effective_k_over_intrinsic_k": 0.33276339168843333,
+            "hot_cold_flux_relative_balance": 2.0544578524983808e-12,
+            "linear_residual_linf": 9.126033262418787e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.09918362219716272
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 993,
+            "active_boundary_nodes": 978,
+            "conducting_edges": 2122,
+            "effective_conductance_over_k": 16.009145826627556,
+            "effective_k_over_intrinsic_k": 0.317755383577095,
+            "hot_cold_flux_relative_balance": 4.607012564606971e-13,
+            "linear_residual_linf": 1.0587974941245193e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.04960918844084669
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3086,
+            "active_boundary_nodes": 3063,
+            "conducting_edges": 7112,
+            "effective_conductance_over_k": 15.474774308001354,
+            "effective_k_over_intrinsic_k": 0.3071489821667636,
+            "hot_cold_flux_relative_balance": 7.751342252230462e-12,
+            "linear_residual_linf": 9.669487432972801e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.014574136473348766
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3119,
+            "active_boundary_nodes": 3095,
+            "conducting_edges": 7208,
+            "effective_conductance_over_k": 15.615047475878686,
+            "effective_k_over_intrinsic_k": 0.3099331753240462,
+            "hot_cold_flux_relative_balance": 4.1697333096140906e-12,
+            "linear_residual_linf": 3.500866263550506e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.02377087985305264
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3125,
+            "active_boundary_nodes": 3104,
+            "conducting_edges": 7247,
+            "effective_conductance_over_k": 15.469303704687508,
+            "effective_k_over_intrinsic_k": 0.3070403996306799,
+            "hot_cold_flux_relative_balance": 8.828213371472494e-13,
+            "linear_residual_linf": 8.975931109489466e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.01421546677499569
+          },
+          "projected_10A": {
+            "active_cells": 363,
+            "conducting_faces": 806,
+            "hot_face_ag_area_fraction": 0.4921875,
+            "cold_face_ag_area_fraction": 0.6614583333333334,
+            "effective_conductance_over_k": 17.60870666470771,
+            "effective_k_over_intrinsic_k": 0.34950405231703924,
+            "hot_cold_flux_relative_balance": 1.0652871094538173e-13,
+            "linear_residual_linf": 6.477929304082863e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.585720486111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.15448135159689608
+          },
+          "projected_5A": {
+            "active_cells": 2156,
+            "conducting_faces": 5446,
+            "hot_face_ag_area_fraction": 0.4921875,
+            "cold_face_ag_area_fraction": 0.6614583333333334,
+            "effective_conductance_over_k": 19.899479103143136,
+            "effective_k_over_intrinsic_k": 0.39497214179200557,
+            "hot_cold_flux_relative_balance": 6.768185984428792e-13,
+            "linear_residual_linf": 5.488054455327074e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.5857204861111112,
+            "relative_effective_k_error_vs_voxel_reference": 0.30467148828799107
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 5398,
+            "conducting_faces": 13105,
+            "hot_face_ag_area_fraction": 0.5659722222222222,
+            "cold_face_ag_area_fraction": 0.5833333333333334,
+            "effective_conductance_over_k": 38.99743787776097,
+            "effective_k_over_intrinsic_k": 0.37993014376957895,
+            "hot_cold_flux_relative_balance": 4.98688009676766e-13,
+            "linear_residual_linf": 9.921730104167636e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 419,
+            "active_boundary_nodes": 409,
+            "conducting_edges": 806,
+            "effective_conductance_over_k": 41.37269347750826,
+            "effective_k_over_intrinsic_k": 0.4030709255904306,
+            "hot_cold_flux_relative_balance": 1.92007508288444e-13,
+            "linear_residual_linf": 1.0604850331219495e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.06090799111450906
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 993,
+            "active_boundary_nodes": 978,
+            "conducting_edges": 2122,
+            "effective_conductance_over_k": 40.34271262843473,
+            "effective_k_over_intrinsic_k": 0.39303640041739163,
+            "hot_cold_flux_relative_balance": 1.3825943057149352e-13,
+            "linear_residual_linf": 1.0821121776416476e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.03449649063845114
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3086,
+            "active_boundary_nodes": 3063,
+            "conducting_edges": 7112,
+            "effective_conductance_over_k": 39.53992509889891,
+            "effective_k_over_intrinsic_k": 0.3852152922084623,
+            "hot_cold_flux_relative_balance": 6.140437853686966e-13,
+            "linear_residual_linf": 3.0911939674638234e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.013910842626082038
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3119,
+            "active_boundary_nodes": 3095,
+            "conducting_edges": 7208,
+            "effective_conductance_over_k": 39.463272969727285,
+            "effective_k_over_intrinsic_k": 0.3844685135470613,
+            "hot_cold_flux_relative_balance": 1.2735053105925692e-12,
+            "linear_residual_linf": 9.639400389005459e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.011945274287672171
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3125,
+            "active_boundary_nodes": 3104,
+            "conducting_edges": 7247,
+            "effective_conductance_over_k": 39.39351291958124,
+            "effective_k_over_intrinsic_k": 0.3837888805423384,
+            "hot_cold_flux_relative_balance": 1.7595141620117942e-12,
+            "linear_residual_linf": 1.1798784171901389e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.01015643753473717
+          },
+          "projected_10A": {
+            "active_cells": 363,
+            "conducting_faces": 806,
+            "hot_face_ag_area_fraction": 0.5659722222222222,
+            "cold_face_ag_area_fraction": 0.5833333333333333,
+            "effective_conductance_over_k": 47.93718255629627,
+            "effective_k_over_intrinsic_k": 0.4670250573284041,
+            "hot_cold_flux_relative_balance": 3.575156042265692e-13,
+            "linear_residual_linf": 1.5009327114512416e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.585720486111111,
+            "relative_effective_k_error_vs_voxel_reference": 0.22923928250254
+          },
+          "projected_5A": {
+            "active_cells": 2156,
+            "conducting_faces": 5446,
+            "hot_face_ag_area_fraction": 0.5659722222222222,
+            "cold_face_ag_area_fraction": 0.5833333333333334,
+            "effective_conductance_over_k": 48.1424104301787,
+            "effective_k_over_intrinsic_k": 0.4690244772870712,
+            "hot_cold_flux_relative_balance": 9.645127314359568e-13,
+            "linear_residual_linf": 1.2462919585232157e-11,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.5857204861111112,
+            "relative_effective_k_error_vs_voxel_reference": 0.23450188140777375
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 419,
+          "source_ag_voxels": 5398,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 809,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 10.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 993,
+          "source_ag_voxels": 5398,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2130,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 6.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 3086,
+          "source_ag_voxels": 5398,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7130,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 3119,
+          "source_ag_voxels": 5398,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7226,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 3125,
+          "source_ag_voxels": 5398,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7261,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_6": {
+      "motif": "low-volume-fraction network spanning x/y/z",
+      "roi_start_voxels_xyz": [
+        36,
+        28,
+        32
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
+      ],
+      "roi_size_A": [
+        71.91239999999999,
+        72.4457963078604,
+        50.755680000000005
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.23914930555555555,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 2204,
+            "conducting_faces": 4208,
+            "hot_face_ag_area_fraction": 0.265625,
+            "cold_face_ag_area_fraction": 0.3229166666666667,
+            "effective_conductance_over_k": 0.912716671548513,
+            "effective_k_over_intrinsic_k": 0.01785015227859746,
+            "hot_cold_flux_relative_balance": 9.279261141339678e-12,
+            "linear_residual_linf": 5.4356519285647664e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 321,
+            "active_boundary_nodes": 252,
+            "conducting_edges": 356,
+            "effective_conductance_over_k": 1.30730486592679,
+            "effective_k_over_intrinsic_k": 0.025567179453130324,
+            "hot_cold_flux_relative_balance": 8.187747559118689e-12,
+            "linear_residual_linf": 1.1119105636225868e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.4323227642032876
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 598,
+            "active_boundary_nodes": 508,
+            "conducting_edges": 827,
+            "effective_conductance_over_k": 0.9286910033554159,
+            "effective_k_over_intrinsic_k": 0.018162564951873475,
+            "hot_cold_flux_relative_balance": 1.052827269559207e-11,
+            "linear_residual_linf": 8.347988966761477e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.017501961238202027
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1467,
+            "active_boundary_nodes": 1295,
+            "conducting_edges": 2379,
+            "effective_conductance_over_k": 0.9055296665270106,
+            "effective_k_over_intrinsic_k": 0.017709594821875202,
+            "hot_cold_flux_relative_balance": 2.2412406445600877e-11,
+            "linear_residual_linf": 1.2001066806988092e-11,
+            "relative_effective_k_error_vs_voxel_reference": -0.007874300147612005
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1442,
+            "active_boundary_nodes": 1281,
+            "conducting_edges": 2381,
+            "effective_conductance_over_k": 0.9560689676056935,
+            "effective_k_over_intrinsic_k": 0.018698000368119708,
+            "hot_cold_flux_relative_balance": 1.0381032534174979e-10,
+            "linear_residual_linf": 1.124411674879866e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.04749808720336962
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1444,
+            "active_boundary_nodes": 1277,
+            "conducting_edges": 2329,
+            "effective_conductance_over_k": 0.8966101367001167,
+            "effective_k_over_intrinsic_k": 0.017535154088374163,
+            "hot_cold_flux_relative_balance": 4.4125975230271415e-11,
+            "linear_residual_linf": 4.652278562389256e-12,
+            "relative_effective_k_error_vs_voxel_reference": -0.017646806890324534
+          },
+          "projected_10A": {
+            "active_cells": 254,
+            "conducting_faces": 415,
+            "hot_face_ag_area_fraction": 0.265625,
+            "cold_face_ag_area_fraction": 0.3229166666666667,
+            "effective_conductance_over_k": 2.0786180224479684,
+            "effective_k_over_intrinsic_k": 0.040651879587981436,
+            "hot_cold_flux_relative_balance": 3.4824359465675795e-14,
+            "linear_residual_linf": 7.76137487612516e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 1.2773967949126974
+          },
+          "projected_5A": {
+            "active_cells": 1367,
+            "conducting_faces": 2909,
+            "hot_face_ag_area_fraction": 0.265625,
+            "cold_face_ag_area_fraction": 0.3229166666666667,
+            "effective_conductance_over_k": 2.362480682557341,
+            "effective_k_over_intrinsic_k": 0.04620342900863944,
+            "hot_cold_flux_relative_balance": 6.0118422191924005e-12,
+            "linear_residual_linf": 8.58557669403126e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 1.5884053137203704
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 2204,
+            "conducting_faces": 4208,
+            "hot_face_ag_area_fraction": 0.3880208333333333,
+            "cold_face_ag_area_fraction": 0.20833333333333334,
+            "effective_conductance_over_k": 0.8787945117263936,
+            "effective_k_over_intrinsic_k": 0.017442634990219863,
+            "hot_cold_flux_relative_balance": 2.2624030600656942e-11,
+            "linear_residual_linf": 9.708234216532219e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 321,
+            "active_boundary_nodes": 288,
+            "conducting_edges": 410,
+            "effective_conductance_over_k": 1.223775447792889,
+            "effective_k_over_intrinsic_k": 0.024289942826236165,
+            "hot_cold_flux_relative_balance": 4.54803213864835e-12,
+            "linear_residual_linf": 1.184297104828147e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.39256155046847035
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 598,
+            "active_boundary_nodes": 561,
+            "conducting_edges": 900,
+            "effective_conductance_over_k": 0.9815421442285868,
+            "effective_k_over_intrinsic_k": 0.019482007592040333,
+            "hot_cold_flux_relative_balance": 1.1340415804193478e-11,
+            "linear_residual_linf": 1.0205170042354439e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.11691883726076661
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1467,
+            "active_boundary_nodes": 1415,
+            "conducting_edges": 2556,
+            "effective_conductance_over_k": 0.9144340436622113,
+            "effective_k_over_intrinsic_k": 0.01815002145939287,
+            "hot_cold_flux_relative_balance": 6.259802692034115e-11,
+            "linear_residual_linf": 8.910205906431656e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.040555023341922854
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1442,
+            "active_boundary_nodes": 1392,
+            "conducting_edges": 2547,
+            "effective_conductance_over_k": 0.9453944044307991,
+            "effective_k_over_intrinsic_k": 0.018764534027286714,
+            "hot_cold_flux_relative_balance": 1.172070816967155e-11,
+            "linear_residual_linf": 4.638067707674054e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.07578551278565673
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1444,
+            "active_boundary_nodes": 1391,
+            "conducting_edges": 2511,
+            "effective_conductance_over_k": 0.8653977144575358,
+            "effective_k_over_intrinsic_k": 0.017176730456588213,
+            "hot_cold_flux_relative_balance": 3.025987941076141e-12,
+            "linear_residual_linf": 9.979572723750607e-12,
+            "relative_effective_k_error_vs_voxel_reference": -0.015244516311941606
+          },
+          "projected_10A": {
+            "active_cells": 254,
+            "conducting_faces": 415,
+            "hot_face_ag_area_fraction": 0.3880208333333333,
+            "cold_face_ag_area_fraction": 0.20833333333333334,
+            "effective_conductance_over_k": 1.7017055102982268,
+            "effective_k_over_intrinsic_k": 0.03377607356544251,
+            "hot_cold_flux_relative_balance": 7.083039466113689e-12,
+            "linear_residual_linf": 1.1193712623480678e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 0.9364088960401254
+          },
+          "projected_5A": {
+            "active_cells": 1367,
+            "conducting_faces": 2909,
+            "hot_face_ag_area_fraction": 0.3880208333333333,
+            "cold_face_ag_area_fraction": 0.20833333333333334,
+            "effective_conductance_over_k": 2.1993995264423907,
+            "effective_k_over_intrinsic_k": 0.04365448648744086,
+            "hot_cold_flux_relative_balance": 1.2227902309327989e-12,
+            "linear_residual_linf": 6.059153179194254e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 1.5027460880720176
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 2204,
+            "conducting_faces": 4208,
+            "hot_face_ag_area_fraction": 0.3645833333333333,
+            "cold_face_ag_area_fraction": 0.2465277777777778,
+            "effective_conductance_over_k": 3.5458132962261693,
+            "effective_k_over_intrinsic_k": 0.034544868297194914,
+            "hot_cold_flux_relative_balance": 1.1671669709286144e-11,
+            "linear_residual_linf": 5.583977724654687e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 321,
+            "active_boundary_nodes": 300,
+            "conducting_edges": 411,
+            "effective_conductance_over_k": 4.05142260350386,
+            "effective_k_over_intrinsic_k": 0.03947073592489352,
+            "hot_cold_flux_relative_balance": 1.4453590489470515e-12,
+            "linear_residual_linf": 2.2637891561316792e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.1425933248701543
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 598,
+            "active_boundary_nodes": 571,
+            "conducting_edges": 899,
+            "effective_conductance_over_k": 3.8339330731844505,
+            "effective_k_over_intrinsic_k": 0.037351857531352874,
+            "hot_cold_flux_relative_balance": 3.326441459730858e-12,
+            "linear_residual_linf": 9.549361301708359e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.08125633046300804
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 1467,
+            "active_boundary_nodes": 1426,
+            "conducting_edges": 2552,
+            "effective_conductance_over_k": 3.642659831874038,
+            "effective_k_over_intrinsic_k": 0.03548838972359261,
+            "hot_cold_flux_relative_balance": 1.0040791347907535e-12,
+            "linear_residual_linf": 4.7695181137896725e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.027312925852848387
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 1442,
+            "active_boundary_nodes": 1403,
+            "conducting_edges": 2545,
+            "effective_conductance_over_k": 3.7065141369386256,
+            "effective_k_over_intrinsic_k": 0.03611048636951945,
+            "hot_cold_flux_relative_balance": 2.374816850343459e-12,
+            "linear_residual_linf": 1.1625367335454939e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.04532129226417295
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 1444,
+            "active_boundary_nodes": 1402,
+            "conducting_edges": 2508,
+            "effective_conductance_over_k": 3.590262160027817,
+            "effective_k_over_intrinsic_k": 0.034977908623266815,
+            "hot_cold_flux_relative_balance": 6.8035931109842936e-12,
+            "linear_residual_linf": 1.3060663661690342e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.012535590593265184
+          },
+          "projected_10A": {
+            "active_cells": 254,
+            "conducting_faces": 415,
+            "hot_face_ag_area_fraction": 0.3645833333333333,
+            "cold_face_ag_area_fraction": 0.24652777777777773,
+            "effective_conductance_over_k": 5.841994388303956,
+            "effective_k_over_intrinsic_k": 0.05691527158288355,
+            "hot_cold_flux_relative_balance": 3.861344945607316e-12,
+            "linear_residual_linf": 1.6709744699028306e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 0.6475752952141126
+          },
+          "projected_5A": {
+            "active_cells": 1367,
+            "conducting_faces": 2909,
+            "hot_face_ag_area_fraction": 0.3645833333333333,
+            "cold_face_ag_area_fraction": 0.2465277777777777,
+            "effective_conductance_over_k": 6.825065526653672,
+            "effective_k_over_intrinsic_k": 0.06649278177982718,
+            "hot_cold_flux_relative_balance": 1.0592971317454551e-13,
+            "linear_residual_linf": 1.3197443138324161e-11,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.23914930555555555,
+            "relative_effective_k_error_vs_voxel_reference": 0.924823716442609
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 321,
+          "source_ag_voxels": 2204,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 418,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 3.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 598,
+          "source_ag_voxels": 2204,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 912,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 3.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 1467,
+          "source_ag_voxels": 2204,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2583,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 1442,
+          "source_ag_voxels": 2204,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2573,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 1444,
+          "source_ag_voxels": 2204,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2540,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_7": {
+      "motif": "high-volume-fraction network spanning x/y/z",
+      "roi_start_voxels_xyz": [
+        28,
+        0,
+        28
+      ],
+      "roi_shape_voxels_xyz": [
+        24,
+        24,
+        16
+      ],
+      "roi_size_A": [
+        71.91239999999999,
+        72.4457963078604,
+        50.755680000000005
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.6145833333333334,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 5664,
+            "conducting_faces": 13992,
+            "hot_face_ag_area_fraction": 0.578125,
+            "cold_face_ag_area_fraction": 0.6223958333333334,
+            "effective_conductance_over_k": 17.287250903181658,
+            "effective_k_over_intrinsic_k": 0.33808965116916057,
+            "hot_cold_flux_relative_balance": 7.02723019485684e-12,
+            "linear_residual_linf": 6.0285110237146e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 426,
+            "active_boundary_nodes": 424,
+            "conducting_edges": 845,
+            "effective_conductance_over_k": 18.981568360693522,
+            "effective_k_over_intrinsic_k": 0.37122570046862313,
+            "hot_cold_flux_relative_balance": 1.1576247908409534e-12,
+            "linear_residual_linf": 1.482103328953599e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.09800965272043538
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 998,
+            "active_boundary_nodes": 996,
+            "conducting_edges": 2222,
+            "effective_conductance_over_k": 18.305169336791682,
+            "effective_k_over_intrinsic_k": 0.357997251866651,
+            "hot_cold_flux_relative_balance": 1.6275761432340174e-12,
+            "linear_residual_linf": 8.904876835913456e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.05888260888390757
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3230,
+            "active_boundary_nodes": 3226,
+            "conducting_edges": 7637,
+            "effective_conductance_over_k": 17.59086890399208,
+            "effective_k_over_intrinsic_k": 0.3440275590850908,
+            "hot_cold_flux_relative_balance": 2.1064794395392254e-12,
+            "linear_residual_linf": 8.94040397270146e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.017563116455638725
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3220,
+            "active_boundary_nodes": 3216,
+            "conducting_edges": 7630,
+            "effective_conductance_over_k": 17.602737424301598,
+            "effective_k_over_intrinsic_k": 0.3442596737176493,
+            "hot_cold_flux_relative_balance": 3.5037226300285907e-12,
+            "linear_residual_linf": 7.551292924290465e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.018249664037783955
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3236,
+            "active_boundary_nodes": 3232,
+            "conducting_edges": 7675,
+            "effective_conductance_over_k": 17.63131341408962,
+            "effective_k_over_intrinsic_k": 0.3448185391192886,
+            "hot_cold_flux_relative_balance": 8.604059749942023e-14,
+            "linear_residual_linf": 3.0591085220521563e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.019902673527150645
+          },
+          "projected_10A": {
+            "active_cells": 361,
+            "conducting_faces": 842,
+            "hot_face_ag_area_fraction": 0.578125,
+            "cold_face_ag_area_fraction": 0.6223958333333334,
+            "effective_conductance_over_k": 20.39257707788032,
+            "effective_k_over_intrinsic_k": 0.39882103344909886,
+            "hot_cold_flux_relative_balance": 2.9836236112175435e-12,
+            "linear_residual_linf": 1.4275247650630263e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.1796310004459492
+          },
+          "projected_5A": {
+            "active_cells": 2150,
+            "conducting_faces": 5537,
+            "hot_face_ag_area_fraction": 0.578125,
+            "cold_face_ag_area_fraction": 0.6223958333333334,
+            "effective_conductance_over_k": 22.414305829513108,
+            "effective_k_over_intrinsic_k": 0.4383603200728842,
+            "hot_cold_flux_relative_balance": 1.8779324234527357e-12,
+            "linear_residual_linf": 5.7767124417296145e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.29658011878498464
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 5664,
+            "conducting_faces": 13992,
+            "hot_face_ag_area_fraction": 0.6380208333333334,
+            "cold_face_ag_area_fraction": 0.5052083333333334,
+            "effective_conductance_over_k": 16.524219147469676,
+            "effective_k_over_intrinsic_k": 0.3279787472972438,
+            "hot_cold_flux_relative_balance": 1.1187330663731414e-11,
+            "linear_residual_linf": 5.796918500777792e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 426,
+            "active_boundary_nodes": 425,
+            "conducting_edges": 846,
+            "effective_conductance_over_k": 17.919000530975882,
+            "effective_k_over_intrinsic_k": 0.3556628785008615,
+            "hot_cold_flux_relative_balance": 2.453928003769028e-12,
+            "linear_residual_linf": 1.2740475341388446e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.08440830825702202
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 998,
+            "active_boundary_nodes": 997,
+            "conducting_edges": 2223,
+            "effective_conductance_over_k": 17.432759147211673,
+            "effective_k_over_intrinsic_k": 0.34601178161647506,
+            "hot_cold_flux_relative_balance": 2.1337363697238255e-13,
+            "linear_residual_linf": 1.0771827874123119e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.05498232573858848
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3230,
+            "active_boundary_nodes": 3229,
+            "conducting_edges": 7640,
+            "effective_conductance_over_k": 16.761864084250508,
+            "effective_k_over_intrinsic_k": 0.3326956109487916,
+            "hot_cold_flux_relative_balance": 5.812364706219515e-12,
+            "linear_residual_linf": 9.979572723750607e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.014381613718625891
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3220,
+            "active_boundary_nodes": 3219,
+            "conducting_edges": 7633,
+            "effective_conductance_over_k": 16.83547932609316,
+            "effective_k_over_intrinsic_k": 0.33415675320223565,
+            "hot_cold_flux_relative_balance": 8.018965019022588e-14,
+            "linear_residual_linf": 3.006483950684924e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.01883660437117525
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3236,
+            "active_boundary_nodes": 3235,
+            "conducting_edges": 7678,
+            "effective_conductance_over_k": 16.895890437177073,
+            "effective_k_over_intrinsic_k": 0.335355815037431,
+            "hot_cold_flux_relative_balance": 2.0341604520050577e-12,
+            "linear_residual_linf": 8.071987522839663e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.022492517582248836
+          },
+          "projected_10A": {
+            "active_cells": 361,
+            "conducting_faces": 842,
+            "hot_face_ag_area_fraction": 0.6380208333333334,
+            "cold_face_ag_area_fraction": 0.5052083333333334,
+            "effective_conductance_over_k": 19.380690033764925,
+            "effective_k_over_intrinsic_k": 0.3846750265354445,
+            "hot_cold_flux_relative_balance": 1.4107694011108033e-12,
+            "linear_residual_linf": 1.5770496020195424e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.1728657106761172
+          },
+          "projected_5A": {
+            "active_cells": 2150,
+            "conducting_faces": 5537,
+            "hot_face_ag_area_fraction": 0.6380208333333334,
+            "cold_face_ag_area_fraction": 0.5052083333333334,
+            "effective_conductance_over_k": 21.949926456975007,
+            "effective_k_over_intrinsic_k": 0.4356701710608624,
+            "hot_cold_flux_relative_balance": 3.9152816324300256e-13,
+            "linear_residual_linf": 6.589839784965079e-12,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.32834878677678153
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 5664,
+            "conducting_faces": 13992,
+            "hot_face_ag_area_fraction": 0.5434027777777778,
+            "cold_face_ag_area_fraction": 0.4565972222222222,
+            "effective_conductance_over_k": 39.55374633937013,
+            "effective_k_over_intrinsic_k": 0.3853499447950184,
+            "hot_cold_flux_relative_balance": 2.48765204701026e-12,
+            "linear_residual_linf": 6.545208819375148e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 426,
+            "active_boundary_nodes": 424,
+            "conducting_edges": 846,
+            "effective_conductance_over_k": 42.34407859126828,
+            "effective_k_over_intrinsic_k": 0.4125345854104245,
+            "hot_cold_flux_relative_balance": 1.3395645502940641e-12,
+            "linear_residual_linf": 1.6400214519762812e-11,
+            "relative_effective_k_error_vs_voxel_reference": 0.07054533413743343
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 998,
+            "active_boundary_nodes": 996,
+            "conducting_edges": 2223,
+            "effective_conductance_over_k": 41.50874129873583,
+            "effective_k_over_intrinsic_k": 0.4043963631343162,
+            "hot_cold_flux_relative_balance": 9.832525262167648e-13,
+            "linear_residual_linf": 8.078870905592339e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.049426290561503265
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 3230,
+            "active_boundary_nodes": 3228,
+            "conducting_edges": 7640,
+            "effective_conductance_over_k": 40.43660291455877,
+            "effective_k_over_intrinsic_k": 0.3939511207643407,
+            "hot_cold_flux_relative_balance": 1.158858312662735e-12,
+            "linear_residual_linf": 3.731237541160226e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.022320428705128226
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 3220,
+            "active_boundary_nodes": 3218,
+            "conducting_edges": 7633,
+            "effective_conductance_over_k": 40.08631262346874,
+            "effective_k_over_intrinsic_k": 0.3905384391140209,
+            "hot_cold_flux_relative_balance": 1.6640530811533155e-12,
+            "linear_residual_linf": 9.809930645587883e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.01346437021487698
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 3236,
+            "active_boundary_nodes": 3234,
+            "conducting_edges": 7678,
+            "effective_conductance_over_k": 40.04991982939018,
+            "effective_k_over_intrinsic_k": 0.39018388455251907,
+            "hot_cold_flux_relative_balance": 2.650391804712325e-12,
+            "linear_residual_linf": 8.910205906431656e-12,
+            "relative_effective_k_error_vs_voxel_reference": 0.012544285584553621
+          },
+          "projected_10A": {
+            "active_cells": 361,
+            "conducting_faces": 842,
+            "hot_face_ag_area_fraction": 0.5434027777777779,
+            "cold_face_ag_area_fraction": 0.4565972222222222,
+            "effective_conductance_over_k": 49.042371244077,
+            "effective_k_over_intrinsic_k": 0.4777922902516854,
+            "hot_cold_flux_relative_balance": 2.1718027368691436e-13,
+            "linear_residual_linf": 1.430910945288133e-11,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.2398919390162115
+          },
+          "projected_5A": {
+            "active_cells": 2150,
+            "conducting_faces": 5537,
+            "hot_face_ag_area_fraction": 0.5434027777777778,
+            "cold_face_ag_area_fraction": 0.4565972222222222,
+            "effective_conductance_over_k": 49.559318808508245,
+            "effective_k_over_intrinsic_k": 0.48282862015344286,
+            "hot_cold_flux_relative_balance": 1.3747957915906405e-12,
+            "linear_residual_linf": 1.0175860154504335e-11,
+            "grid_shape_xyz": [
+              15,
+              15,
+              11
+            ],
+            "actual_spacing_A_xyz": [
+              4.79416,
+              4.82971975385736,
+              4.614152727272728
+            ],
+            "ag_volume_fraction": 0.6145833333333334,
+            "relative_effective_k_error_vs_voxel_reference": 0.2529614358976408
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 426,
+          "source_ag_voxels": 5664,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 846,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 13.0,
+          "node_capacity_voxel_counts_max": 27
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 998,
+          "source_ag_voxels": 5664,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 2223,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 7.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 3230,
+          "source_ag_voxels": 5664,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7640,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 3220,
+          "source_ag_voxels": 5664,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7633,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 3236,
+          "source_ag_voxels": 5664,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 7678,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_8": {
+      "motif": "disconnected Ag islands; no axis spans",
+      "roi_start_voxels_xyz": [
+        80,
+        56,
+        38
+      ],
+      "roi_shape_voxels_xyz": [
+        12,
+        12,
+        8
+      ],
+      "roi_size_A": [
+        35.956199999999995,
+        36.2228981539302,
+        25.377840000000003
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.0920138888888889,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 106,
+            "conducting_faces": 103,
+            "hot_face_ag_area_fraction": 0.14583333333333334,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 6.217248937900877e-15
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 41,
+            "active_boundary_nodes": 21,
+            "conducting_edges": 12,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 53,
+            "active_boundary_nodes": 27,
+            "conducting_edges": 18,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 81,
+            "active_boundary_nodes": 45,
+            "conducting_edges": 40,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.2434497875801753e-14,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 88,
+            "active_boundary_nodes": 49,
+            "conducting_edges": 52,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 7.105427357601002e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 85,
+            "active_boundary_nodes": 49,
+            "conducting_edges": 50,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 6.217248937900877e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 29,
+            "conducting_faces": 18,
+            "hot_face_ag_area_fraction": 0.14583333333333334,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 100,
+            "conducting_faces": 121,
+            "hot_face_ag_area_fraction": 0.14583333333333334,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.328182339781051e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 106,
+            "conducting_faces": 103,
+            "hot_face_ag_area_fraction": 0.09375,
+            "cold_face_ag_area_fraction": 0.125,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 41,
+            "active_boundary_nodes": 17,
+            "conducting_edges": 7,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 0.0,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 53,
+            "active_boundary_nodes": 25,
+            "conducting_edges": 16,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 8.881784197001252e-16,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 81,
+            "active_boundary_nodes": 38,
+            "conducting_edges": 31,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.329070518200751e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 88,
+            "active_boundary_nodes": 43,
+            "conducting_edges": 43,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.3322676295501878e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 85,
+            "active_boundary_nodes": 45,
+            "conducting_edges": 44,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 29,
+            "conducting_faces": 18,
+            "hot_face_ag_area_fraction": 0.09374999999999999,
+            "cold_face_ag_area_fraction": 0.12500000000000003,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 100,
+            "conducting_faces": 121,
+            "hot_face_ag_area_fraction": 0.09375,
+            "cold_face_ag_area_fraction": 0.125,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 6.439293542825908e-15,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 106,
+            "conducting_faces": 103,
+            "hot_face_ag_area_fraction": 0.14583333333333334,
+            "cold_face_ag_area_fraction": 0.2777777777777778,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 41,
+            "active_boundary_nodes": 36,
+            "conducting_edges": 16,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 8.881784197001252e-16,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 53,
+            "active_boundary_nodes": 47,
+            "conducting_edges": 27,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 81,
+            "active_boundary_nodes": 75,
+            "conducting_edges": 61,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 88,
+            "active_boundary_nodes": 82,
+            "conducting_edges": 76,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.329070518200751e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 85,
+            "active_boundary_nodes": 79,
+            "conducting_edges": 70,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 4.440892098500626e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 29,
+            "conducting_faces": 18,
+            "hot_face_ag_area_fraction": 0.14583333333333331,
+            "cold_face_ag_area_fraction": 0.2777777777777778,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 100,
+            "conducting_faces": 121,
+            "hot_face_ag_area_fraction": 0.14583333333333331,
+            "cold_face_ag_area_fraction": 0.27777777777777773,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 7.105427357601002e-15,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.09201388888888888,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 41,
+          "source_ag_voxels": 106,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 16,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 11
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 53,
+          "source_ag_voxels": 106,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 28,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 8
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 81,
+          "source_ag_voxels": 106,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 62,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 88,
+          "source_ag_voxels": 106,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 77,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 85,
+          "source_ag_voxels": 106,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 71,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        }
+      }
+    },
+    "roi_9": {
+      "motif": "disconnected Ag islands; no axis spans",
+      "roi_start_voxels_xyz": [
+        0,
+        88,
+        34
+      ],
+      "roi_shape_voxels_xyz": [
+        12,
+        12,
+        8
+      ],
+      "roi_size_A": [
+        35.956199999999995,
+        36.2228981539302,
+        25.377840000000003
+      ],
+      "source_voxel_spacing_A": [
+        2.9963499999999996,
+        3.0185748461608504,
+        3.1722300000000003
+      ],
+      "roi_ag_volume_fraction": 0.1388888888888889,
+      "directions": {
+        "x": {
+          "source_voxel_reference": {
+            "active_cells": 160,
+            "conducting_faces": 172,
+            "hot_face_ag_area_fraction": 0.15625,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 55,
+            "active_boundary_nodes": 30,
+            "conducting_edges": 19,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 8.881784197001252e-16,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 72,
+            "active_boundary_nodes": 45,
+            "conducting_edges": 36,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 128,
+            "active_boundary_nodes": 81,
+            "conducting_edges": 86,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 123,
+            "active_boundary_nodes": 83,
+            "conducting_edges": 88,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 129,
+            "active_boundary_nodes": 83,
+            "conducting_edges": 84,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.9968028886505635e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 34,
+            "conducting_faces": 37,
+            "hot_face_ag_area_fraction": 0.15624999999999997,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.24866822106941142,
+            "effective_k_over_intrinsic_k": 0.009726491804748414,
+            "hot_cold_flux_relative_balance": 8.929351887833363e-15,
+            "linear_residual_linf": 2.746414207166481e-14,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.1388888888888889,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 154,
+            "conducting_faces": 230,
+            "hot_face_ag_area_fraction": 0.15625,
+            "cold_face_ag_area_fraction": 0.11458333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.248068480843358e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.13888888888888887,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        },
+        "y": {
+          "source_voxel_reference": {
+            "active_cells": 160,
+            "conducting_faces": 172,
+            "hot_face_ag_area_fraction": 0.15625,
+            "cold_face_ag_area_fraction": 0.09375,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.2434497875801753e-14
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 55,
+            "active_boundary_nodes": 22,
+            "conducting_edges": 12,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.7763568394002505e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 72,
+            "active_boundary_nodes": 26,
+            "conducting_edges": 18,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 128,
+            "active_boundary_nodes": 48,
+            "conducting_edges": 45,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.0658141036401503e-14,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 123,
+            "active_boundary_nodes": 45,
+            "conducting_edges": 40,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.329070518200751e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 129,
+            "active_boundary_nodes": 48,
+            "conducting_edges": 46,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.773159728050814e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 34,
+            "conducting_faces": 37,
+            "hot_face_ag_area_fraction": 0.15625,
+            "cold_face_ag_area_fraction": 0.09375,
+            "effective_conductance_over_k": 0.5661844644125829,
+            "effective_k_over_intrinsic_k": 0.02247567279518139,
+            "hot_cold_flux_relative_balance": 1.588317423861818e-14,
+            "linear_residual_linf": 1.4028778139163478e-12,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.1388888888888889,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 154,
+            "conducting_faces": 230,
+            "hot_face_ag_area_fraction": 0.15624999999999997,
+            "cold_face_ag_area_fraction": 0.09375,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.432187701766452e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.13888888888888887,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        },
+        "z": {
+          "source_voxel_reference": {
+            "active_cells": 160,
+            "conducting_faces": 172,
+            "hot_face_ag_area_fraction": 0.2708333333333333,
+            "cold_face_ag_area_fraction": 0.2708333333333333,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.419486915845482e-12
+          },
+          "component_lumped_3x3x3": {
+            "component_nodes": 55,
+            "active_boundary_nodes": 51,
+            "conducting_edges": 31,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 3.552713678800501e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x2x2": {
+            "component_nodes": 72,
+            "active_boundary_nodes": 67,
+            "conducting_edges": 51,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.329070518200751e-15,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x1x2": {
+            "component_nodes": 128,
+            "active_boundary_nodes": 121,
+            "conducting_edges": 124,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 5.654587909020847e-12,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_1x2x1": {
+            "component_nodes": 123,
+            "active_boundary_nodes": 116,
+            "conducting_edges": 116,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 2.9487523534044158e-12,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "component_lumped_2x1x1": {
+            "component_nodes": 129,
+            "active_boundary_nodes": 122,
+            "conducting_edges": 122,
+            "effective_conductance_over_k": 0.0,
+            "effective_k_over_intrinsic_k": 0.0,
+            "hot_cold_flux_relative_balance": 0.0,
+            "linear_residual_linf": 1.262989712813578e-12,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_10A": {
+            "active_cells": 34,
+            "conducting_faces": 37,
+            "hot_face_ag_area_fraction": 0.2708333333333333,
+            "cold_face_ag_area_fraction": 0.27083333333333337,
+            "effective_conductance_over_k": 2.5289313594329883,
+            "effective_k_over_intrinsic_k": 0.04927591694533841,
+            "hot_cold_flux_relative_balance": 2.2582610703804416e-13,
+            "linear_residual_linf": 3.0020430585864233e-12,
+            "grid_shape_xyz": [
+              4,
+              4,
+              3
+            ],
+            "actual_spacing_A_xyz": [
+              8.989049999999999,
+              9.05572453848255,
+              8.459280000000001
+            ],
+            "ag_volume_fraction": 0.1388888888888889,
+            "relative_effective_k_error_vs_voxel_reference": null
+          },
+          "projected_5A": {
+            "active_cells": 154,
+            "conducting_faces": 230,
+            "hot_face_ag_area_fraction": 0.2708333333333333,
+            "cold_face_ag_area_fraction": 0.2708333333333333,
+            "effective_conductance_over_k": 0.8520972374386719,
+            "effective_k_over_intrinsic_k": 0.016603010020325108,
+            "hot_cold_flux_relative_balance": 2.8805436274852925e-11,
+            "linear_residual_linf": 8.142819751810748e-12,
+            "grid_shape_xyz": [
+              8,
+              8,
+              6
+            ],
+            "actual_spacing_A_xyz": [
+              4.494524999999999,
+              4.527862269241275,
+              4.229640000000001
+            ],
+            "ag_volume_fraction": 0.13888888888888887,
+            "relative_effective_k_error_vs_voxel_reference": null
+          }
+        }
+      },
+      "component_graphs": {
+        "component_lumped_3x3x3": {
+          "coarse_voxels": [
+            3,
+            3,
+            3
+          ],
+          "component_nodes": 55,
+          "source_ag_voxels": 160,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 32,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 15
+        },
+        "component_lumped_2x2x2": {
+          "coarse_voxels": [
+            2,
+            2,
+            2
+          ],
+          "component_nodes": 72,
+          "source_ag_voxels": 160,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 53,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 2.0,
+          "node_capacity_voxel_counts_max": 6
+        },
+        "component_lumped_1x1x2": {
+          "coarse_voxels": [
+            1,
+            1,
+            2
+          ],
+          "component_nodes": 128,
+          "source_ag_voxels": 160,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 128,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_1x2x1": {
+          "coarse_voxels": [
+            1,
+            2,
+            1
+          ],
+          "component_nodes": 123,
+          "source_ag_voxels": 160,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 120,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
+        },
+        "component_lumped_2x1x1": {
+          "coarse_voxels": [
+            2,
+            1,
+            1
+          ],
+          "component_nodes": 129,
+          "source_ag_voxels": 160,
+          "preserved_ag_voxel_fraction": 1.0,
+          "edge_count": 126,
+          "node_capacity_voxel_counts_min": 1,
+          "node_capacity_voxel_counts_median": 1.0,
+          "node_capacity_voxel_counts_max": 2
         }
       }
     }
