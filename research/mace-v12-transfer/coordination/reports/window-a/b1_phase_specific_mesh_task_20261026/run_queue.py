@@ -44,12 +44,29 @@ def env_for_gpaw():
     ])
     return env
 
+def finalize_archive(run_dir, label):
+    verification = json.loads(subprocess.check_output(
+        [PYTHON, str(HERE / "verify_job.py"), label], cwd=ROOT, text=True
+    ))
+    assert verification["status"] == "PASS", verification
+    run_dir.joinpath("verification.json").write_text(json.dumps(verification, indent=2) + "\n")
+    files = sorted(p for p in run_dir.iterdir() if p.is_file() and p.name not in ("SHA256SUMS.txt", "state.gpw"))
+    run_dir.joinpath("SHA256SUMS.txt").write_text("".join(
+        f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n" for p in files
+    ))
+    subprocess.run([PYTHON, str(HERE / "verify_job.py"), label], cwd=ROOT, check=True, capture_output=True, text=True)
+    state = run_dir / "state.gpw"
+    if state.exists():
+        state.unlink()
+    return verification
+
 def ensure_run(record, conditional=False):
     label = record["label"]
     run_dir = OUT / label
     if run_dir.exists():
-        # Resume only from an already complete, independently verified archive.
-        subprocess.run([PYTHON, str(HERE / "verify_job.py"), label], check=True, capture_output=True, text=True)
+        # Finalize a complete endpoint left behind if the launcher was interrupted
+        # between SCF completion and compact-archive verification.
+        finalize_archive(run_dir, label)
         write_progress(labels={**read_progress().get("labels", {}), label:"complete_verified"})
         return
     cmd = ["mpirun", "--bind-to", "core", "--map-by", "core", "-n", "4", PYTHON, str(HERE / "run_one.py"), label]
@@ -64,17 +81,7 @@ def ensure_run(record, conditional=False):
         write_progress(status="failed", active_label=label,
                        labels={**read_progress().get("labels", {}), label:f"failed_exit_{result.returncode}"})
         raise SystemExit(f"{label} failed; preserve output and inspect {logfile}")
-    verification = json.loads(subprocess.check_output([PYTHON, str(HERE / "verify_job.py"), label], cwd=ROOT, text=True))
-    assert verification["status"] == "PASS"
-    run_dir.joinpath("verification.json").write_text(json.dumps(verification, indent=2) + "\n")
-    files = sorted(p for p in run_dir.iterdir() if p.is_file() and p.name not in ("SHA256SUMS.txt", "state.gpw"))
-    run_dir.joinpath("SHA256SUMS.txt").write_text("".join(
-        f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n" for p in files
-    ))
-    subprocess.run([PYTHON, str(HERE / "verify_job.py"), label], cwd=ROOT, check=True, capture_output=True, text=True)
-    state = run_dir / "state.gpw"
-    if state.exists():
-        state.unlink()
+    finalize_archive(run_dir, label)
     write_progress(labels={**read_progress().get("labels", {}), label:"complete_verified"}, active_label=None)
 
 def read_progress():

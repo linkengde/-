@@ -40,5 +40,5 @@ assert all(checks.values()), checks
 checksum_file = RUN / "SHA256SUMS.txt"
 if checksum_file.exists():
     subprocess.run(["sha256sum", "-c", "SHA256SUMS.txt"], cwd=RUN, check=True, stdout=subprocess.DEVNULL)
-result = {"status":"PASS" if all(checks.values()) else "FAIL", "label":args.label, "checks":checks}
+result = {"status":"PASS" if all(checks.values()) else "FAIL", "label":args.label, "checks":{key: bool(value) for key, value in checks.items()}}
 print(json.dumps(result, indent=2))
