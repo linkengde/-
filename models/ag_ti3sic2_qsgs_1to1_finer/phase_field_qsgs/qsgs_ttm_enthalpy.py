@@ -27,6 +27,10 @@ from qsgs_enthalpy_solver import DATA_DIR, PHASE_FRACTION_ROUNDOFF_TOL, QSGSEnth
 
 EV_J = 1.602176634e-19
 DEFAULT_ELECTRON_TABLE = DATA_DIR.parent / "ttm_data" / "Ag_TTM_hybrid_figure_fit_300_20000K.csv"
+# A constant-property Fourier-mode benchmark and matched QSGS trial showed
+# that 1e-8 preserves the implicit solution to sub-nanokelvin precision while
+# reducing Jacobi-preconditioned CG iterations by about one fifth versus 1e-10.
+ELECTRON_DIFFUSION_CG_RTOL = 1.0e-8
 
 
 class QSGSDoubleTemperatureGrid:
@@ -329,7 +333,7 @@ class QSGSDoubleTemperatureGrid:
                 jacobian,
                 -residual,
                 M=preconditioner,
-                rtol=1.0e-10,
+                rtol=ELECTRON_DIFFUSION_CG_RTOL,
                 atol=max(1.0e-14, scale * 1.0e-12),
                 maxiter=min(3000, max(200, 4 * len(t))),
             )
