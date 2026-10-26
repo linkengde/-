@@ -154,6 +154,10 @@ class QSGSDoubleTemperatureGrid:
         self.time_ps = 0.0
         self.injected_energy_J = 0.0
         self.coupling_energy_J = 0.0
+        # Signed local cumulative transfer: positive means electron -> lattice.
+        self.coupling_energy_density_J_m3 = np.zeros_like(
+            self.lattice.enthalpy_density_J_m3
+        )
         self.electron_diffusion_energy_J = 0.0
         self.lattice_diffusion_energy_J = 0.0
         self.initial_total_energy_J = self.total_energy_J
@@ -463,10 +467,14 @@ class QSGSDoubleTemperatureGrid:
         h_full = self.lattice.enthalpy_density_J_m3.ravel().copy()
         h_full[active_ids] = h1 / self.lattice.cell_volume_m3
         self.lattice.enthalpy_density_J_m3 = h_full.reshape(self.lattice.temperature_shape)
+        local_transfer_J = (ee0 - ee1) * EV_J
+        self.coupling_energy_density_J_m3.ravel()[active_ids] += (
+            local_transfer_J / self.lattice.cell_volume_m3
+        )
         self.lattice.state = self.lattice.state_from_enthalpy_density(
             self.lattice.enthalpy_density_J_m3
         )
-        return float((ee0 - ee1).sum() * EV_J)
+        return float(local_transfer_J.sum())
 
     def _lattice_conductivity(self) -> np.ndarray:
         state = self.lattice.state
@@ -692,6 +700,13 @@ class QSGSDoubleTemperatureGrid:
                 "electron_temperature_K": self.electron.temperature_K.copy(),
                 "lattice_temperature_K": self.lattice.state.temperature_K.copy(),
                 "ag_liquid_fraction": self.lattice.state.ag_liquid_fraction.copy(),
+                "electron_energy_density_eV_A3": (
+                    self.electron.electron_energy_eV / self.electron.cell_volume_A3
+                ),
+                "lattice_enthalpy_density_J_m3": self.lattice.enthalpy_density_J_m3.copy(),
+                "electron_to_lattice_cumulative_energy_density_J_m3": (
+                    self.coupling_energy_density_J_m3.copy()
+                ),
             }
 
         while snapshots and abs(snapshots[0] - self.time_ps) <= tolerance:

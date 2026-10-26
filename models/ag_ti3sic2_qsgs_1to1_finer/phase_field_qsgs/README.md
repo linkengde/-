@@ -31,6 +31,8 @@ The follow-up 0.1 ps localization screen compares legacy volume-fraction links w
 
 The subsequent source/grid audit replaces thermal-cell-center source sampling with an analytic integral over the original binary QSGS Ag voxels. A matched 5 fs, 3×3-domain comparison gives grid-independent source power and good agreement for several bulk/local metrics, but the electron peak and q99.9 tail remain resolution-sensitive; the spatial-convergence gate is therefore not passed. A 10 Å time-step refinement is within 1.3% for the electron peak, while a 1×1 versus 3×3 repeat confirms that global temperature statistics depend strongly on lateral box size. There is still no liquid Ag. Full metrics, thresholds, run commands, and limits are recorded in [`QSGS_SOURCE_GRID_CONVERGENCE.md`](QSGS_SOURCE_GRID_CONVERGENCE.md), with the CSV/JSON histories and 3D field snapshots alongside it.
 
+The matched 0.02 ps follow-up saves 1, 5, and 20 fs fields on both 5 Å and 10 Å grids and conservatively remaps electron energy, lattice enthalpy, and cumulative local electron-to-lattice transfer. Source and energy ledgers pass, and the common-grid hotspot diameter agrees closely, but electron high-tail and local energy/enthalpy maps still exceed the 5% spatial screen. No liquid Ag appears. The grid comparison is therefore still not converged and the runs stop at 0.02 ps; see [`QSGS_MATCHED_GRID_LOCALIZATION_0p02ps.md`](QSGS_MATCHED_GRID_LOCALIZATION_0p02ps.md) and `qsgs_localization_matched_0p02ps_grid_analysis.json`.
+
 ## Reproduce
 
 From the model directory:

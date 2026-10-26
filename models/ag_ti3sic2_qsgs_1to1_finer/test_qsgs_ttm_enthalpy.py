@@ -202,6 +202,12 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
             self.assertEqual(sorted(model.field_snapshots), [0.0005, 0.001])
             snapshot = model.field_snapshots[0.0005]
             self.assertEqual(snapshot["electron_temperature_K"].shape, (2, 2, 2))
+            self.assertEqual(snapshot["electron_energy_density_eV_A3"].shape, (2, 2, 2))
+            self.assertEqual(snapshot["lattice_enthalpy_density_J_m3"].shape, (2, 2, 2))
+            self.assertEqual(
+                snapshot["electron_to_lattice_cumulative_energy_density_J_m3"].shape,
+                (2, 2, 2),
+            )
             metrics = field_snapshot_metrics(
                 0.0005,
                 snapshot,
@@ -346,6 +352,11 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
                 delta=max(1.0e-29, record["source_energy_J"] * 2.0e-10),
             )
             self.assertLess(abs(record["energy_balance_residual_J"]), 1.0e-28)
+            self.assertAlmostEqual(
+                float(model.coupling_energy_density_J_m3.sum() * model.lattice.cell_volume_m3),
+                model.coupling_energy_J,
+                delta=max(1.0e-31, model.coupling_energy_J * 1.0e-12),
+            )
             self.assertAlmostEqual(
                 model.actual_source_power_W,
                 model.electron.source_power.sum() * EV_J / 1.0e-12,

@@ -23,13 +23,24 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=None)
     parser.add_argument("--half-width-A", type=float, default=100.0)
     parser.add_argument("--depth-A", type=float, default=3.0)
+    parser.add_argument("--coarse-fields", type=Path, default=None)
+    parser.add_argument("--fine-fields", type=Path, default=None)
+    parser.add_argument("--times-ps", default="0.001,0.005",
+                        help="comma-separated saved snapshot times")
     args = parser.parse_args()
 
     inputs = {
-        "10 Å": args.directory / "qsgs_source_gridcompare_3x3_10A_dt0p3125fs_fields.npz",
-        "5 Å": args.directory / "qsgs_source_gridcompare_3x3_5A_dt0p3125fs_fields.npz",
+        "10 Å": args.coarse_fields or args.directory / "qsgs_source_gridcompare_3x3_10A_dt0p3125fs_fields.npz",
+        "5 Å": args.fine_fields or args.directory / "qsgs_source_gridcompare_3x3_5A_dt0p3125fs_fields.npz",
     }
-    fig, axes = plt.subplots(2, 2, figsize=(9.0, 8.0), constrained_layout=True)
+    try:
+        times = tuple(float(value.strip()) for value in args.times_ps.split(",") if value.strip())
+    except ValueError:
+        parser.error("--times-ps must be a comma-separated list of numbers")
+    if not times:
+        parser.error("--times-ps must include at least one time")
+    fig, axes = plt.subplots(len(times), 2, figsize=(9.0, 4.0 * len(times)),
+                             constrained_layout=True, squeeze=False)
     image = None
     for col, (resolution, path) in enumerate(inputs.items()):
         with np.load(path, allow_pickle=False) as data:
@@ -46,7 +57,7 @@ def main() -> None:
             y_rel = y[iy] - size[1] / 2.0
             extent = (x_rel[0] - dx / 2.0, x_rel[-1] + dx / 2.0,
                       y_rel[0] - dy / 2.0, y_rel[-1] + dy / 2.0)
-            for row, time_ps in enumerate((0.001, 0.005)):
+            for row, time_ps in enumerate(times):
                 label = f"t_{time_ps:.9g}ps_electron_temperature_K"
                 temperature = data[label].astype(float)[np.ix_(ix, iy, [iz])][:, :, 0].T
                 ag_slice = ag[np.ix_(ix, iy, [iz])][:, :, 0].T
@@ -60,7 +71,7 @@ def main() -> None:
                     interpolation="nearest",
                     cmap="inferno",
                     vmin=0.0,
-                    vmax=700.0,
+                    vmax=800.0,
                     alpha=np.clip(ag_slice, 0.0, 1.0),
                 )
                 ax.add_patch(Circle((0.0, 0.0), 30.0, fill=False,
