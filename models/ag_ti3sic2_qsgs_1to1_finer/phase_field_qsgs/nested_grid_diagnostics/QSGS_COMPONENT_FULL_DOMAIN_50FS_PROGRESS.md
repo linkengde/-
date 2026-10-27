@@ -52,7 +52,7 @@
   - `qsgs_component_full_domain_50fs_0.15625fs_native_voxel.log`
 - 完成后生成的汇总指标：`qsgs_component_full_domain_50fs_match.json`
 - 四组独立日志：对应的 `qsgs_component_full_domain_50fs_*.log`
-- 本阶段已验收通过；实际加热已从原生 Ag 体素 50 fs 检查点续算，保持热源开启至总时间 `0.1 ps`。脚本为 `qsgs_component_heating_extend.py`，输出预定为 `qsgs_component_native_heating_to_0p1ps.json`、同名日志和末态温度/液相场快照。
+- 本阶段已验收通过；随后已从原生 Ag 体素 50 fs 检查点继续加热至 `0.1 ps`，结果记录见 `QSGS_NATIVE_AG_HEATING_0P1PS_PROGRESS.md`。`0.1 ps` 时尚无 Ag 液相，故按分阶段方案继续加热；没有把电子高温误判为熔池。
 
 临时完整场保存在 `/tmp/qsgs50_fields`，不提交大型逐体素场文件。四组分项日志和 JSON 指标保留在仓库中用于追溯。
 

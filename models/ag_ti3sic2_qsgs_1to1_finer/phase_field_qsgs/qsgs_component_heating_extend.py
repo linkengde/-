@@ -77,11 +77,25 @@ def _largest_liquid_cluster(backend: QSGSComponentTTMBackend, threshold: float =
 def _restore_native_checkpoint(
     backend: QSGSComponentTTMBackend,
     checkpoint: Path,
-    screen_json: Path,
+    checkpoint_json: Path,
     checkpoint_time_ps: float,
 ) -> dict:
-    summary = json.loads(screen_json.read_text(encoding="utf-8"))
-    run = summary["results_by_time_step"]["0.3125fs"]["native_voxel"]
+    summary = json.loads(checkpoint_json.read_text(encoding="utf-8"))
+    if "samples" in summary:
+        matches = [
+            row for row in summary["samples"]
+            if abs(float(row["time_ps"]) - checkpoint_time_ps) <= 1.0e-9
+        ]
+        if not matches:
+            raise ValueError(
+                f"No saved sample at {checkpoint_time_ps:g} ps in {checkpoint_json}"
+            )
+        run = matches[-1]
+    else:
+        # Original 50 fs matched-screen format.
+        if not np.isclose(checkpoint_time_ps, 0.05, rtol=0.0, atol=1.0e-9):
+            raise ValueError("The matched-screen checkpoint is valid only at 0.05 ps")
+        run = summary["results_by_time_step"]["0.3125fs"]["native_voxel"]
     with np.load(checkpoint, allow_pickle=False) as state:
         ag_node_ids = backend.graph.component_id[backend.source_ag]
         n_nodes = backend.graph.voxel_count.size
@@ -93,10 +107,27 @@ def _restore_native_checkpoint(
             ("ag_liquid_fraction", backend.lattice_liquid_fraction),
         ):
             values = np.asarray(state[name], dtype=float)
+            if values.shape == backend.source_ag.shape:
+                values = values[backend.source_ag]
             if values.shape != ag_node_ids.shape:
                 raise ValueError(f"Checkpoint field {name} has unexpected shape {values.shape}")
             destination[ag_node_ids] = values
-        coupling_density = np.asarray(state["electron_to_lattice_energy_eV_A3"], dtype=float)
+        if "electron_to_lattice_energy_eV_A3" in state:
+            coupling_density = np.asarray(state["electron_to_lattice_energy_eV_A3"], dtype=float)
+            coupling_units = "eV_A3"
+        elif "electron_to_lattice_cumulative_energy_density_J_m3" in state:
+            coupling_density = np.asarray(
+                state["electron_to_lattice_cumulative_energy_density_J_m3"], dtype=float
+            )
+            coupling_units = "J_m3"
+        else:
+            raise ValueError("Checkpoint is missing cumulative electron-lattice coupling field")
+        if coupling_density.shape == backend.source_ag.shape:
+            coupling_density = coupling_density[backend.source_ag]
+        if coupling_density.shape != ag_node_ids.shape:
+            raise ValueError("Checkpoint cumulative coupling field has unexpected shape")
+        if coupling_units == "J_m3":
+            coupling_density = coupling_density * ANGSTROM3_TO_M3 / EV_J
         backend.cumulative_coupling_eV[ag_node_ids] = (
             coupling_density * backend.node_volume_A3[ag_node_ids]
         )
@@ -104,8 +135,15 @@ def _restore_native_checkpoint(
     backend.time_ps = float(checkpoint_time_ps)
     backend.injected_energy_J = float(run["source_energy_J"])
     backend.coupling_energy_J = float(run["electron_to_lattice_cumulative_J"])
-    backend.electron_diffusion_energy_J = float(run.get("electron_diffusion_energy_J", 0.0))
-    backend.lattice_diffusion_energy_J = float(run.get("lattice_diffusion_energy_J", 0.0))
+    backend.electron_diffusion_energy_J = float(
+        run.get("electron_diffusion_energy_J", run.get("electron_diffusion_net_J", 0.0))
+    )
+    if "lattice_diffusion_net_J" in run:
+        backend.lattice_diffusion_energy_J = float(run["lattice_diffusion_net_J"])
+    else:
+        backend.lattice_diffusion_energy_J = float(
+            summary.get("final_energy_balance", {}).get("lattice_diffusion_net_J", 0.0)
+        )
     checkpoint_total = backend.total_energy_J
     recorded_total = float(run["electron_energy_J"]) + float(run["lattice_enthalpy_J"])
     relative_restore_error = abs(checkpoint_total - recorded_total) / max(abs(recorded_total), 1.0e-30)
@@ -177,6 +215,11 @@ def main() -> None:
     parser.add_argument("--electron-table", type=Path, default=DEFAULT_ELECTRON_TABLE)
     parser.add_argument("--checkpoint", type=Path, default=DEFAULT_CHECKPOINT)
     parser.add_argument("--screen-json", type=Path, default=DEFAULT_SCREEN_JSON)
+    parser.add_argument(
+        "--checkpoint-json",
+        type=Path,
+        help="Summary JSON matching --checkpoint; defaults to the original 50 fs screen JSON",
+    )
     parser.add_argument("--checkpoint-time-ps", type=float, default=0.05)
     parser.add_argument("--end-time-ps", type=float, default=0.1)
     parser.add_argument("--dt-fs", type=float, default=0.3125)
@@ -201,7 +244,10 @@ def main() -> None:
         linear_preconditioner="amg",
     )
     checkpoint = _restore_native_checkpoint(
-        backend, args.checkpoint, args.screen_json, args.checkpoint_time_ps
+        backend,
+        args.checkpoint,
+        args.checkpoint_json or args.screen_json,
+        args.checkpoint_time_ps,
     )
     dt_ps = args.dt_fs * 1.0e-3
     steps_float = (args.end_time_ps - args.checkpoint_time_ps) / dt_ps
@@ -209,7 +255,7 @@ def main() -> None:
     if not np.isclose(steps_float, steps, rtol=0.0, atol=1.0e-10):
         raise ValueError("extension duration must be an integer multiple of the time step")
     sample_stride = max(1, int(round(0.025 / dt_ps)))
-    samples = [_sample(backend, "restored_50fs_checkpoint", args.dt_fs)]
+    samples = [_sample(backend, f"restored_{args.checkpoint_time_ps:g}ps_checkpoint", args.dt_fs)]
 
     with args.log.open("w", encoding="utf-8", buffering=1) as log:
         log.write(json.dumps({"checkpoint": checkpoint}, sort_keys=True) + "\n")
@@ -233,12 +279,14 @@ def main() -> None:
                 )
 
     backend.capture_snapshot(args.end_time_ps)
-    snapshot_path = args.output.with_name("qsgs_component_native_heating_to_0p1ps_fields.npz")
+    snapshot_path = args.output.with_name(f"{args.output.stem}_fields.npz")
     np.savez_compressed(snapshot_path, **backend.field_snapshots[args.end_time_ps])
     result = {
         "status": "NATIVE_QSGS_AG_HEATING_PILOT_COMPLETED",
         "baseline_commit": "3feb5bc",
-        "started_from_50fs_native_voxel_checkpoint": True,
+        "started_from_50fs_native_voxel_checkpoint": bool(
+            np.isclose(args.checkpoint_time_ps, 0.05, rtol=0.0, atol=1.0e-9)
+        ),
         "checkpoint": str(args.checkpoint),
         "checkpoint_validation": checkpoint,
         "geometry": args.geometry.name,
