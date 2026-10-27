@@ -35,16 +35,116 @@ DEFAULT_OUTPUT = DIAG_DIR / "qsgs_component_native_heating_to_0p1ps.json"
 DEFAULT_LOG = DIAG_DIR / "qsgs_component_native_heating_to_0p1ps.log"
 
 
-def _largest_liquid_cluster(backend: QSGSComponentTTMBackend, threshold: float = 0.5) -> dict:
+def _periodic_interval(indices: np.ndarray, n_cells: int, spacing_A: float) -> dict:
+    occupied = np.unique(np.asarray(indices, dtype=np.int64))
+    if occupied.size == 0:
+        return {"start_index": None, "end_index": None, "extent_A": 0.0, "wraps_boundary": False}
+    if occupied.size == n_cells:
+        start, span = 0, n_cells
+    else:
+        gaps = (np.roll(occupied, -1) - occupied) % n_cells
+        empty = gaps - 1
+        gap_index = int(np.argmax(empty))
+        start = int(occupied[(gap_index + 1) % occupied.size])
+        span = int(n_cells - empty[gap_index])
+    end = int((start + span - 1) % n_cells)
+    return {
+        "start_index": start,
+        "end_index": end,
+        "extent_A": float(span * spacing_A),
+        "wraps_boundary": bool(start + span > n_cells),
+    }
+
+
+def _cluster_spatial_metrics(backend: QSGSComponentTTMBackend, node_ids: np.ndarray) -> dict:
+    if node_ids.size == 0:
+        return {
+            "bbox_voxel_xyz": None,
+            "bbox_A": None,
+            "extent_fraction_xyz": None,
+            "center_A": None,
+            "source_center_A": None,
+            "distance_to_source_center_A": None,
+        }
+    if not np.all(backend.graph.voxel_count == 1):
+        raise ValueError("Cluster coordinates require the native one-node-per-Ag-voxel graph")
+    coords = backend.graph.block_index[node_ids]
+    shape = np.asarray(backend.source_ag.shape, dtype=int)
+    spacing = np.asarray(backend.spacing_A, dtype=float)
+    intervals = [_periodic_interval(coords[:, a], int(shape[a]), float(spacing[a])) for a in range(2)]
+    intervals.append({
+        "start_index": int(coords[:, 2].min()),
+        "end_index": int(coords[:, 2].max()),
+        "extent_A": float((coords[:, 2].max() - coords[:, 2].min() + 1) * spacing[2]),
+        "wraps_boundary": False,
+    })
+    bbox_voxel = {}
+    bbox_A = {}
+    extents = []
+    centers = []
+    for axis, name in enumerate(("x", "y", "z")):
+        row = intervals[axis]
+        start = row["start_index"]
+        end = row["end_index"]
+        extent = row["extent_A"]
+        bbox_voxel[name] = {"start": start, "end": end, "wraps_periodic_boundary": row["wraps_boundary"]}
+        start_A = float(start * spacing[axis])
+        bbox_A[name] = {
+            "start": start_A,
+            "end_unwrapped": float(start_A + extent),
+            "extent": extent,
+            "wraps_periodic_boundary": row["wraps_boundary"],
+        }
+        extents.append(float(extent))
+        if axis < 2:
+            angles = 2.0 * np.pi * (coords[:, axis] + 0.5) / shape[axis]
+            vector = np.mean(np.exp(1j * angles))
+            center_index = float((np.angle(vector) % (2.0 * np.pi)) * shape[axis] / (2.0 * np.pi))
+            centers.append(float(center_index * spacing[axis]))
+        else:
+            centers.append(float((coords[:, axis].mean() + 0.5) * spacing[axis]))
+    source_coords = backend.graph.block_index
+    source_weights = np.asarray(backend.source_node_W, dtype=float)
+    source_center = []
+    for axis in range(3):
+        if axis < 2:
+            angles = 2.0 * np.pi * (source_coords[:, axis] + 0.5) / shape[axis]
+            vector = np.average(np.exp(1j * angles), weights=source_weights)
+            center_index = float((np.angle(vector) % (2.0 * np.pi)) * shape[axis] / (2.0 * np.pi))
+            source_center.append(float(center_index * spacing[axis]))
+        else:
+            source_center.append(float(np.average(source_coords[:, axis] + 0.5, weights=source_weights) * spacing[axis]))
+    displacement = np.asarray(centers) - np.asarray(source_center)
+    for axis in range(2):
+        displacement[axis] = (displacement[axis] + 0.5 * backend.size_A[axis]) % backend.size_A[axis] - 0.5 * backend.size_A[axis]
+    return {
+        "bbox_voxel_xyz": bbox_voxel,
+        "bbox_A": bbox_A,
+        "extent_fraction_xyz": [float(extents[a] / backend.size_A[a]) for a in range(3)],
+        "center_A": centers,
+        "source_center_A": source_center,
+        "distance_to_source_center_A": float(np.linalg.norm(displacement)),
+    }
+
+
+def _largest_liquid_cluster(
+    backend: QSGSComponentTTMBackend, threshold: float = 0.5
+) -> tuple[dict, np.ndarray]:
     active = backend.lattice_liquid_fraction >= threshold
     count = int(np.count_nonzero(active))
     if count == 0:
-        return {
+        return ({
             "threshold_liquid_fraction": threshold,
             "active_node_count": 0,
+            "active_threshold_liquid_volume_A3": 0.0,
             "largest_cluster_node_count": 0,
             "largest_cluster_volume_A3": 0.0,
-        }
+            "largest_cluster_liquid_fraction_weighted_volume_A3": 0.0,
+            "equal_size_largest_cluster_count": 0,
+            "largest_cluster_is_tied": False,
+            "largest_cluster_source_power_fraction": 0.0,
+            **_cluster_spatial_metrics(backend, np.empty(0, dtype=np.int64)),
+        }, np.empty(0, dtype=np.int64))
     active_ids = np.flatnonzero(active)
     local_id = np.full(active.size, -1, dtype=np.int32)
     local_id[active_ids] = np.arange(count, dtype=np.int32)
@@ -61,17 +161,29 @@ def _largest_liquid_cluster(backend: QSGSComponentTTMBackend, threshold: float =
     n_components, labels = connected_components(adjacency, directed=False, return_labels=True)
     sizes = np.bincount(labels, minlength=n_components)
     largest = int(sizes.max(initial=0))
-    # Native graph nodes represent one source voxel each, but use node volumes
-    # so this remains correct if the backend's native grouping changes.
-    largest_labels = np.flatnonzero(sizes == largest)
-    largest_mask = np.isin(labels, largest_labels)
-    volume = float(backend.node_volume_A3[active_ids[largest_mask]].sum())
-    return {
+    # Select exactly one largest component. np.argmax deterministically chooses
+    # the first label in a tie; never sum disconnected equal-size components.
+    largest_label = int(np.argmax(sizes))
+    cluster_ids = np.sort(active_ids[labels == largest_label])
+    volume = float(backend.node_volume_A3[cluster_ids].sum())
+    liquid_volume = float(np.dot(
+        backend.node_volume_A3[cluster_ids], backend.lattice_liquid_fraction[cluster_ids]
+    ))
+    metadata = {
         "threshold_liquid_fraction": threshold,
         "active_node_count": count,
+        "active_threshold_liquid_volume_A3": float(backend.node_volume_A3[active].sum()),
         "largest_cluster_node_count": largest,
         "largest_cluster_volume_A3": volume,
+        "largest_cluster_liquid_fraction_weighted_volume_A3": liquid_volume,
+        "equal_size_largest_cluster_count": int(np.count_nonzero(sizes == largest)),
+        "largest_cluster_is_tied": bool(np.count_nonzero(sizes == largest) > 1),
+        "largest_cluster_source_power_fraction": float(
+            backend.source_node_W[cluster_ids].sum() / max(backend.source_power_W, 1.0e-300)
+        ),
+        **_cluster_spatial_metrics(backend, cluster_ids),
     }
+    return metadata, cluster_ids
 
 
 def _restore_native_checkpoint(
@@ -180,7 +292,9 @@ def _sample(backend: QSGSComponentTTMBackend, label: str, dt_fs: float) -> dict:
         - backend.electron_diffusion_energy_J
         - backend.lattice_diffusion_energy_J
     )
-    return {
+    liquid_volume = float(np.dot(backend.node_volume_A3, backend.lattice_liquid_fraction))
+    liquid_cluster, cluster_ids = _largest_liquid_cluster(backend)
+    sample = {
         "label": label,
         "time_ps": backend.time_ps,
         "dt_fs": dt_fs,
@@ -193,10 +307,13 @@ def _sample(backend: QSGSComponentTTMBackend, label: str, dt_fs: float) -> dict:
             np.average(backend.lattice_temperature_K, weights=backend.node_volume_A3)
         ),
         "ag_liquid_volume_fraction": float(
-            np.dot(backend.node_volume_A3, backend.lattice_liquid_fraction)
-            / backend.node_volume_A3.sum()
+            liquid_volume / backend.node_volume_A3.sum()
         ),
+        "ag_liquid_volume_A3": liquid_volume,
+        "initial_melting_detected": bool(np.any(backend.lattice_liquid_fraction > 0.0)),
         "max_ag_liquid_fraction": float(backend.lattice_liquid_fraction.max()),
+        "minimum_pool_nodes": 50,
+        "minimum_pool_volume_A3": float(50 * backend.voxel_volume_A3),
         "electron_energy_J": backend.electron_energy_J,
         "lattice_enthalpy_J": backend.lattice_energy_J,
         "source_energy_J": backend.injected_energy_J,
@@ -205,8 +322,34 @@ def _sample(backend: QSGSComponentTTMBackend, label: str, dt_fs: float) -> dict:
         "energy_balance_residual_J": residual,
         "energy_residual_relative_to_source": abs(residual)
         / max(abs(backend.injected_energy_J), 1.0e-30),
-        "liquid_connectivity_at_f_l_ge_0p5": _largest_liquid_cluster(backend),
+        "liquid_connectivity_at_f_l_ge_0p5": liquid_cluster,
+        "_largest_cluster_node_ids": cluster_ids,
     }
+    sample["largest_cluster_volume_fraction_of_total_ag"] = float(
+        liquid_cluster["largest_cluster_volume_A3"] / backend.node_volume_A3.sum()
+    )
+    return sample
+
+
+def _add_cluster_overlap(sample: dict, previous_ids: np.ndarray | None) -> np.ndarray:
+    current_ids = np.asarray(sample.pop("_largest_cluster_node_ids"), dtype=np.int64)
+    if previous_ids is None or previous_ids.size == 0 or current_ids.size == 0:
+        common = 0
+        jaccard = None
+        previous_fraction = None
+        current_fraction = None
+    else:
+        common = int(np.intersect1d(previous_ids, current_ids, assume_unique=True).size)
+        jaccard = float(common / (previous_ids.size + current_ids.size - common))
+        previous_fraction = float(common / previous_ids.size)
+        current_fraction = float(common / current_ids.size)
+    sample["largest_cluster_overlap_with_previous_sample"] = {
+        "shared_node_count": common,
+        "jaccard_fraction": jaccard,
+        "fraction_of_previous_cluster": previous_fraction,
+        "fraction_of_current_cluster": current_fraction,
+    }
+    return current_ids
 
 
 def main() -> None:
@@ -255,7 +398,9 @@ def main() -> None:
     if not np.isclose(steps_float, steps, rtol=0.0, atol=1.0e-10):
         raise ValueError("extension duration must be an integer multiple of the time step")
     sample_stride = max(1, int(round(0.025 / dt_ps)))
-    samples = [_sample(backend, f"restored_{args.checkpoint_time_ps:g}ps_checkpoint", args.dt_fs)]
+    first_sample = _sample(backend, f"restored_{args.checkpoint_time_ps:g}ps_checkpoint", args.dt_fs)
+    previous_cluster_ids = _add_cluster_overlap(first_sample, None)
+    samples = [first_sample]
 
     with args.log.open("w", encoding="utf-8", buffering=1) as log:
         log.write(json.dumps({"checkpoint": checkpoint}, sort_keys=True) + "\n")
@@ -268,6 +413,7 @@ def main() -> None:
             row = backend.advance(dt_ps, heat_on=True, coupling_on=True, electron_diffusion_on=True)
             if step % sample_stride == 0 or step == steps:
                 sample = _sample(backend, "heated", args.dt_fs)
+                previous_cluster_ids = _add_cluster_overlap(sample, previous_cluster_ids)
                 samples.append(sample)
                 log.write(json.dumps(sample, sort_keys=True) + "\n")
                 log.write(

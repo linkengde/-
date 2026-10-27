@@ -47,6 +47,70 @@ def _pid_alive(pid: int) -> bool:
     return True
 
 
+def _append_new_samples(target: list[dict], incoming: list[dict]) -> None:
+    last_time = float(target[-1]["time_ps"]) if target else -1.0
+    for row in incoming:
+        if float(row["time_ps"]) > last_time + 1.0e-9:
+            target.append(row)
+            last_time = float(row["time_ps"])
+
+
+def _pool_gate(samples: list[dict]) -> dict:
+    initial_melting = any(bool(row.get("initial_melting_detected", False)) for row in samples)
+    qualifying_windows = []
+    minimum_nodes = 50
+    minimum_volume = 1.44e3
+    sample_interval_ps = 0.025
+    for end in range(2, len(samples)):
+        window = samples[end - 2 : end + 1]
+        times = [float(row["time_ps"]) for row in window]
+        counts = [
+            int(row.get("liquid_connectivity_at_f_l_ge_0p5", {}).get("largest_cluster_node_count", 0))
+            for row in window
+        ]
+        volumes = [
+            float(row.get("liquid_connectivity_at_f_l_ge_0p5", {}).get("largest_cluster_volume_A3", 0.0))
+            for row in window
+        ]
+        if any(count < minimum_nodes for count in counts) or any(volume < minimum_volume for volume in volumes):
+            continue
+        if any(abs((times[i + 1] - times[i]) - sample_interval_ps) > 1.0e-6 for i in range(2)):
+            continue
+        overlaps = [
+            int(window[i + 1].get("largest_cluster_overlap_with_previous_sample", {}).get("shared_node_count", 0))
+            for i in range(2)
+        ]
+        if any(value <= 0 for value in overlaps):
+            continue
+        qualifying_windows.append({
+            "start_time_ps": times[0],
+            "end_time_ps": times[-1],
+            "samples": 3,
+            "coverage_ps": times[-1] - times[0],
+            "minimum_node_count": min(counts),
+            "minimum_cluster_volume_A3": min(volumes),
+            "adjacent_shared_node_counts": overlaps,
+            "latest_cluster_metrics": window[-1].get("liquid_connectivity_at_f_l_ge_0p5", {}),
+        })
+    return {
+        "initial_melting_detected": initial_melting,
+        "initial_melting_sample_times_ps": [
+            float(row["time_ps"]) for row in samples if row.get("initial_melting_detected", False)
+        ],
+        "preliminary_pool_gate_met": bool(qualifying_windows),
+        "preliminary_pool_gate": {
+            "liquid_threshold_fl": 0.5,
+            "minimum_nodes": minimum_nodes,
+            "approximate_minimum_volume_A3": minimum_volume,
+            "consecutive_samples": 3,
+            "sample_interval_ps": sample_interval_ps,
+            "required_adjacent_overlap_nodes": ">0",
+        },
+        "qualifying_windows": qualifying_windows,
+        "locality_metrics": "For a qualifying cluster, inspect source-center distance, periodic bbox/extents and Ag-volume fraction; no extra numeric locality cutoff was supplied.",
+    }
+
+
 def _wait_for_first_stage(json_path: Path, fields_path: Path, pid: int | None, log) -> dict:
     while not json_path.exists():
         if pid is not None and not _pid_alive(pid):
@@ -111,6 +175,7 @@ def main() -> None:
         "stage_ps": args.stage_ps,
         "dt_fs": args.dt_fs,
         "completed_stages": [],
+        "samples": [],
         "stable_pool_gate": {
             "project_candidate_rule": "largest connected liquid Ag cluster persists >=3 ps; volume variation <=5% over last 2 ps",
             "evaluable_before_1ps": False,
@@ -128,6 +193,8 @@ def main() -> None:
             raise RuntimeError("Initial stage end time does not match requested start")
         state["status"] = "HEATING_IN_STAGES"
         state["first_stage_end"] = first_result["samples"][-1]
+        _append_new_samples(state["samples"], first_result["samples"])
+        state["melting_and_pool_assessment"] = _pool_gate(state["samples"])
         _write_json(args.progress, state)
         log.write(f"First stage complete at {current_time:.2f} ps; continuing to {args.stop_time_ps:.2f} ps.\n")
 
@@ -186,6 +253,8 @@ def main() -> None:
                 "energy_residual_relative_to_source": final["energy_residual_relative_to_source"],
             }
             state["completed_stages"].append(record)
+            _append_new_samples(state["samples"], result["samples"])
+            state["melting_and_pool_assessment"] = _pool_gate(state["samples"])
             state["current_time_ps"] = end
             state["latest_sample"] = final
             state["status"] = "COMPLETED_AT_1PS" if final_stage else "HEATING_IN_STAGES"
@@ -206,9 +275,8 @@ def main() -> None:
         state["task_result"] = {
             "stop_reason": "1 ps hard limit reached",
             "heat_source_on_at_stop": True,
-            "liquid_observed": any(
-                row["ag_liquid_volume_fraction"] > 0.0 for row in state["completed_stages"]
-            ) or float(first_result["samples"][-1]["ag_liquid_volume_fraction"]) > 0.0,
+            "liquid_observed": state["melting_and_pool_assessment"]["initial_melting_detected"],
+            "preliminary_pool_size_and_persistence_gate_met": state["melting_and_pool_assessment"]["preliminary_pool_gate_met"],
             "stable_pool_claimed": False,
             "note": "The existing 3 ps persistence / 2 ps volume-window candidate criterion cannot be demonstrated within a 1 ps cap.",
         }
