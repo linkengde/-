@@ -69,6 +69,30 @@ class LiquidClusterMetricsTests(unittest.TestCase):
         failing = _pool_gate([row(0.1, 49, 1), row(0.125, 55, 40), row(0.15, 60, 45)])
         self.assertFalse(failing["preliminary_pool_gate_met"])
 
+    def test_pool_gate_distinguishes_0p3_and_0p5_ps_persistence(self) -> None:
+        samples = []
+        for index in range(25):
+            samples.append({
+                "time_ps": 0.2 + index * 0.025,
+                "initial_melting_detected": True,
+                "energy_residual_relative_to_source": 1.0e-14,
+                "liquid_connectivity_at_f_l_ge_0p5": {
+                    "largest_cluster_node_count": 50,
+                    "largest_cluster_volume_A3": 1440.0,
+                },
+                "largest_cluster_overlap_with_previous_sample": {
+                    "shared_node_count": 45,
+                    "jaccard_fraction": 0.82,
+                },
+            })
+        result = _pool_gate(samples)
+        self.assertTrue(result["short_time_persistence_0p3ps"]["passed"])
+        self.assertTrue(result["enhanced_persistence_0p5ps"]["passed"])
+        self.assertAlmostEqual(
+            result["enhanced_persistence_0p5ps"]["first_qualifying_window"]["observed_duration_ps"],
+            0.5,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

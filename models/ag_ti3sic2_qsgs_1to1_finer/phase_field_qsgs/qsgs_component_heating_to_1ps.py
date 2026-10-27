@@ -17,6 +17,8 @@ import subprocess
 import sys
 import time
 
+import numpy as np
+
 PHASE_DIR = Path(__file__).resolve().parent
 DIAG_DIR = PHASE_DIR / "nested_grid_diagnostics"
 STAGE_RUNNER = PHASE_DIR / "qsgs_component_heating_extend.py"
@@ -62,56 +64,102 @@ def _pool_gate(samples: list[dict]) -> dict:
         ) > 0.0
 
     initial_melting = any(_has_any_liquid(row) for row in samples)
-    qualifying_windows = []
     minimum_nodes = 50
     minimum_volume = 1.44e3
     sample_interval_ps = 0.025
-    for end in range(2, len(samples)):
-        window = samples[end - 2 : end + 1]
-        times = [float(row["time_ps"]) for row in window]
-        counts = [
-            int(row.get("liquid_connectivity_at_f_l_ge_0p5", {}).get("largest_cluster_node_count", 0))
-            for row in window
-        ]
-        volumes = [
-            float(row.get("liquid_connectivity_at_f_l_ge_0p5", {}).get("largest_cluster_volume_A3", 0.0))
-            for row in window
-        ]
-        if any(count < minimum_nodes for count in counts) or any(volume < minimum_volume for volume in volumes):
-            continue
-        if any(abs((times[i + 1] - times[i]) - sample_interval_ps) > 1.0e-6 for i in range(2)):
-            continue
-        overlaps = [
-            int(window[i + 1].get("largest_cluster_overlap_with_previous_sample", {}).get("shared_node_count", 0))
-            for i in range(2)
-        ]
-        if any(value <= 0 for value in overlaps):
-            continue
-        qualifying_windows.append({
-            "start_time_ps": times[0],
-            "end_time_ps": times[-1],
-            "samples": 3,
-            "coverage_ps": times[-1] - times[0],
-            "minimum_node_count": min(counts),
-            "minimum_cluster_volume_A3": min(volumes),
-            "adjacent_shared_node_counts": overlaps,
-            "latest_cluster_metrics": window[-1].get("liquid_connectivity_at_f_l_ge_0p5", {}),
-        })
+    valid_runs: list[list[dict]] = []
+    active_run: list[dict] = []
+    for row in samples:
+        cluster = row.get("liquid_connectivity_at_f_l_ge_0p5", {})
+        count = int(cluster.get("largest_cluster_node_count", 0))
+        volume = float(cluster.get("largest_cluster_volume_A3", 0.0))
+        min_volume = float(row.get("minimum_pool_volume_A3", minimum_volume))
+        energy_ok = float(row.get("energy_residual_relative_to_source", 0.0)) <= 1.0e-10
+        qualifies = count >= minimum_nodes and volume >= max(minimum_volume, min_volume) and energy_ok
+        time = float(row["time_ps"])
+        contiguous = bool(active_run) and abs(
+            time - float(active_run[-1]["time_ps"]) - sample_interval_ps
+        ) <= 1.0e-6
+        overlap = int(row.get("largest_cluster_overlap_with_previous_sample", {}).get("shared_node_count", 0))
+        same_region = bool(active_run) and overlap > 0
+        if qualifies and (not active_run or (contiguous and same_region)):
+            active_run.append(row)
+        else:
+            if active_run:
+                valid_runs.append(active_run)
+            active_run = [row] if qualifies else []
+    if active_run:
+        valid_runs.append(active_run)
+
+    def _gate_for_duration(required_ps: float) -> dict:
+        qualifying = []
+        for run in valid_runs:
+            if len(run) < 2:
+                continue
+            run_duration = float(run[-1]["time_ps"]) - float(run[0]["time_ps"])
+            if run_duration + 1.0e-9 < required_ps:
+                continue
+            end_time = float(run[0]["time_ps"]) + required_ps
+            window = [row for row in run if float(row["time_ps"]) <= end_time + 1.0e-9]
+            volumes = [
+                float(row["liquid_connectivity_at_f_l_ge_0p5"]["largest_cluster_volume_A3"])
+                for row in window
+            ]
+            overlap_rows = window[1:]
+            jaccard = [
+                float(row["largest_cluster_overlap_with_previous_sample"]["jaccard_fraction"])
+                for row in overlap_rows
+                if row.get("largest_cluster_overlap_with_previous_sample", {}).get("jaccard_fraction") is not None
+            ]
+            qualifying.append({
+                "start_time_ps": float(window[0]["time_ps"]),
+                "first_pass_time_ps": end_time,
+                "end_sample_time_ps": float(window[-1]["time_ps"]),
+                "observed_duration_ps": float(window[-1]["time_ps"]) - float(window[0]["time_ps"]),
+                "sample_count": len(window),
+                "minimum_node_count": min(
+                    int(row["liquid_connectivity_at_f_l_ge_0p5"]["largest_cluster_node_count"])
+                    for row in window
+                ),
+                "minimum_cluster_volume_A3": min(volumes),
+                "maximum_cluster_volume_A3": max(volumes),
+                "volume_peak_to_peak_fraction_of_mean": float(
+                    (max(volumes) - min(volumes)) / max(float(np.mean(volumes)), 1.0e-30)
+                ),
+                "minimum_adjacent_jaccard_fraction": min(jaccard) if jaccard else None,
+                "latest_cluster_metrics": window[-1]["liquid_connectivity_at_f_l_ge_0p5"],
+            })
+        return {"passed": bool(qualifying), "first_qualifying_window": qualifying[0] if qualifying else None}
+
+    short_005 = _gate_for_duration(0.05)
+    short_03 = _gate_for_duration(0.3)
+    enhanced_05 = _gate_for_duration(0.5)
     return {
         "initial_melting_detected": initial_melting,
         "initial_melting_sample_times_ps": [
             float(row["time_ps"]) for row in samples if _has_any_liquid(row)
         ],
-        "preliminary_pool_gate_met": bool(qualifying_windows),
-        "preliminary_pool_gate": {
+        "preliminary_pool_gate_met": short_005["passed"],
+        "preliminary_local_pool_gate": {
             "liquid_threshold_fl": 0.5,
             "minimum_nodes": minimum_nodes,
             "approximate_minimum_volume_A3": minimum_volume,
             "consecutive_samples": 3,
             "sample_interval_ps": sample_interval_ps,
             "required_adjacent_overlap_nodes": ">0",
+            **short_005,
         },
-        "qualifying_windows": qualifying_windows,
+        "short_time_persistence_0p3ps": short_03,
+        "enhanced_persistence_0p5ps": enhanced_05,
+        "candidate_runs": [
+            {
+                "start_time_ps": float(run[0]["time_ps"]),
+                "end_time_ps": float(run[-1]["time_ps"]),
+                "duration_ps": float(run[-1]["time_ps"]) - float(run[0]["time_ps"]),
+                "sample_count": len(run),
+            }
+            for run in valid_runs
+        ],
         "locality_metrics": "For a qualifying cluster, inspect source-center distance, periodic bbox/extents and Ag-volume fraction; no extra numeric locality cutoff was supplied.",
     }
 
@@ -286,6 +334,8 @@ def main() -> None:
             "three_stage_classification": {
                 "initial_melting": state["melting_and_pool_assessment"]["initial_melting_detected"],
                 "preliminary_local_pool_size_and_persistence": state["melting_and_pool_assessment"]["preliminary_pool_gate_met"],
+                "short_time_persistence_0p3ps": state["melting_and_pool_assessment"]["short_time_persistence_0p3ps"]["passed"],
+                "enhanced_persistence_0p5ps": state["melting_and_pool_assessment"]["enhanced_persistence_0p5ps"]["passed"],
                 "stable_pool": False,
                 "locality_review": "Use saved cluster bbox/extents, distance to heat-source center, Ag-volume fraction and source-power fraction; no unsupported numeric locality cutoff is imposed.",
             },
