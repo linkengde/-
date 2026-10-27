@@ -39,6 +39,8 @@
 - 四组最大晶格温度均约 `300.47`–`300.48 K`，Ag 液相体积分数及最大液相分数均为 0；本轮是输运筛查，不是熔化结果。
 - 电子温度场体积加权 RMS 差约 `0.83 K`，但最大逐点差约 `113 K`。整体能量场通过 L1 门槛不代表所有局部电子温度点完全相同；后续局部熔化结论仍需检查原生体素空间场。
 - 汇总 JSON 中 `numerical_50fs_gate_passed=true`。结果不验证 Ti₃SiC₂ 骨架储热、导热或界面传热。
+- 原生 Ag 体素、`0.3125 fs` 的 50 fs 状态已经保存为压缩续算检查点 `qsgs_component_native_50fs_restart.npz`；检查点无损保留电子温度、晶格温度、液相分数和累计电子—晶格传能密度。SHA-256：`d45028d75f3ae4d0c49c61a8d3380bd21f7dc1f2f13eb3b53cf7597ad120634b`。
+- 已通过检查点恢复烟测：恢复后的电子与晶格总能量相对差为 0，检查点能量残差约 `-9.37e-31 J`。
 
 ## 当前运行文件
 
@@ -50,7 +52,7 @@
   - `qsgs_component_full_domain_50fs_0.15625fs_native_voxel.log`
 - 完成后生成的汇总指标：`qsgs_component_full_domain_50fs_match.json`
 - 四组独立日志：对应的 `qsgs_component_full_domain_50fs_*.log`
-- 本阶段已验收通过；下一步是相同 QSGS 条件下的分段实际加热试算，先跑至 `0.1 ps` 并监测液相、温度和能量收支。
+- 本阶段已验收通过；实际加热已从原生 Ag 体素 50 fs 检查点续算，保持热源开启至总时间 `0.1 ps`。脚本为 `qsgs_component_heating_extend.py`，输出预定为 `qsgs_component_native_heating_to_0p1ps.json`、同名日志和末态温度/液相场快照。
 
 临时完整场保存在 `/tmp/qsgs50_fields`，不提交大型逐体素场文件。四组分项日志和 JSON 指标保留在仓库中用于追溯。
 
