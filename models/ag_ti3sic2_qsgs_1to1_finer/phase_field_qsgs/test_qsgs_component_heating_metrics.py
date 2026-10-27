@@ -6,6 +6,7 @@ import unittest
 import numpy as np
 
 from qsgs_component_heating_extend import _largest_liquid_cluster, _periodic_interval
+from qsgs_component_heating_to_1ps import _pool_gate
 
 
 class LiquidClusterMetricsTests(unittest.TestCase):
@@ -48,6 +49,25 @@ class LiquidClusterMetricsTests(unittest.TestCase):
         self.assertEqual(interval["end_index"], 0)
         self.assertEqual(interval["extent_A"], 4.0)
         self.assertTrue(interval["wraps_boundary"])
+
+    def test_pool_gate_requires_50_nodes_and_three_persistent_samples(self) -> None:
+        def row(time_ps: float, nodes: int, overlap: int) -> dict:
+            return {
+                "time_ps": time_ps,
+                "max_ag_liquid_fraction": 0.1,
+                "liquid_connectivity_at_f_l_ge_0p5": {
+                    "largest_cluster_node_count": nodes,
+                    "largest_cluster_volume_A3": nodes * 28.8,
+                },
+                "largest_cluster_overlap_with_previous_sample": {"shared_node_count": overlap},
+            }
+
+        passing = _pool_gate([row(0.1, 50, 1), row(0.125, 55, 40), row(0.15, 60, 45)])
+        self.assertTrue(passing["initial_melting_detected"])
+        self.assertTrue(passing["preliminary_pool_gate_met"])
+
+        failing = _pool_gate([row(0.1, 49, 1), row(0.125, 55, 40), row(0.15, 60, 45)])
+        self.assertFalse(failing["preliminary_pool_gate_met"])
 
 
 if __name__ == "__main__":

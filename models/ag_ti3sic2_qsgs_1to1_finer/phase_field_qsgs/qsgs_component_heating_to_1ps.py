@@ -56,7 +56,12 @@ def _append_new_samples(target: list[dict], incoming: list[dict]) -> None:
 
 
 def _pool_gate(samples: list[dict]) -> dict:
-    initial_melting = any(bool(row.get("initial_melting_detected", False)) for row in samples)
+    def _has_any_liquid(row: dict) -> bool:
+        return bool(row.get("initial_melting_detected", False)) or float(
+            row.get("max_ag_liquid_fraction", row.get("ag_liquid_volume_fraction", 0.0))
+        ) > 0.0
+
+    initial_melting = any(_has_any_liquid(row) for row in samples)
     qualifying_windows = []
     minimum_nodes = 50
     minimum_volume = 1.44e3
@@ -95,7 +100,7 @@ def _pool_gate(samples: list[dict]) -> dict:
     return {
         "initial_melting_detected": initial_melting,
         "initial_melting_sample_times_ps": [
-            float(row["time_ps"]) for row in samples if row.get("initial_melting_detected", False)
+            float(row["time_ps"]) for row in samples if _has_any_liquid(row)
         ],
         "preliminary_pool_gate_met": bool(qualifying_windows),
         "preliminary_pool_gate": {
@@ -278,6 +283,12 @@ def main() -> None:
             "liquid_observed": state["melting_and_pool_assessment"]["initial_melting_detected"],
             "preliminary_pool_size_and_persistence_gate_met": state["melting_and_pool_assessment"]["preliminary_pool_gate_met"],
             "stable_pool_claimed": False,
+            "three_stage_classification": {
+                "initial_melting": state["melting_and_pool_assessment"]["initial_melting_detected"],
+                "preliminary_local_pool_size_and_persistence": state["melting_and_pool_assessment"]["preliminary_pool_gate_met"],
+                "stable_pool": False,
+                "locality_review": "Use saved cluster bbox/extents, distance to heat-source center, Ag-volume fraction and source-power fraction; no unsupported numeric locality cutoff is imposed.",
+            },
             "note": "The existing 3 ps persistence / 2 ps volume-window candidate criterion cannot be demonstrated within a 1 ps cap.",
         }
         _write_json(args.progress, state)
