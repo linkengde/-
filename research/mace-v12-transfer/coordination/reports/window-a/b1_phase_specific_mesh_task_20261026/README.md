@@ -33,7 +33,7 @@ The two 3×3×3 liquid endpoints are conditionally registered and may run only i
 
 The first Ag64 7×7×7 attempt was killed with exit code 137 during GPAW's LCAO-to-PW initialization, before SCF began. The cgroup recorded an OOM kill at its 32 GiB memory limit. Its logs and progress record are preserved under `failed_attempts/`.
 
-A single manually registered recovery uses GPAW's random plane-wave initial wavefunctions for this endpoint only. This skips the LCAO diagonalization/conversion that reached the memory limit. Four MPI ranks and all physical method settings remain fixed; the initialization override is recorded in the manifest and endpoint summary. This is not an automatic retry. If the recovery also fails, stop the queue and review resources before another attempt.
+A manually registered recovery used GPAW's random plane-wave initial wavefunctions for this endpoint only, while retaining four MPI ranks and the physical method settings. It was also OOM-killed before SCF at the 32 GiB limit. Both failures are preserved in `failed_attempts/`; the queue is stopped pending a reviewed memory/parallelization strategy. Automatic retries remain disabled.
 
 ## Execution
 
