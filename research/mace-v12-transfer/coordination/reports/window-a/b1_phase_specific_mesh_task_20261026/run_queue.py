@@ -64,9 +64,16 @@ def ensure_run(record, conditional=False):
     label = record["label"]
     run_dir = OUT / label
     if run_dir.exists():
-        # Finalize a complete endpoint left behind if the launcher was interrupted
-        # between SCF completion and compact-archive verification.
-        finalize_archive(run_dir, label)
+        archive_files = ("gpaw.log", "progress.json", "result.extxyz", "summary.json",
+                         "verification.json", "SHA256SUMS.txt")
+        already_archived = all((run_dir / name).is_file() for name in archive_files) and not (run_dir / "state.gpw").exists()
+        if already_archived:
+            subprocess.run([PYTHON, str(HERE / "verify_job.py"), label], cwd=ROOT,
+                           check=True, capture_output=True, text=True)
+        else:
+            # Finalize a complete endpoint left behind if the launcher was interrupted
+            # between SCF completion and compact-archive verification.
+            finalize_archive(run_dir, label)
         write_progress(labels={**read_progress().get("labels", {}), label:"complete_verified"})
         return
     cmd = ["mpirun", "--bind-to", "core", "--map-by", "core", "-n", "4", PYTHON, str(HERE / "run_one.py"), label]
