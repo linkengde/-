@@ -124,8 +124,8 @@ def main() -> None:
         current_json = args.first_json
         current_fields = args.first_fields
         current_time = args.start_time_ps
-        if abs(float(first_result["heating"]["checkpoint_time_ps"]) - current_time) > 1.0e-9:
-            raise RuntimeError("Initial stage checkpoint time does not match requested start")
+        if abs(float(first_result["heating"]["end_time_ps"]) - current_time) > 1.0e-9:
+            raise RuntimeError("Initial stage end time does not match requested start")
         state["status"] = "HEATING_IN_STAGES"
         state["first_stage_end"] = first_result["samples"][-1]
         _write_json(args.progress, state)
