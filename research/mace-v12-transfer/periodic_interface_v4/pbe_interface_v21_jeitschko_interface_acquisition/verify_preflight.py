@@ -33,7 +33,9 @@ checks = {
     "method": summary["method"]["xc"] == "PBE" and summary["method"]["cutoff_eV"] == 500 and summary["method"]["kpts"] == job["kpts"] and summary["method"]["smearing_eV"] == job["smearing_eV"] and summary["method"]["poissonsolver"] == {"dipolelayer": "xy"},
     "energy_force_consistency_recorded_separately": output.info["PW_PBE_energy_eV"] == summary["native_extrapolated_energy_eV_cell"] and output.info["PW_PBE_free_energy_eV"] == summary["free_energy_eV_cell"] and summary["training_integration"] == "not performed",
     "finite_forces_and_energies": forces.shape == (len(source), 3) and np.isfinite(forces).all() and np.isfinite(summary["native_extrapolated_energy_eV_cell"]) and np.isfinite(summary["free_energy_eV_cell"]),
-    "force_summaries": np.isclose(summary["max_force_eV_A"], np.linalg.norm(forces, axis=1).max(), rtol=0, atol=1e-12) and np.isclose(summary["rms_force_vector_eV_A"], np.sqrt(np.mean(np.sum(forces * forces, axis=1))), rtol=0, atol=1e-12),
+    # extxyz stores force components at finite decimal precision while the
+    # JSON summary retains full precision. Allow only the resulting roundoff.
+    "force_summaries": np.isclose(summary["max_force_eV_A"], np.linalg.norm(forces, axis=1).max(), rtol=0, atol=1e-8) and np.isclose(summary["rms_force_vector_eV_A"], np.sqrt(np.mean(np.sum(forces * forces, axis=1))), rtol=0, atol=1e-8),
     "no_large_checkpoint": not list(folder.glob("*.gpw")),
 }
 checks = {k: bool(v) for k, v in checks.items()}
