@@ -1,12 +1,12 @@
 {
   "task_id": "window-a-b1-kmesh-20261026",
-  "status": "recovery_registered",
+  "status": "running",
   "started_epoch_s": 1792986638.959702,
   "labels": {
     "B1_Ag32_s9073_k6__to_8_k6x6x6": "complete_verified",
     "B1_Ag32_s9073_k6__to_8_k8x8x8": "complete_verified",
     "B1_Ag64_s9073_k5__to_7_k5x5x5": "complete_verified",
-    "B1_Ag64_s9073_k5__to_7_k7x7x7": "recovery_pending_attempt2"
+    "B1_Ag64_s9073_k5__to_7_k7x7x7": "running"
   },
   "pairs": {
     "Ag32_seed9073_k6_to_k8.json": {
@@ -26,6 +26,10 @@
         8,
         8
       ],
+      "initial_wavefunctions": {
+        "coarse": "lcao",
+        "fine": "lcao"
+      },
       "free_energy_delta_meV_per_atom": 0.7960163388971431,
       "native_energy_delta_meV_per_atom_diagnostic_only": 1.366292010589909,
       "force_vector_rms_delta_eV_per_A": 0.0007198502683088833,
@@ -39,9 +43,9 @@
       "interpretation": "Numerical mesh control only; no dataset integration or validation role."
     }
   },
-  "updated_epoch_s": 1793078116.1208518,
+  "updated_epoch_s": 1793078264.4979537,
   "active_label": "B1_Ag64_s9073_k5__to_7_k7x7x7",
   "observed_scf_iteration": 0,
-  "observed_at_utc": "2026-10-27 05:11:11+00:00",
-  "note": "Ag32 k6x6x6 vs k8x8x8 passed all mesh thresholds. Ag64 k5x5x5 converged in 16 SCF steps and passed endpoint verification. The first Ag64 k7x7x7 attempt exited 137 before SCF; cgroup OOM counters confirm a 32 GiB memory-limit kill during LCAO-to-PW initialization. The failed attempt is preserved. One manual recovery has been registered using random plane-wave initial wavefunctions, while retaining four MPI ranks and the physical DFT settings. Queue restart is being validated; no fine-endpoint result exists."
+  "observed_at_utc": "2026-10-27 05:16:48+00:00",
+  "note": "Ag32 k6x6x6 vs k8x8x8 passed all thresholds; Ag64 k5x5x5 converged in 16 SCF steps and passed verification. Ag64 k7x7x7 attempt 1 was OOM-killed at the 32 GiB cgroup limit before SCF and is preserved. The registered manual recovery (attempt 2) started at 2026-10-27 05:16:48 UTC using random plane-wave initial wavefunctions, four MPI ranks, and unchanged physical DFT settings. The four ranks are active during initialization; SCF iteration is 0. Automatic retries remain disabled."
 }
