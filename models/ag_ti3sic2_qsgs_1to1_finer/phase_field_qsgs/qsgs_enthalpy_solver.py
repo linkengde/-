@@ -1,4 +1,4 @@
-"""First-pass finite-volume enthalpy solver on the projected QSGS geometry.
+"""Finite-volume single-temperature enthalpy solver on QSGS geometry.
 
 This is a single-temperature continuum baseline. It is intentionally separate
 from the repository's TTM-MD work: heat is deposited directly into the Ag
@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,6 +19,7 @@ import numpy as np
 
 from thermophysical_model import AgEnthalpy, Ti3SiC2ThermalProperties
 from qsgs_source_integration import integrate_qsgs_source_power_W
+from qsgs_liquid_connectivity import liquid_cluster_metrics
 
 
 DATA_DIR = Path(__file__).resolve().parent
@@ -32,11 +35,17 @@ class ThermalState:
 
 
 class QSGSEnthalpyGrid:
-    """Conservative cell-centered enthalpy method for the two limiting BCs."""
+    """Conservative finite-volume enthalpy method for the two limiting BCs.
+
+    Projected grids retain the historical fast screening path. Native geometry
+    assigns one cell to each original QSGS voxel, so face fluxes only cross
+    actual shared faces. Optional native mesh refinement uniformly subdivides
+    those existing voxels without regenerating the QSGS morphology.
+    """
 
     def __init__(
         self,
-        projected_npz: Path,
+        projected_npz: Path | None,
         boundary_case: str,
         peak_flux_eV_ps_A2: float = 5.0,
         gaussian_radius_A: float = 30.0,
@@ -44,16 +53,41 @@ class QSGSEnthalpyGrid:
         source_center_xy_A: tuple[float, float] | None = None,
         tile_xy: int = 1,
         source_geometry_npz: Path | None = None,
+        native_geometry_npz: Path | None = None,
+        mesh_refinement: int = 1,
     ) -> None:
         if boundary_case not in {"A", "B"}:
             raise ValueError("boundary_case must be A (adiabatic scaffold) or B (ideal contact)")
         if peak_flux_eV_ps_A2 < 0 or gaussian_radius_A <= 0 or absorption_depth_A <= 0:
             raise ValueError("Source flux must be nonnegative and lengths must be positive")
-        with np.load(projected_npz) as archive:
-            self.ag_fraction = np.asarray(archive["ag_fraction"], dtype=float)
-            self.sc_fraction = np.asarray(archive["skeleton_fraction"], dtype=float)
-            self.size_A = np.asarray(archive["size_A"], dtype=float)
-            self.spacing_A = np.asarray(archive["spacing_A"], dtype=float)
+        if native_geometry_npz is None:
+            if mesh_refinement != 1:
+                raise ValueError("mesh_refinement applies only to native QSGS geometry")
+            if projected_npz is None:
+                raise ValueError("projected_npz is required unless native_geometry_npz is supplied")
+            with np.load(projected_npz) as archive:
+                self.ag_fraction = np.asarray(archive["ag_fraction"], dtype=float)
+                self.sc_fraction = np.asarray(archive["skeleton_fraction"], dtype=float)
+                self.size_A = np.asarray(archive["size_A"], dtype=float)
+                self.spacing_A = np.asarray(archive["spacing_A"], dtype=float)
+        else:
+            if projected_npz is not None:
+                raise ValueError("Choose either projected_npz or native_geometry_npz, not both")
+            with np.load(native_geometry_npz, allow_pickle=False) as archive:
+                skeleton = np.asarray(archive["skeleton"], dtype=bool)
+                self.size_A = np.asarray(archive["size_A"], dtype=float)
+            if not isinstance(mesh_refinement, (int, np.integer)) or mesh_refinement <= 0:
+                raise ValueError("mesh_refinement must be a positive integer")
+            if mesh_refinement > 1:
+                skeleton = np.repeat(skeleton, int(mesh_refinement), axis=0)
+                skeleton = np.repeat(skeleton, int(mesh_refinement), axis=1)
+                skeleton = np.repeat(skeleton, int(mesh_refinement), axis=2)
+            self.ag_fraction = (~skeleton).astype(float)
+            self.sc_fraction = skeleton.astype(float)
+            self.spacing_A = self.size_A / np.asarray(skeleton.shape, dtype=float)
+            if source_geometry_npz is None:
+                source_geometry_npz = native_geometry_npz
+        self.mesh_refinement = int(mesh_refinement)
         # Overlap projection can leave machine-epsilon phase slivers at
         # nominally empty/full cells. They have negligible volume but can
         # create extreme per-cell temperatures because source and capacity
@@ -363,9 +397,24 @@ class QSGSEnthalpyGrid:
         total = float(self.ag_fraction.sum())
         return float(np.sum(self.ag_fraction * self.state.ag_liquid_fraction) / total) if total else 0.0
 
-    def run(self, duration_ps: float, source_on: bool, sample_interval_ps: float = 0.1) -> list[dict[str, float]]:
+    def run(
+        self,
+        duration_ps: float,
+        source_on: bool,
+        sample_interval_ps: float = 0.1,
+        maximum_dt_s: float | None = None,
+        track_liquid_connectivity: bool = False,
+        liquid_threshold: float = 0.5,
+        progress: bool = False,
+    ) -> list[dict[str, float]]:
         if duration_ps <= 0.0 or sample_interval_ps <= 0.0:
             raise ValueError("Run duration and sample interval must be positive")
+        if maximum_dt_s is not None and (not np.isfinite(maximum_dt_s) or maximum_dt_s <= 0.0):
+            raise ValueError("maximum_dt_s must be finite and positive")
+        if track_liquid_connectivity and self.source_geometry_npz is None:
+            raise ValueError("Liquid connectivity tracking requires the native QSGS geometry")
+        if not 0.0 < liquid_threshold <= 1.0:
+            raise ValueError("liquid_threshold must be in (0, 1]")
         end_s = self.time_s + duration_ps * 1.0e-12
         sample_interval_s = sample_interval_ps * 1.0e-12
         next_sample = self.time_s
@@ -373,15 +422,26 @@ class QSGSEnthalpyGrid:
         # in both phases; a fixed initial stable step is therefore conservative
         # and avoids recomputing the full-grid diffusion bound every substep.
         stable_dt = self.stable_timestep_s()
+        step_limit = stable_dt if maximum_dt_s is None else min(stable_dt, maximum_dt_s)
         rows: list[dict[str, float]] = []
         while self.time_s < end_s - 1.0e-24:
-            dt = min(stable_dt, end_s - self.time_s, next_sample + sample_interval_s - self.time_s)
+            dt = min(step_limit, end_s - self.time_s, next_sample + sample_interval_s - self.time_s)
             if dt <= 1.0e-25:
                 next_sample += sample_interval_s
                 continue
             row = self.advance(dt, source_on=source_on, enforce_stability=False)
             if self.time_s >= next_sample + sample_interval_s - 1.0e-24 or self.time_s >= end_s - 1.0e-24:
+                if track_liquid_connectivity:
+                    liquid = (self.state.ag_liquid_fraction >= liquid_threshold) & (self.ag_fraction > 0.0)
+                    row.update(liquid_cluster_metrics(liquid, self.spacing_A))
                 rows.append(row)
+                if progress:
+                    print(
+                        f"t={row['time_ps']:.6g} ps  peak={row['max_temperature_K']:.4f} K  "
+                        f"Ag liquid={row['ag_liquid_volume_fraction']:.6g}",
+                        file=sys.stderr,
+                        flush=True,
+                    )
                 next_sample += sample_interval_s
         return rows
 
@@ -394,27 +454,119 @@ def write_csv(path: Path, rows: list[dict[str, float]]) -> None:
         writer.writerows(rows)
 
 
+def longest_sampled_liquid_presence_ps(rows: list[dict[str, float]], sample_interval_ps: float) -> float:
+    """Return the longest uninterrupted sampled presence of any liquid cluster."""
+    longest = current = 0.0
+    previous_time: float | None = None
+    tolerance = max(1.0e-12, sample_interval_ps * 1.0e-6)
+    for row in rows:
+        if row.get("connected_liquid_cluster_count", 0) <= 0:
+            current = 0.0
+            previous_time = None
+            continue
+        time_ps = float(row["time_ps"])
+        if previous_time is None:
+            current = 0.0
+        else:
+            delta = time_ps - previous_time
+            if delta <= sample_interval_ps + tolerance:
+                current += delta
+            else:
+                current = 0.0
+        longest = max(longest, current)
+        previous_time = time_ps
+    return longest
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--spacing", choices=("5A", "10A"), default="10A")
+    parser.add_argument("--geometry", choices=("projected", "native"), default="projected")
     parser.add_argument("--boundary", choices=("A", "B"), required=True)
     parser.add_argument("--heat-ps", type=float, default=1.0)
     parser.add_argument("--cool-ps", type=float, default=1.0)
     parser.add_argument("--sample-ps", type=float, default=0.1)
+    parser.add_argument("--tile-xy", type=int, default=1)
+    parser.add_argument("--mesh-refinement", type=int, default=1)
+    parser.add_argument("--source-integration", choices=("cell-center", "exact-qsgs"), default=None)
+    parser.add_argument("--max-dt-fs", type=float, default=None)
+    parser.add_argument("--track-liquid-connectivity", action="store_true")
+    parser.add_argument("--progress", action="store_true")
+    parser.add_argument("--liquid-threshold", type=float, default=0.5)
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
-    path = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz"
-    model = QSGSEnthalpyGrid(path, args.boundary)
-    rows = model.run(args.heat_ps, source_on=True, sample_interval_ps=args.sample_ps)
-    rows += model.run(args.cool_ps, source_on=False, sample_interval_ps=args.sample_ps)
+    if args.tile_xy <= 0:
+        parser.error("--tile-xy must be a positive integer")
+    if args.mesh_refinement <= 0:
+        parser.error("--mesh-refinement must be a positive integer")
+    if args.geometry != "native" and args.mesh_refinement != 1:
+        parser.error("--mesh-refinement applies only to --geometry native")
+    if args.max_dt_fs is not None and args.max_dt_fs <= 0.0:
+        parser.error("--max-dt-fs must be positive")
+    if args.heat_ps <= 0.0 or args.cool_ps < 0.0:
+        parser.error("--heat-ps must be positive and --cool-ps cannot be negative")
+    native_path = DATA_DIR.parent / "qsgs_morphology.npz"
+    geometry_path = native_path if args.source_integration == "exact-qsgs" or args.geometry == "native" else None
+    if args.track_liquid_connectivity and args.geometry != "native":
+        parser.error("--track-liquid-connectivity requires --geometry native")
+    if args.geometry == "native" and args.source_integration == "cell-center":
+        parser.error("Native geometry requires --source-integration exact-qsgs")
+    projected_path = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz" if args.geometry == "projected" else None
+    model = QSGSEnthalpyGrid(
+        projected_path,
+        args.boundary,
+        tile_xy=args.tile_xy,
+        source_geometry_npz=geometry_path,
+        native_geometry_npz=native_path if args.geometry == "native" else None,
+        mesh_refinement=args.mesh_refinement,
+    )
+    initial_stable_timestep_fs = model.stable_timestep_s() * 1.0e15
+    max_dt_s = None if args.max_dt_fs is None else args.max_dt_fs * 1.0e-15
+    rows = model.run(
+        args.heat_ps,
+        source_on=True,
+        sample_interval_ps=args.sample_ps,
+        maximum_dt_s=max_dt_s,
+        track_liquid_connectivity=args.track_liquid_connectivity,
+        liquid_threshold=args.liquid_threshold,
+        progress=args.progress,
+    )
+    if args.cool_ps > 0.0:
+        rows += model.run(
+            args.cool_ps,
+            source_on=False,
+            sample_interval_ps=args.sample_ps,
+            maximum_dt_s=max_dt_s,
+            track_liquid_connectivity=args.track_liquid_connectivity,
+            liquid_threshold=args.liquid_threshold,
+            progress=args.progress,
+        )
     output = args.output or DATA_DIR / f"qsgs_enthalpy_{args.spacing}_BC{args.boundary}.csv"
     write_csv(output, rows)
+    mesh_geometry_path = native_path if args.geometry == "native" else projected_path
+    assert mesh_geometry_path is not None
+    source_geometry_hash = (
+        hashlib.sha256(geometry_path.read_bytes()).hexdigest() if geometry_path is not None else None
+    )
     summary = {
         "status": "SINGLE_TEMPERATURE_ENTHALPY_EXPLORATORY_RUN",
         "boundary_case": args.boundary,
+        "geometry_mode": args.geometry,
+        "mesh_geometry_input": str(mesh_geometry_path.relative_to(DATA_DIR.parent)),
+        "mesh_geometry_sha256": hashlib.sha256(mesh_geometry_path.read_bytes()).hexdigest(),
+        "source_geometry_input": (
+            str(geometry_path.relative_to(DATA_DIR.parent)) if geometry_path is not None else None
+        ),
+        "source_geometry_sha256": source_geometry_hash,
         "spacing_label": args.spacing,
+        "tile_xy": args.tile_xy,
+        "native_mesh_refinement": args.mesh_refinement if args.geometry == "native" else None,
         "grid_shape_xyz": list(model.temperature_shape),
         "actual_spacing_A": model.spacing_A.tolist(),
+        "source_integration_method": model.source_integration_method,
+        "stable_timestep_fs_at_initial_state": initial_stable_timestep_fs,
+        "maximum_timestep_fs": args.max_dt_fs,
+        "liquid_connectivity_threshold": args.liquid_threshold if args.track_liquid_connectivity else None,
         "heat_duration_ps": args.heat_ps,
         "cool_duration_ps": args.cool_ps,
         "total_time_ps": model.time_s * 1.0e12,
@@ -423,6 +575,7 @@ def main() -> None:
         "final_total_enthalpy_J": float(model.enthalpy_density_J_m3.sum() * model.cell_volume_m3),
         "energy_balance_error_J": float(model.enthalpy_density_J_m3.sum() * model.cell_volume_m3 - model.injected_energy_J),
         "max_temperature_K": float(model.state.temperature_K.max()),
+        "mean_ag_temperature_K": model._ag_weighted_mean_temperature(),
         "ag_liquid_volume_fraction": model._liquid_ag_volume_fraction(),
         "max_ag_liquid_fraction": float(model.state.ag_liquid_fraction.max()),
         "limitations": [
@@ -434,6 +587,46 @@ def main() -> None:
         "timeseries_csv": str(output.name),
     }
     summary_path = output.with_suffix(".json")
+    if args.track_liquid_connectivity:
+        presence_ps = longest_sampled_liquid_presence_ps(rows, args.sample_ps)
+        active_cluster_rows = [
+            row for row in rows if row.get("connected_liquid_cluster_count", 0) > 0
+        ]
+        largest_cluster_row = max(
+            active_cluster_rows,
+            key=lambda row: row["largest_liquid_cluster_voxels"],
+            default=None,
+        )
+        summary["sampled_liquid_persistence_screen"] = {
+            "longest_connected_liquid_presence_ps": presence_ps,
+            "provisional_0p3_ps_gate_met": presence_ps >= 0.3,
+            "provisional_0p5_ps_enhanced_gate_met": presence_ps >= 0.5,
+            "interpretation": (
+                "Provisional user-defined screening only. It measures consecutive sampled presence of any "
+                "connected liquid cluster, not persistent identity of one tracked cluster; it is not a universal stability criterion."
+            ),
+            "sampling_interval_ps": args.sample_ps,
+        }
+        summary["first_detected_connected_liquid_time_ps"] = (
+            float(active_cluster_rows[0]["time_ps"]) if active_cluster_rows else None
+        )
+        summary["connected_liquid_sample_count"] = len(active_cluster_rows)
+        summary["max_sampled_connected_liquid_cluster_count"] = max(
+            (int(row["connected_liquid_cluster_count"]) for row in rows), default=0
+        )
+        summary["final_connected_liquid_cluster_count"] = int(
+            rows[-1].get("connected_liquid_cluster_count", 0)
+        )
+        summary["largest_sampled_liquid_cluster"] = (
+            {
+                "time_ps": float(largest_cluster_row["time_ps"]),
+                "voxel_count": int(largest_cluster_row["largest_liquid_cluster_voxels"]),
+                "volume_A3": float(largest_cluster_row["largest_liquid_cluster_volume_A3"]),
+                "centroid_A": largest_cluster_row["largest_liquid_cluster_centroid_A"],
+            }
+            if largest_cluster_row is not None
+            else None
+        )
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
 

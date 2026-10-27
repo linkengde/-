@@ -1,0 +1,107 @@
+{
+  "status": "NATIVE_QSGS_NUMERICAL_CONVERGENCE_SCREEN",
+  "model": "single-temperature explicit finite-volume enthalpy conduction",
+  "geometry_input": "existing qsgs_morphology.npz; each native voxel is uniformly subdivided for mesh refinement",
+  "source_integration": "exact separable Gaussian/exponential integral over original binary Ag voxels",
+  "boundary_case": "A",
+  "initial_temperature_K": 300.0,
+  "duration_ps": 0.005,
+  "lateral_tile_xy": 1,
+  "chosen_matched_dt_fs": 0.008084225186476515,
+  "screening_tolerance": {
+    "relative_ag_weighted_field_L1_timestep_halving_max": 0.001,
+    "relative_ag_weighted_field_L1_mesh_refinement_1_to_2_max": 0.01,
+    "maximum_peak_temperature_difference_as_peak_rise_max": 0.02
+  },
+  "interpretation": "Working numerical gates for this exploratory start only; they are not universal criteria or paper-grade validation.",
+  "runs": {
+    "native_mesh_base_dt": {
+      "mesh_refinement": 1,
+      "grid_shape_xyz": [
+        100,
+        100,
+        50
+      ],
+      "spacing_A": [
+        2.99635,
+        3.01857484616085,
+        3.1722300000000003
+      ],
+      "stable_timestep_fs": 0.040421125932382576,
+      "maximum_timestep_fs": 0.008084225186476515,
+      "step_count": 619,
+      "elapsed_s": 17.390908152000065,
+      "source_power_W": 0.0008862179242256766,
+      "injected_energy_J": 4.431089621128406e-18,
+      "final_enthalpy_J": 4.431089621128427e-18,
+      "energy_balance_error_J": 2.0800043399382147e-32,
+      "max_ag_temperature_K": 358.18103762068324,
+      "ag_weighted_mean_temperature_K": 300.29926798587024,
+      "max_ag_liquid_fraction": 0.0,
+      "reported_dt_fs_at_sample": 0.003948834757563133
+    },
+    "native_mesh_half_dt": {
+      "mesh_refinement": 1,
+      "grid_shape_xyz": [
+        100,
+        100,
+        50
+      ],
+      "spacing_A": [
+        2.99635,
+        3.01857484616085,
+        3.1722300000000003
+      ],
+      "stable_timestep_fs": 0.040421125932382576,
+      "maximum_timestep_fs": 0.004042112593238258,
+      "step_count": 1237,
+      "elapsed_s": 35.00076782999997,
+      "source_power_W": 0.0008862179242256766,
+      "injected_energy_J": 4.4310896211281976e-18,
+      "final_enthalpy_J": 4.431089621128306e-18,
+      "energy_balance_error_J": 1.086224488634401e-31,
+      "max_ag_temperature_K": 358.1776226861142,
+      "ag_weighted_mean_temperature_K": 300.2992680331017,
+      "max_ag_liquid_fraction": 0.0,
+      "reported_dt_fs_at_sample": 0.003948834757427449
+    },
+    "native_mesh_refined_base_dt": {
+      "mesh_refinement": 2,
+      "grid_shape_xyz": [
+        200,
+        200,
+        100
+      ],
+      "spacing_A": [
+        1.498175,
+        1.509287423080425,
+        1.5861150000000002
+      ],
+      "stable_timestep_fs": 0.010105281483095644,
+      "maximum_timestep_fs": 0.008084225186476515,
+      "step_count": 619,
+      "elapsed_s": 172.62032292600009,
+      "source_power_W": 0.0008862179242256766,
+      "injected_energy_J": 4.431089621128406e-18,
+      "final_enthalpy_J": 4.431089621128427e-18,
+      "energy_balance_error_J": 2.0800043399382147e-32,
+      "max_ag_temperature_K": 357.5774726450763,
+      "ag_weighted_mean_temperature_K": 300.29927254335956,
+      "max_ag_liquid_fraction": 0.0,
+      "reported_dt_fs_at_sample": 0.003948834757563133
+    }
+  },
+  "relative_ag_weighted_field_L1_timestep_halving": 5.919299724423681e-05,
+  "relative_ag_weighted_field_L1_mesh_refinement_1_to_2": 0.007422948898197868,
+  "max_ag_temperature_difference_timestep_K": 0.004531184189204396,
+  "max_ag_temperature_difference_mesh_K": 1.1613533368341677,
+  "all_runs_energy_balance_error_J_below_1e-12_relative": true,
+  "max_temperature_difference_as_base_peak_rise_timestep": 7.788077309218647e-05,
+  "max_temperature_difference_as_base_peak_rise_mesh": 0.0199610282718868,
+  "screening_checks": {
+    "timestep_field_l1_within_gate": true,
+    "mesh_field_l1_within_gate": true,
+    "mesh_peak_difference_within_gate": true,
+    "all_runs_energy_balance_error_J_below_1e-12_relative": true
+  }
+}
