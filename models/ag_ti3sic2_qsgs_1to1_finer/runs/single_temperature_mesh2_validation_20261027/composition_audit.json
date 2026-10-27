@@ -1,0 +1,224 @@
+{
+  "status": "VOLUME_TARGET_CONFIRMED_MASS_CONVERSION_CORRECTED",
+  "geometry_path": "qsgs_morphology.npz",
+  "geometry_sha256": "7e0e1509b414597ce4e2a1c9fc387ed9656caf507f1186e2d28de79c3c1bfc43",
+  "mask_shape_xyz": [
+    100,
+    100,
+    50
+  ],
+  "domain_size_A": [
+    299.635,
+    301.857484616085,
+    158.6115
+  ],
+  "thermal_mask_volume_fraction": {
+    "Ag": 0.416654,
+    "Ti3SiC2": 0.583346
+  },
+  "candidate_bulk_densities_kg_m3": {
+    "Ag_solid_reference": 10490.0,
+    "Ti3SiC2": 4520.0
+  },
+  "bulk_density_mass_ratio_implied_by_thermal_mask_Ag_over_Ti3SiC2": 1.6576253686809954,
+  "implied_Ag_mass_fraction_by_bulk_density": 0.6237242420302793,
+  "Ag_volume_fraction_for_equal_mass_at_candidate_bulk_densities": 0.3011325782811459,
+  "user_stated_target_volume_fraction": {
+    "Ag": 0.7,
+    "Ti3SiC2": 0.3
+  },
+  "mass_ratio_implied_by_user_stated_70_30_volume_fraction": 5.415191740412979,
+  "Ag_mass_fraction_implied_by_user_stated_70_30_volume_fraction": 0.8441200137946889,
+  "atomistic_geometry_mass_ratio_Ag_over_Ti3SiC2": 0.9999983918196158,
+  "atomistic_geometry_counts": {
+    "Ti": 352191,
+    "Si": 117397,
+    "C": 234794,
+    "Ag": 212996
+  },
+  "interpretation": "The user confirmed Ag:Ti3SiC2 = 70:30 by volume as the experimental target. Under the current candidate bulk densities this corresponds to about 5.42:1 by mass, not 1:1. The existing atomistic geometry's approximately equal-mass accounting is a separate construction and does not set the chosen continuum volume target. The exact density/porosity basis remains to be sourced.",
+  "experimental_target_Ag_volume_fraction": 0.7,
+  "user_confirmed_target_basis": "volume_fraction",
+  "user_confirmed_Ag_volume_fraction": 0.7,
+  "user_confirmed_Ti3SiC2_volume_fraction": 0.3,
+  "claimed_equal_mass_conversion_matches_candidate_density_conversion": false,
+  "mass_ratio_from_candidate_density_for_selected_volume_target_Ag_over_Ti3SiC2": 5.415191740412979,
+  "selected_target_geometry": {
+    "status": "INDEPENDENT_70_30_VOLUME_THERMAL_GEOMETRY_CREATED",
+    "target_phase_volume_fraction": {
+      "Ag": 0.7,
+      "Ti3SiC2": 0.3
+    },
+    "achieved_phase_volume_fraction": {
+      "Ag": 0.699996,
+      "Ti3SiC2": 0.300004
+    },
+    "absolute_skeleton_fraction_error": 4.000000000004e-06,
+    "geometry_path": "runs/single_temperature_mesh2_validation_20261027/qsgs_morphology_ag70vol.npz",
+    "geometry_sha256": "03ef47b1dd534b3215cf03f42c8cf7e887dcdfcc185b33bab7453cd838c1faac",
+    "shape_xyz": [
+      100,
+      100,
+      50
+    ],
+    "domain_size_A": [
+      299.635,
+      301.857484616085,
+      158.6115
+    ],
+    "voxel_size_A": [
+      2.99635,
+      3.01857484616085,
+      3.1722300000000003
+    ],
+    "construction": {
+      "method": "threshold the already generated QSGS growth-rank realization, then apply the original alternating largest face-connected component cleanup",
+      "stochastic_growth_regenerated": false,
+      "rank_threshold_exclusive": 155304,
+      "raw_skeleton_voxel_count": 155304,
+      "cleanup_voxel_changes_by_iteration": [
+        10058,
+        0
+      ],
+      "seed": 20261024,
+      "parent_geometry_sha256": "7e0e1509b414597ce4e2a1c9fc387ed9656caf507f1186e2d28de79c3c1bfc43",
+      "growth_rank_sha256": "ebaa70879bd9b539922007e040a063395c5881769b4012fd0b1b34ca4313f5a5",
+      "parent_geometry_edited": false
+    },
+    "phase_connectivity": {
+      "Ti3SiC2": {
+        "periodic_face_connected_components": 1,
+        "largest_component_voxel_fraction_of_phase": 1.0,
+        "largest_component_seam_edges_xy": [
+          1080,
+          879
+        ],
+        "largest_component_open_z_extent_voxels": 50
+      },
+      "Ag": {
+        "periodic_face_connected_components": 1,
+        "largest_component_voxel_fraction_of_phase": 1.0,
+        "largest_component_seam_edges_xy": [
+          3054,
+          3506
+        ],
+        "largest_component_open_z_extent_voxels": 50
+      }
+    },
+    "mass_ratio_from_candidate_bulk_densities_Ag_over_Ti3SiC2": 5.415191740412979,
+    "mass_fraction_from_candidate_bulk_densities": {
+      "Ag": 0.8441200137946889,
+      "Ti3SiC2": 0.15587998620531096
+    },
+    "limitations": [
+      "This is a new continuum thermal mask derived from the existing QSGS growth history; it is not an independent random realization or a regenerated atomic model.",
+      "The exact experimental density/porosity mapping remains unverified; mass conversion uses candidate densities pending literature audit.",
+      "Connectivity checks establish periodic face connectivity, not minimum neck thickness or statistical representativeness."
+    ]
+  },
+  "mesh2_heating_window_comparison": {
+    "status": "AG70VOL_2X_HEATING_WINDOW_COMPARISON_NOT_CONVERGENCE_PROOF",
+    "geometry": "runs/single_temperature_mesh2_validation_20261027/qsgs_morphology_ag70vol.npz",
+    "geometry_sha256": "03ef47b1dd534b3215cf03f42c8cf7e887dcdfcc185b33bab7453cd838c1faac",
+    "composition_target": "Ag:Ti3SiC2 = 70:30 by volume",
+    "time_ps": 0.2,
+    "comparison_method": "2x T and liquid-fraction fields block-averaged over 2x2x2 refined voxels and compared on the common Ag voxels of the 1x QSGS mask",
+    "geometry_is_same_for_both_resolutions": true,
+    "grid_shape_xyz": {
+      "1x": [
+        100,
+        100,
+        50
+      ],
+      "2x": [
+        200,
+        200,
+        100
+      ]
+    },
+    "source_power_W": {
+      "1x": 0.0015513589462382562,
+      "2x": 0.001551358946238256
+    },
+    "relative_source_power_difference": -1.1102230246251565e-16,
+    "peak_temperature_K": {
+      "1x": 748.6092849131937,
+      "2x": 723.1791725797245,
+      "Ag_melting_temperature_candidate_K": 1235.08,
+      "1x_fraction_of_candidate_melting_temperature": 0.6061221013320545,
+      "2x_fraction_of_candidate_melting_temperature": 0.5855322510118572,
+      "2x_minus_1x_K": -25.430112333469197,
+      "relative_to_1x_temperature_rise": -0.05668654927280416
+    },
+    "maximum_temperature_location_A": {
+      "1x": [
+        166.297425,
+        152.43802973112292,
+        157.02538500000003
+      ],
+      "2x_fine_grid": [
+        152.0647625,
+        147.15552375034144,
+        157.8184425
+      ],
+      "2x_block_averaged": [
+        151.315675,
+        146.40088003880123,
+        157.02538500000003
+      ]
+    },
+    "source_hotspot_alignment": {
+      "source_center_xy_A": [
+        149.8175,
+        150.9287423080425
+      ],
+      "1x_peak_lateral_distance_A": 16.54889351380007,
+      "2x_fine_peak_lateral_distance_A": 4.39173849723386,
+      "2x_block_averaged_peak_lateral_distance_A": 4.769283495436573
+    },
+    "Ag_weighted_temperature_field_difference": {
+      "mean_signed_2x_minus_1x_K": 0.010689684981232557,
+      "mean_absolute_K": 0.40424856080778127,
+      "root_mean_square_K": 1.41466119981954,
+      "maximum_absolute_K": 28.634605566575146,
+      "L1_error_over_1x_Ag_temperature_rise": 0.03273987539310019
+    },
+    "liquid_fraction": {
+      "1x_Ag_volume_fraction": 0.0,
+      "2x_Ag_volume_fraction": 0.0,
+      "connected_clusters_1x": 0,
+      "connected_clusters_2x": 0,
+      "threshold_mask_IoU": null,
+      "mask_comparison_note": "Both resolutions are fully solid at 0.2 ps; IoU is undefined because the union is empty."
+    },
+    "energy_ledger": {
+      "1x": {
+        "injected_energy_J": 3.1027178924767655e-16,
+        "total_enthalpy_J": 3.102717892476734e-16,
+        "balance_error_J": -3.1554436208840472e-30,
+        "relative_balance_error": -1.0169934007004501e-14
+      },
+      "2x": {
+        "injected_energy_J": 3.1027178924736204e-16,
+        "total_enthalpy_J": 3.102717892475154e-16,
+        "balance_error_J": 1.5333483845233417e-28,
+        "relative_balance_error": 4.941952306531267e-13
+      },
+      "injected_energy_relative_difference": -1.013633621482768e-12
+    },
+    "checkpoint_integrity": {
+      "1x_identity_sha256": "64d49c1cd5b7e807aa758d020a8a442bacc30c1424c515a9c65ebc84938d8b3e",
+      "2x_identity_sha256": "1ccdfc09c413738a369fb91d07c90f914a3a9c869780f869fd66e8a6bd6f8d27",
+      "1x_internal_energy_error_matches_summary": true,
+      "2x_internal_energy_error_matches_summary": true
+    },
+    "interpretation": "The selected 70:30 vol% geometry has no Ag liquid in either the 1x or 2x Case A heating run through 0.2 ps. The 2x peak is lower than the 1x peak, while a single pair of resolutions does not establish full mesh convergence. This 0.2 ps window therefore cannot validate molten-pool size or lifetime for the selected composition.",
+    "limitations": [
+      "Candidate thermal properties are not yet fully traced to archived source tables.",
+      "Case A treats Ti3SiC2 as having zero heat capacity and zero conductivity; it is an idealized adiabatic scaffold bound.",
+      "External domain faces are insulated and no environmental cooling or vaporization is modeled."
+    ]
+  },
+  "next_action": "The selected 70:30 vol% target has now been compared at 1x and 2x through 0.2 ps; neither resolution melts. Preserve the old 41.6654 vol% results separately. Do not claim melt-pool convergence from this all-solid window; source property provenance and the experimental density convention remain open.",
+  "property_limit": "The exact bibliographic records and source tables are not yet archived in this checkout. These values are implementation candidates pending source-table attachment and citation audit."
+}

@@ -1,0 +1,103 @@
+{
+  "status": "AG70VOL_2X_HEATING_WINDOW_COMPARISON_NOT_CONVERGENCE_PROOF",
+  "geometry": "runs/single_temperature_mesh2_validation_20261027/qsgs_morphology_ag70vol.npz",
+  "geometry_sha256": "03ef47b1dd534b3215cf03f42c8cf7e887dcdfcc185b33bab7453cd838c1faac",
+  "composition_target": "Ag:Ti3SiC2 = 70:30 by volume",
+  "time_ps": 0.2,
+  "comparison_method": "2x T and liquid-fraction fields block-averaged over 2x2x2 refined voxels and compared on the common Ag voxels of the 1x QSGS mask",
+  "geometry_is_same_for_both_resolutions": true,
+  "grid_shape_xyz": {
+    "1x": [
+      100,
+      100,
+      50
+    ],
+    "2x": [
+      200,
+      200,
+      100
+    ]
+  },
+  "source_power_W": {
+    "1x": 0.0015513589462382562,
+    "2x": 0.001551358946238256
+  },
+  "relative_source_power_difference": -1.1102230246251565e-16,
+  "peak_temperature_K": {
+    "1x": 748.6092849131937,
+    "2x": 723.1791725797245,
+    "Ag_melting_temperature_candidate_K": 1235.08,
+    "1x_fraction_of_candidate_melting_temperature": 0.6061221013320545,
+    "2x_fraction_of_candidate_melting_temperature": 0.5855322510118572,
+    "2x_minus_1x_K": -25.430112333469197,
+    "relative_to_1x_temperature_rise": -0.05668654927280416
+  },
+  "maximum_temperature_location_A": {
+    "1x": [
+      166.297425,
+      152.43802973112292,
+      157.02538500000003
+    ],
+    "2x_fine_grid": [
+      152.0647625,
+      147.15552375034144,
+      157.8184425
+    ],
+    "2x_block_averaged": [
+      151.315675,
+      146.40088003880123,
+      157.02538500000003
+    ]
+  },
+  "source_hotspot_alignment": {
+    "source_center_xy_A": [
+      149.8175,
+      150.9287423080425
+    ],
+    "1x_peak_lateral_distance_A": 16.54889351380007,
+    "2x_fine_peak_lateral_distance_A": 4.39173849723386,
+    "2x_block_averaged_peak_lateral_distance_A": 4.769283495436573
+  },
+  "Ag_weighted_temperature_field_difference": {
+    "mean_signed_2x_minus_1x_K": 0.010689684981232557,
+    "mean_absolute_K": 0.40424856080778127,
+    "root_mean_square_K": 1.41466119981954,
+    "maximum_absolute_K": 28.634605566575146,
+    "L1_error_over_1x_Ag_temperature_rise": 0.03273987539310019
+  },
+  "liquid_fraction": {
+    "1x_Ag_volume_fraction": 0.0,
+    "2x_Ag_volume_fraction": 0.0,
+    "connected_clusters_1x": 0,
+    "connected_clusters_2x": 0,
+    "threshold_mask_IoU": null,
+    "mask_comparison_note": "Both resolutions are fully solid at 0.2 ps; IoU is undefined because the union is empty."
+  },
+  "energy_ledger": {
+    "1x": {
+      "injected_energy_J": 3.1027178924767655e-16,
+      "total_enthalpy_J": 3.102717892476734e-16,
+      "balance_error_J": -3.1554436208840472e-30,
+      "relative_balance_error": -1.0169934007004501e-14
+    },
+    "2x": {
+      "injected_energy_J": 3.1027178924736204e-16,
+      "total_enthalpy_J": 3.102717892475154e-16,
+      "balance_error_J": 1.5333483845233417e-28,
+      "relative_balance_error": 4.941952306531267e-13
+    },
+    "injected_energy_relative_difference": -1.013633621482768e-12
+  },
+  "checkpoint_integrity": {
+    "1x_identity_sha256": "64d49c1cd5b7e807aa758d020a8a442bacc30c1424c515a9c65ebc84938d8b3e",
+    "2x_identity_sha256": "1ccdfc09c413738a369fb91d07c90f914a3a9c869780f869fd66e8a6bd6f8d27",
+    "1x_internal_energy_error_matches_summary": true,
+    "2x_internal_energy_error_matches_summary": true
+  },
+  "interpretation": "The selected 70:30 vol% geometry has no Ag liquid in either the 1x or 2x Case A heating run through 0.2 ps. The 2x peak is lower than the 1x peak, while a single pair of resolutions does not establish full mesh convergence. This 0.2 ps window therefore cannot validate molten-pool size or lifetime for the selected composition.",
+  "limitations": [
+    "Candidate thermal properties are not yet fully traced to archived source tables.",
+    "Case A treats Ti3SiC2 as having zero heat capacity and zero conductivity; it is an idealized adiabatic scaffold bound.",
+    "External domain faces are insulated and no environmental cooling or vaporization is modeled."
+  ]
+}
