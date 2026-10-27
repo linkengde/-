@@ -1,0 +1,1421 @@
+{
+  "task_id": "user_directed_Jeitschko1967_Ti3SiC2_backbone_DFT_acquisition_v21",
+  "authorization": "User directed the assistant to calculate the missing data directly.",
+  "launch_enabled": false,
+  "training_enabled": false,
+  "development_test_role_assignment": "pending",
+  "source": {
+    "doi": "10.1007/BF00899949",
+    "source_cif": "research/mace-v12-transfer/coordination/reports/window-c/ti3sic2_jeitschko1967_source_audit_20261027/Ti3SiC2_Jeitschko1967_fulltext_Fourier_variant.cif",
+    "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+    "uploaded_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "kpts": [
+      1,
+      1,
+      1
+    ],
+    "kpoint_label": "Gamma",
+    "smearing_eV": 0.1,
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "poissonsolver": {},
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "PAW_data_version": "1.2.1",
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    },
+    "parallel": {
+      "mpi_ranks": 4,
+      "sl_auto": true,
+      "threads_per_rank": 1
+    },
+    "scf_thresholds": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "mixer": {
+      "type": "Pulay",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "energy_keys": {
+      "native": "get_potential_energy(force_consistent=False)",
+      "finite_width_free_energy": "calc.results['free_energy']",
+      "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+    }
+  },
+  "runtime_guard": {
+    "one_job_at_a_time": true,
+    "maximum_mpi_ranks": 4,
+    "maximum_threads_per_rank": 1,
+    "memory_cgroup_bytes": 34359738368,
+    "minimum_starting_free_disk_bytes": 3221225472,
+    "never_retry_an_OOM_job_without_revised_resource_plan": true
+  },
+  "energy_convention": "Record native extrapolated total energy and finite-width free energy separately; record forces without relabeling energy convention.",
+  "records": [
+    {
+      "label": "Ti3SiC2_JN1967_baseline_gamma_v21",
+      "site_id": null,
+      "delta_z_A": 0.0,
+      "input": "inputs/Ti3SiC2_JN1967_baseline_gamma_v21.extxyz",
+      "input_sha256": "df3445f7d2bd36de62a0042a4ea04646be648abe9c9f1da27114b3f80dbac8d2",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "kpoint_label": "Gamma",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "coarse_Gamma_method_diagnostic_not_training",
+      "launch_enabled": false,
+      "status": "completed_control_only"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_Ti4f_id0003_z_m002A_gamma_v21",
+      "site_id": 3,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_Ti4f_id0003_z_m002A_gamma_v21.extxyz",
+      "input_sha256": "db5bd8789986ac561fc0343ff10da5dd86e8f8033d097471d3a0dbf12b4d6df2",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "kpoint_label": "Gamma",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "coarse_Gamma_method_diagnostic_not_training",
+      "launch_enabled": false,
+      "status": "not_launched_gamma_mesh_too_coarse"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_Ti4f_id0003_z_p002A_gamma_v21",
+      "site_id": 3,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_Ti4f_id0003_z_p002A_gamma_v21.extxyz",
+      "input_sha256": "5c8fff9c7832cbc82ff65d388bcc965093e35becca20b427ad6db433ddf10fe3",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "kpoint_label": "Gamma",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "coarse_Gamma_method_diagnostic_not_training",
+      "launch_enabled": false,
+      "status": "not_launched_gamma_mesh_too_coarse"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_C4f_id0009_z_m002A_gamma_v21",
+      "site_id": 9,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_C4f_id0009_z_m002A_gamma_v21.extxyz",
+      "input_sha256": "9360ed364a738743fd66a757f652d31d3bfe0a9c6114dc92e59ed196edf4f512",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "kpoint_label": "Gamma",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "coarse_Gamma_method_diagnostic_not_training",
+      "launch_enabled": false,
+      "status": "not_launched_gamma_mesh_too_coarse"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_C4f_id0009_z_p002A_gamma_v21",
+      "site_id": 9,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_C4f_id0009_z_p002A_gamma_v21.extxyz",
+      "input_sha256": "0f8e7cb946df22d1dd277a2e78888d1035fea394247b62edac88f3128929c1ab",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          1,
+          1,
+          1
+        ],
+        "kpoint_label": "Gamma",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "coarse_Gamma_method_diagnostic_not_training",
+      "launch_enabled": false,
+      "status": "not_launched_gamma_mesh_too_coarse"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_baseline_k6x6x2_v21",
+      "site_id": null,
+      "delta_z_A": 0.0,
+      "input": "inputs/Ti3SiC2_JN1967_baseline_k6x6x2_v21.extxyz",
+      "input_sha256": "7e71418d9bb772dbb75523fb97dcffb27511e690a16fe4fc334eb7db3f041b8b",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "interrupted_resource_estimate_not_label",
+      "launch_enabled": false,
+      "status": "aborted_planned_primitive_cell_reduction",
+      "mesh_selection_basis": "existing Ti3SiC2 48-atom fixed-parent controls found 4x4x2 through 10x10x4 converged with max force below 0.10 eV/A; Gamma on this new source gave ~2 eV/A forces and is retained only as a coarse-mesh diagnostic"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_Ti4f_id0003_z_m002A_k6x6x2_v21",
+      "site_id": 3,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_Ti4f_id0003_z_m002A_k6x6x2_v21.extxyz",
+      "input_sha256": "7e3a7a9236b1c95e009be394b11cfcec368489cd4ef836063233fbd22c75c8f9",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "interrupted_resource_estimate_not_label",
+      "launch_enabled": false,
+      "status": "not_launched_after_primitive_cell_replan",
+      "mesh_selection_basis": "existing Ti3SiC2 48-atom fixed-parent controls found 4x4x2 through 10x10x4 converged with max force below 0.10 eV/A; Gamma on this new source gave ~2 eV/A forces and is retained only as a coarse-mesh diagnostic"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_Ti4f_id0003_z_p002A_k6x6x2_v21",
+      "site_id": 3,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_Ti4f_id0003_z_p002A_k6x6x2_v21.extxyz",
+      "input_sha256": "f50d2c25f7ec8e330b2f67f4c27695d6a292a74d1c3a7b7c42daf5f59e462aac",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "interrupted_resource_estimate_not_label",
+      "launch_enabled": false,
+      "status": "not_launched_after_primitive_cell_replan",
+      "mesh_selection_basis": "existing Ti3SiC2 48-atom fixed-parent controls found 4x4x2 through 10x10x4 converged with max force below 0.10 eV/A; Gamma on this new source gave ~2 eV/A forces and is retained only as a coarse-mesh diagnostic"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_C4f_id0009_z_m002A_k6x6x2_v21",
+      "site_id": 9,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_C4f_id0009_z_m002A_k6x6x2_v21.extxyz",
+      "input_sha256": "8ec31088b9a617138fa156b83cff4b31283b3a00ac362adc0f7d226670373e96",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "interrupted_resource_estimate_not_label",
+      "launch_enabled": false,
+      "status": "not_launched_after_primitive_cell_replan",
+      "mesh_selection_basis": "existing Ti3SiC2 48-atom fixed-parent controls found 4x4x2 through 10x10x4 converged with max force below 0.10 eV/A; Gamma on this new source gave ~2 eV/A forces and is retained only as a coarse-mesh diagnostic"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_C4f_id0009_z_p002A_k6x6x2_v21",
+      "site_id": 9,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_C4f_id0009_z_p002A_k6x6x2_v21.extxyz",
+      "input_sha256": "90ec5a10eabe389632195c14ea5255e51355752e6929309e67866ec2ec3fb36d",
+      "atom_count": 48,
+      "formula": "C16Si8Ti24",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "interrupted_resource_estimate_not_label",
+      "launch_enabled": false,
+      "status": "not_launched_after_primitive_cell_replan",
+      "mesh_selection_basis": "existing Ti3SiC2 48-atom fixed-parent controls found 4x4x2 through 10x10x4 converged with max force below 0.10 eV/A; Gamma on this new source gave ~2 eV/A forces and is retained only as a coarse-mesh diagnostic"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_baseline_k6x6x2_v21",
+      "site_id": null,
+      "delta_z_A": 0.0,
+      "input": "inputs/Ti3SiC2_JN1967_primitive_baseline_k6x6x2_v21.extxyz",
+      "input_sha256": "80021f397f98e0b47aee93118b4e8b3b285fff6b08c2285cca32e5bd56b497e8",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "underconverged_mesh_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_underconverged_mesh_control"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k6x6x2_v21",
+      "site_id": 3,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k6x6x2_v21.extxyz",
+      "input_sha256": "dfdba3ce9dc72bf1b46d4f2d1fb998ab72aa49482e9f6b02a52fec880d49bcc1",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "underconverged_mesh_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_underconverged_mesh_control"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k6x6x2_v21",
+      "site_id": 3,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k6x6x2_v21.extxyz",
+      "input_sha256": "30cf15beb6da6777f5ff7266f49fa5da9a0b4a0e289a4f4280df3a7beca8bd4f",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "underconverged_mesh_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_underconverged_mesh_control"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k6x6x2_v21",
+      "site_id": 9,
+      "delta_z_A": -0.02,
+      "input": "inputs/Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k6x6x2_v21.extxyz",
+      "input_sha256": "02a3f6bec5d1020fe68dd0755806dbadc1a18a71f10108be56bd03017b8aa3ca",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "underconverged_mesh_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_underconverged_mesh_control"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k6x6x2_v21",
+      "site_id": 9,
+      "delta_z_A": 0.02,
+      "input": "inputs/Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k6x6x2_v21.extxyz",
+      "input_sha256": "ffc0804c317bf4c7746737513e176216287f829641d920139bea8a0fffcb6ebb",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          2
+        ],
+        "kpoint_label": "6x6x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "underconverged_mesh_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_underconverged_mesh_control"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21",
+      "input": "inputs/Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21.extxyz",
+      "input_sha256": "4539da57fb472e96465c3f4cdb1c42e84021e3442de0c947c79ad6ef9e93688c",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "fixed_geometry_kpoint_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_control_only",
+      "comparison_geometry": "80021f397f98e0b47aee93118b4e8b3b285fff6b08c2285cca32e5bd56b497e8"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_abstract_primitive_baseline_k10x10x2_mesh_control_v21",
+      "input": "inputs/Ti3SiC2_JN1967_abstract_primitive_baseline_k10x10x2_mesh_control_v21.extxyz",
+      "input_sha256": "54a0505d7b5e511ad4f8430939b40ad4669ceec85373062ce41b9201d75d0e5d",
+      "source_cif_sha256": "5fd657f81d55bb0d15e4c2e12911846f537d97f28244f53952eee23e6d1edb5f",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "fixed_geometry_coordinate_variant_control_not_training",
+      "launch_enabled": false,
+      "status": "completed_coordinate_variant_control_only",
+      "compared_with": "4539da57fb472e96465c3f4cdb1c42e84021e3442de0c947c79ad6ef9e93688c",
+      "coordinate_variant": "publisher abstract zTi=0.135, zC=0.5675"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21",
+      "input": "inputs/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21.extxyz",
+      "input_sha256": "cf7be1328f8fd6ed03c63a253a6e3858661beaaef43f544d6cb90f33bad8ffb0",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "site_id": 3,
+      "delta_z_A": -0.02,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "status": "completed_archive_verified_candidate_pending_audit",
+      "mesh_selected_after_control": "10x10x2: 6x6x2-to-10x10x2 force-vector RMS difference was 0.06198 eV/A on identical geometry"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21",
+      "input": "inputs/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21.extxyz",
+      "input_sha256": "6d785d2ccb04242b415c442113b1a9bf3424bf740866d14e13ec678189819954",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "site_id": 3,
+      "delta_z_A": 0.02,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "status": "completed_archive_verified_candidate_pending_audit",
+      "mesh_selected_after_control": "10x10x2: 6x6x2-to-10x10x2 force-vector RMS difference was 0.06198 eV/A on identical geometry"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21",
+      "input": "inputs/Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21.extxyz",
+      "input_sha256": "5126f58924312e1161297b5b905a0cac0792f6d9609d950e89efe1b08732582f",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "site_id": 9,
+      "delta_z_A": -0.02,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "status": "completed_archive_verified_candidate_pending_audit",
+      "mesh_selected_after_control": "10x10x2: 6x6x2-to-10x10x2 force-vector RMS difference was 0.06198 eV/A on identical geometry"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21",
+      "input": "inputs/Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21.extxyz",
+      "input_sha256": "97bba55b26a9003679f0f38be685907e634cb05ae7250d83a84e6d02c43089ab",
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "site_id": 9,
+      "delta_z_A": 0.02,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          10,
+          10,
+          2
+        ],
+        "kpoint_label": "10x10x2",
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          true
+        ],
+        "poissonsolver": {},
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "PAW_data_version": "1.2.1",
+        "PAW_setup_sha256": {
+          "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+          "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+          "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+          "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+        },
+        "parallel": {
+          "mpi_ranks": 4,
+          "sl_auto": true,
+          "threads_per_rank": 1
+        },
+        "scf_thresholds": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "maxiter": 160,
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "energy_keys": {
+          "native": "get_potential_energy(force_consistent=False)",
+          "finite_width_free_energy": "calc.results['free_energy']",
+          "forces": "ASE calculator forces at FermiDirac width 0.1 eV"
+        }
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "status": "completed_archive_verified_candidate_pending_audit",
+      "mesh_selected_after_control": "10x10x2: 6x6x2-to-10x10x2 force-vector RMS difference was 0.06198 eV/A on identical geometry"
+    }
+  ],
+  "revision": 7,
+  "mesh_revision_note": "The five 6x6x2 primitive-cell calculations are retained as underconverged-mesh controls only. A same-geometry 10x10x2 control differs by 0.06198 eV/A RMS force-vector norm, so only the four 10x10x2 displacement outputs remain acquisition candidates; their 10x10x2 baseline is control-only.",
+  "current_batch": {
+    "status": "closed",
+    "candidate_labels": 4,
+    "control_labels": 7,
+    "coarse_gamma_diagnostic_labels": 1,
+    "not_launched_or_replanned_records": 9,
+    "all_registered_launches_disabled": true,
+    "training_integration_performed": false
+  },
+  "revision_note": "All registered jobs are now closed. Twelve GPAW results passed identity, geometry, finite-value, convergence, method, MPI-rank, role, and per-result SHA256 checks. The four 10x10x2 displacement rows remain acquisition candidates pending provenance/role audit; no training dataset or model was changed.",
+  "current_control": {
+    "label": "Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21",
+    "status": "completed_control_only",
+    "notes": "Same Fourier-coordinate primitive geometry at 10x10x2. The five 6x6x2 values are retained as underconverged mesh controls."
+  }
+}
