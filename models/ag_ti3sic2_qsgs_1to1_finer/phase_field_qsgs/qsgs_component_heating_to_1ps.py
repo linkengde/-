@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""Continue the native-voxel QSGS Ag heating pilot in 50 fs stages to 1 ps.
+
+The first 0.1--0.15 ps stage is run separately. This driver waits for that
+stage's checkpoint, then resumes sequentially. Intermediate checkpoints are
+kept under /tmp to avoid committing a large 3-D field for every 50 fs stage;
+the final 1 ps fields and energy ledger are written in the repository.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+PHASE_DIR = Path(__file__).resolve().parent
+DIAG_DIR = PHASE_DIR / "nested_grid_diagnostics"
+STAGE_RUNNER = PHASE_DIR / "qsgs_component_heating_extend.py"
+DEFAULT_FIRST_JSON = DIAG_DIR / "qsgs_component_native_heating_to_0p15ps.json"
+DEFAULT_FIRST_FIELDS = DIAG_DIR / "qsgs_component_native_heating_to_0p15ps_fields.npz"
+DEFAULT_PROGRESS = DIAG_DIR / "qsgs_component_native_heating_to_1ps_progress.json"
+DEFAULT_LOG = DIAG_DIR / "qsgs_component_native_heating_to_1ps_orchestrator.log"
+INTERMEDIATE_DIR = Path("/tmp/qsgs_component_heating_to_1ps")
+FINAL_STEM = "qsgs_component_native_heating_to_1ps"
+
+
+def _tag(time_ps: float) -> str:
+    return f"{time_ps:.2f}".replace(".", "p")
+
+
+def _write_json(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
+    tmp.replace(path)
+
+
+def _pid_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    return True
+
+
+def _wait_for_first_stage(json_path: Path, fields_path: Path, pid: int | None, log) -> dict:
+    while not json_path.exists():
+        if pid is not None and not _pid_alive(pid):
+            raise RuntimeError(
+                f"The active 0.1--0.15 ps process (PID {pid}) exited before writing {json_path}"
+            )
+        log.write(f"Waiting for active 0.1--0.15 ps stage; pid={pid}\n")
+        log.flush()
+        time.sleep(60)
+    result = json.loads(json_path.read_text(encoding="utf-8"))
+    if result.get("status") != "NATIVE_QSGS_AG_HEATING_PILOT_COMPLETED":
+        raise RuntimeError(f"Unexpected first-stage status in {json_path}")
+    if abs(float(result["heating"]["end_time_ps"]) - 0.15) > 1.0e-9:
+        raise RuntimeError("First stage did not end at 0.15 ps")
+    if not fields_path.exists():
+        raise FileNotFoundError(fields_path)
+    return result
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--first-json", type=Path, default=DEFAULT_FIRST_JSON)
+    parser.add_argument("--first-fields", type=Path, default=DEFAULT_FIRST_FIELDS)
+    parser.add_argument("--wait-pid", type=int, default=None)
+    parser.add_argument("--start-time-ps", type=float, default=0.15)
+    parser.add_argument("--stop-time-ps", type=float, default=1.0)
+    parser.add_argument("--stage-ps", type=float, default=0.05)
+    parser.add_argument("--dt-fs", type=float, default=0.3125)
+    parser.add_argument("--progress", type=Path, default=DEFAULT_PROGRESS)
+    parser.add_argument("--log", type=Path, default=DEFAULT_LOG)
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args()
+
+    if args.stop_time_ps > 1.0 + 1.0e-12:
+        parser.error("This task is capped at 1 ps")
+    if args.stop_time_ps <= args.start_time_ps or args.stage_ps <= 0 or args.dt_fs <= 0:
+        parser.error("Invalid time interval or step")
+    interval_steps = args.stage_ps * 1000.0 / args.dt_fs
+    if abs(interval_steps - round(interval_steps)) > 1.0e-9:
+        parser.error("Stage duration must be an integer multiple of dt")
+
+    stages = []
+    current = args.start_time_ps
+    while current < args.stop_time_ps - 1.0e-12:
+        end = min(args.stop_time_ps, current + args.stage_ps)
+        stages.append((round(current, 10), round(end, 10)))
+        current = end
+    if args.dry_run:
+        print(json.dumps({"stages": stages, "dt_fs": args.dt_fs}, indent=2))
+        return
+
+    args.first_json = args.first_json.resolve()
+    args.first_fields = args.first_fields.resolve()
+    args.start_time_ps = round(args.start_time_ps, 10)
+    args.log.parent.mkdir(parents=True, exist_ok=True)
+    args.progress.parent.mkdir(parents=True, exist_ok=True)
+    INTERMEDIATE_DIR.mkdir(parents=True, exist_ok=True)
+    state = {
+        "status": "WAITING_FOR_0P15PS_CHECKPOINT",
+        "start_time_ps": args.start_time_ps,
+        "stop_time_ps": args.stop_time_ps,
+        "stage_ps": args.stage_ps,
+        "dt_fs": args.dt_fs,
+        "completed_stages": [],
+        "stable_pool_gate": {
+            "project_candidate_rule": "largest connected liquid Ag cluster persists >=3 ps; volume variation <=5% over last 2 ps",
+            "evaluable_before_1ps": False,
+        },
+    }
+    _write_json(args.progress, state)
+
+    with args.log.open("a", encoding="utf-8", buffering=1) as log:
+        log.write("Waiting for the already-running 0.1--0.15 ps stage to finish.\n")
+        first_result = _wait_for_first_stage(args.first_json, args.first_fields, args.wait_pid, log)
+        current_json = args.first_json
+        current_fields = args.first_fields
+        current_time = args.start_time_ps
+        if abs(float(first_result["heating"]["checkpoint_time_ps"]) - current_time) > 1.0e-9:
+            raise RuntimeError("Initial stage checkpoint time does not match requested start")
+        state["status"] = "HEATING_IN_STAGES"
+        state["first_stage_end"] = first_result["samples"][-1]
+        _write_json(args.progress, state)
+        log.write(f"First stage complete at {current_time:.2f} ps; continuing to {args.stop_time_ps:.2f} ps.\n")
+
+        env = os.environ.copy()
+        env.update({"OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"})
+        for start, end in stages:
+            if abs(start - current_time) > 1.0e-9:
+                raise RuntimeError(f"Stage chain discontinuity: expected {current_time}, got {start}")
+            final_stage = abs(end - args.stop_time_ps) <= 1.0e-9
+            if final_stage:
+                output = DIAG_DIR / f"{FINAL_STEM}.json"
+                stage_log = DIAG_DIR / f"{FINAL_STEM}.log"
+                driver_log = DIAG_DIR / f"{FINAL_STEM}_driver.log"
+            else:
+                tag = _tag(end)
+                output = INTERMEDIATE_DIR / f"heating_to_{tag}ps.json"
+                stage_log = INTERMEDIATE_DIR / f"heating_to_{tag}ps.log"
+                driver_log = INTERMEDIATE_DIR / f"heating_to_{tag}ps_driver.log"
+            command = [
+                sys.executable, str(STAGE_RUNNER),
+                "--checkpoint", str(current_fields),
+                "--checkpoint-json", str(current_json),
+                "--checkpoint-time-ps", f"{start:.10g}",
+                "--end-time-ps", f"{end:.10g}",
+                "--dt-fs", f"{args.dt_fs:.10g}",
+                "--output", str(output),
+                "--log", str(stage_log),
+            ]
+            log.write(f"Launching stage {start:.2f}->{end:.2f} ps.\n")
+            with driver_log.open("w", encoding="utf-8") as driver:
+                completed = subprocess.run(command, cwd=PHASE_DIR.parents[2], env=env, stdout=driver, stderr=subprocess.STDOUT)
+            if completed.returncode != 0:
+                raise RuntimeError(f"Stage {start:.2f}->{end:.2f} failed; see {driver_log}")
+            result = json.loads(output.read_text(encoding="utf-8"))
+            if result.get("status") != "NATIVE_QSGS_AG_HEATING_PILOT_COMPLETED":
+                raise RuntimeError(f"Stage {start:.2f}->{end:.2f} did not report completion")
+            final = result["samples"][-1]
+            if abs(float(final["time_ps"]) - end) > 1.0e-8:
+                raise RuntimeError(f"Stage ended at {final['time_ps']}, expected {end}")
+            if float(final["energy_residual_relative_to_source"]) > 1.0e-10:
+                raise RuntimeError(f"Energy balance failed at {end} ps")
+            if float(final["electron_temperature_max_K"]) > 20000.0:
+                raise RuntimeError(f"Electron temperature exceeded table limit at {end} ps")
+            fields = output.with_name(f"{output.stem}_fields.npz")
+            if not fields.exists():
+                raise FileNotFoundError(fields)
+
+            record = {
+                "start_time_ps": start,
+                "end_time_ps": end,
+                "status": "completed",
+                "max_electron_temperature_K": final["electron_temperature_max_K"],
+                "max_lattice_temperature_K": final["lattice_temperature_max_K"],
+                "ag_liquid_volume_fraction": final["ag_liquid_volume_fraction"],
+                "largest_liquid_cluster_volume_A3": final["liquid_connectivity_at_f_l_ge_0p5"]["largest_cluster_volume_A3"],
+                "energy_residual_relative_to_source": final["energy_residual_relative_to_source"],
+            }
+            state["completed_stages"].append(record)
+            state["current_time_ps"] = end
+            state["latest_sample"] = final
+            state["status"] = "COMPLETED_AT_1PS" if final_stage else "HEATING_IN_STAGES"
+            _write_json(args.progress, state)
+            log.write(json.dumps(record, ensure_ascii=False) + "\n")
+            log.write(f"Completed {end:.2f} ps: Tl,max={final['lattice_temperature_max_K']:.6f} K; liquid={final['ag_liquid_volume_fraction']:.8g}.\n")
+
+            # Keep only the latest temporary restart. The 0.1 ps and final 1 ps
+            # snapshots remain as durable repository checkpoints.
+            if current_fields.parent == INTERMEDIATE_DIR and current_fields != fields:
+                current_fields.unlink(missing_ok=True)
+            if current_json.parent == INTERMEDIATE_DIR and current_json != output:
+                current_json.unlink(missing_ok=True)
+            if current_fields.parent == INTERMEDIATE_DIR and current_fields != fields:
+                current_fields.with_name(current_fields.stem.removesuffix("_fields") + ".log").unlink(missing_ok=True)
+            current_json, current_fields, current_time = output, fields, end
+
+        state["task_result"] = {
+            "stop_reason": "1 ps hard limit reached",
+            "heat_source_on_at_stop": True,
+            "liquid_observed": any(
+                row["ag_liquid_volume_fraction"] > 0.0 for row in state["completed_stages"]
+            ) or float(first_result["samples"][-1]["ag_liquid_volume_fraction"]) > 0.0,
+            "stable_pool_claimed": False,
+            "note": "The existing 3 ps persistence / 2 ps volume-window candidate criterion cannot be demonstrated within a 1 ps cap.",
+        }
+        _write_json(args.progress, state)
+        log.write("Reached the 1 ps task limit; no further heating was scheduled.\n")
+
+
+if __name__ == "__main__":
+    main()
