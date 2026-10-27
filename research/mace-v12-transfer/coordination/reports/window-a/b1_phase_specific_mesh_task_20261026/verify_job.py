@@ -32,6 +32,7 @@ checks = {
     "scf": summary["scf_converged"] is True and progress["scf_converged"] is True and progress["status"] == "complete" and f"Converged in {summary['scf_iterations']} steps" in log,
     "mpi": summary["mpi_ranks"] == progress["mpi_ranks"] == 4,
     "method": summary["method"] == record["method"] and summary["method"]["kpts"] == record["kpts"],
+    "initial_wavefunctions": summary.get("initial_wavefunctions", "lcao") == record.get("initial_wavefunctions", "lcao"),
     "finite_values": np.isfinite(summary["native_energy_eV_cell"]) and np.isfinite(summary["free_energy_eV_cell"]) and forces.shape == (len(input_atoms),3) and np.isfinite(forces).all(),
     "energy_consistency": np.isclose(float(output_atoms.info["PW_PBE_energy_eV"]), summary["native_energy_eV_cell"], rtol=0, atol=1e-12) and np.isclose(float(output_atoms.info["free_energy_eV"]), summary["free_energy_eV_cell"], rtol=0, atol=1e-12),
     "control_only": summary["dataset_role"] == output_atoms.info["dataset_role"] == "NUMERICAL_CONTROL_ONLY",

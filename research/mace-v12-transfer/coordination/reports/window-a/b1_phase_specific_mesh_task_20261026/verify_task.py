@@ -41,6 +41,9 @@ roles = {r["config_type"]: r for r in csv.DictReader(ledger.open())}
 pairs = defaultdict(list)
 for record, original in zip(TASK["records"], source["records"]):
     assert record["label"] == original["label"]
+    assert record.get("initial_wavefunctions", "lcao") in {"lcao", "random"}
+    if record.get("initial_wavefunctions") == "random":
+        assert record["label"] == "B1_Ag64_s9073_k5__to_7_k7x7x7"
     for key in ("input", "input_sha256", "config_type", "natoms", "pair_id", "pair_member", "kpts", "method"):
         assert record[key] == original[key], (record["label"], key)
     assert record["candidate_role"] == "TRAINING_CANDIDATE_ONLY"

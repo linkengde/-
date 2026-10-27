@@ -1,11 +1,12 @@
 {
   "task_id": "window-a-b1-kmesh-20261026",
-  "status": "running",
+  "status": "recovery_registered",
   "started_epoch_s": 1792986638.959702,
   "labels": {
     "B1_Ag32_s9073_k6__to_8_k6x6x6": "complete_verified",
     "B1_Ag32_s9073_k6__to_8_k8x8x8": "complete_verified",
-    "B1_Ag64_s9073_k5__to_7_k5x5x5": "running"
+    "B1_Ag64_s9073_k5__to_7_k5x5x5": "complete_verified",
+    "B1_Ag64_s9073_k5__to_7_k7x7x7": "recovery_pending_attempt2"
   },
   "pairs": {
     "Ag32_seed9073_k6_to_k8.json": {
@@ -38,9 +39,9 @@
       "interpretation": "Numerical mesh control only; no dataset integration or validation role."
     }
   },
-  "updated_epoch_s": 1793068872.050894,
-  "active_label": "B1_Ag64_s9073_k5__to_7_k5x5x5",
-  "observed_scf_iteration": 11,
-  "observed_at_utc": "2026-10-27 02:08:01+00:00",
-  "note": "The Ag32 6x6x6 vs 8x8x8 pair passed: free-energy difference 0.7960 meV/atom, force-vector RMS difference 0.000720 eV/A, and maximum atom-force-vector difference 0.001199 eV/A. Both Ag32 endpoint archives passed verification. The queue is running the Ag64 5x5x5 coarse endpoint; initialization took 3131.975 s and the live log reached SCF iteration 11 at 2026-10-27 02:08:01 UTC. Four MPI ranks remain active; runtime progress.json is at iteration 10. The Ag64 endpoint and pair comparison are not complete."
+  "updated_epoch_s": 1793078116.1208518,
+  "active_label": "B1_Ag64_s9073_k5__to_7_k7x7x7",
+  "observed_scf_iteration": 0,
+  "observed_at_utc": "2026-10-27 05:11:11+00:00",
+  "note": "Ag32 k6x6x6 vs k8x8x8 passed all mesh thresholds. Ag64 k5x5x5 converged in 16 SCF steps and passed endpoint verification. The first Ag64 k7x7x7 attempt exited 137 before SCF; cgroup OOM counters confirm a 32 GiB memory-limit kill during LCAO-to-PW initialization. The failed attempt is preserved. One manual recovery has been registered using random plane-wave initial wavefunctions, while retaining four MPI ranks and the physical DFT settings. Queue restart is being validated; no fine-endpoint result exists."
 }

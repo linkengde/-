@@ -86,10 +86,13 @@ if world.rank == 0:
         "started_utc_epoch_s": started,
     }, indent=2) + "\n")
 method = record["method"]
+initial_wavefunctions = record.get("initial_wavefunctions", "lcao")
+if initial_wavefunctions not in {"lcao", "random"}:
+    raise SystemExit(f"Unsupported initial wavefunction mode: {initial_wavefunctions}")
 calc = GPAW(
     mode=PW(method["cutoff_eV"]), xc=method["xc"], kpts=tuple(method["kpts"]),
     occupations=FermiDirac(method["smearing_eV"]), mixer=Mixer(0.05, 8, 100),
-    parallel={"sl_auto": True},
+    parallel={"sl_auto": True}, random=(initial_wavefunctions == "random"),
     convergence={"energy": 1e-5, "density": 1e-5, "eigenstates": 1e-5},
     maxiter=method["maxiter"], txt=str(OUT / "gpaw.log"),
 )
@@ -138,7 +141,8 @@ if world.rank == 0:
         "scf_converged": converged, "scf_iterations": iterations,
         "fmax_eV_A": float(np.linalg.norm(forces, axis=1).max()),
         "rms_force_eV_A": float(np.sqrt(np.mean(np.sum(forces * forces, axis=1)))),
-        "method": method, "mpi_ranks": world.size, "elapsed_s": time.time() - started,
+        "method": method, "initial_wavefunctions": initial_wavefunctions,
+        "mpi_ranks": world.size, "elapsed_s": time.time() - started,
         "dataset_role": "NUMERICAL_CONTROL_ONLY",
     }
     (OUT / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")

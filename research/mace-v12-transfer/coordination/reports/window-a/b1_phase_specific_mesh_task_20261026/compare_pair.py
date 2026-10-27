@@ -42,6 +42,10 @@ result = {
     "coarse_label": args.coarse_label, "fine_label": args.fine_label,
     "input_sha256": coarse["source_sha256"], "natoms": len(a),
     "coarse_kpts": coarse["method"]["kpts"], "fine_kpts": fine["method"]["kpts"],
+    "initial_wavefunctions": {
+        "coarse": coarse.get("initial_wavefunctions", "lcao"),
+        "fine": fine.get("initial_wavefunctions", "lcao"),
+    },
     "free_energy_delta_meV_per_atom": per_atom,
     "native_energy_delta_meV_per_atom_diagnostic_only": native_per_atom,
     "force_vector_rms_delta_eV_per_A": force_rms,

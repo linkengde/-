@@ -29,6 +29,12 @@ The two 3×3×3 liquid endpoints are conditionally registered and may run only i
 - Archive compact result extxyz, summary, progress, GPAW log, verification receipt, and SHA256 inventory. Keep large GPAW state files local and remove them only after the compact archive passes verification.
 - Outputs remain numerical method controls with `TRAINING_CANDIDATE_ONLY` input lineage. They are not integrated into V19 or any other dataset and cannot be used for training or validation without a later, separate review.
 
+## Ag64 7×7×7 OOM recovery
+
+The first Ag64 7×7×7 attempt was killed with exit code 137 during GPAW's LCAO-to-PW initialization, before SCF began. The cgroup recorded an OOM kill at its 32 GiB memory limit. Its logs and progress record are preserved under `failed_attempts/`.
+
+A single manually registered recovery uses GPAW's random plane-wave initial wavefunctions for this endpoint only. This skips the LCAO diagonalization/conversion that reached the memory limit. Four MPI ranks and all physical method settings remain fixed; the initialization override is recorded in the manifest and endpoint summary. This is not an automatic retry. If the recovery also fails, stop the queue and review resources before another attempt.
+
 ## Execution
 
 Run the task verifier and existing source-pack verifier from the repository root before launch:

@@ -1,7 +1,7 @@
 {
   "schema": "WINDOW_A_B1_PHASE_KMESH_TASK_V1",
   "task_id": "window-a-b1-kmesh-20261026",
-  "version": 1,
+  "version": 2,
   "status": "registered_ready",
   "owner_window": "window-a",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
@@ -302,7 +302,8 @@
       "dataset_integration_enabled": false,
       "launch_enabled": true,
       "dft_authorized": true,
-      "task_id": "window-a-b1-kmesh-20261026"
+      "task_id": "window-a-b1-kmesh-20261026",
+      "initial_wavefunctions": "random"
     },
     {
       "label": "B1_TSC72_s9073_k5x8x2__to_7x10x2_k5x8x2",
@@ -922,5 +923,15 @@
     }
   ],
   "outputs_directory": "calculations",
-  "archive_policy": "Archive compact extxyz, summary, progress, GPAW log, verification JSON, and SHA256SUMS. Keep large state.gpw checkpoints local and delete only after verification passes."
+  "archive_policy": "Archive compact extxyz, summary, progress, GPAW log, verification JSON, and SHA256SUMS. Keep large state.gpw checkpoints local and delete only after verification passes.",
+  "manual_recovery": {
+    "label": "B1_Ag64_s9073_k5__to_7_k7x7x7",
+    "attempt": 2,
+    "reason": "Attempt 1 was killed by the cgroup OOM killer during LCAO-to-PW initialization before SCF.",
+    "initial_wavefunctions": "random",
+    "physical_method_unchanged": true,
+    "mpi_ranks": 4,
+    "automatic_retries_remain_disabled": true,
+    "preserved_failed_attempt": "failed_attempts/B1_Ag64_s9073_k5__to_7_k7x7x7_attempt1_oom"
+  }
 }
