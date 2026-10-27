@@ -16,19 +16,17 @@ The first registered run is the AgSi 6×6×1 candidate. A same-geometry 8×8×1 
 
 ## Execution
 
-Run from the repository root in the GPAW MPI environment:
+Run from the repository root in the GPAW MPI environment. `run_mesh_sequence.py` waits for the already-running AgSi 6×6×1 job, verifies it, runs the same-geometry 8×8×1 control and compares both meshes. It starts the AgC and AgTi 6×6×1 labels sequentially only if the comparison passes its provisional budgets:
 
 ```text
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/build_inputs.py
-/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/launch_preflight.py AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21
-/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/launch_preflight.py AgSi_JN1967_registryB_k8x8x1_sigma0p10_control_v21
-/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/compare_kmesh.py
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/run_mesh_sequence.py
 ```
 
 `launch_preflight.py` validates cgroup and disk headroom, MPI/ScaLAPACK, package and PAW hashes, and the shared DFT lock before each run. The runner preserves per-iteration progress, checks memory every 10 seconds, and stores result text plus extxyz and SHA256 inventory. A failed run is retained under `calculations/failed_attempts/` for diagnosis; do not overwrite it or retry without correcting the cause.
 
 ## Current status
 
-Geometry candidates and method scripts are prepared. The first attempt stopped before SCF because the runner passed a `PoissonSolver` object where GPAW 26.7 expects the `{"dipolelayer": "xy"}` parameter mapping. No energy or force label was produced. That attempt is preserved with its launcher log and classified as a runner initialization error; the runner was corrected before the next attempt. See `calculations/` for live or completed status and `input_manifest.json` for job flags.
+Geometry candidates and method scripts are prepared. The first attempt stopped before SCF because the runner passed a `PoissonSolver` object where GPAW 26.7 expects the `{"dipolelayer": "xy"}` parameter mapping. No energy or force label was produced. That attempt is preserved with its launcher log and classified as a runner initialization error; the runner was corrected before the next attempt. The corrected AgSi 6×6×1 calculation is active; see `calculations/mesh_sequence_status.json` for queue progress and `input_manifest.json` for registered job flags.
 
 Even if the AgSi mesh comparison passes, only the same 1967-source AgC, AgSi and AgTi geometries should proceed as acquisition candidates; the 8×8×1 endpoint remains a numerical control. A successful calculation does not by itself resolve V19's failed development gate or grant a train/dev role.
