@@ -1,0 +1,90 @@
+{
+  "status": "SINGLE_TEMPERATURE_ENTHALPY_EXPLORATORY_RUN",
+  "boundary_case": "A",
+  "geometry_mode": "native",
+  "mesh_geometry_input": "qsgs_morphology.npz",
+  "mesh_geometry_sha256": "7e0e1509b414597ce4e2a1c9fc387ed9656caf507f1186e2d28de79c3c1bfc43",
+  "source_geometry_input": "qsgs_morphology.npz",
+  "source_geometry_sha256": "7e0e1509b414597ce4e2a1c9fc387ed9656caf507f1186e2d28de79c3c1bfc43",
+  "spacing_label": "10A",
+  "tile_xy": 1,
+  "native_mesh_refinement": 1,
+  "grid_shape_xyz": [
+    100,
+    100,
+    50
+  ],
+  "actual_spacing_A": [
+    2.99635,
+    3.01857484616085,
+    3.1722300000000003
+  ],
+  "source_integration_method": "exact separable integral over binary QSGS Ag voxels; contributions to round-off-only projected cells are omitted",
+  "stable_timestep_fs_at_initial_state": 0.040421125932382576,
+  "maximum_timestep_fs": null,
+  "liquid_connectivity_threshold": 0.5,
+  "heat_duration_ps": 0.6,
+  "cool_duration_ps": 0.0,
+  "start_time_ps": 0.0,
+  "total_time_ps": 0.5999999999999981,
+  "actual_source_power_W": 0.0008862179242256766,
+  "injected_energy_J": 5.317307545352411e-16,
+  "final_total_enthalpy_J": 5.317307545352965e-16,
+  "energy_balance_error_J": 5.531887097862345e-29,
+  "max_temperature_K": 2264.260393154521,
+  "max_temperature_seen_K": 2264.260393154521,
+  "mean_ag_temperature_K": 333.4840916911428,
+  "ag_liquid_volume_fraction": 0.00246857579342505,
+  "max_ag_liquid_fraction": 1.0,
+  "ag_normal_boiling_reference_K": 2435.0,
+  "peak_exceeds_ag_normal_boiling_reference": false,
+  "limitations": [
+    "Heat is deposited directly into lattice enthalpy; this is not TTM or TTM-MD.",
+    "Candidate properties are first-pass values pending source-table archival and citation review.",
+    "Boundary A/B are limiting assumptions, not measured Ag/Ti3SiC2 interface heat transfer.",
+    "External z faces are insulated and x/y are periodic; no free-surface radiation or convection is included.",
+    "The phase model does not include vaporization, so states above the Ag normal-boiling reference are outside its reliable regime.",
+    "Adiabatic cooling redistributes energy inside the computational domain and does not represent heat loss to an external sink."
+  ],
+  "timeseries_csv": "caseA_heat0p6.csv",
+  "tracked_liquid_persistence_screen": {
+    "longest_single_track_sampled_duration_ps": 0.42399999999999827,
+    "provisional_0p3_ps_gate_met": true,
+    "provisional_0p5_ps_enhanced_gate_met": false,
+    "interpretation": "Heating-only screen for the largest component's persistent identity. IDs continue by voxel overlap: the largest-overlap child inherits an ID on split and the largest-overlap parent supplies the ID on merge. The 0.3/0.5 ps thresholds are provisional screens, not universal thermal-stability criteria.",
+    "sampling_interval_ps": 0.002,
+    "longest_track_while_it_was_the_largest_component_ps": 0.42399999999999827
+  },
+  "liquid_track_onset_times_ps": {
+    "first_nonzero_liquid_fraction": 0.15599999999999992,
+    "first_connected_cluster_at_threshold": 0.17599999999999982,
+    "first_cluster_with_at_least_two_face_connected_voxels": 0.17799999999999983
+  },
+  "liquid_tracking": {
+    "threshold_ag_liquid_fraction": 0.5,
+    "track_count": 22,
+    "merge_component_event_count": 18,
+    "split_parent_event_count": 0,
+    "cluster_history_csv": "caseA_heat0p6.clusters.csv"
+  },
+  "first_detected_connected_liquid_time_ps": 0.17599999999999982,
+  "connected_liquid_sample_count": 213,
+  "max_sampled_connected_liquid_cluster_count": 5,
+  "final_connected_liquid_cluster_count": 2,
+  "largest_sampled_liquid_cluster": {
+    "time_ps": 0.5999999999999981,
+    "voxel_count": 511,
+    "volume_A3": 14661.555822071912,
+    "centroid_A": [
+      143.0539435075495,
+      146.46571094013427,
+      152.61778558708414
+    ]
+  },
+  "energy_ledger_definition": {
+    "total_enthalpy_J": "Integral of the stored volumetric enthalpy field relative to uniform 300 K.",
+    "ag_latent_energy_J": "Ag reference-density fusion latent heat multiplied by the stored Ag liquid fraction field.",
+    "sensible_enthalpy_J": "Total enthalpy minus the Ag latent-energy term.",
+    "relative_energy_balance_error": "(total enthalpy - cumulative injected energy) / cumulative injected energy."
+  }
+}

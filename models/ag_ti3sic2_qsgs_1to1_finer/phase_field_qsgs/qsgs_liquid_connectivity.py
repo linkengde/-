@@ -129,3 +129,63 @@ def liquid_cluster_metrics(
         "largest_liquid_cluster_volume_A3": float(largest_size * np.prod(spacing)),
         "largest_liquid_cluster_centroid_A": centroid_A,
     }
+
+
+def liquid_cluster_labels(
+    liquid_mask: np.ndarray,
+    periodic_axes: tuple[int, ...] = (0, 1),
+) -> tuple[np.ndarray, int]:
+    """Return dense six-neighbour component labels, including periodic seams.
+
+    Background is label 0 and occupied components are labeled 1..N.  The
+    component numbering is local to this frame; temporal identity is handled
+    by :class:`qsgs_liquid_tracking.LiquidClusterTracker`.
+    """
+    mask = np.asarray(liquid_mask, dtype=bool)
+    periodic = tuple(sorted(set(int(axis) for axis in periodic_axes)))
+    if mask.ndim != 3 or any(n <= 0 for n in mask.shape):
+        raise ValueError("liquid_mask must be a non-empty three-dimensional field")
+    if any(axis not in (0, 1, 2) for axis in periodic):
+        raise ValueError("periodic_axes may contain only 0, 1, or 2")
+    if not np.any(mask):
+        return np.zeros(mask.shape, dtype=np.int32), 0
+
+    structure = np.zeros((3, 3, 3), dtype=bool)
+    structure[1, 1, 1] = True
+    for axis in range(3):
+        low = [1, 1, 1]
+        high = [1, 1, 1]
+        low[axis] = 0
+        high[axis] = 2
+        structure[tuple(low)] = True
+        structure[tuple(high)] = True
+    local_labels, local_count = label(mask, structure=structure)
+    seam_pairs = []
+    for axis in periodic:
+        if mask.shape[axis] <= 1:
+            continue
+        first = np.take(local_labels, 0, axis=axis).ravel()
+        last = np.take(local_labels, -1, axis=axis).ravel()
+        valid = (first > 0) & (last > 0) & (first != last)
+        if np.any(valid):
+            seam_pairs.append(np.column_stack((first[valid], last[valid])))
+
+    if seam_pairs:
+        pairs = np.unique(np.concatenate(seam_pairs, axis=0), axis=0)
+        rows = np.concatenate((pairs[:, 0], pairs[:, 1]))
+        cols = np.concatenate((pairs[:, 1], pairs[:, 0]))
+        adjacency = coo_matrix(
+            (np.ones(rows.size, dtype=np.uint8), (rows, cols)),
+            shape=(local_count + 1, local_count + 1),
+        ).tocsr()
+        _, component_by_label = connected_components(adjacency, directed=False)
+    else:
+        component_by_label = np.arange(local_count + 1, dtype=np.int32)
+
+    component_labels = component_by_label[local_labels]
+    component_labels[~mask] = 0
+    occupied = np.unique(component_labels[mask])
+    dense = np.zeros(local_labels.shape, dtype=np.int32)
+    for dense_id, component_id in enumerate(occupied, start=1):
+        dense[component_labels == component_id] = dense_id
+    return dense, int(occupied.size)

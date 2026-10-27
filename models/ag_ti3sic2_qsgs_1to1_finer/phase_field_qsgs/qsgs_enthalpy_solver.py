@@ -11,6 +11,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,13 +20,14 @@ import numpy as np
 
 from thermophysical_model import AgEnthalpy, Ti3SiC2ThermalProperties
 from qsgs_source_integration import integrate_qsgs_source_power_W
-from qsgs_liquid_connectivity import liquid_cluster_metrics
+from qsgs_liquid_tracking import LiquidClusterTracker
 
 
 DATA_DIR = Path(__file__).resolve().parent
 ANGSTROM3_TO_M3 = 1.0e-30
 EV_PER_PS_ANGSTROM2_TO_W_M2 = 1.602176634e-19 / 1.0e-12 / 1.0e-20
 PHASE_FRACTION_ROUNDOFF_TOL = 1.0e-12
+AG_NORMAL_BOILING_REFERENCE_K = 2435.0
 
 
 @dataclass(frozen=True)
@@ -140,6 +142,7 @@ class QSGSEnthalpyGrid:
             y = (np.arange(self.temperature_shape[1]) + 0.5) * self.spacing_A[1]
             z = (np.arange(self.temperature_shape[2]) + 0.5) * self.spacing_A[2]
             cx, cy = source_center_xy_A or (self.size_A[0] / 2.0, self.size_A[1] / 2.0)
+            self.source_center_xy_A = (float(cx), float(cy))
             rr2 = (x[:, None, None] - cx) ** 2 + (y[None, :, None] - cy) ** 2
             depth = self.size_A[2] - z[None, None, :]
             spatial = np.exp(-rr2 / self.gaussian_radius_A**2) * np.exp(-depth / self.absorption_depth_A)
@@ -153,6 +156,11 @@ class QSGSEnthalpyGrid:
             self.source_cell_power_W = self.source_W_m3 * self.cell_volume_m3
             self.source_integration_method = "cell-center source times projected Ag fraction"
         else:
+            self.source_center_xy_A = (
+                tuple(float(value) for value in source_center_xy_A)
+                if source_center_xy_A is not None
+                else (float(self.size_A[0] / 2.0), float(self.size_A[1] / 2.0))
+            )
             integrated_cell_power_W = integrate_qsgs_source_power_W(
                 source_ag_mask,
                 self.temperature_shape,
@@ -197,6 +205,189 @@ class QSGSEnthalpyGrid:
         self.enthalpy_density_J_m3 = np.zeros(self.temperature_shape, dtype=float)
         self.time_s = 0.0
         self.injected_energy_J = 0.0
+        self.max_temperature_seen_K = 300.0
+        self.last_run_step_limit_s: float | None = None
+
+    @staticmethod
+    def _sha256_file(path: Path) -> str:
+        digest = hashlib.sha256()
+        with Path(path).open("rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(block)
+        return digest.hexdigest()
+
+    @staticmethod
+    def _sha256_array(array: np.ndarray) -> str:
+        return hashlib.sha256(np.ascontiguousarray(array).view(np.uint8)).hexdigest()
+
+    def checkpoint_identity(self) -> dict[str, object]:
+        geometry_hash = (
+            self._sha256_file(self.source_geometry_npz)
+            if self.source_geometry_npz is not None
+            else None
+        )
+        table_path = DATA_DIR / "thermophysical_candidates.csv"
+        config_path = DATA_DIR / "thermophysical_candidates.json"
+        model_path = DATA_DIR / "thermophysical_model.py"
+        return {
+            "schema_version": 1,
+            "boundary_case": self.boundary_case,
+            "boundary_conditions": {"x": "periodic", "y": "periodic", "z": "insulated"},
+            "grid_shape_xyz": list(self.temperature_shape),
+            "spacing_A": self.spacing_A.tolist(),
+            "domain_size_A": self.size_A.tolist(),
+            "ag_fraction_sha256": self._sha256_array(self.ag_fraction),
+            "geometry_sha256": geometry_hash,
+            "source_geometry_sha256": geometry_hash,
+            "source_integration_method": self.source_integration_method,
+            "source_peak_flux_W_m2": self.peak_flux_W_m2,
+            "source_gaussian_radius_A": self.gaussian_radius_A,
+            "source_absorption_depth_A": self.absorption_depth_A,
+            "source_center_xy_A": list(self.source_center_xy_A),
+            "source_actual_power_W": self.actual_source_power_W,
+            "tile_xy": self.tile_xy,
+            "mesh_refinement": self.mesh_refinement,
+            "thermophysical_candidates_csv_sha256": self._sha256_file(table_path),
+            "thermophysical_candidates_json_sha256": self._sha256_file(config_path),
+            "thermophysical_model_code_sha256": self._sha256_file(model_path),
+            "enthalpy_reference_temperature_K": 300.0,
+            "phase_model": "Ag solid sensible enthalpy + isothermal fusion latent heat + liquid sensible enthalpy",
+        }
+
+    def save_checkpoint(
+        self,
+        path: Path,
+        tracker: LiquidClusterTracker | None = None,
+    ) -> Path:
+        """Atomically save the full restart state and its validation metadata."""
+        target = Path(path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        tracker_metadata = None if tracker is None else tracker.to_metadata()
+        tracker_labels = (
+            np.zeros((0, 0, 0), dtype=np.int32)
+            if tracker is None or tracker.previous_track_labels is None
+            else tracker.previous_track_labels.astype(np.int32, copy=False)
+        )
+        arrays = {
+            "enthalpy_density_J_m3": np.asarray(self.enthalpy_density_J_m3, dtype=np.float64),
+            "temperature_K": np.asarray(self.state.temperature_K, dtype=np.float64),
+            "ag_liquid_fraction": np.asarray(self.state.ag_liquid_fraction, dtype=np.float64),
+            "tracker_track_labels": tracker_labels,
+        }
+        total_energy = float(self.enthalpy_density_J_m3.sum() * self.cell_volume_m3)
+        latent_energy = self._ag_latent_energy_J()
+        energy_error = total_energy - self.injected_energy_J
+        metadata = {
+            "checkpoint_schema_version": 1,
+            "identity": self.checkpoint_identity(),
+            "identity_sha256": hashlib.sha256(
+                json.dumps(self.checkpoint_identity(), sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest(),
+            "time_s": self.time_s,
+            "time_ps": self.time_s * 1.0e12,
+            "max_temperature_seen_K": self.max_temperature_seen_K,
+            "last_run_step_limit_s": self.last_run_step_limit_s,
+            "injected_energy_J": self.injected_energy_J,
+            "actual_source_power_W": self.actual_source_power_W,
+            "total_enthalpy_J": total_energy,
+            "ag_latent_energy_J": latent_energy,
+            "sensible_enthalpy_J": total_energy - latent_energy,
+            "energy_balance_error_J": energy_error,
+            "relative_energy_balance_error": (
+                energy_error / self.injected_energy_J if self.injected_energy_J != 0.0 else 0.0
+            ),
+            "tracker_metadata": tracker_metadata,
+            "tracker_labels_present": bool(tracker is not None and tracker.previous_track_labels is not None),
+            "array_sha256": {name: self._sha256_array(value) for name, value in arrays.items()},
+        }
+        temporary = target.with_name(target.name + ".tmp")
+        try:
+            with temporary.open("wb") as handle:
+                np.savez_compressed(handle, **arrays, metadata_json=np.asarray(json.dumps(metadata)))
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, target)
+        finally:
+            if temporary.exists():
+                temporary.unlink()
+        return target
+
+    def load_checkpoint(
+        self,
+        path: Path,
+        tracker: LiquidClusterTracker | None = None,
+    ) -> dict[str, object]:
+        """Restore a checkpoint only when its geometry and physics match exactly."""
+        with np.load(path, allow_pickle=False) as archive:
+            metadata = json.loads(str(archive["metadata_json"].item()))
+            if int(metadata.get("checkpoint_schema_version", -1)) != 1:
+                raise ValueError("Unsupported enthalpy checkpoint schema")
+            expected_identity = self.checkpoint_identity()
+            expected_digest = hashlib.sha256(
+                json.dumps(expected_identity, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
+            if metadata.get("identity_sha256") != expected_digest or metadata.get("identity") != expected_identity:
+                raise ValueError("Checkpoint geometry, source, boundary, or thermal-property identity does not match")
+            arrays = {
+                name: np.asarray(archive[name]).copy()
+                for name in (
+                    "enthalpy_density_J_m3",
+                    "temperature_K",
+                    "ag_liquid_fraction",
+                    "tracker_track_labels",
+                )
+            }
+        for name, array in arrays.items():
+            if self._sha256_array(array) != metadata["array_sha256"].get(name):
+                raise ValueError(f"Checkpoint array integrity check failed: {name}")
+        enthalpy = arrays["enthalpy_density_J_m3"]
+        temperature = arrays["temperature_K"]
+        liquid = arrays["ag_liquid_fraction"]
+        if enthalpy.shape != self.temperature_shape or temperature.shape != self.temperature_shape or liquid.shape != self.temperature_shape:
+            raise ValueError("Checkpoint fields do not match the active grid")
+        if not all(np.all(np.isfinite(array)) for array in (enthalpy, temperature, liquid)):
+            raise ValueError("Checkpoint contains non-finite thermal fields")
+        restored_state = self.state_from_enthalpy_density(enthalpy)
+        if not np.allclose(temperature, restored_state.temperature_K, rtol=0.0, atol=1.0e-8):
+            raise ValueError("Checkpoint temperature field is inconsistent with its enthalpy field")
+        if not np.allclose(liquid, restored_state.ag_liquid_fraction, rtol=0.0, atol=1.0e-12):
+            raise ValueError("Checkpoint liquid fraction is inconsistent with its enthalpy field")
+        self.enthalpy_density_J_m3 = enthalpy
+        self.state = restored_state
+        self.time_s = float(metadata["time_s"])
+        self.injected_energy_J = float(metadata["injected_energy_J"])
+        self.max_temperature_seen_K = float(metadata["max_temperature_seen_K"])
+        self.last_run_step_limit_s = (
+            None
+            if metadata.get("last_run_step_limit_s") is None
+            else float(metadata["last_run_step_limit_s"])
+        )
+        total_energy = float(enthalpy.sum() * self.cell_volume_m3)
+        error = total_energy - self.injected_energy_J
+        stored_error = float(metadata["energy_balance_error_J"])
+        if not np.isclose(error, stored_error, rtol=1.0e-10, atol=1.0e-30):
+            raise ValueError("Checkpoint energy ledger is inconsistent with its enthalpy field")
+        if "ag_latent_energy_J" in metadata:
+            latent_energy = self._ag_latent_energy_J()
+            if not np.isclose(latent_energy, float(metadata["ag_latent_energy_J"]), rtol=1.0e-12, atol=1.0e-30):
+                raise ValueError("Checkpoint latent-energy ledger is inconsistent with its liquid fraction field")
+        if tracker is None:
+            if metadata.get("tracker_metadata") is not None:
+                raise ValueError("Checkpoint contains liquid tracking state; construct a tracker to restore it")
+        else:
+            tracker_metadata = metadata.get("tracker_metadata")
+            labels = arrays["tracker_track_labels"] if metadata.get("tracker_labels_present") else None
+            if tracker_metadata is None:
+                raise ValueError("Checkpoint contains no liquid tracking state")
+            if labels is not None and labels.shape != self.temperature_shape:
+                raise ValueError("Checkpoint tracker labels do not match the active grid")
+            tracker.load_metadata(tracker_metadata, labels)
+        return {
+            "time_ps": self.time_s * 1.0e12,
+            "injected_energy_J": self.injected_energy_J,
+            "total_enthalpy_J": total_energy,
+            "energy_balance_error_J": error,
+        }
 
     @property
     def melting_temperature_K(self) -> float:
@@ -373,6 +564,7 @@ class QSGSEnthalpyGrid:
         if source_on:
             self.injected_energy_J += self.actual_source_power_W * dt_s
         self.state = self.state_from_enthalpy_density(self.enthalpy_density_J_m3)
+        self.max_temperature_seen_K = max(self.max_temperature_seen_K, float(self.state.temperature_K.max()))
         total_energy = float(self.enthalpy_density_J_m3.sum() * self.cell_volume_m3)
         error = total_energy - self.injected_energy_J
         return {
@@ -397,6 +589,12 @@ class QSGSEnthalpyGrid:
         total = float(self.ag_fraction.sum())
         return float(np.sum(self.ag_fraction * self.state.ag_liquid_fraction) / total) if total else 0.0
 
+    def _ag_latent_energy_J(self) -> float:
+        return float(
+            np.sum(self._latent_volumetric_J_m3 * self.state.ag_liquid_fraction)
+            * self.cell_volume_m3
+        )
+
     def run(
         self,
         duration_ps: float,
@@ -406,52 +604,149 @@ class QSGSEnthalpyGrid:
         track_liquid_connectivity: bool = False,
         liquid_threshold: float = 0.5,
         progress: bool = False,
+        tracker: LiquidClusterTracker | None = None,
+        checkpoint_times_ps: tuple[float, ...] | list[float] = (),
+        checkpoint_dir: Path | None = None,
+        checkpoint_prefix: str = "checkpoint",
     ) -> list[dict[str, float]]:
-        if duration_ps <= 0.0 or sample_interval_ps <= 0.0:
-            raise ValueError("Run duration and sample interval must be positive")
+        if duration_ps < 0.0 or sample_interval_ps <= 0.0:
+            raise ValueError("Run duration must be nonnegative and sample interval positive")
+        if duration_ps == 0.0 and not checkpoint_times_ps:
+            return []
         if maximum_dt_s is not None and (not np.isfinite(maximum_dt_s) or maximum_dt_s <= 0.0):
             raise ValueError("maximum_dt_s must be finite and positive")
-        if track_liquid_connectivity and self.source_geometry_npz is None:
+        if (track_liquid_connectivity or tracker is not None) and self.source_geometry_npz is None:
             raise ValueError("Liquid connectivity tracking requires the native QSGS geometry")
         if not 0.0 < liquid_threshold <= 1.0:
             raise ValueError("liquid_threshold must be in (0, 1]")
+        if tracker is not None and not np.isclose(tracker.liquid_threshold, liquid_threshold, rtol=0.0, atol=0.0):
+            raise ValueError("Tracker threshold differs from the requested liquid threshold")
+        if track_liquid_connectivity and tracker is None:
+            tracker = LiquidClusterTracker(
+                self.spacing_A,
+                self.size_A,
+                liquid_threshold=liquid_threshold,
+            )
+        checkpoint_times = sorted(set(float(value) for value in checkpoint_times_ps))
+        if any(not np.isfinite(value) or value < 0.0 for value in checkpoint_times):
+            raise ValueError("Checkpoint times must be finite nonnegative global simulation times")
+        if checkpoint_times and checkpoint_dir is None:
+            raise ValueError("checkpoint_dir is required when checkpoint times are provided")
         end_s = self.time_s + duration_ps * 1.0e-12
         sample_interval_s = sample_interval_ps * 1.0e-12
-        next_sample = self.time_s
+        sample_index = int(np.floor((self.time_s + 1.0e-24) / sample_interval_s)) + 1
+        next_sample = sample_index * sample_interval_s
+        pending_checkpoints = [value * 1.0e-12 for value in checkpoint_times if value * 1.0e-12 > self.time_s + 1.0e-24]
         # Over the candidate range k(T)/Cp(T) decreases from its 300 K value
         # in both phases; a fixed initial stable step is therefore conservative
         # and avoids recomputing the full-grid diffusion bound every substep.
         stable_dt = self.stable_timestep_s()
         step_limit = stable_dt if maximum_dt_s is None else min(stable_dt, maximum_dt_s)
+        if self.last_run_step_limit_s is not None:
+            step_limit = min(step_limit, self.last_run_step_limit_s)
+        self.last_run_step_limit_s = step_limit
         rows: list[dict[str, float]] = []
+        if tracker is not None and tracker.previous_time_ps is None:
+            tracker_summary, cluster_rows = tracker.update(
+                self.time_s * 1.0e12,
+                self.state.ag_liquid_fraction,
+                self.ag_fraction > 0.0,
+            )
+            rows.append(self._sample_row(0.0, tracker_summary))
         while self.time_s < end_s - 1.0e-24:
-            dt = min(step_limit, end_s - self.time_s, next_sample + sample_interval_s - self.time_s)
+            targets = [end_s, next_sample]
+            if pending_checkpoints:
+                targets.append(pending_checkpoints[0])
+            next_target = min(target for target in targets if target > self.time_s + 1.0e-25)
+            dt = min(step_limit, next_target - self.time_s)
             if dt <= 1.0e-25:
-                next_sample += sample_interval_s
                 continue
             row = self.advance(dt, source_on=source_on, enforce_stability=False)
-            if self.time_s >= next_sample + sample_interval_s - 1.0e-24 or self.time_s >= end_s - 1.0e-24:
-                if track_liquid_connectivity:
-                    liquid = (self.state.ag_liquid_fraction >= liquid_threshold) & (self.ag_fraction > 0.0)
-                    row.update(liquid_cluster_metrics(liquid, self.spacing_A))
+            at_sample = self.time_s >= next_sample - 1.0e-24
+            at_checkpoint = bool(pending_checkpoints) and self.time_s >= pending_checkpoints[0] - 1.0e-24
+            at_end = self.time_s >= end_s - 1.0e-24
+            if at_sample or at_checkpoint or at_end:
+                tracker_summary = None
+                if tracker is not None:
+                    tracker_summary, cluster_rows = tracker.update(
+                        self.time_s * 1.0e12,
+                        self.state.ag_liquid_fraction,
+                        self.ag_fraction > 0.0,
+                    )
+                    row.update(tracker_summary)
+                row["ag_latent_energy_J"] = self._ag_latent_energy_J()
                 rows.append(row)
                 if progress:
                     print(
                         f"t={row['time_ps']:.6g} ps  peak={row['max_temperature_K']:.4f} K  "
-                        f"Ag liquid={row['ag_liquid_volume_fraction']:.6g}",
+                        f"Ag liquid={row['ag_liquid_volume_fraction']:.6g}  "
+                        f"tracked clusters={row.get('connected_liquid_cluster_count', 0)}",
                         file=sys.stderr,
                         flush=True,
                     )
-                next_sample += sample_interval_s
+                if at_sample:
+                    next_sample += sample_interval_s
+                if at_checkpoint:
+                    checkpoint_ps = pending_checkpoints.pop(0) * 1.0e12
+                    assert checkpoint_dir is not None
+                    checkpoint_name = f"{checkpoint_prefix}_{_time_tag_ps(checkpoint_ps)}.npz"
+                    self.save_checkpoint(Path(checkpoint_dir) / checkpoint_name, tracker)
+                if at_end:
+                    break
         return rows
 
+    def _sample_row(
+        self,
+        dt_fs: float,
+        tracker_summary: dict[str, int | float | list[float] | None] | None = None,
+    ) -> dict[str, float]:
+        total_energy = float(self.enthalpy_density_J_m3.sum() * self.cell_volume_m3)
+        row: dict[str, float] = {
+            "time_ps": self.time_s * 1.0e12,
+            "dt_fs": dt_fs,
+            "max_temperature_K": float(self.state.temperature_K.max()),
+            "mean_ag_temperature_K": self._ag_weighted_mean_temperature(),
+            "max_ag_liquid_fraction": float(self.state.ag_liquid_fraction.max()),
+            "ag_liquid_volume_fraction": self._liquid_ag_volume_fraction(),
+            "total_energy_J": total_energy,
+            "ag_latent_energy_J": self._ag_latent_energy_J(),
+            "injected_energy_J": self.injected_energy_J,
+            "energy_balance_error_J": total_energy - self.injected_energy_J,
+        }
+        if tracker_summary is not None:
+            row.update(tracker_summary)
+        return row
 
-def write_csv(path: Path, rows: list[dict[str, float]]) -> None:
+
+def _time_tag_ps(time_ps: float) -> str:
+    value = f"{time_ps:.9f}".rstrip("0").rstrip(".")
+    return value.replace(".", "p") + "ps"
+
+
+def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
+    if not rows:
+        raise ValueError("Cannot write a timeseries with no samples")
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def write_cluster_csv(path: Path, records: list[dict[str, object]]) -> None:
+    if not records:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = list(records[0])
+    with path.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        for record in records:
+            row = dict(record)
+            for field in ("parent_track_ids", "centroid_A"):
+                if field in row:
+                    row[field] = json.dumps(row[field], separators=(",", ":"))
+            writer.writerow(row)
 
 
 def longest_sampled_liquid_presence_ps(rows: list[dict[str, float]], sample_interval_ps: float) -> float:
@@ -493,6 +788,11 @@ def main() -> None:
     parser.add_argument("--track-liquid-connectivity", action="store_true")
     parser.add_argument("--progress", action="store_true")
     parser.add_argument("--liquid-threshold", type=float, default=0.5)
+    parser.add_argument("--checkpoint-dir", type=Path, default=None)
+    parser.add_argument("--checkpoint-times-ps", type=str, default="")
+    parser.add_argument("--checkpoint-prefix", type=str, default="caseA_heat")
+    parser.add_argument("--restart-from", type=Path, default=None)
+    parser.add_argument("--save-final-checkpoint", action="store_true")
     parser.add_argument("--output", type=Path, default=None)
     args = parser.parse_args()
     if args.tile_xy <= 0:
@@ -503,14 +803,26 @@ def main() -> None:
         parser.error("--mesh-refinement applies only to --geometry native")
     if args.max_dt_fs is not None and args.max_dt_fs <= 0.0:
         parser.error("--max-dt-fs must be positive")
-    if args.heat_ps <= 0.0 or args.cool_ps < 0.0:
-        parser.error("--heat-ps must be positive and --cool-ps cannot be negative")
+    if args.heat_ps < 0.0 or args.cool_ps < 0.0 or args.heat_ps + args.cool_ps <= 0.0:
+        parser.error("--heat-ps and --cool-ps must be nonnegative with a positive total duration")
     native_path = DATA_DIR.parent / "qsgs_morphology.npz"
     geometry_path = native_path if args.source_integration == "exact-qsgs" or args.geometry == "native" else None
     if args.track_liquid_connectivity and args.geometry != "native":
         parser.error("--track-liquid-connectivity requires --geometry native")
     if args.geometry == "native" and args.source_integration == "cell-center":
         parser.error("Native geometry requires --source-integration exact-qsgs")
+    try:
+        checkpoint_times_ps = [
+            float(value.strip()) for value in args.checkpoint_times_ps.split(",") if value.strip()
+        ]
+    except ValueError:
+        parser.error("--checkpoint-times-ps must be a comma-separated list of numbers")
+    if checkpoint_times_ps and args.checkpoint_dir is None:
+        parser.error("--checkpoint-dir is required with --checkpoint-times-ps")
+    if args.checkpoint_dir is not None and args.geometry != "native":
+        parser.error("Restartable Case A checkpoints require --geometry native")
+    if args.restart_from is not None and args.geometry != "native":
+        parser.error("--restart-from requires --geometry native")
     projected_path = DATA_DIR / f"qsgs_phase_fractions_{args.spacing}.npz" if args.geometry == "projected" else None
     model = QSGSEnthalpyGrid(
         projected_path,
@@ -522,15 +834,29 @@ def main() -> None:
     )
     initial_stable_timestep_fs = model.stable_timestep_s() * 1.0e15
     max_dt_s = None if args.max_dt_fs is None else args.max_dt_fs * 1.0e-15
-    rows = model.run(
-        args.heat_ps,
-        source_on=True,
-        sample_interval_ps=args.sample_ps,
-        maximum_dt_s=max_dt_s,
-        track_liquid_connectivity=args.track_liquid_connectivity,
-        liquid_threshold=args.liquid_threshold,
-        progress=args.progress,
+    tracker = (
+        LiquidClusterTracker(model.spacing_A, model.size_A, liquid_threshold=args.liquid_threshold)
+        if args.track_liquid_connectivity
+        else None
     )
+    restart_info = None
+    if args.restart_from is not None:
+        restart_info = model.load_checkpoint(args.restart_from, tracker)
+    rows: list[dict[str, object]] = []
+    if args.heat_ps > 0.0:
+        rows += model.run(
+            args.heat_ps,
+            source_on=True,
+            sample_interval_ps=args.sample_ps,
+            maximum_dt_s=max_dt_s,
+            track_liquid_connectivity=args.track_liquid_connectivity,
+            liquid_threshold=args.liquid_threshold,
+            progress=args.progress,
+            tracker=tracker,
+            checkpoint_times_ps=checkpoint_times_ps,
+            checkpoint_dir=args.checkpoint_dir,
+            checkpoint_prefix=args.checkpoint_prefix,
+        )
     if args.cool_ps > 0.0:
         rows += model.run(
             args.cool_ps,
@@ -540,6 +866,10 @@ def main() -> None:
             track_liquid_connectivity=args.track_liquid_connectivity,
             liquid_threshold=args.liquid_threshold,
             progress=args.progress,
+            tracker=tracker,
+            checkpoint_times_ps=checkpoint_times_ps,
+            checkpoint_dir=args.checkpoint_dir,
+            checkpoint_prefix=args.checkpoint_prefix,
         )
     output = args.output or DATA_DIR / f"qsgs_enthalpy_{args.spacing}_BC{args.boundary}.csv"
     write_csv(output, rows)
@@ -569,26 +899,49 @@ def main() -> None:
         "liquid_connectivity_threshold": args.liquid_threshold if args.track_liquid_connectivity else None,
         "heat_duration_ps": args.heat_ps,
         "cool_duration_ps": args.cool_ps,
+        "start_time_ps": restart_info["time_ps"] if restart_info else 0.0,
         "total_time_ps": model.time_s * 1.0e12,
         "actual_source_power_W": model.actual_source_power_W,
         "injected_energy_J": model.injected_energy_J,
         "final_total_enthalpy_J": float(model.enthalpy_density_J_m3.sum() * model.cell_volume_m3),
         "energy_balance_error_J": float(model.enthalpy_density_J_m3.sum() * model.cell_volume_m3 - model.injected_energy_J),
         "max_temperature_K": float(model.state.temperature_K.max()),
+        "max_temperature_seen_K": float(model.max_temperature_seen_K),
         "mean_ag_temperature_K": model._ag_weighted_mean_temperature(),
         "ag_liquid_volume_fraction": model._liquid_ag_volume_fraction(),
         "max_ag_liquid_fraction": float(model.state.ag_liquid_fraction.max()),
+        "ag_normal_boiling_reference_K": AG_NORMAL_BOILING_REFERENCE_K,
+        "peak_exceeds_ag_normal_boiling_reference": bool(
+            model.max_temperature_seen_K > AG_NORMAL_BOILING_REFERENCE_K
+        ),
         "limitations": [
             "Heat is deposited directly into lattice enthalpy; this is not TTM or TTM-MD.",
             "Candidate properties are first-pass values pending source-table archival and citation review.",
             "Boundary A/B are limiting assumptions, not measured Ag/Ti3SiC2 interface heat transfer.",
             "External z faces are insulated and x/y are periodic; no free-surface radiation or convection is included.",
+            "The phase model does not include vaporization, so states above the Ag normal-boiling reference are outside its reliable regime.",
+            "Adiabatic cooling redistributes energy inside the computational domain and does not represent heat loss to an external sink.",
         ],
         "timeseries_csv": str(output.name),
     }
     summary_path = output.with_suffix(".json")
     if args.track_liquid_connectivity:
-        presence_ps = longest_sampled_liquid_presence_ps(rows, args.sample_ps)
+        assert tracker is not None
+        cluster_path = output.with_name(output.stem + ".clusters.csv")
+        write_cluster_csv(cluster_path, tracker.history)
+        track_durations: dict[int, float] = {}
+        for item in tracker.history:
+            track_id = int(item["track_id"])
+            track_durations[track_id] = max(
+                track_durations.get(track_id, 0.0), float(item["continuous_duration_ps"])
+            )
+        longest_track_ps = max(track_durations.values(), default=0.0)
+        main_track_durations = [
+            float(item["continuous_duration_ps"])
+            for item in tracker.history
+            if bool(item["is_main_cluster"])
+        ]
+        longest_main_track_ps = max(main_track_durations, default=0.0)
         active_cluster_rows = [
             row for row in rows if row.get("connected_liquid_cluster_count", 0) > 0
         ]
@@ -597,15 +950,39 @@ def main() -> None:
             key=lambda row: row["largest_liquid_cluster_voxels"],
             default=None,
         )
-        summary["sampled_liquid_persistence_screen"] = {
-            "longest_connected_liquid_presence_ps": presence_ps,
-            "provisional_0p3_ps_gate_met": presence_ps >= 0.3,
-            "provisional_0p5_ps_enhanced_gate_met": presence_ps >= 0.5,
+        summary["tracked_liquid_persistence_screen"] = {
+            "longest_single_track_sampled_duration_ps": longest_track_ps,
+            "longest_track_while_it_was_the_largest_component_ps": longest_main_track_ps,
+            "provisional_0p3_ps_gate_met": longest_main_track_ps >= 0.3,
+            "provisional_0p5_ps_enhanced_gate_met": longest_main_track_ps >= 0.5,
             "interpretation": (
-                "Provisional user-defined screening only. It measures consecutive sampled presence of any "
-                "connected liquid cluster, not persistent identity of one tracked cluster; it is not a universal stability criterion."
+                "Provisional user-defined screening only. IDs continue through overlap using the documented dominant-overlap rule; "
+                "split children get new IDs and merged clusters inherit the largest-overlap parent. This is sampled continuity, "
+                "not a universal thermal-stability criterion."
             ),
             "sampling_interval_ps": args.sample_ps,
+        }
+        summary["liquid_track_onset_times_ps"] = {
+            "first_nonzero_liquid_fraction": tracker.first_liquid_time_ps,
+            "first_connected_cluster_at_threshold": tracker.first_connected_liquid_time_ps,
+            "first_cluster_with_at_least_two_face_connected_voxels": tracker.first_multivoxel_pool_time_ps,
+        }
+        summary["liquid_tracking"] = {
+            "threshold_ag_liquid_fraction": args.liquid_threshold,
+            "track_count": len(track_durations),
+            "merge_component_event_count": sum(
+                "merge" in str(item["event"]) for item in tracker.history
+            ),
+            "split_parent_event_count": len(
+                {
+                    (float(item["time_ps"]), int(parent_id))
+                    for item in tracker.history
+                    if "split" in str(item["event"])
+                    for parent_id in item["parent_track_ids"]
+                }
+            ),
+            "cluster_history_csv": cluster_path.name,
+            "identity_rule": "Largest-overlap child inherits parent on split; largest-overlap parent supplies ID on merge; all parent IDs remain in the event record.",
         }
         summary["first_detected_connected_liquid_time_ps"] = (
             float(active_cluster_rows[0]["time_ps"]) if active_cluster_rows else None
@@ -628,6 +1005,11 @@ def main() -> None:
             else None
         )
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")
+    if args.save_final_checkpoint:
+        final_checkpoint = output.with_name(output.stem + ".checkpoint.npz")
+        model.save_checkpoint(final_checkpoint, tracker)
+        summary["final_checkpoint"] = final_checkpoint.name
+        summary_path.write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
 
 
