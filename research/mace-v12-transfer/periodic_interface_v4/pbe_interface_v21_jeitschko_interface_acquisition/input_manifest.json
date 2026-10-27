@@ -1,0 +1,685 @@
+{
+  "task_id": "user_directed_Jeitschko1967_AgTi3SiC2_interface_acquisition_v21",
+  "status": "geometry_candidates_built_preflight_required",
+  "authorization_basis": "User requested continued modeling and said to calculate needed data directly; DFT acquisition remains candidate-only pending slab memory/k-point preflight and data-role review.",
+  "launch_enabled": false,
+  "training_enabled": false,
+  "dataset_integration_enabled": false,
+  "source": {
+    "doi": "10.1007/BF00899949",
+    "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+    "source_cif": "research/mace-v12-transfer/coordination/reports/window-c/ti3sic2_jeitschko1967_source_audit_20261027/Ti3SiC2_Jeitschko1967_fulltext_Fourier_variant.cif",
+    "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+    "uploaded_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+    "geometry_variant": "full-text Fourier-estimate reconstruction, not an ICSD export"
+  },
+  "method_candidate": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "smearing_eV": 0.1,
+    "pbc": [
+      true,
+      true,
+      false
+    ],
+    "poissonsolver": {
+      "dipolelayer": "xy"
+    },
+    "candidate_kpts": [
+      6,
+      6,
+      1
+    ],
+    "slab_control_kpts": [
+      [
+        6,
+        6,
+        1
+      ],
+      [
+        8,
+        8,
+        1
+      ]
+    ],
+    "mpi_ranks": 4,
+    "maximum_concurrent_jobs": 1,
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "PAW_data_version": "1.2.1",
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    },
+    "scf_thresholds": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "mixer": {
+      "type": "Pulay",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    }
+  },
+  "preflight_jobs": [
+    {
+      "label": "AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21",
+      "geometry_label": "AgSi_JN1967_registryB_v21_acq01",
+      "input": "inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": true
+    },
+    {
+      "label": "AgSi_JN1967_registryB_k8x8x1_sigma0p10_control_v21",
+      "geometry_label": "AgSi_JN1967_registryB_v21_acq01",
+      "input": "inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "kpts": [
+        8,
+        8,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "role": "numerical_kmesh_control_only_not_training",
+      "launch_enabled": true
+    }
+  ],
+  "energy_convention": "Record native extrapolated total energy and free energy separately; forces use Fermi-Dirac width 0.10 eV. No conversion or training target is assumed.",
+  "runtime_guard": {
+    "cgroup_memory_limit_bytes": 34359738368,
+    "stop_threshold_bytes": 32212254720,
+    "minimum_free_disk_bytes": 5000000000,
+    "automatic_retries": 0,
+    "checkpoints_archived": false
+  },
+  "role_policy": "All three 6x6x1 geometries are train-acquisition candidates pending B/source-family/geometry and energy-role audit. The 8x8x1 AgSi same-geometry endpoint is control-only and must not enter training.",
+  "reference_geometry_hashes": {
+    "train36": "a247f7619e613297a1c11d7dc97abec888aa0bbb8cc6889bcbbe05825ade0c9c",
+    "dev3": "e9e86e3a353c50c8173cefede370e2653ec2e81506f4b8122b01b7a8efe76e4c",
+    "residual_inputs": [
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgC_residual_mode_m_06_v19_proposal.extxyz",
+        "sha256": "e53658d837014835aa10ded935e4700f2e72a7584fa29ca4f3e8f1e14ed0dd7b"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgC_residual_mode_p_06_v19_proposal.extxyz",
+        "sha256": "9d90ac09b3aec60c6d556740a3374659f4259333ae34487c9017c8ef35d9cd8a"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgSi_residual_mode_m_03_v19_proposal.extxyz",
+        "sha256": "fc7b88e0e018e10c3427486a45f7b17155d122bdc825c72dee717f2c86e9839c"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgSi_residual_mode_p_03_v19_proposal.extxyz",
+        "sha256": "f1ef4cf1088ed8b1d48c9452a82203ad98b92ffbf33d2373125536c82c6ce7e4"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgTi_residual_mode_m_03_v19_proposal.extxyz",
+        "sha256": "e3b56aef7ba30b0e143970db9bf9f7e368c8d86bfea2bb2b392aa2511ad18e2b"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v19_residual_acquisition/inputs/AgTi_residual_mode_p_03_v19_proposal.extxyz",
+        "sha256": "9c8c82d6d9460ab918b0b41bfa07ba5ccb9b72e455161dde0528e609178d9fcf"
+      }
+    ],
+    "v17_dev_inputs": [
+      {
+        "path": "research/mace-v12-transfer/coordination/reports/window-b/v17_split_geometry_design/final_set/geometries/AgC_v17_dev_validation_01.extxyz",
+        "sha256": "f0d8bb9d065204422d3e11483b9b09505035c837c91faa975fc51414fee70124"
+      },
+      {
+        "path": "research/mace-v12-transfer/coordination/reports/window-b/v17_split_geometry_design/final_set/geometries/AgSi_v17_dev_validation_01.extxyz",
+        "sha256": "45333ff0759bc42ddcd4227c42fbbddfc66afe9ed273c226993a48c0ef43d51b"
+      },
+      {
+        "path": "research/mace-v12-transfer/coordination/reports/window-b/v17_split_geometry_design/final_set/geometries/AgTi_v17_dev_validation_01.extxyz",
+        "sha256": "7c83fad1f8b7a71cb1770019655cb4127b060e4181d7b2a292d51074877f180f"
+      }
+    ]
+  },
+  "records": [
+    {
+      "label": "AgC_JN1967_registryB_v21_acq01",
+      "interface": "AgC",
+      "contact_species": "C",
+      "input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+      "input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "geometry_sha256": "fdb2f179668369c09a6cd4ffff9103c1f67fb390b6c9d99a43e0bc2642d193b3",
+      "atoms": 52,
+      "formula": "C16Ag4Si8Ti24",
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.051331
+        ]
+      ],
+      "cell_lengths_A": [
+        6.136,
+        6.136,
+        34.051331
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "surface_cut": {
+        "fractional_cut": 0.9310000000000002,
+        "top_z_A": 23.651331,
+        "gap_to_Ag_plane_A": 2.4
+      },
+      "Ag_registry_primitive_fractional": [
+        0.37,
+        0.21
+      ],
+      "coherent_in_plane_strain_note": "Ag monolayer is fixed to the 1967 substrate in-plane cell; no relaxation or equilibrium-interface claim.",
+      "marked_contact_pair": {
+        "species": "Ag-C",
+        "indices": [
+          49,
+          22
+        ],
+        "distance_A": 2.8094864927594263
+      },
+      "minimum_pair_distances_A": {
+        "Ti-Ti": 2.981010989517428,
+        "Si-Ti": 2.6862968875896174,
+        "C-Ti": 2.1178105903611097,
+        "Ag-Ti": 3.6478583762067505,
+        "Si-Si": 3.06799999897,
+        "C-Si": 3.6404138073747565,
+        "Ag-Si": 5.666869633120222,
+        "C-C": 3.042455440614501,
+        "Ag-C": 2.8094864889093136,
+        "Ag-Ag": 3.06799999897
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "geometry_screens": {
+        "train36_geometry_only": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V19_dev3_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "cell_normalized_comparable_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": [
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 2.4487473783543243,
+                "framework_RMS_A": 5.191709398158332,
+                "framework_max_displacement_A": 8.862173989521684,
+                "all_atom_RMS_A": 5.034057252066658,
+                "max_atom_displacement_A": 8.862173989521684,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.998665118259254
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 3.893088198400058,
+                "framework_RMS_A": 7.289877766372395,
+                "framework_max_displacement_A": 17.743504301474342,
+                "all_atom_RMS_A": 7.086628524114589,
+                "max_atom_displacement_A": 17.743504301474342,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                1.0045386037920223
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 2.6480545716628874,
+                "framework_RMS_A": 5.212109746245599,
+                "framework_max_displacement_A": 8.914860106148756,
+                "all_atom_RMS_A": 5.061204243271367,
+                "max_atom_displacement_A": 8.914860106148756,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                1.0045386037920223
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            }
+          ]
+        },
+        "V19_residual_inputs_geometry_only": {
+          "frames_geometry_only": 6,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V17_dev_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        }
+      }
+    },
+    {
+      "label": "AgSi_JN1967_registryB_v21_acq01",
+      "interface": "AgSi",
+      "contact_species": "Si",
+      "input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "geometry_sha256": "989e28aca4194abe5fcfec3938ae9199d78ade99fb098e2e543f3fab814c8433",
+      "atoms": 52,
+      "formula": "C16Ag4Si8Ti24",
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "cell_lengths_A": [
+        6.136,
+        6.136,
+        34.251331
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "surface_cut": {
+        "fractional_cut": 0.7510000000000001,
+        "top_z_A": 23.651331,
+        "gap_to_Ag_plane_A": 2.6
+      },
+      "Ag_registry_primitive_fractional": [
+        0.37,
+        0.21
+      ],
+      "coherent_in_plane_strain_note": "Ag monolayer is fixed to the 1967 substrate in-plane cell; no relaxation or equilibrium-interface claim.",
+      "marked_contact_pair": {
+        "species": "Ag-Si",
+        "indices": [
+          48,
+          7
+        ],
+        "distance_A": 2.780705676478546
+      },
+      "minimum_pair_distances_A": {
+        "Ti-Ti": 2.981010989517428,
+        "Si-Ti": 2.6862968875896174,
+        "C-Ti": 2.1178105903611097,
+        "Ag-Ti": 4.686959676004236,
+        "Si-Si": 3.06799999897,
+        "C-Si": 3.6404138073747565,
+        "Ag-Si": 2.7807056770503653,
+        "C-C": 3.0424554406145026,
+        "Ag-C": 5.96208601982259,
+        "Ag-Ag": 3.06799999897
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "geometry_screens": {
+        "train36_geometry_only": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V19_dev3_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "cell_normalized_comparable_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": [
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 3.8479725803054143,
+                "framework_RMS_A": 7.238239290364668,
+                "framework_max_displacement_A": 17.66016171914697,
+                "all_atom_RMS_A": 7.03569027433987,
+                "max_atom_displacement_A": 17.66016171914697,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9928337237463852
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 2.448302269070951,
+                "framework_RMS_A": 5.191716014338651,
+                "framework_max_displacement_A": 8.854993101090692,
+                "all_atom_RMS_A": 5.034046896905899,
+                "max_atom_displacement_A": 8.854993101090692,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9986729128862175
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 3.168204645808458,
+                "framework_RMS_A": 7.2713848664111564,
+                "framework_max_displacement_A": 17.724158482233005,
+                "all_atom_RMS_A": 7.0411645408292225,
+                "max_atom_displacement_A": 17.724158482233005,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9986729128862175
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            }
+          ]
+        },
+        "V19_residual_inputs_geometry_only": {
+          "frames_geometry_only": 6,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V17_dev_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        }
+      }
+    },
+    {
+      "label": "AgTi_JN1967_registryB_v21_acq01",
+      "interface": "AgTi",
+      "contact_species": "Ti",
+      "input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+      "input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "geometry_sha256": "522ace1da320f5b4e6faa818fd5ef2a1379921a81e6fad5e66a963dbe1c5f232",
+      "atoms": 52,
+      "formula": "C16Ag4Si8Ti24",
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "cell_lengths_A": [
+        6.136,
+        6.136,
+        34.251331
+      ],
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+      "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+      "surface_cut": {
+        "fractional_cut": 0.8653000000000001,
+        "top_z_A": 23.651331,
+        "gap_to_Ag_plane_A": 2.6
+      },
+      "Ag_registry_primitive_fractional": [
+        0.37,
+        0.21
+      ],
+      "coherent_in_plane_strain_note": "Ag monolayer is fixed to the 1967 substrate in-plane cell; no relaxation or equilibrium-interface claim.",
+      "marked_contact_pair": {
+        "species": "Ag-Ti",
+        "indices": [
+          48,
+          5
+        ],
+        "distance_A": 2.717939387228757
+      },
+      "minimum_pair_distances_A": {
+        "Ti-Ti": 2.981010989517428,
+        "Si-Ti": 2.6862968875896187,
+        "C-Ti": 2.1178105903611097,
+        "Ag-Ti": 2.7179393865097246,
+        "Si-Si": 3.06799999897,
+        "C-Si": 3.6404138073747587,
+        "Ag-Si": 4.723634253213198,
+        "C-C": 3.042455440614501,
+        "Ag-C": 7.935553342492311,
+        "Ag-Ag": 3.06799999897
+      },
+      "role": "train_acquisition_candidate_pending_audit",
+      "launch_enabled": false,
+      "geometry_screens": {
+        "train36_geometry_only": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V19_dev3_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "cell_normalized_comparable_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": [
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 2.631070901355039,
+                "framework_RMS_A": 5.163501794140099,
+                "framework_max_displacement_A": 8.811897992465651,
+                "all_atom_RMS_A": 5.014314459049393,
+                "max_atom_displacement_A": 8.811897992465651,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9928337237463852
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 3.1748066474986874,
+                "framework_RMS_A": 7.27021886955045,
+                "framework_max_displacement_A": 17.71841814073517,
+                "all_atom_RMS_A": 7.040281824467251,
+                "max_atom_displacement_A": 17.71841814073517,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9986729128862175
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            },
+            {
+              "comparison_after_cell_normalization": {
+                "matching_method": "same_element_order",
+                "cell_max_delta_A": 0.0,
+                "Ag_registry_RMS_A": 2.4482942924802975,
+                "framework_RMS_A": 5.191715016007911,
+                "framework_max_displacement_A": 8.85774956331401,
+                "all_atom_RMS_A": 5.034045648091494,
+                "max_atom_displacement_A": 8.85774956331401,
+                "exact_duplicate": false,
+                "near_duplicate": false
+              },
+              "normalization_scale_factors": [
+                0.9965775749674055,
+                0.9965775749674278,
+                0.9986729128862175
+              ],
+              "note": "A source-cell difference is normalized only for duplicate screening; the registered DFT input retains the 1967 source cell."
+            }
+          ]
+        },
+        "V19_residual_inputs_geometry_only": {
+          "frames_geometry_only": 6,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        },
+        "V17_dev_geometry_only": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 0,
+          "cell_normalized_comparable_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0,
+          "comparisons": []
+        }
+      }
+    }
+  ],
+  "pairwise_candidate_comparisons_after_cell_normalization": {
+    "AgC_JN1967_registryB_v21_acq01__AgSi_JN1967_registryB_v21_acq01": {
+      "matching_method": "same_element_order",
+      "cell_max_delta_A": 0.0,
+      "Ag_registry_RMS_A": 3.0250060921433963,
+      "framework_RMS_A": 7.189462077578907,
+      "framework_max_displacement_A": 17.613802641392237,
+      "all_atom_RMS_A": 6.958177488155971,
+      "max_atom_displacement_A": 17.613802641392237,
+      "exact_duplicate": false,
+      "near_duplicate": false
+    },
+    "AgC_JN1967_registryB_v21_acq01__AgTi_JN1967_registryB_v21_acq01": {
+      "matching_method": "same_element_order",
+      "cell_max_delta_A": 0.0,
+      "Ag_registry_RMS_A": 1.0172320240852057,
+      "framework_RMS_A": 5.084738403626163,
+      "framework_max_displacement_A": 17.61380264139224,
+      "all_atom_RMS_A": 4.89339850906342,
+      "max_atom_displacement_A": 17.61380264139224,
+      "exact_duplicate": false,
+      "near_duplicate": false
+    },
+    "AgSi_JN1967_registryB_v21_acq01__AgTi_JN1967_registryB_v21_acq01": {
+      "matching_method": "same_element_order",
+      "cell_max_delta_A": 0.0,
+      "Ag_registry_RMS_A": 2.0195667000000004,
+      "framework_RMS_A": 5.100600953155748,
+      "framework_max_displacement_A": 17.668999999999997,
+      "all_atom_RMS_A": 4.932406267624733,
+      "max_atom_displacement_A": 17.668999999999997,
+      "exact_duplicate": false,
+      "near_duplicate": false
+    }
+  },
+  "limitations": [
+    "Unrelaxed single Ag monolayer interface probes are not equilibrium morphology or stability claims.",
+    "The source paper discusses possible nonstoichiometry; these inputs assume ideal full occupancy.",
+    "The Ag registry and 2.4/2.6 A contact gaps are fixed acquisition choices, not source-measured values.",
+    "The 1967 source family differs from V19 dev3, but all three candidates share the same 1967 parent family.",
+    "Training remains disabled until method/energy convention and source-family/geometry audits are complete."
+  ]
+}

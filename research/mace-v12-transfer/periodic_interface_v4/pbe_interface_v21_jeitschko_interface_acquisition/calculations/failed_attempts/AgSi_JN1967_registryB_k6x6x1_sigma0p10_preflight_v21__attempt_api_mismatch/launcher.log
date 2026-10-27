@@ -1,0 +1,155 @@
+rank=1 L00: Traceback (most recent call last):
+rank=1 L01:   File "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/run_preflight_label.py", line 72, in <module>
+rank=1 L02:     native = float(atoms.get_potential_energy(force_consistent=False))
+rank=1 L03:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=1 L05:     energy = self._calc.get_potential_energy(self)
+rank=1 L06:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L07:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=1 L08:     return self.calculate_property(atoms,
+rank=1 L09:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L10:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=1 L11:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=1 L12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L13:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 153, in iconverge
+rank=1 L14:     self.create_new_calculation(atoms)
+rank=1 L15:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 258, in create_new_calculation
+rank=1 L16:     self._dft = DFT.from_parameters(
+rank=1 L17:                 ^^^^^^^^^^^^^^^^^^^^
+rank=1 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 158, in from_parameters
+rank=1 L19:     return cls(
+rank=1 L20:            ^^^^
+rank=1 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 135, in __init__
+rank=1 L22:     _components = params.create_dft_calculation_components(
+rank=1 L23:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/dft.py", line 996, in create_dft_calculation_components
+rank=1 L25:     pot_calc = builder.create_potential_calculator()
+rank=1 L26:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 166, in create_potential_calculator
+rank=1 L28:     self.create_poisson_solver(extensions),
+rank=1 L29:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 133, in create_poisson_solver
+rank=1 L31:     psparams = (self.params.poissonsolver.params.copy() or
+rank=1 L32:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=1 L33: AttributeError: 'DipoleCorrection' object has no attribute 'params'
+GPAW CLEANUP (node 1): <class 'AttributeError'> occurred.  Calling MPI_Abort!
+rank=0 L00: Traceback (most recent call last):
+rank=0 L01:   File "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/run_preflight_label.py", line 72, in <module>
+rank=0 L02:     native = float(atoms.get_potential_energy(force_consistent=False))
+rank=0 L03:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=0 L05:     energy = self._calc.get_potential_energy(self)
+rank=0 L06:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L07:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=0 L08:     return self.calculate_property(atoms,
+rank=0 L09:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L10:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=0 L11:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=0 L12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L13:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 153, in iconverge
+rank=0 L14:     self.create_new_calculation(atoms)
+rank=0 L15:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 258, in create_new_calculation
+rank=0 L16:     self._dft = DFT.from_parameters(
+rank=0 L17:                 ^^^^^^^^^^^^^^^^^^^^
+rank=0 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 158, in from_parameters
+rank=0 L19:     return cls(
+rank=0 L20:            ^^^^
+rank=0 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 135, in __init__
+rank=0 L22:     _components = params.create_dft_calculation_components(
+rank=0 L23:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/dft.py", line 996, in create_dft_calculation_components
+rank=0 L25:     pot_calc = builder.create_potential_calculator()
+rank=0 L26:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 166, in create_potential_calculator
+rank=0 L28:     self.create_poisson_solver(extensions),
+rank=0 L29:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 133, in create_poisson_solver
+rank=0 L31:     psparams = (self.params.poissonsolver.params.copy() or
+rank=0 L32:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=0 L33: AttributeError: 'DipoleCorrection' object has no attribute 'params'
+GPAW CLEANUP (node 0): <class 'AttributeError'> occurred.  Calling MPI_Abort!
+rank=2 L00: Traceback (most recent call last):
+rank=2 L01:   File "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/run_preflight_label.py", line 72, in <module>
+rank=2 L02:     native = float(atoms.get_potential_energy(force_consistent=False))
+rank=2 L03:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=2 L05:     energy = self._calc.get_potential_energy(self)
+rank=2 L06:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L07:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=2 L08:     return self.calculate_property(atoms,
+rank=2 L09:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L10:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=2 L11:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=2 L12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L13:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 153, in iconverge
+rank=2 L14:     self.create_new_calculation(atoms)
+rank=2 L15:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 258, in create_new_calculation
+rank=2 L16:     self._dft = DFT.from_parameters(
+rank=2 L17:                 ^^^^^^^^^^^^^^^^^^^^
+rank=2 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 158, in from_parameters
+rank=2 L19:     return cls(
+rank=2 L20:            ^^^^
+rank=2 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 135, in __init__
+rank=2 L22:     _components = params.create_dft_calculation_components(
+rank=2 L23:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/dft.py", line 996, in create_dft_calculation_components
+rank=2 L25:     pot_calc = builder.create_potential_calculator()
+rank=2 L26:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 166, in create_potential_calculator
+rank=2 L28:     self.create_poisson_solver(extensions),
+rank=2 L29:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 133, in create_poisson_solver
+rank=2 L31:     psparams = (self.params.poissonsolver.params.copy() or
+rank=2 L32:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=2 L33: AttributeError: 'DipoleCorrection' object has no attribute 'params'
+GPAW CLEANUP (node 2): <class 'AttributeError'> occurred.  Calling MPI_Abort!
+rank=3 L00: Traceback (most recent call last):
+rank=3 L01:   File "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/run_preflight_label.py", line 72, in <module>
+rank=3 L02:     native = float(atoms.get_potential_energy(force_consistent=False))
+rank=3 L03:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L04:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/ase/atoms.py", line 1971, in get_potential_energy
+rank=3 L05:     energy = self._calc.get_potential_energy(self)
+rank=3 L06:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L07:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 292, in get_potential_energy
+rank=3 L08:     return self.calculate_property(atoms,
+rank=3 L09:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L10:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 215, in calculate_property
+rank=3 L11:     for _ in self.iconverge(atoms, need_wfs=need_wfs):
+rank=3 L12:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L13:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 153, in iconverge
+rank=3 L14:     self.create_new_calculation(atoms)
+rank=3 L15:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/ase_interface.py", line 258, in create_new_calculation
+rank=3 L16:     self._dft = DFT.from_parameters(
+rank=3 L17:                 ^^^^^^^^^^^^^^^^^^^^
+rank=3 L18:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 158, in from_parameters
+rank=3 L19:     return cls(
+rank=3 L20:            ^^^^
+rank=3 L21:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/calculation.py", line 135, in __init__
+rank=3 L22:     _components = params.create_dft_calculation_components(
+rank=3 L23:                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L24:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/dft.py", line 996, in create_dft_calculation_components
+rank=3 L25:     pot_calc = builder.create_potential_calculator()
+rank=3 L26:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L27:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 166, in create_potential_calculator
+rank=3 L28:     self.create_poisson_solver(extensions),
+rank=3 L29:     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L30:   File "/workspace/.venvs/gpaw-mpi/lib/python3.12/site-packages/gpaw/new/pw/builder.py", line 133, in create_poisson_solver
+rank=3 L31:     psparams = (self.params.poissonsolver.params.copy() or
+rank=3 L32:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rank=3 L33: AttributeError: 'DipoleCorrection' object has no attribute 'params'
+GPAW CLEANUP (node 3): <class 'AttributeError'> occurred.  Calling MPI_Abort!
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 1 in communicator MPI_COMM_WORLD
+  Proc: [[11405,1],1]
+  Errorcode: 42
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+prterun has exited due to process rank 0 with PID 0 on node a571809ec295 calling
+"abort". This may have caused other processes in the application to be
+terminated by signals sent by prterun (as reported here).
+--------------------------------------------------------------------------
+ 
