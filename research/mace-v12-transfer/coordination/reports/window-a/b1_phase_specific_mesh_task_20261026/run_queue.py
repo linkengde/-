@@ -105,6 +105,8 @@ def compare(coarse, fine, outfile):
 def main():
     if len(sys.argv) != 1:
         raise SystemExit("This registered task runs the full queue; no ad hoc labels are accepted.")
+    if TASK.get("status") != "registered_ready" or not TASK.get("global_launch_enabled"):
+        raise SystemExit("Task is blocked for resource review; no DFT endpoint will be launched")
     subprocess.run([PYTHON, str(HERE / "verify_task.py")], cwd=ROOT, check=True)
     subprocess.run([PYTHON, str(BASE_PACK_VERIFIER)], cwd=ROOT, check=True)
     with MPI_LOCK.open("a") as lock:

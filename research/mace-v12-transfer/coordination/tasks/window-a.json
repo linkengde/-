@@ -2,9 +2,9 @@
   "task_id": "window-a",
   "status": "running",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
-  "updated_utc": "2026-10-26 05:10:13+00:00",
+  "updated_utc": "2026-10-27T05:25:39Z",
   "auto_complete_after_labels": false,
-  "current_stage": "First Ag32 endpoint active: SCF iteration 5; 107 irreducible k-points, four MPI ranks; archive not yet complete.",
+  "current_stage": "B1 k-mesh controls blocked after Ag32 pair passed, Ag64 coarse endpoint verified, and two Ag64 fine-grid OOM kills before SCF. Launch disabled pending resource review.",
   "current_jobs": {
     "AgC_lateral_registry_holdout_v13": "complete; archive verification PASS",
     "AgSi_lateral_registry_holdout_v13": "complete; archive verification PASS",
@@ -96,7 +96,7 @@
     "v21_exact_dev34_method_controls": "completed; four converged archives verified and compared; V21 review published",
     "v21_train_dev_method_bridge_audit": "completed; read-only method/geometry split audit; no dataset or labels changed",
     "v21_b1_source_role_readiness_review": "completed read-only; Bai source lineage and training-candidate role supported; B1 mesh pack preflight PASS but disabled; stale SHA256SUMS entries flagged in Bai candidate package (README.md, audit_candidate.py, geometry_audit.json)",
-    "b1_phase_specific_mesh_task_20261026": "running; B1_Ag32_s9073_k6__to_8_k6x6x6 at SCF iteration 5; 107 irreducible k-points; four MPI ranks."
+    "b1_phase_specific_mesh_task_20261026": "blocked_resource_review; Ag32 6x6x6 vs 8x8x8 passes; Ag64 5x5x5 verified; Ag64 7x7x7 killed twice by 32 GiB OOM before SCF; no queue running."
   },
   "models": {
     "v12": "completed; validation UNDETERMINED",
@@ -202,7 +202,7 @@
   ],
   "coordination_duties": "A owns V17 role, provisional dataset construction, fixed-recipe training and development scoring. B has completed the rank-recovery analysis and integration recipe; B now reconciles its aggregate archive, runs one A-approved exact rank-lifting PW-PBE relabel, and after A publishes V17 scoring completes the rolling V9-V17 review. Matched near-parent labels and dev structures remain non-blind evidence.",
   "task_boundary": "A may run only the eight labels registered under pbe_interface_v20_slab_method_controls: the original four 44.2058765 A controls and four follow-up controls using the byte-identical approved 34.2058765 A AgSi development input. Run one four-rank job at a time after hash/owner/disk preflight. All eight labels are numerical controls, never training or independent validation. Do not start model training, recompute source-reconciled train36 labels, or open test/sealed data. New model data still require a source-verified Ti3SiC2 parent independent of COD 9009647, a B audit, and versioned A approval.",
-  "next_action": "Execute the separately registered B1 mesh task sequentially with four MPI ranks; verify every archive and pair comparison; keep all outputs as numerical controls. Do not train or alter the approved V19 dataset before a separate source/method/split review.",
+  "next_action": "Continue the independent source/method/split review for any successor fit. Do not mix numerical controls into training data. Resume the B1 mesh queue only after a reviewed resource plan; current task launch is disabled.",
   "live_progress": {
     "task_id": "window-a",
     "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",

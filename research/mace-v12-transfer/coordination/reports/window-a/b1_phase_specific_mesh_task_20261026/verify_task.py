@@ -19,8 +19,9 @@ def sha(path):
 
 assert TASK["schema"] == "WINDOW_A_B1_PHASE_KMESH_TASK_V1"
 assert TASK["task_id"] == "window-a-b1-kmesh-20261026"
-assert TASK["status"] == "registered_ready"
-assert TASK["global_dft_authorized"] is True and TASK["global_launch_enabled"] is True
+assert TASK["status"] in {"registered_ready", "blocked_resource_review"}
+assert TASK["global_dft_authorized"] is True
+assert TASK["global_launch_enabled"] is (TASK["status"] == "registered_ready")
 assert TASK["training_enabled"] is False and TASK["dataset_integration_enabled"] is False
 assert TASK["method_decision"]["status"] == "FROZEN_FOR_THIS_MESH_TASK_ONLY"
 assert sha(SOURCE_PACK) == TASK["source_pack_sha256"]
@@ -79,4 +80,5 @@ for record in TASK["conditional_records"]:
     assert record["compare_to_label"] in {r["label"] for r in TASK["records"]}
     assert sha((ROOT / record["input"]).resolve()) == record["input_sha256"]
 
-print(json.dumps({"status":"PASS_B1_TASK_PREFLIGHT","mandatory_endpoints":12,"same_geometry_pairs":6,"conditional_endpoints":2,"launch_enabled":True,"training_or_integration":False}, indent=2))
+status = "PASS_B1_TASK_PREFLIGHT" if TASK["global_launch_enabled"] else "BLOCKED_RESOURCE_REVIEW"
+print(json.dumps({"status":status,"mandatory_endpoints":12,"same_geometry_pairs":6,"conditional_endpoints":2,"launch_enabled":TASK["global_launch_enabled"],"training_or_integration":False}, indent=2))

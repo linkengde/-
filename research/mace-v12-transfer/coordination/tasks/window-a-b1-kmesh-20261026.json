@@ -1,15 +1,15 @@
 {
   "task_id": "window-a-b1-kmesh-20261026",
-  "status": "running",
+  "status": "blocked_resource_review",
   "owner_window": "window-a",
   "owner_instance": "afff3de5-af03-4d91-b0d0-d9ce73a6e59d",
-  "updated_utc": "2026-10-26 05:10:13+00:00",
-  "version": 1,
-  "current_stage": "First Ag32 endpoint active: SCF iteration 5; 107 irreducible k-points, four MPI ranks; archive not yet complete.",
+  "updated_utc": "2026-10-27T05:25:39Z",
+  "version": 2,
+  "current_stage": "Stopped after two OOM kills during Ag64 7x7x7 initialization before SCF. Ag32 mesh pair passed; Ag64 5x5x5 coarse endpoint completed and verified. Launch disabled pending resource review.",
   "task_manifest": "research/mace-v12-transfer/coordination/reports/window-a/b1_phase_specific_mesh_task_20261026/task_manifest.json",
   "scope": "Fixed-geometry phase-specific k-point convergence controls for the listed B1 training-candidate geometries only.",
   "global_dft_authorized": true,
-  "global_launch_enabled": true,
+  "global_launch_enabled": false,
   "training_enabled": false,
   "dataset_integration_enabled": false,
   "method_decision": {
@@ -34,22 +34,22 @@
     "comparison": "Same input geometry; compare fine mesh against coarse mesh using free_energy and forces. Preserve native extrapolated energy as a separate diagnostic."
   },
   "labels": {
-    "B1_Ag32_s9073_k6__to_8_k6x6x6": "running; observed SCF iteration 5",
-    "B1_Ag32_s9073_k6__to_8_k8x8x8": "registered; not yet started",
-    "B1_Ag64_s9073_k5__to_7_k5x5x5": "registered; not yet started",
-    "B1_Ag64_s9073_k5__to_7_k7x7x7": "registered; not yet started",
-    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k5x8x2": "registered; not yet started",
-    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k7x10x2": "registered; not yet started",
-    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k8x8x2": "registered; not yet started",
-    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k10x10x2": "registered; not yet started",
-    "B1_AgL_1250_s501_Gamma": "registered; not yet started",
-    "B1_AgL_1250_s501_k2x2x2": "registered; not yet started",
-    "B1_AgL_1600_s902_Gamma": "registered; not yet started",
-    "B1_AgL_1600_s902_k2x2x2": "registered; not yet started"
+    "B1_Ag32_s9073_k6__to_8_k6x6x6": "complete_verified",
+    "B1_Ag32_s9073_k6__to_8_k8x8x8": "complete_verified",
+    "B1_Ag64_s9073_k5__to_7_k5x5x5": "complete_verified",
+    "B1_Ag64_s9073_k5__to_7_k7x7x7": "failed_exit_137_attempts_1_and_2_oom_before_scf",
+    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k5x8x2": "registered_not_started",
+    "B1_TSC72_s9073_k5x8x2__to_7x10x2_k7x10x2": "registered_not_started",
+    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k8x8x2": "registered_not_started",
+    "B1_TSC96_s9073_k8x8x2__to_10x10x2_k10x10x2": "registered_not_started",
+    "B1_AgL_1250_s501_Gamma": "registered_not_started",
+    "B1_AgL_1250_s501_k2x2x2": "registered_not_started",
+    "B1_AgL_1600_s902_Gamma": "registered_not_started",
+    "B1_AgL_1600_s902_k2x2x2": "registered_not_started"
   },
   "conditional_labels": {
     "B1_AgL_1250_s501_k3x3x3_conditional": "registered conditionally; launch disabled unless its Gamma-to-2x2x2 pair misses a threshold",
     "B1_AgL_1600_s902_k3x3x3_conditional": "registered conditionally; launch disabled unless its Gamma-to-2x2x2 pair misses a threshold"
   },
-  "next_action": "Run verify_task.py and source-pack verifier, then execute the sequential registered queue. Keep every output outside training/dev/test and stop for review on any SCF, hash, or archive verification failure."
+  "next_action": "Review resources before another DFT launch. The current cgroup is capped at 32 GiB and reached that cap twice; use a larger-memory environment or register a reviewed revision. Keep the failed attempts and numerical-control role unchanged."
 }
