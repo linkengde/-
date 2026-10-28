@@ -17,9 +17,10 @@ from scipy import ndimage
 BASE = Path(__file__).resolve().parent
 RUN_DIR = BASE.parent
 GEOMETRY = RUN_DIR / "qsgs_morphology_ag70vol.npz"
-CHECKPOINT = BASE / "checkpoints" / "caseA_ag70_1x_heat_18p286ps.npz"
-OUTPUT_COMPOSITE = BASE / "ag70_full_model_and_pool_shape_3d_18p286ps.png"
-OUTPUT_POOL = BASE / "ag70_pool_shape_3d_18p286ps.png"
+CHECKPOINT = BASE / "checkpoints" / "caseA_ag70_1x_heat_18p636ps.npz"
+OUTPUT_COMPOSITE = BASE / "ag70_full_model_and_pool_shape_3d_final.png"
+OUTPUT_POOL = BASE / "ag70_pool_shape_3d_final.png"
+OUTPUT_SLICE = BASE / "ag70_phase_slice_through_pool_final.png"
 
 
 def boundary_quads(mask: np.ndarray, spacing_nm: np.ndarray, origin_index: np.ndarray) -> tuple[list[np.ndarray], list[str]]:
@@ -53,13 +54,16 @@ def boundary_quads(mask: np.ndarray, spacing_nm: np.ndarray, origin_index: np.nd
     return polygons, colors
 
 
-def add_pool_surface(ax, mask: np.ndarray, spacing_nm: np.ndarray, origin_index: np.ndarray) -> None:
+def add_pool_surface(
+    ax, mask: np.ndarray, spacing_nm: np.ndarray, origin_index: np.ndarray, alpha: float = 0.98
+) -> None:
     polygons, colors = boundary_quads(mask, spacing_nm, origin_index)
     surface = Poly3DCollection(
         polygons,
         facecolors=colors,
         edgecolors=(0.34, 0.16, 0.06, 0.42),
         linewidths=0.10,
+        alpha=alpha,
         zsort="average",
         rasterized=True,
     )
@@ -145,9 +149,18 @@ def main() -> None:
     fig = plt.figure(figsize=(17.2, 8.8))
     fig.subplots_adjust(left=0.035, right=0.985, top=0.84, bottom=0.10, wspace=0.03)
     ax_full = fig.add_subplot(1, 2, 1, projection="3d")
-    cloud_points(ax_full, ag, spacing_nm, "#83b7d5", stride=3, size=2.2, alpha=0.12)
-    cloud_points(ax_full, scaffold, spacing_nm, "#263f51", stride=3, size=2.4, alpha=0.25)
-    add_pool_surface(ax_full, pool, spacing_nm, np.zeros(3, dtype=int))
+    solid_ag = ag & (liquid_fraction < 0.5)
+    partial_all = ag & (liquid_fraction > 1.0e-12) & (liquid_fraction < 0.5)
+    cloud_points(ax_full, solid_ag, spacing_nm, "#83b7d5", stride=3, size=2.2, alpha=0.18)
+    cloud_points(ax_full, scaffold, spacing_nm, "#263f51", stride=3, size=2.4, alpha=0.34)
+    add_pool_surface(ax_full, pool, spacing_nm, np.zeros(3, dtype=int), alpha=0.48)
+    partial_points = np.argwhere(partial_all)
+    if partial_points.size:
+        partial_points = partial_points[::max(1, len(partial_points) // 12000 + 1)].astype(float) + 0.5
+        partial_points *= spacing_nm[None, :]
+        ax_full.scatter(partial_points[:, 0], partial_points[:, 1], partial_points[:, 2],
+                        s=4.0, c="#ffd166", alpha=0.62, depthshade=False,
+                        linewidths=0, rasterized=True)
     add_sample_box(ax_full, size_nm)
     ax_full.scatter(*centroid_nm, color="#b43f16", s=34, depthshade=False, label="pool centroid")
     source_nm = np.array([size_nm[0] / 2, size_nm[1] / 2, size_nm[2]])
@@ -183,7 +196,7 @@ def main() -> None:
         pcoords = (pcoords + roi_lo[None, :]) * roi_spacing[None, :]
         ax_zoom.scatter(pcoords[:, 0], pcoords[:, 1], pcoords[:, 2], s=9, c="#ffd166",
                         alpha=0.72, edgecolors="#8d6814", linewidths=0.2, depthshade=False, rasterized=True)
-    add_pool_surface(ax_zoom, pool[roi], spacing_nm, roi_lo)
+    add_pool_surface(ax_zoom, pool[roi], spacing_nm, roi_lo, alpha=0.38)
     lower_nm, upper_nm = roi_lo * spacing_nm, roi_hi * spacing_nm
     local_limits = tuple((float(lower_nm[i]), float(upper_nm[i])) for i in range(3))
     local_aspect = (roi_hi - roi_lo) * spacing_nm
@@ -226,9 +239,43 @@ def main() -> None:
     fig2.savefig(OUTPUT_POOL, dpi=220, facecolor="white", bbox_inches="tight")
     plt.close(fig2)
 
+    # This slice shows the phases hidden behind the 3D pool surface.
+    z_index = int(np.clip(round(coords[2].mean()), 0, ag.shape[2] - 1))
+    phase = np.zeros(ag.shape[:2], dtype=np.uint8)
+    phase[ag[:, :, z_index]] = 1
+    phase[partial_all[:, :, z_index]] = 2
+    phase[pool[:, :, z_index]] = 3
+    from matplotlib.colors import ListedColormap
+    from matplotlib.patches import Patch
+
+    fig3, ax_slice = plt.subplots(figsize=(9.2, 8.2))
+    cmap = ListedColormap(["#263f51", "#83b7d5", "#ffd166", "#f28e2b"])
+    extent_xy = (0.0, float(size_nm[0]), 0.0, float(size_nm[1]))
+    ax_slice.imshow(phase.T, origin="lower", extent=extent_xy, interpolation="nearest",
+                    aspect="equal", cmap=cmap, vmin=0, vmax=3)
+    ax_slice.contour(pool[:, :, z_index].T.astype(float), levels=[0.5], colors=["#9b3d08"],
+                     linewidths=0.8, origin="lower", extent=extent_xy)
+    ax_slice.set_xlabel("x (nm)")
+    ax_slice.set_ylabel("y (nm)")
+    ax_slice.set_title(
+        f"Phase map through pool center: z={(z_index + 0.5) * spacing_nm[2]:.2f} nm, "
+        f"t={time_ps:.3f} ps"
+    )
+    ax_slice.legend(handles=[
+        Patch(color="#263f51", label="Ti3SiC2 scaffold"),
+        Patch(color="#83b7d5", label="unmelted Ag"),
+        Patch(color="#ffd166", label="partial-liquid Ag"),
+        Patch(color="#f28e2b", label="liquid Ag (f >= 0.5)"),
+    ], loc="upper right", framealpha=0.92)
+    ax_slice.grid(False)
+    fig3.tight_layout()
+    fig3.savefig(OUTPUT_SLICE, dpi=220, facecolor="white", bbox_inches="tight")
+    plt.close(fig3)
+
     print(f"checkpoint={CHECKPOINT}")
     print(f"saved={OUTPUT_COMPOSITE}")
     print(f"saved={OUTPUT_POOL}")
+    print(f"saved={OUTPUT_SLICE}")
     print(f"time_ps={time_ps:.6f} peak_K={peak_K:.4f} pool_voxels={voxels} volume_nm3={volume_nm3:.6f}")
     print(f"bbox_nm={bbox_nm.tolist()} ag_liquid_fraction={ag_liquid_fraction:.9g} components={count}")
 

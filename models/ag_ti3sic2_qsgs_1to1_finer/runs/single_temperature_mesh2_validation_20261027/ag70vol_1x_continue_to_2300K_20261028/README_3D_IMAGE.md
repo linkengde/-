@@ -1,13 +1,14 @@
 # Ag70 1x 3D liquid-pool image
 
-The images show the saved 1x Case A heating state at **18.286 ps**. The orange surface is the largest face-connected Ag liquid cluster, defined by liquid fraction `f_liquid >= 0.5`, extracted from the original QSGS voxel geometry.
+These images use the saved 1x Case A heating checkpoint at **18.636 ps**. Orange marks the largest face-connected Ag liquid cluster, defined by `f_liquid >= 0.5`. The 3D pool surface is transparent in the whole-sample view so the surrounding phase point clouds remain visible; the phase clouds are sampled every third voxel for display. The pool itself and the central phase slice use the original QSGS grid.
 
-At this checkpoint the peak temperature is 2285.37 K, the Ag-phase liquid fraction is 19.21%, and the main connected pool contains 67,099 voxels (1925.2 nm³). Its axis-aligned dimensions are approximately 23.37 × 23.24 × 12.05 nm (x × y × z). The full-sample phase clouds are sampled every third voxel for display; the highlighted pool uses the original grid.
+At this checkpoint the peak temperature is **2296.53 K**, the Ag-phase liquid fraction is **21.87%**, and the main connected pool contains **76,392 voxels (2191.8 nm³)**. Its axis-aligned dimensions are approximately **24.57 × 24.15 × 12.37 nm** (x × y × z). The horizontal slice at z = 11.26 nm distinguishes Ti3SiC2 scaffold, unmelted Ag, partially liquid Ag, and liquid Ag.
 
-- [Full sample and pool location](ag70_full_model_and_pool_shape_3d_18p286ps.png)
-- [Pool shape close-up](ag70_pool_shape_3d_18p286ps.png)
+- [Whole sample with transparent pool](ag70_full_model_and_pool_shape_3d_final.png)
+- [Pool shape close-up](ag70_pool_shape_3d_final.png)
+- [Phase slice through pool center](ag70_phase_slice_through_pool_final.png)
 - [Rendering script](render_current_3d.py)
-- [Source checkpoint](checkpoints/caseA_ag70_1x_heat_18p286ps.npz)
+- [Source checkpoint](checkpoints/caseA_ag70_1x_heat_18p636ps.npz)
 
 Recreate the figures from this directory with:
 
@@ -15,4 +16,4 @@ Recreate the figures from this directory with:
 MPLCONFIGDIR=/tmp/mpl-ag70 python render_current_3d.py
 ```
 
-This is a thermal enthalpy visualization. The model has no fluid momentum, free-surface, or vaporization treatment, so the figure does not depict splashing or material ejection. The run-specific 2300 K stop guard is numerical protection for a model without vaporization; it is not a general physical standard.
+This is a thermal enthalpy visualization. The model has no fluid momentum, free-surface, or vaporization treatment, so it does not depict splashing or material ejection. The run-specific 2300 K stop guard is numerical protection for a model without vaporization; it is not a general physical standard.
