@@ -19,7 +19,9 @@ The 2× grid is being continued from 0.2 toward 1.0 ps. Matched-time comparisons
 | 0.30 | 794.07 / 763.41 | −30.66 | 0.615 | 1.805 | 16.55 / 4.39 | none in either grid |
 | 0.35 | 809.70 / 777.19 | −32.51 | 0.709 | 1.954 | 16.55 / 4.39 | none in either grid |
 
-At 0.25 and 0.30 ps the 2× integrated source energy agrees with 1× to roundoff, and its own energy residual is below 5.6×10⁻¹³ relative. The 2× block-averaged field has low Ag-weighted MAE/RMSE, while the local maximum remains about 28–31 K lower and its location remains closer to the source centre. This is a meaningful spatial-resolution sensitivity in the hottest voxel, despite the close bulk-average rise; neither grid has melted. The 1 ps matched-time comparison is pending. No melt-pool convergence claim can be made from these solid-state states.
+At 0.25, 0.30, and 0.35 ps the 2× integrated source energy agrees with 1× to roundoff; its relative checkpoint energy residuals range from 4.29×10⁻¹⁴ to 5.51×10⁻¹³. The 2× block-averaged field has low Ag-weighted MAE/RMSE, while the local maximum remains about 28–33 K lower and its location remains closer to the source centre. This is a meaningful spatial-resolution sensitivity in the hottest voxel, despite the close bulk-average rise; neither grid has melted.
+
+The 2× process was interrupted when its cloud environment became unavailable. The progress log includes samples through 0.38 ps, but the last full-field checkpoint is 0.35 ps. After environment recovery no 2× process was found; checkpoints at 0.25, 0.30, and 0.35 ps were re-read successfully and committed. No result through 1.0 ps is available for 2×, so a full-window matched comparison and any melt-pool convergence claim remain pending. Per the follow-up decision, 2× has not been resumed while the composition/source response is being analyzed.
 
 ## Domain-size validation
 
@@ -27,7 +29,7 @@ The previous 3×3 tile study belongs to the old 41.6654 vol% Ag geometry and can
 
 ## What remains necessary
 
-- Compare 1×/2× at shared times around first liquid and first connected multi-voxel liquid; use physical volume for clusters and report field differences after block averaging.
+- Decide whether to resume 2× only after the source/topology audit and physical input ranges are reviewed. Current shared-state comparisons stop at 0.35 ps and contain no liquid, so they do not test melt-pool convergence.
 - A single pair at one voxel scale interval is a mesh-sensitivity check, not Richardson convergence. A further refinement or local error study may be needed if onset or pool dimensions differ materially.
 - Check timestep sensitivity at the phase transition and in source-off cooling.
 - Domain periodicity has not been checked for the target composition. A 3×3 repeat tests only lateral-image interactions for this same realization, not independent-QSGS morphology variability.
