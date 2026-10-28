@@ -52,5 +52,6 @@ The model still uses candidate thermophysical properties not fully source-verifi
 - Full heating segments and cluster tracks: [segments.jsonl](../ag70vol_resume_1x_from1ps_20261028/segments.jsonl) and [heating.clusters.csv](../ag70vol_resume_1x_from1ps_20261028/heating.clusters.csv)
 - Cooling history and cluster tracks: [cooling.csv](../ag70vol_cooling_20261028/cooling.csv) and [cooling.clusters.csv](../ag70vol_cooling_20261028/cooling.clusters.csv)
 - Final heat-off and cooling restart states: [4.52 ps heat-off state](../ag70vol_resume_1x_from1ps_20261028/checkpoints/caseA_ag70_1x_final_4p52ps.npz) and [4.56 ps all-solid state](../ag70vol_cooling_20261028/checkpoints/caseA_ag70_1x_cool_final_4p56ps.npz)
+- Checksums for all local heating/cooling checkpoint files: [LOCAL_CHECKPOINTS_SHA256SUMS.txt](LOCAL_CHECKPOINTS_SHA256SUMS.txt)
 
-The run directories retain the intermediate restart checkpoints locally. The 2× matched melt-window check is still needed before making a resolution-independence claim.
+The workspace retains 176 checkpoint files (about 888 MB) across the heating and cooling runs. To keep the GitHub push within a practical size, the commit contains the event checkpoints at 2.20, 4.12, 4.22, 4.52, 4.54, and 4.56 ps, the complete CSV/JSONL histories, and a checksum manifest for every local checkpoint; the remaining restart checkpoints are preserved in the workspace. The 2× matched melt-window check is still needed before making a resolution-independence claim.
