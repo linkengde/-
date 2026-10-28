@@ -61,8 +61,9 @@ def commit_push(paths: list[Path], message: str) -> str | None:
         raise RuntimeError(f"Unexpected pre-staged paths before publishing: {staged}")
     git("add", "--", *relative)
     staged = git("diff", "--cached", "--name-only").stdout.splitlines()
-    if sorted(staged) != sorted(relative):
-        raise RuntimeError(f"Publishing staged unexpected paths: {staged}")
+    unexpected = sorted(set(staged) - set(relative))
+    if unexpected:
+        raise RuntimeError(f"Publishing staged unexpected paths: {unexpected}")
     if git("diff", "--cached", "--quiet", check=False).returncode == 0:
         git("reset", "--", *relative)
         return None
