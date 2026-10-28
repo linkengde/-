@@ -35,6 +35,8 @@ The same-geometry AgSi 8×8×1 control converged in 56 SCF iterations. Relative 
 
 An earlier 8×8 execution was interrupted when its workspace disappeared; no checkpoint or result from that execution was recovered. The archived control is the clean rerun from the registered input. A first archive verification also exposed an over-strict `1e-12 eV/Å` force-summary comparison against force components rounded in extxyz. The verifier now allows `1e-8 eV/Å`, accounting only for serialization roundoff.
 
-The sequential acquisition has advanced to the AgC 6×6×1 candidate; AgTi remains queued. See `calculations/mesh_sequence_status.json` for live queue progress and `input_manifest.json` for registered job flags.
+The AgC 6×6×1 fixed-geometry candidate converged in 72 SCF iterations and passed archive verification. It produced native extrapolated energy `-378.6672443061853 eV/cell`, free energy `-379.1163275989818 eV/cell`, maximum force `2.97877290 eV/Å` and force-vector RMS `1.14779784 eV/Å`. These are single-point labels on the registered unrelaxed geometry. Peak memory was 9.94 GiB. Its role remains `train_acquisition_candidate_pending_audit`, with training integration disabled; see `calculations/AgC_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21/`.
+
+The sequential acquisition has advanced to the AgTi 6×6×1 candidate. See `calculations/mesh_sequence_status.json` for live queue progress and `input_manifest.json` for registered job flags.
 
 Only the same 1967-source AgC, AgSi and AgTi geometries proceed as acquisition candidates; the 8×8×1 endpoint remains a numerical control. The mesh comparison does not resolve V19's failed development gate or grant a train/dev role.
