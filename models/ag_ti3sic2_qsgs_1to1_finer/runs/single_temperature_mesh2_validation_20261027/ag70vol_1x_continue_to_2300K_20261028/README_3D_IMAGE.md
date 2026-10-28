@@ -2,7 +2,7 @@
 
 These images use the saved 1x Case A heating checkpoint at **18.636 ps**. Orange marks the largest face-connected Ag liquid cluster, defined by `f_liquid >= 0.5`. The 3D pool surface is transparent in the whole-sample view so the surrounding phase point clouds remain visible; the phase clouds are sampled every third voxel for display. The pool itself and the central phase slice use the original QSGS grid.
 
-The phase-aware 3D view renders all four phase classes as solid, color-coded voxel blocks rather than point clouds. It uses one representative native voxel from each 4 × 4 × 4 region for a legible full-volume view, with a corner cutaway exposing the interior phases. The reported pool metrics below are computed from the full native grid, not the display sampling.
+The phase-aware 3D view renders all four phase classes as color-coded voxel blocks rather than point clouds. It uses one representative native voxel from each 4 × 4 × 4 region for a legible full-volume view, with a corner cutaway exposing the interior phases. Liquid Ag voxels are translucent so the scaffold behind the pool is visible. The reported pool metrics below are computed from the full native grid, not the display sampling.
 
 The sphere-style view draws a shaded spherical glyph at every visible native voxel centre, with one consistent sphere size and a different color for each phase. Liquid Ag spheres are translucent so the Ti₃SiC₂ scaffold can be seen through the pool. These spheres visualize the continuum grid; they are not atomistic coordinates.
 

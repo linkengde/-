@@ -107,11 +107,12 @@ def main() -> None:
         (masks_display[2], COLORS["partial_ag"], "partially liquid Ag"),
         (masks_display[3], COLORS["liquid_ag"], "liquid Ag"),
     )
-    for mask, color, _label in phase_specs:
+    for mask, color, label in phase_specs:
+        liquid_phase = label == "liquid Ag"
         ax.voxels(
             x, y, z, mask & visible,
-            facecolors=color,
-            edgecolors=(0.16, 0.22, 0.27, 0.16),
+            facecolors=matplotlib.colors.to_rgba(color, 0.18) if liquid_phase else color,
+            edgecolors=(0.95, 0.45, 0.12, 0.08) if liquid_phase else (0.16, 0.22, 0.27, 0.16),
             linewidth=0.045,
             shade=True,
         )
@@ -126,7 +127,9 @@ def main() -> None:
     ax.set_zlabel("z (nm)", labelpad=8)
     ax.view_init(elev=29, azim=-56)
     ax.grid(True, alpha=0.2)
-    ax.legend(handles=[Patch(facecolor=color, edgecolor="#36434c", label=label)
+    ax.legend(handles=[Patch(facecolor=matplotlib.colors.to_rgba(color, 0.18)
+                            if label == "liquid Ag" else color,
+                            edgecolor="#36434c", label=label)
                        for _mask, color, label in phase_specs],
               loc="upper left", bbox_to_anchor=(0.02, 0.98), framealpha=0.96, fontsize=10)
     ax.text2D(
@@ -146,7 +149,8 @@ def main() -> None:
     )
     fig.text(
         0.5, 0.012,
-        "Visualization cutaway only; thermal enthalpy model, with no liquid flow or splashing physics.",
+        "Liquid Ag voxels are translucent to reveal interior scaffold; cutaway is visual only. "
+        "Thermal model does not resolve liquid flow or splashing.",
         ha="center", fontsize=9,
     )
     fig.subplots_adjust(left=0.02, right=0.98, top=0.88, bottom=0.06)
