@@ -48,6 +48,9 @@ The model still uses candidate thermophysical properties not fully source-verifi
 - Combined heating/cooling metrics: [MELT_FREEZE_METRICS.csv](MELT_FREEZE_METRICS.csv)
 - Temperature, liquid fraction, and largest-cluster history: [ag70_melt_freeze_evolution.png](ag70_melt_freeze_evolution.png)
 - Spatial snapshots: [first multi-voxel cluster, 4.22 ps](ag70_pool_first_multivoxel_4p22ps.png), [heat-off, 4.52 ps](ag70_at_heat_off_4p52ps.png), [cooling, 4.54 ps](ag70_cooling_4p54ps.png), [all solid, 4.56 ps](ag70_after_solidification_4p56ps.png)
+- True 3D heat-off cluster view: [ag70_local_liquid_cluster_3d_4p52ps.png](ag70_local_liquid_cluster_3d_4p52ps.png). It renders the 65-voxel connected liquid Ag cluster from the saved 4.52 ps 1× checkpoint, with its location in the full sample.
+- Full-sample 3D view with melt region inside: [ag70_whole_sample_with_liquid_pool_3d_4p52ps.png](ag70_whole_sample_with_liquid_pool_3d_4p52ps.png). The two phases are shown as every-second-voxel point clouds for visibility; the highlighted liquid cluster uses the original grid.
+- Reproduce the 3D rendering: [render_ag70_liquid_cluster_3d.py](render_ag70_liquid_cluster_3d.py)
 - Reproducible summary/plot generator: [summarize_ag70_melt_freeze.py](../summarize_ag70_melt_freeze.py)
 - Full heating segments and cluster tracks: [segments.jsonl](../ag70vol_resume_1x_from1ps_20261028/segments.jsonl) and [heating.clusters.csv](../ag70vol_resume_1x_from1ps_20261028/heating.clusters.csv)
 - Cooling history and cluster tracks: [cooling.csv](../ag70vol_cooling_20261028/cooling.csv) and [cooling.clusters.csv](../ag70vol_cooling_20261028/cooling.clusters.csv)
