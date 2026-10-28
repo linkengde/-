@@ -2,7 +2,7 @@
 
 ## Status
 
-The 2× restart checkpoint at 0.35 ps passed integrity and physics-identity validation. A same-checkpoint 0.01 ps baseline and a profiling run completed, and an implementation-only optimization reproduced all saved state arrays bit-for-bit. The long continuation is now running from the validated 0.36 ps checkpoint in heating_0p36_to_pool/; this report is a live record and does not yet claim a 2× melting result.
+The 2× restart checkpoint at 0.35 ps passed integrity and physics-identity validation. A same-checkpoint 0.01 ps baseline and a profiling run completed, and an implementation-only optimization reproduced all saved state arrays bit-for-bit. The long continuation is running from the validated 0.36 ps checkpoint in heating_0p36_to_pool/. Its first complete 0.05 ps segment reached 0.41 ps, passed restore-only validation, and remained fully solid (peak 790.581 K); no 2× melting result is claimed yet.
 
 ## Fixed model conditions
 
@@ -24,6 +24,8 @@ The supplied checkpoint ag70vol_resume_2x/checkpoints/caseA_ag70_2x_heat_0p35ps.
 
 The optimized run is 5.84% faster in this single short measurement. Temperature, enthalpy, liquid fraction and tracker-label arrays at 0.36 ps are bitwise equal to the baseline (maximum absolute difference 0 for each). The optimized 0.36 ps checkpoint also passed an independent restore-only validation. This timing gain is an observed result for one short segment, not a guarantee of the same end-to-end speedup.
 
+The matched solid-state 0.35 ps checkpoints also exercised the 1×/2× comparison pipeline: peak Ag temperature was 809.698 K at 1× and 777.189 K at 2×, while the Ag-only block-averaged temperature RMSE was 1.954 K. Both were fully solid. The peak difference shows why maximum temperature and block-averaged field agreement are reported separately; it is not a melt-window convergence result.
+
 ## Implementation change
 
 Profiling showed repeated whole-grid numpy.isclose scans in state_from_enthalpy_density even though the Case A mesh has no cells eligible for the special no-Ag-at-melting-enthalpy branch. The solver now precomputes the candidate indices once and performs the same comparison only at those indices. This changes neither equations nor discretization. The original 0.35 ps checkpoint and the baseline run are retained unchanged.
@@ -34,9 +36,11 @@ The already completed 1× results are read from ../ag70vol_complete_20261028/MEL
 
 The 2× onset times, fields, cluster geometry and energy residuals remain pending until the active continuation reaches the corresponding window.
 
+The first long-run segment covered 0.36–0.41 ps in approximately 1,354 s. Its relative energy residual was −3.10e-13, and the saved 0.41 ps checkpoint independently restored with matching temperature, liquid field, tracker time and energy ledger. The live job has continued beyond that restart point.
+
 ## Active run and recovery
 
-The long continuation starts at the validated optimized_0p35_to0p36/checkpoints/caseA_ag70_2x_final_0p36ps.npz. Each completed heating segment writes a checkpoint, segment CSV and flushed JSONL ledger under heating_0p36_to_pool/. Before any restart, validate the latest complete checkpoint with continue_ag70_heating.py --restore-only; never restart from a partial temperature log.
+The long continuation started at the validated optimized_0p35_to0p36/checkpoints/caseA_ag70_2x_final_0p36ps.npz. Each completed heating segment writes a checkpoint, segment CSV and flushed JSONL ledger under heating_0p36_to_pool/. The latest complete validated checkpoint is currently caseA_ag70_2x_heat_0p41ps.npz; before any restart, validate the latest complete checkpoint with continue_ag70_heating.py --restore-only and never restart from a partial temperature log.
 
 Reproduction command from the repository root:
 

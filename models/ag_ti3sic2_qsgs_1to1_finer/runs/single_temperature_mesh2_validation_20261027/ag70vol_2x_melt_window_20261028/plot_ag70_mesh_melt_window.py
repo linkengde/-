@@ -41,7 +41,10 @@ def main() -> None:
     two_rows: list[dict[str, str]] = []
     if TWO_X_SEGMENTS.exists():
         for path in sorted(TWO_X_SEGMENTS.glob("heating_*.csv")):
-            two_rows.extend(read_rows(path))
+            segment_rows = read_rows(path)
+            for row in segment_rows:
+                row["stage"] = "heating"
+            two_rows.extend(segment_rows)
     if not one_rows:
         raise SystemExit(f"Missing 1x reference metrics: {ONE_X}")
 
