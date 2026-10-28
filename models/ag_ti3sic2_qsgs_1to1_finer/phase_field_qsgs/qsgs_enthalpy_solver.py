@@ -187,6 +187,12 @@ class QSGSEnthalpyGrid:
         self._latent_volumetric_J_m3 = (
             self.ag_fraction * self.ag.reference_density_kg_m3 * self.ag.latent_heat_J_kg
         )
+        # Only cells without Ag can enter the special no-latent-heat plateau
+        # branch below. Precompute those candidates so each enthalpy inversion
+        # does not run a full-grid isclose scan when (as in Case A) none exist.
+        self._no_ag_at_tm_candidate_indices = np.flatnonzero(
+            ((self._latent_volumetric_J_m3 <= 0.0) & (self._solid_at_tm_J_m3 > 0.0)).ravel()
+        )
         self._solid_capacity_at_300_J_m3_K = (
             self.ag_fraction * self.ag.reference_density_kg_m3 * self.ag.solid_cp_J_kg_K[0]
         )
@@ -456,10 +462,16 @@ class QSGSEnthalpyGrid:
         plateau = (h >= solid_at_tm) & (h <= liquidus_enthalpy) & (latent_vol > 0.0)
         temp[plateau] = self.melting_temperature_K
         liquid[plateau] = np.clip((h[plateau] - solid_at_tm[plateau]) / latent_vol[plateau], 0.0, 1.0)
-        no_ag_at_tm = (latent_vol <= 0.0) & (solid_at_tm > 0.0) & np.isclose(
-            h, solid_at_tm, rtol=2.0e-14, atol=1.0e-8
-        )
-        temp[no_ag_at_tm] = self.melting_temperature_K
+        if self._no_ag_at_tm_candidate_indices.size:
+            h_flat = h.ravel()
+            solid_at_tm_flat = solid_at_tm.ravel()
+            matching_candidates = np.isclose(
+                h_flat[self._no_ag_at_tm_candidate_indices],
+                solid_at_tm_flat[self._no_ag_at_tm_candidate_indices],
+                rtol=2.0e-14,
+                atol=1.0e-8,
+            )
+            temp.ravel()[self._no_ag_at_tm_candidate_indices[matching_candidates]] = self.melting_temperature_K
 
         above = (h > liquidus_enthalpy) & has_capacity
         if np.any(above):
