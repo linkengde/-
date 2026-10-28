@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/ag607wt-matplotlib")
+os.environ.setdefault("XDG_CACHE_HOME", "/tmp/ag607wt-cache")
 import matplotlib
 
 matplotlib.use("Agg")
@@ -158,7 +159,8 @@ def render(output_1x: Path, output_2x: Path, destination: Path) -> tuple[Path, P
                 axis.axvline(float(heat_off), color=colors[idx], linestyle="--", alpha=0.5)
         axis.set_ylabel(title)
         axis.grid(True, alpha=0.25)
-        axis.legend()
+        if axis.get_legend_handles_labels()[0]:
+            axis.legend()
     axes[-1].set_xlabel("Simulation time (ps)")
     axes[0].set_title("Heating, stable-pool shutoff, and insulated-domain cooling histories")
     history_path = destination / "melt_solidification_histories.png"
