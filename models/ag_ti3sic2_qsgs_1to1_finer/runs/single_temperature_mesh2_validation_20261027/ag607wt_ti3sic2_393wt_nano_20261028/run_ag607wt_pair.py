@@ -185,7 +185,7 @@ def publish_ready_checkpoints(
         if latest_time >= 0.10 and (
             latest_time - float(pushed.get("last_time_ps", 0.0)) >= 0.50 - 1.0e-9
             or phase == "cooling"
-            or state_status in {"complete", "complete_without_stable_pool", "complete_partial_cooling", "safety_stop"}
+            or state_status in {"paused", "complete", "complete_without_stable_pool", "complete_partial_cooling", "safety_stop"}
         ):
             candidates.append((str(latest), "periodic_or_phase_checkpoint", latest_time))
     for relative_checkpoint, reason, time_ps in candidates:
