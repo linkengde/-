@@ -2,12 +2,12 @@
 
 These images use the saved 1x Case A heating checkpoint at **18.636 ps**. Orange marks the largest face-connected Ag liquid cluster, defined by `f_liquid >= 0.5`. The 3D pool surface is transparent in the whole-sample view so the surrounding phase point clouds remain visible; the phase clouds are sampled every third voxel for display. The pool itself and the central phase slice use the original QSGS grid.
 
-The phase-aware 3D view below is a full-volume perspective rendering, not a 2D section: the orange surface is the connected liquid pool built from native voxels, and the colored background points show the Ti₃SiC₂ scaffold, unmelted Ag, and partially liquid Ag. A limited number of phase points are sampled to keep the 3D view readable; the pool geometry and its reported volume use all native voxels.
+The phase-aware 3D view renders all four phase classes as solid, color-coded voxel blocks rather than point clouds. It uses one representative native voxel from each 4 × 4 × 4 region for a legible full-volume view, with a corner cutaway exposing the interior phases. The reported pool metrics below are computed from the full native grid, not the display sampling.
 
 At this checkpoint the peak temperature is **2296.53 K**, the Ag-phase liquid fraction is **21.87%**, and the main connected pool contains **76,392 voxels (2191.8 nm³)**. Its axis-aligned dimensions are approximately **24.57 × 24.15 × 12.37 nm** (x × y × z). The horizontal slice at z = 11.26 nm distinguishes Ti3SiC2 scaffold, unmelted Ag, partially liquid Ag, and liquid Ag.
 
 - [Whole sample with transparent pool](ag70_full_model_and_pool_shape_3d_final.png)
-- [3D pool with all-phase context](ag70_phase_map_3d_18p636ps.png)
+- [3D cutaway with all phases as voxel blocks](ag70_phase_map_3d_18p636ps.png)
 - [Pool shape close-up](ag70_pool_shape_3d_final.png)
 - [Phase slice through pool center](ag70_phase_slice_through_pool_final.png)
 - [Rendering script](render_current_3d.py)
