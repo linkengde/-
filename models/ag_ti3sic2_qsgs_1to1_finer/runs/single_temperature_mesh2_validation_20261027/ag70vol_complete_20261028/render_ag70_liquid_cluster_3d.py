@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the recorded Ag70 1x local liquid cluster as a true 3D voxel view."""
+"""Render the Ag70 1x melt cluster locally and inside the full 3D sample."""
 
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ CHECKPOINT = (
     / "caseA_ag70_1x_final_4p52ps.npz"
 )
 OUTPUT = Path(__file__).resolve().parent / "ag70_local_liquid_cluster_3d_4p52ps.png"
+OUTPUT_WHOLE = Path(__file__).resolve().parent / "ag70_whole_sample_with_liquid_pool_3d_4p52ps.png"
 
 
 def draw_box(ax, bounds: tuple[tuple[float, float], ...], color: str, linewidth: float) -> None:
@@ -178,6 +179,132 @@ def main() -> None:
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUTPUT, dpi=220, facecolor="white", bbox_inches="tight")
     print(f"saved={OUTPUT}")
+
+    whole = plt.figure(figsize=(16.0, 8.4))
+    whole.subplots_adjust(left=0.035, right=0.98, top=0.83, bottom=0.13, wspace=0.06)
+    ax_sample = whole.add_subplot(1, 2, 1, projection="3d")
+    sample_stride = 2
+    ag_sample = ag[::sample_stride, ::sample_stride, ::sample_stride]
+    sc_sample = scaffold[::sample_stride, ::sample_stride, ::sample_stride]
+    sample_indices = np.indices(ag_sample.shape)
+    sample_centers = [
+        (sample_indices[i] * sample_stride + 0.5) * voxel_A[i]
+        for i in range(3)
+    ]
+    ax_sample.scatter(
+        *[sample_centers[i][ag_sample] for i in range(3)],
+        s=2.0,
+        c="#74a9cf",
+        alpha=0.10,
+        marker="s",
+        depthshade=False,
+        linewidths=0,
+        rasterized=True,
+    )
+    ax_sample.scatter(
+        *[sample_centers[i][sc_sample] for i in range(3)],
+        s=2.4,
+        c="#334e62",
+        alpha=0.20,
+        marker="s",
+        depthshade=False,
+        linewidths=0,
+        rasterized=True,
+    )
+    all_liquid = ag & (liquid_fraction > 1.0e-12) & ~largest_mask
+    partial_coords = np.where(all_liquid)
+    if partial_coords[0].size:
+        ax_sample.scatter(
+            *((partial_coords[i] + 0.5) * voxel_A[i] for i in range(3)),
+            s=34,
+            c="#ffd166",
+            marker="s",
+            edgecolors="#7b5a12",
+            linewidths=0.35,
+            depthshade=False,
+        )
+    ax_sample.scatter(
+        *((coords[i] + 0.5) * voxel_A[i] for i in range(3)),
+        s=34,
+        c="#f28e2b",
+        marker="s",
+        edgecolors="#7f3b08",
+        linewidths=0.35,
+        depthshade=False,
+    )
+    draw_box(
+        ax_sample,
+        ((0.0, domain_size_A[0]), (0.0, domain_size_A[1]), (0.0, domain_size_A[2])),
+        "#667788",
+        0.7,
+    )
+    source = np.asarray([domain_size_A[0] / 2, domain_size_A[1] / 2, domain_size_A[2]])
+    ax_sample.scatter(*source, color="#2468a2", s=95, marker="*", depthshade=False)
+    ax_sample.set_xlim(0, domain_size_A[0])
+    ax_sample.set_ylim(0, domain_size_A[1])
+    ax_sample.set_zlim(0, domain_size_A[2])
+    ax_sample.set_box_aspect(domain_size_A.copy())
+    ax_sample.set_proj_type("ortho")
+    ax_sample.view_init(elev=24, azim=-53)
+    ax_sample.set_xlabel("x (Å)")
+    ax_sample.set_ylabel("y (Å)")
+    ax_sample.set_zlabel("z (Å)")
+    ax_sample.set_title("Complete QSGS sample with the saved liquid region inside")
+    ax_sample.legend(
+        handles=[
+            Line2D([0], [0], marker="s", color="w", markerfacecolor="#74a9cf", label="Ag matrix (every 2nd voxel)"),
+            Line2D([0], [0], marker="s", color="w", markerfacecolor="#334e62", label="Ti₃SiC₂ scaffold (every 2nd voxel)"),
+            Line2D([0], [0], marker="s", color="w", markerfacecolor="#f28e2b", label="connected liquid Ag, f ≥ 0.5"),
+            Line2D([0], [0], marker="s", color="w", markerfacecolor="#ffd166", label="other partially liquid Ag"),
+            Line2D([0], [0], marker="*", color="w", markerfacecolor="#2468a2", label="Gaussian source on top face"),
+        ],
+        loc="upper left",
+        fontsize=7.3,
+        framealpha=0.9,
+    )
+
+    ax_detail = whole.add_subplot(1, 2, 2, projection="3d")
+    local_context = roi_ag & ~roi_liquid & ~roi_partial
+    local_xyz = np.where(local_context)
+    ax_detail.scatter(
+        centers[0][local_xyz[0]], centers[1][local_xyz[1]], centers[2][local_xyz[2]],
+        s=9, c="#7792a5", alpha=0.18, depthshade=False, linewidths=0,
+    )
+    if np.any(roi_partial):
+        ax_detail.voxels(
+            *edge_grid, roi_partial,
+            facecolors=(1.0, 0.78, 0.26, 0.88),
+            edgecolors=(0.48, 0.30, 0.08, 0.8),
+            linewidth=0.35,
+        )
+    ax_detail.voxels(
+        *edge_grid, roi_liquid,
+        facecolors="#f28e2b",
+        edgecolors="#7f3b08",
+        linewidth=0.42,
+    )
+    ax_detail.set_xlabel("x (Å)")
+    ax_detail.set_ylabel("y (Å)")
+    ax_detail.set_zlabel("z (Å)")
+    ax_detail.set_box_aspect((upper - lower) * voxel_A)
+    ax_detail.view_init(elev=27, azim=-54)
+    ax_detail.set_proj_type("ortho")
+    ax_detail.set_title(f"Pool detail: {int(sizes.max())} connected voxels")
+
+    whole.suptitle(
+        f"Ag–Ti₃SiC₂, 70:30 vol% · 1× Case A · t={time_ps:.2f} ps · "
+        f"peak T={peak_K:.1f} K · connected liquid cluster={int(sizes.max())} voxels "
+        f"({sizes.max() * np.prod(voxel_A):.0f} Å³)\n"
+        "The phase cloud is sampled every 2nd voxel for visibility; the highlighted melt voxels use the original grid."
+    )
+    whole.text(
+        0.5, 0.035,
+        f"Whole sample: {domain_size_A[0]:.1f} × {domain_size_A[1]:.1f} × {domain_size_A[2]:.1f} Å; "
+        "orange marks the main connected liquid Ag cluster within the full dual-phase structure.",
+        ha="center", fontsize=9,
+    )
+    whole.savefig(OUTPUT_WHOLE, dpi=220, facecolor="white", bbox_inches="tight")
+    print(f"saved={OUTPUT_WHOLE}")
     print(f"time_ps={time_ps:.8f} peak_temperature_K={peak_K:.6f}")
     print(f"liquid_fraction={liquid_volfrac:.12g} cluster_voxels={int(sizes.max())}")
     print(f"cluster_volume_A3={sizes.max() * np.prod(voxel_A):.6f} centroid_A={centroid_A.tolist()}")
