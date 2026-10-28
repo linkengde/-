@@ -47,12 +47,12 @@ python models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validatio
 
 1× 与 2× 分别通过了 0.001 ps（1 fs）Case A 短测：源功率均为 `8.47205563778101×10⁻⁴ W`，能量相对误差绝对值低于 `7×10⁻¹⁶`，两次独立短测逐位一致，完整状态检查点恢复验证通过。短测结果在 `preflight/1x/preflight.json`、`preflight/2x/preflight.json` 和 `preflight_summary.json`。
 
-完整算例复用现有求解器与物性、边界和热源参数。每个算例上限为加热 15 ps、冷却 5 ps，最高温度保护 2300 K；每 0.05 ps 保存完整检查点，液态连通与团簇量每 0.01 ps 采样。满足以下两条后关闭热源并进入凝固计算：同一最大液态连通团簇连续存在至少 3 ps，且最新 2 ps 的团簇体积极差不超过均值的 5%。若触及温度保护或时间上限，报告实际停机原因，不伪称形成稳定熔池。
+完整算例复用现有求解器与物性、边界和热源参数。默认不设加热时间上限，最高温度保护为 2300 K；加热持续至稳定熔池判据达成并关闭热源，或触及温度保护。冷却阶段最多 5 ps。每 0.05 ps 保存完整检查点，液态连通与团簇量每 0.01 ps 采样。稳定熔池判据为：同一最大液态连通团簇连续存在至少 3 ps，且最新 2 ps 的团簇体积极差不超过均值的 5%。若触及温度保护，报告实际停机原因，不伪称形成稳定熔池。
 
 从本目录启动两种网格的短测门控和并行完整算例：
 
 ```bash
-python run_ag607wt_pair.py --max-heating-ps 15 --max-cooling-ps 5 --max-temperature-K 2300
+python run_ag607wt_pair.py --max-cooling-ps 5 --max-temperature-K 2300
 ```
 
 运行入口为 `run_ag607wt_case.py`；两套输出分别写入 `runs/full_1x/` 和 `runs/full_2x/`。`run_state.json` 指向最后的有效检查点，可用同一个 pair 脚本加 `--resume-existing` 恢复。控制器会把每网格约每 0.5 ps 及首次液相、连通熔池、稳定池和关热检查点推送到目标分支。2× 短测耗时约 32 秒/1 fs；完整 2× 结果需要长时间运行。

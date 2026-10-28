@@ -215,13 +215,18 @@ def on_signal(signum: int, frame: object) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--max-heating-ps", type=float, default=15.0)
+    parser.add_argument(
+        "--max-heating-ps",
+        type=float,
+        default=None,
+        help="optional heating time cap; omit to run until stable-pool shutdown or temperature protection",
+    )
     parser.add_argument("--max-cooling-ps", type=float, default=5.0)
     parser.add_argument("--max-temperature-K", type=float, default=2300.0)
     parser.add_argument("--resume-existing", action="store_true")
     parser.add_argument("--poll-seconds", type=float, default=10.0)
     args = parser.parse_args()
-    if args.max_heating_ps <= 0.0 or args.max_cooling_ps < 0.0:
+    if (args.max_heating_ps is not None and args.max_heating_ps <= 0.0) or args.max_cooling_ps < 0.0:
         parser.error("Invalid heating or cooling duration")
     signal.signal(signal.SIGTERM, on_signal)
     signal.signal(signal.SIGINT, on_signal)
@@ -286,13 +291,13 @@ def main() -> None:
             str(refinement),
             "--output-dir",
             str(output),
-            "--max-heating-ps",
-            str(args.max_heating_ps),
             "--max-cooling-ps",
             str(args.max_cooling_ps),
             "--max-temperature-K",
             str(args.max_temperature_K),
         ]
+        if args.max_heating_ps is not None:
+            command.extend(["--max-heating-ps", str(args.max_heating_ps)])
         if args.resume_existing:
             command.append("--resume")
         log_path = output / "run.log"

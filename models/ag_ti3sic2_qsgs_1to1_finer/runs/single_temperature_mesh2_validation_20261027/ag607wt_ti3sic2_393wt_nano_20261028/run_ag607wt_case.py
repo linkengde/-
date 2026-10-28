@@ -473,10 +473,10 @@ def run_full(args: argparse.Namespace) -> dict[str, Any]:
     if not args.resume and args.restart_from is None:
         save_state("heating", "running")
 
-    # Continue the heating phase until the predefined stable-pool rule, the
-    # heating time cap, or the temperature protection limit is reached.
+    # Continue the heating phase until the predefined stable-pool rule or the
+    # temperature protection limit is reached. A time cap is optional.
     if phase == "heating":
-        while model.time_s * 1.0e12 < args.max_heating_ps - 1.0e-10:
+        while args.max_heating_ps is None or model.time_s * 1.0e12 < args.max_heating_ps - 1.0e-10:
             current_ps = model.time_s * 1.0e12
             peak = float(model.state.temperature_K.max())
             if peak >= args.max_temperature_K:
@@ -488,7 +488,9 @@ def run_full(args: argparse.Namespace) -> dict[str, Any]:
                 status, stop_reason = "paused", "safe_stop_requested"
                 save_state("heating", status)
                 break
-            interval = min(args.segment_ps, args.max_heating_ps - current_ps)
+            interval = args.segment_ps
+            if args.max_heating_ps is not None:
+                interval = min(interval, args.max_heating_ps - current_ps)
             if peak >= args.max_temperature_K - 50.0:
                 interval = min(interval, 0.002)
             run_segment("heating", current_ps + interval)
@@ -512,7 +514,7 @@ def run_full(args: argparse.Namespace) -> dict[str, Any]:
                 status, stop_reason = "paused", "safe_stop_requested"
                 save_state("heating", status)
                 break
-        if phase == "heating" and status == "running":
+        if phase == "heating" and status == "running" and args.max_heating_ps is not None:
             heat_off_time_ps = model.time_s * 1.0e12
             heating_stop_reason = "maximum_heating_time_reached_without_stable_pool"
             heat_off_stability_assessment = dict(stability_assessment)
@@ -642,7 +644,12 @@ def main() -> None:
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--restart-from", type=Path, default=None)
     parser.add_argument("--restart-phase", choices=("heating", "cooling"), default="heating")
-    parser.add_argument("--max-heating-ps", type=float, default=15.0)
+    parser.add_argument(
+        "--max-heating-ps",
+        type=float,
+        default=None,
+        help="optional heating time cap; omit to run until stable-pool shutdown or temperature protection",
+    )
     parser.add_argument("--max-cooling-ps", type=float, default=5.0)
     parser.add_argument("--max-temperature-K", type=float, default=2300.0)
     parser.add_argument("--segment-ps", type=float, default=0.05)
@@ -658,8 +665,8 @@ def main() -> None:
             parser.error("--smoke-ps must be positive")
         result = run_smoke_test(args.refinement, args.output_dir.resolve(), args.smoke_ps)
     else:
-        if args.max_heating_ps <= 0.0 or args.max_cooling_ps < 0.0:
-            parser.error("Heating time must be positive and cooling time nonnegative")
+        if (args.max_heating_ps is not None and args.max_heating_ps <= 0.0) or args.max_cooling_ps < 0.0:
+            parser.error("Optional heating time must be positive when set; cooling time must be nonnegative")
         if args.max_temperature_K <= 300.0 or args.segment_ps <= 0.0 or args.sample_ps <= 0.0:
             parser.error("Temperature and sampling/segment limits must be positive")
         if args.stability_duration_ps <= 0.0 or args.stability_window_ps <= 0.0:
