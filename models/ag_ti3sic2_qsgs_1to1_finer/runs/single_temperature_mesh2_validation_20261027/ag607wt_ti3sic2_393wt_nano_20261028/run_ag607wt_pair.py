@@ -356,7 +356,17 @@ def main() -> None:
         if summary_path.exists():
             summaries[f"{refinement}x"] = json.loads(summary_path.read_text(encoding="utf-8"))
     final = {
-        "status": "both_cases_finished" if all(code == 0 for code in return_codes.values()) and len(summaries) == 2 else "one_or_more_cases_incomplete",
+        "status": (
+            "both_cases_finished"
+            if all(code == 0 for code in return_codes.values())
+            and len(summaries) == 2
+            and all(
+                summary.get("status")
+                in {"complete", "complete_without_stable_pool", "complete_partial_cooling", "safety_stop"}
+                for summary in summaries.values()
+            )
+            else "one_or_more_cases_incomplete"
+        ),
         "finished_utc": now_utc(),
         "return_codes": return_codes,
         "case_summaries": summaries,
