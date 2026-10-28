@@ -1,0 +1,37 @@
+# Thermal-property source audit for the Ag–Ti₃SiC₂ continuum model
+
+Audit date: 2026-10-28  
+Code baseline: `33a1738f1fdf8f800233e6dbb65cfb12ee2b8c2c`  
+Scope: the candidate data consumed by `phase_field_qsgs/thermophysical_model.py`, plus traceable source records already present elsewhere in this repository. Network requests to NIST, Crossref, and DOI endpoints from this environment returned `403 Forbidden`; the source PDFs cited below are those identified and archived in repository records, not files downloaded during this task.
+
+## Disposition
+
+The current model property table remains a candidate set. A few inputs have strong repository-level source lineage, but the required thermal-property table/page and condition have not been attached for the specific Cp/k values. The implementation should not promote the entire candidate table to “verified” based on a source that only supports one property or a crystal structure.
+
+| Property | Current input | Source evidence found | Audit status / required action |
+|---|---:|---|---|
+| Ag melting temperature | 1235.08 K | A committed source note identifies NIST Chemistry WebBook, Silver, CAS 7440-22-4, phase-change record (`Mask=4`) and reports about 1234.93 K. The note also records that direct NIST access returned 403. | **Mismatch to resolve:** current model is 0.15 K higher. Source locator/value is present, but the original NIST response was not retrievable in this environment. Retain both values as traceable candidates until source capture/version and rounding are reviewed. |
+| Ag fusion enthalpy | 11,297 J/mol; 104,729.66 J/kg | Current config attributes it generally to “NIST/CDC”; no exact source record/table/page in the model tree. | **Unverified.** Attach the phase-change value, units, reference convention, and uncertainty from the original record. |
+| Ag solid density | 10,490 kg/m³ | Repository source review records room-temperature fcc Ag `a=4.086 Å` from COD/Suh–Ohta–Waseda 1988, DOI `10.1007/BF01174717`. Using four atoms per fcc cell and the configured molar mass gives a derived crystallographic density of about 10,502.9 kg/m³ at the reported cell parameter. | **Convention unresolved.** The candidate is close but is not the density derived from that exact rounded lattice parameter. State temperature/reference and whether the value is measured bulk or crystal density. The solver holds it fixed and therefore omits expansion. |
+| Ag solid molar Cp | 25.4 J/(mol·K) at 300 K; 31.8 at 1235.08 K | “NIST/CDC” summary attribution only; no exact record/table in this model tree. | **Unverified.** Need source and temperature-specific measurement/evaluation range. The code linearly interpolates two anchors; that interpolation is a model choice. |
+| Ag solid thermal conductivity | 429 W/(m·K) at 300 K; 175 at 1235.08 K | “NIST recommended data” summary attribution only; no edition/table/page, specimen condition, or uncertainty. | **Unverified.** Obtain the original recommended-data source and exact temperature convention. Code linearly interpolates two anchors. |
+| Ag liquid molar Cp | 33.47 J/(mol·K) at Tm | User-provided candidate; no original source record. | **Unverified single anchor.** Code holds it constant above Tm. |
+| Ag liquid thermal conductivity | 175 W/(m·K) at Tm | User-provided tentative recommendation; no original source record. | **Unverified, high uncertainty.** Code holds it constant above Tm. |
+| Ag liquid density | 9,346 kg/m³ at configured Tm | Repository archives the source identity for R. N. Abdullaev, R. A. Khairulin, and S. V. Stankus, *J. Phys.: Conf. Ser.* 1677 (2020) 012161, DOI `10.1088/1742-6596/1677/1/012161`, and the source PDF SHA-256. The archived Eq. (2) fit is `ρ(T)=9327.1−0.9956(T−1234.93) kg/m³`, valid 1234.93–1631 K. | **Source-backed candidate, not used by the thermal solver.** Fit gives 9,327.1 kg/m³ at 1234.93 K and about 9,326.95 kg/m³ at 1235.08 K; this differs from 9,346 by about 0.2%. Original source audit says neighboring tabulated error entries are 0.25/0.26% with no stated coverage convention. Do not read those as a confidence interval. |
+| Ti₃SiC₂ formula molar mass | 0.195708 kg/mol | Formula-derived using atomic masses; exact atomic-weight convention should be fixed in the final input manifest. | **Reproducible formula input.** No special experimental claim. |
+| Ti₃SiC₂ solid density | 4,520 kg/m³ | Generic “user-supplied” candidate, no measured specimen/porosity record. Separately, Bai et al. (2010), *Solid State Sciences* 12, 1220–1225, DOI `10.1016/j.solidstatesciences.2010.03.007`, has a repository-archived structural reconstruction with a DFT cell volume 142.9376 Å³ and Z=2; that cell implies about 4,547.2 kg/m³. | **Candidate not resolved.** The DFT-cell-derived value is an ideal-crystal calculation, not a measured porous composite density and not a substitute for bulk specimen density. Distinguish crystal density from bulk density/porosity. |
+| Ti₃SiC₂ molar Cp | 110 J/(mol·K) at 300 K; 155 at 1473.15 K | Current CSV says “Barsoum et al.”; no exact article, specimen, table, direction, or source artifact in the thermal-property tree. | **Unverified.** Correct mass-specific conversions using 0.195708 kg/mol are 562.06 and 792.00 J/(kg·K); the earlier 656–924 conversion is inconsistent. Code linearly interpolates. |
+| Ti₃SiC₂ thermal conductivity | 37 W/(m·K) at 300 K; 32 at 1473.15 K | Current CSV says “Barsoum et al.”; exact bibliographic record/table, specimen porosity, and measurement direction are absent. | **Unverified.** Code assumes scalar isotropic `k(T)` and linearly interpolates. Need primary measurement/source and directional convention before using Case B quantitatively. |
+
+## Cross-checks and source limits
+
+- The repo’s prior independent source note gives the NIST locator for Ag melting data, but also explicitly says the source page could not be fetched through the proxy. This is better provenance than the generic config note, but it is not a captured primary-source record.
+- The Ag liquid-density paper is the only source found in this audit with an equation, validity range, DOI, license note, and source-PDF hash. It supports liquid density only; it does not support Ag Cp/k or fusion enthalpy.
+- The Suh/COD and Bai records support crystal structure inputs. The Bai-derived density is computed from a DFT unit cell. Neither record supplies the measured thermal-property curves needed for the current heat model.
+- The Ti₃SiC₂ geometry papers found in the repository do not substantiate the “Barsoum et al.” Cp/k attribution. No citation was inferred from a similar title or author name.
+- Existing solver tables use two-point linear interpolation for solid Cp/k and Ti₃SiC₂ Cp/k, and constant single-anchor liquid Cp/k. These interpolation rules are explicitly model assumptions, not values reported by the cited source.
+
+## Closure checklist
+
+For every adopted property, archive a stable source file or source URL capture, DOI/edition, page/table/equation, material purity/porosity and sample direction, temperature interval, units, uncertainty convention, and conversion script. Keep property values and model interpolation in separately versioned files. Until the Ag Cp/k/latent heat and Ti₃SiC₂ Cp/k/density evidence is completed, the finite-interface tests use the current candidate numbers only to verify code conservation and limiting behavior; they do not validate the material response.
+
