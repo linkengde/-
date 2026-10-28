@@ -90,6 +90,7 @@ def main() -> None:
     )
     points = centres(visible, spacing_nm)
     phase_colors = np.array([matplotlib.colors.to_rgba(color) for color, _ in phase_specs])
+    phase_colors[3, 3] = 0.10  # translucent liquid Ag reveals the scaffold behind it
     point_colors = phase_colors[np.where(scaffold, 0, np.where(partial, 2, np.where(liquid, 3, 1)))[visible]]
     ax.scatter(
         points[:, 0], points[:, 1], points[:, 2],
@@ -109,8 +110,9 @@ def main() -> None:
     ax.grid(True, alpha=0.2)
     ax.legend(
         handles=[Line2D([0], [0], marker="o", linestyle="", markersize=9,
-                        markerfacecolor=color, markeredgecolor="#26343d", label=label)
-                 for color, label in phase_specs],
+                        markerfacecolor=matplotlib.colors.to_rgba(color, 0.10 if i == 3 else 1.0),
+                        markeredgecolor="#26343d", label=label)
+                 for i, (color, label) in enumerate(phase_specs)],
         loc="upper left", bbox_to_anchor=(0.02, 0.98), framealpha=0.96, fontsize=10,
     )
     time_ps = float(metadata["time_ps"])
@@ -129,7 +131,7 @@ def main() -> None:
     )
     fig.text(
         0.5, 0.012,
-        "Spheres are visualization glyphs at continuum voxel centres, not atomistic coordinates; "
+        "Liquid Ag spheres are translucent to show the scaffold inside. Spheres are continuum-voxel glyphs, not atoms; "
         "the model does not resolve liquid flow or splashing.",
         ha="center", fontsize=9,
     )
