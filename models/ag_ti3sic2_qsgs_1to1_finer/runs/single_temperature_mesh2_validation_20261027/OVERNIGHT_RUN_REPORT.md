@@ -19,7 +19,7 @@ This work continues the isolated Case A project from the committed 0.2 ps 70:30 
 
 The 1× run resumed at 0.2 ps and reached 1.0 ps in 904.39 s. Its maximum temperature was 906.2125 K (0.734 Tm), and its Ag liquid fraction, any-liquid voxel count and connected-liquid cluster count remained zero at every sample. First-liquid, first-connected and first multi-voxel-pool times were not observed through the 1 ps cutoff. The final checkpoint was read back successfully. Total injected energy was 1.5513589462365018×10⁻¹⁵ J; the final energy residual was 8.574918039752398×10⁻²⁸ J (relative 5.5274×10⁻¹³). There is no liquid checkpoint to cool, so a source-off “solidification time” is not defined for this 70:30 run.
 
-The 2× calculation is continuing from its 0.2 ps checkpoint toward the same absolute 1.0 ps end time. It uses the unchanged heat source, geometry and candidate properties. No conclusion about 2× through 1.0 ps is made until its checkpoint completes. A cooling branch and full 3×3 transient are deferred because the 1× heating produced no liquid; a 3×3 source/energy preflight will be done only if enough budget remains after the 2× run.
+The 2× calculation has reached 0.35 ps from its existing 0.20 ps checkpoint and is continuing toward the same absolute 1.0 ps end time. It uses the unchanged heat source, geometry and candidate properties. The 0.30 and 0.35 ps checkpoints passed separate `load_checkpoint()` restore-only readbacks with consistent time, fields and energy ledgers. At matched 0.25, 0.30, and 0.35 ps, 1×/2× peak temperatures are 774.41/746.06 K, 794.07/763.41 K, and 809.70/777.19 K (2× lower by 28.35, 30.66, and 32.51 K); both grids remain fully solid. After block-averaging 2× to 1× at 0.35 ps, Ag-weighted MAE/RMSE are 0.709/1.954 K, while the hottest-voxel distance from source centre differs by about 12.16 Å and the peak is 32.51 K lower. These are early solid-state mesh-sensitivity results, not convergence and not melt-pool comparisons. A cooling branch is not applicable while no liquid state exists. The full 3×3 transient remains deferred; a central-source/energy preflight will be considered only after the 2× run and only if reporting time remains.
 
 | Item | Status | Result |
 |---|---|---|
@@ -27,7 +27,7 @@ The 2× calculation is continuing from its 0.2 ps checkpoint toward the same abs
 | First connected liquid at threshold 0.5 | 1×, 0.2–1.0 ps | none observed |
 | First ≥2-voxel six-face cluster | 1×, 0.2–1.0 ps | none observed |
 | Source-off solidification | 1× | not applicable: no liquid initial state |
-| Matched 2× mesh comparison | running to 1.0 ps | pending completion |
+| Matched 2× mesh comparison | running; 0.25, 0.30 and 0.35 ps compared | no liquid in either grid; peak-temperature difference is 28–33 K, full 1.0 ps comparison pending |
 | New-composition 3×3 check | preflight only if time remains | no full transient launched yet |
 
 ## Interpretation limits

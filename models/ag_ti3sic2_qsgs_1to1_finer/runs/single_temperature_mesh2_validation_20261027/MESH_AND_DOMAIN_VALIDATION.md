@@ -10,7 +10,16 @@ The 1× and 2× cases use the same binary geometry, exact Gaussian-plus-depth so
 
 The 1× and 2× 0.2 ps checkpoints were restored and their metadata/field hashes and energy ledgers accepted by `load_checkpoint()`. A 1× continuation from 0.2 to 1.0 ps took 904.39 s. Peak temperature increased from 748.61 K at 0.2 ps to 906.21 K at 1.0 ps; every sampled state remained fully solid. Relative energy residual at 1.0 ps was 5.53×10⁻¹³ and the final checkpoint round-tripped. Since no liquid formed, neither pool-size convergence nor cooling-time convergence can be tested in this window.
 
-The 2× grid is currently being continued from 0.2 to 1.0 ps. Its same-time comparison will be inserted after completion. The prior 0.2 ps comparison showed 2× peak temperature 25.43 K below 1×, while Ag-weighted block-averaged MAE/RMSE were 0.404/1.415 K. That early-time result motivates the matched-time check; it does not establish the 1 ps behavior.
+The 2× grid is being continued from 0.2 toward 1.0 ps. Matched-time comparisons currently available are:
+
+| Time (ps) | Peak 1× / 2× (K) | Δ peak (2×−1×, K) | Ag block-averaged MAE (K) | RMSE (K) | Hotspot offset from source, 1× / 2× (Å) | Liquid |
+|---:|---:|---:|---:|---:|---:|---|
+| 0.20 | 748.61 / 723.18 | −25.43 | 0.404 | 1.415 | 16.55 / 4.39 | none in either grid |
+| 0.25 | 774.41 / 746.06 | −28.35 | 0.513 | 1.628 | 16.55 / 4.39 | none in either grid |
+| 0.30 | 794.07 / 763.41 | −30.66 | 0.615 | 1.805 | 16.55 / 4.39 | none in either grid |
+| 0.35 | 809.70 / 777.19 | −32.51 | 0.709 | 1.954 | 16.55 / 4.39 | none in either grid |
+
+At 0.25 and 0.30 ps the 2× integrated source energy agrees with 1× to roundoff, and its own energy residual is below 5.6×10⁻¹³ relative. The 2× block-averaged field has low Ag-weighted MAE/RMSE, while the local maximum remains about 28–31 K lower and its location remains closer to the source centre. This is a meaningful spatial-resolution sensitivity in the hottest voxel, despite the close bulk-average rise; neither grid has melted. The 1 ps matched-time comparison is pending. No melt-pool convergence claim can be made from these solid-state states.
 
 ## Domain-size validation
 
