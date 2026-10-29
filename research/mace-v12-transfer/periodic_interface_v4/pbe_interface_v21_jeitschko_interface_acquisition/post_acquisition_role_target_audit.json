@@ -1,0 +1,266 @@
+{
+  "status": "OWNER_AUDIT_COMPLETE_EXTERNAL_REVIEW_PENDING",
+  "audit_date": "2026-10-29",
+  "scope": "Post-acquisition provenance, direct-geometry, numerical-method, and energy-target review for the three registered Ag/Ti3SiC2 interface labels. Read-only against the approved V19 train36/dev3; no test or sealed data opened.",
+  "acquisition_status": {
+    "all_three_labels_converged_and_archived": true,
+    "archive_verifiers": "PASS for AgSi 6x6x1, AgC 6x6x1, and AgTi 6x6x1",
+    "kmesh_control": "AgSi 8x8x1 numerical control passed provisional comparison; not a training endpoint"
+  },
+  "source_family_review": {
+    "candidate_source_family": "Jeitschko_Nowotny_1967_single_crystal",
+    "candidate_paper_doi": "10.1007/BF00899949",
+    "candidate_source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+    "candidate_source_type": "Full-text Fourier-coordinate reconstruction; not an official ICSD 25762 export.",
+    "development_source_family": "Kisi_1998_COD_9009647",
+    "independent_crystallographic_family_vs_development": true,
+    "supporting_audit": "research/mace-v12-transfer/coordination/reports/window-c/ti3sic2_jeitschko_candidate_role_audit_20261027/candidate_role_audit.json",
+    "interpretation": "The three candidate interfaces form one new source family relative to dev3, not three independent source families. The source relation supports source separation between candidate training data and the frozen dev source, subject to the documented reconstruction and remote-COD-byte limitations."
+  },
+  "geometry_screen": {
+    "evidence_file": "geometry_audit.json",
+    "scope": "Same-composition/PBC and normalized-cell direct geometry comparisons against approved train36 and dev3, residual proposal inputs, and V17 development geometries.",
+    "train36_dev3_direct_hits": [
+      {
+        "label": "AgC_JN1967_registryB_v21_acq01",
+        "train36": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0
+        },
+        "V19_dev3": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0
+        }
+      },
+      {
+        "label": "AgSi_JN1967_registryB_v21_acq01",
+        "train36": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0
+        },
+        "V19_dev3": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0
+        }
+      },
+      {
+        "label": "AgTi_JN1967_registryB_v21_acq01",
+        "train36": {
+          "frames_geometry_only": 36,
+          "same_composition_and_PBC_frames": 0,
+          "exact_hits": 0,
+          "near_hits": 0
+        },
+        "V19_dev3": {
+          "frames_geometry_only": 3,
+          "same_composition_and_PBC_frames": 3,
+          "exact_hits": 0,
+          "near_hits": 0
+        }
+      }
+    ],
+    "exact_or_near_duplicate_hits_against_train36_or_dev3": 0,
+    "limitation": "This is not a universal all-history supercell-equivalence audit."
+  },
+  "method_review": {
+    "candidate_labels": {
+      "xc": "PBE",
+      "basis": "plane wave",
+      "cutoff_eV": 500,
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "smearing_eV": 0.1,
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "poissonsolver": {
+        "dipolelayer": "xy"
+      }
+    },
+    "V19_dev3": "PBE/PW 500 eV, 6x6x1, sigma 0.10 eV, TTF, xy dipole; matches candidate calculation settings.",
+    "V19_train36": "PBE/PW 500 eV, Gamma 1x1x1, TTT; differs in k-point sampling and boundary conditions.",
+    "interpretation": "The new labels directly address the slab-method/composition gap to dev3, while their numerical method differs from the existing train36 bulk labels."
+  },
+  "energy_target_review": {
+    "provisional_v19_comparison_target": "native_extrapolated_energy_eV_cell / PW_PBE_energy_eV",
+    "basis": "The reconciled V19 train36 rows use GPAW atoms.get_potential_energy() as REF_energy; the V19 development evaluation uses native extrapolated energy (force_consistent=False). The new archives preserve native extrapolated and finite-width free energies separately.",
+    "free_energy": "Retain free_energy_eV_cell as a separate diagnostic; do not substitute it for the V19-comparable target in this candidate review.",
+    "forces": "GPAW/ASE forces at Fermi-Dirac width 0.10 eV.",
+    "limitation": "This target choice reproduces the existing V19 energy-key convention. It does not establish exact finite-smearing energy-force gradient consistency; the two energy fields and force convention must remain explicit in any versioned training manifest."
+  },
+  "role_decision": {
+    "candidate_role": "train_acquisition_candidate_pending_audit",
+    "official_train_or_dev_mutation": false,
+    "independent_B_review_complete": false,
+    "fit_authorized_by_this_audit": false,
+    "reason": "A second independent data-entry review and A approval of a versioned train/dev split are required before integration or refitting. The three labels may be proposed for a new training set while dev3 remains frozen, but must not be promoted directly."
+  },
+  "model_gate": {
+    "V19_development_gate": "FAIL; existing held-out force and separation-force thresholds remain unmet.",
+    "current_fit_rerun": "not performed",
+    "interpretation": "The new labels are relevant to the failed slab/interface domain, but their effect on V19 cannot be claimed until a reviewed versioned fit and evaluation."
+  },
+  "candidate_records": [
+    {
+      "label": "AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21",
+      "status": "archive_verifier_PASS",
+      "input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "archive_inventory_sha256": "741704b6de7b5532d15c08b7c242a08b1bb13cb08d6fffa6a22490b057e939fe",
+      "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+      "formula": "C16Ag4Si8Ti24",
+      "atom_count": 52,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          1
+        ],
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          false
+        ],
+        "poissonsolver": {
+          "dipolelayer": "xy"
+        },
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "convergence": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "mpi_ranks": 4
+      },
+      "scf_iterations": 59,
+      "native_extrapolated_energy_eV_cell": -390.0466850492484,
+      "free_energy_eV_cell": -390.44621477785967,
+      "max_force_eV_A": 1.5511591390660986,
+      "rms_force_vector_eV_A": 0.7755126592622015,
+      "dataset_role": "train_acquisition_candidate_pending_audit",
+      "training_integration": "not performed"
+    },
+    {
+      "label": "AgC_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21",
+      "status": "archive_verifier_PASS",
+      "input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "archive_inventory_sha256": "0e09a68eee2ef688fc75753e4663116f4c5761767a9b36295c3cdbe5d25ecfd5",
+      "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+      "formula": "C16Ag4Si8Ti24",
+      "atom_count": 52,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          1
+        ],
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          false
+        ],
+        "poissonsolver": {
+          "dipolelayer": "xy"
+        },
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "convergence": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "mpi_ranks": 4
+      },
+      "scf_iterations": 72,
+      "native_extrapolated_energy_eV_cell": -378.6672443061853,
+      "free_energy_eV_cell": -379.1163275989818,
+      "max_force_eV_A": 2.9787729013781132,
+      "rms_force_vector_eV_A": 1.1477978373709232,
+      "dataset_role": "train_acquisition_candidate_pending_audit",
+      "training_integration": "not performed"
+    },
+    {
+      "label": "AgTi_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21",
+      "status": "archive_verifier_PASS",
+      "input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "archive_inventory_sha256": "0ddcec2a7a7e61407fc166f5eda93407fb647e168aecb4edf6ad1bfa3625dc1f",
+      "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+      "formula": "C16Ag4Si8Ti24",
+      "atom_count": 52,
+      "method": {
+        "xc": "PBE",
+        "basis": "plane wave",
+        "cutoff_eV": 500,
+        "kpts": [
+          6,
+          6,
+          1
+        ],
+        "smearing_eV": 0.1,
+        "pbc": [
+          true,
+          true,
+          false
+        ],
+        "poissonsolver": {
+          "dipolelayer": "xy"
+        },
+        "mixer": {
+          "type": "Pulay",
+          "beta": 0.05,
+          "nmaxold": 8,
+          "weight": 100
+        },
+        "convergence": {
+          "energy": 1e-05,
+          "density": 1e-05,
+          "eigenstates": 1e-05
+        },
+        "GPAW_version": "26.7.0",
+        "ASE_version": "3.29.0",
+        "mpi_ranks": 4
+      },
+      "scf_iterations": 49,
+      "native_extrapolated_energy_eV_cell": -375.7532401992928,
+      "free_energy_eV_cell": -376.298068189782,
+      "max_force_eV_A": 1.8022295072966283,
+      "rms_force_vector_eV_A": 0.7307615728171579,
+      "dataset_role": "train_acquisition_candidate_pending_audit",
+      "training_integration": "not performed"
+    }
+  ],
+  "next_action": "Request/complete an independent B review of this audit and the three label archives; then prepare an A-approved versioned split with the selected native-energy key, preserve free-energy metadata, keep dev3 out of fitting, and run the fixed recipe only after the split preflight passes."
+}

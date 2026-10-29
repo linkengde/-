@@ -40,3 +40,12 @@ The AgC 6×6×1 fixed-geometry candidate converged in 72 SCF iterations and pass
 The AgTi 6×6×1 fixed-geometry candidate converged in 49 SCF iterations and passed archive verification. It produced native extrapolated energy `-375.7532401992928 eV/cell`, free energy `-376.298068189782 eV/cell`, maximum force `1.80222951 eV/Å` and force-vector RMS `0.73076157 eV/Å`. These are single-point labels on the registered unrelaxed geometry. Peak observed memory was 9.27 GiB. Its role remains `train_acquisition_candidate_pending_audit`, with training integration disabled; the archive, launcher record and runtime record are in `calculations/AgTi_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21/`.
 
 Only the same 1967-source AgC, AgSi and AgTi geometries proceed as acquisition candidates; the 8×8×1 endpoint remains a numerical control. The mesh comparison does not resolve V19's failed development gate or grant a train/dev role.
+
+
+## Post-acquisition role and energy-target audit
+
+All three interface candidates are now archived and pass their result verifiers. The source review identifies them as one Jeitschko–Nowotny 1967 source family, distinct from the frozen V19 dev3 COD/Kisi 1998 source family. The registered geometry screen found no exact or near hits against train36 or dev3 in its same-composition/PBC and normalized-cell comparisons; this is not a universal supercell-equivalence search. The candidate CIF is reconstructed from the 1967 full text rather than exported from ICSD.
+
+For a V19-comparable fit, the provisional energy target is the native extrapolated `PW_PBE_energy_eV`, matching the reconciled train36 `REF_energy` getter and the dev3 evaluation convention. Keep `PW_PBE_free_energy_eV` separate. Forces were calculated at 0.10 eV Fermi smearing; this target choice follows the existing data convention and does not claim exact energy-force gradient consistency. Candidate settings match dev3 (6×6×1, TTF, xy dipole) and differ from train36 (Gamma, TTT).
+
+This owner-side audit does not replace the independent B review. All three labels remain `train_acquisition_candidate_pending_audit`; the approved train36/dev3 files are unchanged, and no refit has been run. The machine-readable record is [`post_acquisition_role_target_audit.json`](post_acquisition_role_target_audit.json).
