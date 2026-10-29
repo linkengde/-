@@ -2,7 +2,7 @@
 
 ## Finding
 
-For the Ag 70 vol% 1× Case A model, the 19.25 ps heat-off state cannot reach an all-solid equilibrium while the existing assumptions remain in place. The heat-off enthalpy is **2.908798024218367×10⁻¹⁴ J**, above the model's all-Ag-solid-at-(T_m) enthalpy **(E_s=2.611689713605194×10^{-14}) J**. At a hypothetical uniform-(T_m) equilibrium, energy balance leaves an estimated **26.9305% of Ag liquid**.
+For the Ag 70 vol% 1× Case A model, the source was actually switched off at **18.75 ps**. The **19.25 ps** checkpoint is already 0.50 ps into source-off cooling, not the heat-off instant. The 18.75 ps heat-off enthalpy is **2.908798024218367×10⁻¹⁴ J**, above the model's all-Ag-solid-at-(T_m) enthalpy **(E_s=2.611689713605194×10^{-14}) J**. At a hypothetical uniform-(T_m) equilibrium, energy balance leaves an estimated **26.9305% of Ag liquid**. The measured total enthalpy at 19.25 ps is **2.9087980242183665×10⁻¹⁴ J**, indistinguishable from the heat-off value at the precision relevant here because no heat was added or removed.
 
 Cooling was safely stopped at the latest complete and independently restored checkpoint, **19.49 ps**. The thermal history was not restarted or altered, and no data were removed. The result is an energy-balance conclusion within the candidate-property Case A model, not a validated prediction for the physical composite.
 
@@ -10,7 +10,7 @@ Cooling was safely stopped at the latest complete and independently restored che
 
 This audit uses the existing Ag70 QSGS geometry (actual grid Ag fraction 69.9996 vol%), the 1× single-temperature enthalpy solver, Case A, zero Ti₃SiC₂ heat capacity and conductivity, and insulated external faces. No 2×, TTM, or new heating run was started for this audit.
 
-All energies below are enthalpy relative to the solver's 300 K reference. (E_s) is the sum of the temperature-dependent Ag solid sensible enthalpy evaluated at (T_m), with no latent heat. (E_l=E_s+E_{latent}) adds the latent heat for all Ag. These values are integrated over the actual Ag voxels and their native cell volume.
+All energies below are enthalpy relative to the solver's 300 K reference. The user-requested 19.25 ps value is reported separately from the actual 18.75 ps heat-off value; the former is a source-off cooling checkpoint. (E_s) is the sum of the temperature-dependent Ag solid sensible enthalpy evaluated at (T_m), with no latent heat. (E_l=E_s+E_{latent}) adds the latent heat for all Ag. These values are integrated over the actual Ag voxels and their native cell volume.
 
 The candidate inputs used by the solver are: Ag density 10,490 kg m⁻³; (T_m=1235.08) K; latent heat 104,729.66 J kg⁻¹; solid (C_p) anchors 235.47 J kg⁻¹ K⁻¹ at 300 K and 294.80 J kg⁻¹ K⁻¹ at (T_m); liquid (C_p=310.29) J kg⁻¹ K⁻¹ at its single anchor. The solid (C_p) is linearly interpolated between its anchors, and the liquid value is held constant by the current model. These candidate properties are not fully source-verified.
 
@@ -20,7 +20,8 @@ The Ag volume represented by the grid is 1.0042104138186939×10⁻²³ m³, corr
 
 | Quantity | Value (J) | Meaning |
 | --- | ---: | --- |
-| (E_{off}) | 2.908798024218367×10⁻¹⁴ | Total enthalpy in the 19.25 ps checkpoint when heating ended |
+| (E_{off}) | 2.908798024218367×10⁻¹⁴ | Total enthalpy in the 18.75 ps checkpoint when the heat source was switched off |
+| (E_{19.25}) | 2.9087980242183665×10⁻¹⁴ | Total enthalpy at 19.25 ps, after 0.50 ps of source-off cooling |
 | (E_s) | 2.611689713605194×10⁻¹⁴ | All Ag solid at (T_m), just before latent melting |
 | (E_l) | 3.7149294758437745×10⁻¹⁴ | All Ag liquid at (T_m) |
 | (E_{off}-E_s) | 2.9710831061317302×10⁻¹⁵ | Excess over the all-solid-at-(T_m) enthalpy |
