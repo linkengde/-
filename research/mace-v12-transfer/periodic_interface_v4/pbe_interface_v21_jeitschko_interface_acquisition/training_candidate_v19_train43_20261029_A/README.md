@@ -21,4 +21,16 @@ The candidate dataset contains 43 training frames (the byte-identical 39-frame t
 
 The planned fit uses the same V19 recipe and foundation model as train39: seed 45, CPU, four threads, batch size 1, 80 epochs, learning rate 1e-4, weight decay 5e-7, energy weight 100, force weight 1000, and `REF_energy`/`REF_forces`. The screen evaluates only the frozen dev3 and retains the existing per-interface force-vector RMSE ≤0.05 eV/Å and separation-force error ≤0.10 eV/Å gates.
 
-Status: `TRAIN43_EXPERIMENT_FIT_RUNNING`. Passing this three-structure screen would not establish blind test performance or production qualification. The bulk source assumes full occupancy despite the paper's discussion of possible nonstoichiometry. The source-family review does not constitute a universal supercell-equivalence audit, and slab k-point, smearing, and vacuum convergence remain incomplete.
+## Fit result
+
+The fixed 80-epoch fit completed successfully. All epochs and checkpoints were verified before archival, and the exported epoch-79 model is tensor-identical to its checkpoint. On the frozen dev3, aggregate force-vector RMSE fell from 0.20958 eV/Å for train39 to 0.06003 eV/Å for train43. This is a large improvement, but the 0.05 eV/Å per-interface force gate still fails for all three interfaces, and AgTi still fails its 0.10 eV/Å separation-force gate.
+
+| Interface | Force-vector RMSE (eV/Å) | Train39 (eV/Å) | Separation-force error (eV/Å) | Train39 (eV/Å) | Energy absolute error (meV/atom) |
+|---|---:|---:|---:|---:|---:|
+| AgC | 0.054053 | 0.196795 | 0.035325 | 0.082977 | 1.355 |
+| AgSi | 0.071126 | 0.231677 | 0.045248 | 0.081472 | 19.107 |
+| AgTi | 0.053195 | 0.198404 | 0.158689 | 0.155916 | 6.279 |
+
+The final epoch's validation energy RMSE is 11.64 meV/atom and force-component RMSE is 34.66 meV/Å. Species force-vector RMSE is 0.0620 eV/Å for Ag, 0.0697 for C, 0.0259 for Si, and 0.0609 for Ti. The complete epoch metrics and gate results are in `run/results/train43_verification.json` and `run/results/train43_epoch_metrics.csv`.
+
+Status: `TRAIN43_EXPERIMENT_DEV3_SCREEN_FAIL`. All 80 epoch checkpoints were verified before archiving; only epoch 79 is retained with the model exports, logs, and validation record to keep the package compact. Official train36/dev3, train39, and the prior V19 model are unchanged. This candidate is not a qualified production or molecular-dynamics model. The bulk source assumes full occupancy despite the paper's discussion of possible nonstoichiometry. Source-family review is not a universal supercell-equivalence audit, and slab k-point, smearing, and vacuum convergence remain incomplete.
