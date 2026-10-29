@@ -1,6 +1,7 @@
 {
   "checkpoint_policy": "Restart and validate every 0.5 ps; this is a publication interval, not a total heating cap.",
   "composition_model": "legacy Ag 70 vol% / Ti3SiC2 30 vol%",
+  "cooling_policy": "After reaching the 2300 K peak limit, run source-off cooling for up to 0.5 ps or until all Ag is solid.",
   "note": "This is the legacy Ag70 run. It is kept separate from the corrected Ag60.7 wt% model and its results.",
   "restart_checkpoint": "/workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/ag70vol_2x_stable_stage_20261028T094009Z/checkpoints/caseA_ag70_2x_heat_1p31ps.npz",
   "restart_time_ps": 1.3099999999999996,
@@ -17,11 +18,7 @@
     "tracker_previous_time_ps": 1.3099999999999996,
     "validated_utc": "2026-10-29T04:01:47.210771+00:00"
   },
-  "stable_pool_rule": {
-    "maximum_volume_range_fraction": 0.05,
-    "minimum_track_duration_ps": 3.0,
-    "volume_window_ps": 2.0
-  },
-  "stop_policy": "Continue without a global heating time cap until stable-pool criteria or the 2300 K protection limit.",
+  "stable_pool_rule": "tracked for reporting only; it does not end heating before the temperature peak",
+  "stop_policy": "Heat without a total-time cap until the 2300 K peak limit, switch off the source, then run source-off cooling.",
   "temperature_protection_K": 2300.0
 }
