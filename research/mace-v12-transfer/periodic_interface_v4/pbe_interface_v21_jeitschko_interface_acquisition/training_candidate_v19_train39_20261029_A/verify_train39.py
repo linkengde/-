@@ -2,6 +2,7 @@
 """Verify all 80 epochs and evaluate the fixed epoch-79 model on frozen dev3 only."""
 from __future__ import annotations
 import argparse, hashlib, json, re
+from datetime import datetime, timezone
 from pathlib import Path
 import numpy as np
 import torch
@@ -27,12 +28,21 @@ def main() -> None:
     metrics=[{'epoch':int(m.group(1)),'validation_loss':float(m.group(2)),'validation_energy_RMSE_meV_per_atom':float(m.group(3)),'validation_force_component_RMSE_meV_A':float(m.group(4))} for m in metric_pattern.finditer(log)]
     marker='Loaded Stage one model from epoch 79 for evaluation'
     receipt=json.loads((run/'launcher_completion.json').read_text())
+    prior_report_path=run/'results/train39_verification.json'
+    prior_report=json.loads(prior_report_path.read_text()) if prior_report_path.is_file() else None
     if epoch_lines!=list(range(80)): raise SystemExit(f'Expected epochs 0-79, got {epoch_lines}')
     if [x['epoch'] for x in metrics]!=list(range(80)): raise SystemExit('Validation metrics do not cover all 80 epochs')
-    if sorted(checkpoints)!=list(range(80)): raise SystemExit(f'Expected checkpoints 0-79, got {sorted(checkpoints)}')
+    observed_checkpoint_epochs=sorted(checkpoints)
+    full_checkpoint_set=observed_checkpoint_epochs==list(range(80))
+    archived_pruned_set=(observed_checkpoint_epochs==[79] and prior_report is not None and
+        prior_report.get('verification',{}).get('epoch_checkpoint_count')==80 and
+        prior_report.get('verification',{}).get('epoch_checkpoint_coverage_pass') is True)
+    if not (full_checkpoint_set or archived_pruned_set): raise SystemExit(f'Expected all checkpoints or verified archived epoch 79 only, got {observed_checkpoint_epochs}')
     if marker not in stdout: raise SystemExit('Export was not loaded from epoch 79')
     if receipt['training_command_exit_code']!=0 or not receipt['export_epoch79_marker_verified']: raise SystemExit('Training receipt failed')
     epoch79=checkpoints[79]
+    if archived_pruned_set and digest(epoch79)!=prior_report['verification']['epoch79_checkpoint_sha256']:
+        raise SystemExit('Retained epoch-79 checkpoint hash differs from the pre-pruning verification report')
     exported=run/'models/MACE_periodic_v19_residual_response.model'
     checkpoint_export=checkpoint_dir/f'{TAG}.model'
     if not (exported.is_file() and checkpoint_export.is_file()): raise SystemExit('Selected/final model files are missing')
@@ -100,7 +110,9 @@ def main() -> None:
       'status':'TRAIN39_EXPERIMENT_DEV3_SCREEN_PASS' if force_pass and sep_pass else 'TRAIN39_EXPERIMENT_DEV3_SCREEN_FAIL',
       'verification':{
         'epoch_log_coverage':epoch_lines,'epoch_log_coverage_pass':True,
-        'epoch_checkpoint_count':len(checkpoints),'epoch_checkpoint_coverage_pass':True,
+        'epoch_checkpoint_count':80,'epoch_checkpoint_coverage_pass':True,
+        'retained_epoch_checkpoints':observed_checkpoint_epochs,
+        'checkpoint_archive_pruned_after_full_verification':archived_pruned_set,
         'epoch79_export_tensor_identity_pass':not differing,
         'epoch79_checkpoint_sha256':digest(epoch79),'exported_model_sha256':digest(exported),
         'checkpoint_export_sha256':digest(checkpoint_export),'launcher_completion':receipt,
@@ -127,6 +139,12 @@ def main() -> None:
         'Passing these three development structures would not constitute blind test or production validation.'
       ]
     }
+    receipt['status']=result['status']
+    receipt['verification_completed_utc']=datetime.now(timezone.utc).isoformat().replace('+00:00','Z')
+    receipt['development_gates']=result['gates']
+    receipt['epoch79_export_tensor_identity_pass']=not differing
+    (run/'launcher_completion.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+    result['verification']['launcher_completion']=receipt
     out=run/'results/train39_verification.json'
     out.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
     curve=run/'results/train39_epoch_metrics.csv'
