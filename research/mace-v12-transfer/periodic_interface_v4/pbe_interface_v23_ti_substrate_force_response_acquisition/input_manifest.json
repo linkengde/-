@@ -1,0 +1,942 @@
+{
+  "dataset_integration_enabled": false,
+  "geometry_perturbation_policy": "Use three registered neutral-gap registry-B training geometries and displace the four symmetry-equivalent topmost Ti atoms together by ±0.02 Å along surface normal. Geometry generation and screening read only atomic identities, positions, cell and PBC; no dev3 coordinates or labels were copied into inputs.",
+  "geometry_screens": {
+    "frozen_dev3_exact_hits": 0,
+    "frozen_dev3_near_hits": 0,
+    "screened_against": "train49 and frozen dev3 using geometry-only parser",
+    "train49_exact_hits": 0,
+    "train49_intentional_parent_near_hits": 6,
+    "train49_unexpected_near_hits": 0,
+    "within_panel_paired_displacements_are_intentional": true
+  },
+  "labels_or_forces_read": false,
+  "launch_enabled": true,
+  "limitations": [
+    "All six candidate configurations derive from one 1967 source-family geometry and one registry-B slab family.",
+    "Paired local Ti displacements sample a narrow force-response mode; they do not establish broad interface coverage.",
+    "Native extrapolated energy and finite-smearing forces follow the existing convention; exact energy-force gradient consistency is not claimed.",
+    "Slab k-point, smearing and vacuum convergence are not fully established."
+  ],
+  "method_candidate": {
+    "ASE_version": "3.29.0",
+    "GPAW_version": "26.7.0",
+    "PAW_data_version": "1.2.1",
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    },
+    "basis": "plane wave",
+    "candidate_kpts": [
+      6,
+      6,
+      1
+    ],
+    "cutoff_eV": 500,
+    "maximum_concurrent_jobs": 1,
+    "mixer": {
+      "beta": 0.05,
+      "nmaxold": 8,
+      "type": "Pulay",
+      "weight": 100
+    },
+    "mpi_ranks": 4,
+    "pbc": [
+      true,
+      true,
+      false
+    ],
+    "poissonsolver": {
+      "dipolelayer": "xy"
+    },
+    "scf_thresholds": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "smearing_eV": 0.1,
+    "xc": "PBE"
+  },
+  "preflight_jobs": [
+    {
+      "geometry_label": "AgTi_surfaceTi_-0.02",
+      "input": "inputs/AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "e6152fe4a1172c542652dd18e7bba16419990a3a3a0a81a540247e7575f66b8e",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgTi_surfaceTi_+0.02",
+      "input": "inputs/AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "a2500d2bfe639b7cee6dfd28a9680154b0ce7811b717fa074fd2155e7855ec3d",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgSi_surfaceTi_-0.02",
+      "input": "inputs/AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "4f256cb7b6b7b7560b5519504efd905568d30829b17c238436db9aa5d5cf0e7a",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgSi_surfaceTi_+0.02",
+      "input": "inputs/AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "17de1b83029a3e19263a170add7332f00f3facb05ea35b5dc32ba5d2155b0935",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgC_surfaceTi_-0.02",
+      "input": "inputs/AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "912d6775ad9ea26d84550b36fac23fddbb4dac1b8432c26320126ed901c18193",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgC_surfaceTi_+0.02",
+      "input": "inputs/AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "d3df7e4730d763b4d0acb24f27e7d3efee2391431d43076d0a120b6653da437f",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    }
+  ],
+  "records": [
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 2.0195667000000004,
+              "all_atom_RMS_A": 4.926895189091034,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 36,
+              "framework_RMS_A": 5.094827450463852,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.649,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 38,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 43,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 44,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 2.2195666999999997,
+              "all_atom_RMS_A": 4.933509262301173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 45,
+              "framework_RMS_A": 5.094827450463852,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.649,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 1.819566700000001,
+              "all_atom_RMS_A": 4.920897541457162,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 46,
+              "framework_RMS_A": 5.094827450463852,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.649,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 38,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 6
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "e6152fe4a1172c542652dd18e7bba16419990a3a3a0a81a540247e7575f66b8e",
+      "intentional_parent_train49_geometry_frame_index": 38,
+      "interface": "AgTi",
+      "label": "AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.7370777315854324,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20302005,
+        20302017,
+        20302029,
+        20302041
+      ],
+      "target_displacement_z_A": -0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 23.651331
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 2.0195667000000004,
+              "all_atom_RMS_A": 4.937917426606148,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 36,
+              "framework_RMS_A": 5.106374455847645,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.689,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 38,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 43,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 44,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 2.2195666999999997,
+              "all_atom_RMS_A": 4.94451675585226,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 45,
+              "framework_RMS_A": 5.106374455847645,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.689,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 1.819566700000001,
+              "all_atom_RMS_A": 4.9319331829629895,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 46,
+              "framework_RMS_A": 5.106374455847645,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.689,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 38,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 6
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "a2500d2bfe639b7cee6dfd28a9680154b0ce7811b717fa074fd2155e7855ec3d",
+      "intentional_parent_train49_geometry_frame_index": 38,
+      "interface": "AgTi",
+      "label": "AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.6988135372309183,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20302005,
+        20302017,
+        20302029,
+        20302041
+      ],
+      "target_displacement_z_A": 0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 23.651331
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 36,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 2.0195666999999995,
+              "all_atom_RMS_A": 4.932409386713001,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 38,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 1.8195667000000002,
+              "all_atom_RMS_A": 4.92641845232064,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 43,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 2.219566699999999,
+              "all_atom_RMS_A": 4.939016075602265,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 44,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 45,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 46,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 36,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 6
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "4f256cb7b6b7b7560b5519504efd905568d30829b17c238436db9aa5d5cf0e7a",
+      "intentional_parent_train49_geometry_frame_index": 36,
+      "interface": "AgSi",
+      "label": "AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.7807056770503653,
+      "minimum_periodic_pair_distance_A": 2.106914228117906,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20301003,
+        20301015,
+        20301027,
+        20301039
+      ],
+      "target_displacement_z_A": -0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 21.6317643
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 36,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 2.0195667000000004,
+              "all_atom_RMS_A": 4.932409386713001,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 38,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 1.819566700000001,
+              "all_atom_RMS_A": 4.92641845232064,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 43,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 2.2195666999999997,
+              "all_atom_RMS_A": 4.939016075602265,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 44,
+              "framework_RMS_A": 5.1006042207435245,
+              "matching_method": "same_element_order",
+              "max_atom_displacement_A": 17.668999999999997,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 45,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 46,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 36,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 6
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "17de1b83029a3e19263a170add7332f00f3facb05ea35b5dc32ba5d2155b0935",
+      "intentional_parent_train49_geometry_frame_index": 36,
+      "interface": "AgSi",
+      "label": "AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.7807056770503653,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20301003,
+        20301015,
+        20301027,
+        20301039
+      ],
+      "target_displacement_z_A": 0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 21.6317643
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.051331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 37,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 0.20000000000000284,
+              "all_atom_RMS_A": 0.05574667979074982,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 47,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.20000000000000284,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 48,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 37,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 3
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "912d6775ad9ea26d84550b36fac23fddbb4dac1b8432c26320126ed901c18193",
+      "intentional_parent_train49_geometry_frame_index": 37,
+      "interface": "AgC",
+      "label": "AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.8094864889093136,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20300005,
+        20300017,
+        20300029,
+        20300041
+      ],
+      "target_displacement_z_A": -0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 22.4904777
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.051331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_screens": [
+        {
+          "comparisons": [
+            {
+              "Ag_registry_RMS_A": 0.0,
+              "all_atom_RMS_A": 0.005547001962252173,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 37,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.019999999999999574,
+              "near_duplicate": true
+            },
+            {
+              "Ag_registry_RMS_A": 0.20000000000000284,
+              "all_atom_RMS_A": 0.05574667979074982,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 47,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.20000000000000284,
+              "near_duplicate": false
+            },
+            {
+              "Ag_registry_RMS_A": 0.1999999999999993,
+              "all_atom_RMS_A": 0.055746679790748835,
+              "cell_max_delta_A": 0.0,
+              "exact_duplicate": false,
+              "frame_index": 48,
+              "framework_RMS_A": 0.005773502691896135,
+              "matching_method": "persistent_lammps_id",
+              "max_atom_displacement_A": 0.1999999999999993,
+              "near_duplicate": false
+            }
+          ],
+          "dataset": "train49_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 49,
+          "intentional_parent_near_hit_frame_index": 37,
+          "near_hits": 1,
+          "same_composition_normalized_comparisons": 3
+        },
+        {
+          "comparisons": [],
+          "dataset": "frozen_dev3_geometry_only",
+          "exact_hits": 0,
+          "frames_read_geometry_only": 3,
+          "intentional_parent_near_hit_frame_index": null,
+          "near_hits": 0,
+          "same_composition_normalized_comparisons": 0
+        }
+      ],
+      "input": "inputs/AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23.extxyz",
+      "input_sha256": "d3df7e4730d763b4d0acb24f27e7d3efee2391431d43076d0a120b6653da437f",
+      "intentional_parent_train49_geometry_frame_index": 37,
+      "interface": "AgC",
+      "label": "AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.8094864889093136,
+      "minimum_periodic_pair_distance_A": 2.106914228117906,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20300005,
+        20300017,
+        20300029,
+        20300041
+      ],
+      "target_displacement_z_A": 0.02,
+      "target_element": "Ti",
+      "target_original_z_A": 22.4904777
+    }
+  ],
+  "reference_datasets": {
+    "frozen_dev3_frames": 3,
+    "frozen_dev3_sha256": "e9e86e3a353c50c8173cefede370e2653ec2e81506f4b8122b01b7a8efe76e4c",
+    "train49_frames": 49,
+    "train49_manifest_sha256": "0efc8fe62fb60f36e373d1e4f8ffeb6babc0f4b576b078620af4563707cd1e85",
+    "train49_train_sha256": "021ea4e5dcaba4efb36fa085c3459cd9244ec34b3547d11aae1d2a5df7a1b121"
+  },
+  "role_policy": {
+    "dataset_integration_enabled": false,
+    "official_train36_dev3_mutated": false,
+    "owner_side_external_role_review": "waived by user for experiment-only work",
+    "test_or_sealed_data_opened": false
+  },
+  "runtime_guard": {
+    "automatic_retries": 0,
+    "cgroup_limit_bytes": 34359738368,
+    "maximum_concurrent_jobs": 1,
+    "minimum_free_disk_bytes": 5368709120,
+    "prelaunch_memory_limit_bytes": 3221225472,
+    "stop_threshold_bytes": 32212254720
+  },
+  "source": {
+    "parent_inputs_from": [
+      {
+        "interface": "AgTi",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+        "sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42"
+      },
+      {
+        "interface": "AgSi",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+        "sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585"
+      },
+      {
+        "interface": "AgC",
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+        "sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876"
+      }
+    ],
+    "source_doi": "10.1007/BF00899949",
+    "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+    "train49_geometry_screen_commit": "e1a6c134b240a8afa9b44febc0bb646a4015ca3b",
+    "v22_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c"
+  },
+  "status": "V23_GEOMETRY_SCREENED_ACQUISITION_CANDIDATES",
+  "task_id": "pbe_interface_v23_ti_substrate_force_response_acquisition",
+  "test_or_sealed_data_opened": false,
+  "training_enabled": false
+}
