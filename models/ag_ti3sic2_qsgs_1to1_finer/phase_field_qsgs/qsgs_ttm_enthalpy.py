@@ -472,7 +472,7 @@ class QSGSDoubleTemperatureGrid:
         if self.lattice.boundary_case == "B" and np.any(
             temp > self.lattice.sc.temperature_K[-1] + 1.0e-9
         ):
-            raise ValueError("Ti3SiC2 candidate table exceeds 1473.15 K")
+            raise ValueError(f"Ti3SiC2 candidate table upper limit is {self.lattice.sc.temperature_K[-1]:.2f} K")
         return temp
 
     def _implicit_local_coupling(self, dt_ps: float) -> float:
