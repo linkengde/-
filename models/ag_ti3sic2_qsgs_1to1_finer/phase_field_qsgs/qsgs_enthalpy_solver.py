@@ -254,7 +254,7 @@ class QSGSEnthalpyGrid:
             liquid[above] = 1.0
 
         if self.boundary_case == "B" and np.any(temp[self.sc_fraction > 0.0] > self.sc.temperature_K[-1] + 1.0e-9):
-            raise ValueError("Ti3SiC2 candidate table exceeds 1473.15 K; add high-temperature data before continuing")
+            raise ValueError(f"Ti3SiC2 candidate table upper limit is {self.sc.temperature_K[-1]:.2f} K")
         return ThermalState(temp, liquid)
 
     def conductivity_W_m_K(self, state: ThermalState | None = None) -> np.ndarray:
