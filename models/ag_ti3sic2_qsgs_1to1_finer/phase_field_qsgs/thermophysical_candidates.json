@@ -3,16 +3,16 @@
   "source_scope": {
     "ag_thermodynamics": "The user-provided summary attributes Ag heat capacity, melting point, latent heat, and density anchors to NIST/CDC thermophysical tables.",
     "ag_thermal_conductivity": "The user-provided summary attributes solid and liquid conductivity anchors to NIST recommended data; the liquid value is described there as tentative.",
-    "ti3sic2": "The 300 K and 1473.15 K Ti3SiC2 anchors are attributed to Barsoum et al.; the 2000 K row is an explicit linear extrapolation of the existing anchor trends, not a measured value. The exact original source tables and independent validation of the extrapolation remain outstanding.",
+    "ti3sic2": "Barsoum et al. (1999), Sections 3.3–3.4, provide empirical correlations for Cp and total thermal conductivity. Barsoum report DSC Cp measurements from 100–1000 C and extrapolate Cp to about 1200 C; the thermal-conductivity fit covers 25–1200 C with R^2=0.86. Qiu et al. (2020), Section 2.3, repeats these correlations and states 25–1600 C for Cp, but this is a secondary review of the same underlying experimental work, not an independent high-temperature dataset. Togo et al. (2010) provide first-principles Cp through 1400 K; Wang and Zhou (2004) provide first-principles Cv at 300, 700, 1100 and 1500 K; Son et al. (2016) provide calculated Cp through 1000 K. These are cross-checks, not 2000 K validation.",
     "provenance_limit": "The exact bibliographic records and source tables are not yet archived in this checkout. These values are implementation candidates pending source-table attachment and citation audit."
   },
   "ag": {
     "molar_mass_kg_mol": 0.1078682,
     "melting_temperature_K": 1235.08,
-    "latent_heat_fusion_J_mol": 11297.0,
+    "latent_heat_fusion_J_mol": 11297,
     "latent_heat_fusion_J_kg": 104729.66082682385,
-    "solid_reference_density_kg_m3": 10490.0,
-    "liquid_density_at_melting_kg_m3": 9346.0,
+    "solid_reference_density_kg_m3": 10490,
+    "liquid_density_at_melting_kg_m3": 9346,
     "thermal_density_policy": "Use fixed solid reference density for the first enthalpy-volume solver; do not claim thermal expansion or liquid-volume change is modeled.",
     "solid_cp_interpolation": "Piecewise linear in temperature through thermophysical_candidates.csv anchors at 300 K and Tm.",
     "liquid_cp_interpolation": "Constant at the single supplied melting-point anchor; no temperature trend is inferred.",
@@ -21,37 +21,104 @@
   },
   "ti3sic2": {
     "molar_mass_kg_mol": 0.195708,
-    "density_kg_m3": 4520.0,
-    "maximum_temperature_K": 2000.0,
-    "heat_capacity_interpolation": "Linear continuation of the existing 300 K to 1473.15 K candidate slope through the 2000 K extrapolated anchor; the 2000 K value is a model assumption, not a measurement.",
-    "conductivity_interpolation": "Linear continuation of the existing 300 K to 1473.15 K candidate slope through the 2000 K extrapolated anchor; the 2000 K value is a model assumption, not a measurement.",
-    "high_temperature_extension": {
-      "range_K": [1473.15, 2000.0],
-      "method": "Continue the original two-anchor linear Cp and k trends without changing their slopes.",
-      "cp_molar_at_2000_J_mol_K": 175.2090525508247,
-      "cp_mass_at_2000_J_kg_K": 895.2574884563978,
-      "conductivity_at_2000_W_m_K": 29.754549716575035,
-      "status": "EXTRAPOLATION_ASSUMPTION_NOT_MEASURED_DATA"
+    "density_kg_m3": 4520,
+    "density_policy": "Fixed reference density retained from the existing project configuration; thermal expansion is not coupled into density or volumetric enthalpy.",
+    "reference_temperature_K": 300,
+    "maximum_temperature_K": 2000,
+    "cp_model": {
+      "source": "Barsoum et al. (1999), Section 3.3, Fig. 5; correlation repeated in Qiu et al. (2020), Eq. (25)",
+      "equation": "Cp_molar_J_mol_K(T) = 164.4 - 16419/T",
+      "a_J_mol_K": 164.4,
+      "b_J_mol": 16419,
+      "temperature_unit": "K",
+      "original_dsc_measurement_range_C": [
+        100,
+        1000
+      ],
+      "barsoum_paper_reported_extrapolation_C": 1200,
+      "qiu_review_stated_range_C": [
+        25,
+        1600
+      ],
+      "implementation_range_K": [
+        300,
+        2000
+      ],
+      "extension_status": "2000 K is an extrapolation beyond the primary paper's reported Cp range and beyond the range stated by the secondary review."
     },
-    "specific_heat_conversion_check_J_kg_K": {
-      "110_J_mol_K": 562.0618472418092,
-      "155_J_mol_K": 791.9962392952766,
-      "175.20905255_J_mol_K_at_2000K": 895.2574884563978,
-      "note": "Corrected by dividing by Ti3SiC2 formula molar mass 195.708 g/mol; the 656–924 J/(kg K) conversion in the supplied summary is inconsistent with this formula mass."
+    "conductivity_model": {
+      "source": "Barsoum et al. (1999), Section 3.4, Fig. 6; correlation repeated in Qiu et al. (2020), Eq. (24)",
+      "equation": "k_W_m_K(T) = 38.6 - 0.0045*T",
+      "intercept_W_m_K": 38.6,
+      "slope_W_m_K2": -0.0045,
+      "fit_R2": 0.86,
+      "reported_fit_range_C": [
+        25,
+        1200
+      ],
+      "implementation_range_K": [
+        300,
+        2000
+      ],
+      "extension_status": "1473.15–2000 K is extrapolated beyond the reported fit range."
+    },
+    "enthalpy_model": {
+      "reference_temperature_K": 300,
+      "equation": "h(T)-h(300) = [164.4*(T-300) - 16419*ln(T/300)]/0.195708",
+      "unit": "J/kg",
+      "note": "Analytic integral of the Barsoum molar Cp correlation after conversion with the configured molar mass. Below 300 K, the implementation holds Cp at its 300 K value."
+    },
+    "table_checkpoints": [
+      {
+        "temperature_K": 300,
+        "cp_molar_J_mol_K": 109.67,
+        "cp_mass_J_kg_K": 560.3756617000839,
+        "k_W_m_K": 37.25
+      },
+      {
+        "temperature_K": 1273.15,
+        "cp_molar_J_mol_K": 151.5036405765228,
+        "cp_mass_J_kg_K": 774.1310553299958,
+        "k_W_m_K": 32.870825
+      },
+      {
+        "temperature_K": 1473.15,
+        "cp_molar_J_mol_K": 153.2544954688932,
+        "cp_mass_J_kg_K": 783.0773165577963,
+        "k_W_m_K": 31.970825
+      },
+      {
+        "temperature_K": 1873.15,
+        "cp_molar_J_mol_K": 155.63455142407176,
+        "cp_mass_J_kg_K": 795.2385769824011,
+        "k_W_m_K": 30.170825
+      },
+      {
+        "temperature_K": 2000,
+        "cp_molar_J_mol_K": 156.1905,
+        "cp_mass_J_kg_K": 798.0792813783802,
+        "k_W_m_K": 29.6
+      }
+    ],
+    "validation_scope": {
+      "togo_2010": "Calculated Cp curves and comparison with Barsoum experimental points through 1400 K (Fig. 5).",
+      "wang_zhou_2004": "Calculated Cv values at 300, 700, 1100 and 1500 K; the paper reports 115.0 and 147.7 J/(mol K) for alpha-Ti3SiC2 at 300 and 1500 K, respectively, compared with 110 and 153 experimental values. Cv is not Cp.",
+      "son_2016": "Calculated Cp curve through 1000 K (Fig. 9); authors note a slight overestimate of experimental Cp above 300 K.",
+      "limit": "No cited paper provides direct Ti3SiC2 Cp or k measurements at 2000 K."
     }
   },
   "source": {
-    "peak_flux_eV_ps_A2": 5.0,
-    "gaussian_radius_A": 30.0,
+    "peak_flux_eV_ps_A2": 5,
+    "gaussian_radius_A": 30,
     "gaussian_definition": "exp(-r^2/R^2)",
-    "absorption_depth_A": 20.0,
-    "peak_flux_W_m2": 80108831700000.0,
-    "peak_volumetric_rate_W_m3": 40054415850000000000000.0,
+    "absorption_depth_A": 20,
+    "peak_flux_W_m2": 80108831700000,
+    "peak_volumetric_rate_W_m3": 4.005441585e+22,
     "note": "The conversion uses 1 eV = 1.602176634e-19 J, 1 ps = 1e-12 s, and 1 Angstrom = 1e-10 m. Source power remains weighted by Ag volume fraction and is not renormalized after masking."
   },
   "boundary_cases": {
     "A": "Adiabatic scaffold: no heat flux through the Ag/skeleton boundary; pure geometric confinement baseline.",
     "B": "Ideal thermal contact: shared temperature and continuous heat flux with a dynamically conducting and heat-storing Ti3SiC2 phase; zero added interface resistance."
   },
-  "extrapolation_policy": "Stop if Ti3SiC2 exceeds 2000 K. The 1473.15–2000 K Cp and conductivity values are explicit linear continuations of the previous candidate trends, not experimentally validated high-temperature data. Ag solid anchors are restricted to 300 K through Tm; liquid Cp and conductivity are constant single-anchor assumptions, not sourced temperature curves."
+  "extrapolation_policy": "Single-temperature enthalpy solver only. Ti3SiC2 Cp uses the Barsoum et al. empirical relation Cp_molar=164.4-16419/T (T in K), analytically integrated for enthalpy. Ti3SiC2 k uses the Barsoum et al. linear fit k=38.6-0.0045*T. The 2000 K upper limit is a numerical/property-model guard, not a validated material-stability limit. Cp and especially k above their reported source ranges are extrapolations. Density remains fixed at 4520 kg/m^3."
 }
