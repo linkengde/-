@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sys
 import unittest
+from types import SimpleNamespace
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +15,12 @@ PHASE_DIR = PROJECT_DIR / "phase_field_qsgs"
 sys.path.insert(0, str(PHASE_DIR))
 
 from qsgs_enthalpy_solver import QSGSEnthalpyGrid  # noqa: E402
+from run_ag70_1x_caseB import (  # noqa: E402
+    _choose_sample_ps,
+    _choose_segment_ps,
+    dynamic_heat_stop_reason,
+    state_metrics,
+)
 
 
 GEOMETRY = RUN_DIR / "qsgs_morphology_ag70vol.npz"
@@ -90,6 +97,49 @@ class Ag70CaseBTests(unittest.TestCase):
         h_above_limit = model.enthalpy_density_from_state(above_limit, np.ones_like(above_limit))
         with self.assertRaisesRegex(ValueError, "1473.15 K"):
             model.state_from_enthalpy_density(h_above_limit)
+
+    def test_dynamic_control_warns_at_1400k_and_stops_by_pool_state(self) -> None:
+        fake_model = SimpleNamespace(
+            state=SimpleNamespace(temperature_K=np.array([1200.0, 1400.0]), ag_liquid_fraction=np.zeros(2)),
+            ag_fraction=np.array([1.0, 0.0]),
+            sc_fraction=np.array([0.0, 1.0]),
+        )
+        self.assertAlmostEqual(_choose_segment_ps(fake_model, 0.05), 0.01)
+        self.assertAlmostEqual(_choose_sample_ps(fake_model, 0.01), 0.002)
+        melt_model = SimpleNamespace(
+            state=SimpleNamespace(temperature_K=np.array([1235.08, 1198.7]), ag_liquid_fraction=np.array([0.1, 0.0])),
+            ag_fraction=np.array([1.0, 0.0]),
+            sc_fraction=np.array([0.0, 1.0]),
+        )
+        self.assertAlmostEqual(_choose_segment_ps(melt_model, 0.05), 0.05)
+        self.assertAlmostEqual(_choose_sample_ps(melt_model, 0.01), 0.001)
+        self.assertEqual(dynamic_heat_stop_reason({
+            "ti3sic2_peak_temperature_K": 1450.0,
+            "connected_liquid_cluster_count": 1,
+            "largest_liquid_cluster_voxels": 2,
+        }), "connected_pool_scaffold_temperature_margin_heat_off")
+        self.assertIsNone(dynamic_heat_stop_reason({
+            "ti3sic2_peak_temperature_K": 1450.0,
+            "connected_liquid_cluster_count": 0,
+            "largest_liquid_cluster_voxels": 0,
+        }))
+        self.assertEqual(dynamic_heat_stop_reason({
+            "ti3sic2_peak_temperature_K": 1472.15,
+            "connected_liquid_cluster_count": 0,
+            "largest_liquid_cluster_voxels": 0,
+        }), "scaffold_property_ceiling_safety_stop_without_pool")
+
+    def test_state_metrics_preserves_last_tracked_cluster_summary(self) -> None:
+        model = self.model()
+        metrics = state_metrics(model, {
+            "connected_liquid_cluster_count": 2,
+            "largest_liquid_cluster_voxels": 7,
+            "largest_liquid_cluster_volume_A3": 1234.0,
+            "largest_liquid_cluster_centroid_A": [1.0, 2.0, 3.0],
+        })
+        self.assertEqual(metrics["connected_liquid_cluster_count"], 2)
+        self.assertEqual(metrics["largest_liquid_cluster_voxels"], 7)
+        self.assertAlmostEqual(metrics["largest_liquid_cluster_volume_nm3"], 1.234)
 
 
 if __name__ == "__main__":

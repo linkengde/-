@@ -32,6 +32,9 @@ from qsgs_liquid_tracking import LiquidClusterTracker  # noqa: E402
 
 TM_K = 1235.08
 SC_TMAX_K = 1473.15
+SC_WARNING_K = 1400.0
+SC_POOL_HEAT_OFF_K = 1450.0
+SC_NO_POOL_STOP_K = SC_TMAX_K - 1.0
 AG_TMAX_K = 2300.0
 LIQUID_THRESHOLD = 0.5
 ENERGY_REL_TOL = 1.0e-8
@@ -352,16 +355,42 @@ def _load_or_initialize(
 
 
 def _choose_segment_ps(model: QSGSEnthalpyGrid, requested: float) -> float:
-    max_ag = float(model.state.temperature_K[model.ag_fraction > 0.0].max())
     max_sc = float(model.state.temperature_K[model.sc_fraction > 0.0].max())
     segment = requested
-    if max(max_ag, max_sc) >= TM_K - 150.0:
-        segment = min(segment, 0.002)
-    if max_ag >= TM_K - 30.0:
-        segment = min(segment, 0.0005)
-    if max_ag >= AG_TMAX_K - 100.0 or max_sc >= SC_TMAX_K - 30.0:
-        segment = min(segment, 0.0001)
+    if max_sc >= SC_WARNING_K:
+        segment = min(segment, 0.01)
+    if max_sc >= SC_POOL_HEAT_OFF_K:
+        segment = min(segment, 0.005)
+    if max_sc >= SC_NO_POOL_STOP_K:
+        segment = min(segment, 0.001)
     return segment
+
+
+def _choose_sample_ps(model: QSGSEnthalpyGrid, requested: float) -> float:
+    """Increase field/cluster sampling near melt without writing a full checkpoint each sample."""
+    max_ag = float(model.state.temperature_K[model.ag_fraction > 0.0].max())
+    max_sc = float(model.state.temperature_K[model.sc_fraction > 0.0].max())
+    sample = requested
+    has_liquid = bool(np.any(model.state.ag_liquid_fraction[model.ag_fraction > 0.0] > 0.0))
+    if max_ag >= TM_K - 150.0 or max_sc >= SC_WARNING_K or has_liquid:
+        sample = min(sample, 0.002)
+    if max_ag >= TM_K - 30.0 or max_sc >= SC_POOL_HEAT_OFF_K or has_liquid:
+        sample = min(sample, 0.001)
+    return sample
+
+
+def dynamic_heat_stop_reason(metrics: dict[str, Any]) -> str | None:
+    """Return event-driven heat-off reasons without imposing a pool lifetime."""
+    sc_peak = float(metrics["ti3sic2_peak_temperature_K"])
+    has_connected_pool = (
+        int(metrics.get("connected_liquid_cluster_count", 0)) > 0
+        and int(metrics.get("largest_liquid_cluster_voxels", 0)) >= 2
+    )
+    if has_connected_pool and sc_peak >= SC_POOL_HEAT_OFF_K:
+        return "connected_pool_scaffold_temperature_margin_heat_off"
+    if not has_connected_pool and sc_peak >= SC_NO_POOL_STOP_K:
+        return "scaffold_property_ceiling_safety_stop_without_pool"
+    return None
 
 
 def run_transient(
@@ -421,7 +450,7 @@ def run_transient(
             sample_rows = model.run(
                 segment,
                 source_on=(mode == "heat"),
-                sample_interval_ps=min(sample_ps, segment),
+                sample_interval_ps=min(_choose_sample_ps(model, sample_ps), segment),
                 track_liquid_connectivity=True,
                 liquid_threshold=LIQUID_THRESHOLD,
                 tracker=tracker,
@@ -479,6 +508,10 @@ def run_transient(
             if row["ti3sic2_peak_temperature_K"] >= SC_TMAX_K - 1.0e-8:
                 stop_reason = "ti3sic2_candidate_property_limit_reached"
                 break
+            event_stop = dynamic_heat_stop_reason(row)
+            if event_stop is not None:
+                stop_reason = event_stop
+                break
             if tracker.first_multivoxel_pool_time_ps is not None:
                 pool_start = tracker.first_multivoxel_pool_time_ps
                 if end_ps >= pool_start + pool_followup_ps - 1.0e-10:
@@ -495,7 +528,10 @@ def run_transient(
     model.save_checkpoint(final_cp, tracker)
     if tracker.history:
         write_cluster_csv(output_dir / f"{mode}_liquid_clusters.csv", tracker.history)
-    final_metrics = state_metrics(model)
+    # Keep the tracked component metrics from the last accepted segment in the
+    # final summary. Without this, the checkpoint summary incorrectly reported
+    # a zero-size cluster even when the final validated frame contained liquid.
+    final_metrics = state_metrics(model, rows[-1] if rows else None)
     result = {
         "mode": mode,
         "status": f"AG70_CASE_B_{mode.upper()}_SEGMENTED_RUN_COMPLETED",
