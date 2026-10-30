@@ -212,16 +212,28 @@ class QSGSDoubleTemperatureTests(unittest.TestCase):
 
     def test_active_cell_enthalpy_inverse_matches_full_grid_inverse(self):
         with tempfile.TemporaryDirectory() as directory:
-            geometry = self.make_geometry(np.asarray([0.4, 0.6, 0.8]).reshape(3, 1, 1), directory)
+            geometry = self.make_geometry(np.asarray([0.4, 0.6, 0.8, 0.5, 0.7]).reshape(5, 1, 1), directory)
             model = QSGSDoubleTemperatureGrid(geometry, "B", peak_flux_eV_ps_A2=0.0)
-            temperature = np.asarray([500.0, 1235.08, 1300.0]).reshape(3, 1, 1)
-            liquid = np.asarray([0.0, 0.4, 1.0]).reshape(3, 1, 1)
+            temperature = np.asarray([500.0, 1235.08, 1300.0, 1800.0, 2000.0]).reshape(5, 1, 1)
+            liquid = np.asarray([0.0, 0.4, 1.0, 1.0, 1.0]).reshape(5, 1, 1)
             enthalpy = model.lattice.enthalpy_density_from_state(temperature, liquid)
             expected = model.lattice.state_from_enthalpy_density(enthalpy).temperature_K.ravel()
             actual = model._active_lattice_temperature_from_enthalpy(
                 enthalpy.ravel(), model.lattice.ag_fraction.ravel() > 0.0
             )
             np.testing.assert_allclose(actual, expected, rtol=0.0, atol=1.0e-10)
+
+    def test_active_cell_enthalpy_inverse_rejects_above_2000k(self):
+        with tempfile.TemporaryDirectory() as directory:
+            geometry = self.make_geometry(np.asarray([0.5]).reshape(1, 1, 1), directory)
+            model = QSGSDoubleTemperatureGrid(geometry, "B", peak_flux_eV_ps_A2=0.0)
+            temperature = np.full((1, 1, 1), 2000.01)
+            liquid = np.ones((1, 1, 1))
+            enthalpy = model.lattice.enthalpy_density_from_state(temperature, liquid)
+            with self.assertRaisesRegex(ValueError, "2000.00 K"):
+                model._active_lattice_temperature_from_enthalpy(
+                    enthalpy.ravel(), np.asarray([True])
+                )
 
     def test_implicit_lattice_diffusion_conserves_energy_at_large_step(self):
         with tempfile.TemporaryDirectory() as directory:
