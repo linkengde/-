@@ -1,0 +1,21 @@
+name: Temporary Ti3SiC2 enthalpy validation
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  single-temperature-enthalpy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install numerical dependency
+        run: python -m pip install numpy
+      - name: Run single-temperature enthalpy regression tests
+        run: python models/ag_ti3sic2_qsgs_1to1_finer/test_qsgs_enthalpy_solver.py
