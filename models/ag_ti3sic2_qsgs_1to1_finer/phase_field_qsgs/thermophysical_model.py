@@ -220,7 +220,7 @@ class AgEnthalpy:
 
 
 class Ti3SiC2ThermalProperties:
-    """Linear first-pass Cp/k interpolation with a hard upper data limit."""
+    """Table-driven piecewise-linear Cp/k interpolation with a hard upper data limit."""
 
     def __init__(
         self,
