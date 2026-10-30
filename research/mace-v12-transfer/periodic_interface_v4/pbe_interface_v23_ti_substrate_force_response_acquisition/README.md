@@ -14,7 +14,7 @@ The input manifest records the exact parent, dataset, input and source-commit ha
 
 Each job is a fixed-geometry PBE single point using GPAW 26.7.0 / ASE 3.29.0, a 500 eV plane-wave cutoff, 6×6×1 k-points, 0.10 eV Fermi–Dirac width, xy dipole correction, four MPI ranks and the registered PAW setup hashes. The native extrapolated energy and finite-width free energy are saved separately; force labels are the GPAW/ASE forces at 0.10 eV width. No relaxation or exact energy-force gradient consistency is claimed.
 
-The environment preflight passed with the 32 GiB cgroup ceiling, 30 GiB stop guard, 0.39 GiB current memory, 28.4 GiB free disk, MPI/ScaLAPACK enabled, verified GPAW/ASE/PAW versions and hashes, and the shared DFT lock available. Jobs run one at a time in AgTi, AgSi, AgC order. There are no automatic retries. A failed calculation preserves its text evidence and stops the sequence. `publish_verified_archives.py` pushes each result archive to `main` only after verification passes.
+The environment preflight passed with the 32 GiB cgroup ceiling, 30 GiB stop guard, 0.39 GiB current memory, 28.4 GiB free disk, MPI/ScaLAPACK enabled, verified GPAW/ASE/PAW versions and hashes, and the shared DFT lock available. Jobs run one at a time in AgTi, AgSi, AgC order. At each 20th SCF step, GPAW writes a checkpoint atomically; `checkpoint_keeper.py` retains one hash-verified latest snapshot outside the temporary run directory. If the sequence is interrupted, `recovery_monitor.py` attempts one resume per label, and `resume_sequence.py` validates the checkpoint label and input hash before reuse. If no matching checkpoint exists, the one recovery attempt starts from the registered input. Large `.gpw` files remain local and are not included in result commits. `publish_verified_archives.py` pushes each result archive to `main` only after verification passes.
 
 Run from the repository root:
 
@@ -23,7 +23,11 @@ Run from the repository root:
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/preflight_environment.py
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/run_sequence.py
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/publish_verified_archives.py
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/checkpoint_keeper.py
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/recovery_monitor.py
 ```
+
+Run the publisher, checkpoint keeper and recovery monitor in separate processes alongside the sequence. If the automatic resume attempt is exhausted, invoke `resume_sequence.py`; it refuses to run while a DFT process is active and reuses a checkpoint only when its label, input hash and file hash all match.
 
 ## Role and next gate
 
@@ -31,4 +35,4 @@ All six results remain `train_acquisition_candidate_pending_audit`. They are not
 
 ## Status
 
-Inputs, geometry audit and environment preflight are complete, and the sequential DFT run has been launched. `sequence_status.json` is the live machine-readable execution record. Each completed archive is re-verified and pushed to `main` by the publisher.
+Inputs, geometry audit and environment preflight are complete, and the sequential DFT run has been launched. `sequence_status.json` is the live machine-readable execution record. Each completed archive is re-verified and pushed to `main` by the publisher. The current run's checkpoint is copied to the local ignored `calculations/latest_checkpoint/` directory once stable.

@@ -65,10 +65,29 @@ def main() -> None:
     env.update({"GPAW_MPI_BACKEND": "cgpaw", "OMP_NUM_THREADS": "1",
                 "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1",
                 "NUMEXPR_NUM_THREADS": "1"})
+    env.pop("V23_RESTART_CHECKPOINT", None)
+    env.pop("V23_RESTART_ITERATION_OFFSET", None)
     env["LD_LIBRARY_PATH"] = ":".join([deps + "/openmpi/lib", deps,
         "/workspace/.local/gpaw-libs/usr/lib/x86_64-linux-gnu",
         "/workspace/.local/openblas/usr/lib/x86_64-linux-gnu/openblas-pthread",
         env.get("LD_LIBRARY_PATH", "")])
+    checkpoint_dir = ROOT / "calculations" / "latest_checkpoint"
+    checkpoint = checkpoint_dir / "latest_state.gpw"
+    checkpoint_meta_path = checkpoint_dir / "latest_checkpoint.json"
+    if checkpoint.is_file() and checkpoint_meta_path.is_file():
+        try:
+            checkpoint_meta = json.loads(checkpoint_meta_path.read_text())
+            if (checkpoint_meta.get("label") == label
+                    and checkpoint_meta.get("input_sha256") == job["input_sha256"]
+                    and sha(checkpoint) == checkpoint_meta.get("checkpoint_sha256")):
+                env["V23_RESTART_CHECKPOINT"] = str(checkpoint)
+                env["V23_RESTART_ITERATION_OFFSET"] = str(
+                    int(checkpoint_meta.get("last_reported_scf_iteration") or 0))
+                print(f"Resuming {label} from verified latest GPAW checkpoint at SCF≈"
+                      f"{env['V23_RESTART_ITERATION_OFFSET']}", flush=True)
+        except (OSError, ValueError, json.JSONDecodeError):
+            print("Latest checkpoint metadata/hash did not verify; starting from the registered input.",
+                  flush=True)
     method = manifest["method_candidate"]
     info = subprocess.check_output([str(Path(PYTHON).with_name("gpaw")), "info"], env=env, text=True)
     assert re.search(r"MPI enabled\s+yes", info) and re.search(r"scalapack\s+yes", info), "GPAW requires four-rank MPI and ScaLAPACK"
@@ -119,8 +138,8 @@ def main() -> None:
         (ROOT / "calculations" / f"{label}.runtime.json").write_text(json.dumps(runtime, indent=2) + "\n")
         if stopped or code != 0:
             if scratch.exists():
-                # Keep text evidence, never archive large GPAW state checkpoints.
-                (scratch / "state.gpw").unlink(missing_ok=True)
+                # Preserve the latest GPAW state so a later invocation can resume it.
+                (scratch / "state.next.gpw").unlink(missing_ok=True)
                 failed_root = ROOT / "calculations" / "failed_attempts"
                 failed_root.mkdir(exist_ok=True)
                 failed = failed_root / f"{label}__attempt_{int(start)}"

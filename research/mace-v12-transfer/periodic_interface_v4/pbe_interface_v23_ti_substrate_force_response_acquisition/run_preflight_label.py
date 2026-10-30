@@ -31,7 +31,7 @@ import gpaw_data
 
 os.environ["GPAW_SETUP_PATH"] = str(gpaw_data.datapath())
 from ase.io import read, write
-from gpaw import GPAW, PW
+from gpaw import GPAW, PW, restart
 from gpaw.mixer import Mixer
 from gpaw.occupations import FermiDirac
 
@@ -42,36 +42,58 @@ assert not any(k in atoms.arrays for k in ("forces", "REF_forces", "PW_PBE_force
 
 started = time.time()
 progress_path = scratch / "progress.json"
+restart_path = os.environ.get("V23_RESTART_CHECKPOINT")
+iteration_offset = int(os.environ.get("V23_RESTART_ITERATION_OFFSET", "0"))
+if restart_path:
+    restarted_atoms, calc = restart(restart_path, txt=str(scratch / "gpaw.log"),
+                                    parallel={"sl_auto": True})
+    if (restarted_atoms.get_chemical_symbols() != atoms.get_chemical_symbols()
+            or restarted_atoms.pbc.tolist() != atoms.pbc.tolist()
+            or not np.array_equal(restarted_atoms.cell.array, atoms.cell.array)
+            or not np.allclose(restarted_atoms.positions, atoms.positions, rtol=0, atol=1e-10)):
+        raise SystemExit("checkpoint geometry does not match the registered input")
+else:
+    calc = GPAW(
+        mode=PW(500), xc="PBE", kpts=tuple(job["kpts"]),
+        poissonsolver={"dipolelayer": "xy"},
+        occupations=FermiDirac(job["smearing_eV"]),
+        mixer=Mixer(0.05, 8, 100), parallel={"sl_auto": True},
+        convergence={"energy": 1e-5, "density": 1e-5, "eigenstates": 1e-5},
+        maxiter=160, txt=str(scratch / "gpaw.log"),
+    )
+atoms.calc = calc
 if world.rank == 0:
     progress_path.write_text(json.dumps({"label": LABEL, "status": "running", "iteration": 0,
         "source_sha256": job["input_sha256"], "mpi_ranks": world.size,
-        "started_epoch_s": started}, indent=2) + "\n")
-calc = GPAW(
-    mode=PW(500), xc="PBE", kpts=tuple(job["kpts"]),
-    poissonsolver={"dipolelayer": "xy"},
-    occupations=FermiDirac(job["smearing_eV"]),
-    mixer=Mixer(0.05, 8, 100), parallel={"sl_auto": True},
-    convergence={"energy": 1e-5, "density": 1e-5, "eigenstates": 1e-5},
-    maxiter=160, txt=str(scratch / "gpaw.log"),
-)
-atoms.calc = calc
+        "started_epoch_s": started, "resumed_from_checkpoint": bool(restart_path),
+        "checkpoint_path": restart_path, "iteration_offset": iteration_offset}, indent=2) + "\n")
 converged = {"value": False}
 
 def scf_step(context):
-    iteration = int(context.niter)
+    iteration = iteration_offset + int(context.niter)
     if world.rank == 0 and iteration % 10 == 0:
         progress_path.write_text(json.dumps({"label": LABEL, "status": "running", "iteration": iteration,
             "elapsed_s": time.time() - started, "source_sha256": job["input_sha256"],
-            "mpi_ranks": world.size}, indent=2) + "\n")
+            "mpi_ranks": world.size, "resumed_from_checkpoint": bool(restart_path)}, indent=2) + "\n")
     if iteration % 20 == 0:
-        calc.write(str(scratch / "state.gpw"), mode="all")
+        checkpoint_tmp = scratch / "state.next.gpw"
+        checkpoint = scratch / "state.gpw"
+        if world.rank == 0:
+            checkpoint_tmp.unlink(missing_ok=True)
+        world.barrier()
+        calc.write(str(checkpoint_tmp), mode="all")
+        world.barrier()
+        if world.rank == 0:
+            os.replace(checkpoint_tmp, checkpoint)
+        world.barrier()
 
 calc.hooks["scf_step"] = scf_step
 calc.hooks["converged"] = lambda: converged.__setitem__("value", True)
 native = float(atoms.get_potential_energy(force_consistent=False))
 free = float(calc.results["free_energy"])
 forces = np.asarray(atoms.get_forces(), dtype=float)
-iterations = int(calc.get_number_of_iterations())
+iterations_this_attempt = int(calc.get_number_of_iterations())
+iterations = iteration_offset + iterations_this_attempt
 if not converged["value"]:
     raise SystemExit(f"SCF failed to converge within {iterations} iterations")
 if not np.isfinite(native) or not np.isfinite(free) or not np.isfinite(forces).all():
@@ -95,6 +117,9 @@ if world.rank == 0:
         "forces_method": "GPAW ASE forces at Fermi-Dirac width 0.10 eV; free energy retained separately",
         "energy_convention": "native extrapolated energy (force_consistent=False); free energy separately recorded",
         "scf_converged": True, "scf_iterations": iterations,
+        "scf_iterations_this_attempt": iterations_this_attempt,
+        "resumed_from_checkpoint": bool(restart_path),
+        "checkpoint_iteration_offset": iteration_offset,
         "max_force_eV_A": float(np.linalg.norm(forces, axis=1).max()),
         "rms_force_vector_eV_A": float(np.sqrt(np.mean(np.sum(forces**2, axis=1)))),
         "method": {"xc": "PBE", "basis": "plane wave", "cutoff_eV": 500,

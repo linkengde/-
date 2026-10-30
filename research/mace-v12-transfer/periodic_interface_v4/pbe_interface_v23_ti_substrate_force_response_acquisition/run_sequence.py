@@ -151,7 +151,7 @@ def preserve_failed_attempt(label: str, reason: str, started: float,
                             peak: int, stopped_for_memory: bool) -> None:
     scratch = CALCULATIONS / f".running_{label}"
     if scratch.exists():
-        (scratch / "state.gpw").unlink(missing_ok=True)
+        (scratch / "state.next.gpw").unlink(missing_ok=True)
         failed_root = CALCULATIONS / "failed_attempts"
         failed_root.mkdir(exist_ok=True)
         failed = failed_root / f"{label}__attempt_{int(started)}"
