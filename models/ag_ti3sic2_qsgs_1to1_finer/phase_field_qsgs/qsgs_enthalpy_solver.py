@@ -146,19 +146,15 @@ class QSGSEnthalpyGrid:
             self.ag_fraction * self.ag.reference_density_kg_m3 * self.ag.latent_heat_J_kg
         )
         self._solid_capacity_at_300_J_m3_K = (
-            self.ag_fraction * self.ag.reference_density_kg_m3 * self.ag.solid_cp_J_kg_K[0]
-        )
-        self._solid_capacity_slope_J_m3_K2 = self.ag_fraction * self.ag.reference_density_kg_m3 * (
-            (self.ag.solid_cp_J_kg_K[1] - self.ag.solid_cp_J_kg_K[0])
-            / (self.ag.solid_temperature_K[1] - self.ag.solid_temperature_K[0])
+            self.ag_fraction
+            * self.ag.reference_density_kg_m3
+            * self.ag.cp_solid_J_kg_K(300.0)
         )
         if self.boundary_case == "B":
-            sc_cp0 = self.sc.cp_mass_J_kg_K[0]
-            sc_slope = (self.sc.cp_mass_J_kg_K[1] - sc_cp0) / (
-                self.sc.temperature_K[1] - self.sc.temperature_K[0]
+            sc_cp_300 = float(self.sc.cp_J_kg_K(300.0))
+            self._solid_capacity_at_300_J_m3_K += (
+                self.sc_fraction * self.sc.density_kg_m3 * sc_cp_300
             )
-            self._solid_capacity_at_300_J_m3_K += self.sc_fraction * self.sc.density_kg_m3 * sc_cp0
-            self._solid_capacity_slope_J_m3_K2 += self.sc_fraction * self.sc.density_kg_m3 * sc_slope
         self.state = self.state_from_enthalpy_density(np.zeros(self.temperature_shape, dtype=float))
         self.enthalpy_density_J_m3 = np.zeros(self.temperature_shape, dtype=float)
         self.time_s = 0.0
@@ -177,28 +173,46 @@ class QSGSEnthalpyGrid:
         if self.boundary_case == "A":
             return ag_part
 
-        cp0 = self.sc.cp_mass_J_kg_K[0]
-        slope = (self.sc.cp_mass_J_kg_K[1] - cp0) / (self.sc.temperature_K[1] - self.sc.temperature_K[0])
-        delta = temp - self.sc.temperature_K[0]
-        h_sc = cp0 * delta + 0.5 * slope * delta**2
-        h_sc = np.where(temp < self.sc.temperature_K[0], cp0 * delta, h_sc)
+        sc_t = np.minimum(temp, self.sc.maximum_temperature_K)
+        h_sc = np.asarray(self.sc.specific_enthalpy_J_kg(sc_t))
         return ag_part + self.sc_fraction * self.sc.density_kg_m3 * h_sc
 
+    def _liquid_volumetric_enthalpy(self, temperature_K: np.ndarray) -> np.ndarray:
+        """Mixture enthalpy above Ag melting, including Ti3SiC2 sensible heat."""
+        temp = np.asarray(temperature_K, dtype=float)
+        tm = self.melting_temperature_K
+        h_liquid = (
+            self._solid_at_tm_J_m3
+            + self._latent_volumetric_J_m3
+            + self.ag_fraction
+            * self.ag.reference_density_kg_m3
+            * float(self.ag.liquid_cp_J_kg_K[0])
+            * (temp - tm)
+        )
+        if self.boundary_case == "B":
+            sc_t = np.minimum(temp, self.sc.maximum_temperature_K)
+            h_sc = np.asarray(self.sc.specific_enthalpy_J_kg(sc_t))
+            h_sc_tm = float(self.sc.specific_enthalpy_J_kg(tm))
+            h_liquid += self.sc_fraction * self.sc.density_kg_m3 * (h_sc - h_sc_tm)
+        return h_liquid
+
     def enthalpy_density_from_state(self, temperature_K: np.ndarray, liquid_fraction: np.ndarray) -> np.ndarray:
-        temp, liquid = np.broadcast_arrays(np.asarray(temperature_K, dtype=float), np.asarray(liquid_fraction, dtype=float))
+        temp, liquid = np.broadcast_arrays(
+            np.asarray(temperature_K, dtype=float),
+            np.asarray(liquid_fraction, dtype=float),
+        )
         if np.any((liquid < 0.0) | (liquid > 1.0)):
             raise ValueError("Ag liquid fraction must lie in [0,1]")
-        tm = self.melting_temperature_K
-        solid_at_tm = self._solid_at_tm_J_m3
-        latent_vol = self._latent_volumetric_J_m3
-        h_solid = self._solid_volumetric_enthalpy(temp)
-        h_plateau = solid_at_tm + latent_vol * liquid
-        h_liquid = solid_at_tm + latent_vol + self.ag_fraction * self.ag.reference_density_kg_m3 * float(self.ag.liquid_cp_J_kg_K[0]) * (temp - tm)
         if self.boundary_case == "B":
-            dtemp = temp - tm
-            slope_sc = (self.sc.cp_mass_J_kg_K[1] - self.sc.cp_mass_J_kg_K[0]) / (self.sc.temperature_K[1] - self.sc.temperature_K[0])
-            cp_sc_tm = float(self.sc.cp_J_kg_K(tm))
-            h_liquid += self.sc_fraction * self.sc.density_kg_m3 * (cp_sc_tm * dtemp + 0.5 * slope_sc * dtemp**2)
+            active_sc = self.sc_fraction > PHASE_FRACTION_ROUNDOFF_TOL
+            if np.any(active_sc & (temp > self.sc.maximum_temperature_K + 1.0e-9)):
+                raise ValueError(
+                    f"Ti3SiC2 property model upper limit is {self.sc.maximum_temperature_K:.2f} K"
+                )
+        tm = self.melting_temperature_K
+        h_solid = self._solid_volumetric_enthalpy(temp)
+        h_plateau = self._solid_at_tm_J_m3 + self._latent_volumetric_J_m3 * liquid
+        h_liquid = self._liquid_volumetric_enthalpy(temp)
         out = np.where(temp < tm, h_solid, np.where(temp > tm, h_liquid, h_plateau))
         return out
 
@@ -210,27 +224,39 @@ class QSGSEnthalpyGrid:
         liquid = np.zeros(self.temperature_shape, dtype=float)
         ag_rho = self.ag.reference_density_kg_m3
         c0 = self._solid_capacity_at_300_J_m3_K
-        slope = self._solid_capacity_slope_J_m3_K2
-
-        below_300 = h < 0.0
         has_capacity = c0 > 0.0
-        temp[below_300 & has_capacity] = 300.0 + h[below_300 & has_capacity] / c0[below_300 & has_capacity]
+
+        # Below the reference temperature, hold each present phase's Cp at
+        # its 300 K value. This is only a low-temperature numerical extension.
+        below_300 = (h < 0.0) & has_capacity
+        temp[below_300] = 300.0 + h[below_300] / c0[below_300]
+
+        # Invert the full nonlinear mixture enthalpy below Ag melting by
+        # bisection. This keeps the inverse exactly consistent with the
+        # analytic Barsoum Cp integral used in the forward enthalpy function.
         solid_at_tm = self._solid_at_tm_J_m3
         solid = (h >= 0.0) & (h < solid_at_tm) & has_capacity
-        target = h[solid]
-        c = c0[solid]
-        sl = slope[solid]
-        if target.size:
-            delta = target / c
-            curved = np.abs(sl) > 1.0e-18
-            delta[curved] = 2.0 * target[curved] / (c[curved] + np.sqrt(c[curved] ** 2 + 2.0 * sl[curved] * target[curved]))
-            temp[solid] = 300.0 + delta
+        if np.any(solid):
+            lo = np.full(self.temperature_shape, 300.0, dtype=float)
+            hi = np.full(self.temperature_shape, self.melting_temperature_K, dtype=float)
+            for _ in range(64):
+                mid = 0.5 * (lo + hi)
+                h_mid = self._solid_volumetric_enthalpy(mid)
+                lower = solid & (h_mid < h)
+                upper = solid & ~lower
+                lo = np.where(lower, mid, lo)
+                hi = np.where(upper, mid, hi)
+            temp[solid] = 0.5 * (lo[solid] + hi[solid])
 
         latent_vol = self._latent_volumetric_J_m3
         liquidus_enthalpy = solid_at_tm + latent_vol
         plateau = (h >= solid_at_tm) & (h <= liquidus_enthalpy) & (latent_vol > 0.0)
         temp[plateau] = self.melting_temperature_K
-        liquid[plateau] = np.clip((h[plateau] - solid_at_tm[plateau]) / latent_vol[plateau], 0.0, 1.0)
+        liquid[plateau] = np.clip(
+            (h[plateau] - solid_at_tm[plateau]) / latent_vol[plateau],
+            0.0,
+            1.0,
+        )
         no_ag_at_tm = (latent_vol <= 0.0) & (solid_at_tm > 0.0) & np.isclose(
             h, solid_at_tm, rtol=2.0e-14, atol=1.0e-8
         )
@@ -238,23 +264,57 @@ class QSGSEnthalpyGrid:
 
         above = (h > liquidus_enthalpy) & has_capacity
         if np.any(above):
-            dH = h[above] - liquidus_enthalpy[above]
-            cp_liquid = float(self.ag.liquid_cp_J_kg_K[0])
-            c_tm = self.ag_fraction[above] * ag_rho * cp_liquid
-            slope_liquid = np.zeros_like(c_tm)
+            dH = h - liquidus_enthalpy
+            cp_liquid_ag = float(self.ag.liquid_cp_J_kg_K[0])
+            ag_only = above
             if self.boundary_case == "B":
-                sc_cp_tm = float(self.sc.cp_J_kg_K(self.melting_temperature_K))
-                sc_slope = (self.sc.cp_mass_J_kg_K[1] - self.sc.cp_mass_J_kg_K[0]) / (self.sc.temperature_K[1] - self.sc.temperature_K[0])
-                c_tm += self.sc_fraction[above] * self.sc.density_kg_m3 * sc_cp_tm
-                slope_liquid = self.sc_fraction[above] * self.sc.density_kg_m3 * sc_slope
-            delta = dH / c_tm
-            curved = np.abs(slope_liquid) > 1.0e-18
-            delta[curved] = 2.0 * dH[curved] / (c_tm[curved] + np.sqrt(c_tm[curved] ** 2 + 2.0 * slope_liquid[curved] * dH[curved]))
-            temp[above] = self.melting_temperature_K + delta
+                active_sc = self.sc_fraction > PHASE_FRACTION_ROUNDOFF_TOL
+                ag_only = above & ~active_sc
+                sc_cells = above & active_sc
+            else:
+                sc_cells = np.zeros(self.temperature_shape, dtype=bool)
+
+            # Ag-only cells have a constant liquid Cp and can be inverted exactly.
+            if np.any(ag_only):
+                ag_capacity = self.ag_fraction * ag_rho * cp_liquid_ag
+                temp[ag_only] = (
+                    self.melting_temperature_K + dH[ag_only] / ag_capacity[ag_only]
+                )
+
+            # Cells containing Ti3SiC2 use the nonlinear scaffold enthalpy
+            # and are inverted over [Tm, 2000 K]. Values beyond that interval
+            # are rejected rather than silently extrapolated.
+            if np.any(sc_cells):
+                maximum_temperature = self.sc.maximum_temperature_K
+                h_at_maximum = self._liquid_volumetric_enthalpy(
+                    np.full(self.temperature_shape, maximum_temperature, dtype=float)
+                )
+                beyond_limit = sc_cells & (
+                    h > h_at_maximum + np.maximum(1.0e-8, np.abs(h_at_maximum) * 1.0e-12)
+                )
+                if np.any(beyond_limit):
+                    raise ValueError(
+                        f"Ti3SiC2 property model upper limit is {maximum_temperature:.2f} K"
+                    )
+                lo = np.full(self.temperature_shape, self.melting_temperature_K, dtype=float)
+                hi = np.full(self.temperature_shape, maximum_temperature, dtype=float)
+                for _ in range(64):
+                    mid = 0.5 * (lo + hi)
+                    h_mid = self._liquid_volumetric_enthalpy(mid)
+                    lower = sc_cells & (h_mid < h)
+                    upper = sc_cells & ~lower
+                    lo = np.where(lower, mid, lo)
+                    hi = np.where(upper, mid, hi)
+                temp[sc_cells] = 0.5 * (lo[sc_cells] + hi[sc_cells])
+
             liquid[above] = 1.0
 
-        if self.boundary_case == "B" and np.any(temp[self.sc_fraction > 0.0] > self.sc.temperature_K[-1] + 1.0e-9):
-            raise ValueError(f"Ti3SiC2 candidate table upper limit is {self.sc.temperature_K[-1]:.2f} K")
+        if self.boundary_case == "B":
+            active_sc = self.sc_fraction > PHASE_FRACTION_ROUNDOFF_TOL
+            if np.any(active_sc & (temp > self.sc.maximum_temperature_K + 1.0e-8)):
+                raise ValueError(
+                    f"Ti3SiC2 property model upper limit is {self.sc.maximum_temperature_K:.2f} K"
+                )
         return ThermalState(temp, liquid)
 
     def conductivity_W_m_K(self, state: ThermalState | None = None) -> np.ndarray:
@@ -262,7 +322,8 @@ class QSGSEnthalpyGrid:
         ag_k = np.asarray(self.ag.conductivity_W_m_K(state.temperature_K, state.ag_liquid_fraction))
         result = self.ag_fraction * ag_k
         if self.boundary_case == "B":
-            sc_k = np.asarray(self.sc.conductivity_W_m_K(state.temperature_K))
+            sc_temperature = np.minimum(state.temperature_K, self.sc.maximum_temperature_K)
+            sc_k = np.asarray(self.sc.conductivity_W_m_K(sc_temperature))
             result = result + self.sc_fraction * sc_k
         return result
 
@@ -273,7 +334,8 @@ class QSGSEnthalpyGrid:
         ag_cp = (1.0 - state.ag_liquid_fraction) * ag_solid + state.ag_liquid_fraction * ag_liquid
         capacity = self.ag_fraction * self.ag.reference_density_kg_m3 * ag_cp
         if self.boundary_case == "B":
-            capacity += self.sc_fraction * self.sc.density_kg_m3 * np.asarray(self.sc.cp_J_kg_K(state.temperature_K))
+            sc_temperature = np.minimum(state.temperature_K, self.sc.maximum_temperature_K)
+            capacity += self.sc_fraction * self.sc.density_kg_m3 * np.asarray(self.sc.cp_J_kg_K(sc_temperature))
         return capacity
 
     def stable_timestep_s(self, safety: float = 0.45) -> float:
