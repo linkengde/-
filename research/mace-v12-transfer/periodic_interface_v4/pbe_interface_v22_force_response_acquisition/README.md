@@ -23,6 +23,17 @@ Run from the repository root:
 
 ## Current status
 
-The geometry and environment preflights passed on 2026-10-29. Three labels have completed and passed archive verification: AgTi −0.20 Å (54 SCF iterations, 10,514.9 s, peak 8.79 GiB), AgTi +0.20 Å (59 iterations, 10,950.3 s, peak 8.80 GiB), and AgSi −0.20 Å (53 iterations, 11,585.0 s, peak 8.79 GiB). The current item is `AgSi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22`; it had just entered initialization at the latest status check. The original interactive launcher exited after its execution session detached while the MPI calculation continued; the recovery supervisor now watches the active `.running_<label>` attempt, enforces the same 30 GiB stop guard, archives and verifies it, then continues serially. Supervisor and per-job output are redirected to durable files to avoid tying calculation lifetime to an interactive terminal. Three labels remain after the current item. Prior same-protocol 52-atom interface calculations in v21 took 12,621–22,563 seconds apiece, so the remaining work will take substantial wall time. Automatic retries remain disabled.
+All six registered fixed-geometry DFT labels completed on 2026-10-30 at 01:30 UTC (09:30 China Standard Time). Each result passed verify_preflight.py on the completed archive, including the input hash, exact geometry/PBC, method, SCF convergence, finite energies and forces, and internal file checksums.
 
-After all six results pass their per-result archive verifiers, the next dataset will be a separate train49 experiment (train43 plus six labels), evaluated only on frozen dev3. Training integration into official train36/dev3 remains disabled. This panel does not establish geometry-specific k-point convergence for all six perturbed slabs or certify production/MD use.
+| Interface | Normal displacement | SCF iterations | GPAW elapsed | Observed peak memory |
+| --- | ---: | ---: | ---: | ---: |
+| AgTi | −0.20 Å | 54 | 10,514.9 s | 8.79 GiB |
+| AgTi | +0.20 Å | 59 | 10,950.3 s | 8.80 GiB |
+| AgSi | −0.20 Å | 53 | 11,585.0 s | 8.79 GiB |
+| AgSi | +0.20 Å | 54 | 12,598.6 s | 8.74 GiB |
+| AgC | −0.20 Å | 61 | 13,054.9 s | 8.72 GiB |
+| AgC | +0.20 Å | 62 | 11,399.8 s | 8.75 GiB |
+
+The GPAW summaries record the full calculation elapsed time. For the first AgTi −0.20 Å item, runtime.json additionally records that the supervisor recovered a running job after its launcher exited; its elapsed_s is only the supervisor's recovery interval. The GPAW summary and log contain the full 10,514.9 s runtime. No calculation exceeded the 30 GiB stop guard.
+
+The labels remain train_acquisition_candidate_pending_audit; no result has been inserted into the official training data. The next authorized experiment is a separate train49 fit (train43 plus these six labels), followed by evaluation on frozen dev3 only, using the established train43 recipe. The official train36/dev3 split and sealed test data remain untouched.
