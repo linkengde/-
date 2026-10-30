@@ -14,7 +14,7 @@ The input manifest records the exact parent, dataset, input and source-commit ha
 
 Each job is a fixed-geometry PBE single point using GPAW 26.7.0 / ASE 3.29.0, a 500 eV plane-wave cutoff, 6×6×1 k-points, 0.10 eV Fermi–Dirac width, xy dipole correction, four MPI ranks and the registered PAW setup hashes. The native extrapolated energy and finite-width free energy are saved separately; force labels are the GPAW/ASE forces at 0.10 eV width. No relaxation or exact energy-force gradient consistency is claimed.
 
-The environment preflight passed with the 32 GiB cgroup ceiling, 30 GiB stop guard, 0.39 GiB current memory, 28.4 GiB free disk, MPI/ScaLAPACK enabled, verified GPAW/ASE/PAW versions and hashes, and the shared DFT lock available. Jobs run one at a time in AgTi, AgSi, AgC order. There are no automatic retries. A failed calculation preserves its text evidence and stops the sequence.
+The environment preflight passed with the 32 GiB cgroup ceiling, 30 GiB stop guard, 0.39 GiB current memory, 28.4 GiB free disk, MPI/ScaLAPACK enabled, verified GPAW/ASE/PAW versions and hashes, and the shared DFT lock available. Jobs run one at a time in AgTi, AgSi, AgC order. There are no automatic retries. A failed calculation preserves its text evidence and stops the sequence. `publish_verified_archives.py` pushes each result archive to `main` only after verification passes.
 
 Run from the repository root:
 
@@ -22,6 +22,7 @@ Run from the repository root:
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/build_ti_response_inputs.py
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/preflight_environment.py
 /workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/run_sequence.py
+/workspace/.venvs/gpaw-mpi/bin/python research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/publish_verified_archives.py
 ```
 
 ## Role and next gate
@@ -30,4 +31,4 @@ All six results remain `train_acquisition_candidate_pending_audit`. They are not
 
 ## Status
 
-Inputs, geometry audit and environment preflight are complete. DFT has not started at the time of this initial package record. `sequence_status.json` is the machine-readable execution record; completed archives will be recorded and verified there.
+Inputs, geometry audit and environment preflight are complete, and the sequential DFT run has been launched. `sequence_status.json` is the live machine-readable execution record. Each completed archive is re-verified and pushed to `main` by the publisher.
