@@ -1,0 +1,62 @@
+{
+  "status": "CASE_B_PREFLIGHT_PASSED",
+  "boundary_case": "B: ideal Ag/Ti3SiC2 thermal contact; both phases store and conduct heat",
+  "geometry": "runs/single_temperature_mesh2_validation_20261027/qsgs_morphology_ag70vol.npz",
+  "geometry_sha256": "03ef47b1dd534b3215cf03f42c8cf7e887dcdfcc185b33bab7453cd838c1faac",
+  "grid_shape_xyz": [
+    100,
+    100,
+    50
+  ],
+  "mesh_refinement": 1,
+  "spacing_A": [
+    2.99635,
+    3.01857484616085,
+    3.1722300000000003
+  ],
+  "ag_volume_fraction": 0.699996,
+  "ti3sic2_volume_fraction": 0.300004,
+  "initial_temperature_K": 300.0,
+  "source_peak_flux_W_m2": 80108831700000.0,
+  "source_gaussian_radius_A": 30.0,
+  "source_absorption_depth_A": 20.0,
+  "source_actual_power_W": 0.0015513589462382562,
+  "source_support_in_scaffold": false,
+  "stable_timestep_at_300K_fs": 0.040421125932382576,
+  "static_300K_no_source": {
+    "status": "passed",
+    "duration_ps": 0.001,
+    "energy_J": 0.0,
+    "sample_rows": 1
+  },
+  "uniform_500K_no_source": {
+    "status": "passed",
+    "duration_ps": 0.001,
+    "max_temperature_drift_K": 5.684341886080802e-14,
+    "energy_before_J": 7.357749458639872e-15,
+    "energy_after_J": 7.357749458639872e-15,
+    "sample_rows": 1
+  },
+  "ag_to_scaffold_conduction": {
+    "status": "passed",
+    "initial_ag_temperature_K": 600.0,
+    "initial_scaffold_temperature_K": 300.0,
+    "steps": 8,
+    "step_fs": 0.01,
+    "ag_mean_before_K": 600.0,
+    "ag_mean_after_K": 595.653614047474,
+    "scaffold_max_before_K": 300.0,
+    "scaffold_max_after_K": 332.0403035414942,
+    "scaffold_stored_heat_gain_J": 1.163177675684353e-16,
+    "system_energy_relative_error": 2.0377940149110988e-16
+  },
+  "explicit_timestep_guard": "passed",
+  "ti3sic2_1473_15K_hard_limit": "passed; states above the data ceiling are rejected",
+  "candidate_properties": "First-pass candidate values; exact source tables are not archived and remain unverified.",
+  "limitations": [
+    "ideal interface contact; no finite interface thermal resistance",
+    "external faces are insulated except x/y periodicity; no external heat sink",
+    "single-temperature continuum model; no electron-lattice nonequilibrium",
+    "no liquid flow, melt expansion, vaporization, or mechanical skeleton constraint"
+  ]
+}
