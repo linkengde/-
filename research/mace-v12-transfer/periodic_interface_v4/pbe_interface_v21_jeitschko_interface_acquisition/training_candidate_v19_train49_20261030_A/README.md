@@ -20,4 +20,18 @@ Build and preflight the experiment data before fitting:
 bash run_train49.sh
 ```
 
-Dataset construction and read-only preflight passed on 2026-10-30. The train49 fit is now running with the fixed recipe; fit outputs and frozen-dev3 evaluation will be archived in a follow-up commit. Native extrapolated energy and finite-smearing forces follow the established candidate convention; exact energy-force gradient consistency is not claimed. Passing frozen dev3 would not establish blind-test performance or production/MD readiness.
+Dataset construction and preflight passed on 2026-10-30. The 80-epoch fit completed at 09:55 UTC, and the independent verifier confirmed full epoch-log/checkpoint coverage and tensor identity between the epoch-79 checkpoint and exported model. After this verification, intermediate epoch checkpoints were pruned; epoch 79 is retained.
+
+## Frozen-dev3 result
+
+The candidate fails the per-interface force-vector RMSE gate (≤0.05 eV/Å) for all three interfaces. All separation-force errors pass the ≤0.10 eV/Å gate. Aggregate force-vector RMSE is 0.09039 eV/Å, higher than train43's 0.06003 eV/Å. The fixed final epoch was used; no alternate epoch was selected using dev3.
+
+| Interface | Force-vector RMSE (eV/Å) | Gate | Separation-force error (eV/Å) | Gate |
+| --- | ---: | --- | ---: | --- |
+| AgC | 0.08906 | Fail | 0.06556 | Pass |
+| AgSi | 0.09129 | Fail | 0.07930 | Pass |
+| AgTi | 0.09081 | Fail | 0.07230 | Pass |
+
+Compared with train43, the force-vector RMSE rose by 0.03501 eV/Å for AgC, 0.02017 for AgSi and 0.03761 for AgTi. The AgTi separation-force error improved from 0.15869 to 0.07230 eV/Å; AgC and AgSi separation errors increased but remain below threshold. Species force-vector RMSE is largest for Ti (0.11215 eV/Å) and C (0.08136 eV/Å), which points to backbone/interface response as the next residual area to inspect.
+
+The result status is TRAIN49_EXPERIMENT_DEV3_SCREEN_FAIL. The model remains an experiment artifact and is not suitable for promotion to the official split, production use or molecular dynamics. Native extrapolated energy and finite-smearing forces follow the established candidate convention; exact energy-force gradient consistency is not claimed. These three frozen structures do not establish blind-test performance, and slab k-point, smearing and vacuum convergence remain incomplete. See run/results/train49_verification.json and run/SHA256SUMS.txt for the complete evaluation and artifact inventory.
