@@ -35,4 +35,4 @@ All six results remain `train_acquisition_candidate_pending_audit`. They are not
 
 ## Status
 
-Inputs, geometry audit and environment preflight are complete, and the sequential DFT run has been launched. `sequence_status.json` is the live machine-readable execution record. Each completed archive is re-verified and pushed to `main` by the publisher. The current run's checkpoint is copied to the local ignored `calculations/latest_checkpoint/` directory once stable.
+All six sequential DFT labels completed and passed archive verification. Their result archives were pushed to `main`; the last result is commit `94801a2ad963bdd32fcfcd871104953f0ca14228`. `sequence_status.json` records the six completed labels. The local ignored checkpoint directory retains the most recent DFT checkpoint for recovery. Follow-up candidate construction and fixed-recipe evaluation are recorded in `training_candidate_v19_train55_20261101_A/`; train55 improves over train49 but still fails the force-vector dev3 gate, so the labels remain acquisition candidates pending role audit.
