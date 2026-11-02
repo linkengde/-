@@ -20,7 +20,7 @@ Build and preflight the experiment data before fitting:
 bash run_train49.sh
 ```
 
-Dataset construction and preflight passed on 2026-10-30. The 80-epoch fit completed at 09:55 UTC, and the independent verifier confirmed full epoch-log/checkpoint coverage and tensor identity between the epoch-79 checkpoint and exported model. After this verification, intermediate epoch checkpoints were pruned; epoch 79 is retained.
+Dataset construction and preflight passed on 2026-10-30. The 80-epoch fit completed at 09:55 UTC, and the independent verifier confirmed full epoch-log/checkpoint coverage and tensor identity between the epoch-79 checkpoint and exported model. After this verification, intermediate epoch checkpoints were pruned. The verified epoch-79 PyTorch checkpoint was later pruned in the latest-only cleanup; the exported model, logs, and validation record remain.
 
 ## Frozen-dev3 result
 

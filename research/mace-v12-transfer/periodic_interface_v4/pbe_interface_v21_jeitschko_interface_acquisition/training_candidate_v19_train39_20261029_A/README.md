@@ -24,7 +24,7 @@ The fixed V19 recipe was seed 45, CPU with four threads, batch size 1, 80 epochs
 - `run/results/train39_verification.json`: complete verification and development-screen result.
 - `run/results/train39_epoch_metrics.csv`: validation metrics for epochs 0–79.
 - `run/logs/` and `run/train.stdout`: training logs and epoch-79 export record.
-- `run/checkpoints/MACE_periodic_v19_residual_response_run-45_epoch-79.pt`: final checkpoint.
+- The verified epoch-79 PyTorch checkpoint was pruned in the latest-only cleanup; the exported model, training logs, metrics, and verification record remain.
 - `run/models/MACE_periodic_v19_residual_response.model`: exported epoch-79 model.
 - `run/checkpoints/MACE_periodic_v19_residual_response_run-45.model`: checkpoint model export used for identity verification.
 
