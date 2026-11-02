@@ -103,8 +103,9 @@ def scf_step(context):
             meta_tmp = checkpoint_meta_path.with_suffix('.json.tmp')
             meta_tmp.write_text(json.dumps(meta, indent=2) + '\n')
             meta_tmp.replace(checkpoint_meta_path)
-    pause_requested = bool(pause_path.exists()) if world.rank == 0 else False
-    pause_requested = world.broadcast(pause_requested, 0)
+    pause_flag = np.array([int(pause_path.exists()) if world.rank == 0 else 0], dtype=np.int32)
+    world.broadcast(pause_flag, 0)
+    pause_requested = bool(pause_flag[0])
     if pause_requested and iteration > 0 and iteration % checkpoint_interval == 0:
         if world.rank == 0:
             progress_path.write_text(json.dumps({
