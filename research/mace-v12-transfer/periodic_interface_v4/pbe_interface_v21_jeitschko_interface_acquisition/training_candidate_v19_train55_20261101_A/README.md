@@ -10,26 +10,26 @@ The candidate has 55 training frames and the same three frozen development frame
 
 ## Fixed fit and verification
 
-The fit repeats the established recipe: seed 45, CPU, four threads, batch size 1, 80 epochs, learning rate 1e−4, weight decay 5e−7, energy weight 100, force weight 1000, and `REF_energy` / `REF_forces` targets. The fixed epoch-79 model was evaluated only on frozen dev3. The verifier confirmed all 80 epoch records and checkpoint files before pruning, and confirmed tensor identity between the epoch-79 checkpoint and exported model.
+The fit repeats the established recipe: seed 45, CPU, four threads, batch size 1, 80 epochs, learning rate 1e−4, weight decay 5e−7, energy weight 100, force weight 1000, and `REF_energy` / `REF_forces` targets. The fixed epoch-79 model was screened against frozen dev3. The verifier confirmed all 80 epoch records and checkpoint files before pruning, and confirmed tensor identity between the epoch-79 checkpoint and exported model. Because the 55-frame training set includes both Ti–Si–C substrate configurations and Ag-containing interface slabs, this is an Ag–Ti–Si–C interface cross-potential candidate, not a Ti–Si–C-only skeleton fit. Its Ag interaction coverage is limited to the sampled interface configurations; it is not a general Ag alloy potential.
 
-| Interface | Train49 force-vector RMSE (eV/Å) | Train55 force-vector RMSE (eV/Å) | Force gate | Separation-force error (eV/Å) | Separation gate |
-| --- | ---: | ---: | --- | ---: | --- |
-| AgC | 0.08906 | 0.05725 | Fail | 0.02158 | Pass |
-| AgSi | 0.09129 | 0.05827 | Fail | 0.08379 | Pass |
-| AgTi | 0.09081 | 0.06579 | Fail | 0.03753 | Pass |
+| Interface | Train55 force-vector RMSE (eV/Å) | Historical ≤0.05 gate | Current ≤0.07 gate | Separation-force error (eV/Å) | ≤0.10 gate | Max force error (eV/Å) |
+| --- | ---: | --- | --- | ---: | --- | ---: |
+| AgC | 0.05725 | Fail | Pass | 0.02158 | Pass | 0.10548 |
+| AgSi | 0.05827 | Fail | Pass | 0.08379 | Pass | 0.08373 |
+| AgTi | 0.06579 | Fail | Pass | 0.03753 | Pass | 0.14411 |
 
-All three force-vector RMSE values remain above the ≤0.05 eV/Å gate; all separation-force errors meet the ≤0.10 eV/Å gate. Aggregate force-vector RMSE is 0.06056 eV/Å, improved from train49's 0.09039 eV/Å and close to train43's 0.06003 eV/Å. The status is `TRAIN55_EXPERIMENT_DEV3_SCREEN_FAIL`; this model is not promoted to official training or production use.
-
+On 2026-11-02, the working per-interface force-vector RMSE tolerance was set to ≤0.07 eV/Å for the intended practical use; under this criterion, all three interfaces pass, and all separation-force errors remain ≤0.10 eV/Å. Aggregate force-vector RMSE is 0.06056 eV/Å. The original ≤0.05 eV/Å assessment remains a historical fail in `run/results/train55_verification.json`; it has not been overwritten. This is a post-hoc reclassification, and frozen dev3 was monitored as validation data during fitting, so it is not an independent blind validation. The result passes the current working precision screen only; the model remains `train_acquisition_candidate_pending_audit` and is not promoted to the official training set or production use. The force criterion is RMSE; it does not bound every atom's maximum force error (see the table).
 The frozen-dev3 residual diagnostic shows improvements over train49 for Ti in all three interfaces and for C in AgC/AgSi. Remaining force error is distributed across species and interfaces; AgC Si residual increased, so the six topmost-Ti labels did not address every error mode. These are diagnostic correlations, not a causal attribution. The dev3 geometries and labels were not copied into training.
 
 ## Next acquisition
 
-Keep train55 as an experiment-only baseline. The next DFT acquisition should broaden force-response coverage on registered training-interface parent geometries, sampling subsurface Ti and C internal modes in addition to the already sampled topmost-Ti orbit. Use the same DFT method and exact source/input/hash audit, then evaluate one fixed recipe against frozen dev3. Do not tune epochs or hyperparameters against dev3, and do not alter the official split or inspect sealed test data.
+Keep train55 as the already-fitted experiment-only cross-potential baseline. The v24 acquisition is currently collecting six additional Ag–Ti–Si–C interface carbon-response labels. After all six archives pass verification, build the next candidate from those labels and rerun the fixed recipe against frozen dev3 to check robustness under the current 0.07/0.10 working screen. Do not tune epochs or hyperparameters against dev3, and do not alter the official split or inspect sealed test data.
 
 ## Artifacts
 
 - `dataset/`: train55, frozen dev3 and provenance manifest with checksums.
-- `run/results/train55_verification.json`: fixed-epoch evaluation, gate results and checkpoint/model identity audit.
+- `run/results/train55_verification.json`: original fixed-epoch evaluation using the historical 0.05 eV/Å gate, plus checkpoint/model identity audit.
+- `run/results/train55_revised_gate_assessment_20261102.json`: explicit reclassification under the current 0.07 eV/Å working tolerance; records scope and limitations.
 - `run/results/train55_residual_diagnostics.json`: per-interface, per-species and distance-resolved dev3 error comparison against train43/train49.
 - `run/checkpoints/`: only the latest epoch-79 checkpoint is retained after full-coverage verification.
 - `run/models/`: exported and compiled epoch-79 models; `run/logs/` and `run/train.stdout` preserve training evidence.

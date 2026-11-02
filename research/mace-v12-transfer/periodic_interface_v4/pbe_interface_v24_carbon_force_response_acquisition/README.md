@@ -1,6 +1,6 @@
 # Ti₃SiC₂ interface carbon force-response acquisition v24
 
-The fixed V19 seed-45 train55 fit improved aggregate interface force error over train49, but all three per-interface force-vector RMSE values remain above the 0.05 eV/Å gate. This acquisition adds six local force labels targeting the carbon response nearest the marked Ag contact pair, complementing v23's topmost-Ti response labels.
+The fixed V19 seed-45 train55 fit has aggregate interface force-vector RMSE 0.06056 eV/Å. Under the current working tolerance of 0.07 eV/Å, all three frozen-dev3 interface RMSE values pass; they failed the historical 0.05 eV/Å screen. This in-progress acquisition adds six local force labels targeting the carbon response nearest the marked Ag contact pair, complementing v23's topmost-Ti response labels, to broaden response coverage.
 
 ## Inputs and geometry audit
 
@@ -28,7 +28,7 @@ Run the publisher, checkpoint keeper and recovery monitor in separate processes 
 
 ## Role and next gate
 
-All six configurations remain `train_acquisition_candidate_pending_audit`; the workflow does not add them to official training data. After all archives pass verification, the next step is to construct a candidate from the authorized acquisition pool and rerun the fixed V19 fit against frozen dev3 only. Acceptance remains per-interface force-vector RMSE ≤0.05 eV/Å and separation-force RMSE ≤0.10 eV/Å. A passing fit still requires a separate data-role audit before formal training integration.
+All six configurations remain `train_acquisition_candidate_pending_audit`; the workflow does not add them to official training data. After all archives pass verification, the next step is to construct a candidate from the authorized acquisition pool and rerun the fixed V19 fit against frozen dev3 only, to check whether the added response coverage improves or preserves the current working-gate result. The current working acceptance screen is per-interface force-vector RMSE ≤0.07 eV/Å and separation-force RMSE ≤0.10 eV/Å. The 0.07 threshold was adopted on 2026-11-02 for the intended practical use; the earlier 0.05 assessment is retained as historical. The existing dev3 screen is post-hoc and dev3 was monitored during fitting, so it is not blind validation. A passing fit still requires a separate data-role audit before formal training integration.
 
 ## Status
 

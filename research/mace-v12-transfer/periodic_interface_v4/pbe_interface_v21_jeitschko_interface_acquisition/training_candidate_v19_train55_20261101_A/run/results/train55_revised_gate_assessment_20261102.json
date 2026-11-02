@@ -1,0 +1,60 @@
+{
+  "schema": "train55_revised_gate_assessment_v1",
+  "assessment_date": "2026-11-02",
+  "decision": "PASS_CURRENT_WORKING_GATE",
+  "criterion": {
+    "basis": "user-stated tolerance for intended practical use",
+    "per_interface_force_vector_RMSE_max_eV_A": 0.07,
+    "per_interface_separation_force_abs_error_max_eV_A": 0.1,
+    "interpretation": "The force criterion is RMSE over force vectors per interface; it is not a maximum per-atom force-error bound."
+  },
+  "historical_criterion": {
+    "per_interface_force_vector_RMSE_max_eV_A": 0.05,
+    "result": "FAIL",
+    "note": "Preserved in the original train55_verification.json and not rewritten."
+  },
+  "per_interface": [
+    {
+      "interface": "AgC",
+      "force_vector_RMSE_eV_A": 0.0572544771144312,
+      "force_vector_max_error_eV_A": 0.10547940052675607,
+      "force_gate_0p05_historical": "FAIL",
+      "force_gate_0p07_current": "PASS",
+      "separation_force_abs_error_eV_A": 0.021581702214401643,
+      "separation_gate_0p10": "PASS"
+    },
+    {
+      "interface": "AgSi",
+      "force_vector_RMSE_eV_A": 0.058273843359992146,
+      "force_vector_max_error_eV_A": 0.08372697907528802,
+      "force_gate_0p05_historical": "FAIL",
+      "force_gate_0p07_current": "PASS",
+      "separation_force_abs_error_eV_A": 0.08378653935774683,
+      "separation_gate_0p10": "PASS"
+    },
+    {
+      "interface": "AgTi",
+      "force_vector_RMSE_eV_A": 0.06579088053658047,
+      "force_vector_max_error_eV_A": 0.14411442667278473,
+      "force_gate_0p05_historical": "FAIL",
+      "force_gate_0p07_current": "PASS",
+      "separation_force_abs_error_eV_A": 0.03752753598150527,
+      "separation_gate_0p10": "PASS"
+    }
+  ],
+  "aggregate_force_vector_RMSE_eV_A": 0.060559491222462195,
+  "model": {
+    "exported_model_sha256": "1e17d78f5dfc678efca6985395bcde37f31866ccc65b6b7fe36eb800395dac83",
+    "epoch79_checkpoint_sha256": "acd8709dfb134cfbf43bd302ae6f14c862112227cc7ae65279c3f07ce180c58c",
+    "train_sha256": "5a9eabc8c31d83670a81f73ba8da1ff18d3fe2311e6bec062aca3be1c8b094aa",
+    "dev3_sha256": "e9e86e3a353c50c8173cefede370e2653ec2e81506f4b8122b01b7a8efe76e4c"
+  },
+  "source_assessment_sha256": "da5038245f9221ae6c6a45f6a188b1677ff1ee59c157541d828687288c0679ec",
+  "evaluation_limits": [
+    "This is a post-hoc reclassification of existing train55 predictions after the working tolerance changed.",
+    "Frozen dev3 was monitored as validation data during fitting and is not an untouched blind holdout.",
+    "The new threshold does not change the official data split or promote this candidate to the official training set or production model.",
+    "Some maximum per-atom force errors exceed 0.07 eV/Å; only the agreed per-interface RMSE criterion is assessed here."
+  ],
+  "data_role": "train_acquisition_candidate_pending_audit"
+}
