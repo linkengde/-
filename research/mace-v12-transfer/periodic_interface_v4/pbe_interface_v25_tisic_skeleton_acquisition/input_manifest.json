@@ -1,0 +1,444 @@
+{
+  "schema": "tisic_skeleton_acquisition_v25_v1",
+  "task_id": "Ti3SiC2_TiSiC_skeleton_potential_candidate_v25",
+  "status": "inputs_prepared",
+  "launch_enabled": true,
+  "fit_enabled": false,
+  "data_role": "non_official_skeleton_train_and_development_candidate",
+  "source": {
+    "doi": "10.1007/BF00899949",
+    "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+    "source_commit": "847676691c89faa78750802d2217bea9d8702f85",
+    "source_manifest_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/input_manifest.json",
+    "source_cif_sha256": "26960fc12d2de584c6a13ba5fe0d15713c07f697f455dbe29791b747f07359a1",
+    "source_paper_sha256": "6765f99b3cc83daf3e48e4674dbeba109e5fffef8fa66cd53e266733ac4a4a63",
+    "baseline_input_path_at_source_commit": "inputs/Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21.extxyz",
+    "baseline_input_sha256": "4539da57fb472e96465c3f4cdb1c42e84021e3442de0c947c79ad6ef9e93688c",
+    "occupancy_assumption": "full occupancy; inherited from reconstructed source model"
+  },
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "kpts": [
+      10,
+      10,
+      2
+    ],
+    "smearing_eV": 0.1,
+    "energy_target": "finite-width free energy, force-consistent with ASE forces at sigma 0.10 eV",
+    "also_record": [
+      "native_extrapolated_energy_eV_cell",
+      "free_energy_eV_cell",
+      "forces_eV_A",
+      "stress_eV_A3"
+    ],
+    "pbc": [
+      true,
+      true,
+      true
+    ],
+    "poissonsolver": {},
+    "mixer": {
+      "type": "Pulay",
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "convergence": {
+      "energy_eV_per_electron": 1e-05,
+      "density_electrons_per_electron": 1e-05,
+      "eigenstates_eV2_per_electron": 1e-05
+    },
+    "maxiter": 160,
+    "GPAW_version": "26.7.0",
+    "ASE_version": "3.29.0",
+    "MPI_ranks": 4,
+    "threads_per_rank": 1,
+    "PAW_data_version": "1.2.1",
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983"
+    },
+    "shared_dft_lock": "/workspace/.mace-v19-dft.lock",
+    "cgroup_limit_bytes": 34359738368,
+    "memory_stop_guard_bytes": 32212254720,
+    "checkpoint_interval_scf_steps": 20
+  },
+  "working_gate_fixed_before_fit": {
+    "per_configuration_force_vector_RMSE_max_eV_A": 0.07,
+    "note": "Working fit screen only; the development set is not a blind test set."
+  },
+  "previously_verified_training_candidates": [
+    {
+      "label": "Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21",
+      "source_result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/calculations/Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21/Ti3SiC2_JN1967_primitive_baseline_k10x10x2_mesh_control_v21_PW_PBE.extxyz",
+      "source_result_commit": "847676691c89faa78750802d2217bea9d8702f85",
+      "source_result_role": "10x10x2 fixed-geometry mesh control, re-used as a candidate baseline only in this separate skeleton experiment",
+      "split": "train",
+      "target_energy_field": "PW_PBE_free_energy_eV"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21",
+      "source_result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/calculations/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21_PW_PBE.extxyz",
+      "source_result_commit": "847676691c89faa78750802d2217bea9d8702f85",
+      "source_result_role": "previous Ti/C displacement candidate; pending source-parent audit",
+      "split": "train",
+      "target_energy_field": "PW_PBE_free_energy_eV"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21",
+      "source_result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/calculations/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21/Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21_PW_PBE.extxyz",
+      "source_result_commit": "847676691c89faa78750802d2217bea9d8702f85",
+      "source_result_role": "previous Ti/C displacement candidate; pending source-parent audit",
+      "split": "train",
+      "target_energy_field": "PW_PBE_free_energy_eV"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21",
+      "source_result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/calculations/Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21/Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21_PW_PBE.extxyz",
+      "source_result_commit": "847676691c89faa78750802d2217bea9d8702f85",
+      "source_result_role": "previous Ti/C displacement candidate; pending source-parent audit",
+      "split": "train",
+      "target_energy_field": "PW_PBE_free_energy_eV"
+    },
+    {
+      "label": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21",
+      "source_result_path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_bulk_training_acquisition/calculations/Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21/Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21_PW_PBE.extxyz",
+      "source_result_commit": "847676691c89faa78750802d2217bea9d8702f85",
+      "source_result_role": "previous Ti/C displacement candidate; pending source-parent audit",
+      "split": "train",
+      "target_energy_field": "PW_PBE_free_energy_eV"
+    }
+  ],
+  "preflight_jobs": [
+    {
+      "label": "Ti2a_z_m0p03_v25",
+      "input": "inputs/Ti2a_z_m0p03_v25.extxyz",
+      "input_sha256": "1ddb45cfdf008c21775286608dd4416caf9411a6e99376c2538426e3435e7669",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 0,
+        "element": "Ti",
+        "axis": "z",
+        "delta_A": -0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "Ti2a_z_p0p03_v25",
+      "input": "inputs/Ti2a_z_p0p03_v25.extxyz",
+      "input_sha256": "c3359402b522f94ba42e5133020605ee07cc6ee93e983e5228a6ea7a219f2cf2",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 0,
+        "element": "Ti",
+        "axis": "z",
+        "delta_A": 0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "Si2b_z_m0p03_v25",
+      "input": "inputs/Si2b_z_m0p03_v25.extxyz",
+      "input_sha256": "94afe06fbc9135723bbc4ef3d8b1a4e1495bc4f1ef6de6dd253b08bb725b2097",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 6,
+        "element": "Si",
+        "axis": "z",
+        "delta_A": -0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "Si2b_z_p0p03_v25",
+      "input": "inputs/Si2b_z_p0p03_v25.extxyz",
+      "input_sha256": "a4229558825f3393218a93f4b6787e4236c71241a1add167a5e2a8d101a71b1a",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 6,
+        "element": "Si",
+        "axis": "z",
+        "delta_A": 0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "Ti4f_x_m0p03_v25",
+      "input": "inputs/Ti4f_x_m0p03_v25.extxyz",
+      "input_sha256": "6dcd636d0f9e76a02684fbdc069d688d01db489dcf36936275681e43d447e820",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 3,
+        "element": "Ti",
+        "axis": "x",
+        "delta_A": -0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "Ti4f_x_p0p03_v25",
+      "input": "inputs/Ti4f_x_p0p03_v25.extxyz",
+      "input_sha256": "10fa4c01eef6ca3b8be51c3d27174890ff28062e06d052307a87df17619ab97b",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 3,
+        "element": "Ti",
+        "axis": "x",
+        "delta_A": 0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "C4f_x_m0p03_v25",
+      "input": "inputs/C4f_x_m0p03_v25.extxyz",
+      "input_sha256": "164b3bcec3eac9e504b1ad95a66ad3f302684080728476e207ebb2e94e913fe0",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 9,
+        "element": "C",
+        "axis": "x",
+        "delta_A": -0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "C4f_x_p0p03_v25",
+      "input": "inputs/C4f_x_p0p03_v25.extxyz",
+      "input_sha256": "6361a64c586facfe1c60e0a092d35ade04d3d0476156f2a5758f7ec47e5b0aa8",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "single_atom_cartesian_displacement",
+        "atom_index_zero_based": 9,
+        "element": "C",
+        "axis": "x",
+        "delta_A": 0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "strain_basal_ab_m1p0pct_v25",
+      "input": "inputs/strain_basal_ab_m1p0pct_v25.extxyz",
+      "input_sha256": "da12ce26fb7cf904627a0399339c1cd5b7b3542042f9dbe46b725dde4bc1cfda",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "homogeneous_cell_strain",
+        "strain_axis": "basal_ab",
+        "linear_scale": 0.99,
+        "nominal_percent": -1.0
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "strain_basal_ab_p1p0pct_v25",
+      "input": "inputs/strain_basal_ab_p1p0pct_v25.extxyz",
+      "input_sha256": "367431a29dfecbf176b29218e758ebb530da0c7e8c97575af0181d6580e7ed05",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "homogeneous_cell_strain",
+        "strain_axis": "basal_ab",
+        "linear_scale": 1.01,
+        "nominal_percent": 1.0
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "strain_c_axis_m1p0pct_v25",
+      "input": "inputs/strain_c_axis_m1p0pct_v25.extxyz",
+      "input_sha256": "aa6649ccb1a175e307236db71651594cc7a75c78ca7cebb51f132054c85c6db4",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "homogeneous_cell_strain",
+        "strain_axis": "c_axis",
+        "linear_scale": 0.99,
+        "nominal_percent": -1.0
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "strain_c_axis_p1p0pct_v25",
+      "input": "inputs/strain_c_axis_p1p0pct_v25.extxyz",
+      "input_sha256": "3f9d2f9ee6eda3f3a3302aea31cec19fe07d7901960bebde97b0cfe71408cb97",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "homogeneous_cell_strain",
+        "strain_axis": "c_axis",
+        "linear_scale": 1.01,
+        "nominal_percent": 1.0
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_train_seed4101_rms0p02_v25",
+      "input": "inputs/bulk_random_train_seed4101_rms0p02_v25.extxyz",
+      "input_sha256": "17aef5ae2276e94d0eb7ed9e0353a588cad535eb7854b4ac85799d0ed24864b4",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 4101,
+        "target_rms_displacement_A": 0.02,
+        "realized_rms_displacement_A": 0.02
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_train_seed4102_rms0p04_v25",
+      "input": "inputs/bulk_random_train_seed4102_rms0p04_v25.extxyz",
+      "input_sha256": "e3a4ea9a22cb309edb969994d77422e92f54c7f8e547391ff1bcb2d7cfc3f162",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "train_candidate_pending_audit",
+      "split": "train",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 4102,
+        "target_rms_displacement_A": 0.04,
+        "realized_rms_displacement_A": 0.04
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_dev_seed8201_rms0p02_v25",
+      "input": "inputs/bulk_random_dev_seed8201_rms0p02_v25.extxyz",
+      "input_sha256": "7ac2a01f6348331c98dba8778cf32144543796fdc3a61a447c48aeb0a45b5775",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "development_candidate",
+      "split": "development",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 8201,
+        "target_rms_displacement_A": 0.02,
+        "realized_rms_displacement_A": 0.020000000000000004
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_dev_seed8202_rms0p03_v25",
+      "input": "inputs/bulk_random_dev_seed8202_rms0p03_v25.extxyz",
+      "input_sha256": "e358a455d2d9cd3dda7dcc942a2ace6c74a05ee3869c0dfe5f9d8783da363a94",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "development_candidate",
+      "split": "development",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 8202,
+        "target_rms_displacement_A": 0.03,
+        "realized_rms_displacement_A": 0.03
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_dev_seed8203_rms0p045_v25",
+      "input": "inputs/bulk_random_dev_seed8203_rms0p045_v25.extxyz",
+      "input_sha256": "7528debf4e4b567700b92233129bceef69da12c7a5eed0445a412fe3cce12f02",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "development_candidate",
+      "split": "development",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 8203,
+        "target_rms_displacement_A": 0.045,
+        "realized_rms_displacement_A": 0.04499999999999999
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    },
+    {
+      "label": "bulk_random_dev_seed8204_rms0p06_v25",
+      "input": "inputs/bulk_random_dev_seed8204_rms0p06_v25.extxyz",
+      "input_sha256": "1cc512816bb6e6013c44d02b7bdef05f292e2173c0be200e6d623b8163b1dfc8",
+      "atom_count": 12,
+      "formula": "C4Si2Ti6",
+      "role": "development_candidate",
+      "split": "development",
+      "perturbation": {
+        "kind": "zero_mean_all_atom_random_displacement",
+        "seed": 8204,
+        "target_rms_displacement_A": 0.06,
+        "realized_rms_displacement_A": 0.05999999999999999
+      },
+      "launch_enabled": true,
+      "status": "queued"
+    }
+  ],
+  "splits": {
+    "train": 19,
+    "development": 4,
+    "test": 0,
+    "note": "Counts include the 5 reused historical labels. Random development seeds are held out as whole configurations."
+  },
+  "limitations": [
+    "This initial panel is for near-structure Ti3SiC2 bulk response, not defects, surfaces, other phases, or high-temperature MD.",
+    "The 0.07 eV/A screen is a per-configuration force-vector RMSE criterion and does not bound each atom maximum error.",
+    "No sealed test set exists yet; a passing development screen does not establish general production validity.",
+    "Stress is archived for future variable-cell training/audit but the initial MACE recipe may use energy and forces only."
+  ]
+}
