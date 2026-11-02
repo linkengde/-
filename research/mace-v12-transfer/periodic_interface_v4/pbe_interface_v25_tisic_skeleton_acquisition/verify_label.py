@@ -21,14 +21,14 @@ summary = json.loads((folder/'summary.json').read_text())
 atoms = read(folder/f'{label}_PW_PBE.extxyz')
 source = read(ROOT/job['input'])
 checks = {
-    'scf_converged': summary.get('scf_converged') is True,
-    'registered_input_hash': summary.get('input_sha256') == job['input_sha256'],
-    'composition': atoms.get_chemical_formula() == 'C4Si2Ti6' and set(atoms.get_chemical_symbols()) == {'Ti','Si','C'},
-    'geometry_matches_input': len(atoms)==len(source) and np.allclose(atoms.positions,source.positions,rtol=0,atol=1e-10) and np.allclose(atoms.cell.array,source.cell.array,rtol=0,atol=1e-10),
-    'finite_force_consistent_targets': np.isfinite(float(atoms.info['REF_energy'])) and np.isfinite(atoms.arrays['REF_forces']).all(),
-    'finite_native_and_free_energy': np.isfinite(float(atoms.info['PW_PBE_energy_eV'])) and np.isfinite(float(atoms.info['PW_PBE_free_energy_eV'])),
-    'finite_stress': all(np.isfinite(float(atoms.info[f'PW_PBE_stress_{x}_eV_A3'])) for x in ('xx','yy','zz','yz','xz','xy')),
-    'no_checkpoint_in_archive': not any(p.suffix=='.gpw' for p in folder.iterdir()),
+    'scf_converged': bool(summary.get('scf_converged') is True),
+    'registered_input_hash': bool(summary.get('input_sha256') == job['input_sha256']),
+    'composition': bool(atoms.get_chemical_formula() == 'C4Si2Ti6' and set(atoms.get_chemical_symbols()) == {'Ti','Si','C'}),
+    'geometry_matches_input': bool(len(atoms)==len(source) and np.allclose(atoms.positions,source.positions,rtol=0,atol=1e-10) and np.allclose(atoms.cell.array,source.cell.array,rtol=0,atol=1e-10)),
+    'finite_force_consistent_targets': bool(np.isfinite(float(atoms.info['REF_energy'])) and np.isfinite(atoms.arrays['REF_forces']).all()),
+    'finite_native_and_free_energy': bool(np.isfinite(float(atoms.info['PW_PBE_energy_eV'])) and np.isfinite(float(atoms.info['PW_PBE_free_energy_eV']))),
+    'finite_stress': bool(all(np.isfinite(float(atoms.info[f'PW_PBE_stress_{x}_eV_A3'])) for x in ('xx','yy','zz','yz','xz','xy'))),
+    'no_checkpoint_in_archive': bool(not any(p.suffix=='.gpw' for p in folder.iterdir())),
 }
 if not all(checks.values()): raise SystemExit(json.dumps({'status':'FAIL','checks':checks},indent=2))
 print(json.dumps({'status':'PASS','label':label,'checks':checks,'archive_sha256':inventory},indent=2))

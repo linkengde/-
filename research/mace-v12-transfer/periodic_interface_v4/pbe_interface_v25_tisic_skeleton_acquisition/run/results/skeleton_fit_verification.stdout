@@ -1,0 +1,91 @@
+/workspace/.venvs/mace/lib/python3.12/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+{
+  "status": "SKELETON_ACCEPTANCE_PASS",
+  "completed_utc": "2026-11-02T16:12:39.436245Z",
+  "role": "non_official_tisic_skeleton_candidate",
+  "training_recipe": {
+    "seed": 45,
+    "epochs": 80,
+    "cpu_threads": 4,
+    "batch_size": 1,
+    "energy_weight": 100,
+    "force_weight": 1000
+  },
+  "acceptance_standard": {
+    "per_configuration_force_vector_RMSE_eV_A": 0.07
+  },
+  "additional_stricter_reference_screen": {
+    "per_configuration_force_vector_RMSE_eV_A": 0.05,
+    "status": "PASS",
+    "all_development_configurations_pass": true
+  },
+  "per_configuration": [
+    {
+      "config_type": "bulk_random_dev_seed8201_rms0p02_v25",
+      "atom_count": 12,
+      "force_vector_RMSE_eV_A": 0.009129374417557042,
+      "force_component_RMSE_eV_A": 0.0052708467775094405,
+      "force_vector_max_error_eV_A": 0.0176039580147149,
+      "pass_0p07_eV_A": true,
+      "pass_0p05_eV_A": true
+    },
+    {
+      "config_type": "bulk_random_dev_seed8202_rms0p03_v25",
+      "atom_count": 12,
+      "force_vector_RMSE_eV_A": 0.012399309373943375,
+      "force_component_RMSE_eV_A": 0.007158744604811658,
+      "force_vector_max_error_eV_A": 0.019384789714013275,
+      "pass_0p07_eV_A": true,
+      "pass_0p05_eV_A": true
+    },
+    {
+      "config_type": "bulk_random_dev_seed8203_rms0p045_v25",
+      "atom_count": 12,
+      "force_vector_RMSE_eV_A": 0.01853743399058776,
+      "force_component_RMSE_eV_A": 0.01070259250455076,
+      "force_vector_max_error_eV_A": 0.0323964929988637,
+      "pass_0p07_eV_A": true,
+      "pass_0p05_eV_A": true
+    },
+    {
+      "config_type": "bulk_random_dev_seed8204_rms0p06_v25",
+      "atom_count": 12,
+      "force_vector_RMSE_eV_A": 0.03294758031931157,
+      "force_component_RMSE_eV_A": 0.019022294366501352,
+      "force_vector_max_error_eV_A": 0.08528854980353974,
+      "pass_0p07_eV_A": true,
+      "pass_0p05_eV_A": true
+    }
+  ],
+  "all_development_configurations_pass": true,
+  "aggregate_force_vector_RMSE_eV_A": 0.020409972183099555,
+  "verification": {
+    "epoch_log_coverage_pass": true,
+    "epoch_checkpoint_coverage_pass": true,
+    "epoch_checkpoint_count": 80,
+    "retained_epoch_checkpoints": [
+      79
+    ],
+    "checkpoint_archive_pruned_after_full_verification": true,
+    "epoch79_export_marker_pass": true,
+    "epoch79_checkpoint_export_tensor_identity_pass": true,
+    "selected_checkpoint_sha256": "0e6aaf49e6d500d7070d143cd2deab5982efa85a08b001823cfff60b6be711a4",
+    "epoch79_checkpoint_sha256": "6ff5a39770e684e5c5058700e8c1f6040299ac50b49691cc8c20df5de969c84e",
+    "exported_model_sha256": "d5922fb482bcd6a8ecfa7775694fcba2d797d34f7c590589478a8486a1291bfe",
+    "dataset_manifest_sha256": "b4b83e1a81e36f8685e9c5779302596e46be1b63f9e643b7bfb46b92121f1825",
+    "training_receipt": {
+      "completed_utc": "2026-11-02T15:55:10.608777+00:00",
+      "fit_verification_status": "SKELETON_ACCEPTANCE_PASS",
+      "status": "SKELETON_ACCEPTANCE_PASS",
+      "training_command_exit_code": 0,
+      "verification_completed_utc": "2026-11-02T16:12:39.436245Z"
+    }
+  },
+  "limitations": [
+    "The standard is applied to four development configurations, which are not an independent blind test.",
+    "Passing establishes only this skeleton-candidate acceptance; it does not establish transferability to Ag-containing interfaces or general production use.",
+    "The 0.07 eV/A criterion is per-configuration force-vector RMSE, not a maximum atomwise error bound."
+  ]
+}

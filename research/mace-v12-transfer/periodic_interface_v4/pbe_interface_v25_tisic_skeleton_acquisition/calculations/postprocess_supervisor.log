@@ -1,0 +1,20 @@
+All DFT archives verified; assembling and fitting the Ti-Si-C skeleton candidate.
+Traceback (most recent call last):
+  File "/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/prepare_dataset.py", line 52, in <module>
+    a=read(io.BytesIO(raw),format='extxyz')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/mace/lib/python3.12/site-packages/ase/io/formats.py", line 821, in read
+    return next(_iread(filename, slice(index, None), format, io,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/mace/lib/python3.12/site-packages/ase/parallel.py", line 301, in new_generator
+    for result in generator(*args, **kwargs):
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/mace/lib/python3.12/site-packages/ase/io/formats.py", line 887, in _iread
+    for dct in io.read(fd, *args, **kwargs):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venvs/mace/lib/python3.12/site-packages/ase/io/formats.py", line 645, in wrap_read_function
+    yield from read(filename, index, **kwargs)
+  File "/workspace/.venvs/mace/lib/python3.12/site-packages/ase/io/extxyz.py", line 716, in read_xyz
+    if line.lstrip().startswith('VEC'):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: startswith first arg must be bytes or a tuple of bytes, not str

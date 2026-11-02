@@ -1,0 +1,264 @@
+2026-11-02 15:25:58.171 INFO: ===========VERIFYING SETTINGS===========
+2026-11-02 15:25:58.172 INFO: MACE version: 0.3.16
+2026-11-02 15:25:58.172 DEBUG: Configuration: Namespace(config=None, name='MACE_TiSiC_skeleton_v25', seed=45, work_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run', log_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/logs', model_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/models', checkpoints_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints', results_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/results', downloads_dir='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/downloads', device='cpu', default_dtype='float64', distributed=False, launcher='slurm', log_level='INFO', plot=True, plot_frequency=0, plot_interaction_e=False, error_table='PerAtomRMSE', model='MACE', r_max=5.0, radial_type='bessel', num_radial_basis=8, num_cutoff_basis=5, pair_repulsion=False, distance_transform='None', apply_cutoff=True, use_last_readout_only=False, use_embedding_readout=False, interaction='RealAgnosticResidualInteractionBlock', interaction_first='RealAgnosticResidualInteractionBlock', max_ell=3, correlation=3, use_reduced_cg=False, use_so3=False, use_agnostic_product=False, num_interactions=2, MLP_irreps='16x0e', radial_MLP='[64, 64, 64]', hidden_irreps='128x0e + 128x1o', edge_irreps=None, use_edge_irreps_first=False, num_channels=128, max_L=1, gate='silu', kspace_cutoff_factor=1.5, atomic_multipoles_max_l=0, atomic_multipoles_smearing_width=1.0, field_feature_max_l=0, field_feature_widths='[1.0]', field_feature_norms=None, num_recursion_steps=1, field_si=False, include_electrostatic_self_interaction=False, add_local_electron_energy=False, quadrupole_feature_corrections=False, return_electrostatic_potentials=False, field_norm_factor=0.02, fixedpoint_update_config=None, field_readout_config=None, scaling='rms_forces_scaling', avg_num_neighbors=1, compute_avg_num_neighbors=True, compute_stress=False, compute_forces=True, compute_polarizability=False, compute_atomic_dipole=False, train_file='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset/train.extxyz', valid_file='/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset/valid.extxyz', valid_fraction=0.1, test_file=None, test_dir=None, multi_processed_test=False, num_workers=0, pin_memory=True, atomic_numbers=None, mean=None, std=None, statistics_file=None, les_arguments=None, E0s='estimated', pseudolabel_replay=False, pseudolabel_replay_compute_stress=False, foundation_filter_elements=True, heads=None, multiheads_finetuning=True, foundation_head=None, weight_pt_head=1.0, real_pt_data_ratio_threshold=0.1, num_samples_pt=10000, force_mh_ft_lr=False, subselect_pt='random', filter_type_pt='none', allow_random_padding_pt=True, pt_train_file=None, pt_valid_file=None, foundation_model_elements=False, keep_isolated_atoms=False, lora=False, lora_rank=4, lora_alpha=1.0, energy_key='REF_energy', forces_key='REF_forces', virials_key='REF_virials', stress_key='REF_stress', dipole_key='dipole', polarizability_key='polarizability', head_key='head', charges_key='REF_charges', elec_temp_key='elec_temp', total_spin_key='total_spin', total_charge_key='total_charge', embedding_specs=None, skip_evaluate_heads='pt_head', loss='weighted', forces_weight=1000.0, swa_forces_weight=100.0, energy_weight=100.0, swa_energy_weight=1000.0, virials_weight=1.0, swa_virials_weight=10.0, stress_weight=1.0, swa_stress_weight=10.0, dipole_weight=1.0, swa_dipole_weight=1.0, swa_polarizability_weight=1.0, polarizability_weight=1.0, config_type_weights='{"Default":1.0}', huber_delta=0.01, optimizer='adam', beta=0.9, beta1_schedulefree=0.9, beta2_schedulefree=0.98, batch_size=1, valid_batch_size=10, lr=0.0001, swa_lr=0.001, weight_decay=5e-07, lr_params_factors='{"embedding_lr_factor": 1.0, "interactions_lr_factor": 1.0, "products_lr_factor": 1.0, "readouts_lr_factor": 1.0}', freeze=None, amsgrad=True, scheduler='ReduceLROnPlateau', lr_factor=0.8, scheduler_patience=50, lr_scheduler_gamma=0.9993, swa=False, start_swa=None, lbfgs=False, ema=False, ema_decay=0.99, max_num_epochs=80, patience=2048, foundation_model='/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model', foundation_model_kwargs='{}', foundation_model_readout=True, eval_interval=1, keep_checkpoints=True, save_all_checkpoints=True, restart_latest=False, save_cpu=False, clip_grad=10.0, dry_run=False, enable_cueq=False, only_cueq=False, enable_oeq=False, wandb=False, wandb_dir=None, wandb_project='', wandb_entity='', wandb_name='', wandb_log_hypers=['num_channels', 'max_L', 'correlation', 'lr', 'swa_lr', 'weight_decay', 'batch_size', 'max_num_epochs', 'start_swa', 'energy_weight', 'forces_weight'], key_specification=KeySpecification(info_keys={'energy': 'REF_energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'REF_forces', 'charges': 'REF_charges'}))
+2026-11-02 15:25:58.172 INFO: Using CPU
+2026-11-02 15:25:58.214 DEBUG: Popen(['git', 'version'], cwd=/workspace/jeitschko-main-run, stdin=None, shell=False, universal_newlines=False)
+2026-11-02 15:25:58.217 DEBUG: Popen(['git', 'version'], cwd=/workspace/jeitschko-main-run, stdin=None, shell=False, universal_newlines=False)
+2026-11-02 15:25:58.220 DEBUG: sys.platform='linux', git_executable='git'
+2026-11-02 15:25:58.220 DEBUG: sys.platform='linux', git_executable='git'
+2026-11-02 15:25:58.222 DEBUG: Popen(['git', 'cat-file', '--batch-check'], cwd=/workspace/jeitschko-main-run, stdin=<valid stream>, shell=False, universal_newlines=False)
+2026-11-02 15:25:58.225 DEBUG: Current Git commit: 7459a64a053f04d73db71de102ff5ecc9ab23b1f
+2026-11-02 15:25:58.466 INFO: Using foundation model /workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v12_interface_energy/foundation_models/mace-mp-0b3-medium.model as initial checkpoint.
+2026-11-02 15:25:58.467 WARNING: Using multiheads finetuning with a foundation model that is not a Materials Project model, need to provied a path to a pretraining file with --pt_train_file.
+2026-11-02 15:25:58.467 INFO: ===========LOADING INPUT DATA===========
+2026-11-02 15:25:58.467 INFO: Using heads: ['Default']
+2026-11-02 15:25:58.467 INFO: Using the key specifications to parse data:
+2026-11-02 15:25:58.467 INFO: Default: KeySpecification(info_keys={'energy': 'REF_energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'REF_forces', 'charges': 'REF_charges'})
+2026-11-02 15:25:58.467 INFO: =============    Processing head Default     ===========
+2026-11-02 15:25:58.468 DEBUG: Loading training file: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset/train.extxyz
+2026-11-02 15:25:58.497 INFO: Training set 1/1 [energy: 19, stress: 0, virials: 0, dipole components: 0, head: 19, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 19, charges: 0]
+2026-11-02 15:25:58.498 INFO: Total Training set [energy: 19, stress: 0, virials: 0, dipole components: 0, head: 19, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 19, charges: 0]
+2026-11-02 15:25:58.503 INFO: Validation set 1/1 [energy: 4, stress: 0, virials: 0, dipole components: 0, head: 4, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 4, charges: 0]
+2026-11-02 15:25:58.503 INFO: Total Validation set [energy: 4, stress: 0, virials: 0, dipole components: 0, head: 4, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 4, charges: 0]
+2026-11-02 15:25:58.503 INFO: Total number of configurations: train=19, valid=4, tests=[],
+2026-11-02 15:25:58.503 WARNING: Validation batch size (10) is larger than the number of validation data (4)
+2026-11-02 15:25:58.504 INFO: Atomic Numbers used: [6, 14, 22]
+2026-11-02 15:25:58.504 INFO: Estimating E0s from foundation model predictions on training data
+2026-11-02 15:25:58.505 INFO: Estimating E0s using foundation model on 19 configurations with 3 elements
+2026-11-02 15:26:01.466 INFO: ================================================================================
+2026-11-02 15:26:01.466 INFO: E0 ESTIMATION FROM FOUNDATION MODEL
+2026-11-02 15:26:01.466 INFO: ================================================================================
+2026-11-02 15:26:01.466 INFO: Rank of system: 1/3
+2026-11-02 15:26:01.466 INFO: Residuals: []
+2026-11-02 15:26:01.466 INFO: Element 6: foundation E0 = -1.261735 eV, correction = 0.522286 eV, new E0 = -0.739449 eV
+2026-11-02 15:26:01.466 INFO: Element 14: foundation E0 = -0.826390 eV, correction = 0.261143 eV, new E0 = -0.565247 eV
+2026-11-02 15:26:01.466 INFO: Element 22: foundation E0 = -2.500549 eV, correction = 0.783429 eV, new E0 = -1.717120 eV
+2026-11-02 15:26:01.467 INFO: ================================================================================
+2026-11-02 15:26:01.467 INFO: FIT STATISTICS
+2026-11-02 15:26:01.467 INFO: ================================================================================
+2026-11-02 15:26:01.467 INFO: RMSE before E0 correction: 7.312010 eV
+2026-11-02 15:26:01.467 INFO: RMSE after E0 correction:  0.009337 eV
+2026-11-02 15:26:01.467 INFO: MAE before E0 correction:  7.312004 eV
+2026-11-02 15:26:01.467 INFO: MAE after E0 correction:   0.005482 eV
+2026-11-02 15:26:01.467 WARNING: System is rank deficient (rank 1/3). Some elements may not be sufficiently represented in the dataset.
+2026-11-02 15:26:01.467 INFO: ================================================================================
+2026-11-02 15:26:01.468 INFO: Atomic Energies used (z: eV) for head Default: {6: -0.7394490947792071, 14: -0.5652473123896035, 22: -1.7171197471688102}
+2026-11-02 15:26:01.468 INFO: Processing datasets for head 'Default'
+2026-11-02 15:26:01.489 DEBUG: Successfully loaded dataset from ASE files: ['/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset/train.extxyz']
+2026-11-02 15:26:01.489 INFO: Combining 1 list datasets for head 'Default'
+2026-11-02 15:26:01.492 DEBUG: Successfully loaded validation dataset from ASE files: ['/workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset/valid.extxyz']
+2026-11-02 15:26:01.492 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-11-02 15:26:01.492 INFO: Combined validation datasets for Default
+2026-11-02 15:26:01.493 INFO: Head 'Default' training dataset size: 19
+2026-11-02 15:26:01.493 INFO: Computing average number of neighbors
+2026-11-02 15:26:01.510 INFO: Average number of neighbors: 73.6140350877193
+2026-11-02 15:26:01.510 INFO: During training the following quantities will be reported: energy, forces
+2026-11-02 15:26:01.510 INFO: ===========MODEL DETAILS===========
+2026-11-02 15:26:01.533 INFO: Loading FOUNDATION model
+2026-11-02 15:26:01.533 INFO: Using filtered elements: [6, 14, 22]
+2026-11-02 15:26:01.533 INFO: Model configuration extracted from foundation model
+2026-11-02 15:26:01.533 INFO: Using weighted loss function for fine-tuning
+2026-11-02 15:26:01.533 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-11-02 15:26:01.533 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-11-02 15:26:01.534 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-11-02 15:26:01.534 INFO: Distance transform for radial basis functions: Agnesi
+2026-11-02 15:26:03.091 INFO: ===========OPTIMIZER INFORMATION===========
+2026-11-02 15:26:03.091 INFO: Using ADAM as parameter optimizer
+2026-11-02 15:26:03.091 INFO: Batch size: 1
+2026-11-02 15:26:03.091 INFO: Number of gradient updates: 1520
+2026-11-02 15:26:03.092 INFO: Learning rate: 0.0001, weight decay: 5e-07
+2026-11-02 15:26:03.092 INFO: WeightedEnergyForcesLoss(energy_weight=100.000, forces_weight=1000.000)
+2026-11-02 15:26:03.092 INFO: === Layer's learning rates ===
+2026-11-02 15:26:03.092 INFO: Param group 0: lr = 0.0001
+2026-11-02 15:26:03.093 INFO: Param group 1: lr = 0.0001
+2026-11-02 15:26:03.093 INFO: Param group 2: lr = 0.0001
+2026-11-02 15:26:03.093 INFO: Param group 3: lr = 0.0001
+2026-11-02 15:26:03.093 INFO: Param group 4: lr = 0.0001
+2026-11-02 15:26:03.093 INFO: Using gradient clipping with tolerance=10.000
+2026-11-02 15:26:03.093 INFO: 
+2026-11-02 15:26:03.093 INFO: ===========TRAINING===========
+2026-11-02 15:26:03.093 INFO: Started training, reporting errors on validation set
+2026-11-02 15:26:03.093 INFO: Loss metrics on validation set
+2026-11-02 15:26:04.567 INFO: Initial: head: Default, loss=3.39768104, RMSE_E_per_atom=    3.82 meV, RMSE_F=  116.57 meV / A
+2026-11-02 15:26:22.593 INFO: Epoch 0: head: Default, loss=2.36113667, RMSE_E_per_atom=    4.61 meV, RMSE_F=   97.17 meV / A
+2026-11-02 15:26:22.595 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-0.pt
+2026-11-02 15:26:38.458 INFO: Epoch 1: head: Default, loss=1.15266403, RMSE_E_per_atom=    4.48 meV, RMSE_F=   67.89 meV / A
+2026-11-02 15:26:38.461 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-1.pt
+2026-11-02 15:27:06.212 INFO: Epoch 2: head: Default, loss=0.73714055, RMSE_E_per_atom=    4.79 meV, RMSE_F=   54.28 meV / A
+2026-11-02 15:27:06.213 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-2.pt
+2026-11-02 15:27:21.795 INFO: Epoch 3: head: Default, loss=0.51480084, RMSE_E_per_atom=    1.29 meV, RMSE_F=   45.38 meV / A
+2026-11-02 15:27:21.797 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-3.pt
+2026-11-02 15:27:36.720 INFO: Epoch 4: head: Default, loss=0.42048375, RMSE_E_per_atom=    1.24 meV, RMSE_F=   41.01 meV / A
+2026-11-02 15:27:36.721 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-4.pt
+2026-11-02 15:28:00.311 INFO: Epoch 5: head: Default, loss=0.52203815, RMSE_E_per_atom=    3.94 meV, RMSE_F=   45.68 meV / A
+2026-11-02 15:28:00.318 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-5.pt
+2026-11-02 15:28:27.781 INFO: Epoch 6: head: Default, loss=0.37039673, RMSE_E_per_atom=    0.13 meV, RMSE_F=   38.49 meV / A
+2026-11-02 15:28:27.784 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-6.pt
+2026-11-02 15:28:48.536 INFO: Epoch 7: head: Default, loss=0.34470811, RMSE_E_per_atom=    1.92 meV, RMSE_F=   37.13 meV / A
+2026-11-02 15:28:48.537 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-7.pt
+2026-11-02 15:29:07.889 INFO: Epoch 8: head: Default, loss=0.33550365, RMSE_E_per_atom=    2.75 meV, RMSE_F=   36.62 meV / A
+2026-11-02 15:29:07.890 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-8.pt
+2026-11-02 15:29:26.582 INFO: Epoch 9: head: Default, loss=0.32056560, RMSE_E_per_atom=    2.24 meV, RMSE_F=   35.80 meV / A
+2026-11-02 15:29:26.584 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-9.pt
+2026-11-02 15:29:42.915 INFO: Epoch 10: head: Default, loss=0.31047895, RMSE_E_per_atom=    1.82 meV, RMSE_F=   35.24 meV / A
+2026-11-02 15:29:42.917 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-10.pt
+2026-11-02 15:30:08.316 INFO: Epoch 11: head: Default, loss=0.34894750, RMSE_E_per_atom=    4.67 meV, RMSE_F=   37.33 meV / A
+2026-11-02 15:30:08.318 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-11.pt
+2026-11-02 15:30:38.879 INFO: Epoch 12: head: Default, loss=0.27598870, RMSE_E_per_atom=    0.43 meV, RMSE_F=   33.23 meV / A
+2026-11-02 15:30:38.881 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-12.pt
+2026-11-02 15:31:00.422 INFO: Epoch 13: head: Default, loss=0.29301352, RMSE_E_per_atom=    1.70 meV, RMSE_F=   34.23 meV / A
+2026-11-02 15:31:00.423 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-13.pt
+2026-11-02 15:31:24.082 INFO: Epoch 14: head: Default, loss=0.35040974, RMSE_E_per_atom=    0.10 meV, RMSE_F=   37.44 meV / A
+2026-11-02 15:31:24.085 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-14.pt
+2026-11-02 15:31:42.167 INFO: Epoch 15: head: Default, loss=0.26300483, RMSE_E_per_atom=    2.20 meV, RMSE_F=   32.43 meV / A
+2026-11-02 15:31:42.171 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-15.pt
+2026-11-02 15:32:00.083 INFO: Epoch 16: head: Default, loss=0.22771114, RMSE_E_per_atom=    2.67 meV, RMSE_F=   30.17 meV / A
+2026-11-02 15:32:00.086 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-16.pt
+2026-11-02 15:32:16.523 INFO: Epoch 17: head: Default, loss=0.27651968, RMSE_E_per_atom=    2.07 meV, RMSE_F=   33.25 meV / A
+2026-11-02 15:32:16.525 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-17.pt
+2026-11-02 15:32:40.376 INFO: Epoch 18: head: Default, loss=0.20350661, RMSE_E_per_atom=    2.12 meV, RMSE_F=   28.52 meV / A
+2026-11-02 15:32:40.377 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-18.pt
+2026-11-02 15:32:59.378 INFO: Epoch 19: head: Default, loss=0.22040460, RMSE_E_per_atom=    0.62 meV, RMSE_F=   29.69 meV / A
+2026-11-02 15:32:59.380 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-19.pt
+2026-11-02 15:33:17.430 INFO: Epoch 20: head: Default, loss=0.23106926, RMSE_E_per_atom=    2.92 meV, RMSE_F=   30.39 meV / A
+2026-11-02 15:33:17.431 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-20.pt
+2026-11-02 15:33:36.237 INFO: Epoch 21: head: Default, loss=0.18017972, RMSE_E_per_atom=    6.25 meV, RMSE_F=   26.77 meV / A
+2026-11-02 15:33:36.239 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-21.pt
+2026-11-02 15:34:00.142 INFO: Epoch 22: head: Default, loss=0.16993320, RMSE_E_per_atom=    3.96 meV, RMSE_F=   26.04 meV / A
+2026-11-02 15:34:00.145 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-22.pt
+2026-11-02 15:34:18.996 INFO: Epoch 23: head: Default, loss=0.20534704, RMSE_E_per_atom=    0.89 meV, RMSE_F=   28.66 meV / A
+2026-11-02 15:34:18.997 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-23.pt
+2026-11-02 15:34:34.216 INFO: Epoch 24: head: Default, loss=0.13852809, RMSE_E_per_atom=    1.22 meV, RMSE_F=   23.54 meV / A
+2026-11-02 15:34:34.220 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-24.pt
+2026-11-02 15:34:49.788 INFO: Epoch 25: head: Default, loss=0.12674698, RMSE_E_per_atom=    0.19 meV, RMSE_F=   22.52 meV / A
+2026-11-02 15:34:49.790 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-25.pt
+2026-11-02 15:35:13.034 INFO: Epoch 26: head: Default, loss=0.12957706, RMSE_E_per_atom=    0.31 meV, RMSE_F=   22.77 meV / A
+2026-11-02 15:35:13.036 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-26.pt
+2026-11-02 15:35:55.407 INFO: Epoch 27: head: Default, loss=0.12439157, RMSE_E_per_atom=    1.72 meV, RMSE_F=   22.30 meV / A
+2026-11-02 15:35:55.409 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-27.pt
+2026-11-02 15:36:12.044 INFO: Epoch 28: head: Default, loss=0.10660068, RMSE_E_per_atom=    0.42 meV, RMSE_F=   20.65 meV / A
+2026-11-02 15:36:12.046 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-28.pt
+2026-11-02 15:36:30.674 INFO: Epoch 29: head: Default, loss=0.09946225, RMSE_E_per_atom=    0.07 meV, RMSE_F=   19.95 meV / A
+2026-11-02 15:36:30.676 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-29.pt
+2026-11-02 15:36:46.889 INFO: Epoch 30: head: Default, loss=0.09563287, RMSE_E_per_atom=    1.57 meV, RMSE_F=   19.55 meV / A
+2026-11-02 15:36:46.892 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-30.pt
+2026-11-02 15:37:11.623 INFO: Epoch 31: head: Default, loss=0.08498537, RMSE_E_per_atom=    3.15 meV, RMSE_F=   18.41 meV / A
+2026-11-02 15:37:11.625 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-31.pt
+2026-11-02 15:37:28.091 INFO: Epoch 32: head: Default, loss=0.08359388, RMSE_E_per_atom=    2.18 meV, RMSE_F=   18.27 meV / A
+2026-11-02 15:37:28.093 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-32.pt
+2026-11-02 15:37:46.724 INFO: Epoch 33: head: Default, loss=0.07666363, RMSE_E_per_atom=    0.05 meV, RMSE_F=   17.51 meV / A
+2026-11-02 15:37:46.725 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-33.pt
+2026-11-02 15:38:04.691 INFO: Epoch 34: head: Default, loss=0.07434156, RMSE_E_per_atom=    0.21 meV, RMSE_F=   17.24 meV / A
+2026-11-02 15:38:04.693 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-34.pt
+2026-11-02 15:39:02.198 INFO: Epoch 35: head: Default, loss=0.07386973, RMSE_E_per_atom=    0.42 meV, RMSE_F=   17.19 meV / A
+2026-11-02 15:39:02.202 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-35.pt
+2026-11-02 15:39:21.225 INFO: Epoch 36: head: Default, loss=0.06879481, RMSE_E_per_atom=    1.45 meV, RMSE_F=   16.58 meV / A
+2026-11-02 15:39:21.227 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-36.pt
+2026-11-02 15:39:36.341 INFO: Epoch 37: head: Default, loss=0.06173053, RMSE_E_per_atom=    1.31 meV, RMSE_F=   15.71 meV / A
+2026-11-02 15:39:36.343 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-37.pt
+2026-11-02 15:39:52.491 INFO: Epoch 38: head: Default, loss=0.06140262, RMSE_E_per_atom=    0.14 meV, RMSE_F=   15.67 meV / A
+2026-11-02 15:39:52.494 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-38.pt
+2026-11-02 15:40:09.501 INFO: Epoch 39: head: Default, loss=0.05808732, RMSE_E_per_atom=    3.44 meV, RMSE_F=   15.20 meV / A
+2026-11-02 15:40:09.503 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-39.pt
+2026-11-02 15:40:26.897 INFO: Epoch 40: head: Default, loss=0.05913444, RMSE_E_per_atom=    3.58 meV, RMSE_F=   15.34 meV / A
+2026-11-02 15:40:26.900 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-40.pt
+2026-11-02 15:40:44.228 INFO: Epoch 41: head: Default, loss=0.05332917, RMSE_E_per_atom=    0.53 meV, RMSE_F=   14.60 meV / A
+2026-11-02 15:40:44.231 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-41.pt
+2026-11-02 15:41:01.273 INFO: Epoch 42: head: Default, loss=0.05254705, RMSE_E_per_atom=    0.87 meV, RMSE_F=   14.50 meV / A
+2026-11-02 15:41:01.275 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-42.pt
+2026-11-02 15:41:17.312 INFO: Epoch 43: head: Default, loss=0.06839661, RMSE_E_per_atom=    3.46 meV, RMSE_F=   16.50 meV / A
+2026-11-02 15:41:17.313 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-43.pt
+2026-11-02 15:41:34.608 INFO: Epoch 44: head: Default, loss=0.05061326, RMSE_E_per_atom=    0.22 meV, RMSE_F=   14.23 meV / A
+2026-11-02 15:41:34.610 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-44.pt
+2026-11-02 15:42:01.935 INFO: Epoch 45: head: Default, loss=0.04599786, RMSE_E_per_atom=    2.31 meV, RMSE_F=   13.54 meV / A
+2026-11-02 15:42:01.937 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-45.pt
+2026-11-02 15:42:21.809 INFO: Epoch 46: head: Default, loss=0.04433778, RMSE_E_per_atom=    0.20 meV, RMSE_F=   13.32 meV / A
+2026-11-02 15:42:21.811 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-46.pt
+2026-11-02 15:42:41.212 INFO: Epoch 47: head: Default, loss=0.04782696, RMSE_E_per_atom=    0.14 meV, RMSE_F=   13.83 meV / A
+2026-11-02 15:42:41.216 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-47.pt
+2026-11-02 15:42:57.129 INFO: Epoch 48: head: Default, loss=0.04369286, RMSE_E_per_atom=    2.22 meV, RMSE_F=   13.20 meV / A
+2026-11-02 15:42:57.131 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-48.pt
+2026-11-02 15:43:17.791 INFO: Epoch 49: head: Default, loss=0.04818289, RMSE_E_per_atom=    1.59 meV, RMSE_F=   13.87 meV / A
+2026-11-02 15:43:17.793 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-49.pt
+2026-11-02 15:44:13.923 INFO: Epoch 50: head: Default, loss=0.04546042, RMSE_E_per_atom=    0.33 meV, RMSE_F=   13.48 meV / A
+2026-11-02 15:44:13.926 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-50.pt
+2026-11-02 15:44:33.116 INFO: Epoch 51: head: Default, loss=0.04147833, RMSE_E_per_atom=    0.38 meV, RMSE_F=   12.88 meV / A
+2026-11-02 15:44:33.119 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-51.pt
+2026-11-02 15:44:49.283 INFO: Epoch 52: head: Default, loss=0.03996840, RMSE_E_per_atom=    0.92 meV, RMSE_F=   12.64 meV / A
+2026-11-02 15:44:49.285 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-52.pt
+2026-11-02 15:45:07.866 INFO: Epoch 53: head: Default, loss=0.04031794, RMSE_E_per_atom=    0.55 meV, RMSE_F=   12.70 meV / A
+2026-11-02 15:45:07.869 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-53.pt
+2026-11-02 15:45:24.857 INFO: Epoch 54: head: Default, loss=0.03805025, RMSE_E_per_atom=    1.47 meV, RMSE_F=   12.33 meV / A
+2026-11-02 15:45:24.858 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-54.pt
+2026-11-02 15:45:44.302 INFO: Epoch 55: head: Default, loss=0.03723021, RMSE_E_per_atom=    1.16 meV, RMSE_F=   12.20 meV / A
+2026-11-02 15:45:44.303 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-55.pt
+2026-11-02 15:46:01.094 INFO: Epoch 56: head: Default, loss=0.03985461, RMSE_E_per_atom=    0.87 meV, RMSE_F=   12.62 meV / A
+2026-11-02 15:46:01.096 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-56.pt
+2026-11-02 15:46:19.341 INFO: Epoch 57: head: Default, loss=0.03690929, RMSE_E_per_atom=    0.70 meV, RMSE_F=   12.15 meV / A
+2026-11-02 15:46:19.342 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-57.pt
+2026-11-02 15:46:38.348 INFO: Epoch 58: head: Default, loss=0.03548358, RMSE_E_per_atom=    0.37 meV, RMSE_F=   11.91 meV / A
+2026-11-02 15:46:38.349 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-58.pt
+2026-11-02 15:46:54.880 INFO: Epoch 59: head: Default, loss=0.03925909, RMSE_E_per_atom=    1.01 meV, RMSE_F=   12.53 meV / A
+2026-11-02 15:46:54.882 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-59.pt
+2026-11-02 15:47:10.341 INFO: Epoch 60: head: Default, loss=0.03611824, RMSE_E_per_atom=    0.84 meV, RMSE_F=   12.02 meV / A
+2026-11-02 15:47:10.343 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-60.pt
+2026-11-02 15:47:26.079 INFO: Epoch 61: head: Default, loss=0.03525416, RMSE_E_per_atom=    0.10 meV, RMSE_F=   11.87 meV / A
+2026-11-02 15:47:26.081 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-61.pt
+2026-11-02 15:47:42.151 INFO: Epoch 62: head: Default, loss=0.03826958, RMSE_E_per_atom=    0.31 meV, RMSE_F=   12.37 meV / A
+2026-11-02 15:47:42.153 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-62.pt
+2026-11-02 15:48:00.334 INFO: Epoch 63: head: Default, loss=0.03622709, RMSE_E_per_atom=    0.92 meV, RMSE_F=   12.03 meV / A
+2026-11-02 15:48:00.337 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-63.pt
+2026-11-02 15:48:16.614 INFO: Epoch 64: head: Default, loss=0.03436097, RMSE_E_per_atom=    0.26 meV, RMSE_F=   11.72 meV / A
+2026-11-02 15:48:16.616 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-64.pt
+2026-11-02 15:48:34.863 INFO: Epoch 65: head: Default, loss=0.03413953, RMSE_E_per_atom=    1.10 meV, RMSE_F=   11.68 meV / A
+2026-11-02 15:48:34.866 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-65.pt
+2026-11-02 15:48:58.087 INFO: Epoch 66: head: Default, loss=0.03784923, RMSE_E_per_atom=    0.16 meV, RMSE_F=   12.30 meV / A
+2026-11-02 15:48:58.090 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-66.pt
+2026-11-02 15:49:15.927 INFO: Epoch 67: head: Default, loss=0.03657956, RMSE_E_per_atom=    0.26 meV, RMSE_F=   12.10 meV / A
+2026-11-02 15:49:15.929 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-67.pt
+2026-11-02 15:49:33.983 INFO: Epoch 68: head: Default, loss=0.03586787, RMSE_E_per_atom=    1.34 meV, RMSE_F=   11.97 meV / A
+2026-11-02 15:49:33.986 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-68.pt
+2026-11-02 15:50:03.848 INFO: Epoch 69: head: Default, loss=0.03452457, RMSE_E_per_atom=    0.15 meV, RMSE_F=   11.75 meV / A
+2026-11-02 15:50:03.851 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-69.pt
+2026-11-02 15:50:34.533 INFO: Epoch 70: head: Default, loss=0.03344038, RMSE_E_per_atom=    0.61 meV, RMSE_F=   11.56 meV / A
+2026-11-02 15:50:34.534 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-70.pt
+2026-11-02 15:51:06.585 INFO: Epoch 71: head: Default, loss=0.03331557, RMSE_E_per_atom=    0.14 meV, RMSE_F=   11.54 meV / A
+2026-11-02 15:51:06.587 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-71.pt
+2026-11-02 15:51:41.278 INFO: Epoch 72: head: Default, loss=0.03253170, RMSE_E_per_atom=    0.46 meV, RMSE_F=   11.41 meV / A
+2026-11-02 15:51:41.280 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-72.pt
+2026-11-02 15:52:05.003 INFO: Epoch 73: head: Default, loss=0.03297048, RMSE_E_per_atom=    0.14 meV, RMSE_F=   11.48 meV / A
+2026-11-02 15:52:05.005 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-73.pt
+2026-11-02 15:52:53.972 INFO: Epoch 74: head: Default, loss=0.03276739, RMSE_E_per_atom=    0.33 meV, RMSE_F=   11.45 meV / A
+2026-11-02 15:52:53.973 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-74.pt
+2026-11-02 15:53:22.347 INFO: Epoch 75: head: Default, loss=0.03349218, RMSE_E_per_atom=    0.48 meV, RMSE_F=   11.57 meV / A
+2026-11-02 15:53:22.348 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-75.pt
+2026-11-02 15:53:52.083 INFO: Epoch 76: head: Default, loss=0.03384004, RMSE_E_per_atom=    0.11 meV, RMSE_F=   11.63 meV / A
+2026-11-02 15:53:52.086 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-76.pt
+2026-11-02 15:54:10.114 INFO: Epoch 77: head: Default, loss=0.03536512, RMSE_E_per_atom=    0.53 meV, RMSE_F=   11.89 meV / A
+2026-11-02 15:54:10.115 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-77.pt
+2026-11-02 15:54:29.742 INFO: Epoch 78: head: Default, loss=0.03213197, RMSE_E_per_atom=    0.60 meV, RMSE_F=   11.34 meV / A
+2026-11-02 15:54:29.744 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-78.pt
+2026-11-02 15:54:54.489 INFO: Epoch 79: head: Default, loss=0.03474105, RMSE_E_per_atom=    1.04 meV, RMSE_F=   11.78 meV / A
+2026-11-02 15:54:54.494 DEBUG: Saving checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-79.pt
+2026-11-02 15:54:54.533 INFO: Training complete
+2026-11-02 15:54:54.534 INFO: 
+2026-11-02 15:54:54.535 INFO: ===========RESULTS===========
+2026-11-02 15:54:54.541 INFO: Loading checkpoint: /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45_epoch-79.pt
+2026-11-02 15:54:54.575 INFO: Loaded Stage one model from epoch 79 for evaluation
+2026-11-02 15:54:54.576 INFO: Saving model to /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/checkpoints/MACE_TiSiC_skeleton_v25_run-45.model
+2026-11-02 15:54:54.898 INFO: Compiling model, saving metadata to /workspace/jeitschko-main-run/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/run/models/MACE_TiSiC_skeleton_v25_compiled.model
+2026-11-02 15:54:55.912 INFO: Computing metrics for training, validation, and test sets
+2026-11-02 15:54:55.913 INFO: Skipping evaluation for heads: ['pt_head']
+2026-11-02 15:54:55.914 INFO: Evaluating train_Default ...
+2026-11-02 15:55:00.736 INFO: Evaluating valid_Default ...
+2026-11-02 15:55:01.658 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % |
++---------------+---------------------+------------------+-------------------+
+| train_Default |            1.1      |          3.5     |          1.03     |
+| valid_Default |            1.0      |         11.8     |          2.35     |
++---------------+---------------------+------------------+-------------------+
+2026-11-02 15:55:01.661 DEBUG: Running inference on train_Default dataset
+2026-11-02 15:55:06.079 DEBUG: Running inference on valid_Default dataset
+2026-11-02 15:55:07.208 DEBUG: Plotting failed: label must be scalar or have the same length as the input data, but found 2 for 1 datasets.
+2026-11-02 15:55:07.209 INFO: Done

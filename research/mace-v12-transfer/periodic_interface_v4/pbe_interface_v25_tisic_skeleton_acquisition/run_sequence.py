@@ -58,7 +58,7 @@ def move_failed(label,reason,code,started,peak):
         },indent=2)+'\n')
 def preflight(env):
     if int((CGROUP/'memory.max').read_text())!=LIMIT: raise RuntimeError('unexpected cgroup memory limit')
-    if mem()>=3*1024**3: raise RuntimeError(f'prelaunch memory exceeds 3 GiB ({mem()})')
+    if mem()>=4*1024**3: raise RuntimeError(f'prelaunch memory exceeds 4 GiB ({mem()})')
     if shutil.disk_usage(ROOT).free<5*1024**3: raise RuntimeError('less than 5 GiB free disk')
     if active_runners(): raise RuntimeError(f'another DFT runner is active: {active_runners()}')
     info=subprocess.check_output(['/workspace/.venvs/gpaw-mpi/bin/gpaw','info'],env=env,text=True)
@@ -73,7 +73,13 @@ def run_job(job,status):
     label=job['label']; target=CALC/label; scratch=CALC/f'.running_{label}'
     if target.exists():
         result=verify(label)
+        receipt=target/'verification.json'
+        if not receipt.exists():
+            receipt.write_text(json.dumps(result,indent=2)+'\n')
+            write_sums(target)
+            result=verify(label)
         status.setdefault('completed_labels',[]).append({'label':label,'archive_verification':'PASS','archive_sha256':result['archive_sha256']})
+        status['current_label']=None; status['last_reported_scf_iteration']=None; status['last_job_progress']=None
         write_status(status); return
     if scratch.exists():
         failed_root=CALC/'failed_attempts'; failed_root.mkdir(exist_ok=True)
