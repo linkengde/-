@@ -1,0 +1,1148 @@
+{
+  "dataset_integration_enabled": false,
+  "geometry_perturbation_policy": "On each registered AgTi, AgSi and AgC training-interface parent, displace the four C atoms in the symmetry orbit nearest the registered central contact pair by ±0.02 Å along the surface normal. Geometry generation reads only parent geometry; frozen dev3 is used only for geometry-only duplicate screening.",
+  "geometry_screens": {
+    "frozen_dev3_exact_hits": 0,
+    "frozen_dev3_near_hits": 0,
+    "screened_against": "train55 and frozen dev3 using geometry-only parser",
+    "train55_exact_hits": 0,
+    "train55_expected_near_hit_types": [
+      "registered parent",
+      "same-interface v23 topmost-Ti response pair"
+    ],
+    "train55_unexpected_near_hits": 0,
+    "within_panel_paired_displacements_are_intentional": true
+  },
+  "labels_or_forces_read": false,
+  "launch_enabled": true,
+  "limitations": [
+    "All six configurations share one crystallographic source family and registry-B slab construction.",
+    "The panel samples one contact-nearest C orbit at fixed geometry and does not establish broad interface coverage.",
+    "Native extrapolated energy and finite-smearing forces follow the existing convention; exact energy-force gradient consistency is not claimed.",
+    "Slab k-point, smearing and vacuum convergence are not fully established."
+  ],
+  "method_candidate": {
+    "ASE_version": "3.29.0",
+    "GPAW_version": "26.7.0",
+    "PAW_data_version": "1.2.1",
+    "PAW_setup_sha256": {
+      "Ag.PBE.gz": "bff00ac79a7fa6e8c3a71c8b34d3a9c488e6bf1c00b3e9c4c91c231551145e97",
+      "C.PBE.gz": "fbef4c5328af74d9fb1b5b7f9aa024cd9ec5a2b9b862351f5cff280e0f83c983",
+      "Si.PBE.gz": "2defcf97f4072f0946dd4ad44cbb78bb48987a64f38a79afbf62ff66c6154ef0",
+      "Ti.PBE.gz": "bf822f91317bebbb6ea9b456dc4e8f72fb2a8b824984221578bf1bd7048add2f"
+    },
+    "basis": "plane wave",
+    "candidate_kpts": [
+      6,
+      6,
+      1
+    ],
+    "cutoff_eV": 500,
+    "maximum_concurrent_jobs": 1,
+    "mixer": {
+      "beta": 0.05,
+      "nmaxold": 8,
+      "type": "Pulay",
+      "weight": 100
+    },
+    "mpi_ranks": 4,
+    "pbc": [
+      true,
+      true,
+      false
+    ],
+    "poissonsolver": {
+      "dipolelayer": "xy"
+    },
+    "scf_thresholds": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "smearing_eV": 0.1,
+    "xc": "PBE"
+  },
+  "preflight_jobs": [
+    {
+      "geometry_label": "AgTi_registryB_contact_C_orbit_z-0.02A",
+      "input": "inputs/AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "641f1c0f8ba0cc4d3c1c0b0165751fa48e745fb4b8312d60802830f2a7cb4e40",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgTi_registryB_contact_C_orbit_z+0.02A",
+      "input": "inputs/AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "78515b71e7800260b38a57427c3a6f347fde3c99e7cdb0fb246d81351c5c12a3",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgSi_registryB_contact_C_orbit_z-0.02A",
+      "input": "inputs/AgSi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "73ad572ec0223732a7bc3fe3659cada153eeabb36f586addc7934b767a72b0e2",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgSi_registryB_contact_C_orbit_z+0.02A",
+      "input": "inputs/AgSi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "c241322c1e60e732bdcae541a852dbabd7ca1495c87e9681142f3c4b9d59bc13",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgSi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgC_registryB_contact_C_orbit_z-0.02A",
+      "input": "inputs/AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "53c7ab546bceb106cf4d77ca36ac87215008ad4d0d8a2f9a9a564fa706c7cb0b",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    },
+    {
+      "geometry_label": "AgC_registryB_contact_C_orbit_z+0.02A",
+      "input": "inputs/AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "dc828add432f5e463b19476c20eee4df3badba2cc9f1b47cb0d0fb6945adc0c5",
+      "kpts": [
+        6,
+        6,
+        1
+      ],
+      "label": "AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "role": "train_acquisition_candidate_pending_audit",
+      "smearing_eV": 0.1
+    }
+  ],
+  "records": [
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgTi_registryB_contact_C_orbit_z-0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 2.0195667000000004,
+            "all_atom_RMS_A": 4.932409386713001,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 36,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 38,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 43,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 44,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.2195666999999997,
+            "all_atom_RMS_A": 4.939016075602265,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 45,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 1.819566700000001,
+            "all_atom_RMS_A": 4.92641845232064,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 46,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 49,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 50,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.932412505799296,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 51,
+            "framework_RMS_A": 5.100607488329208,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195667000000004,
+            "all_atom_RMS_A": 4.932412505799296,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 52,
+            "framework_RMS_A": 5.100607488329208,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "641f1c0f8ba0cc4d3c1c0b0165751fa48e745fb4b8312d60802830f2a7cb4e40",
+      "intentional_train55_near_hit_frame_indices": [
+        38,
+        49,
+        50
+      ],
+      "intentional_train55_parent_frame_index": 38,
+      "intentional_train55_v23_response_frame_indices": [
+        49,
+        50
+      ],
+      "interface": "AgTi",
+      "label": "AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.717939386509725,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20302008,
+        20302020,
+        20302032,
+        20302044
+      ],
+      "target_contact_nearest_mean_distance_A": 5.693062390941186,
+      "target_displacement_z_A": -0.02,
+      "target_element": "C",
+      "target_original_z_A": 18.4513
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgTi_registryB_contact_C_orbit_z+0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.932409386713001,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 36,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 38,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 43,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 44,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.219566699999999,
+            "all_atom_RMS_A": 4.939016075602265,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 45,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 1.8195667000000002,
+            "all_atom_RMS_A": 4.92641845232064,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 46,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 49,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 50,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999986,
+            "all_atom_RMS_A": 4.932412505799296,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 51,
+            "framework_RMS_A": 5.100607488329208,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.932412505799296,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 52,
+            "framework_RMS_A": 5.100607488329208,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "78515b71e7800260b38a57427c3a6f347fde3c99e7cdb0fb246d81351c5c12a3",
+      "intentional_train55_near_hit_frame_indices": [
+        38,
+        49,
+        50
+      ],
+      "intentional_train55_parent_frame_index": 38,
+      "intentional_train55_v23_response_frame_indices": [
+        49,
+        50
+      ],
+      "interface": "AgTi",
+      "label": "AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.717939386509725,
+      "minimum_periodic_pair_distance_A": 2.106914228117906,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgTi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "3e56bf52cbe7a3c405ae1d44b95255af499cbbea4e3c4ed96cecaee93e083e42",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20302008,
+        20302020,
+        20302032,
+        20302044
+      ],
+      "target_contact_nearest_mean_distance_A": 5.693062390941186,
+      "target_displacement_z_A": 0.02,
+      "target_element": "C",
+      "target_original_z_A": 18.4513
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgSi_registryB_contact_C_orbit_z-0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 36,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.932409386713001,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 38,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 1.8195667000000002,
+            "all_atom_RMS_A": 4.92641845232064,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 43,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.219566699999999,
+            "all_atom_RMS_A": 4.939016075602265,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 44,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 45,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 46,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.926898311668219,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 49,
+            "framework_RMS_A": 5.094830721754485,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.648999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195666999999995,
+            "all_atom_RMS_A": 4.937920542213234,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 50,
+            "framework_RMS_A": 5.106377719740937,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.688999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 51,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 52,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgSi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "73ad572ec0223732a7bc3fe3659cada153eeabb36f586addc7934b767a72b0e2",
+      "intentional_train55_near_hit_frame_indices": [
+        36,
+        51,
+        52
+      ],
+      "intentional_train55_parent_frame_index": 36,
+      "intentional_train55_v23_response_frame_indices": [
+        51,
+        52
+      ],
+      "interface": "AgSi",
+      "label": "AgSi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.7807056770503653,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20301008,
+        20301020,
+        20301032,
+        20301044
+      ],
+      "target_contact_nearest_mean_distance_A": 3.92051088493134,
+      "target_displacement_z_A": -0.02,
+      "target_element": "C",
+      "target_original_z_A": 20.4709
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.251331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgSi_registryB_contact_C_orbit_z+0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 36,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195667000000004,
+            "all_atom_RMS_A": 4.932409386713001,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 38,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 1.819566700000001,
+            "all_atom_RMS_A": 4.92641845232064,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 43,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.2195666999999997,
+            "all_atom_RMS_A": 4.939016075602265,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 44,
+            "framework_RMS_A": 5.1006042207435245,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.668999999999997,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 45,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 46,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195667000000004,
+            "all_atom_RMS_A": 4.926898311668219,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 49,
+            "framework_RMS_A": 5.094830721754486,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.649,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 2.0195667000000004,
+            "all_atom_RMS_A": 4.937920542213235,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 50,
+            "framework_RMS_A": 5.106377719740938,
+            "matching_method": "same_element_order",
+            "max_atom_displacement_A": 17.689,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 51,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 52,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgSi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "c241322c1e60e732bdcae541a852dbabd7ca1495c87e9681142f3c4b9d59bc13",
+      "intentional_train55_near_hit_frame_indices": [
+        36,
+        51,
+        52
+      ],
+      "intentional_train55_parent_frame_index": 36,
+      "intentional_train55_v23_response_frame_indices": [
+        51,
+        52
+      ],
+      "interface": "AgSi",
+      "label": "AgSi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.7807056770503653,
+      "minimum_periodic_pair_distance_A": 2.106914228117906,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgSi_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "d0ef6c0a42584c3142b06d7119e266804a7c287473b160a05dafde891e2f1585",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20301008,
+        20301020,
+        20301032,
+        20301044
+      ],
+      "target_contact_nearest_mean_distance_A": 3.92051088493134,
+      "target_displacement_z_A": 0.02,
+      "target_element": "C",
+      "target_original_z_A": 20.4709
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.051331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgC_registryB_contact_C_orbit_z-0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 37,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.20000000000000284,
+            "all_atom_RMS_A": 0.05574667979074982,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 47,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.20000000000000284,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 48,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 53,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 54,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "53c7ab546bceb106cf4d77ca36ac87215008ad4d0d8a2f9a9a564fa706c7cb0b",
+      "intentional_train55_near_hit_frame_indices": [
+        37,
+        53,
+        54
+      ],
+      "intentional_train55_parent_frame_index": 37,
+      "intentional_train55_v23_response_frame_indices": [
+        53,
+        54
+      ],
+      "interface": "AgC",
+      "label": "AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.826590584319558,
+      "minimum_periodic_pair_distance_A": 2.106914228117906,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20300010,
+        20300022,
+        20300034,
+        20300046
+      ],
+      "target_contact_nearest_mean_distance_A": 2.2570078452266236,
+      "target_displacement_z_A": -0.02,
+      "target_element": "C",
+      "target_original_z_A": 23.6513
+    },
+    {
+      "atoms": 52,
+      "cell_A": [
+        [
+          6.136,
+          0.0,
+          0.0
+        ],
+        [
+          -3.0679999999999987,
+          5.313931877621316,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          34.051331
+        ]
+      ],
+      "formula": "C16Ag4Si8Ti24",
+      "geometry_label": "AgC_registryB_contact_C_orbit_z+0.02A",
+      "geometry_screens": {
+        "frozen_dev3_comparisons": [],
+        "frozen_dev3_exact_hits": 0,
+        "frozen_dev3_near_hits": 0,
+        "train55_comparisons": [
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.005547001962252173,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 37,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.20000000000000284,
+            "all_atom_RMS_A": 0.05574667979074982,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 47,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.20000000000000284,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.1999999999999993,
+            "all_atom_RMS_A": 0.055746679790748835,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 48,
+            "framework_RMS_A": 0.005773502691896135,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.1999999999999993,
+            "near_duplicate": false
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 53,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          },
+          {
+            "Ag_registry_RMS_A": 0.0,
+            "all_atom_RMS_A": 0.007844645405527194,
+            "cell_max_delta_A": 0.0,
+            "exact_duplicate": false,
+            "frame_index": 54,
+            "framework_RMS_A": 0.008164965809277086,
+            "matching_method": "persistent_lammps_id",
+            "max_atom_displacement_A": 0.019999999999999574,
+            "near_duplicate": true
+          }
+        ],
+        "train55_exact_hits": 0,
+        "train55_near_hits": 3,
+        "train55_unexpected_near_hits": 0
+      },
+      "input": "inputs/AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24.extxyz",
+      "input_sha256": "dc828add432f5e463b19476c20eee4df3badba2cc9f1b47cb0d0fb6945adc0c5",
+      "intentional_train55_near_hit_frame_indices": [
+        37,
+        53,
+        54
+      ],
+      "intentional_train55_parent_frame_index": 37,
+      "intentional_train55_v23_response_frame_indices": [
+        53,
+        54
+      ],
+      "interface": "AgC",
+      "label": "AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24",
+      "launch_enabled": true,
+      "marked_contact_pair_distance_A": 2.792420872892191,
+      "minimum_periodic_pair_distance_A": 2.1178105903611097,
+      "parent_input": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/inputs/AgC_JN1967_registryB_v21_acq01.extxyz",
+      "parent_input_sha256": "dbbcb0907704e20825ddcce925c88ad5c22433aa11a112a29242996cb02f1876",
+      "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+      "parent_source_manifest_sha256": "a342f06349fba2d144b3e4a3050ee4961b2048a460eccd03686f208a2c25a574",
+      "pbc": [
+        true,
+        true,
+        false
+      ],
+      "role": "train_acquisition_candidate_pending_audit",
+      "target_atom_ids": [
+        20300010,
+        20300022,
+        20300034,
+        20300046
+      ],
+      "target_contact_nearest_mean_distance_A": 2.2570078452266236,
+      "target_displacement_z_A": 0.02,
+      "target_element": "C",
+      "target_original_z_A": 23.6513
+    }
+  ],
+  "reference_datasets": {
+    "frozen_dev3_frames": 3,
+    "frozen_dev3_sha256": "e9e86e3a353c50c8173cefede370e2653ec2e81506f4b8122b01b7a8efe76e4c",
+    "train55_frames": 55,
+    "train55_manifest_sha256": "c6ee83dad2c308b1399a5714a141efdad75ceff14aa1300a3a5d66cfcccb7b8f",
+    "train55_train_sha256": "5a9eabc8c31d83670a81f73ba8da1ff18d3fe2311e6bec062aca3be1c8b094aa"
+  },
+  "role_policy": {
+    "dataset_integration_enabled": false,
+    "official_train36_dev3_mutated": false,
+    "test_or_sealed_data_opened": false
+  },
+  "runtime_guard": {
+    "automatic_retries": 0,
+    "cgroup_limit_bytes": 34359738368,
+    "maximum_concurrent_jobs": 1,
+    "minimum_free_disk_bytes": 5368709120,
+    "prelaunch_memory_limit_bytes": 3221225472,
+    "stop_threshold_bytes": 32212254720
+  },
+  "source": {
+    "parent_source_commit": "5d1e734c16d17dc9b460e3184eab4670ccc2739c",
+    "source_doi": "10.1007/BF00899949",
+    "source_family": "Jeitschko_Nowotny_1967_single_crystal",
+    "train55_manifest_sha256": "c6ee83dad2c308b1399a5714a141efdad75ceff14aa1300a3a5d66cfcccb7b8f",
+    "train55_screen_commit": "6b8fe5520679808cd98506eb08b8ea72cd71f61a"
+  },
+  "status": "V24_GEOMETRY_SCREENED_ACQUISITION_CANDIDATES",
+  "task_id": "pbe_interface_v24_carbon_force_response_acquisition",
+  "test_or_sealed_data_opened": false,
+  "training_enabled": false
+}
