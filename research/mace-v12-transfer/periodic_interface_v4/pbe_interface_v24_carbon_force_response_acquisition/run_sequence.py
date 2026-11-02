@@ -48,6 +48,8 @@ status = read_status()
 status["status"] = "running"
 status["supervisor_started_utc"] = utc()
 status["automatic_retries"] = 0
+for stale_key in ("supervisor_error", "failed_label", "launcher_exit_code", "finished_utc"):
+    status.pop(stale_key, None)
 
 
 def save_status() -> None:
