@@ -1,0 +1,9 @@
+parameter,value,status,source_or_basis,temperature_range,unit,uncertainty_or_limit,allowed_use
+liquid_Ag_density_rho_l(T),"9327.1 - 0.9956*(T-1234.93)",EXPERIMENTAL_FIT_VERIFIED_IN_REPOSITORY,"Abdullaev et al 2020 Eq. 2; DOI 10.1088/1742-6596/1677/1/012161",1234.93-1631,K; kg/m^3,"Table error 0.25% at Tm, 0.26% at 1300 K, 0.34% at 1600 K; coverage convention unspecified",Candidate input only within source range; preserve current production model until separately approved
+liquid_Ag_dynamic_viscosity_mu_l(T),,UNRESOLVED,"Assael et al 2012 identified as candidate reference; primary coefficients not inspected",,Pa*s,"No auditable numerical fit in current workspace",Do not choose a numeric parameter
+liquid_Ag_self_diffusion_D(T),"6.48e-9 at mean 1594.7 K",MODEL_OUTPUT_ONLY,"Ag_u3.eam pure Ag NPT trajectory; 0.648 A^2/ps",about 1600,K; m^2/s,"Not experimental; EAM density is about 7.6% below Abdullaev 1600 K fit",Method pilot only; do not calibrate flow model
+Ag_Ti3SiC2_contact_angle,,,NO_DIRECT_VALUE_FOUND,"No directly applicable local experimental/MD result",,degree,"Surface termination/oxidation/roughness unspecified",No wetting boundary assumption
+Ag_Ti3SiC2_wall_friction_lambda,,,UNRESOLVED,"Needs validated surface MD or experiment",,Pa*s/m,"Existing cross potential not qualified",Do not apply
+Ag_Ti3SiC2_slip_length_b,,,UNRESOLVED,"b=mu/lambda after matching conditions",,m,"Unknown; b/w cannot be evaluated",Do not apply
+Ag70_Kxx_Kyy_Kzz,,,NOT_COMPUTED,"No qualified independent Stokes solver and continuum gate not passed",,m^2,"Grid atomic-scale; one geometry/seed; liquid fraction dependence absent",No permeability value
+continuum_pore_scale_NS,,,NOT_JUSTIFIED,"0.30 nm voxel, z throat estimate 1.55 nm (~5 voxels)",,n/a,"No scale separation or validated wall boundary",Do not use for quantitative prediction
