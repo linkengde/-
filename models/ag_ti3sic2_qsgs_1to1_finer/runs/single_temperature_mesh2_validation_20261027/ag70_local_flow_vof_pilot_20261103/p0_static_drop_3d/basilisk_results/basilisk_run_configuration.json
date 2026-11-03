@@ -1,0 +1,36 @@
+{
+  "solver": "Basilisk qcc, octree grid, centered incompressible Navier-Stokes + VOF + height-function curvature",
+  "curvature_modes": {
+    "exact": "prescribed kappa=2/R for isolated force/pressure balance",
+    "auto": "VOF height-function curvature"
+  },
+  "dimensions": 3,
+  "rho_liquid": 1.0,
+  "rho_gas": 1.0,
+  "dynamic_viscosity": 1.0,
+  "surface_tension": 1.0,
+  "radius": 1.0,
+  "gravity": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "sessile_contact_angle_deg": 72.0,
+  "contact_boundary": "back, corresponding to z=Z0; h.t and h.r",
+  "dynamic_time_end": 0.05,
+  "geometry_only_time": 0.0,
+  "time_step_factors": [
+    0.5,
+    0.25
+  ],
+  "dynamic_resolutions_R_over_dx": [
+    16,
+    32
+  ],
+  "geometry_only_resolutions_R_over_dx": [
+    64
+  ],
+  "time_step_sensitivity_resolution_R_over_dx": 32,
+  "R64_dynamic_status": "not_completed; see basilisk_cases/diagnostics/R64_DYNAMIC_ATTEMPTS.md",
+  "physical_material_properties_used": false
+}
