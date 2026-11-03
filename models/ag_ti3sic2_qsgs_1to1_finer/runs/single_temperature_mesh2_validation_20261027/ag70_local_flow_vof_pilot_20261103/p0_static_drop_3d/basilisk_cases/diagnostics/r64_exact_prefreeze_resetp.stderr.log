@@ -1,0 +1,46 @@
+INIT kind=sphere curvature=exact grid_mode=5 L0=8 origin=-4,-4,-4 volume=4.18802319518 domain_volume=512 cells=732264 DT=0.000550966390183 depth=9
+MESH phase=before_init_adapt step=0 cells=732264 depth=9 volume=4.18802319518 fmin=0 fmax=1 mixed_cells=76928 pmin=0 pmax=2 pmean=0.01637840271 kappa_mean=2.00774048745 kappa_rms=0.0469489775403 kappa_min=1.8846777608 kappa_max=2.12492321711
+MESH phase=after_init_adapt step=0 cells=681472 depth=9 volume=4.18802319518 fmin=0 fmax=1 mixed_cells=76928 pmin=0 pmax=2 pmean=0.01637840271 kappa_mean=2.00774048745 kappa_rms=0.0469489775403 kappa_min=1.8846777608 kappa_max=2.12492321711
+INIT_PRESSURE_RESET cells=681472 rule=p=2*sigma/R when f>0.5, else 0
+FORCE_BALANCE phase=init step=0 t=0 weighted_interface_area=18.8457536217 capillary_rms=71.4607987518 pressure_force_residual_rms=44.6767767274 pressure_force_residual_max=123.697478992 relative_rms=0.625192798119
+WARNING: convergence for p not reached after 100 iterations
+  res: 8.79609e+12 sum: -1.05907e+31 nrelax: 52
+STEP i=0 t=0 dt=0.000550966390183 pressure_iterations=100 pressure_resb=4.76627695824e+28 pressure_resa=8.79609302221e+12 pressure_tolerance=329.419865833 pressure_residual_ratio=26701768577.2 pressure_rhs_sum=-1.05906699469e+31 pressure_nrelax=52 vmax=1.78221022942e+23 urms_liquid=2.9574905429e+21 fmin=0 fmax=1 pmin=-2.86328931492e+24 pmax=2.34508090671e+24 volume=4.18802319518 mass_drift_pct=0 nonfinite_cells=0 cells=681472
+FORCE_BALANCE phase=post_projection step=0 t=0 weighted_interface_area=18.8457536217 capillary_rms=71.4607987518 pressure_force_residual_rms=6.91931818374e+23 pressure_force_residual_max=2.68323382431e+25 relative_rms=9.68267680266e+21
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 8.45568e+21)
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 8.45568e+21)
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 8.45568e+21)
+[15a9d48faed2:31868:0:31868] Caught signal 8 (Floating point exception: floating-point invalid operation)
+[15a9d48faed2:31866:0:31866] Caught signal 8 (Floating point exception: floating-point invalid operation)
+==== backtrace (tid:  31868) ====
+ 0  /lib/x86_64-linux-gnu/libucs.so.0(ucs_handle_error+0x2bc) [0x7fea64a5064c]
+ 1  /lib/x86_64-linux-gnu/libucs.so.0(+0x3182f) [0x7fea64a5082f]
+ 2  /lib/x86_64-linux-gnu/libucs.so.0(+0x31afa) [0x7fea64a50afa]
+ 3  /lib/x86_64-linux-gnu/libc.so.6(+0x3fd70) [0x7fea64e98d70]
+ 4  /tmp/basilisk-r64-diag-mpi(+0x53661) [0x55d20c26c661]
+ 5  /tmp/basilisk-r64-diag-mpi(+0x5476f) [0x55d20c26d76f]
+ 6  /tmp/basilisk-r64-diag-mpi(+0x219a5) [0x55d20c23a9a5]
+ 7  /tmp/basilisk-r64-diag-mpi(+0x4541d) [0x55d20c25e41d]
+ 8  /tmp/basilisk-r64-diag-mpi(+0x5128) [0x55d20c21e128]
+ 9  /lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7fea64e82ca8]
+10  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7fea64e82d65]
+11  /tmp/basilisk-r64-diag-mpi(+0x52a1) [0x55d20c21e2a1]
+=================================
+==== backtrace (tid:  31866) ====
+ 0  /lib/x86_64-linux-gnu/libucs.so.0(ucs_handle_error+0x2bc) [0x7f4c3411164c]
+ 1  /lib/x86_64-linux-gnu/libucs.so.0(+0x3182f) [0x7f4c3411182f]
+ 2  /lib/x86_64-linux-gnu/libucs.so.0(+0x31afa) [0x7f4c34111afa]
+ 3  /lib/x86_64-linux-gnu/libc.so.6(+0x3fd70) [0x7f4c34559d70]
+ 4  /tmp/basilisk-r64-diag-mpi(+0x53543) [0x5583d39ab543]
+ 5  /tmp/basilisk-r64-diag-mpi(+0x5476f) [0x5583d39ac76f]
+ 6  /tmp/basilisk-r64-diag-mpi(+0x219a5) [0x5583d39799a5]
+ 7  /tmp/basilisk-r64-diag-mpi(+0x4541d) [0x5583d399d41d]
+ 8  /tmp/basilisk-r64-diag-mpi(+0x5128) [0x5583d395d128]
+ 9  /lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7f4c34543ca8]
+10  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7f4c34543d65]
+11  /tmp/basilisk-r64-diag-mpi(+0x52a1) [0x5583d395d2a1]
+=================================
+--------------------------------------------------------------------------
+prterun noticed that process rank 1 with PID 31866 on node 15a9d48faed2 exited on
+signal 8 (Floating point exception).
+--------------------------------------------------------------------------
