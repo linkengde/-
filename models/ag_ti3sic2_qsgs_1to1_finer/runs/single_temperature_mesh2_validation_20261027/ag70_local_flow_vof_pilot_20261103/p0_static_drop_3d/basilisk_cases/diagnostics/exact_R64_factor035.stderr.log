@@ -1,0 +1,42 @@
+INIT kind=sphere L0=8 origin=-4,-4,-4 volume=4.18802319518 domain_volume=512 cells=732264 DT=0.000385676473128 depth=9
+STEP i=0 t=0 dt=0.000385676473128 pressure_iterations=2 pressure_resb=24642.601626 pressure_resa=83.1427387141 pressure_tolerance=672.285440476 pressure_residual_ratio=0.123671782413 pressure_rhs_sum=3.40415296507e-08 pressure_nrelax=3 vmax=0.000432153724886 urms_liquid=4.31279964828e-05 fmin=0 fmax=1 pmin=-0.0315718890431 pmax=2.04539628975 volume=4.18802319518 mass_drift_pct=0 nonfinite_cells=0 cells=681472
+WARNING: convergence for p not reached after 100 iterations
+  res: 8.79609e+12 sum: -1.05906e+31 nrelax: 54
+STEP i=1 t=0.000385676473128 dt=0.000307161763436 pressure_iterations=100 pressure_resb=4.76625400045e+28 pressure_resa=8.79609302221e+12 pressure_tolerance=1059.90196064 pressure_residual_ratio=8298968535.66 pressure_rhs_sum=-1.05906218796e+31 pressure_nrelax=54 vmax=9.93570954414e+22 urms_liquid=1.64877914537e+21 fmin=0 fmax=1 pmin=-2.86329889426e+24 pmax=2.34504626808e+24 volume=4.18802322048 mass_drift_pct=6.04089212895e-07 nonfinite_cells=0 cells=678112
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 3.22461e+21)
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 3.22461e+21)
+WARNING: CFL must be <= 0.5 for VOF (cfl - 0.5 = 3.22461e+21)
+[15a9d48faed2:24791:0:24791] Caught signal 8 (Floating point exception: floating-point invalid operation)
+[15a9d48faed2:24789:0:24789] Caught signal 8 (Floating point exception: floating-point invalid operation)
+==== backtrace (tid:  24791) ====
+ 0  /lib/x86_64-linux-gnu/libucs.so.0(ucs_handle_error+0x2bc) [0x7fe61c50564c]
+ 1  /lib/x86_64-linux-gnu/libucs.so.0(+0x3182f) [0x7fe61c50582f]
+ 2  /lib/x86_64-linux-gnu/libucs.so.0(+0x31afa) [0x7fe61c505afa]
+ 3  /lib/x86_64-linux-gnu/libc.so.6(+0x3fd70) [0x7fe61c94dd70]
+ 4  /tmp/basilisk-static-drop-diagnostics-mpi(+0x54003) [0x562b0b615003]
+ 5  /tmp/basilisk-static-drop-diagnostics-mpi(+0x5652f) [0x562b0b61752f]
+ 6  /tmp/basilisk-static-drop-diagnostics-mpi(+0x216e5) [0x562b0b5e26e5]
+ 7  /tmp/basilisk-static-drop-diagnostics-mpi(+0x45edd) [0x562b0b606edd]
+ 8  /tmp/basilisk-static-drop-diagnostics-mpi(+0x4f38) [0x562b0b5c5f38]
+ 9  /lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7fe61c937ca8]
+10  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7fe61c937d65]
+11  /tmp/basilisk-static-drop-diagnostics-mpi(+0x4fd1) [0x562b0b5c5fd1]
+=================================
+==== backtrace (tid:  24789) ====
+ 0  /lib/x86_64-linux-gnu/libucs.so.0(ucs_handle_error+0x2bc) [0x7f1ea687b64c]
+ 1  /lib/x86_64-linux-gnu/libucs.so.0(+0x3182f) [0x7f1ea687b82f]
+ 2  /lib/x86_64-linux-gnu/libucs.so.0(+0x31afa) [0x7f1ea687bafa]
+ 3  /lib/x86_64-linux-gnu/libc.so.6(+0x3fd70) [0x7f1ea6cc3d70]
+ 4  /tmp/basilisk-static-drop-diagnostics-mpi(+0x54003) [0x55a6b3a35003]
+ 5  /tmp/basilisk-static-drop-diagnostics-mpi(+0x5652f) [0x55a6b3a3752f]
+ 6  /tmp/basilisk-static-drop-diagnostics-mpi(+0x216e5) [0x55a6b3a026e5]
+ 7  /tmp/basilisk-static-drop-diagnostics-mpi(+0x45edd) [0x55a6b3a26edd]
+ 8  /tmp/basilisk-static-drop-diagnostics-mpi(+0x4f38) [0x55a6b39e5f38]
+ 9  /lib/x86_64-linux-gnu/libc.so.6(+0x29ca8) [0x7f1ea6cadca8]
+10  /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x85) [0x7f1ea6cadd65]
+11  /tmp/basilisk-static-drop-diagnostics-mpi(+0x4fd1) [0x55a6b39e5fd1]
+=================================
+--------------------------------------------------------------------------
+prterun noticed that process rank 1 with PID 24789 on node 15a9d48faed2 exited on
+signal 8 (Floating point exception).
+--------------------------------------------------------------------------
