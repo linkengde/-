@@ -1,0 +1,89 @@
+{
+  "status": "READ_ONLY_AG70_GEOMETRY_AUDIT_COMPLETE",
+  "geometry_path": "runs/single_temperature_mesh2_validation_20261027/qsgs_morphology_ag70vol.npz",
+  "geometry_sha256": "03ef47b1dd534b3215cf03f42c8cf7e887dcdfcc185b33bab7453cd838c1faac",
+  "qsgs_seed": 20261024,
+  "grid_xyz": [
+    100,
+    100,
+    50
+  ],
+  "domain_size_nm_xyz": [
+    29.9635,
+    30.1857484616085,
+    15.86115
+  ],
+  "voxel_size_A_xyz": [
+    2.99635,
+    3.01857484616085,
+    3.1722300000000003
+  ],
+  "phase_volume_fraction": {
+    "Ag": 0.699996,
+    "Ti3SiC2": 0.300004
+  },
+  "phase_cells": {
+    "Ag": 349998,
+    "Ti3SiC2": 150002
+  },
+  "Ag_connectivity": {
+    "periodic_xy_face_connected_components": 1,
+    "open_boundary_face_connected_components": 35,
+    "largest_component_cells": 349998,
+    "largest_component_fraction": 1.0,
+    "percolates_x_periodically": true,
+    "percolates_y_periodically": true,
+    "spans_open_z_from_bottom_to_top": true,
+    "direct_xy_seam_face_pairs": {
+      "x": 3054,
+      "y": 3506
+    }
+  },
+  "Ag_percolating_throat_estimates": {
+    "axis_order": "x, y, z",
+    "minimum_interface_cell_clearance": {
+      "minimum_center_clearance_to_scaffold_A": 2.99635,
+      "one_cell_scale_width_estimate_A": 2.99635,
+      "Ag_cells_at_minimum_clearance": 73649,
+      "note": "interface-adjacent cell clearance, not a measured channel throat; about one voxel and not a resolved continuum aperture"
+    },
+    "x_periodic": {
+      "percolating_path_found": true,
+      "critical_voxel_center_clearance_A": 21.426674732148125,
+      "estimated_bottleneck_diameter_A": 39.85699946429625
+    },
+    "y_periodic": {
+      "percolating_path_found": true,
+      "critical_voxel_center_clearance_A": 25.51933908386932,
+      "estimated_bottleneck_diameter_A": 48.04232816773864
+    },
+    "z_open_bottom_to_top": {
+      "percolating_path_found": true,
+      "critical_voxel_center_clearance_A": 9.234523273210968,
+      "estimated_bottleneck_diameter_A": 15.472696546421936
+    },
+    "method": "largest EDT-clearance threshold retaining a six-face connected Ag path; approximate diameter = 2*critical center-clearance - minimum voxel spacing",
+    "resolution_limit_A": 2.99635
+  },
+  "internal_Ag_Ti3SiC2_interface": {
+    "phase_boundary_face_counts": {
+      "normal_x_faces": 83526,
+      "normal_y_faces": 83486,
+      "normal_z_faces": 82570
+    },
+    "area_nm2_voxel_face_estimate": 23401.778711783496,
+    "area_density_nm2_per_nm3": 1.6312469245206567,
+    "method": "anisotropic voxel-face area; lateral x/y periodic seams included, outer z surfaces excluded"
+  },
+  "continuum_resolution_assessment": {
+    "smallest_voxel_nm": 0.299635,
+    "grid_cells_across_1nm": 3.33739382915881,
+    "interpretation": "The approximately 0.30 nm cell spacing is atomic-scale. The mask does not provide a scale-separated, resolved pore-fluid mesh for quantitative continuum Navier-Stokes flow."
+  },
+  "limitations": [
+    "The throat estimate is limited by voxelization and is not a validated hydrodynamic pore radius.",
+    "Face-area interface is a stair-step voxel estimate; atomistic roughness and reconstruction are absent.",
+    "Connectivity is topological only; it does not provide permeability, pressure drop, slip length, or flow velocity.",
+    "The source geometry is a binary QSGS thermal mask, not a relaxed atomistic Ag/Ti3SiC2 interface."
+  ]
+}
