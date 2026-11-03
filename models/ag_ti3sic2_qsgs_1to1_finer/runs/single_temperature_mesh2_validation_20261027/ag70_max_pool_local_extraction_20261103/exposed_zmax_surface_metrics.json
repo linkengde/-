@@ -1,0 +1,93 @@
+{
+  "status": "EXPOSED_ZMAX_SURFACE_GEOMETRY_ONLY",
+  "geometry_sha256": "5e509f16716e85464f604fcda2a53eaefd4f15e2d18d6c0bf24e0aa06c6656ce",
+  "checkpoint_sha256": "8b15a8b4766ad1d2fc8e5a6ec3d927e1fbe3728563ddc3f65546bd2a446406c6",
+  "extraction_masks_sha256": "4151d8c9d230acf056c9efd2ff8fbfa1f9bb7c164c5a4e984e8dc94604dae8d6",
+  "checkpoint_time_ps": 0.8495860511825916,
+  "grid_xyz": [
+    64,
+    64,
+    50
+  ],
+  "zmax_index": 49,
+  "grid_spacing_nm_xyz": [
+    0.299635,
+    0.30185748461608497,
+    0.31722300000000003
+  ],
+  "x_y_boundary_for_edge_counts": "periodic, matching the source QSGS geometry",
+  "surface_area_per_cell_nm2": 0.09044706740294062,
+  "zmax_cell_count": 4096,
+  "zmax_total_projected_area_nm2": 370.47118808244477,
+  "exposed_classes": {
+    "Ti3SiC2_skeleton": {
+      "cells": 822,
+      "area_nm2": 74.34748940521719,
+      "area_fraction_of_zmax": 0.20068359375
+    },
+    "solid_Ag": {
+      "cells": 2174,
+      "area_nm2": 196.6319245339929,
+      "area_fraction_of_zmax": 0.53076171875
+    },
+    "partially_melted_Ag_f_l_lt_0p5": {
+      "cells": 24,
+      "area_nm2": 2.170729617670575,
+      "area_fraction_of_zmax": 0.005859375
+    },
+    "partially_melted_Ag_f_l_ge_0p5": {
+      "cells": 11,
+      "area_nm2": 0.9949177414323468,
+      "area_fraction_of_zmax": 0.002685546875
+    },
+    "fully_liquid_Ag": {
+      "cells": 1065,
+      "area_nm2": 96.32612678413176,
+      "area_fraction_of_zmax": 0.260009765625
+    },
+    "all_Ag_with_any_liquid_fraction": {
+      "cells": 1100,
+      "area_nm2": 99.49177414323468,
+      "area_fraction_of_zmax": 0.2685546875
+    },
+    "liquid_dominant_Ag_f_l_ge_0p5": {
+      "cells": 1076,
+      "area_nm2": 97.3210445255641,
+      "area_fraction_of_zmax": 0.2626953125
+    },
+    "maximum_tracked_pool_intersecting_zmax": {
+      "cells": 1071,
+      "area_nm2": 96.8688091885494,
+      "area_fraction_of_zmax": 0.261474609375
+    }
+  },
+  "maximum_pool_zmax_temperature_K": {
+    "min": 1235.08,
+    "max": 2276.996164161152,
+    "mean": 1641.1778657998607
+  },
+  "estimated_top_surface_liquid_skeleton_contact_lines": {
+    "any_melt_fraction_gt_0": {
+      "liquid_skeleton_shared_edges_x_direction": 145,
+      "liquid_skeleton_shared_edges_y_direction": 133,
+      "grid_edge_contact_length_nm": 83.62079026933233
+    },
+    "liquid_dominant_f_l_ge_0p5": {
+      "liquid_skeleton_shared_edges_x_direction": 142,
+      "liquid_skeleton_shared_edges_y_direction": 132,
+      "grid_edge_contact_length_nm": 82.41558281548407
+    },
+    "fully_liquid_f_l_ge_1_minus_tol": {
+      "liquid_skeleton_shared_edges_x_direction": 141,
+      "liquid_skeleton_shared_edges_y_direction": 131,
+      "grid_edge_contact_length_nm": 81.81409033086797
+    }
+  },
+  "contact_edge_coordinates_csv": "exposed_zmax_liquid_skeleton_contact_edges.csv",
+  "limitations": [
+    "Top-face cells are voxelized exposed facets; contact lengths are grid-edge estimates, not atomistic contact-line lengths.",
+    "Cells with 0 < liquid fraction < 1 contain unresolved solid/liquid coexistence; thresholds bracket the apparent liquid footprint.",
+    "The exterior above zmax is treated only as gas for geometric classification; no gas state or physical boundary condition is solved.",
+    "No pressure, velocity, flow rate, surface tension, contact angle, evaporation, or crater prediction is produced."
+  ]
+}
