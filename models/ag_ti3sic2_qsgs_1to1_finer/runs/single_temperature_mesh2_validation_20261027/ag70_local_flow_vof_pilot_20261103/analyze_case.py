@@ -81,11 +81,13 @@ def main() -> None:
     gas_pressure = float(pressure[gas_bulk].mean())
     measured_jump = liquid_pressure - gas_pressure
     expected_jump = SIGMA / equivalent_radius  # 2-D cylindrical interface.
-    continuity_matches = re.findall(r"cumulative\s*=\s*([-+0-9.eE]+)", (CASE / "log.interFoam").read_text(encoding="utf-8", errors="replace"))
     transport_text = (CASE / "constant/transportProperties").read_text(encoding="ascii")
     control_text = (CASE / "system/controlDict").read_text(encoding="ascii")
     nu_match = re.search(r"liquidAg\s*\{[^}]*\bnu\s+([-+0-9.eE]+)", transport_text)
     end_match = re.search(r"\bendTime\s+([-+0-9.eE]+)", control_text)
+    app_match = re.search(r"\bapplication\s+(\w+)\s*;", control_text)
+    application = app_match.group(1) if app_match else "interFoam"
+    continuity_matches = re.findall(r"cumulative\s*=\s*([-+0-9.eE]+)", (CASE / f"log.{application}").read_text(encoding="utf-8", errors="replace"))
 
     history = []
     for directory in output_dirs:
@@ -128,7 +130,7 @@ def main() -> None:
 
     metrics = {
         "status": "DIMENSIONLESS_STATIC_DROP_VOF_TEST_COMPLETED",
-        "solver": "OpenFOAM interFoam 2406",
+        "solver": f"OpenFOAM {application} 2406",
         "case_name": CASE.name,
         "mesh_cells": NX * NY,
         "grid_shape_xy": [NX, NY],

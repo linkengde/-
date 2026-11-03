@@ -13,6 +13,8 @@ DZ = 2.0 / NX
 NU = 0.01
 END_TIME = 0.2
 MAX_DT = 1e-4
+APPLICATION = "interFoam"
+SUBCELL_SAMPLES = 1
 
 
 def header(cls, obj, body, location="constant"):
@@ -36,29 +38,44 @@ def write(rel, text):
 
 
 def main():
-    global CASE, NX, NY, DZ, NU, END_TIME, MAX_DT
+    global CASE, NX, NY, DZ, NU, END_TIME, MAX_DT, APPLICATION, SUBCELL_SAMPLES
     parser = argparse.ArgumentParser()
     parser.add_argument("--resolution", type=int, default=80)
     parser.add_argument("--case-name", default=None)
     parser.add_argument("--nu", type=float, default=0.01)
     parser.add_argument("--end-time", type=float, default=0.2)
     parser.add_argument("--max-dt", type=float, default=1e-4)
+    parser.add_argument("--solver", choices=("interFoam", "interIsoFoam"), default="interFoam")
+    parser.add_argument("--subcell-samples", type=int, default=1)
     args = parser.parse_args()
     NX = NY = args.resolution
     DZ = 2.0 / NX
     NU = args.nu
     END_TIME = args.end_time
     MAX_DT = args.max_dt
+    APPLICATION = args.solver
+    SUBCELL_SAMPLES = args.subcell_samples
+    if SUBCELL_SAMPLES < 1:
+        parser.error("--subcell-samples must be at least 1")
     default_case = "static_drop_case" if NX == 80 else f"static_drop_case_{NX}"
     CASE = ROOT / (args.case_name or default_case)
     dx = 2 * DOMAIN_HALF_WIDTH / NX
     alpha = []
+    sample_offsets = [((s + 0.5) / SUBCELL_SAMPLES - 0.5) * dx for s in range(SUBCELL_SAMPLES)]
     for j in range(NY):
         y = -DOMAIN_HALF_WIDTH + (j + 0.5) * dx
         for i in range(NX):
             x = -DOMAIN_HALF_WIDTH + (i + 0.5) * dx
-            alpha.append("1" if x*x + y*y <= R*R else "0")
-    liquid_cells = alpha.count("1")
+            if SUBCELL_SAMPLES == 1:
+                fraction = float(x*x + y*y <= R*R)
+            else:
+                inside = sum(
+                    (x + ox) ** 2 + (y + oy) ** 2 <= R * R
+                    for oy in sample_offsets for ox in sample_offsets
+                )
+                fraction = inside / (SUBCELL_SAMPLES * SUBCELL_SAMPLES)
+            alpha.append(f"{fraction:.10g}")
+    liquid_cells = sum(float(value) > 0 for value in alpha)
 
     write("system/blockMeshDict", header("dictionary", "blockMeshDict", f'''
 scale 1;
@@ -113,7 +130,7 @@ boundaryField { walls { type fixedFluxPressure; } frontAndBack { type empty; } }
 ''', "0"))
 
     write("system/controlDict", header("dictionary", "controlDict", f'''
-application interFoam;
+application {APPLICATION};
 startFrom startTime;
 startTime 0;
 stopAt endTime;
@@ -167,10 +184,11 @@ PIMPLE
 ''', "system"))
 
     print(f"case={CASE}")
-    print(f"grid={NX}x{NY}x1; dx={dx}; liquid_cells={liquid_cells}")
-    print(f"initial_area={liquid_cells*dx*dx:.8g}; nominal_circle_area={3.141592653589793*R*R:.8g}")
+    print(f"grid={NX}x{NY}x1; dx={dx}; liquid_cells={liquid_cells}; subcell_samples={SUBCELL_SAMPLES}")
+    initial_area = sum(float(value) for value in alpha) * dx * dx
+    print(f"initial_area={initial_area:.8g}; nominal_circle_area={3.141592653589793*R*R:.8g}")
     print(f"expected_2D_cylinder_laplace_jump=sigma/R={1/R:.8g}")
-    print(f"nu={NU}; end_time={END_TIME}; max_delta_t={MAX_DT}")
+    print(f"solver={APPLICATION}; nu={NU}; end_time={END_TIME}; max_delta_t={MAX_DT}; subcell_samples={SUBCELL_SAMPLES}")
     print("dimensionless_benchmark_only=true")
 
 
