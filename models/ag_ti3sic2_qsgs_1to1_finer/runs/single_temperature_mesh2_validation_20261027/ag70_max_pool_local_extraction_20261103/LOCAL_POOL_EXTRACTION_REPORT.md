@@ -92,4 +92,4 @@ Ag 和 Ti₃SiC₂ 分布来自同一原始 `skeleton` 掩膜；温度、焓和�
 - [`threshold_sensitivity.csv`](threshold_sensitivity.csv)、[`buffer_sensitivity.csv`](buffer_sensitivity.csv)：表格结果。
 - [`extract_max_pool.py`](extract_max_pool.py)：校验输入身份并重建以上派生数据及图片。
 
-本阶段只做检查点读取、派生掩膜/图片及几何指标；没有重新加热，没有执行实际流动、MD 或热–流耦合，也没有改生产求解器或任一来源几何。下一阶段应先确认要研究的是 64×64×50 精确尺寸匹配模型，还是早期 100×100×50 模型；之后再单独审定 MD 几何/势函数和流体边界，不自动启动计算。
+本阶段只做检查点读取、派生掩膜/图片及几何指标；没有重新加热，没有执行实际流动、MD 或热–流耦合，也没有改生产求解器或任一来源几何。用户已确认后续局部流动研究以 **64×64×50 尺寸匹配的新 QSGS 模型**为目标（2026-11-03）；冻结输入身份见 [`TARGET_GEOMETRY_SELECTION.json`](TARGET_GEOMETRY_SELECTION.json)。早期 100×100×50 几何和检查点继续独立保留。几何选择不补齐液态 Ag 黏度、界面势、真实驱动力或流体边界；进入流动求解前仍需单独审定这些条件。
