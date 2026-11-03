@@ -211,6 +211,202 @@ def widest_spanning_path_throats(pool: np.ndarray, spacing_a: np.ndarray) -> dic
     }
 
 
+def pool_core_sensitivity(pool: np.ndarray, spacing_a: np.ndarray) -> list[dict[str, object]]:
+    """Count connected cores after geometric clearance thresholds.
+
+    This is a voxel-resolution sensitivity diagnostic, not a physical erosion
+    law or hydrodynamic channel measurement.
+    """
+    structure = np.zeros((3, 3, 3), dtype=bool)
+    structure[1, 1, 1] = True
+    for axis in range(3):
+        lo = [1, 1, 1]
+        hi = [1, 1, 1]
+        lo[axis] = 0
+        hi[axis] = 2
+        structure[tuple(lo)] = True
+        structure[tuple(hi)] = True
+    coords = np.where(pool)
+    clearance = distance_transform_edt(pool, sampling=spacing_a / 10.0)
+    rows = []
+    for radius_nm in (0.0, 0.15, 0.30, 0.45, 0.60, 0.90, 1.20, 1.50):
+        core = pool.copy() if radius_nm == 0.0 else pool & (clearance >= radius_nm)
+        labels, count = ndimage_label(core, structure=structure)
+        sizes = np.bincount(labels.ravel(), minlength=count + 1)
+        largest_label = int(np.argmax(sizes[1:]) + 1) if count else 0
+        spans = {}
+        for axis, name in enumerate(("x", "y", "z")):
+            if count == 0:
+                spans[name] = False
+                continue
+            low_face, high_face = int(coords[axis].min()), int(coords[axis].max())
+            low_labels = np.unique(np.take(labels, low_face, axis=axis))
+            high_labels = np.unique(np.take(labels, high_face, axis=axis))
+            spans[name] = bool(np.intersect1d(low_labels[low_labels > 0], high_labels[high_labels > 0]).size)
+        rows.append({
+            "edt_clearance_threshold_nm": radius_nm,
+            "remaining_pool_voxels": int(core.sum()),
+            "remaining_fraction_of_threshold_0p5_pool": float(core.sum() / pool.sum()),
+            "six_face_connected_components": int(count),
+            "largest_core_voxels": int(sizes[largest_label]) if largest_label else 0,
+            "largest_core_spans_pool_bbox_faces_xyz": spans,
+        })
+    return rows
+
+
+def recorded_cluster_history_audit(path: Path, heat_off_time_ps: float) -> dict[str, object]:
+    with path.open(newline="", encoding="utf-8") as stream:
+        rows = list(csv.DictReader(stream))
+    by_time: dict[float, list[dict[str, str]]] = {}
+    for row in rows:
+        # CSV floating-point serialization can make one frame appear as e.g.
+        # 0.3 and 0.30000000000000004. Group at sub-femtosecond precision.
+        by_time.setdefault(round(float(row["time_ps"]), 9), []).append(row)
+    observed_max_by_time = []
+    for time_ps, frame_rows in sorted(by_time.items()):
+        largest = max(frame_rows, key=lambda row: int(row["voxel_count"]))
+        observed_max_by_time.append({
+            "time_ps": time_ps,
+            "largest_cluster_voxels": int(largest["voxel_count"]),
+            "largest_cluster_track_id": int(largest["track_id"]),
+            "largest_cluster_component_id": int(largest["component_id"]),
+        })
+    heating = [row for row in observed_max_by_time if row["time_ps"] <= heat_off_time_ps + 1e-12]
+    if not heating:
+        raise RuntimeError("no cluster observations found during the heating interval")
+    max_heating = max(heating, key=lambda row: row["largest_cluster_voxels"])
+    max_all = max(observed_max_by_time, key=lambda row: row["largest_cluster_voxels"])
+    return {
+        "cluster_tracking_observation_count": len(observed_max_by_time),
+        "cluster_tracking_observations_during_heating": len(heating),
+        "heating_sample_times_ps": [row["time_ps"] for row in heating],
+        "maximum_recorded_heating_cluster": max_heating,
+        "maximum_recorded_cluster_across_heating_and_cooling_records": max_all,
+        "heat_off_event_time_ps": heat_off_time_ps,
+        "reported_sample_interval_ps": 0.1,
+        "sampling_basis": "The run script updates LiquidClusterTracker when writing 0.1 ps series rows and at the scaffold-temperature event; it does not label every internal integration step.",
+        "maximum_is_global_over_saved_tracker_observations": bool(
+            round(float(max_heating["time_ps"]), 9) == round(heat_off_time_ps, 9)
+        ),
+        "continuous_time_global_maximum_certified": False,
+        "limit": "This audit proves the maximum among saved tracker observations, not an unsampled transient peak between those observations.",
+        "all_observed_frame_maxima": observed_max_by_time,
+    }
+
+
+def orthogonal_slice_data(
+    pool: np.ndarray,
+    phase_code: np.ndarray,
+    spacing_a: np.ndarray,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    """Describe centroid-crossing slices in xy, xz, and yz planes."""
+    centroid_idx = np.asarray(np.where(pool), dtype=float).mean(axis=1)
+    center_indices = np.rint(centroid_idx).astype(int)
+    plan = (
+        ("xy", 2, int(center_indices[2]), (0, 1)),
+        ("xz", 1, int(center_indices[1]), (0, 2)),
+        ("yz", 0, int(center_indices[0]), (1, 2)),
+    )
+    summaries = {
+        "pool_centroid_index_xyz": centroid_idx.tolist(),
+        "slice_center_index_xyz": center_indices.tolist(),
+        "planes": {},
+    }
+    count_rows = []
+    for name, fixed_axis, index, display_axes in plan:
+        pool_slice = np.take(pool, index, axis=fixed_axis)
+        phase_slice = np.take(phase_code, index, axis=fixed_axis)
+        counts = {
+            "Ti3SiC2_scaffold": int(np.count_nonzero(phase_slice == 0)),
+            "solid_Ag": int(np.count_nonzero(phase_slice == 1)),
+            "partially_melted_Ag": int(np.count_nonzero(phase_slice == 2)),
+            "fully_liquid_Ag": int(np.count_nonzero(phase_slice == 3)),
+            "maximum_pool_f_l_ge_0p5": int(pool_slice.sum()),
+            "slice_total_cells": int(pool_slice.size),
+        }
+        axis_names = ("x", "y", "z")
+        summaries["planes"][name] = {
+            "fixed_axis": axis_names[fixed_axis],
+            "fixed_index": index,
+            "fixed_coordinate_A_cell_center": float((index + 0.5) * spacing_a[fixed_axis]),
+            "display_axes": [axis_names[axis] for axis in display_axes],
+            "phase_and_pool_counts": counts,
+        }
+        count_rows.append({
+            "plane": name,
+            "fixed_axis": axis_names[fixed_axis],
+            "fixed_index": index,
+            "fixed_coordinate_A_cell_center": float((index + 0.5) * spacing_a[fixed_axis]),
+            **counts,
+        })
+    return summaries, count_rows
+
+
+def write_slice_figure(
+    arrays: dict[str, np.ndarray],
+    source_x: np.ndarray,
+    source_y: np.ndarray,
+    source_z: np.ndarray,
+    center_indices: list[int],
+    spacing_a: np.ndarray,
+    time_ps: float,
+) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
+    from matplotlib.patches import Patch
+
+    prefix = "pad8_"
+    phase = arrays[prefix + "phase_code_0_scaffold_1_solid_ag_2_partial_ag_3_fully_liquid_ag"]
+    pool = arrays[prefix + "max_pool_mask"]
+    local_indices = {
+        axis: int(np.flatnonzero(source == center_indices[axis])[0])
+        for axis, source in enumerate((source_x, source_y, source_z))
+    }
+    centers_nm = {
+        "x": arrays[prefix + "x_unwrapped_center_A"] / 10.0,
+        "y": arrays[prefix + "y_unwrapped_center_A"] / 10.0,
+        "z": arrays[prefix + "z_center_A"] / 10.0,
+    }
+    plans = (
+        ("XY", "z", local_indices[2], ("x", "y"), phase[:, :, local_indices[2]], pool[:, :, local_indices[2]]),
+        ("XZ", "y", local_indices[1], ("x", "z"), phase[:, local_indices[1], :], pool[:, local_indices[1], :]),
+        ("YZ", "x", local_indices[0], ("y", "z"), phase[local_indices[0], :, :], pool[local_indices[0], :, :]),
+    )
+    cmap = ListedColormap(("#17232b", "#84b8d8", "#f4df00", "#f47721"))
+    fig, axes = plt.subplots(1, 3, figsize=(17, 5.7), facecolor="white", constrained_layout=True)
+    for ax, (plane, fixed_axis, local_fixed, displayed_axes, field, pool_field) in zip(axes, plans):
+        horizontal, vertical = displayed_axes
+        xcenters, ycenters = centers_nm[horizontal], centers_nm[vertical]
+        dx = float(spacing_a["xyz".index(horizontal)] / 10.0)
+        dy = float(spacing_a["xyz".index(vertical)] / 10.0)
+        extent = (xcenters[0] - dx / 2, xcenters[-1] + dx / 2,
+                  ycenters[0] - dy / 2, ycenters[-1] + dy / 2)
+        ax.imshow(field.T, origin="lower", interpolation="nearest", aspect="equal",
+                  extent=extent, cmap=cmap, vmin=-0.5, vmax=3.5)
+        if pool_field.any():
+            ax.contour(xcenters, ycenters, pool_field.T.astype(float), levels=(0.5,),
+                       colors=("#c00028",), linewidths=1.2)
+        original_index = center_indices["xyz".index(fixed_axis)]
+        fixed_a = (original_index + 0.5) * spacing_a["xyz".index(fixed_axis)]
+        ax.set_title(f"{plane} 截面｜{fixed_axis} 索引 {original_index} ({fixed_a/10:.3f} nm)")
+        ax.set_xlabel(f"{horizontal} (nm)")
+        ax.set_ylabel(f"{vertical} (nm)")
+    legend = [
+        Patch(facecolor="#17232b", label="Ti3SiC2 骨架"),
+        Patch(facecolor="#84b8d8", label="固态 Ag"),
+        Patch(facecolor="#f4df00", label="固液共存 Ag"),
+        Patch(facecolor="#f47721", label="完全液态 Ag"),
+        Patch(facecolor="none", edgecolor="#c00028", label="f_l >= 0.5 最大池边界"),
+    ]
+    fig.legend(handles=legend, loc="upper center", ncol=5, frameon=False, bbox_to_anchor=(0.5, 1.07))
+    fig.suptitle(f"Ag70 最大连通液相簇中心正交截面｜t={time_ps:.6f} ps｜网格体素视图", y=1.13)
+    fig.savefig(HERE / "maximum_pool_orthogonal_slices.png", dpi=220, bbox_inches="tight", facecolor="white")
+    plt.close(fig)
+
+
 def read_source() -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, dict[str, object], dict[str, object]]:
     geometry_sha = sha256_file(GEOMETRY_PATH)
     checkpoint_sha = sha256_file(CHECKPOINT_PATH)
@@ -309,6 +505,12 @@ def extract() -> None:
         result = component_summary(ag & (fl >= threshold), spacing_a)
         result["liquid_fraction_threshold_inclusive"] = threshold
         threshold_results.append(result)
+
+    history_audit = recorded_cluster_history_audit(CLUSTERS_PATH, time_ps)
+    core_sensitivity = pool_core_sensitivity(pool, spacing_a)
+    orthogonal_slices, orthogonal_slice_counts = orthogonal_slice_data(
+        pool, phase_code, spacing_a
+    )
 
     spacing_nm = spacing_a / 10.0
     pool_idx = np.where(pool)
@@ -456,6 +658,9 @@ def extract() -> None:
             "pool_partially_melted_voxels": int(np.count_nonzero(pool & partial)),
             "pool_bbox": pool_bounds,
             "widest_spanning_path_throat_estimates": widest_spanning_path_throats(pool, spacing_a),
+            "clearance_core_sensitivity": core_sensitivity,
+            "centroid_crossing_orthogonal_slices": orthogonal_slices,
+            "saved_cluster_history_audit": history_audit,
             "threshold_sensitivity": threshold_results,
             "all_threshold_0p5_component_count": int(component_summary(liquid_dominant, spacing_a)["component_count"]),
             "all_threshold_0p5_liquid_dominant_voxels": int(liquid_dominant.sum()),
@@ -543,7 +748,39 @@ def extract() -> None:
                 "pool_touches_z_original_top_face": touch["pool_touches_global_z_top_physical_face"],
             })
 
+    with (HERE / "pool_core_sensitivity.csv").open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, lineterminator="\n", fieldnames=[
+            "edt_clearance_threshold_nm", "remaining_pool_voxels",
+            "remaining_fraction_of_threshold_0p5_pool", "six_face_connected_components",
+            "largest_core_voxels", "largest_core_spans_pool_bbox_faces_xyz",
+        ])
+        writer.writeheader()
+        for row in core_sensitivity:
+            writer.writerow({
+                **row,
+                "largest_core_spans_pool_bbox_faces_xyz": json.dumps(row["largest_core_spans_pool_bbox_faces_xyz"], sort_keys=True),
+            })
+
+    with (HERE / "orthogonal_slice_counts.csv").open("w", newline="", encoding="utf-8") as stream:
+        fields = [
+            "plane", "fixed_axis", "fixed_index", "fixed_coordinate_A_cell_center",
+            "Ti3SiC2_scaffold", "solid_Ag", "partially_melted_Ag", "fully_liquid_Ag",
+            "maximum_pool_f_l_ge_0p5", "slice_total_cells",
+        ]
+        writer = csv.DictWriter(stream, lineterminator="\n", fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(orthogonal_slice_counts)
+
     create_figure(window_arrays, window_summaries[1], pool_track_id, time_ps)
+    write_slice_figure(
+        window_arrays,
+        window_arrays["pad8_source_x_index"],
+        window_arrays["pad8_source_y_index"],
+        window_arrays["pad8_source_z_index"],
+        orthogonal_slices["slice_center_index_xyz"],
+        spacing_a,
+        time_ps,
+    )
     print(f"pool_track={pool_track_id} time_ps={time_ps:.12f} count={pool.sum()}")
     print(f"bbox_nm_xyz={[pool_bounds[a]['size_nm'] for a in ('x','y','z')]}")
     print(f"source_grid_xyz={list(shape)} geometry_sha256={source['geometry_sha256']}")
