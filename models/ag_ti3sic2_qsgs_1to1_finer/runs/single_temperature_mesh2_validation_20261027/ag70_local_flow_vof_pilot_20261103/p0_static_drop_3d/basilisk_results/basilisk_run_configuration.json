@@ -25,12 +25,38 @@
   ],
   "dynamic_resolutions_R_over_dx": [
     16,
-    32
+    32,
+    64
   ],
   "geometry_only_resolutions_R_over_dx": [
     64
   ],
   "time_step_sensitivity_resolution_R_over_dx": 32,
-  "R64_dynamic_status": "not_completed; see basilisk_cases/diagnostics/R64_DYNAMIC_ATTEMPTS.md",
-  "physical_material_properties_used": false
+  "R64_dynamic_status": "VOF-curvature sphere and 72-degree sessile drop passed dynamically; analytical-curvature sphere failed.",
+  "physical_material_properties_used": false,
+  "dynamic_curvature_modes_by_resolution": {
+    "16": [
+      "exact",
+      "vof"
+    ],
+    "32": [
+      "exact",
+      "vof"
+    ],
+    "64": [
+      "vof"
+    ]
+  },
+  "dynamic_contact_angle_resolutions_R_over_dx": [
+    16,
+    32,
+    64
+  ],
+  "R64_exact_curvature_status": "failed; pressure projection diverged; see basilisk_cases/diagnostics/R64_DYNAMIC_ATTEMPTS.md",
+  "R64_execution": {
+    "mode": "MPI",
+    "runtime": "Open MPI 5.0.7",
+    "ranks": 4
+  },
+  "R32_MPI_serial_consistency_check": "basilisk_cases/diagnostics/mpi_R32_serial_consistency.csv"
 }
