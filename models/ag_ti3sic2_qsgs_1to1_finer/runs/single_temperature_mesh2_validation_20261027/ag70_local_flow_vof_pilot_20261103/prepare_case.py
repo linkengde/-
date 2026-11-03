@@ -10,6 +10,9 @@ NX = NY = 80
 R = 0.4
 DOMAIN_HALF_WIDTH = 1.0
 DZ = 2.0 / NX
+NU = 0.01
+END_TIME = 0.2
+MAX_DT = 1e-4
 
 
 def header(cls, obj, body, location="constant"):
@@ -33,13 +36,19 @@ def write(rel, text):
 
 
 def main():
-    global CASE, NX, NY, DZ
+    global CASE, NX, NY, DZ, NU, END_TIME, MAX_DT
     parser = argparse.ArgumentParser()
     parser.add_argument("--resolution", type=int, default=80)
     parser.add_argument("--case-name", default=None)
+    parser.add_argument("--nu", type=float, default=0.01)
+    parser.add_argument("--end-time", type=float, default=0.2)
+    parser.add_argument("--max-dt", type=float, default=1e-4)
     args = parser.parse_args()
     NX = NY = args.resolution
     DZ = 2.0 / NX
+    NU = args.nu
+    END_TIME = args.end_time
+    MAX_DT = args.max_dt
     default_case = "static_drop_case" if NX == 80 else f"static_drop_case_{NX}"
     CASE = ROOT / (args.case_name or default_case)
     dx = 2 * DOMAIN_HALF_WIDTH / NX
@@ -68,10 +77,10 @@ boundary
 mergePatchPairs ();
 '''))
 
-    write("constant/transportProperties", header("dictionary", "transportProperties", '''
+    write("constant/transportProperties", header("dictionary", "transportProperties", f'''
 phases (liquidAg gas);
-liquidAg { transportModel Newtonian; nu 0.01; rho 1; }
-gas      { transportModel Newtonian; nu 0.01; rho 1; }
+liquidAg {{ transportModel Newtonian; nu {NU}; rho 1; }}
+gas      {{ transportModel Newtonian; nu {NU}; rho 1; }}
 sigma 1;
 '''))
     write("constant/g", header("uniformDimensionedVectorField", "g", '''
@@ -103,12 +112,12 @@ internalField uniform 0;
 boundaryField { walls { type fixedFluxPressure; } frontAndBack { type empty; } }
 ''', "0"))
 
-    write("system/controlDict", header("dictionary", "controlDict", '''
+    write("system/controlDict", header("dictionary", "controlDict", f'''
 application interFoam;
 startFrom startTime;
 startTime 0;
 stopAt endTime;
-endTime 0.2;
+endTime {END_TIME};
 deltaT 1e-5;
 writeControl runTime;
 writeInterval 0.02;
@@ -122,7 +131,7 @@ runTimeModifiable no;
 adjustTimeStep yes;
 maxCo 0.1;
 maxAlphaCo 0.1;
-maxDeltaT 1e-4;
+maxDeltaT {MAX_DT};
 ''', "system"))
     write("system/fvSchemes", header("dictionary", "fvSchemes", '''
 ddtSchemes { default Euler; }
@@ -161,6 +170,7 @@ PIMPLE
     print(f"grid={NX}x{NY}x1; dx={dx}; liquid_cells={liquid_cells}")
     print(f"initial_area={liquid_cells*dx*dx:.8g}; nominal_circle_area={3.141592653589793*R*R:.8g}")
     print(f"expected_2D_cylinder_laplace_jump=sigma/R={1/R:.8g}")
+    print(f"nu={NU}; end_time={END_TIME}; max_delta_t={MAX_DT}")
     print("dimensionless_benchmark_only=true")
 
 

@@ -51,11 +51,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--resolution", type=int, default=80)
     parser.add_argument("--case-name", default=None)
+    parser.add_argument("--output-tag", default=None)
     args = parser.parse_args()
     NX = NY = args.resolution
     DX = DY = 2.0 / NX
     default_case = "static_drop_case" if NX == 80 else f"static_drop_case_{NX}"
     CASE = ROOT / (args.case_name or default_case)
+    output_tag = args.output_tag or str(NX)
     initial_alpha = scalar_field(CASE / "0/alpha.liquidAg")
     time_dirs = sorted(
         (p for p in CASE.iterdir() if p.is_dir() and re.fullmatch(r"\d+(?:\.\d+)?", p.name)),
@@ -80,6 +82,10 @@ def main() -> None:
     measured_jump = liquid_pressure - gas_pressure
     expected_jump = SIGMA / equivalent_radius  # 2-D cylindrical interface.
     continuity_matches = re.findall(r"cumulative\s*=\s*([-+0-9.eE]+)", (CASE / "log.interFoam").read_text(encoding="utf-8", errors="replace"))
+    transport_text = (CASE / "constant/transportProperties").read_text(encoding="ascii")
+    control_text = (CASE / "system/controlDict").read_text(encoding="ascii")
+    nu_match = re.search(r"liquidAg\s*\{[^}]*\bnu\s+([-+0-9.eE]+)", transport_text)
+    end_match = re.search(r"\bendTime\s+([-+0-9.eE]+)", control_text)
 
     history = []
     for directory in output_dirs:
@@ -100,7 +106,7 @@ def main() -> None:
     x = -1.0 + (np.arange(NX) + 0.5) * DX
     y = -1.0 + (np.arange(NY) + 0.5) * DY
     np.savez_compressed(
-        ROOT / f"static_drop_final_fields_{NX}.npz",
+        ROOT / f"static_drop_final_fields_{output_tag}.npz",
         alpha_liquid=alpha,
         pressure=pressure,
         velocity=velocity,
@@ -123,9 +129,12 @@ def main() -> None:
     metrics = {
         "status": "DIMENSIONLESS_STATIC_DROP_VOF_TEST_COMPLETED",
         "solver": "OpenFOAM interFoam 2406",
+        "case_name": CASE.name,
         "mesh_cells": NX * NY,
         "grid_shape_xy": [NX, NY],
         "cell_spacing": [DX, DY],
+        "kinematic_viscosity_both_phases_dimensionless": float(nu_match.group(1)) if nu_match else None,
+        "requested_end_time": float(end_match.group(1)) if end_match else None,
         "initial_liquid_area_per_unit_depth": initial_area,
         "final_liquid_area_per_unit_depth": final_area,
         "relative_liquid_area_drift": (final_area - initial_area) / initial_area,
@@ -147,8 +156,8 @@ def main() -> None:
         "cumulative_continuity_error_last": float(continuity_matches[-1]) if continuity_matches else None,
         "physical_scope": "dimensionless method verification only; no Ag properties, heating, skeleton, arc forcing, evaporation, or splash prediction",
     }
-    (ROOT / f"static_drop_metrics_{NX}.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-    with (ROOT / f"static_drop_time_history_{NX}.csv").open("w", newline="", encoding="utf-8") as stream:
+    (ROOT / f"static_drop_metrics_{output_tag}.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    with (ROOT / f"static_drop_time_history_{output_tag}.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.DictWriter(stream, fieldnames=history[0].keys(), lineterminator="\n")
         writer.writeheader()
         writer.writerows(history)
@@ -178,7 +187,7 @@ def main() -> None:
         ax.set_xlim(-0.65, 0.65)
         ax.set_ylim(-0.65, 0.65)
     fig.suptitle("Static circular-drop VOF benchmark (not an Ag or arc simulation)")
-    fig.savefig(ROOT / f"static_drop_benchmark_{NX}.png", dpi=180, facecolor="white")
+    fig.savefig(ROOT / f"static_drop_benchmark_{output_tag}.png", dpi=180, facecolor="white")
     plt.close(fig)
     print(json.dumps(metrics, indent=2))
 
