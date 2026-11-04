@@ -1,0 +1,3 @@
+# Incomplete tangential-only pilot — diagnostic only
+
+This first isolated attempt added only a tangential Marangoni CSF term while retaining constant normal surface tension. It omitted the position-dependent `sigma*kappa*n` contribution required when sigma varies along a curved interface. Its coarse-grid migration direction disagreed with the analytical reference. The run was stopped deliberately after the 16-cells-per-radius pass (process exit 130); it is not a valid P1b result and is excluded from all convergence tables. The later full-stress implementation is archived in the parent directory and is the one reported in the P1b comparison.

@@ -1,0 +1,121 @@
+/*
+ * P1b comparison: axisymmetric moving-drop Marangoni benchmark using the
+ * project's automatic-curvature VOF path (two-phase.h + tension.h).
+ * Dimensionless and independent of Ag material properties/geometry.
+ * The imposed d(sigma)/dx is projected onto the local interface tangent.
+ */
+#include "axi.h"
+#include "navier-stokes/centered.h"
+#include "two-phase.h"
+#include "tension.h"
+
+int LEVEL = 8;
+const double R = 1. [1], NablaT = 1., Mu = 1., Rho = 1. [0];
+const double Re = 0.066, Ca = 0.66;
+const double Gamma_T = Re*sq(Mu)/(Rho*sq(R)*NablaT);
+const double Gamma_0 = Gamma_T*R*NablaT/Ca;
+const double t0 = Mu/(Gamma_T*NablaT);
+const double Cdrop = 1., Cbulk = 1.;
+double U_drop, u_drop, mass0, xcm0, tprev;
+scalar deltaf[], nxf[], nyf[];
+
+int main()
+{
+  size (16.*R);
+  origin (-L0/2.);
+  rho1 = rho2 = Rho;
+  mu1 = mu2 = Mu;
+  f.sigma = Gamma_0;
+  TOLERANCE = 1e-4 [*];
+  U_drop = -2./((2. + 3.*mu2/mu1)*(2. + Cdrop/Cbulk))*Gamma_T*R*NablaT/mu1;
+  for (LEVEL = 7; LEVEL <= 9; LEVEL++) {
+    N = 1 << LEVEL;
+    run();
+  }
+}
+
+static void interface_geometry()
+{
+  foreach() {
+    double gx = (f[1] - f[-1])/(2.*Delta);
+    double gy = (f[0,1] - f[0,-1])/(2.*Delta);
+    double g = sqrt(sq(gx) + sq(gy));
+    deltaf[] = g;
+    nxf[] = g > 1e-30 ? gx/g : 0.;
+    nyf[] = g > 1e-30 ? gy/g : 0.;
+  }
+  boundary ({deltaf,nxf,nyf});
+}
+
+event init (t = 0)
+{
+  /* f=0 is the spherical drop, matching the official test's (1-f) drop. */
+  fraction (f, sq(x) + sq(y) - sq(R));
+  boundary ({f});
+  interface_geometry();
+  foreach() {
+    u.x[] = u.y[] = 0.;
+    p[] = 0.;
+  }
+  boundary ((scalar *){u,p});
+  mass0 = xcm0 = tprev = u_drop = 0.;
+}
+
+event acceleration (i++)
+{
+  interface_geometry();
+  face vector av = a;
+  foreach_face(x) {
+    double ds = 0.5*(deltaf[] + deltaf[-1]);
+    double tx = 0.5*((1. - sq(nxf[])) + (1. - sq(nxf[-1])));
+    av.x[] += alpha.x[]/fm.x[]*Gamma_T*NablaT*tx*ds;
+  }
+  foreach_face(y) {
+    double ds = 0.5*(deltaf[] + deltaf[0,-1]);
+    double ty = -0.5*(nxf[]*nyf[] + nxf[0,-1]*nyf[0,-1]);
+    av.y[] += alpha.y[]/fm.y[]*Gamma_T*NablaT*ty*ds;
+  }
+}
+
+event logfile (i += 10)
+{
+  double xb = 0., vb = 0., sb = 0.;
+  foreach(reduction(+:xb) reduction(+:vb) reduction(+:sb)) {
+    double dvdrop = (1. - f[])*dv();
+    xb += x*dvdrop;
+    vb += u.x[]*dvdrop;
+    sb += dvdrop;
+  }
+  if (t == 0.) {
+    mass0 = sb;
+    xcm0 = sb > 0. ? xb/sb : 0.;
+    tprev = 0.;
+    fprintf(stdout, "\nt mass_drift xb vb_over_Udrop tmid u_drop_over_Udrop dt cells\n");
+  }
+  u_drop = t > tprev && sb > 0. ? (xb/sb - xcm0)/(t - tprev) : 0.;
+  fprintf(stdout, "%g %.12g %.12g %.12g %g %.12g %.12g %ld\n",
+          t/t0, mass0 > 0. ? (sb-mass0)/mass0 : 0.,
+          sb > 0. ? xb/sb : 0., sb > 0. ? vb/sb/U_drop : 0.,
+          (t+tprev)/2./t0, u_drop/U_drop, dt, grid->tn);
+  fflush(stdout);
+  if (sb > 0.) xcm0 = xb/sb;
+  tprev = t;
+}
+
+event report (t = 3.*t0)
+{
+  double U = -Gamma_T*R*NablaT/Mu;
+  fprintf(stderr, "%d %.12g %.12g\n", N/16, u_drop/U, U_drop/U);
+}
+
+event stop (t = 3.*t0)
+{
+  return 1;
+}
+
+#if TREE
+event adapt (i++)
+{
+  adapt_wavelet ({f,u}, (double[]){1e-2,1e-5,1e-5}, LEVEL);
+}
+#endif

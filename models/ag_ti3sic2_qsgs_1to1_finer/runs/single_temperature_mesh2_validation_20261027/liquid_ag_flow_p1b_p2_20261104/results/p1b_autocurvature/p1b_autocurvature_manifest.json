@@ -1,0 +1,33 @@
+{
+  "implementation": "project P1 automatic-curvature path adapted to the Basilisk dynamic droplet case",
+  "method": "axisymmetric centered Navier-Stokes; standard VOF; tension.h automatic curvature; CSF correction for spatially varying normal and tangential surface-tension stress",
+  "not_same_as_reference": "does not use the official two-phase CLSVOF plus integral.h formulation",
+  "physical_parameters": {
+    "dimensionless": true,
+    "R": 1.0,
+    "rho1_rho2": 1.0,
+    "mu1_mu2": 1.0,
+    "Re": 0.066,
+    "Ca_reference_source": 0.66,
+    "Gamma_T": 0.066,
+    "Gamma_0": 0.1,
+    "U_drop_theory": -0.0088,
+    "stop_time": "3*t0"
+  },
+  "grid_cells_per_radius": [
+    8,
+    16,
+    32
+  ],
+  "qcc_compile_command": "qcc -disable-dimensions -O2 -Wall -autolink p1b_vof_autocurvature.c -o p1b_vof_autocurvature -lm",
+  "qcc_path": "pinned Basilisk v2026-07-20 source snapshot; see ../p1b_official/p1b_source_manifest.json",
+  "source_sha256": "670a349667ef9cab3c23d007935140c35195638a423ed4b09d4d8f8b80b898c1",
+  "result_csv": "p1b_autocurvature_velocity_grid_convergence.csv",
+  "raw_logs": [
+    "p1b_vof_fullstress_stdout.log",
+    "p1b_vof_fullstress_stderr.log"
+  ],
+  "decision": "not accepted: speed error rises to about 10 percent on finer grids and does not converge to the theoretical migration speed",
+  "compiled_binary_sha256": "30b5f0e4796be9207d9a54c4e9e2ef45b9cabdd9ecd6e48797128909b7742ed8",
+  "compiler": "cc (Debian 14.2.0-19), linux x86_64"
+}

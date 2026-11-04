@@ -1,29 +1,41 @@
-# P1b dynamic Marangoni benchmark — status report
+# P1b dynamic Marangoni droplet validation
 
 ## Decision
 
-**Not run; no P1b pass/fail decision is made.** The available P1 results establish controlled planar Stokes flow and static curved-interface force closure. They do not reproduce a translating droplet, solve a temperature field, or exercise a moving interface under a temperature-dependent surface tension.
+The pinned Basilisk CLSVOF reference run passes the project's preliminary dynamic-benchmark checks. The separate project automatic-curvature standard-VOF comparison does **not** reproduce the theoretical migration speed within tolerance and does not converge with the tested grid sequence. Therefore this validates the reference case and exposes a limitation in the current project VOF route; it does not clear that route for Ag melt-pool predictions.
 
-## Baseline and what it establishes
+## Pinned reference and run
 
-Baseline commit: `66961178b383fa7c507bea6318f8672e1cb4c08e` (`codex/ag70-p1b-p2`). The inherited P1 report records an automatic-curvature planar Stokes benchmark with velocity error 0.7805% at H/Δx=64, reversal when the imposed sign of dσ/dT changes, maximum mass drift 1.53×10⁻⁹%, and a separate static-circle force-closure residual of 0.0137%. That implementation uses a flat interface, an imposed dimensionless tangential stress, and a fixed interface. It is not the Basilisk official dynamic droplet-migration case.
+The official `src/test/marangoni.c` was run from the user-provided Linux Basilisk snapshot `comphy-lab/basilisk-C v2026-07-20`, commit `9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e`. The archive SHA256 is `4686294e8f649a424ca437a7fa94bfac9984c32bea5e9f33a27a5783cc692829`; the exact source and selected dependency hashes are recorded in `results/p1b_official/p1b_source_manifest.json`. This is a downstream-patched snapshot based on Basilisk/Darcs, not an untouched upstream release.
 
-The inherited P1 configuration records that the local Basilisk source mirror did not contain `src/test/marangoni.c`; it also lacks a Darcs revision identifier. The exact executable and selected headers are hashed in the inherited `results/p1_solver_configuration.json`, but those hashes cannot identify the official dynamic benchmark source or its complete dependency revision.
+A harness-only stop event was appended so the recurring adaptation/logging events terminate after the source's `t=3*t0` measurement. The source body and physical settings were otherwise unchanged. Reproduction steps are in `results/p1b_official/BUILD_AND_RUN.md`; raw stdout, final velocity output, source, patch and the generated reference image are archived in `results/p1b_official/`.
 
-## Source retrieval and reproduction status
+The case is dimensionless and axisymmetric, with `R=1`, `rho=mu=1` in both phases, `Re=0.066`, source setting `Ca=0.66`, `Gamma_T=0.066`, `Gamma_0=0.1`, and theoretical `U_drop=-0.0088`. The source comments that `Ca=0.66` is ten times the value in Al Saud et al. (2018), chosen to accelerate computation, and that results are also good at `Ca=0.066`; the latter was not run here. The imposed linear surface-tension field is not a solved temperature field.
 
-The official reference target is `https://basilisk.fr/src/test/marangoni.c`. The user reports successfully opening that official source in the current chat environment and confirming that it is an axisymmetric CLSVOF droplet-migration case with a theoretical migration-speed and grid-convergence reference. This confirms the external reference exists, but the complete source, revision, and dependencies have not been archived in this repository. The current managed environment uses restricted egress; a direct `curl -fI` through its configured route returned HTTP 403. Per the user's instruction, source acquisition is outside this runner's role; the user will locate/provide the source tree and required files. No P1b computation was performed and no result has been fabricated.
+## Official CLSVOF results
 
-The P1b work therefore remains blocked until the user-provided local source tree and data are available. The required sequence is:
+| Cells per radius | Domain N | Measured `u_drop/U` | Theory `U_drop/U` | Relative speed error | Max logged mass drift |
+|---:|---:|---:|---:|---:|---:|
+| 8 | 128 | 0.128711 | 0.133333 | 3.467% | 0.05941% |
+| 16 | 256 | 0.131629 | 0.133333 | 1.278% | 0.02714% |
+| 32 | 512 | 0.132880 | 0.133333 | 0.340% | 0.01262% |
 
-1. Retrieve the complete official test source and every included local dependency from the same Basilisk revision.
-2. Record the source URL, revision identifier, SHA256 hashes, compiler, and run command.
-3. Run the official method and compare the droplet migration speed, interface trajectory, and mass conservation against its stated reference/theory at the published resolutions.
-4. Implement the same physical case in the project’s automatic-curvature path only after confirming equivalent nondimensional parameters and boundary conditions; report method differences separately.
-5. Test at no fewer than three resolutions and preserve raw logs and CSV data.
+The speed error decreases at each refinement. At 32 cells per radius the error is below the provisional 5% goal; mass drift is below 0.1% at all three resolutions. This is a pass for the reference setup and these tested quantities, not a general validation of thermal Marangoni physics.
 
-The official test uses a different interface-tracking and surface-force formulation from the project’s P1 planar implementation. Results from those methods must not be presented as an apples-to-apples code comparison unless the geometry, stress law, nondimensional groups, and boundary conditions are matched.
+## Project automatic-curvature VOF comparison
 
-## Scope limits
+A separate isolated adaptation of the same dimensionless case used `axi.h`, centered Navier–Stokes, standard `two-phase.h`/`tension.h`, automatic curvature, and a CSF representation of the spatially varying normal and tangential surface stresses. It did not use the reference CLSVOF plus `integral.h` stress discretization. No Ag geometry or Ag material parameters were used.
 
-No Ag70 geometry, Ti₃SiC₂ skeleton, dimensional Ag flow, temperature solver, or melt-pool calculation was used. P1b remains a controlled numerical verification task only. The known P0 exact-curvature/wavelet-AMR defect remains unchanged.
+| Cells per radius | Domain N | Measured `u_drop/U` | Theory `U_drop/U` | Relative speed error | Max logged mass drift |
+|---:|---:|---:|---:|---:|---:|
+| 8 | 128 | 0.127917 | 0.133333 | 4.062% | 0.01918% |
+| 16 | 256 | 0.120751 | 0.133333 | 9.437% | 0.00423% |
+| 32 | 512 | 0.120003 | 0.133333 | 9.998% | 0.00423% |
+
+Mass conservation is good, but the velocity error increases and then remains near 10%; the sequence does not meet the speed-error or grid-convergence checks. A preliminary tangential-only implementation produced the wrong migration direction because it omitted the variable normal `sigma*kappa*n` contribution. That incomplete run was stopped and is kept only in `results/p1b_autocurvature/diagnostics_tangential_only_incomplete/`; it is not included in the results table. The full-stress implementation still fails quantitative agreement, so the discrepancy must be resolved before using this project route for dynamic interface prediction.
+
+The combined grid table and mass data are `p1b_velocity_convergence.csv` and `p1b_mass_conservation.csv`. Full logs and source for the second method are under `results/p1b_autocurvature/`.
+
+## Scope
+
+No thermal conduction equation, Ag-specific dimensional property, Ti₃SiC₂ skeleton, nanoscale pore, Ag70 geometry, or melt-pool flow was simulated. These results do not establish Ag velocities, melt-pool deformation, or crater formation. The existing P0/P1 controlled tests remain valid only for their previously reported configurations.

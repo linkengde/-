@@ -1,0 +1,28 @@
+{
+  "source_project": "comphy-lab/basilisk-C",
+  "release_tag": "v2026-07-20",
+  "peeled_git_commit": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+  "snapshot_character": "downstream-patched Basilisk/Darcs source snapshot; not an untouched upstream release",
+  "archive_url": "https://github.com/comphy-lab/basilisk-C/releases/download/v2026-07-20/basilisk-linux.tar.gz",
+  "archive_sha256": "4686294e8f649a424ca437a7fa94bfac9984c32bea5e9f33a27a5783cc692829",
+  "official_test_path": "src/test/marangoni.c",
+  "official_test_sha256": "b2d2112e012ece62876c5010e3aeca3928c12c2d18ccd4b008e74afeb1d4294f",
+  "run_harness": "append stop_event.patch to the unchanged official test; stop at the official 3*t0 report event",
+  "stop_patch_sha256": "161b6ada5abd0cee4406bce0022c9a1a4dc47628db4f44019931c0322205167b",
+  "compiled_qcc_sha256": "521f42b26689c6bc79e1476e55db9275e1e3a18f18f79e81182a59279f0d9328",
+  "compiler": "cc (Debian 14.2.0-19)",
+  "build_libraries": {
+    "src/gl/libglutils.a": "2399c3b7bf0adc6af34f65db9c083169966532477ee672fc686d1aea1854c6c4",
+    "src/gl/libfb_tiny.a": "776e312acafe8fc4f34432c3403ea3014dab92829d9b76858ca7e6ccb1aff1d6"
+  },
+  "official_dependencies_sha256": {
+    "src/axi.h": "9f5571dc6d5b880271fbf2d715d6ff4938bd1fb7034620681b46c7cc02b86790",
+    "src/navier-stokes/centered.h": "98f132f6902ad4642ab1b431491dc97855b839b9a725d07d5afc5c5dee8b01bd",
+    "src/two-phase-clsvof.h": "c0f21472c2d6acac0bdda0a2c43602273ee35d6c111cce4a98005ff9f6dbd048",
+    "src/integral.h": "234d407ac3012a9be14e91747fae10dfe0a2c4677c5ca5a8bb93ae0d3511a395",
+    "src/view.h": "3ed48dbe1db1fd9def03546dd9e3c49c28e8eb33c2c5300811dea7d5adcbb2a1"
+  },
+  "run_command": "qcc -O2 -Wall -autolink marangoni.c -o marangoni -lm; timeout 900 ./marangoni",
+  "grid_cells_per_radius": [8, 16, 32],
+  "benchmark_stop_time": "3*t0"
+}

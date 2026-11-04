@@ -2,27 +2,19 @@
 
 ## Outcome
 
-**Not ready for a physical Ag70 melt-pool flow calculation.** The literature audit improves the property basis, but the official dynamic Marangoni reproduction remains unrun and important material/interface gates remain open.
+**Not ready for physical Ag70 melt-pool flow prediction.** The official dynamic benchmark is reproduced, but the project's automatic-curvature VOF comparison fails quantitative velocity convergence. The Ag viscosity record is now uncertainty-audited, yet its measurements stop at 1673 K and wall/interface momentum transfer remains unknown.
 
-## Decision table
-
-| Gate | Current evidence | Status |
+| Gate | Evidence | Status |
 |---|---|---|
-| P1 controlled Marangoni implementation | Planar Stokes sign, speed, timestep and mass tests; static curved-force closure | Passed for those dimensionless cases only |
-| P1b official dynamic droplet migration | User confirms the official page exists and identifies its axisymmetric CLSVOF/theory/grid-convergence content; source retrieval from this runner returned HTTP 403 | Not run; no decision |
-| Liquid Ag viscosity | Nine primary-paper points and fit, 1273–1673 K; user reports the NIST JSON’s nine values match and expanded-uncertainty fields are present | Candidate inside stated range; numeric NIST uncertainty fields still need local extraction; not validated above it |
-| Liquid Ag density | Abdullaev experimental correlation, 1234.93–1631 K | Candidate within range; reported error convention is unspecified |
-| Ag surface tension | Two separate Morohoshi atmosphere-specific fits: 1219–1734 K and 1350–1521 K | Candidate only within each separate range; do not combine or extrapolate |
-| Ag/Ti₃SiC₂ static wetting | 72° under the cited polished-substrate/vacuum/970 °C condition | Condition-specific static datum only |
-| Ag/Ti₃SiC₂ friction and slip | No calibrated data | Unresolved |
-| Nanopore continuum validity | ~1.55 nm geometric z bottleneck, ~0.317 nm voxel; no scale separation or wall law | Quantitative pore-scale NS not justified |
+| P0 automatic-curvature static VOF tests | Prior controlled curvature, contact-angle and mass results | Passed for those tests only |
+| P1 planar Marangoni/static force checks | Prior controlled dimensionless tests | Passed for those tests only |
+| P1b official CLSVOF dynamic droplet | 0.340% fine-grid speed error; max logged mass drift 0.0594% | Passed for reference setup |
+| P1b project auto-curvature VOF dynamic comparison | 9.44–10.00% errors on finer grids; no convergence | Not passed |
+| Liquid Ag viscosity | Nine NIST points, 1273–1673 K, 95% expanded uncertainty; all publisher-fit residuals within U95 | Audited candidate in measured range only |
+| Ag density | Abdullaev experimental correlation, 1234.93–1631 K | Candidate within range; reported error convention remains unspecified |
+| Ag surface tension | Two atmosphere-specific Morohoshi fits with distinct ranges | Candidates only in their separate ranges |
+| Ag/Ti₃SiC₂ wetting | 72° static datum under cited specimen/atmosphere/temperature | Condition-specific static value only |
+| Ag/Ti₃SiC₂ friction/slip | No calibrated dynamic wall data | Unresolved |
+| Nanopore continuum validity | ~1.55 nm bottleneck, ~0.317 nm voxels, no scale separation or wall law | Quantitative pore-scale NS not justified |
 
-## Permitted next work
-
-1. Once the user places the official Basilisk source tree, `src/test/marangoni.c`, its revision metadata, and the NIST JSON in the workspace, hash and inspect those local files.
-2. Run P1b with the official method, then run a carefully matched project-method comparison and preserve logs/results.
-3. Parse the NIST expanded-uncertainty values, verify units/coverage, compare all nine values to the paper CSV, and update the audit tables.
-4. Seek condition-matched Ag/Ti₃SiC₂ momentum-transfer data or develop a separately validated interface-calibration study. Do not treat the static contact angle as a friction/slip measurement.
-5. Revisit the continuum model only with a documented scale-bridging basis and a justified driving condition. If pore-scale Navier–Stokes remains unsupported, develop a validated coarse-grained closure before flow predictions.
-
-No production solver or original Ag70 geometry was changed. No melt pool was regenerated, no real Ag70 flow was run, and no 2000–2277 K Ag transport parameter was represented as experimentally validated.
+The next technical gate is to resolve the automatic-curvature dynamic stress discretization and repeat P1b. Separately, obtain or derive a defensible Ag/Ti₃SiC₂ momentum-transfer law. No Ag70 geometry, thermal field, or real melt-pool flow was used in this phase.
