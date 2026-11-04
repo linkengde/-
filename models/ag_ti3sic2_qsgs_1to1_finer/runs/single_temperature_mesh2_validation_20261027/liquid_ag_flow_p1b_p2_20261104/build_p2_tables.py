@@ -49,8 +49,10 @@ def build_viscosity_tables() -> dict[str, float]:
             f"{reported_aux:.6f}",
             f"{fitted:.9f}",
             f"{residual_pct:.6f}",
-            "primary-paper table transcribed; NIST ThermoML cross-check pending",
+            "primary-paper Table 4; user reports NIST JSON's nine Ag values match",
             "1273-1673",
+            "externally checked in chat as reported by user; raw JSON not yet archived",
+            "JSON reportedly has per-point expanded-uncertainty fields; values, units, and coverage not yet locally extracted",
             "mPa s; Table 4 auxiliary eta_sigma column retained verbatim; definition not stated in inspected text",
         ])
         residuals.append(residual_pct)
@@ -62,7 +64,7 @@ def build_viscosity_tables() -> dict[str, float]:
             "source", "doi", "temperature_K", "measured_dynamic_viscosity_mPa_s",
             "reported_eta_sigma_mPa_s_undefined", "fit_prediction_mPa_s",
             "fit_minus_measured_percent", "data_provenance", "reported_temperature_range_K",
-            "notes",
+            "nist_json_nine_value_match_status", "nist_expanded_uncertainty_status", "notes",
         ],
         raw_rows,
     )

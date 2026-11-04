@@ -2,7 +2,7 @@
 
 ## Result and scope
 
-The primary-paper data and its reported Arrhenius fit are transcribed and checked over the paper’s nine-point experimental interval, 1273–1673 K. This provides an auditable candidate viscosity curve **within that interval only**. It does not establish a validated viscosity at 2000 K or at the 2277 K Ag melting point, and it does not authorize a dimensional melt-pool velocity calculation.
+The primary-paper data and its reported Arrhenius fit are transcribed and checked over the paper’s nine-point experimental interval, 1273–1673 K. This provides an auditable candidate viscosity curve **within that interval only**. It does not establish a validated viscosity at 2000 K or at 2277 K. Silver melts at about 1235 K; 2277 K is a high-temperature melt-pool condition considered in earlier project work, not the Ag melting point. No extrapolated viscosity authorizes a dimensional melt-pool velocity calculation.
 
 ## Source and provenance
 
@@ -16,7 +16,7 @@ The user-provided article PDF was inspected locally (SHA256 `34bb1a81fdabfd81c63
 
 with absolute temperature T in kelvin. The article states that the relative measurement error for the high-temperature metal measurements is below 30%. Its Table 4 includes an additional `ησ` column; the inspected text does not define that symbol, so the values are retained in the CSV without interpreting them as standard deviations or confidence limits.
 
-The experimental points were transcribed from the primary paper’s Table 4. The task’s NIST ThermoML record (`https://trc.nist.gov/ThermoML/10.1007/s10765-016-2104-7.html`) was not independently fetched in this run because `trc.nist.gov` is not yet enabled in the running environment. The egress domain is present only in the saved configuration draft. Thus this is a paper-table transcription, not a claimed NIST-page parse.
+The experimental points were transcribed from the primary paper’s Table 4. The user reports independently inspecting the NIST ThermoML JSON record (`https://trc.nist.gov/ThermoML/10.1007/s10765-016-2104-7.json`) in the current chat environment: its nine Ag values match the paper-table transcription, and the JSON contains per-point expanded-uncertainty fields. This is recorded as external cross-check evidence. The JSON and its numeric uncertainty fields are not yet archived in this repository: direct requests from the managed cloud runner returned HTTP 403 because the `trc.nist.gov` allowlist change has not been published. Therefore the values, units, and coverage definition of those uncertainty fields still require local extraction before they can be reported numerically.
 
 ## Fit check against the nine tabulated points
 
@@ -40,4 +40,4 @@ For clarity, formal evaluations of this equation are about 1.78854 mPa·s at 200
 
 ## Use decision
 
-Use the correlation as a literature candidate only inside 1273–1673 K, preserving its broad stated measurement error and atmosphere/sample limitations. Keep the NIST ThermoML cross-check open. Do not extrapolate it to the full melt-pool temperature range or use it to produce a real Ag70 flow prediction.
+Use the correlation as a literature candidate only inside 1273–1673 K, preserving its broad stated measurement error and atmosphere/sample limitations. The nine-point NIST value match is externally confirmed as reported by the user; archiving the JSON and extracting its per-point uncertainty values remain open. Do not extrapolate it to the full melt-pool temperature range or use it to produce a real Ag70 flow prediction.
