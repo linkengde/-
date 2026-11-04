@@ -12,9 +12,9 @@ The inherited P1 configuration records that the local Basilisk source mirror did
 
 ## Source retrieval and reproduction status
 
-The official reference target is `https://basilisk.fr/src/test/marangoni.c`. The user reports successfully opening that official source in the current chat environment and confirming that it is an axisymmetric CLSVOF droplet-migration case with a theoretical migration-speed and grid-convergence reference. This confirms the external reference exists, but the complete source, revision, and dependencies have not been archived in this repository. The current managed environment uses restricted egress; a direct `curl -fI` through its configured route returned HTTP 403. A configuration draft adding exactly `basilisk.fr` and `trc.nist.gov` was saved for review; the environment tool returned `requires_publish=true`, so that draft has **not** changed the running environment. No P1b computation was performed and no result has been fabricated.
+The official reference target is `https://basilisk.fr/src/test/marangoni.c`. The user reports successfully opening that official source in the current chat environment and confirming that it is an axisymmetric CLSVOF droplet-migration case with a theoretical migration-speed and grid-convergence reference. This confirms the external reference exists, but the complete source, revision, and dependencies have not been archived in this repository. The current managed environment uses restricted egress; a direct `curl -fI` through its configured route returned HTTP 403. Per the user's instruction, source acquisition is outside this runner's role; the user will locate/provide the source tree and required files. No P1b computation was performed and no result has been fabricated.
 
-The P1b work therefore remains blocked at source acquisition. After the environment configuration is reviewed and published, the required sequence is:
+The P1b work therefore remains blocked until the user-provided local source tree and data are available. The required sequence is:
 
 1. Retrieve the complete official test source and every included local dependency from the same Basilisk revision.
 2. Record the source URL, revision identifier, SHA256 hashes, compiler, and run command.

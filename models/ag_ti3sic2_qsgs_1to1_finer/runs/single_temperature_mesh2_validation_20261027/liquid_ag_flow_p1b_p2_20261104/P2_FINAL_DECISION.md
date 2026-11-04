@@ -19,9 +19,9 @@
 
 ## Permitted next work
 
-1. Review and publish the saved restricted-egress draft if appropriate; it adds only `basilisk.fr` and `trc.nist.gov` to the existing custom allowlist. The draft is not active until published.
-2. Retrieve and hash the official Basilisk source and revision, then finish P1b with the official method and a carefully matched project-method comparison.
-3. Retrieve the NIST ThermoML JSON, preserve its SHA256, and extract the expanded-uncertainty values with their units and coverage convention. The nine-value equality has been externally checked in the current chat as reported by the user, but the raw JSON and uncertainty values are not yet in the repository.
+1. Once the user places the official Basilisk source tree, `src/test/marangoni.c`, its revision metadata, and the NIST JSON in the workspace, hash and inspect those local files.
+2. Run P1b with the official method, then run a carefully matched project-method comparison and preserve logs/results.
+3. Parse the NIST expanded-uncertainty values, verify units/coverage, compare all nine values to the paper CSV, and update the audit tables.
 4. Seek condition-matched Ag/Ti₃SiC₂ momentum-transfer data or develop a separately validated interface-calibration study. Do not treat the static contact angle as a friction/slip measurement.
 5. Revisit the continuum model only with a documented scale-bridging basis and a justified driving condition. If pore-scale Navier–Stokes remains unsupported, develop a validated coarse-grained closure before flow predictions.
 
