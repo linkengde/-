@@ -1,0 +1,65 @@
+{
+  "solver": "Basilisk C qcc, 2-D quadtree uniform Cartesian grid, centered Stokes + VOF + tension.h automatic curvature",
+  "source_file": "p1_planar_marangoni.c",
+  "source_sha256": "e5076b7304394347ac025a89df499c47091867fcaa1fd3ed3843f2c8e209ace6",
+  "qcc_path": "/tmp/basilisk-build/src/qcc",
+  "qcc_sha256": "79d76d1b4a951ae1d32efe24635a1bc195af7bc1a4913488970c18fadf1e3791",
+  "basilisk_header_sha256": {
+    "tension.h": "c42f7e4c12f5f881e2361a4a2b8ce7739a0366f9a6cc2638d94c19b1277f9f35",
+    "iforce.h": "a40700dff29e73ac1bb41fc31aa2bb2df92ab66c6ed488c02903aed2cbcf00ed",
+    "curvature.h": "451ffc22bcd22612c934b42116afbec0466909b2fc818fb365e65ef39f1d3879",
+    "two-phase.h": "19faf8d7b4f4985da2d436048cb28a4cf65878c130cb8dae838e40a1b8659e3e"
+  },
+  "basilisk_release_or_darcs_revision": "not recorded in the installed build; executable and key-header hashes are recorded",
+  "dimensionless": true,
+  "ag_properties_or_geometry_used": false,
+  "interface": "flat liquid layer below y=0, gas above y=0; periodic x; no-slip top and bottom",
+  "rho_liquid": 1.0,
+  "rho_gas": 1.0,
+  "mu_liquid": 1.0,
+  "mu_gas": 1.0,
+  "sigma_constant": 0.01,
+  "temperature_gradient": 0.01,
+  "d_sigma_dT": {
+    "negative": -0.5,
+    "positive": 0.5,
+    "zero": 0.0
+  },
+  "silver_literature_slope_sensitivity": {
+    "normalization": "dimensionless beta*=0.5*(beta/beta_ref), beta_ref=+0.546 mN/(m K); grad_T*=0.01; tau*=beta* grad_T*",
+    "agred": {
+      "beta_mN_per_m_K": -0.298,
+      "atmosphere": "Ar/He + 5% H2; 2.6 ppm H2O; apparent oxygen partial pressure varies with temperature"
+    },
+    "agoxygen": {
+      "beta_mN_per_m_K": 0.546,
+      "oxygen_partial_pressure_Pa": 100.0
+    },
+    "source": "Morohoshi et al., J. Japan Inst. Metals 72 (2008), 708-713, doi:10.2320/jinstmet.72.708",
+    "meaning": "sign and flow-direction sensitivity only; not an Ag dimensional-velocity prediction"
+  },
+  "surface_shear": "tau=d_sigma_dT*grad_T; imposed force density tau*|grad(f)| e_x",
+  "analytical_interface_velocity": "U=tau*H/(mu_liquid+mu_gas) for equal layer heights H; here H=mu_liquid=mu_gas=1, so U=tau/2",
+  "H_over_dx": [
+    16,
+    32,
+    64
+  ],
+  "timestep_factors": [
+    0.5,
+    0.25
+  ],
+  "final_time": 5.0,
+  "official_basilisk_marangoni_case": "https://basilisk.fr/src/test/marangoni.c; not present in the installed source mirror, so no code-to-code reproduction is claimed",
+  "surface_force_closure": {
+    "source_file": "p1_surface_force_closure.c",
+    "source_sha256": "efcf34c24982aeacb9483afb62fe273aff7dc00130cdd41aee35070e0307c914",
+    "analytic_profile": "sigma(theta)=1+0.1*cos(theta), R=0.5",
+    "normal_force": "sigma*kappa*n using Basilisk automatic height-function curvature",
+    "tangential_force": "projected surface gradient grad_s(sigma); both forces integrated over PLIC interface segments",
+    "expected_normal_resultant_x": "-pi*sigma1",
+    "expected_tangential_resultant_x": "+pi*sigma1",
+    "expected_total_resultant": "zero",
+    "results_csv": "p1_surface_force_closure.csv"
+  }
+}
