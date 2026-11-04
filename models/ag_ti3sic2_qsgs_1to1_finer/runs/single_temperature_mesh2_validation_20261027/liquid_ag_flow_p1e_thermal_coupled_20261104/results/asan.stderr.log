@@ -1,0 +1,12 @@
+=================================================================
+==28111==ERROR: AddressSanitizer: attempting free on address which was not malloc()-ed: 0x5571dda3d960 in thread T0
+    #0 0x7fae56946b58 in realloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:85
+    #1 0x5571dd7f351a in list_append /tmp/ag70-p1b-p2_sources/basilisk-v2026-07-20/basilisk/src/common.h:190
+    #2 0x5571dda1718f in main /tmp/ag70-p1b-p2/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1e_thermal_coupled_20261104/results/p1e_thermal_marangoni.c:48
+    #3 0x7fae56598ca7  (/lib/x86_64-linux-gnu/libc.so.6+0x29ca7) (BuildId: 5e5b51f4c39af9ac589408c1dc432ba390a273cc)
+    #4 0x7fae56598d64 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x29d64) (BuildId: 5e5b51f4c39af9ac589408c1dc432ba390a273cc)
+    #5 0x5571dd7f2540 in _start (/tmp/ag70-p1b-p2/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1e_thermal_coupled_20261104/results/p1e_thermal_marangoni_asan+0x11540) (BuildId: 596a7c664d3c8297dd20002eb65074428359c697)
+
+0x5571dda3d960 is located 0 bytes inside of global variable '__compound_literal.1' defined in '/tmp/ag70-p1b-p2_sources/basilisk-v2026-07-20/basilisk/src/two-phase-clsvof.h:25:86' (0x5571dda3d960) of size 8
+SUMMARY: AddressSanitizer: bad-free ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:85 in realloc
+==28111==ABORTING
