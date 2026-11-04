@@ -1,0 +1,306 @@
+{
+  "stage": "P1c automatic-curvature VOF dynamic error diagnosis",
+  "base_commit": "31fe325c781450643037f86a4fda106959d14486",
+  "branch": "codex/ag70-p1c-diagnostics",
+  "basilisk_release": "comphy-lab/basilisk-C v2026-07-20",
+  "basilisk_commit": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+  "basilisk_archive_sha256": "4686294e8f649a424ca437a7fa94bfac9984c32bea5e9f33a27a5783cc692829",
+  "qcc_sha256": "521f42b26689c6bc79e1476e55db9275e1e3a18f18f79e81182a59279f0d9328",
+  "compiler": "cc (Debian 14.2.0-19)",
+  "scope": "dimensionless axisymmetric droplet only; no Ag geometry or production heating",
+  "dynamic_runs": [
+    {
+      "name": "combined_amr_dt1",
+      "arguments": [
+        16,
+        0,
+        1,
+        1,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "combined_amr_dt1.stdout.log",
+      "stderr": "combined_amr_dt1.stderr.log"
+    },
+    {
+      "name": "combined_amr_dt05",
+      "arguments": [
+        16,
+        0,
+        1,
+        0.5,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "combined_amr_dt05.stdout.log",
+      "stderr": "combined_amr_dt05.stderr.log"
+    },
+    {
+      "name": "normal_only_amr_dt1",
+      "arguments": [
+        16,
+        1,
+        1,
+        1,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "normal_only_amr_dt1.stdout.log",
+      "stderr": "normal_only_amr_dt1.stderr.log"
+    },
+    {
+      "name": "tangential_only_amr_dt1",
+      "arguments": [
+        16,
+        2,
+        1,
+        1,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "tangential_only_amr_dt1.stdout.log",
+      "stderr": "tangential_only_amr_dt1.stderr.log"
+    },
+    {
+      "name": "combined_fixed_r8_dt1",
+      "arguments": [
+        8,
+        0,
+        0,
+        1,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "combined_fixed_r8_dt1.stdout.log",
+      "stderr": "combined_fixed_r8_dt1.stderr.log"
+    },
+    {
+      "name": "balanced_tangent_r8",
+      "arguments": [
+        8,
+        0,
+        1,
+        1,
+        0.9792
+      ],
+      "exit_code": 0,
+      "stdout": "balanced_tangent_r8.stdout.log",
+      "stderr": "balanced_tangent_r8.stderr.log"
+    },
+    {
+      "name": "balanced_tangent_r16",
+      "arguments": [
+        16,
+        0,
+        1,
+        1,
+        0.9792
+      ],
+      "exit_code": 0,
+      "stdout": "balanced_tangent_r16.stdout.log",
+      "stderr": "balanced_tangent_r16.stderr.log"
+    },
+    {
+      "name": "balanced_tangent_r32",
+      "arguments": [
+        32,
+        0,
+        1,
+        1,
+        0.9792
+      ],
+      "exit_code": 0,
+      "stdout": "balanced_tangent_r32.stdout.log",
+      "stderr": "balanced_tangent_r32.stderr.log"
+    },
+    {
+      "name": "combined_scale1_r16_replay",
+      "arguments": [
+        16,
+        0,
+        1,
+        1,
+        1.0
+      ],
+      "exit_code": 0,
+      "stdout": "combined_scale1_r16_replay.stdout.log",
+      "stderr": "combined_scale1_r16_replay.stderr.log"
+    }
+  ],
+  "axisymmetric_force_balance_resolutions": [
+    {
+      "cells_per_radius": 8,
+      "exit_code": 0
+    },
+    {
+      "cells_per_radius": 16,
+      "exit_code": 0
+    },
+    {
+      "cells_per_radius": 32,
+      "exit_code": 0
+    }
+  ],
+  "reproduction_commands": [
+    "$BASILISK_SRC/qcc -disable-dimensions -O2 -Wall -autolink p1c_vof_dynamic.c -o p1c_vof_dynamic -lm",
+    "$BASILISK_SRC/qcc -disable-dimensions -O2 -Wall -autolink p1c_axisymmetric_force_balance.c -o p1c_axisymmetric_force_balance -lm"
+  ],
+  "files": {
+    "BUILD_AND_RUN.md": {
+      "sha256": "875c7765a8d46b5f6315a219751fa4067eaa4c6644fec006eadc03d8c5f0612b",
+      "bytes": 1618
+    },
+    "P1C_DIAGNOSIS.md": {
+      "sha256": "c27c5507d56452ca50d6fce1947072bc64e3e7b66ed2cac282210e0c7c1ac8fa",
+      "bytes": 6066
+    },
+    "P1C_FINAL_DECISION.md": {
+      "sha256": "94db07e1c93cd177aa60d827a171b3dc026fe30e6e517e6b1a1e0b324a461ce0",
+      "bytes": 1057
+    },
+    "balanced_tangent_r16.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "balanced_tangent_r16.stderr.log": {
+      "sha256": "72a5d0720ee20b1046ce61963caaf94f08734ff3131bd7815b11190ed300e850",
+      "bytes": 220
+    },
+    "balanced_tangent_r16.stdout.log": {
+      "sha256": "efb02ad57b676d6b013faa2dbf7e0c1a1ecc8159ef8cc963dd76df68dc22d525",
+      "bytes": 28402
+    },
+    "balanced_tangent_r32.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "balanced_tangent_r32.stderr.log": {
+      "sha256": "27025b31f7e0677fe37c82eb87fcb8e8ae7e424d6659501f7414bad8062d6cdc",
+      "bytes": 221
+    },
+    "balanced_tangent_r32.stdout.log": {
+      "sha256": "5ebd1fb765322c8229e50ede443da8e4900ac2186e11fbffc6124e1691cb7ff4",
+      "bytes": 79024
+    },
+    "balanced_tangent_r8.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "balanced_tangent_r8.stderr.log": {
+      "sha256": "2f03ecab419a4f7181b58b96daba4e62736b6a89c6617a8aa8c85c74bf87e4e5",
+      "bytes": 220
+    },
+    "balanced_tangent_r8.stdout.log": {
+      "sha256": "dc9ae397a4d7cf2e1d9a2c311de3856e80d29c31b5fadf73344cd0dca985bb54",
+      "bytes": 10124
+    },
+    "combined_amr_dt05.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "combined_amr_dt05.stderr.log": {
+      "sha256": "05f2117349381ac93fae25dc6153e6f10b2f507b618fa81b64cf77ab994d962e",
+      "bytes": 201
+    },
+    "combined_amr_dt05.stdout.log": {
+      "sha256": "2786ca291428993a7db84f5c4161c341ceb0dcb56f35dd0f18df802a1e62fed5",
+      "bytes": 54002
+    },
+    "combined_amr_dt1.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "combined_amr_dt1.stderr.log": {
+      "sha256": "c99b3d0ed7073a21098199b1dd765f530cbd9ad0cd2d1f1e965ce6dd83f0de7d",
+      "bytes": 198
+    },
+    "combined_amr_dt1.stdout.log": {
+      "sha256": "e40f99aeecf2031f738e6e876b4f188101f4416d263a504f304b68066dc8f43b",
+      "bytes": 26908
+    },
+    "combined_fixed_r8_dt1.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "combined_fixed_r8_dt1.stderr.log": {
+      "sha256": "7d7562595de6974ea2dc8d185bef292ef5cfe8a6a61d3f00ad2fec5ce9a09e0d",
+      "bytes": 201
+    },
+    "combined_fixed_r8_dt1.stdout.log": {
+      "sha256": "6dc48a4b66aa5de42eee315a47bd67cbf9f1946d604c71c218bed3436e35b9be",
+      "bytes": 9859
+    },
+    "combined_scale1_r16_replay.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "combined_scale1_r16_replay.stderr.log": {
+      "sha256": "62a0d0689a126d3e239c498c4b0952eaee36ae4a9c48ebe78ea79c4c531ef4c8",
+      "bytes": 214
+    },
+    "combined_scale1_r16_replay.stdout.log": {
+      "sha256": "ffbc5619fd77d7939a8473c9cb16927975c7df0c2df429839421f8cf4acd3c91",
+      "bytes": 27348
+    },
+    "normal_only_amr_dt1.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "normal_only_amr_dt1.stderr.log": {
+      "sha256": "0edd64618af23d58c33ef73b37de746837db3897fff40875788155042d16e2ae",
+      "bytes": 200
+    },
+    "normal_only_amr_dt1.stdout.log": {
+      "sha256": "9e7155db87fdbad54cc5213061f67ae9209493e7282a38d6e08446a01275986a",
+      "bytes": 26130
+    },
+    "p1c_axisymmetric_force_balance": {
+      "sha256": "8be6ebfc378d69049571a1ead3bbb51403383e29713bfa6f1a903e18982eba48",
+      "bytes": 439232
+    },
+    "p1c_axisymmetric_force_balance.c": {
+      "sha256": "ceb5e3d7361953cae13a968779cc1298072b933c3d8a8938e737f40d763bc12a",
+      "bytes": 3580
+    },
+    "p1c_axisymmetric_force_balance.csv": {
+      "sha256": "031ee23b2e3d8fc6a272e4ad42e068a7cb94d5a180c4587e0019c4c854cfcc28",
+      "bytes": 611
+    },
+    "p1c_component_force_ablation.csv": {
+      "sha256": "5d15b652db87bf482bf1f4acfc60edb656b4c90eb1e13e22139043b892f5463c",
+      "bytes": 556
+    },
+    "p1c_dynamic_diagnostics.csv": {
+      "sha256": "8c25336ec42ace1fddb9c833a866eb7c3fd696fbfbc2a884838fee7c9cc5b2e3",
+      "bytes": 1637
+    },
+    "p1c_velocity_grid_convergence.csv": {
+      "sha256": "707ada1c6b65e1f11689581675737b83ba8be26b9bbc909cc1a9d71093cdf7d2",
+      "bytes": 591
+    },
+    "p1c_vof_dynamic": {
+      "sha256": "0b4733c836981bcf0276da202c30d22f16581e86557402e1863cc824ed78f9ba",
+      "bytes": 440248
+    },
+    "p1c_vof_dynamic.c": {
+      "sha256": "de1bc77c7ebf18fbb8381d2dbdd7e05ef59b2163ba4993236a7f5bfabd89eb3f",
+      "bytes": 5363
+    },
+    "run_p1c_diagnostics.sh": {
+      "sha256": "5a1c5273e05e4b502c7a12de7e431158b801ef23157f74025622accb6e988783",
+      "bytes": 1173
+    },
+    "tangential_only_amr_dt1.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "tangential_only_amr_dt1.stderr.log": {
+      "sha256": "cc114661b897c79baaf2ac80dfa228a2e82f42912ecee929e9d03cfb6d2efb01",
+      "bytes": 201
+    },
+    "tangential_only_amr_dt1.stdout.log": {
+      "sha256": "7e7343a9d139054e98d9d5470e117ac6995919d880892e3628c4bfec5f0af747",
+      "bytes": 26647
+    }
+  }
+}
