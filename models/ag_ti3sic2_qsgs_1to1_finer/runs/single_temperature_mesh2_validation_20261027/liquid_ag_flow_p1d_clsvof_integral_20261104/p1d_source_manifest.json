@@ -1,0 +1,123 @@
+{
+  "stage": "P1d CLSVOF plus integral.h dynamic benchmark",
+  "base_commit": "73fedf646903837fd4c94f7e8e17ed7a563d6b8f",
+  "branch": "codex/ag70-p1d-clsvof-integral",
+  "reference_source_project": "comphy-lab/basilisk-C",
+  "reference_release": "v2026-07-20",
+  "reference_git_commit": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+  "reference_archive_sha256": "4686294e8f649a424ca437a7fa94bfac9984c32bea5e9f33a27a5783cc692829",
+  "reference_official_test_sha256": "b2d2112e012ece62876c5010e3aeca3928c12c2d18ccd4b008e74afeb1d4294f",
+  "method": "Basilisk two-phase-clsvof.h plus integral.h",
+  "low_Ca_case": {
+    "Re": 0.066,
+    "Ca": 0.066,
+    "Gamma_T": 0.066,
+    "Gamma_0": 1.0,
+    "grid_cells_per_radius": [
+      8,
+      16,
+      32
+    ],
+    "measurement_time": "3*t0",
+    "exit_code": 0
+  },
+  "temperature_sigma_smoke_test": {
+    "resolution_cells_per_radius": 16,
+    "Ca": 0.066,
+    "temperature": "T=NablaT*x, prescribed analytical and static",
+    "result": "identical to direct linear sigma(x) at reported precision",
+    "exit_code": 0,
+    "compiler_warning": "qcc interpreter warns that the scalar-list condition s && s->i >= 0 is undefined during compile-time interpretation; binary completed, and runtime logs contain no solver warnings or NaN/Inf"
+  },
+  "reproduction_script": "run_p1d.sh",
+  "files": {
+    "BUILD_AND_RUN.md": {
+      "sha256": "0ac4a779e93890c315e5d15dccb107be01c74e51d9e3ba1c7c89388d4433250d",
+      "bytes": 1253
+    },
+    "P1D_CLSVOF_INTEGRAL_REPORT.md": {
+      "sha256": "16c5c6e437e7c14545c20f73de4b61145157af4d585009b3f8bf55ba64b34eea",
+      "bytes": 4544
+    },
+    "P1D_FINAL_DECISION.md": {
+      "sha256": "6830fbe118b586ed68e903b23c0f98e53459814fe57a8c0f2dff6f0ac9b9a9d2",
+      "bytes": 838
+    },
+    "P1D_SCOPE_NOTE.md": {
+      "sha256": "e0dfb1bc79b75d0eca6ae4f7f95f0ff90e3e5ae6e43a484ab7f683473f520f2f",
+      "bytes": 389
+    },
+    "run_p1d.sh": {
+      "sha256": "cf26ccad681bcfbb681434ac7fddbc198dc9511926313fff52a9e40360d135eb",
+      "bytes": 633
+    },
+    "results/Ca0066_exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "results/Ca0066_stderr.log": {
+      "sha256": "1608cf0627503b73891a4b5b530e2db697f9d7007eaa826bf6074f5b22cff946",
+      "bytes": 60
+    },
+    "results/Ca0066_stdout.log": {
+      "sha256": "1371a29221c6c7e1d3736408a134cef1db55365333b7878f64c11c886b166c3b",
+      "bytes": 393226
+    },
+    "results/Ca0066_velocity_grid.csv": {
+      "sha256": "6ac0a770c6fd922f008e8d0843e01291921e98c220c467b171702aeca8df85b4",
+      "bytes": 452
+    },
+    "results/fields.png": {
+      "sha256": "4cdc0e81be9c04dd31e1f5ca710bd13da798750fd4c8fa3098a8f21e8e265aa5",
+      "bytes": 191300
+    },
+    "results/marangoni_Ca0066": {
+      "sha256": "c4977f9a36642a41c8d5b80ca42781eaf7579901efdae761cc7c64c77cac49f1",
+      "bytes": 659056
+    },
+    "results/marangoni_Ca0066.c": {
+      "sha256": "64688e91aca68148c00b510678dedd61018be824db558bd4b428e42deabe7d9a",
+      "bytes": 4546
+    },
+    "results/marangoni_temperature_sigma_R16": {
+      "sha256": "4d38f73c0b2b9a2a046b5872082b6fe2d6d7e494a37c90b5bc5eed111add2b6c",
+      "bytes": 659104
+    },
+    "results/marangoni_temperature_sigma_R16.c": {
+      "sha256": "3139fffa4d2956ea7859e51d13b0b6127be0eaf1e49184373cb642c1a2f880d1",
+      "bytes": 4581
+    },
+    "results/marangoni_temperature_sigma_R16_rebuild": {
+      "sha256": "bba8e691702df21499de1c85de36da2de333379ed3cc5277ae3e59a4c62016cd",
+      "bytes": 659104
+    },
+    "results/p1d_temperature_sigma_smoke.csv": {
+      "sha256": "a557bb8fa724adfc45458d5370e6a737ff39d108031d2e45825d7a9995c52c54",
+      "bytes": 424
+    },
+    "results/temperature_sigma_R16.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "results/temperature_sigma_R16.stderr.log": {
+      "sha256": "12a613776a8114ca080dddf8a07a39d82542e3a74933085c6cc4b0a02acf3037",
+      "bytes": 19
+    },
+    "results/temperature_sigma_R16.stdout.log": {
+      "sha256": "7850be902a1297ab5afcdf7562e037a4256150b3c1f85ea36c990eaeb8b0c1c1",
+      "bytes": 95007
+    },
+    "results/temperature_sigma_R16_build.exit_code.txt": {
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "bytes": 2
+    },
+    "results/temperature_sigma_R16_build.stderr.log": {
+      "sha256": "e58a6ececff7fa9c3a9499a5ac12b028d6dac7a3a4b54b1acc76144b1081b04c",
+      "bytes": 93
+    },
+    "results/temperature_sigma_R16_build.stdout.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  }
+}
