@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-04",
+  "objective": "Document source data and acquisition needs for exploratory Ag-Ti3SiC2 melt-pool modeling and lightweight single-model POD/SNAP alternatives.",
+  "exploratory_use": {
+    "original_hybrid_potential": "Ag EAM + Ti-Si-C TSCBOP/Tersoff + Ag-framework Morse may be used for explicitly qualitative exploratory runs, subject to stability checks and limitations stated in README.md.",
+    "user_selected_mobile_atom_max_force_vector_eV_A": 0.3,
+    "note": "This is an initial-geometry relaxation criterion, not a potential force-error threshold."
+  },
+  "existing_dft_data": {
+    "v19_train55": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/v19_train55_cold_gate1_20261104/provenance/dataset/train.extxyz",
+      "frames": 55,
+      "pure_Ag_frames": 0,
+      "pure_Ti3SiC2_frames": 4,
+      "Ag_containing_frames": 51,
+      "source_manifest": "research/mace-v12-transfer/periodic_interface_v4/v19_train55_cold_gate1_20261104/provenance/train55_dataset_manifest.json"
+    },
+    "static_audit_controls": {
+      "path": "research/mace-v12-transfer/periodic_interface_v4/v19_train55_cold_gate1_20261104/results/static_audit.json",
+      "pure_Ag_structures": 6,
+      "pure_Ti3SiC2_structures": 5,
+      "Ag_Ti3SiC2_interface_structures": 3,
+      "interface_atoms_per_structure": 52,
+      "Ag_atoms_per_interface_structure": 4,
+      "interface_structures_are_independent_holdouts": false
+    }
+  },
+  "old_hybrid_potential_diagnostic": {
+    "path": "models/ag_ti3sic2_qsgs_1to1_finer/STAGE1_MINIMIZATION_DIAGNOSTICS.md",
+    "initial_max_force_vector_eV_A": 3.9878,
+    "screening_result": "No tested full-potential endpoint passed the documented low-force heating gate; several paths produced short contacts.",
+    "allowed_scope": "Qualitative exploratory use only, after basic equilibration and structural-stability checks."
+  },
+  "references": [
+    {
+      "doi": "10.1103/PhysRevB.102.054210",
+      "title": "Neutron Brillouin scattering and ab initio simulation study of the collective dynamics of liquid silver",
+      "year": 2020,
+      "family": "liquid_Ag_AIMD",
+      "priority": "high",
+      "raw_force_labeled_frames_verified": false
+    },
+    {
+      "doi": "10.1088/1361-648X/ac23fb",
+      "title": "Ab initio phase diagram of silver",
+      "year": 2021,
+      "family": "Ag_high_temperature_QMD_EOS",
+      "priority": "optional",
+      "raw_force_labeled_frames_verified": false
+    },
+    {
+      "doi": "10.1111/jace.12725",
+      "title": "Inelastic Neutron Scattering and Density Functional Theory-Molecular Dynamics Study of Si Dynamics in Ti3SiC2",
+      "year": 2013,
+      "family": "Ti3SiC2_finite_temperature_DFT_MD",
+      "priority": "high",
+      "raw_force_labeled_frames_verified": false
+    },
+    {
+      "doi": "10.3390/ma14010077",
+      "title": "DFT Study of MAX Phase Surfaces for Electrocatalyst Support Materials in Hydrogen Fuel Cells",
+      "year": 2021,
+      "family": "Ti3SiC2_surface_terminations",
+      "priority": "medium",
+      "raw_force_labeled_frames_verified": false
+    },
+    {
+      "doi": "10.1016/j.rser.2021.111812",
+      "title": "A review of metallic materials for latent heat thermal energy storage: thermophysical properties, applications, and challenges",
+      "year": 2022,
+      "family": "liquid_Ag_density_validation",
+      "priority": "validation_only",
+      "raw_force_labeled_frames_verified": false,
+      "reported_Ag_density_fit": {
+        "temperature_range_K": [1235, 1600],
+        "rho0_kg_m3": 9294,
+        "c_kg_m3_K": 0.877,
+        "Tref_K": 1234.9,
+        "c1_column_unresolved": true
+      }
+    }
+  ],
+  "missing_training_families": [
+    "liquid_Ag_DFT_AIMD_structures_with_energy_and_per_atom_forces",
+    "high_temperature_and_distorted_Ti3SiC2_with_energy_and_per_atom_forces",
+    "larger_Ag_on_C_Si_and_Ti_terminated_Ti3SiC2_interfaces_with_energy_and_per_atom_forces",
+    "liquid_contact_undercooled_and_early_solidification_interface_structures_with_DFT_labels",
+    "independent_DFT_holdout_structures_for_each_family"
+  ],
+  "lightweight_model_status": {
+    "lammps_packages_available": ["ML-POD", "ML-SNAP", "ML-UF3"],
+    "lammps_styles_available": ["fitpod", "pod", "snap", "uf3"],
+    "first_candidate": "POD via LAMMPS fitpod",
+    "comparison_candidate": "linear SNAP",
+    "ace_pace_style_available": false,
+    "four_element_parameter_file_in_repository": false,
+    "fit_completed": false,
+    "full_scale_memory_or_speed_benchmark_completed": false,
+    "warning": "POD descriptor-output compute styles allocate large per-atom arrays; benchmark pair_style pod and avoid descriptor-output computes on the production-size system."
+  }
+}
