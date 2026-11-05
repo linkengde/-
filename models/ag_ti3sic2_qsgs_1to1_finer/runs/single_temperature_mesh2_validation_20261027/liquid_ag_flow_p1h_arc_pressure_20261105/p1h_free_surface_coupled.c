@@ -23,6 +23,9 @@
 
 #define NC 64
 #define NCELLS (NC*NC*NC)
+#ifndef P1H_TOP_OPEN
+#define P1H_TOP_OPEN 0
+#endif
 #ifndef POOL_REPORT_INTERVAL_PS
 #define POOL_REPORT_INTERVAL_PS 0.05
 #endif
@@ -121,10 +124,17 @@ Tfield[front] = neumann(0.);
 u.n[back] = dirichlet(0.);
 u.t[back] = dirichlet(0.);
 u.r[back] = dirichlet(0.);
+#if P1H_TOP_OPEN
+u.n[front] = neumann(0.); /* pressure outlet for the gas cap; Ag remains inside unless it reaches the top */
+u.t[front] = neumann(0.);
+u.r[front] = neumann(0.);
+p[front] = dirichlet(0.); /* ambient gauge-pressure reference */
+#else
 u.n[front] = dirichlet(0.); /* closed gas-cap boundary: no Ag can leave */
 u.t[front] = neumann(0.);
 u.r[front] = neumann(0.);
 p[front] = neumann(0.);
+#endif
 
 static inline double clampd (double x, double lo, double hi)
 {
@@ -574,10 +584,10 @@ static void write_pool_field_snapshot (double time_ps, const char * stage)
   if (!fp) { perror(temporary_path); return; }
   struct {
     char magic[8];
-    uint32_t version, nx, ny, nz, nfields, marangoni;
+    uint32_t version, nx, ny, nz, nfields, case_flags;
     double time_ps, dx_m, x0_m, y0_m, z0_m;
   } header={{'P','1','H','S','N','A','P','1'},1,NC,NC,NC,SNAPSHOT_NFIELDS,
-            (uint32_t)marangoni_enabled,
+            (uint32_t)((marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0)),
             time_ps,delta_x,X0,Y0,Z0};
   int ok=fwrite(&header,sizeof(header),1,fp)==1 &&
     fwrite(pool_snapshot_fields,sizeof(pool_snapshot_fields),1,fp)==1;
@@ -617,7 +627,7 @@ static void write_pool_field_snapshot (double time_ps, const char * stage)
 struct RestartState {
   char magic[8];
   uint32_t version;
-  int32_t heat_on, solidified_steps, balanced_steps, sigma_case, marangoni_enabled;
+  int32_t heat_on, solidified_steps, balanced_steps, sigma_case, case_flags;
   double energy_initial, input_energy, sink_energy;
   double ag_volume_initial, sc_volume_initial, applied_source_scale;
   double max_temperature_seen, next_pool_report_ps, next_pool_field_snapshot_ps;
@@ -642,7 +652,8 @@ static void write_restart_checkpoint (double time_ps, int step)
   dump(file=temp_dump);
   if (rename(temp_dump,final_dump)!=0) { perror("rename restart dump"); return; }
   struct RestartState state={{'P','1','H','R','S','T','3','\0'},3,
-    heat_on,solidified_steps,balanced_steps,sigma_case,marangoni_enabled,
+    heat_on,solidified_steps,balanced_steps,sigma_case,
+    (marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0),
     energy_initial,input_energy,sink_energy,ag_volume_initial,sc_volume_initial,
     applied_source_scale,max_temperature_seen,next_pool_report_ps,
     next_pool_field_snapshot_ps,time_ps,
@@ -706,8 +717,9 @@ static int read_restart_state (const char * dump_path)
   restored_time_ps=state.time_ps;
   next_pool_checkpoint_ps = (floor((restored_time_ps + 1.e-9)/POOL_CHECKPOINT_INTERVAL_PS) + 1.)*
     POOL_CHECKPOINT_INTERVAL_PS;
-  if (state.sigma_case!=sigma_case || state.marangoni_enabled!=marangoni_enabled) {
-    fprintf(stderr,"restart case does not match requested sigma/Marangoni mode\n"); return 0;
+  int expected_case_flags=(marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0);
+  if (state.sigma_case!=sigma_case || state.case_flags!=expected_case_flags) {
+    fprintf(stderr,"restart case does not match requested sigma/Marangoni/top-boundary mode\n"); return 0;
   }
   if (state.arc_pressure_enabled!=arc_pressure_cfg.enabled ||
       state.arc_pressure_profile!=(int32_t)arc_pressure_cfg.profile ||
@@ -895,8 +907,9 @@ event initialize_material_fields (i = 1)
   if (!history) { perror("p1h_history.csv"); exit(2); }
   open_arc_pressure_history(0);
   fprintf(history,"time_ps,heat_on_after_step,Tmax_K,Tmax_Ag_K,Tmax_skeleton_K,mean_Ag_T_K,max_velocity_m_s,Ag_volume_nm3,Ag_volume_drift_pct,liquid_Ag_volume_nm3,skeleton_volume_nm3,composite_volume_nm3,mean_surface_depression_nm,source_center_depression_nm,source_power_W,enthalpy_J,input_energy_J,bottom_sink_energy_J,energy_residual_J,pressure_iterations,pressure_residual,thermal_iterations,thermal_residual,thermal_nonlinear_iterations,thermal_nonlinear_change_K,viscosity_iterations,viscosity_residual,dt_fs,heat_scale,input_minus_bottom_mW,balance_steps\n");
-  fprintf(stderr,"INIT case=%s marangoni=%d grid=%d^3 drag_s-1=%.6g cells=%ld dx_m=%.9g dt_max_ps=%.6g source_power_W=%.12g source_scale=%.9g\n",
-          sigma_case < 0 ? "negative_dsigma_dT" : "positive_dsigma_dT",marangoni_enabled,NC,solid_drag_s,
+  fprintf(stderr,"INIT case=%s marangoni=%d top_boundary=%s grid=%d^3 drag_s-1=%.6g cells=%ld dx_m=%.9g dt_max_ps=%.6g source_power_W=%.12g source_scale=%.9g\n",
+          sigma_case < 0 ? "negative_dsigma_dT" : "positive_dsigma_dT",marangoni_enabled,
+          P1H_TOP_OPEN ? "open_ambient_pressure" : "closed_no_penetration",NC,solid_drag_s,
           grid->tn,delta_x,DT*1.e12,source_power_target,applied_source_scale);
   write_pool_field_snapshot(0.,"initial");
   write_restart_checkpoint(0.,i);

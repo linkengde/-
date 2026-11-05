@@ -5,6 +5,10 @@ pressure frame as `p1h_pressure_*.bin`. Both are atomic little-endian binary
 files. The common header is packed as `<8s6I5d` (72 bytes): magic, version,
 `nx, ny, nz, nfields, case_flag`, then `time_ps, dx_m, x0_m, y0_m, z0_m`.
 Float32 arrays follow in field-major C order `(field, x, y, z)`.
+For the main frame, `case_flag` is a bit field: bit 0 is Marangoni on/off and
+bit 1 is the top gas boundary (`0` closed/no-penetration, `1` open with
+ambient gauge-pressure reference). The pressure sidecar's flag remains the
+pressure enabled state.
 
 The main frame has magic `P1HSNAP1`, version 1, and 20 fields:
 

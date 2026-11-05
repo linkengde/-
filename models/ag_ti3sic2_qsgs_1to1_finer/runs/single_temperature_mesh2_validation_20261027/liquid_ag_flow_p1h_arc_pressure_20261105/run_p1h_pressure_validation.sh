@@ -19,6 +19,11 @@ build_solver() {
     p1h_pressure_vof_test.c -o p1h_pressure_vof_test -lm)
 }
 
+build_open_top_solver() {
+  (cd "$HERE" && "$BASILISK_SRC/qcc" -DP1H_TOP_OPEN=1 -disable-dimensions -O2 -Wall -autolink \
+    p1h_free_surface_coupled.c -o p1h_free_surface_coupled_open_top -lm)
+}
+
 case "$MODE" in
   build)
     build_solver
@@ -51,8 +56,20 @@ case "$MODE" in
         "${P1H_SIGMA_CASE:-negative}" "${P1H_SOLID_DRAG_S:-1e11}" "$max_time"
     )
     ;;
+  smoke-open-top)
+    build_open_top_solver
+    input="${P1H_INPUT_DIR:-$P1G_RUN_ROOT/inputs/basilisk}"
+    out="${P1H_OUTPUT_DIR:-$HERE/results/open_top_smoke_$(date -u +%Y%m%dT%H%M%SZ)}"
+    max_time="${P1H_MAX_TIME_PS:-0.16}"
+    mkdir -p "$out"
+    (
+      cd "$out"
+      "$HERE/p1h_free_surface_coupled_open_top" "$input" \
+        "${P1H_SIGMA_CASE:-negative}" "${P1H_SOLID_DRAG_S:-1e11}" "$max_time"
+    )
+    ;;
   *)
-    echo "Usage: $0 build|test|smoke" >&2
+    echo "Usage: $0 build|test|smoke|smoke-open-top" >&2
     exit 2
     ;;
 esac

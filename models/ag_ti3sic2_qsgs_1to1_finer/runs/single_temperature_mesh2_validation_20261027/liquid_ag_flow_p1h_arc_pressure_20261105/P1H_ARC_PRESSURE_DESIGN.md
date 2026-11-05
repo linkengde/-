@@ -53,9 +53,13 @@ be balanced by pressure and should not be used to force a crater.
 The P1G VOF tracks the composite-to-gas outer surface. It does not resolve
 gas-liquid interfaces in internal pores. P1H therefore applies pressure only
 to the exposed outer surface and makes no claim about pressure inside the
-Ti3SiC2 pore network. The inherited top boundary is closed. Gas-cap height and
-open-versus-closed top-boundary sensitivity remain a prerequisite before
-formal C/D heating runs.
+Ti3SiC2 pore network. The inherited top boundary is closed. A matched short
+open-versus-closed comparison has been completed for the existing 11-cell gas
+cap; it found no measurable difference within the sample through initial
+melting. Gas-cap-height sensitivity remains untested because the current 64³
+octree is cubic. See `P1H_TOP_BOUNDARY_SENSITIVITY_REPORT.md`; formal C/D
+heating remains gated on a height study that preserves the sample, lateral
+period, and grid spacing.
 
 The pressure module does not introduce evaporation, recoil, ejection, or Ag
 mass loss. It does not establish a physically calibrated arc-pressure field,

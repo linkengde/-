@@ -60,7 +60,8 @@ def main() -> None:
         h5.attrs["grid_shape_xyz"] = mm["shape"]
         h5.attrs["grid_spacing_m"] = mm["dx_m"]
         h5.attrs["origin_xyz_m"] = mm["origin_m"]
-        h5.attrs["marangoni_enabled"] = bool(mm["case_flag"])
+        h5.attrs["marangoni_enabled"] = bool(mm["case_flag"] & 1)
+        h5.attrs["top_boundary_open"] = bool(mm["case_flag"] & 2)
         h5.attrs["pressure_frame_enabled"] = bool(pm["case_flag"])
         fields = h5.create_group("fields")
         for name, data in zip(MAIN_NAMES, main):
