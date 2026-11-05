@@ -1,0 +1,140 @@
+{
+  "status": "FORMAL_A_B_RUNS_COMPLETED_AND_SOLIDIFIED",
+  "geometry_source": "full-domain masks from the user-selected fresh Ag70 64x64x50 QSGS geometry",
+  "geometry_sha256_from_source_manifest": "5e509f16716e85464f604fcda2a53eaefd4f15e2d18d6c0bf24e0aa06c6656ce",
+  "checkpoint_sha256_from_source_manifest": "8b15a8b4766ad1d2fc8e5a6ec3d927e1fbe3728563ddc3f65546bd2a446406c6",
+  "checkpoint_time_ps": 0.8495860511825916,
+  "original_grid_xyz": [
+    64,
+    64,
+    50
+  ],
+  "original_domain_size_A_xyz": [
+    191.7664,
+    193.1887901542944,
+    158.6115
+  ],
+  "original_voxel_spacing_A_xyz": [
+    2.99635,
+    3.01857484616085,
+    3.17223
+  ],
+  "maximum_pool_voxels": 7370,
+  "maximum_pool_volume_nm3_recomputed": 211.45922976256355,
+  "maximum_pool_bbox_nm_xyz": [
+    12.285035,
+    11.772441900027314,
+    4.123899
+  ],
+  "coldstart_fixed_grid": {
+    "shape_xyz": [
+      64,
+      64,
+      64
+    ],
+    "sample_layers_z": 53,
+    "gas_layers_z": 11,
+    "box_size_nm": 19.318879015429438,
+    "isotropic_cell_size_A": 3.01857484616085,
+    "z_mapping": "nearest source-cell mapping from 50 to 53 layers; geometry distortion is under 1% in total z extent",
+    "initial_temperature_K": 300.0,
+    "initial_enthalpy_reference": "zero relative to the existing 300 K reference state",
+    "boundary_candidate": "periodic x/y; stationary bottom substrate; explicit gas above z_max",
+    "source": {
+      "integrated_power_W": 0.008931899111848596,
+      "gaussian_radius_A": 50.0,
+      "absorption_depth_A": 20.0,
+      "center_xy_A": [
+        95.8832,
+        96.5943950771472
+      ],
+      "distribution": "4x composite Gaussian/depth-exponential source, renormalized on the mapped fixed-grid geometry to preserve the recorded total power",
+      "integral_recomputed_W": 0.008931899111848598
+    }
+  },
+  "hot_pool_native_crop": {
+    "shape_xyz": [
+      64,
+      63,
+      25
+    ],
+    "z_range_inclusive": [
+      25,
+      49
+    ],
+    "gas_cap_included": false,
+    "boundary_warning": "crop preserves the real z_max sample face but has no external gas cells; a gas cap must be added by the flow solver",
+    "temperature_range_K": [
+      554.8231491311717,
+      2299.9999999997017
+    ],
+    "liquid_fraction_range": [
+      0.0,
+      1.0
+    ]
+  },
+  "source_files": {
+    "full_domain_masks_sha256": "4151d8c9d230acf056c9efd2ff8fbfa1f9bb7c164c5a4e984e8dc94604dae8d6",
+    "local_fields_sha256": "90beae292f606170a261574165f9f01d9de22febeefa4d6de0c679aee71aad9f",
+    "target_selection_sha256": "0b76d563847ee5bc3158a2255584f206588db291c7f4c88d9066d9f40b5b2d8a",
+    "pool_metrics_sha256": "5be32847140412f27b6622b52979059643d62170e51c57874c20261e8f67cd4e"
+  },
+  "prepared_files": {
+    "p1g_coldstart_fixedgrid_64cube.npz": "f9d49080219c25d476aa2a18296d0b9491f99071374aad1f32781bdadb3a3ff3",
+    "p1g_hot_pool_pad12_native.npz": "f2107807629f6a8fa49983ba42f2eeb2173d1e85ee14b9d6ad8aa2ab4d9963fc"
+  },
+  "scope": "Prepared geometry plus exploratory coupled simulations. Results are stored under results/; they are numerical research outputs, not validated welding predictions.",
+  "ti3sic2_thermophysical_properties": {
+    "file": "inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv",
+    "sha256": "0771fc059d3a597fdf524e3e30cdb54bb47a8850e7e8ffb158852e523645e67c",
+    "rows": 201,
+    "temperature_range_K": [
+      300,
+      2300
+    ],
+    "spacing_K": 10,
+    "solver_columns": [
+      "T_K",
+      "Cp_mass_J_kgK",
+      "k_W_mK",
+      "h_mass_from_300_J_kg"
+    ],
+    "2300K_values": {
+      "Cp_J_kgK": 803.50145283,
+      "k_W_mK": 28.25,
+      "h_J_kg": 1509076.41342888
+    },
+    "density_used_kg_m3": 4520.0,
+    "density_note": "CSV reference density 4500 kg/m3 is not applied; retain production candidate 4520 kg/m3.",
+    "status_note": "CSV basis labels values above 1473 K as extrapolation; numerical ceiling is 2300 K, not a validated material-stability limit."
+  },
+  "exploratory_runs": {
+    "legacy_2000K_guard_run": "Stopped at 0.37334975 ps after the obsolete 1950 K heat guard switched the source off at 0.354768825 ps; kept as diagnostic history, not a 2300 K case.",
+    "table_backed_0p01ps_smoke": "Passed: loaded all 201 rows, source integral 8.931899 mW, peak 461.266 K, zero Ag volume drift, no liquid, energy residual 3.30e-24 J.",
+    "current_restart": "No active run. Both formal A/B cases cold-started from the 300 K state, reached solidification, and saved final checkpoints. See result directories and P1G_FORMAL_AB_REPORT.md.",
+    "formal_case_A_marangoni_off": {
+      "status": "completed; process exit 0; DONE_SOLIDIFIED",
+      "start": "cold start at 300 K",
+      "heat_off_time_ps": 0.6240172552448766,
+      "heat_off_scaffold_max_K": 2117.73401,
+      "max_liquid_ag_nm3": 121.852731905,
+      "solidified_time_ps": 0.8612800164067586,
+      "maximum_pit_depth_nm": 0.0,
+      "maximum_velocity_m_s": 0.0,
+      "results_directory": "../p1g_marangoni_pit_validation/results/formal_case_A_marangoni_off_2100K_cut_cool_20261105"
+    },
+    "formal_case_B_marangoni_on": {
+      "status": "completed; process exit 0; DONE_SOLIDIFIED",
+      "start": "cold start at 300 K",
+      "heat_off_time_ps": 0.6240172552448766,
+      "heat_off_scaffold_max_K": 2117.28618,
+      "max_liquid_ag_nm3": 121.854858266,
+      "solidified_time_ps": 0.8612800164067586,
+      "maximum_pit_depth_above_half_cell_nm": 0.0,
+      "maximum_domain_speed_m_s": 62.287581,
+      "maximum_domain_speed_time_ps": 0.781874076,
+      "results_directory": "../p1g_marangoni_pit_validation/results/formal_case_B_marangoni_on_2100K_cut_cool_20261105"
+    },
+    "heat_policy": "Fixed 8.931899 mW source; stop at actual scaffold Tmax >=2100 K or sustained input/sink difference <=0.01 mW for 10 steps; 2300 K property ceiling; both formal cases stopped by temperature."
+  }
+}
