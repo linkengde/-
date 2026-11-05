@@ -45,6 +45,8 @@
 
 - [逐算例比较 CSV](arc_pressure_exploration_comparison.csv)
 - [压力档位与表面位移对照图](arc_pressure_exploration_comparison.png)
+- [167 MPa 峰值熔池三维图](peak_pool_167MPa_3d.png)；图中黑色为 Ti₃SiC₂、浅蓝为固态 Ag、黄色为部分液化 Ag、半透明橙色为液态 Ag。
+- 可复现图片的脚本：[render_p1h_melt_pool_3d.py](../../render_p1h_melt_pool_3d.py)。
 - [压缩场文件 SHA256 清单](arc_pressure_field_manifest.json)
 - 四个算例的峰值温度/VOF、压力场、凝固终态和检查点保存在当前云工作区的 `/workspace/p1h_arc_pressure_exploration_20261105/`，见 CSV 的绝对路径字段。大文件没有复制进 Git 工作树。
-- 代码基线提交：`182fc483097ec585384382c60e40bd2e0ece73bb`，本地分支 `codex/ag70-p1h-arc-pressure`。本报告对应的工作树改动尚未推送。
+- 仿真基线提交：`182fc483097ec585384382c60e40bd2e0ece73bb`；结果与三维图保存在 `codex/ag70-p1h-arc-pressure` 分支。
