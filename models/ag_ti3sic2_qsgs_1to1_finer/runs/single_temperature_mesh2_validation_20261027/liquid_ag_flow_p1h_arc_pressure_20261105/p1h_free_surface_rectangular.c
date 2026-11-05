@@ -77,7 +77,8 @@ static char restart_path[1024];
 static double restored_time_ps = 0.;
 static double solid_drag_s = 1.e11;
 static double max_time_s = 5.e-12;
-static double heat_cut_K = 2100.; /* requested heater cutoff; table ceiling remains 2300 K */
+static double heat_cut_K = 2300.; /* exploratory cutoff at the Ti3SiC2 table ceiling */
+static double heat_dt_max_s = 2.e-14;
 static int heat_on = 1;
 static double heat_source_ramp_s = 0.;
 static double heat_source_ramp_start_s = INFINITY;
@@ -854,7 +855,7 @@ int main (int argc, char * argv[])
   TOLERANCE = 1.e-5;
   NITERMAX = 200; /* allow extra iterations for the high-contrast liquid/mushy solve */
   CFL = 0.2;
-  DT = 2.e-14;
+  DT = heat_dt_max_s = 2.e-14;
   run();
 }
 
@@ -989,9 +990,9 @@ event thermal_step (i++,last)
       if (scfrac > 1.e-8)
         max_sc_now = max(max_sc_now,Tfield[]);
     }
-    /* Stop from the calculated state only. The 2100 K heat-off threshold is
-       below the 2300 K property ceiling, so the normal timestep has room for
-       a small measured overshoot; do not scale the physical heat source. */
+    /* Stop from the calculated state only. The timestep cap below shrinks as
+       the skeleton peak approaches the 2300 K property ceiling; the physical
+       heat source is never rescaled. */
     if (max_sc_now >= heat_cut_K) {
       stop_heat_and_pressure_at(t);
       write_peak_pool_stats(t*1.e12,max_sc_now);
@@ -1137,13 +1138,34 @@ event thermal_step (i++,last)
     fprintf(stderr,"HEAT_OFF_AT_BALANCE t_ps=%.9g Tmax_skeleton_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.9g source_minus_bottom_mW=%.9g hold_steps=%d\n",
             t*1.e12,Tmax_SC,Tmax_Ag,liquidvol/cube(1.e-9),input_minus_bottom_mW,balanced_steps);
   }
-  if (heat_on && Tmax_SC >= heat_cut_K - 0.001 && Tmax_SC <= SC_Tmax) {
+  double rise_K = Tmax_SC - max_sc_now;
+  double rate_K_s = rise_K > 0. && dt > 0. ? rise_K/dt : 0.;
+  double ramp_peak_prediction_K = Tmax_SC +
+    rate_K_s*heat_source_ramp_s*0.5;
+  if (heat_on && Tmax_SC <= SC_Tmax &&
+      (Tmax_SC >= heat_cut_K - 0.001 ||
+       (rate_K_s > 0. && ramp_peak_prediction_K >= heat_cut_K))) {
     stop_heat_and_pressure_at(t);
     write_peak_pool_stats(t*1.e12,Tmax_SC);
     dump(file="p1h_peak_pool_heat_off_temperature.dump");
-    fprintf(stderr,"HEAT_OFF_AT_TARGET t_ps=%.9g Tmax_skeleton_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.9g cut_K=%.9g\n",
-            t*1.e12,Tmax_SC,Tmax_Ag,liquidvol/cube(1.e-9),heat_cut_K);
+    fprintf(stderr,"HEAT_OFF_PREDICTED_TARGET t_ps=%.9g Tmax_skeleton_K=%.9g predicted_after_ramp_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.9g cut_K=%.9g ramp_ps=%.9g\n",
+            t*1.e12,Tmax_SC,ramp_peak_prediction_K,Tmax_Ag,
+            liquidvol/cube(1.e-9),heat_cut_K,heat_source_ramp_s*1.e12);
   }
+  /* Apply predictive timestep shrinking only while heating is still commanded
+     on.  Once heat is switched off, the smooth source/pressure off-ramp is
+     midpoint-integrated over the configured maximum step.  Keeping the
+     temperature-rise cap active during this prescribed ramp caused a severe
+     timestep collapse even while the measured peak temperature was falling.
+     The hard 2300 K guard below remains active and never clips temperature. */
+  double pending_heat_scale=heat_source_scale_at(t);
+  if (heat_on && pending_heat_scale > 1.e-12 && Tmax_SC < SC_Tmax &&
+      SC_Tmax - Tmax_SC < 20. && rate_K_s > 0.) {
+    double safe_dt = 0.5*(SC_Tmax - Tmax_SC)/rate_K_s;
+    DT = min(heat_dt_max_s,max(2.e-18,safe_dt));
+  }
+  else
+    DT = heat_dt_max_s;
   if (heat_was_on && !heat_on) {
     write_pool_field_snapshot(t*1.e12,"heat_off");
     write_restart_checkpoint(t*1.e12,i);
@@ -1161,9 +1183,14 @@ event thermal_step (i++,last)
             thermal_nl_change,mgu.i,mgu.resa,dt*1.e15,heat_step_scale,input_minus_bottom_mW,balanced_steps);
     fflush(history);
   }
-  if (i%10==0)
-    fprintf(stderr,"STEP i=%d t_ps=%.6g Tmax=%.6gK Tmax_Ag=%.6gK Tmax_SC=%.6gK liquid_Ag_nm3=%.6g depression_nm=%.6g heat=%d\n",
-            i,t*1.e12,Tmax,Tmax_Ag,Tmax_SC,liquidvol/cube(1.e-9),depression_nm,heat_on);
+  if (i%10==0) {
+    double ufmax=0.;
+    foreach_face(reduction(max:ufmax))
+      ufmax=max(ufmax,fabs(uf.x[]));
+    fprintf(stderr,"STEP i=%d t_ps=%.6g Tmax=%.6gK Tmax_Ag=%.6gK Tmax_SC=%.6gK liquid_Ag_nm3=%.6g depression_nm=%.6g heat=%d dt_fs=%.9g dtmax_fs=%.9g ufmax_m_s=%.9g\n",
+            i,t*1.e12,Tmax,Tmax_Ag,Tmax_SC,liquidvol/cube(1.e-9),depression_nm,heat_on,
+            dt*1.e15,DT*1.e15,ufmax);
+  }
   if (Tmax_SC>SC_Tmax) {
     fprintf(stderr,"STOP Ti3SiC2 property ceiling exceeded: %.9g K > %.9g K\n",Tmax_SC,SC_Tmax);
     dump(file="p1h_failed_property_ceiling.dump");
@@ -1306,6 +1333,13 @@ event acceleration (i++)
 
 event stop (t = max_time_s)
 {
+  double ufmax=0., umax=0.;
+  foreach_face(reduction(max:ufmax))
+    ufmax=max(ufmax,fabs(uf.x[]));
+  foreach(reduction(max:umax))
+    umax=max(umax,norm(u));
+  fprintf(stderr,"STOP_DIAG t_ps=%.9g dt_fs=%.9g dtmax_fs=%.9g ufmax_m_s=%.9g umax_m_s=%.9g\n",
+          t*1.e12,dt*1.e15,DT*1.e15,ufmax,umax);
   write_pool_field_snapshot(t*1.e12,"max_time");
   write_restart_checkpoint(t*1.e12,i);
   dump(file="p1h_final.dump");
