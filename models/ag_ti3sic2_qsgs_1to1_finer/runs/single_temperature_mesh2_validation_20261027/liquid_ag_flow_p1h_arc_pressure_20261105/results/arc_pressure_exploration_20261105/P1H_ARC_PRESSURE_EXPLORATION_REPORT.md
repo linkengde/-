@@ -44,6 +44,11 @@
 ## 结果文件
 
 - [逐算例比较 CSV](arc_pressure_exploration_comparison.csv)
+- [P1H 电弧压力机制诊断报告](P1H_MECHANISM_DIAGNOSIS.md)：回答压力是否实际施加、压力与曲率表面张力关系、Ag 横向迁移、骨架阻尼作用，以及凹陷是否曾出现后恢复。
+- [四个关键时刻的场统计](p1h_mechanism_event_diagnostics.csv)
+- [四时刻自由表面高度与压力图](p1h_pressure_event_surface_maps.png)
+- [压力载荷与表面响应独立复核](P1H_PRESSURE_LOAD_RESPONSE_AUDIT.md)；二进制压力场重算的合力与求解器记录相符，等时刻比较显示中心仍未低于初始表面。
+- [压力载荷复核 CSV](p1h_pressure_load_response_audit.csv)
 - [压力档位与表面位移对照图](arc_pressure_exploration_comparison.png)
 - [167 MPa 峰值熔池三维图](peak_pool_167MPa_3d.png)；图中黑色为 Ti₃SiC₂、浅蓝为固态 Ag、黄色为部分液化 Ag、半透明橙色为液态 Ag。
 - 可复现图片的脚本：[render_p1h_melt_pool_3d.py](../../render_p1h_melt_pool_3d.py)。
