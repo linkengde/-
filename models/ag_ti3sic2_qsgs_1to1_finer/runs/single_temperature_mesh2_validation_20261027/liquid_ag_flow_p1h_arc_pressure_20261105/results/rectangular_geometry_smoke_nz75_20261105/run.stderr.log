@@ -1,0 +1,10 @@
+INPUT source_power=0.00893189911119 W grid=64x64x75 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=90112
+SC_PROPERTIES file=/tmp/ag70-p1h/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_cut_K=2100.0
+ARC_PRESSURE_CONFIG enabled=0 peak_Pa=0 profile=uniform center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=-1 source_off_ramp_ps=0.02 periodic_xy=1
+INIT_FIELDS ag_m3=4.13042566868e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616833e-24
+INIT case=negative_dsigma_dT marangoni=0 top_boundary=closed_no_penetration grid=64x64x75 drag_s-1=1e+11 cells=307200 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.00893189911185 source_scale=1.07534865
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=0 fields=20 file=p1h_marangoni_off_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_off_initial_t000.000000_ps.bin
+RESTART_CHECKPOINT t_ps=0 step=1 file=p1h_restart_i0000000001_t000.000000_ps.dump
+src/poisson.h:219: warning: convergence for Tfield not reached after 200 iterations
+  res: 1.20546e+181 sum: -6.46351e+07 nrelax: 100 tolerance: 1e-05
