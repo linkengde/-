@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task": "P1H local arc-pressure numerical prototype",
+  "branch": "codex/ag70-p1h-arc-pressure",
+  "base_branch": "codex/ag70-exploratory-pool-p1g",
+  "base_commit": "c262e2ea37f5b631da98a64b44604421150f36f4",
+  "basilisk": {
+    "release": "v2026-07-20",
+    "git_revision": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+    "source_archive_sha256": "4686294e8f649a424ca437a7fa94bfac9984c32bea5e9f33a27a5783cc692829",
+    "qcc_sha256": "521f42b26689c6bc79e1476e55db9275e1e3a18f18f79e81182a59279f0d9328"
+  },
+  "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
+  "build_flags": [
+    "-disable-dimensions",
+    "-O2",
+    "-Wall",
+    "-autolink",
+    "-lm"
+  ],
+  "validation": {
+    "pressure_helper_unit_test": "PASS",
+    "uniform_planar_pressure_vof": "PASS; dimensionless end time 0.199900; volume drift 3.91e-9",
+    "periodic_gaussian_pressure_vof": "PASS; dimensionless Pi_p approximately 0.301; end time 0.199900; volume drift 7.56e-9",
+    "gaussian_time_step_sensitivity": "PASS trend; end time 0.04; max steps 1e-4, 5e-5, 2.5e-5",
+    "64_cube_geometry_pressure_smoke": "PASS; stops at 0.16 ps; pressure 1.8 MPa is software-only smoke input",
+    "pressure_configured_restart": "PASS; restored at 0.16 ps and continued to 0.161 ps",
+    "gas_cap_height_sensitivity": "NOT RUN; required gate before formal C/D",
+    "closed_vs_open_top_boundary": "NOT RUN; required gate before formal C/D",
+    "formal_C_D_heating_and_cooling": "NOT RUN"
+  },
+  "artifact_sha256": {
+    "p1h_free_surface_coupled.c": "3a8e28efa01364e8cdb6244c5b475165272b724f48f52ec9edeadb12af4cd084",
+    "p1h_arc_pressure.h": "e0d7b34262d1e10be6968c675b7c9ef96b7fad2cb9d98abf668bd87dff666f47",
+    "p1h_pressure_vof_test.c": "f657d5f235160d582b0ef008d610cbe095259d33f96d3aa5e826c0c97477387f",
+    "test_p1h_arc_pressure.c": "69a29200f32436253c42dde6f8ada5f8abb26d31d32de1a2ee9b57a7501badbf",
+    "two-phase-clsvof-p1g.h": "ea70984809517aef601e02ac6a82f9d218b6a993b7903bec76d01db67501607c",
+    "run_p1h_pressure_validation.sh": "68b8ac7d0509160b77fe7ad7704413d591031c912af2da9675a6b6181b71de89",
+    "P1H_ARC_PRESSURE_DESIGN.md": "e74ce27a9ca235953d1df1fb115df09b2014461f61747ec7604894448cd36a1a",
+    "P1H_ARC_PRESSURE_VALIDATION_REPORT.md": "f1042cfcd0ae6ac20e3efbbcaeef62ec8261e3de3aea414eda01616ec1e2385a",
+    "P1H_FIELD_OUTPUT_SCHEMA.md": "9f3b5bee155f861558988d39f278864ab09682d7680bacc51024ae24e4f3ecf5",
+    "convert_p1h_snapshot.py": "a50888ba08a7cac30442578ff29778197b661013c12cd8fa578146d6f965310f",
+    "results/dt_sensitivity_20261105/pressure_vof_validation_summary.csv": "b327e0ba118383cb7f530c1c480fff3979cfa13de459cbf4342200c55fbe6adb",
+    "results/geometry_preflight_0p16ps/P1H_pressure_preflight_0p16ps.h5": "3f73123790882764ffc897b41a3c32f359d95841b8fcb321081efb50608dbe8e",
+    "results/geometry_preflight_0p16ps/p1h_geometry_preflight_summary.csv": "9b740a8c01653fcf4c23f06e6a03696f7ab2bd02a18dd1a8b0b2b9b8ba35358a"
+  },
+  "note": "The HDF5 frame is a fixed-grid diagnostic projection of solver fields; do not infer conservative material volumes by summing this projected snapshot."
+}

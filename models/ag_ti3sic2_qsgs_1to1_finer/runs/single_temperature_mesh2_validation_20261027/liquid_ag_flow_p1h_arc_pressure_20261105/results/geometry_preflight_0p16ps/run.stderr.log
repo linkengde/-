@@ -1,0 +1,19 @@
+INPUT source_power=0.00893189911119 W grid=64^3 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=45056
+SC_PROPERTIES file=/tmp/ag70-p1h/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_cut_K=2100.0
+ARC_PRESSURE_CONFIG enabled=1 peak_Pa=1800000 profile=uniform center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=1.00000002e+42 source_off_ramp_ps=0.02 periodic_xy=1
+INIT_FIELDS ag_m3=4.13042566868e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616833e-24
+INIT case=negative_dsigma_dT marangoni=0 grid=64^3 drag_s-1=1e+11 cells=262144 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.00893189911185 source_scale=1.07534865
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=0 fields=20 file=p1h_marangoni_off_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_off_initial_t000.000000_ps.bin
+RESTART_CHECKPOINT t_ps=0 step=1 file=p1h_restart_i0000000001_t000.000000_ps.dump
+POOL_DIMENSIONS t_ps=0.0513933317 Tmax_skeleton_K=884.706512
+P1H_FIELD_SNAPSHOT t_ps=0.0513933317 stage=regular marangoni=0 fields=20 file=p1h_marangoni_off_regular_t000.051393_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.0513933317 stage=regular fields=4 file=p1h_pressure_marangoni_off_regular_t000.051393_ps.bin
+STEP i=10 t_ps=0.0744722 Tmax=1013.71K Tmax_Ag=996.328K Tmax_SC=1013.71K liquid_Ag_nm3=0 depression_nm=0 heat=1
+POOL_DIMENSIONS t_ps=0.111126999 Tmax_skeleton_K=1170.16481
+P1H_FIELD_SNAPSHOT t_ps=0.111126999 stage=regular marangoni=0 fields=20 file=p1h_marangoni_off_regular_t000.111127_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.111126999 stage=regular fields=4 file=p1h_pressure_marangoni_off_regular_t000.111127_ps.bin
+P1H_FIELD_SNAPSHOT t_ps=0.16 stage=max_time marangoni=0 fields=20 file=p1h_marangoni_off_max_time_t000.160000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.16 stage=max_time fields=4 file=p1h_pressure_marangoni_off_max_time_t000.160000_ps.bin
+RESTART_CHECKPOINT t_ps=0.16 step=17 file=p1h_restart_i0000000017_t000.160000_ps.dump
+MAX_TIME_STOP t_ps=0.16; check liquid_Ag_volume_nm3 in p1h_history.csv to determine whether cooling completed
