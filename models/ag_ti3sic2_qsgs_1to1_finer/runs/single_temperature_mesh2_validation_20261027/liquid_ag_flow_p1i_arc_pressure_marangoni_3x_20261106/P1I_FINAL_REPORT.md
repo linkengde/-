@@ -40,3 +40,7 @@ At final solidification, liquid Ag volume was zero, skeleton and Ag maxima were 
 The final dump and field snapshots were validated before the remaining periodic restart checkpoints were removed to recover workspace storage. The archived run is therefore a result archive, not a restartable run directory.
 
 The 0.16 ps preliminary run and setup details are documented separately in `P1I_PRELIMINARY_PREFLIGHT_REPORT.md`. This full run supersedes it for the 3× parameter case.
+
+## Storage cleanup
+
+After the run was archived and pushed, 51 restart-checkpoint and stale-pointer files from previously completed P1G smoke runs were removed, freeing 0.954 GiB. Final dumps, logs, CSV summaries, and field snapshots were retained. Failed, ambiguous, and active runs were left untouched. The removed-file list and pre-removal SHA-256 values are recorded in `results/p1g_completed_smoke_checkpoint_cleanup_20261106.csv`.
