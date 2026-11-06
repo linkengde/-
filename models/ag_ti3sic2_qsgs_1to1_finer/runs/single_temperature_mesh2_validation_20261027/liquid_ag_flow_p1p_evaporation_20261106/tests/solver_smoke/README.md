@@ -22,6 +22,15 @@ is retained in `synthetic_thermal_failure.stderr`; it means the complete
 thermal-flow runtime path has not passed. No restart, long run, or physical
 Ag70 evaporation calculation was performed.
 
+With a 1 fs maximum-step setting, a further P1P run completed one full
+source-plus-thermal step. Its Ag-volume drift was `-1.84719291e-10%` and its
+global energy residual was `-5.97478060099e-24 J`. The next step failed in the
+thermal nonlinear iteration at `0.00026446281 ps` after 81 iterations with a
+`102.081935 K` update. A matched run with evaporation disabled failed at the
+same time, iteration count, and update, showing that this diagnostic failure
+comes from the inherited thermal solve under the manufactured hot initial
+condition, not from P1P. Both runs' logs and CSVs are retained.
+
 Both runs used the Basilisk `v2026-07-20` source snapshot recorded in the
 project manifest and the same P1M input directory. Rebuilds must set
 `BASILISK_SRC` and compile with `P1H_RECT_NZ=76` and `P1H_TOP_OPEN=1`. The

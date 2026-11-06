@@ -21,17 +21,19 @@
     "isolated_solver_compile_status": "passed with fixed Basilisk qcc and production solver flags",
     "isolated_solver_source": "p1p/p1p_m1m_evaporation.c",
     "isolated_solver_source_sha256": "75ea9738b6499360ced4131450c8cdab489cda530c40234b31c0159dd3201b6b",
-    "mass_energy_coupling": "implemented in isolated copy; unit and synthetic source checks pass; full thermal-flow runtime validation awaits sourced Ag properties and a converged coupled timestep",
+    "mass_energy_coupling": "implemented in isolated copy; kernel, synthetic source checks, and one full synthetic coupled timestep pass; multi-step runtime validation awaits repair/understanding of inherited thermal-solver convergence and sourced Ag properties",
     "p1p_source_runtime_smoke": {
-      "status": "source hook passed one synthetic-property software smoke; thermal solve intentionally skipped",
-      "area_m2": 2.98320138895e-16,
+      "status": "source-only smoke passed and one full synthetic source-plus-thermal timestep passed; no Ag property data used",
+      "source_only_area_m2": 2.98320138895e-16,
       "synthetic_flux_kg_m2_s": 1.55501282076,
-      "removed_mass_kg": 1.25317752386e-30,
-      "mass_residual_pct": -4.5838895855e-13,
+      "source_only_removed_mass_kg": 1.25317752386e-30,
+      "source_only_mass_residual_pct": -4.5838895855e-13,
+      "one_full_step_ag_volume_drift_pct": -1.84719291e-10,
+      "one_full_step_energy_residual_J": -5.97478060099e-24,
       "physical_ag_result": false,
       "artifacts": "tests/solver_smoke/"
     },
-    "full_thermal_flow_smoke_status": "not passed: source executed with synthetic properties, then inherited enthalpy nonlinear solve failed at 0.001818 ps after 81 iterations (48.952 K update); failure log retained"
+    "full_thermal_flow_smoke_status": "not passed beyond one full synthetic step: at 0.00026446281 ps the thermal nonlinear solve failed after 81 iterations with 102.081935 K update; a matched no-evaporation control failed identically, so the failure is inherited thermal-solver behavior under the manufactured hot initial condition"
   },
   "checkpoint_cleanup": {
     "removed_duplicate_files": 127,
