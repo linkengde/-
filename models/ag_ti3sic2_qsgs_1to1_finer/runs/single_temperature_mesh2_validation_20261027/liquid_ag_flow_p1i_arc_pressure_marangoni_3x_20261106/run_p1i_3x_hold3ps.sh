@@ -12,6 +12,8 @@ MAX_TIME_PS="${P1I_MAX_TIME_PS:-10}"
 PRESSURE_PA=501000000
 PRESSURE_RADIUS_NM=5
 MAX_SAVED_CHECKPOINTS=2
+SOURCE_POWER_MW="${P1I_SOURCE_POWER_MW:-8.93189911185}"
+SOURCE_POWER_W="$(awk -v p="$SOURCE_POWER_MW" 'BEGIN { printf "%.15g", p/1000 }')"
 
 [[ -d "$BASILISK_SRC" ]] || { echo "BASILISK_SRC not found: $BASILISK_SRC" >&2; exit 2; }
 [[ -d "$INPUT_DIR" ]] || { echo "P1G input directory not found: $INPUT_DIR" >&2; exit 2; }
@@ -19,6 +21,7 @@ MAX_SAVED_CHECKPOINTS=2
 mkdir -p "$OUT_DIR" "$BUILD_DIR"
 EXE="$BUILD_DIR/p1i_nz76_open_marangoni3x"
 (cd "$HERE" && "$BASILISK_SRC/qcc" -DP1H_RECT_NZ=76 -DP1H_TOP_OPEN=1 \
+  -DP1I_SOURCE_POWER_W="$SOURCE_POWER_W" \
   -DPOOL_REPORT_INTERVAL_PS=0.05 -DPOOL_FIELD_INTERVAL_PS=20.0 \
   -DPOOL_CHECKPOINT_INTERVAL_PS=0.5 -disable-dimensions -fopenmp \
   -O2 -Wall -autolink p1i_free_surface_rectangular.c -o "$EXE" -lm)
@@ -28,7 +31,7 @@ git_branch=$(git -C "$REPO_ROOT" branch --show-current)
 git_head=$(git -C "$REPO_ROOT" rev-parse HEAD)
 grid=64x64x76; sample geometry unchanged; Ag70; 23-cell gas cap
 top_boundary=open, ambient gauge pressure 0
-thermal_model=single-temperature enthalpy; existing composite heat source; source power=8.93189911185mW
+thermal_model=single-temperature enthalpy; existing composite heat source; source power=${SOURCE_POWER_MW}mW
 marangoni=on; tangential multiplier=3; normal capillary stress unchanged
 arc_pressure=periodic_gaussian; configured peak=501MPa; radius=5nm; center=existing source center
 heating_target=Ti3SiC2 max 2100K; then full 3ps hold; heat and pressure off together after hold

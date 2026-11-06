@@ -95,7 +95,10 @@ static double energy_initial = 0., input_energy = 0., sink_energy = 0.;
 static double ag_volume_initial = 0., sc_volume_initial = 0.;
 static double applied_source_scale = 1.;
 static double max_temperature_seen = 300.;
-static double source_power_target = 0.008931899111848596;
+#ifndef P1I_SOURCE_POWER_W
+#define P1I_SOURCE_POWER_W 0.008931899111848596
+#endif
+static double source_power_target = P1I_SOURCE_POWER_W;
 static double next_pool_report_ps = POOL_REPORT_INTERVAL_PS;
 static double next_pool_field_snapshot_ps = POOL_FIELD_INTERVAL_PS;
 static double next_pool_checkpoint_ps = POOL_CHECKPOINT_INTERVAL_PS;
