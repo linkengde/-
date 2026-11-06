@@ -38,3 +38,5 @@ The result archive is `results/full_6mW_3x_safe_20261106/`.
 - `run_manifest.json`, `run_config.txt`, `code_hashes_*.sha256`, and `SHA256SUMS`: reproducibility and integrity data.
 
 Restart dumps were omitted from the published archive after the field snapshots and logs were verified. The archived results are for analysis and visualization, not direct checkpoint restart.
+
+The temporary 6 mW restart and failed-state dump copies were removed after publication to recover 257 MB. Their paths, sizes, and SHA-256 values are recorded in `results/full_6mW_3x_safe_20261106/diagnostics/checkpoint_cleanup_6mW_20261106.csv`.
