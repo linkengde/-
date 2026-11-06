@@ -130,6 +130,7 @@ const double Ag_mushy_width_K = 10.; /* numerical regularization, not a measured
 const double Ag_Tsol = 1230.08;
 const double Ag_Tliq = 1240.08;
 const double SC_Tmax = 2300.;
+const double SC_predictive_margin_K = 5.;
 const double Tref = 300.;
 const double delta_x = Lbox/NC;
 const double source_x = 95.8832e-10;
@@ -1201,10 +1202,14 @@ event thermal_step (i++,last)
   }
   double rise_K = Tmax_SC - max_sc_now;
   double rate_K_s = rise_K > 0. && dt > 0. ? rise_K/dt : 0.;
-  double ramp_peak_prediction_K = Tmax_SC +
-    rate_K_s*heat_source_ramp_s*0.5;
+  /* Forecast through the remaining source/pressure off-ramp and one full
+     next step. Keep a 5 K buffer below the tabulated ceiling so the hard
+     post-step guard cannot be reached by an accelerating temperature rise. */
+  double forecast_horizon_s = heat_source_ramp_s*0.5 + heat_dt_max_s;
+  double ramp_peak_prediction_K = Tmax_SC + rate_K_s*forecast_horizon_s;
   if (heat_on && Tmax_SC <= SC_Tmax &&
-      rate_K_s > 0. && ramp_peak_prediction_K >= SC_Tmax &&
+      rate_K_s > 0. &&
+      ramp_peak_prediction_K >= SC_Tmax - SC_predictive_margin_K &&
       (!heat_hold_started || t+1.e-18 < heat_hold_end_s)) {
     stop_heat_and_pressure_at(t);
     write_peak_pool_stats(t*1.e12,Tmax_SC);
@@ -1227,9 +1232,10 @@ event thermal_step (i++,last)
      timestep collapse even while the measured peak temperature was falling.
      The hard 2300 K guard below remains active and never clips temperature. */
   double pending_heat_scale=heat_source_scale_at(t);
-  if (heat_on && pending_heat_scale > 1.e-12 && Tmax_SC < SC_Tmax &&
-      SC_Tmax - Tmax_SC < 20. && rate_K_s > 0.) {
-    double safe_dt = 0.5*(SC_Tmax - Tmax_SC)/rate_K_s;
+  double predictive_limit_K=SC_Tmax-SC_predictive_margin_K;
+  if (heat_on && pending_heat_scale > 1.e-12 && Tmax_SC < predictive_limit_K &&
+      predictive_limit_K - Tmax_SC < 20. && rate_K_s > 0.) {
+    double safe_dt = 0.5*(predictive_limit_K - Tmax_SC)/rate_K_s;
     DT = min(heat_dt_max_s,max(2.e-18,safe_dt));
   }
   else
