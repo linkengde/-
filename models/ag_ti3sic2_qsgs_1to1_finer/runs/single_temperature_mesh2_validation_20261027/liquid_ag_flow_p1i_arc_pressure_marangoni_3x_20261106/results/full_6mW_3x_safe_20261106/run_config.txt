@@ -1,0 +1,21 @@
+# Ag70 P1I 6 mW run configuration and actual outcome
+branch=codex/ag70-p1i-3x-hold3ps
+base_commit=9a4f4c908de894cf36d96873f96aeaff679056d6
+source_target_mW=6.0
+source_reference_integral_mW=8.93189911185
+source_mapping=existing composite Ag+Ti3SiC2 spatial distribution, renormalized to 6.0 mW
+initial_temperature_K=300
+geometry=existing Ag70
+mesh=64x64x76
+dx_nm=0.301857485
+thermal_model=single-temperature enthalpy with existing phase change and heat sink
+marangoni=tangential multiplier 3; normal capillary stress unchanged
+arc_pressure=configured 501 MPa peak, periodic Gaussian, radius 5 nm
+requested_hold=3 ps after skeleton reached 2100 K
+hold_start_ps=2.2767726589
+actual_source_pressure_cutoff_ps=3.2963804857
+actual_hold_before_safety_cutoff_ps=1.0196078269
+shutdown_reason=pre-step property guard on validated restart; the checkpoint began at 2274.6 K and the pre-step field was 2276.0 K, so heat and pressure were turned off before the next thermal solve
+cooling=continued until two successive no-liquid steps; solidified at 3.8786255241 ps
+hard_property_ceiling_K=2300
+pre_step_shutdown_threshold_K=2250

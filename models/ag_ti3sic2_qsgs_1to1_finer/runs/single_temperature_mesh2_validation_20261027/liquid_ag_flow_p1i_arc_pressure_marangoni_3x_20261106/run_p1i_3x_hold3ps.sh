@@ -37,7 +37,7 @@ marangoni=on; tangential multiplier=3; normal capillary stress unchanged
 arc_pressure=periodic_gaussian; configured peak=501MPa; radius=5nm; center=existing source center
 heating_target=Ti3SiC2 max 2100K; then full 3ps hold; heat and pressure off together after hold
 pre_target_balance_stop=abs(input-bottom)<=0.01mW for 10 consecutive steps
-safety=hard 2300K ceiling; predictive forecast includes next step plus off-ramp and 5K buffer; divergence guard retained
+safety=hard 2300K ceiling; pre-step source shutdown at 2250K plus predictive forecast with 5K buffer; divergence guard retained
 cooling_stop=two successive steps with no liquid Ag after source and pressure ramps end
 max_time_guard_ps=$MAX_TIME_PS; dt_max=20fs; source and pressure ramp=0.02ps
 openmp_threads=$OMP_THREADS

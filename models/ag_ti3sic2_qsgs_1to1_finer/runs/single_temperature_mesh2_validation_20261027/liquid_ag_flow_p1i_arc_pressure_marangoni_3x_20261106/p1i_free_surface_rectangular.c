@@ -131,6 +131,7 @@ const double Ag_Tsol = 1230.08;
 const double Ag_Tliq = 1240.08;
 const double SC_Tmax = 2300.;
 const double SC_predictive_margin_K = 5.;
+const double SC_preemptive_shutdown_margin_K = 50.;
 const double Tref = 300.;
 const double delta_x = Lbox/NC;
 const double source_x = 95.8832e-10;
@@ -1030,6 +1031,18 @@ event thermal_step (i++,last)
       write_pool_field_snapshot(t*1.e12,"hold_start_2100K");
       write_restart_checkpoint(t*1.e12,i);
     }
+  }
+  /* A hard pre-step cutoff is a second, independent protection.  The
+     predictive ramp forecast can miss when the local peak rises sharply
+     within a nonlinear enthalpy update.  Switch the source off before the
+     next thermal solve once the pre-step skeleton temperature is within
+     50 K of the property-table ceiling. */
+  if (heat_on && max_sc_now >= SC_Tmax - SC_preemptive_shutdown_margin_K &&
+      (!heat_hold_started || t+1.e-18 < heat_hold_end_s)) {
+    stop_heat_and_pressure_at(t);
+    fprintf(stderr,"HEAT_OFF_PRESTEP_PROPERTY_GUARD t_ps=%.9g Tmax_skeleton_K=%.9g margin_K=%.9g ceiling_K=%.9g hold_started=%d hold_age_ps=%.9g\n",
+            t*1.e12,max_sc_now,SC_preemptive_shutdown_margin_K,SC_Tmax,
+            heat_hold_started,heat_hold_started ? (t-heat_hold_start_s)*1.e12 : 0.);
   }
   double heat_source_scale = heat_source_scale_at(t + 0.5*dt);
 
