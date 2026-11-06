@@ -32,6 +32,7 @@ git_head=$(git -C "$REPO_ROOT" rev-parse HEAD)
 grid=64x64x76; sample geometry unchanged; Ag70; 23-cell gas cap
 top_boundary=open, ambient gauge pressure 0
 thermal_model=single-temperature enthalpy; existing composite heat source; source power=${SOURCE_POWER_MW}mW
+source_template_integral=8.93189911185mW; VOF-mapped source is renormalized to the requested target
 marangoni=on; tangential multiplier=3; normal capillary stress unchanged
 arc_pressure=periodic_gaussian; configured peak=501MPa; radius=5nm; center=existing source center
 heating_target=Ti3SiC2 max 2100K; then full 3ps hold; heat and pressure off together after hold

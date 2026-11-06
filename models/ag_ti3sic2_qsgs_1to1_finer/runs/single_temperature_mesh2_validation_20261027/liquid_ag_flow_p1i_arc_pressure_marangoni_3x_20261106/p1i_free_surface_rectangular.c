@@ -99,6 +99,7 @@ static double max_temperature_seen = 300.;
 #define P1I_SOURCE_POWER_W 0.008931899111848596
 #endif
 static double source_power_target = P1I_SOURCE_POWER_W;
+static const double source_map_reference_power = 0.008931899111848596;
 static double next_pool_report_ps = POOL_REPORT_INTERVAL_PS;
 static double next_pool_field_snapshot_ps = POOL_FIELD_INTERVAL_PS;
 static double next_pool_checkpoint_ps = POOL_CHECKPOINT_INTERVAL_PS;
@@ -339,11 +340,13 @@ static void read_raw_inputs (const char * dir)
     count_gas += material_code[n] == 0;
   }
   sum *= cube(delta_x);
-  if (fabs(sum - source_power_target) > 2.e-6*source_power_target) {
-    fprintf(stderr, "source integral %.12g W != target %.12g W\n", sum, source_power_target);
+  if (!(sum > 0.) ||
+      fabs(sum - source_map_reference_power) > 2.e-6*source_map_reference_power) {
+    fprintf(stderr, "source-map template integral %.12g W != expected %.12g W\n",
+            sum, source_map_reference_power);
     exit(2);
   }
-  fprintf(stderr, "INPUT source_power=%.12g W grid=%dx%dx%d dx=%.9g m codes_ag=%ld codes_sc=%ld codes_gas=%ld\n", sum, NC,NC,NCZ,delta_x,count_ag,count_sc,count_gas);
+  fprintf(stderr, "INPUT source_template=%.12g W normalized_target=%.12g W grid=%dx%dx%d dx=%.9g m codes_ag=%ld codes_sc=%ld codes_gas=%ld\n", sum,source_power_target,NC,NC,NCZ,delta_x,count_ag,count_sc,count_gas);
 }
 
 static void read_sc_property_table (const char * dir)
