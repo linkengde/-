@@ -1,0 +1,49 @@
+INPUT source_power=0.00893189911119 W grid=64x64x76 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=94208
+SC_PROPERTIES file=/tmp/ag70-p1h/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_target_K=2100.0 table_ceiling_K=2300.0
+ARC_PRESSURE_CONFIG enabled=1 peak_Pa=501000000 profile=periodic_gaussian center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=-1 source_off_ramp_ps=0.02 periodic_xy=1
+INIT_FIELDS ag_m3=4.13042566869e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616836e-24
+INIT case=negative_dsigma_dT marangoni=1 marangoni_tangential_multiplier=3 top_boundary=open_ambient_pressure grid=64x64x76 multigrid_factors=16x16x19 levels=2 drag_s-1=1e+11 cells=311296 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.00893189911185 source_scale=1.07534865
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=1 fields=20 file=p1h_marangoni_on_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_on_initial_t000.000000_ps.bin
+RESTART_CHECKPOINT t_ps=0 step=1 file=p1h_restart_i0000000001_t000.000000_ps.dump
+POOL_DIMENSIONS t_ps=0.0532795606 Tmax_skeleton_K=898.902919
+STEP i=10 t_ps=0.0770728 Tmax=1029.11K Tmax_Ag=1011.71K Tmax_SC=1029.11K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=12.9881246 dtmax_fs=20 ufmax_m_s=0
+POOL_DIMENSIONS t_ps=0.103673497 Tmax_skeleton_K=1147.94913
+POOL_DIMENSIONS t_ps=0.163441835 Tmax_skeleton_K=1324.78334
+POOL_DIMENSIONS t_ps=0.212559293 Tmax_skeleton_K=1452.73253
+STEP i=20 t_ps=0.229581 Tmax=1495.01K Tmax_Ag=1473.98K Tmax_SC=1495.01K liquid_Ag_nm3=9.59491 depression_nm=-0.282181 heat=1 dt_fs=17.2927771 dtmax_fs=20 ufmax_m_s=30.4209251
+POOL_DIMENSIONS t_ps=0.2644153 Tmax_skeleton_K=1574.29127
+POOL_DIMENSIONS t_ps=0.300143663 Tmax_skeleton_K=1650.66566
+POOL_DIMENSIONS t_ps=0.355017823 Tmax_skeleton_K=1753.29688
+STEP i=30 t_ps=0.411169 Tmax=1844.6K Tmax_Ag=1822.88K Tmax_SC=1844.6K liquid_Ag_nm3=48.2042 depression_nm=-0.265083 heat=1 dt_fs=18.9502597 dtmax_fs=20 ufmax_m_s=59.8800336
+POOL_DIMENSIONS t_ps=0.411168574 Tmax_skeleton_K=1844.59606
+POOL_DIMENSIONS t_ps=0.468246153 Tmax_skeleton_K=1927.18084
+POOL_DIMENSIONS t_ps=0.506680957 Tmax_skeleton_K=1978.11452
+RESTART_CHECKPOINT t_ps=0.506680957 step=35 file=p1h_restart_i0000000035_t000.506681_ps.dump
+POOL_DIMENSIONS t_ps=0.564843751 Tmax_skeleton_K=2050.1329
+STEP i=40 t_ps=0.603872 Tmax=2095.63K Tmax_Ag=2071.33K Tmax_SC=2095.63K liquid_Ag_nm3=114.171 depression_nm=-0.252187 heat=1 dt_fs=19.5752657 dtmax_fs=20 ufmax_m_s=73.4422649
+POOL_DIMENSIONS t_ps=0.603872444 Tmax_skeleton_K=2095.62875
+HEAT_HOLD_STARTED t_ps=0.62344771 Tmax_skeleton_K=2117.80109 hold_duration_ps=3 hold_end_ps=3.62344771
+P1H_FIELD_SNAPSHOT t_ps=0.62344771 stage=hold_start_2100K marangoni=1 fields=20 file=p1h_marangoni_on_hold_start_2100K_t000.623448_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.62344771 stage=hold_start_2100K fields=4 file=p1h_pressure_marangoni_on_hold_start_2100K_t000.623448_ps.bin
+RESTART_CHECKPOINT t_ps=0.62344771 step=41 file=p1h_restart_i0000000041_t000.623448_ps.dump
+POOL_DIMENSIONS t_ps=0.662721357 Tmax_skeleton_K=2160.8557
+POOL_DIMENSIONS t_ps=0.702077773 Tmax_skeleton_K=2202.46993
+POOL_DIMENSIONS t_ps=0.761342389 Tmax_skeleton_K=2262.07662
+HEAT_OFF_PROPERTY_GUARD t_ps=0.800950919 Tmax_skeleton_K=2292.29441 predicted_after_ramp_K=2300.3197 Tmax_Ag_K=2265.70189 liquid_Ag_nm3=190.948839 ceiling_K=2300 hold_started=1 hold_age_ps=0.177503209 hold_complete=0
+P1H_FIELD_SNAPSHOT t_ps=0.800950919 stage=heat_off marangoni=1 fields=20 file=p1h_marangoni_on_heat_off_t000.800951_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.800950919 stage=heat_off fields=4 file=p1h_pressure_marangoni_on_heat_off_t000.800951_ps.bin
+RESTART_CHECKPOINT t_ps=0.800950919 step=50 file=p1h_restart_i0000000050_t000.800951_ps.dump
+STEP i=50 t_ps=0.800951 Tmax=2292.29K Tmax_Ag=2265.7K Tmax_SC=2292.29K liquid_Ag_nm3=190.949 depression_nm=-0.240322 heat=0 dt_fs=11.4273902 dtmax_fs=20 ufmax_m_s=97.5064644
+POOL_DIMENSIONS t_ps=0.800950919 Tmax_skeleton_K=2292.29441
+POOL_DIMENSIONS t_ps=0.851038634 Tmax_skeleton_K=1797.76577
+POOL_DIMENSIONS t_ps=0.910582389 Tmax_skeleton_K=1483.45171
+STEP i=60 t_ps=0.942933 Tmax=1381.42K Tmax_Ag=1376.2K Tmax_SC=1381.42K liquid_Ag_nm3=61.1688 depression_nm=-0.237963 heat=0 dt_fs=16.6796807 dtmax_fs=20 ufmax_m_s=121.432303
+POOL_DIMENSIONS t_ps=0.959613061 Tmax_skeleton_K=1341.64333
+POOL_DIMENSIONS t_ps=1.01134706 Tmax_skeleton_K=1259.33804
+RESTART_CHECKPOINT t_ps=1.01134706 step=64 file=p1h_restart_i0000000064_t001.011347_ps.dump
+POOL_DIMENSIONS t_ps=1.06514146 Tmax_skeleton_K=1229.18359
+P1H_FIELD_SNAPSHOT t_ps=1.10183585 stage=solidified marangoni=1 fields=20 file=p1h_marangoni_on_solidified_t001.101836_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=1.10183585 stage=solidified fields=4 file=p1h_pressure_marangoni_on_solidified_t001.101836_ps.bin
+RESTART_CHECKPOINT t_ps=1.10183585 step=69 file=p1h_restart_i0000000069_t001.101836_ps.dump
+DONE_SOLIDIFIED t_ps=1.10183585 Tmax=1108.97886 K Tmax_Ag=1104.19974 K Tmax_skeleton=1108.97886 K
