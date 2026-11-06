@@ -1,0 +1,13 @@
+P1M_POLICY configured_max_power_mW=4 hold_ps=5 balance_to_bottom_sink=1 plateau_window_ps=0.1 plateau_delta_K=1 plateau_windows=2
+P1M_POWER_TARGET configured_W=0.004
+INPUT source_template=0.00893189911119 W normalized_target=0.004 W grid=64x64x76 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=94208
+SC_PROPERTIES file=/tmp/ag70-p1b-p2/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_target_K=2100.0 table_ceiling_K=2300.0
+P1P_EVAPORATION enabled=1 property_table=/workspace/ag70-p1p-evaporation/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1p_evaporation_20261106/tests/synthetic_property_table.csv source=synthetic software smoke fixture; not Ag data rows=2 temperature_range_K=1000..2000 alpha_ev=0.5 p_Ag_v_Pa=0 R_Ag_J_kg_K=77.0798309247 Kelvin_correction=off recoil_pressure=off table_fingerprint=629a74a21cec8c4d
+ARC_PRESSURE_CONFIG enabled=0 peak_Pa=0 profile=uniform center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=-1 source_off_ramp_ps=0.02 periodic_xy=1
+P1J_FORCE_AUDIT t_ps=0 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+INIT_FIELDS ag_m3=4.13042566869e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616836e-24
+INIT case=negative_dsigma_dT marangoni=0 marangoni_tangential_multiplier=1 top_boundary=open_ambient_pressure grid=64x64x76 multigrid_factors=16x16x19 levels=2 drag_s-1=1e+11 cells=311296 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.004 source_scale=0.481576709
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=0 fields=21 file=p1h_marangoni_off_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_off_initial_t000.000000_ps.bin
+P1J_FORCE_AUDIT t_ps=0.00181818182 gamma_gradient_tan_max_N_m2=4781850.95 marangoni_accel_max_m_s2=8.4738848e+11 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STOP nonlinear enthalpy solve failed at t_ps=0.00181818182, change_K=48.9522415 after 81 iterations

@@ -83,6 +83,10 @@ int main(int argc, char **argv)
   check_close("mass_balance_initial_equals_remaining_plus_escaped_kg",
               0.8, (0.8-step.removed_mass_kg)+step.removed_mass_kg, 1.e-12);
   check_close("mass_limit_flag", 1., step.mass_limited ? 1. : 0., 0.);
+  check_status("overflowing_requested_mass_rejected", P1P_ERR_ARGUMENT,
+               p1p_evaporation_step(1.e308,1.e308,1.e308,1.,1.,&step));
+  check_status("overflowing_latent_energy_rejected", P1P_ERR_ARGUMENT,
+               p1p_evaporation_step(1.e100,1.,1.,1.e100,1.e300,&step));
 
   P1PStep whole, half_a, half_b;
   p1p_evaporation_step(5., 0.02, 0.1, 100., 2.e6, &whole);
@@ -91,6 +95,83 @@ int main(int argc, char **argv)
   check_close("constant_flux_dt_halving_mass_invariance_kg",
               whole.removed_mass_kg,
               half_a.removed_mass_kg + half_b.removed_mass_kg, 1.e-12);
+
+  P1PCellState cell = {0.9, 0.6, 0.2, 0.1, 1.e7};
+  const P1PCellState initial_cell = cell;
+  P1PCellUpdate cell_update;
+  st = p1p_apply_cell_evaporation(&table, 0.5, 0., 77.1, 1500., 0.7,
+                                  4.e5, 10490., 1.e-12, 1.e-6, 1.e-6,
+                                  &cell, &cell_update);
+  check_status("cell_evaporation_update_valid_inputs", P1P_OK, st);
+  check_close("cell_ag_mass_initial_equals_remaining_plus_escaped_kg",
+              initial_cell.ag_fraction * 10490. * 1.e-12,
+              cell.ag_fraction * 10490. * 1.e-12 +
+                  cell_update.removed_mass_kg,
+              1.e-12);
+  check_close("cell_sample_and_components_remain_consistent",
+              cell.sample_fraction,
+              cell.ag_fraction + cell.skeleton_fraction + cell.pore_fraction,
+              1.e-12);
+  check_close("cell_skeleton_fraction_unchanged", initial_cell.skeleton_fraction,
+              cell.skeleton_fraction, 0.);
+  check_close("cell_pore_fraction_unchanged", initial_cell.pore_fraction,
+              cell.pore_fraction, 0.);
+  check_close("cell_energy_initial_equals_remaining_plus_escaped_J",
+              initial_cell.enthalpy_density_J_m3 * 1.e-12,
+              cell.enthalpy_density_J_m3 * 1.e-12 +
+                  cell_update.escaped_energy_J,
+              1.e-12);
+  check_close("escaped_energy_equals_sensible_plus_vaporization_J",
+              cell_update.ag_sensible_energy_J + cell_update.latent_energy_J,
+              cell_update.escaped_energy_J, 1.e-12);
+
+  P1PCellState solid_cell = {0.9, 0.6, 0.2, 0.1, 1.e7};
+  st = p1p_apply_cell_evaporation(&table, 0.5, 0., 77.1, 1500., 0.,
+                                  4.e5, 10490., 1.e-12, 1.e-6, 1.e-6,
+                                  &solid_cell, &cell_update);
+  check_status("no_liquid_ag_no_evaporation", P1P_OK, st);
+  check_close("no_liquid_ag_removed_mass_kg", 0.,
+              cell_update.removed_mass_kg, 0.);
+
+  P1PCellState energy_limited_cell = {0.9, 0.6, 0.2, 0.1, 1000.};
+  st = p1p_apply_cell_evaporation(&table, 0.5, 0., 77.1, 1500., 1.,
+                                  4.e5, 10490., 1.e-12, 1.e-6, 1.e-6,
+                                  &energy_limited_cell, &cell_update);
+  check_status("enthalpy_limited_evaporation_valid_inputs", P1P_OK, st);
+  check_close("enthalpy_cap_reported", 1.,
+              cell_update.enthalpy_limited ? 1. : 0., 0.);
+  check_close("enthalpy_floor_not_crossed_J", 0.,
+              energy_limited_cell.enthalpy_density_J_m3 * 1.e-12, 0.);
+
+  P1PCellState range_cell = {0.9, 0.6, 0.2, 0.1, 1.e7};
+  const P1PCellState range_cell_before = range_cell;
+  st = p1p_apply_cell_evaporation(&table, 0.5, 0., 77.1, 999., 1.,
+                                  4.e5, 10490., 1.e-12, 1.e-6, 1.e-6,
+                                  &range_cell, &cell_update);
+  check_status("cell_evaporation_rejects_property_extrapolation",
+               P1P_ERR_RANGE, st);
+  check_close("out_of_range_update_does_not_change_ag",
+              range_cell_before.ag_fraction, range_cell.ag_fraction, 0.);
+  check_close("out_of_range_update_does_not_change_enthalpy",
+              range_cell_before.enthalpy_density_J_m3,
+              range_cell.enthalpy_density_J_m3, 0.);
+
+  P1PPropertyTable overflow_table=table;
+  for (size_t row=0;row<overflow_table.n;row++) {
+    overflow_table.saturation_pressure_Pa[row]=1.e308;
+    overflow_table.vaporization_enthalpy_J_kg[row]=1.e308;
+  }
+  P1PCellState overflow_cell={0.9,0.6,0.2,0.1,1.e7};
+  const P1PCellState overflow_cell_before=overflow_cell;
+  st=p1p_apply_cell_evaporation(&overflow_table,1.,0.,77.1,1500.,1.,
+                                4.e5,10490.,1.,1.e200,1.,
+                                &overflow_cell,&cell_update);
+  check_status("overflowing_cell_source_rejected",P1P_ERR_ARGUMENT,st);
+  check_close("rejected_overflow_does_not_mutate_ag",
+              overflow_cell_before.ag_fraction,overflow_cell.ag_fraction,0.);
+  check_close("rejected_overflow_does_not_mutate_enthalpy",
+              overflow_cell_before.enthalpy_density_J_m3,
+              overflow_cell.enthalpy_density_J_m3,0.);
 
   fclose(csv);
   if (failures) {

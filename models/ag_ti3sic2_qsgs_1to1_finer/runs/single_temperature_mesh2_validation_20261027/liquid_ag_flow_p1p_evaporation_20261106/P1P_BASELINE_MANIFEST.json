@@ -16,6 +16,27 @@
     "recoil_pressure_implemented": false,
     "ag70_evaporation_run_started": false,
     "property_table_status": "missing; test fixture is synthetic only",
-    "kernel_test_status": "passed"
+    "kernel_test_status": "37 checks passed; AddressSanitizer and UndefinedBehaviorSanitizer passed",
+    "synthetic_flat_interface_source_test": "12 grid/timestep cases passed; max mass relative error 6.51e-14; max Ag mass residual 9.41e-14; max energy residual 6.39e-14; synthetic values only",
+    "isolated_solver_compile_status": "passed with fixed Basilisk qcc and production solver flags",
+    "isolated_solver_source": "p1p/p1p_m1m_evaporation.c",
+    "isolated_solver_source_sha256": "75ea9738b6499360ced4131450c8cdab489cda530c40234b31c0159dd3201b6b",
+    "mass_energy_coupling": "implemented in isolated copy; unit and synthetic source checks pass; full thermal-flow runtime validation awaits sourced Ag properties and a converged coupled timestep",
+    "p1p_source_runtime_smoke": {
+      "status": "source hook passed one synthetic-property software smoke; thermal solve intentionally skipped",
+      "area_m2": 2.98320138895e-16,
+      "synthetic_flux_kg_m2_s": 1.55501282076,
+      "removed_mass_kg": 1.25317752386e-30,
+      "mass_residual_pct": -4.5838895855e-13,
+      "physical_ag_result": false,
+      "artifacts": "tests/solver_smoke/"
+    },
+    "full_thermal_flow_smoke_status": "not passed: source executed with synthetic properties, then inherited enthalpy nonlinear solve failed at 0.001818 ps after 81 iterations (48.952 K update); failure log retained"
+  },
+  "checkpoint_cleanup": {
+    "removed_duplicate_files": 127,
+    "removed_bytes": 2031938621,
+    "method": "each removed checkpoint SHA256 matched a preserved identical file under /workspace/-",
+    "manifest": "P1P_CHECKPOINT_CLEANUP.csv"
   }
 }
