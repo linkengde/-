@@ -14,14 +14,14 @@
   },
   "p1p": {
     "recoil_pressure_implemented": false,
-    "ag70_evaporation_run_started": false,
-    "property_table_status": "missing; test fixture is synthetic only",
+    "ag70_evaporation_run_started": true,
+    "property_table_status": "user-supplied Ag source data transcribed into generated tables; numeric checks passed; real arc conditions remain uncalibrated",
     "kernel_test_status": "37 checks passed; AddressSanitizer and UndefinedBehaviorSanitizer passed",
     "synthetic_flat_interface_source_test": "12 grid/timestep cases passed; max mass relative error 6.51e-14; max Ag mass residual 9.41e-14; max energy residual 6.39e-14; synthetic values only",
     "isolated_solver_compile_status": "passed with fixed Basilisk qcc and production solver flags",
     "isolated_solver_source": "p1p/p1p_m1m_evaporation.c",
-    "isolated_solver_source_sha256": "75ea9738b6499360ced4131450c8cdab489cda530c40234b31c0159dd3201b6b",
-    "mass_energy_coupling": "implemented in isolated copy; kernel, synthetic source checks, and one full synthetic coupled timestep pass; multi-step runtime validation awaits repair/understanding of inherited thermal-solver convergence and sourced Ag properties",
+    "isolated_solver_source_sha256": "098a64e3d7123114929d1cd09f27ea7ea1d96d2eac6b9c4091f7b7afbcd22bdd",
+    "mass_energy_coupling": "isolated implementation passed kernel and synthetic source tests; short Ag70 exploratory source run reached a verified 3.0128048117 ps checkpoint with low mass-ledger residual; full run and cooling are not validated",
     "p1p_source_runtime_smoke": {
       "status": "source-only smoke passed and one full synthetic source-plus-thermal timestep passed; no Ag property data used",
       "source_only_area_m2": 2.98320138895e-16,
@@ -33,7 +33,51 @@
       "physical_ag_result": false,
       "artifacts": "tests/solver_smoke/"
     },
-    "full_thermal_flow_smoke_status": "not passed beyond one full synthetic step: at 0.00026446281 ps the thermal nonlinear solve failed after 81 iterations with 102.081935 K update; a matched no-evaporation control failed identically, so the failure is inherited thermal-solver behavior under the manufactured hot initial condition"
+    "full_thermal_flow_smoke_status": "not passed beyond one full synthetic step: at 0.00026446281 ps the thermal nonlinear solve failed after 81 iterations with 102.081935 K update; a matched no-evaporation control failed identically, so the failure is inherited thermal-solver behavior under the manufactured hot initial condition",
+    "ag70_short_run": {
+      "run_directory": "results/p1p_real_smoke_4mw_3x_3ps_20261106/",
+      "initial_temperature_K": 300,
+      "configured_max_time_ps": 7,
+      "actual_checkpoint_time_ps": 3.0128048117,
+      "stopped_after_checkpoint": true,
+      "completed_full_7ps_or_cooling": false,
+      "source_power_mW": 4.0,
+      "arc_pressure_MPa": 501,
+      "marangoni_tangential_multiplier": 3,
+      "local_ag_vapor_partial_pressure_Pa": 0,
+      "alpha_out_of_anchor_sensitivity": 0.1428,
+      "checkpoint_cumulative_evaporated_mass_kg": 1.06863766228e-32,
+      "checkpoint_mass_ledger_residual_pct": -0.000214554359275,
+      "checkpoint_max_temperature_K": 1474.35287,
+      "checkpoint_max_skeleton_temperature_K": 1465.15248,
+      "checkpoint_liquid_Ag_volume_nm3": 26.8032853185,
+      "checkpoint_input_minus_bottom_sink_mW": 0.599538734,
+      "checkpoint_dump_compressed_sha256": "afc7026af29bfac4cb38a1a185a0feaef7f23e69f75d5f9a0f9e7f97ee6a0b54"
+    },
+    "user_provided_paper_review": {
+      "status": "reviewed",
+      "papers": [
+        {
+          "citation": "Holyst and Litniewski, J Chem Phys 130, 074707 (2009)",
+          "doi": "10.1063/1.3077059",
+          "use": "nonequilibrium HK applicability caveat; LJ MD, not Ag calibration"
+        },
+        {
+          "citation": "Wang et al., Next Materials 4, 100189 (2024)",
+          "doi": "10.1016/j.nxmate.2024.100189",
+          "use": "Ag vapor pressure, mass-loss data, effective alpha anchors and experimental ranges"
+        },
+        {
+          "citation": "Much et al., Adv Model Simul Eng Sci 11:16 (2024)",
+          "doi": "10.1186/s40323-024-00270-6",
+          "use": "interface temperature sensitivity in diffuse CSF; not direct Ag or P1Q validation"
+        }
+      ],
+      "details": "P1P_PAPER_REVIEW.md",
+      "p1q_recoil_pressure_implemented": false
+    },
+    "property_table_sha256": "172c461d16a5cd505ae7613847a55b087d0c86052323b6e28e14a3ff4fc1a373",
+    "property_table_fingerprint": "2307fbcf67f2b882"
   },
   "checkpoint_cleanup": {
     "removed_duplicate_files": 127,

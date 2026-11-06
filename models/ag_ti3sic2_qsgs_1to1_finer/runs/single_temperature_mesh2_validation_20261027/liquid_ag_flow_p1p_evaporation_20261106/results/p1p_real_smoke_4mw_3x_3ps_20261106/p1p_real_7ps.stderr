@@ -1,0 +1,441 @@
+P1M_POLICY configured_max_power_mW=4 hold_ps=5 balance_to_bottom_sink=1 plateau_window_ps=0.1 plateau_delta_K=1 plateau_windows=2
+P1M_POWER_TARGET configured_W=0.004
+INPUT source_template=0.00893189911119 W normalized_target=0.004 W grid=64x64x76 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=94208
+SC_PROPERTIES file=/tmp/ag70-p1b-p2/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_target_K=2100.0 table_ceiling_K=2300.0
+P1P_EVAPORATION enabled=1 property_table=/workspace/ag70-p1p-evaporation/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1p_evaporation_20261106/data/Ag_evaporation_solver_table.csv source=Wang2024-p_sat_and_derived_Lv;Table8-alpha-anchors-1373-1773K rows=61 temperature_range_K=1234..2436 alpha_table_anchors=5 alpha_ev_fallback_sensitivity=0.1428 p_Ag_v_Pa=0 R_Ag_J_kg_K=77.0798309247 Kelvin_correction=off recoil_pressure=off table_fingerprint=2307fbcf67f2b882
+ARC_PRESSURE_CONFIG enabled=1 peak_Pa=501000000 profile=periodic_gaussian center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=-1 source_off_ramp_ps=0.02 periodic_xy=1
+P1J_FORCE_AUDIT t_ps=0 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+INIT_FIELDS ag_m3=4.13042566869e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616836e-24
+INIT case=negative_dsigma_dT marangoni=1 marangoni_tangential_multiplier=3 top_boundary=open_ambient_pressure grid=64x64x76 multigrid_factors=16x16x19 levels=2 drag_s-1=1e+11 cells=311296 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.004 source_scale=0.481576709
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=1 fields=21 file=p1h_marangoni_on_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_on_initial_t000.000000_ps.bin
+RESTART_CHECKPOINT t_ps=0 step=1 file=p1h_restart_i0000000001_t000.000000_ps.dump
+P1J_FORCE_AUDIT t_ps=0.00181818182 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.00181818182 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.00528778113 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.00528778113 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0102591473 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0102591473 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0165961744 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0165961744 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0241703651 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0241703651 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.032879266 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.032879266 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0426098815 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0426098815 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.053264384 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.053264384 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.053264384 Tmax_skeleton_K=564.993648
+P1J_FORCE_AUDIT t_ps=0.0647656019 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0647656019 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0770403531 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=10 t_ps=0.0770404 Tmax=616.235K Tmax_Ag=606.6K Tmax_SC=616.235K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=12.9886673 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0770403531 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.0900290203 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.0900290203 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.103631325 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.103631325 Tmax_skeleton_K=660.10893 window_ps=0.101813144 delta_K=331.591575 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.103631325 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.103631325 Tmax_skeleton_K=660.10893
+P1J_FORCE_AUDIT t_ps=0.117821384 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.117821384 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.132526894 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.132526894 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.147720419 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.147720419 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.163364893 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.163364893 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.163364893 Tmax_skeleton_K=731.483804
+P1J_FORCE_AUDIT t_ps=0.179375748 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.179375748 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.195771479 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.195771479 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.212489485 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.212489485 Tmax_skeleton_K=774.98739 window_ps=0.10885816 delta_K=114.878461 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.212489485 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.212489485 Tmax_skeleton_K=774.98739
+P1J_FORCE_AUDIT t_ps=0.22950079 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=20 t_ps=0.229501 Tmax=788.103K Tmax_Ag=775.69K Tmax_SC=788.103K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=17.2716817 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.22950079 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.246772472 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.246772472 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.264313322 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.264313322 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.264313322 Tmax_skeleton_K=812.714686
+P1J_FORCE_AUDIT t_ps=0.282038814 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.282038814 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.300001277 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.300001277 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.300001277 Tmax_skeleton_K=835.523968
+P1J_FORCE_AUDIT t_ps=0.318109381 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.318109381 Tmax_skeleton_K=846.373782 window_ps=0.105619896 delta_K=71.3863919 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.318109381 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.336415931 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.336415931 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.354874613 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.354874613 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.354874613 Tmax_skeleton_K=867.106327
+P1J_FORCE_AUDIT t_ps=0.373436415 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.373436415 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.392155522 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.392155522 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.410981289 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=30 t_ps=0.410981 Tmax=896.255K Tmax_Ag=883.649K Tmax_SC=896.255K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=18.9339618 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.410981289 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.410981289 Tmax_skeleton_K=896.255004
+P1J_FORCE_AUDIT t_ps=0.429915251 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.429915251 Tmax_skeleton_K=905.5378 window_ps=0.11180587 delta_K=59.1640176 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.429915251 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.448958975 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.448958975 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.46805822 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.46805822 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.46805822 Tmax_skeleton_K=923.524508
+P1J_FORCE_AUDIT t_ps=0.487269813 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.487269813 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.506538246 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.506538246 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.506538246 Tmax_skeleton_K=940.836714
+P1J_FORCE_AUDIT t_ps=0.525864025 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.525864025 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.545247666 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.545247666 Tmax_skeleton_K=957.55051 window_ps=0.115332415 delta_K=52.0127102 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.545247666 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.564689691 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.564689691 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.564689691 Tmax_skeleton_K=965.70848
+P1J_FORCE_AUDIT t_ps=0.584190631 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.584190631 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.603691571 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=40 t_ps=0.603692 Tmax=981.619K Tmax_Ag=969.462K Tmax_SC=981.619K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=19.5605762 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.603691571 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.603691571 Tmax_skeleton_K=981.61943
+P1J_FORCE_AUDIT t_ps=0.623252148 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.623252148 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.64287291 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.64287291 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.662493673 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.662493673 Tmax_skeleton_K=1004.64395 window_ps=0.117246007 delta_K=47.0934374 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.662493673 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.662493673 Tmax_skeleton_K=1004.64395
+P1J_FORCE_AUDIT t_ps=0.68217537 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.68217537 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.701857066 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.701857066 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.701857066 Tmax_skeleton_K=1019.46295
+P1J_FORCE_AUDIT t_ps=0.721600461 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.721600461 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.741343856 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.741343856 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.761087251 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.761087251 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.761087251 Tmax_skeleton_K=1040.95553
+P1J_FORCE_AUDIT t_ps=0.780893323 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.780893323 Tmax_skeleton_K=1047.93689 window_ps=0.11839965 delta_K=43.292938 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.780893323 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.800699395 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=50 t_ps=0.800699 Tmax=1054.82K Tmax_Ag=1043.23K Tmax_SC=1054.82K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=19.8060722 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.800699395 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.800699395 Tmax_skeleton_K=1054.82472
+P1J_FORCE_AUDIT t_ps=0.820505467 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.820505467 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.840311539 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.840311539 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.860181502 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.860181502 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.860181502 Tmax_skeleton_K=1074.99477
+P1J_FORCE_AUDIT t_ps=0.880051465 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.880051465 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.899921428 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=0.899921428 Tmax_skeleton_K=1088.03092 window_ps=0.119028105 delta_K=40.094032 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.899921428 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.91979139 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.91979139 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.91979139 Tmax_skeleton_K=1094.42788
+P1J_FORCE_AUDIT t_ps=0.939661353 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.939661353 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.959531316 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.959531316 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=0.959531316 Tmax_skeleton_K=1106.98873
+P1J_FORCE_AUDIT t_ps=0.979401279 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.979401279 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=0.999271242 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=60 t_ps=0.999271 Tmax=1119.27K Tmax_Ag=1108.3K Tmax_SC=1119.27K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=0.999271242 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.01920722 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=1.01920722 Tmax_skeleton_K=1125.31265 window_ps=0.11928579 delta_K=37.281734 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.01920722 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.01920722 Tmax_skeleton_K=1125.31265
+RESTART_CHECKPOINT t_ps=1.01920722 step=61 file=p1h_restart_i0000000061_t001.019207_ps.dump
+P1J_FORCE_AUDIT t_ps=1.03914319 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.03914319 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.05907917 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.05907917 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.05907917 Tmax_skeleton_K=1137.18633
+P1J_FORCE_AUDIT t_ps=1.07901515 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.07901515 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.09895112 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.09895112 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.1188871 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.1188871 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.1188871 Tmax_skeleton_K=1154.49052
+P1J_FORCE_AUDIT t_ps=1.13882307 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=1.13882307 Tmax_skeleton_K=1160.12871 window_ps=0.119615856 delta_K=34.816056 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.13882307 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.15875905 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.15875905 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.15875905 Tmax_skeleton_K=1165.70344
+P1J_FORCE_AUDIT t_ps=1.17869503 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.17869503 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.198631 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=70 t_ps=1.19863 Tmax=1176.67K Tmax_Ag=1166.34K Tmax_SC=1176.67K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.198631 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.21856698 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.21856698 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.21856698 Tmax_skeleton_K=1182.06094
+P1J_FORCE_AUDIT t_ps=1.23850295 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.23850295 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.25843893 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=1.25843893 Tmax_skeleton_K=1192.66985 window_ps=0.119615856 delta_K=32.5411442 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.25843893 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.25843893 Tmax_skeleton_K=1192.66985
+P1J_FORCE_AUDIT t_ps=1.2783749 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.2783749 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.29831088 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.29831088 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.31824686 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.31824686 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.31824686 Tmax_skeleton_K=1208.20262
+P1J_FORCE_AUDIT t_ps=1.33818283 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.33818283 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.35811881 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.35811881 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.35811881 Tmax_skeleton_K=1218.45278
+P1J_FORCE_AUDIT t_ps=1.37805478 gamma_gradient_tan_max_N_m2=0 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+P1M_TEMPERATURE_WINDOW t_ps=1.37805478 Tmax_skeleton_K=1223.49918 window_ps=0.119615856 delta_K=30.8293303 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.37805478 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.39799076 gamma_gradient_tan_max_N_m2=2497717.3 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+STEP i=80 t_ps=1.39799 Tmax=1228.49K Tmax_Ag=1218.4K Tmax_SC=1228.49K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.39799076 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.41792674 gamma_gradient_tan_max_N_m2=5894255.17 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.41792674 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.41792674 Tmax_skeleton_K=1233.43871
+P1J_FORCE_AUDIT t_ps=1.43786271 gamma_gradient_tan_max_N_m2=9272483.96 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.43786271 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+P1J_FORCE_AUDIT t_ps=1.45779869 gamma_gradient_tan_max_N_m2=12618985.1 marangoni_accel_max_m_s2=0 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=0 arc_force_z_N=0
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.45779869 liquid_f_gt_0p5_m_s=0 gas_f_le_0p5_m_s=0 interface_m_s=0 global_m_s=0
+POOL_DIMENSIONS t_ps=1.45779869 Tmax_skeleton_K=1242.53661
+P1J_FORCE_AUDIT t_ps=1.47773466 gamma_gradient_tan_max_N_m2=15598593.5 marangoni_accel_max_m_s2=5.37790764e+11 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=54080246.5 arc_force_z_N=-9.62223478e-12
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.47773466 liquid_f_gt_0p5_m_s=0.145495403 gas_f_le_0p5_m_s=0.377508154 interface_m_s=0.377508154 global_m_s=0.377508154
+P1J_FORCE_AUDIT t_ps=1.49767064 gamma_gradient_tan_max_N_m2=18366805.1 marangoni_accel_max_m_s2=1.69037089e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=175879323 arc_force_z_N=-3.08641382e-11
+P1M_TEMPERATURE_WINDOW t_ps=1.49767064 Tmax_skeleton_K=1249.41574 window_ps=0.119615856 delta_K=25.9165618 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.49767064 liquid_f_gt_0p5_m_s=0.569748317 gas_f_le_0p5_m_s=1.40593485 interface_m_s=1.40593485 global_m_s=1.40593485
+P1J_FORCE_AUDIT t_ps=1.51760662 gamma_gradient_tan_max_N_m2=20854181.8 marangoni_accel_max_m_s2=3.00659999e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=299933346 arc_force_z_N=-8.26027252e-11
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.51760662 liquid_f_gt_0p5_m_s=1.20127043 gas_f_le_0p5_m_s=2.35742493 interface_m_s=2.35742493 global_m_s=2.35742493
+POOL_DIMENSIONS t_ps=1.51760662 Tmax_skeleton_K=1252.78196
+P1J_FORCE_AUDIT t_ps=1.53754259 gamma_gradient_tan_max_N_m2=23186426.4 marangoni_accel_max_m_s2=4.37749727e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=418296996 arc_force_z_N=-1.55625091e-10
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.53754259 liquid_f_gt_0p5_m_s=2.00380453 gas_f_le_0p5_m_s=3.42127756 interface_m_s=3.42127756 global_m_s=3.42127756
+P1J_FORCE_AUDIT t_ps=1.55747857 gamma_gradient_tan_max_N_m2=25591305.5 marangoni_accel_max_m_s2=5.48397099e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=476339789 arc_force_z_N=-2.38182449e-10
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.55747857 liquid_f_gt_0p5_m_s=2.75764954 gas_f_le_0p5_m_s=4.44866939 interface_m_s=4.44866939 global_m_s=4.44866939
+POOL_DIMENSIONS t_ps=1.55747857 Tmax_skeleton_K=1259.72269
+P1J_FORCE_AUDIT t_ps=1.57741454 gamma_gradient_tan_max_N_m2=28036809 marangoni_accel_max_m_s2=6.99636375e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=476339742 arc_force_z_N=-3.38452142e-10
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.57741454 liquid_f_gt_0p5_m_s=3.22809723 gas_f_le_0p5_m_s=5.0398822 interface_m_s=5.0398822 global_m_s=5.0398822
+P1J_FORCE_AUDIT t_ps=1.59735052 gamma_gradient_tan_max_N_m2=28719079.9 marangoni_accel_max_m_s2=7.71143613e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=486871041 arc_force_z_N=-4.43360366e-10
+STEP i=90 t_ps=1.59735 Tmax=1266.17K Tmax_Ag=1265.91K Tmax_SC=1266.17K liquid_Ag_nm3=0.367039 depression_nm=-0.252334 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=5.62537505
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.59735052 liquid_f_gt_0p5_m_s=3.76066257 gas_f_le_0p5_m_s=5.67744833 interface_m_s=5.67744833 global_m_s=5.67744833
+P1J_FORCE_AUDIT t_ps=1.6172865 gamma_gradient_tan_max_N_m2=28575782.9 marangoni_accel_max_m_s2=7.88106046e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=489591508 arc_force_z_N=-5.48176141e-10
+P1M_TEMPERATURE_WINDOW t_ps=1.6172865 Tmax_skeleton_K=1269.23408 window_ps=0.119615856 delta_K=19.8183402 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.6172865 liquid_f_gt_0p5_m_s=4.29994361 gas_f_le_0p5_m_s=6.31335479 interface_m_s=6.31335479 global_m_s=6.31335479
+POOL_DIMENSIONS t_ps=1.6172865 Tmax_skeleton_K=1269.23408
+P1J_FORCE_AUDIT t_ps=1.63722247 gamma_gradient_tan_max_N_m2=28375903.9 marangoni_accel_max_m_s2=8.06856471e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=489591341 arc_force_z_N=-6.88092237e-10
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.63722247 liquid_f_gt_0p5_m_s=4.78823231 gas_f_le_0p5_m_s=6.80170422 interface_m_s=6.80170422 global_m_s=6.80170422
+P1J_FORCE_AUDIT t_ps=1.65715845 gamma_gradient_tan_max_N_m2=28250699.1 marangoni_accel_max_m_s2=7.91605957e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=496781467 arc_force_z_N=-8.6236972e-10
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.65715845 liquid_f_gt_0p5_m_s=5.16992263 gas_f_le_0p5_m_s=7.20843104 interface_m_s=7.20843104 global_m_s=7.20843104
+POOL_DIMENSIONS t_ps=1.65715845 Tmax_skeleton_K=1275.93758
+P1J_FORCE_AUDIT t_ps=1.67709442 gamma_gradient_tan_max_N_m2=30224308.5 marangoni_accel_max_m_s2=7.85439123e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=496781297 arc_force_z_N=-1.07880247e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.67709442 liquid_f_gt_0p5_m_s=5.58140949 gas_f_le_0p5_m_s=7.57496099 interface_m_s=7.57496099 global_m_s=7.57496099
+P1J_FORCE_AUDIT t_ps=1.6970304 gamma_gradient_tan_max_N_m2=32550196.6 marangoni_accel_max_m_s2=9.37127e+12 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416089 arc_force_z_N=-1.34264573e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.6970304 liquid_f_gt_0p5_m_s=5.95697366 gas_f_le_0p5_m_s=8.04868282 interface_m_s=8.04868282 global_m_s=8.04868282
+P1J_FORCE_AUDIT t_ps=1.71696638 gamma_gradient_tan_max_N_m2=35123449.1 marangoni_accel_max_m_s2=1.11941654e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416013 arc_force_z_N=-1.61459539e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.71696638 liquid_f_gt_0p5_m_s=6.3020512 gas_f_le_0p5_m_s=8.53044052 interface_m_s=8.53044052 global_m_s=8.53044052
+POOL_DIMENSIONS t_ps=1.71696638 Tmax_skeleton_K=1287.31467
+P1J_FORCE_AUDIT t_ps=1.73690235 gamma_gradient_tan_max_N_m2=37889392.7 marangoni_accel_max_m_s2=1.3031654e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416154 arc_force_z_N=-1.88829212e-09
+P1M_TEMPERATURE_WINDOW t_ps=1.73690235 Tmax_skeleton_K=1291.39178 window_ps=0.119615856 delta_K=22.1576937 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.73690235 liquid_f_gt_0p5_m_s=6.60369788 gas_f_le_0p5_m_s=8.95593583 interface_m_s=8.95593583 global_m_s=8.95593583
+P1J_FORCE_AUDIT t_ps=1.75683833 gamma_gradient_tan_max_N_m2=40642741.2 marangoni_accel_max_m_s2=1.33346171e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416131 arc_force_z_N=-2.16969947e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.75683833 liquid_f_gt_0p5_m_s=6.95089233 gas_f_le_0p5_m_s=9.35287914 interface_m_s=9.35287914 global_m_s=9.35287914
+POOL_DIMENSIONS t_ps=1.75683833 Tmax_skeleton_K=1295.24794
+P1J_FORCE_AUDIT t_ps=1.7767743 gamma_gradient_tan_max_N_m2=43285137.1 marangoni_accel_max_m_s2=1.35680463e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416108 arc_force_z_N=-2.44114167e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.7767743 liquid_f_gt_0p5_m_s=7.27294107 gas_f_le_0p5_m_s=9.70538199 interface_m_s=9.70538199 global_m_s=9.70538199
+P1J_FORCE_AUDIT t_ps=1.79671028 gamma_gradient_tan_max_N_m2=45564338 marangoni_accel_max_m_s2=1.36735939e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416078 arc_force_z_N=-2.70187606e-09
+STEP i=100 t_ps=1.79671 Tmax=1302.61K Tmax_Ag=1302.61K Tmax_SC=1302.61K liquid_Ag_nm3=3.01645 depression_nm=-0.297878 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=9.02232732
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.79671028 liquid_f_gt_0p5_m_s=7.56560641 gas_f_le_0p5_m_s=10.0174624 interface_m_s=10.0174624 global_m_s=10.0174624
+P1J_FORCE_AUDIT t_ps=1.81664626 gamma_gradient_tan_max_N_m2=46811815 marangoni_accel_max_m_s2=1.47153947e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500416037 arc_force_z_N=-2.93363957e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.81664626 liquid_f_gt_0p5_m_s=7.82942243 gas_f_le_0p5_m_s=10.2981166 interface_m_s=10.2981166 global_m_s=10.2981166
+POOL_DIMENSIONS t_ps=1.81664626 Tmax_skeleton_K=1306.38444
+P1J_FORCE_AUDIT t_ps=1.83658223 gamma_gradient_tan_max_N_m2=49037055.3 marangoni_accel_max_m_s2=1.57727887e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415983 arc_force_z_N=-3.1507255e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.83658223 liquid_f_gt_0p5_m_s=8.06783109 gas_f_le_0p5_m_s=10.5355823 interface_m_s=10.5355823 global_m_s=10.5355823
+P1J_FORCE_AUDIT t_ps=1.85651821 gamma_gradient_tan_max_N_m2=50962936.2 marangoni_accel_max_m_s2=1.66041594e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415922 arc_force_z_N=-3.36806388e-09
+P1M_TEMPERATURE_WINDOW t_ps=1.85651821 Tmax_skeleton_K=1313.76447 window_ps=0.119615856 delta_K=22.3726935 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.85651821 liquid_f_gt_0p5_m_s=8.34035736 gas_f_le_0p5_m_s=10.7573341 interface_m_s=10.7573341 global_m_s=10.7573341
+POOL_DIMENSIONS t_ps=1.85651821 Tmax_skeleton_K=1313.76447
+P1J_FORCE_AUDIT t_ps=1.87645418 gamma_gradient_tan_max_N_m2=51722687.5 marangoni_accel_max_m_s2=1.67571225e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415856 arc_force_z_N=-3.58043172e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.87645418 liquid_f_gt_0p5_m_s=8.59486239 gas_f_le_0p5_m_s=10.9588744 interface_m_s=10.9588744 global_m_s=10.9588744
+P1J_FORCE_AUDIT t_ps=1.89639016 gamma_gradient_tan_max_N_m2=51830898.5 marangoni_accel_max_m_s2=1.68238821e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415784 arc_force_z_N=-3.80215292e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.89639016 liquid_f_gt_0p5_m_s=8.83686162 gas_f_le_0p5_m_s=11.1345249 interface_m_s=11.1345249 global_m_s=11.1345249
+P1J_FORCE_AUDIT t_ps=1.91632613 gamma_gradient_tan_max_N_m2=51959312.4 marangoni_accel_max_m_s2=1.66028685e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415703 arc_force_z_N=-4.01764271e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.91632613 liquid_f_gt_0p5_m_s=9.0583274 gas_f_le_0p5_m_s=11.2830817 interface_m_s=11.2830817 global_m_s=11.2830817
+POOL_DIMENSIONS t_ps=1.91632613 Tmax_skeleton_K=1324.4687
+P1J_FORCE_AUDIT t_ps=1.93626211 gamma_gradient_tan_max_N_m2=52071269.5 marangoni_accel_max_m_s2=1.67921141e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415613 arc_force_z_N=-4.19193633e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.93626211 liquid_f_gt_0p5_m_s=9.25640687 gas_f_le_0p5_m_s=11.4138024 interface_m_s=11.4138024 global_m_s=11.4138024
+P1J_FORCE_AUDIT t_ps=1.95619809 gamma_gradient_tan_max_N_m2=52170585.3 marangoni_accel_max_m_s2=1.70613829e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415511 arc_force_z_N=-4.39288977e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.95619809 liquid_f_gt_0p5_m_s=9.44107701 gas_f_le_0p5_m_s=11.5275513 interface_m_s=11.5275513 global_m_s=11.5275513
+POOL_DIMENSIONS t_ps=1.95619809 Tmax_skeleton_K=1331.40188
+P1J_FORCE_AUDIT t_ps=1.97613406 gamma_gradient_tan_max_N_m2=52266108.3 marangoni_accel_max_m_s2=1.73137602e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415400 arc_force_z_N=-4.58877821e-09
+P1M_TEMPERATURE_WINDOW t_ps=1.97613406 Tmax_skeleton_K=1334.92559 window_ps=0.119615856 delta_K=21.1611169 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.97613406 liquid_f_gt_0p5_m_s=9.98421639 gas_f_le_0p5_m_s=11.6130668 interface_m_s=11.6130668 global_m_s=11.6130668
+P1J_FORCE_AUDIT t_ps=1.99607004 gamma_gradient_tan_max_N_m2=52370017.2 marangoni_accel_max_m_s2=1.75635203e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415280 arc_force_z_N=-4.79277354e-09
+STEP i=110 t_ps=1.99607 Tmax=1338.44K Tmax_Ag=1338.44K Tmax_SC=1338.44K liquid_Ag_nm3=6.82191 depression_nm=-0.295667 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=10.1406277
+VELOCITY_PHASE_DIAGNOSTIC t_ps=1.99607004 liquid_f_gt_0p5_m_s=10.6717577 gas_f_le_0p5_m_s=11.6749299 interface_m_s=11.6749299 global_m_s=11.6749299
+P1J_FORCE_AUDIT t_ps=2.01600601 gamma_gradient_tan_max_N_m2=53072574.4 marangoni_accel_max_m_s2=1.94521834e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415153 arc_force_z_N=-4.98457307e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.01600601 liquid_f_gt_0p5_m_s=11.3920355 gas_f_le_0p5_m_s=11.7264146 interface_m_s=11.7264146 global_m_s=11.7264146
+POOL_DIMENSIONS t_ps=2.01600601 Tmax_skeleton_K=1341.9958
+RESTART_CHECKPOINT t_ps=2.01600601 step=111 file=p1h_restart_i0000000111_t002.016006_ps.dump
+P1J_FORCE_AUDIT t_ps=2.03594199 gamma_gradient_tan_max_N_m2=55384483.9 marangoni_accel_max_m_s2=2.03892057e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500415018 arc_force_z_N=-5.11566994e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.03594199 liquid_f_gt_0p5_m_s=12.1065107 gas_f_le_0p5_m_s=11.75637 interface_m_s=12.1065107 global_m_s=12.1065107
+P1J_FORCE_AUDIT t_ps=2.05587797 gamma_gradient_tan_max_N_m2=57728703.3 marangoni_accel_max_m_s2=2.12855327e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414874 arc_force_z_N=-5.2233586e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.05587797 liquid_f_gt_0p5_m_s=12.8057373 gas_f_le_0p5_m_s=11.7771376 interface_m_s=12.8057373 global_m_s=12.8057373
+POOL_DIMENSIONS t_ps=2.05587797 Tmax_skeleton_K=1349.27335
+P1J_FORCE_AUDIT t_ps=2.07581394 gamma_gradient_tan_max_N_m2=59485916 marangoni_accel_max_m_s2=2.15857555e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414723 arc_force_z_N=-5.35598921e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.07581394 liquid_f_gt_0p5_m_s=12.5830573 gas_f_le_0p5_m_s=11.7835803 interface_m_s=12.5830573 global_m_s=12.5830573
+P1J_FORCE_AUDIT t_ps=2.09574992 gamma_gradient_tan_max_N_m2=60793422.9 marangoni_accel_max_m_s2=2.14985842e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414562 arc_force_z_N=-5.50992779e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.09574992 Tmax_skeleton_K=1356.48537 window_ps=0.119615856 delta_K=21.5597776 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.09574992 liquid_f_gt_0p5_m_s=13.2451163 gas_f_le_0p5_m_s=11.8212747 interface_m_s=13.2451163 global_m_s=13.2451163
+P1J_FORCE_AUDIT t_ps=2.11568589 gamma_gradient_tan_max_N_m2=62082139.1 marangoni_accel_max_m_s2=2.15924827e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414394 arc_force_z_N=-5.68084457e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.11568589 liquid_f_gt_0p5_m_s=13.8666257 gas_f_le_0p5_m_s=11.8900758 interface_m_s=13.8666257 global_m_s=13.8666257
+POOL_DIMENSIONS t_ps=2.11568589 Tmax_skeleton_K=1359.99869
+P1J_FORCE_AUDIT t_ps=2.13562187 gamma_gradient_tan_max_N_m2=63370728.9 marangoni_accel_max_m_s2=2.16797726e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414216 arc_force_z_N=-5.84990047e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.13562187 liquid_f_gt_0p5_m_s=13.8394401 gas_f_le_0p5_m_s=11.9440114 interface_m_s=13.8394401 global_m_s=13.8394401
+P1J_FORCE_AUDIT t_ps=2.15555785 gamma_gradient_tan_max_N_m2=64645361.8 marangoni_accel_max_m_s2=2.20175955e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500414030 arc_force_z_N=-6.00159618e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.15555785 liquid_f_gt_0p5_m_s=11.2374175 gas_f_le_0p5_m_s=11.9866159 interface_m_s=11.9866159 global_m_s=11.9866159
+POOL_DIMENSIONS t_ps=2.15555785 Tmax_skeleton_K=1366.61781
+P1J_FORCE_AUDIT t_ps=2.17549382 gamma_gradient_tan_max_N_m2=65893227 marangoni_accel_max_m_s2=2.22288098e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500413838 arc_force_z_N=-6.12213441e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.17549382 liquid_f_gt_0p5_m_s=10.8739539 gas_f_le_0p5_m_s=12.0226017 interface_m_s=12.0226017 global_m_s=12.0226017
+P1J_FORCE_AUDIT t_ps=2.1954298 gamma_gradient_tan_max_N_m2=66822996.5 marangoni_accel_max_m_s2=2.22812381e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500413640 arc_force_z_N=-6.23014592e-09
+STEP i=120 t_ps=2.19543 Tmax=1372.99K Tmax_Ag=1372.99K Tmax_SC=1372.99K liquid_Ag_nm3=9.92607 depression_nm=-0.293972 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=10.544928
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.1954298 liquid_f_gt_0p5_m_s=10.986245 gas_f_le_0p5_m_s=12.0512819 interface_m_s=12.0512819 global_m_s=12.0512819
+P1J_FORCE_AUDIT t_ps=2.21536577 gamma_gradient_tan_max_N_m2=66899098.9 marangoni_accel_max_m_s2=2.23779865e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500413436 arc_force_z_N=-6.34426994e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.21536577 Tmax_skeleton_K=1376.09524 window_ps=0.119615856 delta_K=19.609874 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.21536577 liquid_f_gt_0p5_m_s=11.2664181 gas_f_le_0p5_m_s=12.0752858 interface_m_s=12.0752858 global_m_s=12.0752858
+POOL_DIMENSIONS t_ps=2.21536577 Tmax_skeleton_K=1376.09524
+P1J_FORCE_AUDIT t_ps=2.23530175 gamma_gradient_tan_max_N_m2=66967998.2 marangoni_accel_max_m_s2=2.20316985e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500413227 arc_force_z_N=-6.47731143e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.23530175 liquid_f_gt_0p5_m_s=11.5363408 gas_f_le_0p5_m_s=12.093452 interface_m_s=12.093452 global_m_s=12.093452
+P1J_FORCE_AUDIT t_ps=2.25523773 gamma_gradient_tan_max_N_m2=67016452 marangoni_accel_max_m_s2=2.20328831e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500413014 arc_force_z_N=-6.63297193e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.25523773 liquid_f_gt_0p5_m_s=11.8003251 gas_f_le_0p5_m_s=12.1058704 interface_m_s=12.1058704 global_m_s=12.1058704
+POOL_DIMENSIONS t_ps=2.25523773 Tmax_skeleton_K=1382.09715
+P1J_FORCE_AUDIT t_ps=2.2751737 gamma_gradient_tan_max_N_m2=67322816.7 marangoni_accel_max_m_s2=2.20955405e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500412797 arc_force_z_N=-6.80430066e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.2751737 liquid_f_gt_0p5_m_s=12.0549581 gas_f_le_0p5_m_s=12.1143023 interface_m_s=12.1143023 global_m_s=12.1143023
+P1J_FORCE_AUDIT t_ps=2.29510968 gamma_gradient_tan_max_N_m2=67904618.9 marangoni_accel_max_m_s2=2.2083827e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500412576 arc_force_z_N=-6.97312881e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.29510968 liquid_f_gt_0p5_m_s=12.2868305 gas_f_le_0p5_m_s=12.1222684 interface_m_s=12.2868305 global_m_s=12.2868305
+P1J_FORCE_AUDIT t_ps=2.31504565 gamma_gradient_tan_max_N_m2=68320890.1 marangoni_accel_max_m_s2=2.20480938e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500412352 arc_force_z_N=-7.11384736e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.31504565 liquid_f_gt_0p5_m_s=12.4987896 gas_f_le_0p5_m_s=12.1303162 interface_m_s=12.4987896 global_m_s=12.4987896
+POOL_DIMENSIONS t_ps=2.31504565 Tmax_skeleton_K=1390.31648
+P1J_FORCE_AUDIT t_ps=2.33498163 gamma_gradient_tan_max_N_m2=68636103.3 marangoni_accel_max_m_s2=2.1947441e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500412123 arc_force_z_N=-7.22536192e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.33498163 Tmax_skeleton_K=1392.98778 window_ps=0.119615856 delta_K=16.8925415 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.33498163 liquid_f_gt_0p5_m_s=12.6951205 gas_f_le_0p5_m_s=12.1385315 interface_m_s=12.6951205 global_m_s=12.6951205
+P1J_FORCE_AUDIT t_ps=2.35491761 gamma_gradient_tan_max_N_m2=68879722.8 marangoni_accel_max_m_s2=2.24219423e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500411891 arc_force_z_N=-7.32918073e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.35491761 liquid_f_gt_0p5_m_s=12.8917363 gas_f_le_0p5_m_s=12.1521746 interface_m_s=12.8917363 global_m_s=12.8917363
+POOL_DIMENSIONS t_ps=2.35491761 Tmax_skeleton_K=1395.6624
+P1J_FORCE_AUDIT t_ps=2.37485358 gamma_gradient_tan_max_N_m2=68867354.6 marangoni_accel_max_m_s2=2.79206842e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500411655 arc_force_z_N=-7.43433259e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.37485358 liquid_f_gt_0p5_m_s=13.099005 gas_f_le_0p5_m_s=12.1693911 interface_m_s=13.099005 global_m_s=13.099005
+P1J_FORCE_AUDIT t_ps=2.39478956 gamma_gradient_tan_max_N_m2=68153006.4 marangoni_accel_max_m_s2=2.85122214e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500411415 arc_force_z_N=-7.55008323e-09
+STEP i=130 t_ps=2.39479 Tmax=1400.99K Tmax_Ag=1400.99K Tmax_SC=1400.99K liquid_Ag_nm3=13.1075 depression_nm=-0.292719 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=11.0140305
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.39478956 liquid_f_gt_0p5_m_s=13.3058357 gas_f_le_0p5_m_s=12.1866098 interface_m_s=13.3058357 global_m_s=13.3058357
+P1J_FORCE_AUDIT t_ps=2.41472553 gamma_gradient_tan_max_N_m2=68283022 marangoni_accel_max_m_s2=2.92079133e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500411172 arc_force_z_N=-7.68504284e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.41472553 liquid_f_gt_0p5_m_s=13.508636 gas_f_le_0p5_m_s=12.2026163 interface_m_s=13.508636 global_m_s=13.508636
+POOL_DIMENSIONS t_ps=2.41472553 Tmax_skeleton_K=1403.55662
+P1J_FORCE_AUDIT t_ps=2.43466151 gamma_gradient_tan_max_N_m2=68509079.7 marangoni_accel_max_m_s2=2.93557698e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500410927 arc_force_z_N=-7.83106895e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.43466151 liquid_f_gt_0p5_m_s=13.7039614 gas_f_le_0p5_m_s=12.2185313 interface_m_s=13.7039614 global_m_s=13.7039614
+P1J_FORCE_AUDIT t_ps=2.45459749 gamma_gradient_tan_max_N_m2=68515778.7 marangoni_accel_max_m_s2=2.94278107e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500410680 arc_force_z_N=-7.9661789e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.45459749 Tmax_skeleton_K=1408.31519 window_ps=0.119615856 delta_K=15.3274129 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.45459749 liquid_f_gt_0p5_m_s=13.8910138 gas_f_le_0p5_m_s=12.2810832 interface_m_s=13.8910138 global_m_s=13.8910138
+POOL_DIMENSIONS t_ps=2.45459749 Tmax_skeleton_K=1408.31519
+P1J_FORCE_AUDIT t_ps=2.47453346 gamma_gradient_tan_max_N_m2=68603808.6 marangoni_accel_max_m_s2=2.94549572e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500410432 arc_force_z_N=-8.10022814e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.47453346 liquid_f_gt_0p5_m_s=14.0742241 gas_f_le_0p5_m_s=12.3392672 interface_m_s=14.0742241 global_m_s=14.0742241
+P1J_FORCE_AUDIT t_ps=2.49446944 gamma_gradient_tan_max_N_m2=68677705.9 marangoni_accel_max_m_s2=2.94751878e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500410183 arc_force_z_N=-8.24879693e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.49446944 liquid_f_gt_0p5_m_s=14.2540519 gas_f_le_0p5_m_s=12.3933613 interface_m_s=14.2540519 global_m_s=14.2540519
+P1J_FORCE_AUDIT t_ps=2.51440541 gamma_gradient_tan_max_N_m2=68384846.7 marangoni_accel_max_m_s2=2.92883098e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500409934 arc_force_z_N=-8.39980415e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.51440541 liquid_f_gt_0p5_m_s=14.427213 gas_f_le_0p5_m_s=12.4446502 interface_m_s=14.427213 global_m_s=14.427213
+POOL_DIMENSIONS t_ps=2.51440541 Tmax_skeleton_K=1415.25491
+P1J_FORCE_AUDIT t_ps=2.53434139 gamma_gradient_tan_max_N_m2=68174540.1 marangoni_accel_max_m_s2=2.93353094e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500409684 arc_force_z_N=-8.54844541e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.53434139 liquid_f_gt_0p5_m_s=14.5849929 gas_f_le_0p5_m_s=12.4993261 interface_m_s=14.5849929 global_m_s=14.5849929
+P1J_FORCE_AUDIT t_ps=2.55427737 gamma_gradient_tan_max_N_m2=68144173.2 marangoni_accel_max_m_s2=2.94213095e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500409434 arc_force_z_N=-8.677406e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.55427737 liquid_f_gt_0p5_m_s=14.7345487 gas_f_le_0p5_m_s=12.5580368 interface_m_s=14.7345487 global_m_s=14.7345487
+POOL_DIMENSIONS t_ps=2.55427737 Tmax_skeleton_K=1419.95487
+P1J_FORCE_AUDIT t_ps=2.57421334 gamma_gradient_tan_max_N_m2=68211937.8 marangoni_accel_max_m_s2=2.94614619e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500409184 arc_force_z_N=-8.80858388e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.57421334 Tmax_skeleton_K=1422.2756 window_ps=0.119615856 delta_K=13.9604081 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.57421334 liquid_f_gt_0p5_m_s=14.8946311 gas_f_le_0p5_m_s=12.6164364 interface_m_s=14.8946311 global_m_s=14.8946311
+P1J_FORCE_AUDIT t_ps=2.59414932 gamma_gradient_tan_max_N_m2=68285475.4 marangoni_accel_max_m_s2=2.94776869e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500408933 arc_force_z_N=-8.9447444e-09
+STEP i=140 t_ps=2.59415 Tmax=1424.58K Tmax_Ag=1424.58K Tmax_SC=1424.58K liquid_Ag_nm3=17.1717 depression_nm=-0.291393 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=12.7249815
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.59414932 liquid_f_gt_0p5_m_s=15.0704649 gas_f_le_0p5_m_s=12.6744965 interface_m_s=15.0704649 global_m_s=15.0704649
+P1J_FORCE_AUDIT t_ps=2.61408529 gamma_gradient_tan_max_N_m2=68229525.3 marangoni_accel_max_m_s2=2.93661082e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500408683 arc_force_z_N=-9.06724481e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.61408529 liquid_f_gt_0p5_m_s=15.2504603 gas_f_le_0p5_m_s=12.7350398 interface_m_s=15.2504603 global_m_s=15.2504603
+POOL_DIMENSIONS t_ps=2.61408529 Tmax_skeleton_K=1426.86081
+P1J_FORCE_AUDIT t_ps=2.63402127 gamma_gradient_tan_max_N_m2=68267279 marangoni_accel_max_m_s2=2.92774492e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500408434 arc_force_z_N=-9.1780045e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.63402127 liquid_f_gt_0p5_m_s=15.4235435 gas_f_le_0p5_m_s=12.8072488 interface_m_s=15.4235435 global_m_s=15.4235435
+P1J_FORCE_AUDIT t_ps=2.65395724 gamma_gradient_tan_max_N_m2=68471199.1 marangoni_accel_max_m_s2=2.93942949e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500408186 arc_force_z_N=-9.28713613e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.65395724 liquid_f_gt_0p5_m_s=15.5904619 gas_f_le_0p5_m_s=12.8795213 interface_m_s=15.5904619 global_m_s=15.5904619
+POOL_DIMENSIONS t_ps=2.65395724 Tmax_skeleton_K=1431.2228
+P1J_FORCE_AUDIT t_ps=2.67389322 gamma_gradient_tan_max_N_m2=68674985.1 marangoni_accel_max_m_s2=2.94599589e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500407939 arc_force_z_N=-9.39636442e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.67389322 liquid_f_gt_0p5_m_s=15.749479 gas_f_le_0p5_m_s=12.9509018 interface_m_s=15.749479 global_m_s=15.749479
+P1J_FORCE_AUDIT t_ps=2.6938292 gamma_gradient_tan_max_N_m2=68829870.1 marangoni_accel_max_m_s2=2.94919122e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500407694 arc_force_z_N=-9.50036272e-09
+P1M_TEMPERATURE_WINDOW t_ps=2.6938292 Tmax_skeleton_K=1435.41379 window_ps=0.119615856 delta_K=13.1381928 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.6938292 liquid_f_gt_0p5_m_s=15.9059649 gas_f_le_0p5_m_s=13.0244688 interface_m_s=15.9059649 global_m_s=15.9059649
+P1J_FORCE_AUDIT t_ps=2.71376517 gamma_gradient_tan_max_N_m2=68982723.3 marangoni_accel_max_m_s2=2.95435622e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500407450 arc_force_z_N=-9.6164031e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.71376517 liquid_f_gt_0p5_m_s=16.0629314 gas_f_le_0p5_m_s=13.0943263 interface_m_s=16.0629314 global_m_s=16.0629314
+POOL_DIMENSIONS t_ps=2.71376517 Tmax_skeleton_K=1437.4592
+P1J_FORCE_AUDIT t_ps=2.73370115 gamma_gradient_tan_max_N_m2=69125908.4 marangoni_accel_max_m_s2=2.95866479e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500407208 arc_force_z_N=-9.76844736e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.73370115 liquid_f_gt_0p5_m_s=16.218706 gas_f_le_0p5_m_s=13.1623356 interface_m_s=16.218706 global_m_s=16.218706
+P1J_FORCE_AUDIT t_ps=2.75363712 gamma_gradient_tan_max_N_m2=69067635.1 marangoni_accel_max_m_s2=2.94832992e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500406967 arc_force_z_N=-9.93058934e-09
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.75363712 liquid_f_gt_0p5_m_s=16.3743804 gas_f_le_0p5_m_s=13.2277479 interface_m_s=16.3743804 global_m_s=16.3743804
+POOL_DIMENSIONS t_ps=2.75363712 Tmax_skeleton_K=1441.45065
+P1J_FORCE_AUDIT t_ps=2.7735731 gamma_gradient_tan_max_N_m2=68759801.3 marangoni_accel_max_m_s2=2.9291522e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500406728 arc_force_z_N=-1.00846397e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.7735731 liquid_f_gt_0p5_m_s=16.5301836 gas_f_le_0p5_m_s=13.2949347 interface_m_s=16.5301836 global_m_s=16.5301836
+P1J_FORCE_AUDIT t_ps=2.79350908 gamma_gradient_tan_max_N_m2=68757604.6 marangoni_accel_max_m_s2=2.93370329e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500406491 arc_force_z_N=-1.02282115e-08
+STEP i=150 t_ps=2.79351 Tmax=1445.3K Tmax_Ag=1445.3K Tmax_SC=1445.3K liquid_Ag_nm3=21.6838 depression_nm=-0.290361 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=14.0953993
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.79350908 liquid_f_gt_0p5_m_s=16.6813648 gas_f_le_0p5_m_s=13.3637103 interface_m_s=16.6813648 global_m_s=16.6813648
+P1J_FORCE_AUDIT t_ps=2.81344505 gamma_gradient_tan_max_N_m2=68804136.9 marangoni_accel_max_m_s2=2.93598197e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500406256 arc_force_z_N=-1.03639316e-08
+P1M_TEMPERATURE_WINDOW t_ps=2.81344505 Tmax_skeleton_K=1447.14201 window_ps=0.119615856 delta_K=11.7282106 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.81344505 liquid_f_gt_0p5_m_s=16.8283923 gas_f_le_0p5_m_s=13.4348535 interface_m_s=16.8283923 global_m_s=16.8283923
+POOL_DIMENSIONS t_ps=2.81344505 Tmax_skeleton_K=1447.14201
+P1J_FORCE_AUDIT t_ps=2.83338103 gamma_gradient_tan_max_N_m2=68735512.3 marangoni_accel_max_m_s2=2.92698027e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500406024 arc_force_z_N=-1.04745392e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.83338103 liquid_f_gt_0p5_m_s=16.9768554 gas_f_le_0p5_m_s=13.5077312 interface_m_s=16.9768554 global_m_s=16.9768554
+P1J_FORCE_AUDIT t_ps=2.853317 gamma_gradient_tan_max_N_m2=68717426.7 marangoni_accel_max_m_s2=2.92367034e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500405793 arc_force_z_N=-1.05671362e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.853317 liquid_f_gt_0p5_m_s=17.1172531 gas_f_le_0p5_m_s=13.597708 interface_m_s=17.1172531 global_m_s=17.1172531
+POOL_DIMENSIONS t_ps=2.853317 Tmax_skeleton_K=1450.76616
+P1J_FORCE_AUDIT t_ps=2.87325298 gamma_gradient_tan_max_N_m2=68735809.8 marangoni_accel_max_m_s2=2.92180438e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500405566 arc_force_z_N=-1.06537063e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.87325298 liquid_f_gt_0p5_m_s=17.2567953 gas_f_le_0p5_m_s=13.6928282 interface_m_s=17.2567953 global_m_s=17.2567953
+P1J_FORCE_AUDIT t_ps=2.89318896 gamma_gradient_tan_max_N_m2=68752427.5 marangoni_accel_max_m_s2=2.91951045e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500405340 arc_force_z_N=-1.0764238e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.89318896 liquid_f_gt_0p5_m_s=17.3971775 gas_f_le_0p5_m_s=13.7849028 interface_m_s=17.3971775 global_m_s=17.3971775
+P1J_FORCE_AUDIT t_ps=2.91312493 gamma_gradient_tan_max_N_m2=68735659.6 marangoni_accel_max_m_s2=2.91399417e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500405118 arc_force_z_N=-1.08859266e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.91312493 liquid_f_gt_0p5_m_s=17.537004 gas_f_le_0p5_m_s=13.8743659 interface_m_s=17.537004 global_m_s=17.537004
+POOL_DIMENSIONS t_ps=2.91312493 Tmax_skeleton_K=1456.21669
+P1J_FORCE_AUDIT t_ps=2.93306091 gamma_gradient_tan_max_N_m2=68825472.6 marangoni_accel_max_m_s2=2.91520255e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500404899 arc_force_z_N=-1.09967876e-08
+P1M_TEMPERATURE_WINDOW t_ps=2.93306091 Tmax_skeleton_K=1458.0427 window_ps=0.119615856 delta_K=10.9006979 stable_windows=0 required=2
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.93306091 liquid_f_gt_0p5_m_s=17.6753941 gas_f_le_0p5_m_s=13.9621407 interface_m_s=17.6753941 global_m_s=17.6753941
+P1J_FORCE_AUDIT t_ps=2.95299688 gamma_gradient_tan_max_N_m2=68943464.7 marangoni_accel_max_m_s2=2.91692006e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500404683 arc_force_z_N=-1.11146636e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.95299688 liquid_f_gt_0p5_m_s=17.809732 gas_f_le_0p5_m_s=14.0490825 interface_m_s=17.809732 global_m_s=17.809732
+POOL_DIMENSIONS t_ps=2.95299688 Tmax_skeleton_K=1459.85414
+P1J_FORCE_AUDIT t_ps=2.97293286 gamma_gradient_tan_max_N_m2=69069750.9 marangoni_accel_max_m_s2=2.91922157e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500404472 arc_force_z_N=-1.12485726e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.97293286 liquid_f_gt_0p5_m_s=17.9407712 gas_f_le_0p5_m_s=14.1350747 interface_m_s=17.9407712 global_m_s=17.9407712
+P1J_FORCE_AUDIT t_ps=2.99286884 gamma_gradient_tan_max_N_m2=69189219.2 marangoni_accel_max_m_s2=2.92160204e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500404264 arc_force_z_N=-1.13759673e-08
+STEP i=160 t_ps=2.99287 Tmax=1471.62K Tmax_Ag=1463.42K Tmax_SC=1463.42K liquid_Ag_nm3=26.3334 depression_nm=-0.289034 heat=1 dt_fs=19.9359759 dtmax_fs=20 ufmax_m_s=15.4439342
+VELOCITY_PHASE_DIAGNOSTIC t_ps=2.99286884 liquid_f_gt_0p5_m_s=18.069674 gas_f_le_0p5_m_s=14.2194398 interface_m_s=18.069674 global_m_s=18.069674
+P1J_FORCE_AUDIT t_ps=3.01280481 gamma_gradient_tan_max_N_m2=69288830.7 marangoni_accel_max_m_s2=2.92237727e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500404061 arc_force_z_N=-1.14893812e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=3.01280481 liquid_f_gt_0p5_m_s=18.1995097 gas_f_le_0p5_m_s=14.3057511 interface_m_s=18.1995097 global_m_s=18.1995097
+POOL_DIMENSIONS t_ps=3.01280481 Tmax_skeleton_K=1465.15248
+RESTART_CHECKPOINT t_ps=3.01280481 step=161 file=p1h_restart_i0000000161_t003.012805_ps.dump
+P1J_FORCE_AUDIT t_ps=3.03274079 gamma_gradient_tan_max_N_m2=69236693 marangoni_accel_max_m_s2=2.91270815e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500403862 arc_force_z_N=-1.15883618e-08
+VELOCITY_PHASE_DIAGNOSTIC t_ps=3.03274079 liquid_f_gt_0p5_m_s=18.3285881 gas_f_le_0p5_m_s=14.4014988 interface_m_s=18.3285881 global_m_s=18.3285881
+P1J_FORCE_AUDIT t_ps=3.05267676 gamma_gradient_tan_max_N_m2=69212787.3 marangoni_accel_max_m_s2=2.90749886e+13 near_gas_accel_max_m_s2=0 arc_pressure_max_Pa=500403668 arc_force_z_N=-1.16908308e-08

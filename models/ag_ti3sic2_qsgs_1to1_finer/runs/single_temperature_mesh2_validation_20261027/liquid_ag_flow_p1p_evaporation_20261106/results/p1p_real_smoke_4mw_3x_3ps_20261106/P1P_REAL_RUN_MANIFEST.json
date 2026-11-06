@@ -1,0 +1,48 @@
+{
+  "run_id": "p1p_real_smoke_4mw_3x_3ps_20261106",
+  "date": "2026-11-06",
+  "status": "short exploratory run stopped after verified 3.0128048117 ps checkpoint; no cooling; 7 ps target not completed",
+  "initial_temperature_K": 300,
+  "grid": "64x64x76",
+  "cell_size_m": 3.01857485e-10,
+  "source_power_W": 0.004,
+  "marangoni_tangential_multiplier": 3,
+  "arc_pressure_peak_Pa": 501000000,
+  "evaporation": {
+    "enabled": true,
+    "vapor_pressure_source": "Wang et al. 2024 fit, 1234-2436 K",
+    "latent_heat_source": "Clausius-Clapeyron derivative of vapor-pressure fit, ideal-vapor estimate",
+    "alpha_table_knots_K": [1373, 1473, 1573, 1673, 1773],
+    "alpha_out_of_range_sensitivity": 0.1428,
+    "local_ag_vapor_partial_pressure_Pa": 0,
+    "vapor_pressure_zero_interpretation": "free-evaporation upper-bound scenario, not measured arc condition",
+    "recoil_pressure": false,
+    "condensation_or_vapor_transport": false
+  },
+  "checkpoint": {
+    "time_ps": 3.0128048117,
+    "step": 161,
+    "compressed_file": "checkpoint/p1h_restart_i0000000161_t003.012805_ps.dump.gz",
+    "compressed_sha256": "afc7026af29bfac4cb38a1a185a0feaef7f23e69f75d5f9a0f9e7f97ee6a0b54",
+    "uncompressed_sha256": "b0059aaf6384435ebea87f8859fe62749772521702a2b310631086b6d06b2e1f"
+  },
+  "selected_checkpoint_metrics": {
+    "max_temperature_K": 1474.35287,
+    "max_skeleton_temperature_K": 1465.15248,
+    "liquid_ag_volume_nm3": 26.8032853185,
+    "input_minus_bottom_sink_mW": 0.599538734,
+    "cumulative_evaporated_ag_kg": 1.06863766228e-32,
+    "ag_mass_ledger_residual_pct": -0.000214554359275,
+    "max_flux_kg_m2_s": 0.00258734240583
+  },
+  "source_data": "../../source_data/user_source_pack and ../../source_data/user_implementation_pack",
+  "solver_binary": "/tmp/p1p-build/p1p_evaporation_smoke",
+  "solver_binary_sha256": "a28242badb5831fc1ce9b480537a27fa0b8c2ad74a78353b795dd689c73f581b",
+  "solver_build": {
+    "basilisk_source": "comphy-lab/basilisk-C v2026-07-20 snapshot",
+    "basilisk_revision": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+    "compile_flags": "-O2 -Wall -autolink -disable-dimensions -fopenmp -DP1H_RECT_NZ=76 -DP1H_TOP_OPEN=1 -DPOOL_FIELD_INTERVAL_PS=1000.0 -DPOOL_CHECKPOINT_INTERVAL_PS=1.0",
+    "p1p_solver_source_sha256": "098a64e3d7123114929d1cd09f27ea7ea1d96d2eac6b9c4091f7b7afbcd22bdd",
+    "p1p_property_table_sha256": "172c461d16a5cd505ae7613847a55b087d0c86052323b6e28e14a3ff4fc1a373"
+  }
+}

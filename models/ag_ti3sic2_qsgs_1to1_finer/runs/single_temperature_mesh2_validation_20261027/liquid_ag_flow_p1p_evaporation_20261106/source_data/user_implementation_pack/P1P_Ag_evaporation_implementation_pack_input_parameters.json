@@ -1,0 +1,81 @@
+{
+  "material": "pure Ag",
+  "molar_mass_kg_per_mol": 0.1078682,
+  "universal_gas_constant_J_per_mol_K": 8.31446261815324,
+  "primary_vapor_pressure": {
+    "source": "Wang et al. (2024), DOI 10.1016/j.nxmate.2024.100189, Table 1",
+    "equation": "log10(p_sat_Pa) = -14400/T_K - 0.85*log10(T_K) + 13.825",
+    "valid_range_K": [
+      1234,
+      2436
+    ],
+    "use": "primary p_sat correlation in liquid Ag range"
+  },
+  "cross_check_vapor_pressure": {
+    "source": "NIST Chemistry WebBook SRD 69, Silver Antoine parameters, reference Hartmann & Schneider (1929)",
+    "equation": "log10(P_bar) = 1.95303 - 2505.533/(T_K - 1194.947)",
+    "valid_range_K": [
+      1823,
+      2425
+    ],
+    "use": "independent comparison only; discrepancy with Wang fit is temperature dependent; do not average fits blindly"
+  },
+  "hertz_knudsen_langstrom": {
+    "molar_flux_equation": "N_mol = alpha_ev*(p_sat - p_Ag_v)/sqrt(2*pi*M_kg_per_mol*R_u*T)",
+    "mass_flux_equation": "j_mass = alpha_ev*(p_sat - p_Ag_v)*sqrt(M_kg_per_mol/(2*pi*R_u*T))",
+    "equivalent_specific_gas_constant_form": "j_mass = alpha_ev*(p_sat - p_Ag_v)/sqrt(2*pi*R_specific*T), R_specific=R_u/M",
+    "units": {
+      "N_mol": "mol m^-2 s^-1",
+      "j_mass": "kg m^-2 s^-1",
+      "p_sat": "Pa",
+      "p_Ag_v": "Pa",
+      "T": "K"
+    },
+    "sign_convention": "signed net flux is positive for evaporation when p_sat>p_Ag_v; if only evaporation is modeled, clip negative flux to zero only as an explicitly one-way boundary assumption. If condensation is relevant, retain signed flux."
+  },
+  "alpha_ev": {
+    "values": [
+      {
+        "T_K": 1373,
+        "alpha": 0.2118
+      },
+      {
+        "T_K": 1473,
+        "alpha": 0.0834
+      },
+      {
+        "T_K": 1573,
+        "alpha": 0.1428
+      },
+      {
+        "T_K": 1673,
+        "alpha": 0.1329
+      },
+      {
+        "T_K": 1773,
+        "alpha": 0.2715
+      }
+    ],
+    "meaning": "Table 8 effective volatile coefficient = experimentally extrapolated maximum evaporation rate / theoretical maximum rate under vacuum-distillation conditions",
+    "validated_data_range_K": [
+      1373,
+      1773
+    ],
+    "above_1773K": "No measured alpha(T) supplied. Do not extrapolate as validated. Use bracketed sensitivity scenarios 0.0834, 0.1428, 0.2715 only if clearly labelled exploratory."
+  },
+  "vaporization_enthalpy": {
+    "equation": "DeltaHvap_molar_J_mol = R_u*(14400*ln(10)-0.85*T_K)",
+    "status": "derived from vapor-pressure slope under ideal-vapor Clausius-Clapeyron approximation; not direct calorimetry",
+    "mass_specific_conversion": "DeltaHvap_J_kg = DeltaHvap_J_mol/M",
+    "energy_flux": "q_ev = j_mass*DeltaHvap_mass",
+    "double_counting_warning": "If explicit vapor mass/enthalpy transport is included in the conservative total-energy equation, do not also subtract q_ev separately. If only condensed-phase enthalpy is solved, include the surface latent-heat sink consistently."
+  },
+  "pressure_data_scope": {
+    "table5_table7_pressure": "total furnace/system pressure in an argon-controlled vacuum distillation experiment, not local Ag vapor partial pressure",
+    "p_Ag_v": "must be an explicit local Ag vapor partial-pressure input or be solved by a gas kinetic/species model; p_Ag_v=0 is only a free-evaporation upper-bound scenario"
+  },
+  "recoil_pressure": {
+    "status": "NOT INCLUDED IN P1P; P1Q remains frozen",
+    "warning": "Do not automatically set p_rec=0.54*p_sat or p_rec=j_mass*sqrt(pi*R_specific*T/2). Select a closure only after defining gas rarefaction, backscatter/condensation, and momentum-flux boundary conditions."
+  }
+}

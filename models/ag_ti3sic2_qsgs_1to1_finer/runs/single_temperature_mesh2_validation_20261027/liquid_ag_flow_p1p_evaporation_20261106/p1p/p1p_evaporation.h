@@ -29,6 +29,9 @@ typedef struct {
   double temperature_K[P1P_MAX_PROPERTY_ROWS];
   double saturation_pressure_Pa[P1P_MAX_PROPERTY_ROWS];
   double vaporization_enthalpy_J_kg[P1P_MAX_PROPERTY_ROWS];
+  /* NaN means alpha_ev is unavailable at this row. Finite alpha anchors are
+   * interpolated only inside their source-supported temperature interval. */
+  double alpha_ev[P1P_MAX_PROPERTY_ROWS];
 } P1PPropertyTable;
 
 typedef struct {
@@ -59,11 +62,35 @@ typedef struct {
   double latent_energy_J;
   double escaped_energy_J;
   double removed_volume_fraction;
+  double alpha_ev_used;
+  int alpha_from_property_table;
   int liquid_mass_limited;
   int enthalpy_limited;
 } P1PCellUpdate;
 
-/* CSV contract: temperature_K,p_sat_Pa,L_v_J_kg; numeric rows only. */
+static inline int p1p_parse_csv_number(char *field, double *value,
+                                       int allow_blank)
+{
+  while (*field == ' ' || *field == '\t' || *field == '\r' || *field == '\n')
+    field++;
+  char *end = field + strlen(field);
+  while (end > field && (end[-1] == ' ' || end[-1] == '\t' ||
+                         end[-1] == '\r' || end[-1] == '\n'))
+    *--end = '\0';
+  if (!*field) {
+    if (!allow_blank) return 0;
+    *value = NAN;
+    return 1;
+  }
+  char *tail = NULL;
+  double parsed = strtod(field, &tail);
+  if (tail == field || *tail != '\0' || !isfinite(parsed)) return 0;
+  *value = parsed;
+  return 1;
+}
+
+/* CSV contracts: legacy temperature_K,p_sat_Pa,L_v_J_kg, or the same header
+ * with a fourth alpha_ev column. Empty alpha cells mean no value is available. */
 static inline P1PStatus p1p_load_property_table(const char *path,
                                                 P1PPropertyTable *table)
 {
@@ -78,8 +105,15 @@ static inline P1PStatus p1p_load_property_table(const char *path,
     fclose(fp);
     return P1P_ERR_TABLE;
   }
-  static const char *header = "temperature_K,p_sat_Pa,L_v_J_kg";
-  if (strncmp(line, header, strlen(header)) != 0) {
+  if ((unsigned char)line[0] == 0xef && (unsigned char)line[1] == 0xbb &&
+      (unsigned char)line[2] == 0xbf)
+    memmove(line, line + 3, strlen(line + 3) + 1);
+  char *newline = strpbrk(line, "\r\n");
+  if (newline) *newline = '\0';
+  static const char *header3 = "temperature_K,p_sat_Pa,L_v_J_kg";
+  static const char *header4 = "temperature_K,p_sat_Pa,L_v_J_kg,alpha_ev";
+  int has_alpha_column = strcmp(line, header4) == 0;
+  if (!has_alpha_column && strcmp(line, header3) != 0) {
     fclose(fp);
     return P1P_ERR_TABLE;
   }
@@ -90,10 +124,23 @@ static inline P1PStatus p1p_load_property_table(const char *path,
       fclose(fp);
       return P1P_ERR_TABLE;
     }
-    double t, p, lv;
-    char tail;
-    if (sscanf(line, " %lf , %lf , %lf %c", &t, &p, &lv, &tail) != 3 ||
+    char *fields[4] = {NULL, NULL, NULL, NULL};
+    fields[0] = line;
+    int field_count = 1;
+    for (char *cursor = line; *cursor && field_count < 4; cursor++) {
+      if (*cursor == ',') {
+        *cursor = '\0';
+        fields[field_count++] = cursor + 1;
+      }
+    }
+    double t, p, lv, alpha = NAN;
+    if (field_count != (has_alpha_column ? 4 : 3) ||
+        !p1p_parse_csv_number(fields[0], &t, 0) ||
+        !p1p_parse_csv_number(fields[1], &p, 0) ||
+        !p1p_parse_csv_number(fields[2], &lv, 0) ||
+        (has_alpha_column && !p1p_parse_csv_number(fields[3], &alpha, 1)) ||
         !isfinite(t) || !isfinite(p) || !isfinite(lv) ||
+        (has_alpha_column && isfinite(alpha) && (alpha < 0. || alpha > 1.)) ||
         t <= 0. || p <= 0. || lv <= 0. ||
         (table->n && t <= table->temperature_K[table->n - 1])) {
       fclose(fp);
@@ -103,9 +150,43 @@ static inline P1PStatus p1p_load_property_table(const char *path,
     table->temperature_K[i] = t;
     table->saturation_pressure_Pa[i] = p;
     table->vaporization_enthalpy_J_kg[i] = lv;
+    table->alpha_ev[i] = alpha;
   }
   fclose(fp);
   return table->n >= 2 ? P1P_OK : P1P_ERR_TABLE;
+}
+
+/* Interpolate alpha_ev only between finite source anchors; never extrapolate.
+ * A separately declared fallback may be used for sensitivity cases. */
+static inline P1PStatus p1p_alpha_lookup(const P1PPropertyTable *table,
+                                         double temperature_K,
+                                         double *alpha_ev)
+{
+  if (!table || !alpha_ev || !isfinite(temperature_K) ||
+      temperature_K <= 0. || table->n < 1)
+    return P1P_ERR_ARGUMENT;
+  size_t first = table->n, previous = table->n;
+  for (size_t i = 0; i < table->n; i++) {
+    if (!isfinite(table->alpha_ev[i])) continue;
+    if (first == table->n) first = i;
+    if (temperature_K == table->temperature_K[i]) {
+      *alpha_ev = table->alpha_ev[i];
+      return P1P_OK;
+    }
+    if (table->temperature_K[i] < temperature_K) previous = i;
+    if (table->temperature_K[i] > temperature_K) {
+      if (previous == table->n) return P1P_ERR_RANGE;
+      const double t0 = table->temperature_K[previous];
+      const double t1 = table->temperature_K[i];
+      const double f = (temperature_K - t0)/(t1 - t0);
+      *alpha_ev = table->alpha_ev[previous] +
+          f*(table->alpha_ev[i] - table->alpha_ev[previous]);
+      return P1P_OK;
+    }
+  }
+  if (first == table->n || temperature_K < table->temperature_K[first])
+    return P1P_ERR_RANGE;
+  return P1P_ERR_RANGE;
 }
 
 /*
@@ -242,11 +323,17 @@ static inline P1PStatus p1p_apply_cell_evaporation(
                                          &p_sat_Pa, &lv_J_kg);
   if (status != P1P_OK)
     return status;
-  status = p1p_hk_mass_flux(alpha_ev, p_sat_Pa, p_ag_vapor_Pa,
+  double alpha_from_table = NAN;
+  int used_table_alpha = p1p_alpha_lookup(table,temperature_K,
+                                           &alpha_from_table) == P1P_OK;
+  const double alpha_used = used_table_alpha ? alpha_from_table : alpha_ev;
+  status = p1p_hk_mass_flux(alpha_used, p_sat_Pa, p_ag_vapor_Pa,
                             temperature_K, r_ag_specific_J_kg_K,
                             &flux_kg_m2_s);
   if (status != P1P_OK)
     return status;
+  update->alpha_ev_used = alpha_used;
+  update->alpha_from_property_table = used_table_alpha;
 
   const double available_liquid_mass_kg =
       state->ag_fraction * liquid_fraction * rho_ag_kg_m3 * cell_volume_m3;

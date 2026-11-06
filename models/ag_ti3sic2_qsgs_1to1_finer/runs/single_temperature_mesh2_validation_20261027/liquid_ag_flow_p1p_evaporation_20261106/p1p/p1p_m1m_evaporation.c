@@ -228,6 +228,8 @@ static uint64_t p1p_hash_property_table (const P1PPropertyTable *table)
                         table->n*sizeof(table->saturation_pressure_Pa[0]));
   hash = p1p_hash_bytes(hash, table->vaporization_enthalpy_J_kg,
                         table->n*sizeof(table->vaporization_enthalpy_J_kg[0]));
+  hash = p1p_hash_bytes(hash, table->alpha_ev,
+                        table->n*sizeof(table->alpha_ev[0]));
   return hash;
 }
 
@@ -269,11 +271,14 @@ static void read_p1p_config (void)
   }
   p1p_property_fingerprint=p1p_hash_property_table(&p1p_property_table);
   p1p_evaporation_enabled = 1;
-  fprintf(stderr,"P1P_EVAPORATION enabled=1 property_table=%s source=%s rows=%zu temperature_range_K=%.9g..%.9g alpha_ev=%.9g p_Ag_v_Pa=%.9g R_Ag_J_kg_K=%.12g Kelvin_correction=off recoil_pressure=off table_fingerprint=%016llx\n",
+  size_t alpha_rows=0;
+  for (size_t i=0; i<p1p_property_table.n; i++)
+    alpha_rows += isfinite(p1p_property_table.alpha_ev[i]);
+  fprintf(stderr,"P1P_EVAPORATION enabled=1 property_table=%s source=%s rows=%zu temperature_range_K=%.9g..%.9g alpha_table_anchors=%zu alpha_ev_fallback_sensitivity=%.9g p_Ag_v_Pa=%.9g R_Ag_J_kg_K=%.12g Kelvin_correction=off recoil_pressure=off table_fingerprint=%016llx\n",
           p1p_property_path,p1p_property_source,p1p_property_table.n,
           p1p_property_table.temperature_K[0],
           p1p_property_table.temperature_K[p1p_property_table.n-1],
-          p1p_alpha_ev,p1p_ag_vapor_pressure_Pa,p1p_r_ag_specific,
+          alpha_rows,p1p_alpha_ev,p1p_ag_vapor_pressure_Pa,p1p_r_ag_specific,
           (unsigned long long)p1p_property_fingerprint);
 }
 
@@ -682,11 +687,14 @@ static int p1p_apply_surface_sources (double dt_s)
   p1p_build_top_connected_gas();
   double step_mass=0., step_sensible=0., step_latent=0., step_area=0.;
   double step_requested=0., max_flux=0., max_surface_temperature=0.;
-  int invalid_cells=0;
+  int alpha_table_cells=0, alpha_fallback_cells=0;
+  int invalid_cells=0, subsolidus_fit_cells=0;
   foreach(reduction(+:step_mass) reduction(+:step_sensible)
           reduction(+:step_latent) reduction(+:step_area)
           reduction(+:step_requested) reduction(max:max_flux)
-          reduction(max:max_surface_temperature) reduction(+:invalid_cells)) {
+          reduction(max:max_surface_temperature) reduction(+:invalid_cells)
+          reduction(+:alpha_table_cells) reduction(+:alpha_fallback_cells)
+          reduction(+:subsolidus_fit_cells)) {
     if (!(f[] > 1.e-12 && f[] < 1. - 1.e-12)) continue;
     int ii=clamp((int)((x-X0)/Delta),0,NC-1);
     int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
@@ -709,6 +717,14 @@ static int p1p_apply_surface_sources (double dt_s)
     const double fl=ag_liquid_fraction(surface_T);
     const double ag_liquid_area=area*ag_coverage*fl;
     if (!(ag_liquid_area > 0.)) continue;
+    /* The supplied p_sat fit is for liquid Ag and starts at 1234 K. The
+     * numerical 10 K mushy interval begins slightly below the physical melt
+     * range, so those sub-fit cells are solid-side regularization, not a
+     * reason to extrapolate vapor pressure or abort the run. */
+    if (surface_T < p1p_property_table.temperature_K[0]) {
+      subsolidus_fit_cells++;
+      continue;
+    }
 
     P1PCellState cell={f[],ag_marker[],sc_marker[],pore_marker[],Hadv[]};
     P1PCellUpdate update;
@@ -732,6 +748,8 @@ static int p1p_apply_surface_sources (double dt_s)
     step_requested+=update.requested_mass_kg;
     max_flux=max(max_flux,update.mass_flux_kg_m2_s);
     max_surface_temperature=max(max_surface_temperature,surface_T);
+    if (update.alpha_from_property_table) alpha_table_cells++;
+    else alpha_fallback_cells++;
   }
   if (invalid_cells) {
     fprintf(stderr,"STOP P1P property/composition failure t_ps=%.9g invalid_interface_cells=%d table_range_K=%.9g..%.9g; no extrapolation used\n",
@@ -751,7 +769,7 @@ static int p1p_apply_surface_sources (double dt_s)
     }
     fseek(p1p_evaporation_history,0,SEEK_END);
     if (ftell(p1p_evaporation_history)==0)
-      fprintf(p1p_evaporation_history,"time_ps,dt_fs,exposed_liquid_Ag_area_m2,max_flux_kg_m2_s,max_surface_T_K,requested_mass_step_kg,escaped_mass_step_kg,escaped_mass_cumulative_kg,sensible_energy_step_J,latent_energy_step_J,escaped_energy_cumulative_J,mass_balance_residual_pct,property_fingerprint\n");
+      fprintf(p1p_evaporation_history,"time_ps,dt_fs,exposed_liquid_Ag_area_m2,max_flux_kg_m2_s,max_surface_T_K,requested_mass_step_kg,escaped_mass_step_kg,escaped_mass_cumulative_kg,sensible_energy_step_J,latent_energy_step_J,escaped_energy_cumulative_J,mass_balance_residual_pct,alpha_table_cells,alpha_sensitivity_fallback_cells,alpha_fallback_value,subsolidus_fit_cutoff_cells,property_fingerprint\n");
   }
   double ag_current=0.;
   foreach(reduction(+:ag_current)) ag_current+=ag_marker[]*dv();
@@ -760,11 +778,13 @@ static int p1p_apply_surface_sources (double dt_s)
       100.*(ag_mass_current+p1p_escaped_mass_kg-ag_mass_initial)/
       ag_mass_initial : NAN;
   fprintf(p1p_evaporation_history,
-          "%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%016llx\n",
+          "%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%d,%d,%.12g,%d,%016llx\n",
           t*1.e12,dt_s*1.e15,step_area,max_flux,max_surface_temperature,
           step_requested,step_mass,p1p_escaped_mass_kg,step_sensible,
           step_latent,p1p_escaped_sensible_energy_J+
           p1p_escaped_latent_energy_J,mass_residual_pct,
+          alpha_table_cells,alpha_fallback_cells,p1p_alpha_ev,
+          subsolidus_fit_cells,
           (unsigned long long)p1p_property_fingerprint);
   fflush(p1p_evaporation_history);
   if (ag_mass_initial > 0. && fabs(mass_residual_pct) > 0.1) {
