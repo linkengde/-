@@ -1,0 +1,14 @@
+INPUT source_power=0.00893189911119 W grid=64x64x76 dx=3.01857485e-10 m codes_ag=151809 codes_sc=65279 codes_gas=94208
+SC_PROPERTIES file=/tmp/ag70-p1h/models/ag_ti3sic2_qsgs_1to1_finer/runs/single_temperature_mesh2_validation_20261027/liquid_ag_flow_p1g_exploratory_meltpool_20261104/inputs/basilisk/Ti3SiC2_thermophysical_fit_300-2300K.csv rows=201 range_K=300.0..2300.0 step_K=10.0 rho_used_kg_m3=4520.0 heat_target_K=2100.0 table_ceiling_K=2300.0
+ARC_PRESSURE_CONFIG enabled=1 peak_Pa=501000000 profile=periodic_gaussian center_nm=(9.58832,9.65943951) radius_nm=5 start_ps=0 ramp_ps=0.02 end_ps=-1 source_off_ramp_ps=0.02 periodic_xy=1
+INIT_FIELDS ag_m3=4.13042566868e-24 sc_m3=1.78417049967e-24 sample_m3=5.91459616836e-24
+INIT case=negative_dsigma_dT marangoni=1 marangoni_tangential_multiplier=3 top_boundary=open_ambient_pressure grid=64x64x76 multigrid_factors=16x16x19 levels=2 drag_s-1=1e+11 cells=311296 dx_m=3.01857485e-10 dt_max_ps=0.02 source_power_W=0.00893189911185 source_scale=1.07534865
+P1H_FIELD_SNAPSHOT t_ps=0 stage=initial marangoni=1 fields=20 file=p1h_marangoni_on_initial_t000.000000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0 stage=initial fields=4 file=p1h_pressure_marangoni_on_initial_t000.000000_ps.bin
+POOL_DIMENSIONS t_ps=0.0513933317 Tmax_skeleton_K=884.706455
+STEP i=10 t_ps=0.0744722 Tmax=1013.71K Tmax_Ag=996.328K Tmax_SC=1013.71K liquid_Ag_nm3=0 depression_nm=0 heat=1 dt_fs=12.2182502 dtmax_fs=20 ufmax_m_s=0
+POOL_DIMENSIONS t_ps=0.111126999 Tmax_skeleton_K=1170.16358
+STOP_DIAG t_ps=0.16 dt_fs=12.2182502 dtmax_fs=20 ufmax_m_s=2.24859391 umax_m_s=2.0048172
+P1H_FIELD_SNAPSHOT t_ps=0.16 stage=max_time marangoni=1 fields=20 file=p1h_marangoni_on_max_time_t000.160000_ps.bin
+P1H_PRESSURE_FIELD_SNAPSHOT t_ps=0.16 stage=max_time fields=4 file=p1h_pressure_marangoni_on_max_time_t000.160000_ps.bin
+MAX_TIME_STOP t_ps=0.16; check liquid_Ag_volume_nm3 in p1h_history.csv to determine whether cooling completed
