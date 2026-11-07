@@ -1,0 +1,152 @@
+--- a/p1p/p1p_m1m_evaporation.c
++++ b/p1p/p1p_m1m_evaporation.c
+@@ -1173,6 +1173,139 @@
+   }
+ }
+ 
++static void p1p_interface_temperature_diagnostic (void)
++{
++  FILE * fp = fopen ("p1p_interface_temperature_diagnostic.csv", "w");
++  if (!fp) { perror ("p1p_interface_temperature_diagnostic.csv"); exit (2); }
++  fprintf (fp, "time_ps,x_nm,y_nm,z_nm,f,normal_x,normal_y,normal_z,ag_coverage,area_geom_m2,current_ag_liquid_area_m2,one_sided_ag_liquid_area_m2,T_cell_K,T_centered_surface_K,T_liquid_nearest_K,T_liquid_fit_surface_K,fit_samples,fit_slope_K_per_nm,T_fit_minus_centered_K,alpha_centered,alpha_one_sided,J_centered_kg_m2_s,J_one_sided_kg_m2_s\n");
++  p1p_build_top_connected_gas();
++  double total_area=0., current_area=0., one_area=0.;
++  double current_rate=0., one_rate=0.;
++  double t_weight_current=0., t_weight_one=0.;
++  double delta_abs_area=0., max_abs_delta=0.;
++  long n_interface=0, n_evap_current=0, n_evap_one=0, n_fit=0;
++  long n_alpha_current_table=0, n_alpha_current_fallback=0;
++  long n_alpha_one_table=0, n_alpha_one_fallback=0;
++  const double sqrt2pi = sqrt(2.*P1P_PI);
++  foreach (serial) {
++    if (!(f[] > 1.e-12 && f[] < 1. - 1.e-12)) continue;
++    int ii=clamp((int)((x-X0)/Delta),0,NC-1);
++    int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
++    int kk=clamp((int)((z-Z0)/Delta),0,NCZ-1);
++    int id=index3(ii,jj,kk);
++    if (!p1p_gas_connected[id]) continue;
++    const double coverage=clampd(ag_marker[]/f[],0.,1.);
++    if (coverage <= 1.e-12) continue;
++    coord n=interface_normal(point,f), pc;
++    const double alpha=plane_alpha(f[],n);
++    const double geom_area=pow(Delta,dimension-1)*plane_area_center(n,alpha,&pc);
++    if (!(geom_area > 0.)) continue;
++    double norm=sqrt(sq(n.x)+sq(n.y)+sq(n.z));
++    if (!(norm > 0.)) continue;
++    n.x/=norm; n.y/=norm; n.z/=norm;
++    coord gradT;
++    foreach_dimension()
++      gradT.x=(Tfield[1]-Tfield[-1])/(2.*Delta);
++    const double Tcentered=Tfield[] + Delta*(gradT.x*pc.x+
++                                               gradT.y*pc.y+
++                                               gradT.z*pc.z);
++    double sw=0., ss=0., st=0., sss=0., sst=0.;
++    double nearest_sum=0., nearest_w=0.;
++    int ns=0;
++    for (int di=-2; di<=2; di++)
++      for (int dj=-2; dj<=2; dj++)
++        for (int dk=-2; dk<=2; dk++) {
++          if (di==0 && dj==0 && dk==0) continue;
++          if (kk+dk<0 || kk+dk>=NCZ) continue;
++          const double fn=f[di,dj,dk];
++          if (fn < 0.95) continue;
++          const double agn=ag_marker[di,dj,dk];
++          const double covn=clampd(agn/fmax(fn,1.e-30),0.,1.);
++          if (covn < 0.5) continue;
++          const double Tn=Tfield[di,dj,dk];
++          if (!isfinite(Tn) || ag_liquid_fraction(Tn) < 0.5) continue;
++          const double rx=di*Delta-Delta*pc.x;
++          const double ry=dj*Delta-Delta*pc.y;
++          const double rz=dk*Delta-Delta*pc.z;
++          const double r2=rx*rx+ry*ry+rz*rz;
++          const double s=-(rx*n.x+ry*n.y+rz*n.z);
++          if (s < 0.05*Delta || r2 > sq(3.2*Delta)) continue;
++          const double tang2=max(0.,r2-s*s);
++          if (tang2 > sq(2.5*Delta)) continue;
++          const double w=1./(1.+tang2/sq(Delta));
++          sw+=w; ss+=w*s; st+=w*Tn; sss+=w*s*s; sst+=w*s*Tn;
++          ns++;
++          if (s <= 1.5*Delta) { nearest_sum+=w*Tn; nearest_w+=w; }
++        }
++    double Tnearest=nearest_w>0. ? nearest_sum/nearest_w : NAN;
++    double Tfit=NAN, slope= NAN;
++    const double den=sw*sss-ss*ss;
++    if (ns>=2 && den > 1.e-12*max(1.,sw*sss)) {
++      Tfit=(st*sss-ss*sst)/den;
++      slope=(sw*sst-ss*st)/den;
++    }
++    else if (ns>0) Tfit=Tnearest;
++    const double flc=ag_liquid_fraction(Tcentered);
++    const double current_A=geom_area*coverage*flc;
++    double fl1=isfinite(Tfit) ? ag_liquid_fraction(Tfit) : 0.;
++    const double one_A=geom_area*coverage*fl1;
++    double alphaC=NAN, alpha1=NAN, JC=NAN, J1=NAN, psC=NAN, ps1=NAN, lv=0.;
++    int ctab=0, otab=0;
++    if (current_A>0. && Tcentered>=p1p_property_table.temperature_K[0] &&
++        Tcentered<=p1p_property_table.temperature_K[p1p_property_table.n-1] &&
++        p1p_property_lookup(&p1p_property_table,Tcentered,&psC,&lv)==P1P_OK) {
++      if (p1p_alpha_lookup(&p1p_property_table,Tcentered,&alphaC)==P1P_OK) {
++        ctab=1; n_alpha_current_table++;
++      } else { alphaC=p1p_alpha_ev; n_alpha_current_fallback++; }
++      if (p1p_hk_mass_flux(alphaC,psC,p1p_ag_vapor_pressure_Pa,Tcentered,
++                           p1p_r_ag_specific,&JC)==P1P_OK) {
++        current_area+=current_A; current_rate+=current_A*JC;
++        t_weight_current+=current_A*Tcentered; n_evap_current++;
++      }
++    }
++    if (one_A>0. && isfinite(Tfit) &&
++        Tfit>=p1p_property_table.temperature_K[0] &&
++        Tfit<=p1p_property_table.temperature_K[p1p_property_table.n-1] &&
++        p1p_property_lookup(&p1p_property_table,Tfit,&ps1,&lv)==P1P_OK) {
++      if (p1p_alpha_lookup(&p1p_property_table,Tfit,&alpha1)==P1P_OK) {
++        otab=1; n_alpha_one_table++;
++      } else { alpha1=p1p_alpha_ev; n_alpha_one_fallback++; }
++      if (p1p_hk_mass_flux(alpha1,ps1,p1p_ag_vapor_pressure_Pa,Tfit,
++                           p1p_r_ag_specific,&J1)==P1P_OK) {
++        one_area+=one_A; one_rate+=one_A*J1;
++        t_weight_one+=one_A*Tfit; n_evap_one++;
++      }
++    }
++    if (current_A>0. && isfinite(Tfit)) {
++      total_area+=current_A; n_interface++;
++      const double d=fabs(Tfit-Tcentered);
++      delta_abs_area+=current_A*d; max_abs_delta=max(max_abs_delta,d);
++      if (ns>0) n_fit++;
++    }
++    fprintf(fp,"%.12g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.12g,%.12g,%.12g,%.9g,%.9g,%.9g,%.9g,%d,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g\n",
++      t*1.e12,x*1.e9,y*1.e9,z*1.e9,f[],n.x,n.y,n.z,coverage,
++      geom_area,current_A,one_A,Tfield[],Tcentered,Tnearest,Tfit,ns,
++      slope*Delta*1.e-9,Tfit-Tcentered,alphaC,alpha1,JC,J1);
++  }
++  fclose(fp);
++  const double avgTc=current_area>0. ? t_weight_current/current_area : NAN;
++  const double avgTo=one_area>0. ? t_weight_one/one_area : NAN;
++  FILE * sf=fopen("p1p_interface_temperature_summary.csv","w");
++  if (!sf) { perror("p1p_interface_temperature_summary.csv"); exit(2); }
++  fprintf(sf,"time_ps,eligible_cells,fit_cells,current_active_area_m2,one_sided_active_area_m2,area_ratio_one_vs_current,current_HK_mass_rate_kg_s,one_sided_HK_mass_rate_kg_s,mass_rate_ratio_one_vs_current,area_weighted_current_T_K,area_weighted_one_sided_T_K,area_weighted_abs_T_difference_K,max_abs_T_difference_K,current_alpha_table_cells,current_alpha_fallback_cells,one_alpha_table_cells,one_alpha_fallback_cells\n");
++  fprintf(sf,"%.12g,%ld,%ld,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.9g,%.9g,%.9g,%.9g,%ld,%ld,%ld,%ld\n",
++    t*1.e12,n_interface,n_fit,current_area,one_area,
++    current_area>0.?one_area/current_area:NAN,current_rate,one_rate,
++    current_rate>0.?one_rate/current_rate:NAN,avgTc,avgTo,
++    total_area>0.?delta_abs_area/total_area:NAN,max_abs_delta,
++    n_alpha_current_table,n_alpha_current_fallback,n_alpha_one_table,n_alpha_one_fallback);
++  fclose(sf);
++  fprintf(stderr,"P1P_INTERFACE_TEMP_DIAG t_ps=%.12g cells=%ld fit=%ld area_current=%.12g area_one=%.12g rate_current=%.12g rate_one=%.12g rate_ratio=%.9g Tmean_current=%.9g Tmean_one=%.9g mean_abs_dT=%.9g max_abs_dT=%.9g\n",
++    t*1.e12,n_interface,n_fit,current_area,one_area,current_rate,one_rate,
++    current_rate>0.?one_rate/current_rate:NAN,avgTc,avgTo,
++    total_area>0.?delta_abs_area/total_area:NAN,max_abs_delta);
++}
++
+ int main (int argc, char * argv[])
+ {
+   if (argc < 3 || argc > 5) {
+@@ -1285,6 +1418,9 @@
+     fprintf(stderr,"P1M_RESTART_SOURCE_RESCALED prior_integral_W=%.12g target_W=%.12g factor=%.12g\n",
+             restored_source_integral,source_power_target,p1m_source_factor);
+     refresh_properties();
++    p1p_interface_temperature_diagnostic();
++    if (!p1p_apply_surface_sources(19.9359759415e-15)) exit(3);
++    exit(0);
+     open_arc_pressure_history(1);
+     history=fopen("p1h_history.csv","a");
+     if (!history) { perror("p1h_history.csv append"); exit(2); }

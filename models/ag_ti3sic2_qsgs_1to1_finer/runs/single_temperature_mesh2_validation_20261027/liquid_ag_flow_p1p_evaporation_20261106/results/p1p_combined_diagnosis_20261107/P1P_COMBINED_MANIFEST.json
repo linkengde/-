@@ -1,0 +1,94 @@
+{
+  "date_utc": "2026-11-07",
+  "branch": "codex/ag70-p1p-evaporation",
+  "baseline_commit": "6aecbac46cf7dda59bea72767983ac86b85d2142",
+  "scope": "offline interface-temperature/replay diagnostics, postprocess archived run, matched A/B/C exploratory controls; production solver and geometry unchanged",
+  "solver_source_sha256": "098a64e3d7123114929d1cd09f27ea7ea1d96d2eac6b9c4091f7b7afbcd22bdd",
+  "short_solver_sha256": "92be50628e7ceb8bcf5f6512fceafcd59c567210a12335eadd900630019bdfa3",
+  "compile_flags": [
+    "-O2",
+    "-Wall",
+    "-autolink",
+    "-disable-dimensions",
+    "-fopenmp",
+    "-DP1H_RECT_NZ=76",
+    "-DP1H_TOP_OPEN=1",
+    "-DPOOL_FIELD_INTERVAL_PS=1000.0",
+    "-DPOOL_CHECKPOINT_INTERVAL_PS=1.0",
+    "-DP1I_PREFLIGHT",
+    "-DP1M_NO_FINAL_DUMP",
+    "-lm"
+  ],
+  "basilisk_source": "comphy-lab/basilisk-C v2026-07-20; commit 9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+  "inputs_sha256": {
+    "Ag_evaporation_solver_table.csv": "172c461d16a5cd505ae7613847a55b087d0c86052323b6e28e14a3ff4fc1a373",
+    "Ti3SiC2_thermophysical_fit_300-2300K.csv": "0771fc059d3a597fdf524e3e30cdb54bb47a8850e7e8ffb158852e523645e67c",
+    "material_code.u8": "0e4e647957308f0f341d3aea479bba189eb9672b8bb21224f403f24dc06cd81b",
+    "source_power_density_W_m3.f64": "9e61956a20d6245b30a2a31e49fc8b53f253ee0cb5544733c7e0b099d6377057"
+  },
+  "common_parameters": {
+    "initial_temperature_K": 300,
+    "grid": "64x64x76",
+    "cell_size_nm": 0.301857484616085,
+    "source_power_mW": 4.0,
+    "marangoni": "on, tangential multiplier 3; negative dSigma/dT branch",
+    "solid_drag_s-1": 100000000000.0,
+    "maximum_timestep_fs": 20,
+    "top_boundary": "open ambient pressure"
+  },
+  "cases": {
+    "A": {
+      "arc_pressure_Pa": 0,
+      "evaporation": false
+    },
+    "B": {
+      "arc_pressure_Pa": 501000000,
+      "evaporation": false
+    },
+    "C": {
+      "arc_pressure_Pa": 501000000,
+      "evaporation": true,
+      "Ag_vapor_partial_pressure_Pa": 0,
+      "recoil_pressure": false
+    }
+  },
+  "short_test_target_time_ps": 3.1,
+  "short_test_compile_omits_initial_and_final_restart_dumps": true,
+  "current_status": {
+    "A": "complete: balanced-source hold 5.0198 ps; fully solidified at 12.86318 ps; no resolvable permanent crater",
+    "B": "complete cooling and solidification at 9.52330 ps; hold stopped after 2.6399 ps by pre-step enthalpy-property guard; no resolvable permanent crater",
+    "C": "incomplete: original P1P property/composition stop at 9.30330989 ps with 7 rejected interface cells; isolated instrumented replay returned P1P_ERR_RANGE in 5 cells at 9.28035320 ps with reconstructed interface temperature 4925–5320 K; replay did not exactly reproduce stop time/count; no cooling/solidified snapshot; crater status unknown"
+  },
+  "initial_t0_snapshot_sha256": "abd706826e90a174c6eb37322b60637b54b59f1bab9fab18b56ab06801b61e73",
+  "continuation_checkpoint_sha256": {
+    "A": "886fe5ab8d033a0e66dbb39d5342df5e4184d351bb42848138fba3bf56aa6d65",
+    "B": "14fe438dda3411f2589027203aaece3bcaa05acebce8e50d4e1220fea4d8d076",
+    "C": "756ee9dc26f95b34a11024e4bb1be85b28d873584ebff410273f807afd6fba2a"
+  },
+  "full_run_policy": "each case began at the same 300 K initial field, ran under its assigned A/B/C forcing through the common short phase, and continued from its own checkpoint through balanced hold and cooling; no case reached 2100 K; A completed 5 ps hold, B was stopped by an enthalpy-property guard then cooled, C stopped on a P1P property/composition failure before cooling",
+  "permanent_pit_decision": "A and B fully solidified with no resolved center depression at 0.301857 nm grid spacing; C incomplete and unassessed",
+  "launcher_exit_status_note": "C launcher recorded exit_status=0 despite solver STOP; analysis classifies C as INCOMPLETE_STOP based on solver stderr",
+  "instrumented_C_replay": {
+    "restart_time_ps": 9.00332084,
+    "replay_stop_time_ps": 9.28035319592,
+    "original_stop_time_ps": 9.30330989,
+    "replay_rejected_interface_cells": 5,
+    "original_rejected_interface_cells": 7,
+    "status": "P1P_ERR_RANGE=3",
+    "reconstructed_interface_temperature_K": [4925.17258139, 5319.74763556],
+    "property_table_range_K": [1234, 2436],
+    "interpretation": "Immediate rejection is confirmed as property-table range failure. With almost all cell volume classified as gas, Hadv inverted through the model's gas heat capacity implies about 4293–4911 K before interface-gradient extrapolation; this supports a gas-dominated enthalpy / vanishing-Ag-interface artifact. The anomalous enthalpy source/transport is unresolved. Instrumented replay is not an exact reproduction of original count/time.",
+    "restart_field_sha256": "685f96295a5618a8bb76b40ac65c3e8f4e547bcc147d647a6ecc53ed723fb07a",
+    "debug_source_sha256": "9be6910661b00d5d573d2125de9f02ac0ededf4e686c6ee10dfddd163bc99b5c",
+    "debug_executable_sha256": "a4fea1bfd7dcc20a3752b5468c6643f6a5a3b554d4024990e8437b0c89ce9877",
+    "debug_log_sha256": "cc22573e7efdcfd1859d99731d12562a45dea408e2c7e82dde58396bffad3b18",
+    "debug_log": "../p1p_cell_failure_diag_20261107/debug.stderr",
+    "replay_note": "../p1p_cell_failure_diag_20261107/P1P_C_FAILURE_REPLAY.md",
+    "per_cell_csv": "P1P_C_FAILURE_CELL_DIAGNOSTIC.csv"
+  },
+  "replay_determinism": {
+    "identical_checkpoint_code_input_outputs": true,
+    "comparison": "P1P_REPLAY_REPEAT_HASHES.csv"
+  },
+  "production_files_modified": false
+}
