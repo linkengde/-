@@ -1,0 +1,156 @@
+{
+  "purpose": "Short numerical method trials for the synthetic no-evaporation thermal nonlinear failure; no production solver changes",
+  "branch": "codex/ag70-p1p-evaporation",
+  "base_commit": "e11394df24ada697b126de11ca9f24e67ffbdab7",
+  "basilisk_release": "comphy-lab/basilisk-C v2026-07-20",
+  "basilisk_commit": "9bb4f30aaf195feaa7a3a613468a1c888f5a4b9e",
+  "qcc_sha256": "521f42b26689c6bc79e1476e55db9275e1e3a18f18f79e81182a59279f0d9328",
+  "original_smoke_source_sha256": "a6e199c29a503dfdc1118fc82d163477f4e4018ff2b61d59bfdafaf6d809237f",
+  "trial_source_sha256": "7059295d0f1598ab9ac80b012c1c07255ae5abdb65d12959b155b773085bdc53",
+  "inputs": {
+    "Ag_evaporation_solver_table.csv": {
+      "bytes": 2193,
+      "sha256": "172c461d16a5cd505ae7613847a55b087d0c86052323b6e28e14a3ff4fc1a373"
+    },
+    "Ti3SiC2_thermophysical_fit_300-2300K.csv": {
+      "bytes": 55044,
+      "sha256": "0771fc059d3a597fdf524e3e30cdb54bb47a8850e7e8ffb158852e523645e67c"
+    },
+    "material_code.u8": {
+      "bytes": 262144,
+      "sha256": "0e4e647957308f0f341d3aea479bba189eb9672b8bb21224f403f24dc06cd81b"
+    },
+    "source_power_density_W_m3.f64": {
+      "bytes": 2097152,
+      "sha256": "9e61956a20d6245b30a2a31e49fc8b53f253ee0cb5544733c7e0b099d6377057"
+    }
+  },
+  "variants": {
+    "fixed_point_omp1_dtmax1fs": {
+      "actual_failed_dt_fs": 0.154545454545,
+      "failure_time_ps": 0.000245454545455,
+      "thermal_iterations": 80,
+      "result": "nonlinear period-2 failure"
+    },
+    "residual_line_search_omp1_dtmax1fs": {
+      "actual_dt_fs": 0.154545454545,
+      "second_step_time_ps": 0.000245454545455,
+      "thermal_iterations_second_step": 25,
+      "result": "both synthetic thermal steps converged"
+    },
+    "fixed_point_omp2_dtmax0.1fs": {
+      "actual_failed_dt_fs": 0.0408040027605,
+      "failure_time_ps": 0.000155175983437,
+      "thermal_iterations": 80,
+      "result": "periodic failure persists"
+    },
+    "explicit_enthalpy_residual_omp1_omega0.25": {
+      "actual_dt_fs": 0.0290909090909,
+      "attempts": 400,
+      "final_residual_ratio": 2.62750037281e-05,
+      "final_max_temperature_update_K": 0.000280141830444,
+      "result": "did not meet 1e-6 residual ratio criterion"
+    }
+  },
+  "csv_data_rows": {
+    "line_search_iterations.csv": 43,
+    "fixed_point_iterations.csv": 96,
+    "reduced_dt_iterations.csv": 146,
+    "enthalpy_residual_iterations.csv": 400
+  },
+  "artifact_sha256": {
+    "P1P_THERMAL_SOLVER_TRIALS.md": {
+      "bytes": 5797,
+      "sha256": "6212c8be83c53895d743840147cecf4d10283c3a1ab0db56e521d7c68d8a4298"
+    },
+    "enthalpy_residual_iterations.csv": {
+      "bytes": 51230,
+      "sha256": "b8796033954fc66c1f28f4ea490dcafeaca3bc132a4bc1c079154691c7a87de9"
+    },
+    "enthalpy_residual_run.stderr": {
+      "bytes": 1871,
+      "sha256": "a7b77442eae911ebed832e59e22cc8ea643547fc2cb193227af8b85f98404268"
+    },
+    "enthalpy_residual_run.stdout": {
+      "bytes": 78,
+      "sha256": "f2e4f8787a82b3c24dc396f7e40b41dc4c3e409f2983d1c41291e9b7155a82f5"
+    },
+    "enthalpy_residual_solver_status.txt": {
+      "bytes": 159,
+      "sha256": "779553326889d027bb70be7bbab1d104bd36e63405fba4b4437ad5a8e225fc93"
+    },
+    "fixed_point_iterations.csv": {
+      "bytes": 73776,
+      "sha256": "a932ff0852d8b2c098c10664990ded401f501da5f57ad894f795a59bff3887fb"
+    },
+    "fixed_point_run.stderr": {
+      "bytes": 25839,
+      "sha256": "13ae7a622082cc9170e56e60845e13276c02b321eeee5084ee543a101234daf4"
+    },
+    "fixed_point_run.stdout": {
+      "bytes": 78,
+      "sha256": "38baf5d5494df4935ac98d0dc29cd93496bf833de01e1cebcc9ca23b8b585c7e"
+    },
+    "fixed_point_solver_status.txt": {
+      "bytes": 145,
+      "sha256": "125271e4223c050441468552195a44c80266e7b920f79c04638f331692047c73"
+    },
+    "line_search_energy_history.csv": {
+      "bytes": 1086,
+      "sha256": "c67a5f1b2dc2bf05dca04e4b6e9d0ffee32b6c7d45e97a96b5e7cc65156a5038"
+    },
+    "line_search_iterations.csv": {
+      "bytes": 5805,
+      "sha256": "d7dd7987b8e2f107a756cb0b6e927f8d11c5f2d9e26a9d7ae71ea8f6f7d6c0d4"
+    },
+    "line_search_run.stderr": {
+      "bytes": 13202,
+      "sha256": "3b3446cdce2d38ab6c80bbcffdff1f7c1114e53b32ab602b8c4f863f2b479f5b"
+    },
+    "line_search_run.stdout": {
+      "bytes": 79,
+      "sha256": "94f3994d16f9adf81b48038732f83a754d46cdffaa2fd455e9b9f425efb3ac95"
+    },
+    "line_search_solver_status.txt": {
+      "bytes": 108,
+      "sha256": "b7aa66481fe3659b15639f9d8a0bc3b8ab42f934ca56eb5de99b503a156bec8a"
+    },
+    "local_headers/p1h_arc_pressure.h": {
+      "bytes": 3574,
+      "sha256": "e0d7b34262d1e10be6968c675b7c9ef96b7fad2cb9d98abf668bd87dff666f47"
+    },
+    "local_headers/two-phase-clsvof-p1g.h": {
+      "bytes": 2360,
+      "sha256": "ea70984809517aef601e02ac6a82f9d218b6a993b7903bec76d01db67501607c"
+    },
+    "reduced_dt_iterations.csv": {
+      "bytes": 112080,
+      "sha256": "2bf88e950d20e092dbadada46d0b4cc65add833b53b2b0490ebb35ceb8221210"
+    },
+    "reduced_dt_run.stderr": {
+      "bytes": 39276,
+      "sha256": "a66727ee4f87584738b9976aec999a8e324acbaae4e91c2a7e4454faf5756f7b"
+    },
+    "reduced_dt_run.stdout": {
+      "bytes": 79,
+      "sha256": "429730a449d9eeebb9ffb2419e3298efa1b7c9fd53ba531d5840eea5d9fa77c7"
+    },
+    "reduced_dt_solver_status.txt": {
+      "bytes": 145,
+      "sha256": "3e237d18ea7ff06b1ad15c3d2fb38b947932395c4cc847387df67277b6771d84"
+    },
+    "run_solver_trial.sh": {
+      "bytes": 2492,
+      "sha256": "88f8e0e95d0ec0132656852235ee5162a4c16560017491e74d2ea1d96631d87b"
+    },
+    "solver_trial_source.c": {
+      "bytes": 91329,
+      "sha256": "7059295d0f1598ab9ac80b012c1c07255ae5abdb65d12959b155b773085bdc53"
+    }
+  },
+  "notes": [
+    "Basilisk qcc compiled only disposable copies.",
+    "The short smoke task is synthetic, not a physical Ag pool run.",
+    "solver_status must be read from stderr markers because Basilisk event return paths can leave process exit status 0."
+  ]
+}

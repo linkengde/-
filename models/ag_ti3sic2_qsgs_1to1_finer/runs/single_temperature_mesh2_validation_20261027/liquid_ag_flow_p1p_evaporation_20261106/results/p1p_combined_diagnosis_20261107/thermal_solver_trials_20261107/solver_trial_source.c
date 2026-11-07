@@ -1,0 +1,1998 @@
+/*
+ * P1G exploratory 3-D fixed-grid Ag/Ag70 free-surface prototype.
+ *
+ * This is intentionally isolated from the production enthalpy solver.  It
+ * combines a single-temperature enthalpy update, Gaussian composite heating,
+ * fixed Ti3SiC2 Brinkman penalization, mushy/solid Ag damping, CLSVOF, 3-D
+ * height-function capillary curvature, and projected Marangoni stress. All
+ * physical outputs are exploratory; the
+ * one-voxel-scale porous geometry and dynamic contact line are unresolved.
+ */
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+#include "grid/multigrid3D.h"
+#include "navier-stokes/centered.h"
+#include "two-phase-clsvof-p1g.h"
+#include "iforce.h"
+#include "curvature.h"
+#include "p1h_arc_pressure.h"
+
+#define NC 64
+#ifndef P1H_RECT_NZ
+#define P1H_RECT_NZ 64
+#endif
+#define NCZ P1H_RECT_NZ
+#define NCELLS (NC*NC*NCZ)
+#ifndef P1H_TOP_OPEN
+#define P1H_TOP_OPEN 0
+#endif
+#ifndef POOL_REPORT_INTERVAL_PS
+#define POOL_REPORT_INTERVAL_PS 0.05
+#endif
+#ifndef POOL_FIELD_INTERVAL_PS
+#define POOL_FIELD_INTERVAL_PS 0.05
+#endif
+#ifndef POOL_CHECKPOINT_INTERVAL_PS
+#define POOL_CHECKPOINT_INTERVAL_PS 0.2
+#endif
+
+static uint8_t material_code[NCELLS]; /* 0 gas, 1 Ag, 2 Ti3SiC2 */
+static double source_map[NCELLS];
+static uint8_t pool_mask[NCELLS], pool_seen[NCELLS];
+static double pool_weight[NCELLS];
+static int pool_queue[NCELLS];
+/* C-order 64^3 field buffers for compact, post-processable snapshots. */
+/* C-order fixed-grid field buffers, written atomically and converted to HDF5. */
+#define SNAPSHOT_NFIELDS 21
+static float pool_snapshot_fields[SNAPSHOT_NFIELDS][NCELLS];
+#define P1H_PRESSURE_NFIELDS 4
+static float p1h_pressure_snapshot_fields[P1H_PRESSURE_NFIELDS][NCELLS];
+#define SC_TABLE_CAPACITY 256
+static int sc_property_count = 0;
+static double sc_property_T[SC_TABLE_CAPACITY];
+static double sc_property_Cp[SC_TABLE_CAPACITY];
+static double sc_property_k[SC_TABLE_CAPACITY];
+static double sc_property_h[SC_TABLE_CAPACITY];
+static double sc_property_step_K = 0.;
+static char sc_property_path[1024];
+
+static int sigma_case = -1; /* -1 reducing atmosphere, +1 oxygen-rich reference */
+static int marangoni_enabled = 1;
+static double marangoni_multiplier = 1.; /* scales only tangential thermal Marangoni acceleration */
+static P1HArcPressure arc_pressure_cfg;
+static int arc_pressure_configured = 0;
+static double arc_pressure_max_effective_Pa = 0.;
+static double arc_pressure_force_z_N = 0.;
+static FILE * arc_pressure_history = NULL;
+static FILE * p1j_transport_history = NULL;
+static int resumed_from_checkpoint = 0;
+static int mesh_gcd = 1;
+/* Read by the isolated CLSVOF init-hook overlay so a restart preserves the
+ * conservative VOF field instead of reconstructing it from the redistanced
+ * level set. */
+int p1g_restart_mode = 0;
+static char restart_path[1024];
+static double restored_time_ps = 0.;
+static double solid_drag_s = 1.e11;
+/* Effectively no fixed ps ceiling; physical temperature/balance events stop
+ * heating, followed by the explicit cooling-to-solidification criterion. */
+static double max_time_s = 1.e-6;
+static const double heat_target_K = 2100.;
+static double heat_hold_duration_s = 5.e-12;
+static double plateau_window_s = 0.1e-12;
+static double plateau_tolerance_K = 1.;
+static int plateau_windows_required = 2;
+static double plateau_window_start_s = NAN;
+static double plateau_window_start_T_K = NAN;
+static int plateau_stable_windows = 0;
+static double balance_command_power_W = 0.;
+static double heat_dt_max_s = 2.e-14;
+static int heat_on = 1;
+static int heat_hold_started = 0;
+static double heat_hold_start_s = NAN, heat_hold_end_s = NAN;
+static uint32_t heat_hold_snapshot_mask = 0;
+static double heat_source_ramp_s = 0.;
+static double heat_source_ramp_start_s = INFINITY;
+static int heat_source_ramping = 0;
+static int solidified_steps = 0;
+static int balanced_steps = 0;
+static const int heat_balance_required_steps = 10;
+static double energy_initial = 0., input_energy = 0., sink_energy = 0.;
+static double ag_volume_initial = 0., sc_volume_initial = 0.;
+static double ag_mass_initial = 0.;
+static double applied_source_scale = 1.;
+static double max_temperature_seen = 300.;
+#ifndef P1I_SOURCE_POWER_W
+#define P1I_SOURCE_POWER_W 0.008931899111848596
+#endif
+static double source_power_target = P1I_SOURCE_POWER_W;
+static const double source_map_reference_power = 0.008931899111848596;
+static double next_pool_report_ps = POOL_REPORT_INTERVAL_PS;
+static double next_pool_field_snapshot_ps = POOL_FIELD_INTERVAL_PS;
+static double next_pool_checkpoint_ps = POOL_CHECKPOINT_INTERVAL_PS;
+static FILE * history = NULL;
+static double initial_surface_height[NC*NC];
+static scalar Tfield[], Told[], Tguess[], Hvol[], Hadv[], cpvol[], kcell[], mucell[];
+static scalar ag_marker[], sc_marker[], pore_marker[], liquid_fraction[];
+/* Diagnostic-only coefficient fields. They are never read by the physical update. */
+static scalar p1i_k_candidate_diag[];
+static face vector p1i_kappa_candidate_diag[];
+static scalar source_q[], rhs_heat[], lambda_heat[], sigmaf[], drag_cell[];
+static scalar kappa_field[], phi_normal, gamma_field[];
+static scalar arc_pressure_raw[], arc_pressure_mask[], arc_pressure_effective[];
+static scalar total_normal_stress_field[];
+static vector marangoni_cell[];
+static face vector kappa_heat[], viscous[];
+#if defined(P1K_RESIDUAL_LINE_SEARCH) || defined(P1K_ENTHALPY_RESIDUAL)
+static scalar p1k_kcell[], p1k_residual[];
+static face vector p1k_kface[];
+#endif
+#ifdef P1K_RESIDUAL_LINE_SEARCH
+static scalar p1k_raw_candidate[];
+#endif
+#ifdef P1K_ENTHALPY_RESIDUAL
+static scalar p1k_Hiter[], p1k_Hnext[], p1k_Tprevious[];
+#endif
+
+const double Lbox = 1.931887901542944e-8;
+const double Tm = 1235.08;
+const double rho_Ag = 10490.;
+const double rho_Ag_liquid = 9346.;
+const double rho_SC = 4520.;
+const double rho_air = 1.2;
+const double cp_air = 1005.;
+const double k_air = 0.026;
+const double cp_Ag_s_300 = 25.4/0.1078682;
+const double cp_Ag_s_Tm = 31.8/0.1078682;
+const double cp_Ag_l = 33.47/0.1078682;
+const double L_Ag = 104729.66082682385;
+const double Ag_mushy_width_K = 10.; /* numerical regularization, not a measured range */
+const double Ag_Tsol = 1230.08;
+const double Ag_Tliq = 1240.08;
+const double SC_Tmax = 2300.;
+const double SC_predictive_margin_K = 5.;
+const double SC_preemptive_shutdown_margin_K = 50.;
+const double Tref = 300.;
+const double delta_x = Lbox/NC;
+const double source_x = 95.8832e-10;
+const double source_y = 96.5943950771472e-10;
+
+Tfield[back] = dirichlet(300.);
+Tfield[front] = neumann(0.);
+u.n[back] = dirichlet(0.);
+u.t[back] = dirichlet(0.);
+u.r[back] = dirichlet(0.);
+#if P1H_TOP_OPEN
+u.n[front] = neumann(0.); /* pressure outlet for the gas cap; Ag remains inside unless it reaches the top */
+u.t[front] = neumann(0.);
+u.r[front] = neumann(0.);
+p[front] = dirichlet(0.); /* ambient gauge-pressure reference */
+#else
+u.n[front] = dirichlet(0.); /* closed gas-cap boundary: no Ag can leave */
+u.t[front] = neumann(0.);
+u.r[front] = neumann(0.);
+p[front] = neumann(0.);
+#endif
+
+static inline double clampd (double x, double lo, double hi)
+{
+  return x < lo ? lo : x > hi ? hi : x;
+}
+
+static int gcd_positive (int a, int b)
+{
+  while (b) {
+    int r = a % b;
+    a = b;
+    b = r;
+  }
+  return a;
+}
+
+static double env_double (const char * name, double fallback)
+{
+  const char * value = getenv(name);
+  if (!value || !*value) return fallback;
+  char * end = NULL;
+  double parsed = strtod(value, &end);
+  if (end == value || *end || !isfinite(parsed)) {
+    fprintf(stderr,"invalid numeric environment value %s=%s\n",name,value);
+    exit(2);
+  }
+  return parsed;
+}
+
+/* The power-balance hold uses the same bottom Neumann-to-300 K flux that is
+ * accumulated by the energy audit.  The source integral is recomputed because
+ * the Ag/VOF overlap can evolve during the run. */
+static double p1m_source_power_at_unit_scale (void)
+{
+  double power = 0.;
+  foreach(reduction(+:power))
+    power += source_q[]*f[]*dv();
+  return power;
+}
+
+static double p1m_bottom_sink_power (void)
+{
+  double power = 0.;
+  foreach(reduction(+:power)) {
+    if (fabs(z - (Z0 + 0.5*Delta)) < 0.25*Delta) {
+      int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+      int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+      int kk=0;
+      int code=material_code[index3(ii,jj,kk)];
+      if (code != 0)
+        power += 2.*kcell[]*max(0.,Tfield[]-300.)/Delta*sq(Delta);
+    }
+  }
+  return power;
+}
+
+static void read_arc_pressure_config (void)
+{
+  memset(&arc_pressure_cfg,0,sizeof(arc_pressure_cfg));
+  arc_pressure_cfg.enabled = 0;
+  arc_pressure_cfg.peak_Pa = 0.;
+  arc_pressure_cfg.center_x_m = source_x;
+  arc_pressure_cfg.center_y_m = source_y;
+  arc_pressure_cfg.radius_m = 5.e-9;
+  arc_pressure_cfg.start_s = 0.;
+  arc_pressure_cfg.ramp_s = 0.;
+  arc_pressure_cfg.end_s = INFINITY;
+  arc_pressure_cfg.period_x_m = Lbox;
+  arc_pressure_cfg.period_y_m = Lbox;
+  arc_pressure_cfg.profile = P1H_PRESSURE_UNIFORM;
+
+  const char * enabled = getenv("P1H_ARC_PRESSURE_ENABLED");
+  if (enabled && !strcmp(enabled,"1")) arc_pressure_cfg.enabled = 1;
+  else if (enabled && strcmp(enabled,"0")) {
+    fprintf(stderr,"P1H_ARC_PRESSURE_ENABLED must be 0 or 1\n"); exit(2);
+  }
+  arc_pressure_cfg.peak_Pa = env_double("P1H_ARC_PRESSURE_PEAK_PA",0.);
+  arc_pressure_cfg.center_x_m = env_double("P1H_ARC_PRESSURE_CENTER_X_NM",source_x*1.e9)*1.e-9;
+  arc_pressure_cfg.center_y_m = env_double("P1H_ARC_PRESSURE_CENTER_Y_NM",source_y*1.e9)*1.e-9;
+  arc_pressure_cfg.radius_m = env_double("P1H_ARC_PRESSURE_RADIUS_NM",5.)*1.e-9;
+  arc_pressure_cfg.start_s = env_double("P1H_ARC_PRESSURE_START_PS",0.)*1.e-12;
+  arc_pressure_cfg.ramp_s = env_double("P1H_ARC_PRESSURE_RAMP_PS",0.02)*1.e-12;
+  double end_ps = env_double("P1H_ARC_PRESSURE_END_PS",-1.);
+  arc_pressure_cfg.end_s = end_ps < 0. ? HUGE : end_ps*1.e-12;
+  const char * profile = getenv("P1H_ARC_PRESSURE_PROFILE");
+  if (profile && !strcmp(profile,"periodic_gaussian"))
+    arc_pressure_cfg.profile = P1H_PRESSURE_PERIODIC_GAUSSIAN;
+  else if (profile && strcmp(profile,"uniform")) {
+    fprintf(stderr,"P1H_ARC_PRESSURE_PROFILE must be uniform or periodic_gaussian\n"); exit(2);
+  }
+  if (arc_pressure_cfg.enabled && !(arc_pressure_cfg.peak_Pa > 0.)) {
+    fprintf(stderr,"enabled arc pressure requires P1H_ARC_PRESSURE_PEAK_PA > 0\n"); exit(2);
+  }
+  if (arc_pressure_cfg.ramp_s < 0. ||
+      (isfinite(arc_pressure_cfg.end_s) && arc_pressure_cfg.end_s <= arc_pressure_cfg.start_s) ||
+      (arc_pressure_cfg.profile == P1H_PRESSURE_PERIODIC_GAUSSIAN &&
+       !(arc_pressure_cfg.radius_m > 0.))) {
+    fprintf(stderr,"invalid P1H arc-pressure timing/profile configuration\n"); exit(2);
+  }
+  heat_source_ramp_s = env_double("P1H_SOURCE_RAMP_PS",arc_pressure_cfg.ramp_s*1.e12)*1.e-12;
+  if (heat_source_ramp_s < 0. ||
+      (arc_pressure_cfg.enabled && fabs(heat_source_ramp_s-arc_pressure_cfg.ramp_s) > 1.e-18)) {
+    fprintf(stderr,"P1H source and pressure off-ramp durations must match for synchronous shutdown\n"); exit(2);
+  }
+  arc_pressure_configured = 1;
+  fprintf(stderr,"ARC_PRESSURE_CONFIG enabled=%d peak_Pa=%.9g profile=%s center_nm=(%.9g,%.9g) radius_nm=%.9g start_ps=%.9g ramp_ps=%.9g end_ps=%.9g source_off_ramp_ps=%.9g periodic_xy=1\n",
+          arc_pressure_cfg.enabled,arc_pressure_cfg.peak_Pa,
+          arc_pressure_cfg.profile == P1H_PRESSURE_UNIFORM ? "uniform" : "periodic_gaussian",
+          arc_pressure_cfg.center_x_m*1.e9,arc_pressure_cfg.center_y_m*1.e9,
+          arc_pressure_cfg.radius_m*1.e9,arc_pressure_cfg.start_s*1.e12,
+          arc_pressure_cfg.ramp_s*1.e12,
+          end_ps < 0. ? -1. : arc_pressure_cfg.end_s*1.e12,
+          heat_source_ramp_s*1.e12);
+}
+
+static void ramp_arc_pressure_down_at (double cutoff_s)
+{
+  if (!arc_pressure_configured || !arc_pressure_cfg.enabled)
+    return;
+  double ramp_end = cutoff_s + arc_pressure_cfg.ramp_s;
+  if (arc_pressure_cfg.ramp_s <= 0.)
+    ramp_end = cutoff_s;
+  if (!isfinite(arc_pressure_cfg.end_s) || ramp_end < arc_pressure_cfg.end_s)
+    arc_pressure_cfg.end_s = ramp_end;
+}
+
+static void stop_heat_and_pressure_at (double cutoff_s)
+{
+  heat_on = 0;
+  heat_source_ramp_start_s = cutoff_s;
+  heat_source_ramping = heat_source_ramp_s > 0.;
+  ramp_arc_pressure_down_at(cutoff_s);
+}
+
+static double heat_source_scale_at (double time_s)
+{
+  return p1h_heat_source_scale(heat_on,heat_source_ramping,
+                               heat_source_ramp_start_s,heat_source_ramp_s,time_s);
+}
+
+static void open_arc_pressure_history (int append)
+{
+  arc_pressure_history = fopen("p1h_arc_pressure_history.csv",append ? "a" : "w");
+  if (!arc_pressure_history) { perror("p1h_arc_pressure_history.csv"); exit(2); }
+  fseek(arc_pressure_history,0,SEEK_END);
+  if (ftell(arc_pressure_history) == 0) {
+    fprintf(arc_pressure_history,
+            "time_ps,heat_source_scale,configured_peak_Pa,max_effective_interface_Pa,integrated_pressure_force_z_N,pressure_enabled,pressure_profile\n");
+    fflush(arc_pressure_history);
+  }
+}
+
+static inline int index3 (int i, int j, int k)
+{
+  return (i*NC + j)*NCZ + k;
+}
+
+static inline int input_index3 (int i, int j, int k)
+{
+  return (i*NC + j)*NC + k;
+}
+
+static void read_raw_inputs (const char * dir)
+{
+  char path[1024];
+  const size_t input_cells=(size_t)NC*NC*NC;
+  uint8_t * input_material=malloc(input_cells);
+  double * input_source=malloc(input_cells*sizeof(double));
+  if (!input_material || !input_source) {
+    fprintf(stderr,"cannot allocate base P1G input buffers\n"); exit(2);
+  }
+  snprintf (path, sizeof(path), "%s/material_code.u8", dir);
+  FILE * fp = fopen (path, "rb");
+  if (!fp) { perror(path); exit(2); }
+  if (fread (input_material, 1, input_cells, fp) != input_cells) {
+    fprintf(stderr, "short read: %s\n", path); exit(2);
+  }
+  fclose(fp);
+  snprintf (path, sizeof(path), "%s/source_power_density_W_m3.f64", dir);
+  fp = fopen (path, "rb");
+  if (!fp) { perror(path); exit(2); }
+  if (fread (input_source, sizeof(double), input_cells, fp) != input_cells) {
+    fprintf(stderr, "short read: %s\n", path); exit(2);
+  }
+  fclose(fp);
+  for (int i=0; i<NC; i++)
+    for (int j=0; j<NC; j++)
+      for (int k=0; k<NCZ; k++) {
+        int id=index3(i,j,k);
+        if (k<NC) {
+          int in=input_index3(i,j,k);
+          material_code[id]=input_material[in];
+          source_map[id]=input_source[in];
+        }
+        else {
+          material_code[id]=0;
+          source_map[id]=0.;
+        }
+      }
+  free(input_material);
+  free(input_source);
+  double sum = 0.;
+  long count_ag=0, count_sc=0, count_gas=0;
+  for (int n = 0; n < NCELLS; n++) {
+    if (material_code[n] > 2) {
+      fprintf(stderr, "invalid material code at %d\n", n); exit(2);
+    }
+    if (material_code[n] == 0 && source_map[n] != 0.) {
+      fprintf(stderr, "nonzero heat source in gas at %d\n", n); exit(2);
+    }
+    sum += source_map[n];
+    count_ag += material_code[n] == 1;
+    count_sc += material_code[n] == 2;
+    count_gas += material_code[n] == 0;
+  }
+  sum *= cube(delta_x);
+  if (!(sum > 0.) ||
+      fabs(sum - source_map_reference_power) > 2.e-6*source_map_reference_power) {
+    fprintf(stderr, "source-map template integral %.12g W != expected %.12g W\n",
+            sum, source_map_reference_power);
+    exit(2);
+  }
+  fprintf(stderr, "INPUT source_template=%.12g W normalized_target=%.12g W grid=%dx%dx%d dx=%.9g m codes_ag=%ld codes_sc=%ld codes_gas=%ld\n", sum,source_power_target,NC,NC,NCZ,delta_x,count_ag,count_sc,count_gas);
+}
+
+static void read_sc_property_table (const char * dir)
+{
+  snprintf(sc_property_path,sizeof(sc_property_path),
+           "%s/Ti3SiC2_thermophysical_fit_300-2300K.csv",dir);
+  FILE * fp=fopen(sc_property_path,"r");
+  if (!fp) { perror(sc_property_path); exit(2); }
+  char line[2048];
+  if (!fgets(line,sizeof(line),fp)) {
+    fprintf(stderr,"empty Ti3SiC2 property table: %s\n",sc_property_path);
+    exit(2);
+  }
+  while (fgets(line,sizeof(line),fp)) {
+    char * field[20];
+    int n=0;
+    char * token=strtok(line,",\r\n");
+    while (token && n<20) { field[n++]=token; token=strtok(NULL,",\r\n"); }
+    if (n<15 || sc_property_count>=SC_TABLE_CAPACITY) {
+      fprintf(stderr,"invalid Ti3SiC2 CSV row/capacity at row %d\n",sc_property_count+2);
+      exit(2);
+    }
+    int i=sc_property_count++;
+    sc_property_T[i]=strtod(field[0],NULL);
+    sc_property_Cp[i]=strtod(field[2],NULL);
+    sc_property_k[i]=strtod(field[4],NULL);
+    sc_property_h[i]=strtod(field[13],NULL);
+    if (!isfinite(sc_property_T[i]) || !isfinite(sc_property_Cp[i]) ||
+        !isfinite(sc_property_k[i]) || !isfinite(sc_property_h[i]) ||
+        sc_property_Cp[i]<=0. || sc_property_k[i]<=0.) {
+      fprintf(stderr,"invalid Ti3SiC2 property value at row %d\n",i+2);
+      exit(2);
+    }
+    if (i==1) sc_property_step_K=sc_property_T[1]-sc_property_T[0];
+    if (i>0 && (sc_property_T[i]<=sc_property_T[i-1] ||
+        fabs((sc_property_T[i]-sc_property_T[i-1])-sc_property_step_K)>1.e-8)) {
+      fprintf(stderr,"Ti3SiC2 property temperatures must be uniformly increasing\n");
+      exit(2);
+    }
+  }
+  fclose(fp);
+  if (sc_property_count<2 || fabs(sc_property_T[0]-300.)>1.e-8 ||
+      fabs(sc_property_T[sc_property_count-1]-SC_Tmax)>1.e-8 ||
+      fabs(sc_property_h[0])>1.e-8) {
+    fprintf(stderr,"Ti3SiC2 table must cover 300--%.0f K with h(300)=0\n",SC_Tmax);
+    exit(2);
+  }
+  fprintf(stderr,"SC_PROPERTIES file=%s rows=%d range_K=%.1f..%.1f step_K=%.1f rho_used_kg_m3=%.1f heat_target_K=%.1f table_ceiling_K=%.1f\n",
+          sc_property_path,sc_property_count,sc_property_T[0],
+          sc_property_T[sc_property_count-1],sc_property_step_K,rho_SC,
+          heat_target_K,SC_Tmax);
+}
+
+static double sc_table_value (double T, const double * values)
+{
+  if (sc_property_count<2 || !(sc_property_step_K>0.)) return NAN;
+  double tc=clampd(T,sc_property_T[0],sc_property_T[sc_property_count-1]);
+  double q=(tc-sc_property_T[0])/sc_property_step_K;
+  int lo=(int)floor(q);
+  if (lo>=sc_property_count-1) return values[sc_property_count-1];
+  lo=max(lo,0);
+  double f=q-lo;
+  return values[lo]+f*(values[lo+1]-values[lo]);
+}
+
+static double ag_liquid_fraction (double T)
+{
+  return clampd ((T - Ag_Tsol)/(Ag_Tliq - Ag_Tsol), 0., 1.);
+}
+
+static double ag_cp_app (double T)
+{
+  double slope = (cp_Ag_s_Tm - cp_Ag_s_300)/(Tm - Tref);
+  if (T < Ag_Tsol)
+    return cp_Ag_s_300 + slope*(T - Tref);
+  if (T <= Ag_Tliq)
+    return cp_Ag_s_Tm + L_Ag/Ag_mushy_width_K;
+  return cp_Ag_l;
+}
+
+static double ag_h (double T)
+{
+  double slope = (cp_Ag_s_Tm - cp_Ag_s_300)/(Tm - Tref);
+  double t = max(T, Tref);
+  double h_solidus = cp_Ag_s_300*(Ag_Tsol - Tref) +
+    0.5*slope*sq(Ag_Tsol - Tref);
+  if (t < Ag_Tsol)
+    return cp_Ag_s_300*(t - Tref) + 0.5*slope*sq(t - Tref);
+  if (t <= Ag_Tliq)
+    return h_solidus + cp_Ag_s_Tm*(t - Ag_Tsol) +
+      L_Ag*(t - Ag_Tsol)/Ag_mushy_width_K;
+  return h_solidus + cp_Ag_s_Tm*Ag_mushy_width_K + L_Ag +
+    cp_Ag_l*(t - Ag_Tliq);
+}
+
+static double sc_cp (double T)
+{
+  return sc_table_value(T,sc_property_Cp);
+}
+
+static double sc_k (double T)
+{
+  return sc_table_value(T,sc_property_k);
+}
+
+static double sc_h (double T)
+{
+  return sc_table_value(T,sc_property_h);
+}
+
+static double gamma_ag (double T)
+{
+  if (sigma_case < 0) {
+    double tc = clampd(T, 1219., 1734.);
+    return (984. - 0.298*(tc - 1234.))*1.e-3;
+  }
+  double tc = clampd(T, 1350., 1520.);
+  return (698. + 0.546*(tc - 1234.))*1.e-3;
+}
+
+static double mu_ag (double T)
+{
+  double tc = clampd(T, 1273., 1673.);
+  /* NIST ThermoML Arrhenius fit; experiment range 1273--1673 K. */
+  return exp(-0.4631 + 2089./tc)*1.e-3;
+}
+
+static void material_state (double T, double agfrac, double scfrac,
+                            double * cv, double * conductivity, double * hden)
+{
+  agfrac = clampd(agfrac, 0., 1.);
+  scfrac = clampd(scfrac, 0., 1. - agfrac);
+  double airfrac = max(0., 1. - agfrac - scfrac);
+  *cv = agfrac*rho_Ag*ag_cp_app(T) + scfrac*rho_SC*sc_cp(T) + airfrac*rho_air*cp_air;
+  *conductivity = agfrac*(T < Tm ? 429. + (175. - 429.)*(T-Tref)/(Tm-Tref) : 175.) +
+    scfrac*sc_k(T) + airfrac*k_air;
+  *hden = agfrac*rho_Ag*ag_h(T) + scfrac*rho_SC*sc_h(T) +
+    airfrac*rho_air*cp_air*(T - Tref);
+}
+
+#if defined(P1K_RESIDUAL_LINE_SEARCH) || defined(P1K_ENTHALPY_RESIDUAL)
+/* Evaluate the full nonlinear thermal residual on the current Tfield.
+ * The returned norms are scaled by dt/cv_ref to keep units numerically tame. */
+static void p1k_full_residual (double dt, double source_scale,
+                               double cv_ref, double * rms, double * maxabs)
+{
+  double sum2 = 0., volume = 0., rmax = 0.;
+  foreach() {
+    double ag = clampd(ag_marker[],0.,1.);
+    double sc = clampd(sc_marker[],0.,1.-ag);
+    double cv, kval, h;
+    material_state(Tfield[],ag,sc,&cv,&kval,&h);
+    p1k_kcell[] = kval;
+  }
+  boundary ({p1k_kcell});
+  foreach_face() {
+    double kl = max(p1k_kcell[],1.e-8), kr = max(p1k_kcell[-1],1.e-8);
+    p1k_kface.x[] = 2.*kl*kr/(kl+kr);
+  }
+  boundary ({p1k_kface});
+  foreach(reduction(+:sum2) reduction(+:volume) reduction(max:rmax)) {
+    double ag = clampd(ag_marker[],0.,1.);
+    double sc = clampd(sc_marker[],0.,1.-ag);
+    double cv, kval, h;
+    material_state(Tfield[],ag,sc,&cv,&kval,&h);
+    double divk = 0.;
+    foreach_dimension()
+      divk += (p1k_kface.x[1]*face_gradient_x(Tfield,1) -
+               p1k_kface.x[]*face_gradient_x(Tfield,0))/Delta;
+    double q = source_scale*source_q[]*f[];
+    double r = (h - Hadv[])/dt - divk - q;
+    double rk = r*dt/cv_ref;
+    p1k_residual[] = r;
+    if (!isfinite(rk)) rk = HUGE;
+    sum2 += rk*rk*dv();
+    volume += dv();
+    rmax = max(rmax,fabs(rk));
+  }
+  *rms = volume > 0. ? sqrt(sum2/volume) : HUGE;
+  *maxabs = rmax;
+}
+#endif
+
+/* Invert the cell-mixture volumetric enthalpy after conservative advection. */
+static double temperature_from_enthalpy (double target_h, double agfrac, double scfrac)
+{
+  if (!isfinite(target_h) || target_h <= 0.) return Tref;
+  double lo = Tref, hi = 5000.;
+  double cv, kk, hh;
+  material_state(hi,agfrac,scfrac,&cv,&kk,&hh);
+  if (target_h >= hh) return hi;
+  /* 24 bisections bound the temperature inversion error below 3.0e-4 K. */
+  for (int it = 0; it < 24; it++) {
+    double mid = 0.5*(lo + hi);
+    material_state(mid,agfrac,scfrac,&cv,&kk,&hh);
+    if (hh < target_h) lo = mid;
+    else hi = mid;
+  }
+  return 0.5*(lo + hi);
+}
+
+static double total_enthalpy (void)
+{
+  double E = 0.;
+  foreach(reduction(+:E)) {
+    double scfrac = clampd(sc_marker[], 0., 1.);
+    double agfrac = clampd(ag_marker[], 0., 1. - scfrac);
+    double cv, kk, hh;
+    material_state(Tfield[], agfrac, scfrac, &cv, &kk, &hh);
+    E += hh*dv();
+  }
+  return E;
+}
+
+/* Measure the largest face-connected, majority-liquid Ag component at the
+ * saved peak field. x/y neighbors wrap to honor the periodic boundaries. */
+static void write_peak_pool_stats (double time_ps, double Tmax_SC)
+{
+  memset(pool_mask,0,sizeof(pool_mask));
+  memset(pool_seen,0,sizeof(pool_seen));
+  foreach() {
+    int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+    int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+    int kk=clamp((int)((z-Z0)/Delta),0,NCZ-1);
+    int id=index3(ii,jj,kk);
+    double theta=clampd(f[],0.,1.)*clampd(ag_marker[],0.,1.)*
+      ag_liquid_fraction(Tfield[]);
+    theta=clampd(theta,0.,1.);
+    pool_weight[id]=theta;
+    pool_mask[id]=theta>=0.5;
+  }
+  double cell_nm3=pow(delta_x*1.e9,3.);
+  double best_volume=0.;
+  int best_cells=0, best_min_i=0, best_max_i=-1;
+  int best_min_j=0, best_max_j=-1, best_min_k=0, best_max_k=-1;
+  int component_count=0;
+  for (int id=0; id<NCELLS; id++) {
+    if (!pool_mask[id] || pool_seen[id]) continue;
+    component_count++;
+    int head=0, tail=0, cells=0;
+    double volume=0.;
+    int min_i=NC, max_i=-1, min_j=NC, max_j=-1, min_k=NCZ, max_k=-1;
+    pool_queue[tail++]=id;
+    pool_seen[id]=1;
+    while (head<tail) {
+      int cur=pool_queue[head++];
+      int kk=cur%NCZ, jj=(cur/NCZ)%NC, ii=cur/(NC*NCZ);
+      cells++;
+      volume+=pool_weight[cur]*cell_nm3;
+      min_i=min(min_i,ii); max_i=max(max_i,ii);
+      min_j=min(min_j,jj); max_j=max(max_j,jj);
+      min_k=min(min_k,kk); max_k=max(max_k,kk);
+      int ni[6], nj[6], nk[6];
+      ni[0]=(ii+NC-1)%NC; nj[0]=jj; nk[0]=kk;
+      ni[1]=(ii+1)%NC;    nj[1]=jj; nk[1]=kk;
+      ni[2]=ii; nj[2]=(jj+NC-1)%NC; nk[2]=kk;
+      ni[3]=ii; nj[3]=(jj+1)%NC;    nk[3]=kk;
+      int nn=4;
+      if (kk>0) { ni[nn]=ii; nj[nn]=jj; nk[nn++]=kk-1; }
+      if (kk<NCZ-1) { ni[nn]=ii; nj[nn]=jj; nk[nn++]=kk+1; }
+      for (int q=0; q<nn; q++) {
+        int next=index3(ni[q],nj[q],nk[q]);
+        if (pool_mask[next] && !pool_seen[next]) {
+          pool_seen[next]=1;
+          pool_queue[tail++]=next;
+        }
+      }
+    }
+    if (volume>best_volume) {
+      best_volume=volume; best_cells=cells;
+      best_min_i=min_i; best_max_i=max_i;
+      best_min_j=min_j; best_max_j=max_j;
+      best_min_k=min_k; best_max_k=max_k;
+    }
+  }
+  FILE *fp=fopen("p1h_peak_pool_dimensions.csv","a+");
+  if (!fp) { perror("p1h_peak_pool_dimensions.csv"); return; }
+  fseek(fp,0,SEEK_END);
+  if (ftell(fp)==0)
+    fprintf(fp,"time_ps,Tmax_skeleton_K,connectivity,liquid_Ag_mask_threshold,components,largest_cells,largest_liquid_volume_nm3,x_min_nm,x_max_nm,x_size_nm,y_min_nm,y_max_nm,y_size_nm,z_min_nm,z_max_nm,z_size_nm\n");
+  if (best_cells>0) {
+    double dxnm=delta_x*1.e9;
+    fprintf(fp,"%.9g,%.9g,6-face-periodic-xy,0.5,%d,%d,%.12g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g\n",
+            time_ps,Tmax_SC,component_count,best_cells,best_volume,
+            best_min_i*dxnm,(best_max_i+1)*dxnm,(best_max_i-best_min_i+1)*dxnm,
+            best_min_j*dxnm,(best_max_j+1)*dxnm,(best_max_j-best_min_j+1)*dxnm,
+            best_min_k*dxnm,(best_max_k+1)*dxnm,(best_max_k-best_min_k+1)*dxnm);
+  }
+  else
+    fprintf(fp,"%.9g,%.9g,6-face-periodic-xy,0.5,%d,0,0,nan,nan,0,nan,nan,0,nan,nan,0\n",
+            time_ps,Tmax_SC,component_count);
+  fclose(fp);
+}
+
+/* Save the complete P1G diagnostic field set; each raw frame is atomic. */
+static void write_pool_field_snapshot (double time_ps, const char * stage)
+{
+  foreach() {
+    int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+    int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+    int kk=clamp((int)((z-Z0)/Delta),0,NCZ-1);
+    int id=index3(ii,jj,kk);
+    pool_snapshot_fields[0][id]=(float)f[];
+    pool_snapshot_fields[1][id]=(float)d[];
+    pool_snapshot_fields[2][id]=(float)ag_marker[];
+    pool_snapshot_fields[3][id]=(float)sc_marker[];
+    pool_snapshot_fields[4][id]=(float)liquid_fraction[];
+    pool_snapshot_fields[5][id]=(float)Tfield[];
+    pool_snapshot_fields[6][id]=(float)Hvol[];
+    pool_snapshot_fields[7][id]=(float)u.x[];
+    pool_snapshot_fields[8][id]=(float)u.y[];
+    pool_snapshot_fields[9][id]=(float)u.z[];
+    pool_snapshot_fields[10][id]=(float)p[];
+    pool_snapshot_fields[11][id]=(float)kappa_field[];
+    pool_snapshot_fields[12][id]=(float)gamma_ag(Tfield[]);
+    pool_snapshot_fields[13][id]=(float)sigmaf[];
+    pool_snapshot_fields[14][id]=(float)marangoni_cell.x[];
+    pool_snapshot_fields[15][id]=(float)marangoni_cell.y[];
+    pool_snapshot_fields[16][id]=(float)marangoni_cell.z[];
+    pool_snapshot_fields[17][id]=(float)source_q[];
+    pool_snapshot_fields[18][id]=(float)drag_cell[];
+    pool_snapshot_fields[19][id]=(float)material_code[id];
+    pool_snapshot_fields[20][id]=(float)pore_marker[];
+    p1h_pressure_snapshot_fields[0][id]=(float)arc_pressure_raw[];
+    p1h_pressure_snapshot_fields[1][id]=(float)arc_pressure_mask[];
+    p1h_pressure_snapshot_fields[2][id]=(float)arc_pressure_effective[];
+    p1h_pressure_snapshot_fields[3][id]=(float)total_normal_stress_field[];
+  }
+  char final_path[160], temporary_path[176];
+  snprintf(final_path,sizeof(final_path),"p1h_%s_%s_t%010.6f_ps.bin",
+           marangoni_enabled ? "marangoni_on" : "marangoni_off",
+           stage ? stage : "regular",time_ps);
+  snprintf(temporary_path,sizeof(temporary_path),"%s.part",final_path);
+  FILE *fp=fopen(temporary_path,"wb");
+  if (!fp) { perror(temporary_path); return; }
+  struct {
+    char magic[8];
+    uint32_t version, nx, ny, nz, nfields, case_flags;
+    double time_ps, dx_m, x0_m, y0_m, z0_m;
+  } header={{'P','1','H','S','N','A','P','1'},1,NC,NC,NCZ,SNAPSHOT_NFIELDS,
+            (uint32_t)((marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0)),
+            time_ps,delta_x,X0,Y0,Z0};
+  int ok=fwrite(&header,sizeof(header),1,fp)==1 &&
+    fwrite(pool_snapshot_fields,sizeof(pool_snapshot_fields),1,fp)==1;
+  if (fclose(fp)!=0) ok=0;
+  if (!ok || rename(temporary_path,final_path)!=0) {
+    perror("write/rename pool field snapshot");
+    remove(temporary_path);
+    return;
+  }
+  fprintf(stderr,"P1H_FIELD_SNAPSHOT t_ps=%.9g stage=%s marangoni=%d fields=%d file=%s\n",
+          time_ps,stage ? stage : "regular",marangoni_enabled,SNAPSHOT_NFIELDS,final_path);
+
+  snprintf(final_path,sizeof(final_path),"p1h_pressure_%s_%s_t%010.6f_ps.bin",
+           marangoni_enabled ? "marangoni_on" : "marangoni_off",
+           stage ? stage : "regular",time_ps);
+  snprintf(temporary_path,sizeof(temporary_path),"%s.part",final_path);
+  fp=fopen(temporary_path,"wb");
+  if (!fp) { perror(temporary_path); return; }
+  struct {
+    char magic[8];
+    uint32_t version, nx, ny, nz, nfields, enabled;
+    double time_ps, dx_m, x0_m, y0_m, z0_m;
+  } pheader={{'P','1','H','P','R','S','0','1'},1,NC,NC,NCZ,P1H_PRESSURE_NFIELDS,
+             (uint32_t)arc_pressure_cfg.enabled,time_ps,delta_x,X0,Y0,Z0};
+  ok=fwrite(&pheader,sizeof(pheader),1,fp)==1 &&
+    fwrite(p1h_pressure_snapshot_fields,sizeof(p1h_pressure_snapshot_fields),1,fp)==1;
+  if (fclose(fp)!=0) ok=0;
+  if (!ok || rename(temporary_path,final_path)!=0) {
+    perror("write/rename P1H pressure field snapshot");
+    remove(temporary_path);
+    return;
+  }
+  fprintf(stderr,"P1H_PRESSURE_FIELD_SNAPSHOT t_ps=%.9g stage=%s fields=%d file=%s\n",
+          time_ps,stage ? stage : "regular",P1H_PRESSURE_NFIELDS,final_path);
+}
+
+struct RestartState {
+  char magic[8];
+  uint32_t version;
+  int32_t heat_on, solidified_steps, balanced_steps, sigma_case, case_flags;
+  uint32_t nx, ny, nz;
+  double energy_initial, input_energy, sink_energy;
+  double ag_volume_initial, sc_volume_initial, applied_source_scale;
+  double max_temperature_seen, next_pool_report_ps, next_pool_field_snapshot_ps;
+  double time_ps;
+  int32_t arc_pressure_enabled, arc_pressure_profile, heat_source_ramping;
+  double arc_pressure_peak_Pa, arc_pressure_center_x_m, arc_pressure_center_y_m;
+  double arc_pressure_radius_m, arc_pressure_start_s, arc_pressure_ramp_s;
+  double arc_pressure_end_s;
+  double heat_source_ramp_s, heat_source_ramp_start_s;
+  double marangoni_multiplier, heat_hold_start_s, heat_hold_end_s;
+  uint32_t heat_hold_started, heat_hold_snapshot_mask;
+};
+
+static void write_restart_checkpoint (double time_ps, int step)
+{
+  char final_dump[192], temp_dump[200], final_state[208], temp_state[216];
+  char marker[224], temp_marker[232], pointer_tmp[96];
+  snprintf(final_dump,sizeof(final_dump),"p1h_restart_i%010d_t%010.6f_ps.dump",step,time_ps);
+  snprintf(temp_dump,sizeof(temp_dump),"%s.part",final_dump);
+  snprintf(final_state,sizeof(final_state),"%s.state",final_dump);
+  snprintf(temp_state,sizeof(temp_state),"%s.part",final_state);
+  snprintf(marker,sizeof(marker),"%s.complete",final_dump);
+  snprintf(temp_marker,sizeof(temp_marker),"%s.part",marker);
+  dump(file=temp_dump);
+  if (rename(temp_dump,final_dump)!=0) { perror("rename restart dump"); return; }
+  struct RestartState state={{'P','1','I','R','S','T','1','\0'},1,
+    heat_on,solidified_steps,balanced_steps,sigma_case,
+    (marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0),
+    NC,NC,NCZ,
+    energy_initial,input_energy,sink_energy,ag_volume_initial,sc_volume_initial,
+    applied_source_scale,max_temperature_seen,next_pool_report_ps,
+    next_pool_field_snapshot_ps,time_ps,
+    arc_pressure_cfg.enabled,(int32_t)arc_pressure_cfg.profile,heat_source_ramping,
+    arc_pressure_cfg.peak_Pa,arc_pressure_cfg.center_x_m,arc_pressure_cfg.center_y_m,
+    arc_pressure_cfg.radius_m,arc_pressure_cfg.start_s,arc_pressure_cfg.ramp_s,
+    arc_pressure_cfg.end_s,heat_source_ramp_s,heat_source_ramp_start_s,
+    marangoni_multiplier,heat_hold_start_s,heat_hold_end_s,
+    (uint32_t)heat_hold_started,heat_hold_snapshot_mask};
+  FILE *fp=fopen(temp_state,"wb");
+  if (!fp) { perror(temp_state); return; }
+  int ok=fwrite(&state,sizeof(state),1,fp)==1 &&
+    fwrite(initial_surface_height,sizeof(initial_surface_height),1,fp)==1;
+  if (fclose(fp)!=0) ok=0;
+  if (!ok || rename(temp_state,final_state)!=0) {
+    perror("write restart state"); remove(temp_state); return;
+  }
+  fp=fopen(temp_marker,"w");
+  if (!fp) { perror(temp_marker); return; }
+  fprintf(fp,"time_ps=%.12g\nstep=%d\n",time_ps,step);
+  if (fclose(fp)!=0 || rename(temp_marker,marker)!=0) {
+    perror("write restart completion marker"); remove(temp_marker); return;
+  }
+  snprintf(pointer_tmp,sizeof(pointer_tmp),"latest_checkpoint.txt.part");
+  fp=fopen(pointer_tmp,"w");
+  if (fp) {
+    fprintf(fp,"%s\n",final_dump);
+    fclose(fp);
+    rename(pointer_tmp,"latest_checkpoint.txt");
+  }
+  fprintf(stderr,"RESTART_CHECKPOINT t_ps=%.9g step=%d file=%s\n",time_ps,step,final_dump);
+}
+
+static int read_restart_state (const char * dump_path)
+{
+  char state_path[1200], marker_path[1200];
+  snprintf(state_path,sizeof(state_path),"%s.state",dump_path);
+  snprintf(marker_path,sizeof(marker_path),"%s.complete",dump_path);
+  FILE * fp=fopen(marker_path,"r");
+  if (!fp) { fprintf(stderr,"missing complete restart marker: %s\n",marker_path); return 0; }
+  fclose(fp);
+  fp=fopen(state_path,"rb");
+  if (!fp) { perror(state_path); return 0; }
+  struct RestartState state;
+  int ok=fread(&state,sizeof(state),1,fp)==1 &&
+    fread(initial_surface_height,sizeof(initial_surface_height),1,fp)==1;
+  fclose(fp);
+  if (!ok || memcmp(state.magic,"P1IRST1",7) || state.version!=1) {
+    fprintf(stderr,"invalid P1H restart sidecar: %s\n",state_path); return 0;
+  }
+  if (state.nx!=NC || state.ny!=NC || state.nz!=NCZ) {
+    fprintf(stderr,"restart grid does not match requested rectangular dimensions\n"); return 0;
+  }
+  heat_on=state.heat_on;
+  solidified_steps=state.solidified_steps;
+  balanced_steps=state.balanced_steps;
+  heat_hold_started=(int)state.heat_hold_started;
+  heat_hold_start_s=state.heat_hold_start_s;
+  heat_hold_end_s=state.heat_hold_end_s;
+  heat_hold_snapshot_mask=state.heat_hold_snapshot_mask;
+  energy_initial=state.energy_initial;
+  input_energy=state.input_energy;
+  sink_energy=state.sink_energy;
+  ag_volume_initial=state.ag_volume_initial;
+  sc_volume_initial=state.sc_volume_initial;
+  applied_source_scale=state.applied_source_scale;
+  max_temperature_seen=state.max_temperature_seen;
+  next_pool_report_ps=state.next_pool_report_ps;
+  next_pool_field_snapshot_ps=state.next_pool_field_snapshot_ps;
+  restored_time_ps=state.time_ps;
+  next_pool_checkpoint_ps = (floor((restored_time_ps + 1.e-9)/POOL_CHECKPOINT_INTERVAL_PS) + 1.)*
+    POOL_CHECKPOINT_INTERVAL_PS;
+  int expected_case_flags=(marangoni_enabled ? 1 : 0) | (P1H_TOP_OPEN ? 2 : 0);
+  if (state.sigma_case!=sigma_case || state.case_flags!=expected_case_flags) {
+    fprintf(stderr,"restart case does not match requested sigma/Marangoni/top-boundary mode\n"); return 0;
+  }
+  if (state.arc_pressure_enabled!=arc_pressure_cfg.enabled ||
+      state.arc_pressure_profile!=(int32_t)arc_pressure_cfg.profile ||
+      state.arc_pressure_peak_Pa!=arc_pressure_cfg.peak_Pa ||
+      state.arc_pressure_center_x_m!=arc_pressure_cfg.center_x_m ||
+      state.arc_pressure_center_y_m!=arc_pressure_cfg.center_y_m ||
+      state.arc_pressure_radius_m!=arc_pressure_cfg.radius_m ||
+      state.arc_pressure_start_s!=arc_pressure_cfg.start_s ||
+      state.arc_pressure_ramp_s!=arc_pressure_cfg.ramp_s ||
+      state.heat_source_ramp_s!=heat_source_ramp_s ||
+      state.marangoni_multiplier!=marangoni_multiplier) {
+    fprintf(stderr,"restart case does not match requested P1H pressure configuration\n"); return 0;
+  }
+  arc_pressure_cfg.end_s=state.arc_pressure_end_s;
+  heat_source_ramping=state.heat_source_ramping;
+  heat_source_ramp_start_s=state.heat_source_ramp_start_s;
+  return 1;
+}
+
+static void refresh_properties (void)
+{
+  foreach() {
+    double scfrac = clampd(sc_marker[], 0., 1.);
+    double agfrac = clampd(ag_marker[], 0., 1. - scfrac);
+    liquid_fraction[] = agfrac > 0. ? ag_liquid_fraction(Tfield[]) : 0.;
+    material_state(Tfield[], agfrac, scfrac, &cpvol[], &kcell[], &Hvol[]);
+    double fl = liquid_fraction[];
+    double drag = scfrac*solid_drag_s +
+      agfrac*solid_drag_s*sq(1. - fl)/(cube(fl) + 1.e-3);
+    drag_cell[] = drag;
+    sigmaf[] = agfrac*liquid_fraction[]*gamma_ag(Tfield[]);
+    gamma_field[] = gamma_ag(Tfield[]);
+    mucell[] = agfrac > 1.e-8 ? mu_ag(Tfield[]) : 1.8e-5;
+  }
+  boundary ({Tfield,Hvol,cpvol,kcell,mucell,ag_marker,sc_marker,
+             pore_marker,gamma_field,liquid_fraction,drag_cell,sigmaf,arc_pressure_raw,
+             arc_pressure_mask,arc_pressure_effective,total_normal_stress_field});
+  foreach_face() {
+    double kl = max(kcell[], 1.e-8), kr = max(kcell[-1], 1.e-8);
+    kappa_heat.x[] = 2.*kl*kr/(kl + kr);
+    double ml = max(mucell[], 1.e-8), mr = max(mucell[-1], 1.e-8);
+    viscous.x[] = max(1.e-8, 2.*ml*mr/(ml + mr));
+  }
+}
+
+int main (int argc, char * argv[])
+{
+  if (argc < 3 || argc > 5) {
+    fprintf(stderr,"usage: %s input_dir negative|positive [solid_drag_s^-1] [max_time_ps]\nSet P1H_MARANGONI=on|off, optional P1H_RESTART_DUMP=restart.dump, and P1H_ARC_PRESSURE_* values in the environment.\n",argv[0]);
+    return 2;
+  }
+  source_power_target = env_double("P1M_SOURCE_POWER_W",source_power_target);
+  if (!(source_power_target > 0.)) {
+    fprintf(stderr,"P1M_SOURCE_POWER_W must be positive\n"); return 2;
+  }
+  heat_hold_duration_s = env_double("P1M_HOLD_DURATION_PS",5.)*1.e-12;
+  plateau_window_s = env_double("P1M_TEMP_PLATEAU_WINDOW_PS",0.1)*1.e-12;
+  plateau_tolerance_K = env_double("P1M_TEMP_PLATEAU_DELTA_K",1.);
+  plateau_windows_required = (int)env_double("P1M_TEMP_PLATEAU_WINDOWS",2.);
+  if (!(heat_hold_duration_s > 0.) || !(plateau_window_s > 0.) ||
+      !(plateau_tolerance_K > 0.) || plateau_windows_required < 1) {
+    fprintf(stderr,"invalid P1M hold/plateau settings\n"); return 2;
+  }
+  fprintf(stderr,"P1M_POLICY configured_max_power_mW=%.9g hold_ps=%.9g balance_to_bottom_sink=1 plateau_window_ps=%.9g plateau_delta_K=%.9g plateau_windows=%d\n",
+          source_power_target*1.e3,heat_hold_duration_s*1.e12,
+          plateau_window_s*1.e12,plateau_tolerance_K,plateau_windows_required);
+  fprintf(stderr,"P1M_POWER_TARGET configured_W=%.12g\n",source_power_target);
+  read_raw_inputs(argv[1]);
+  read_sc_property_table(argv[1]);
+  if (!strcmp(argv[2],"negative")) sigma_case = -1;
+  else if (!strcmp(argv[2],"positive")) sigma_case = 1;
+  else return 2;
+  if (argc >= 4) solid_drag_s = atof(argv[3]);
+  if (argc >= 5) max_time_s = atof(argv[4])*1.e-12;
+  const char * marangoni_env=getenv("P1H_MARANGONI");
+  if (!marangoni_env) marangoni_env=getenv("P1G_MARANGONI");
+  if (marangoni_env && !strcmp(marangoni_env,"off")) marangoni_enabled=0;
+  else if (marangoni_env && strcmp(marangoni_env,"on")) {
+    fprintf(stderr,"P1H_MARANGONI must be on or off\n"); return 2;
+  }
+  marangoni_multiplier=env_double("P1H_MARANGONI_MULTIPLIER",1.);
+  if (marangoni_multiplier < 0.) {
+    fprintf(stderr,"P1H_MARANGONI_MULTIPLIER must be non-negative\n"); return 2;
+  }
+  const char * restart_env=getenv("P1H_RESTART_DUMP");
+  if (!restart_env) restart_env=getenv("P1G_RESTART_DUMP");
+  if (restart_env && *restart_env) snprintf(restart_path,sizeof(restart_path),"%s",restart_env);
+  if (solid_drag_s <= 0. || max_time_s <= 0.) return 2;
+  heat_dt_max_s=env_double("P1J_DT_MAX_FS",20.)*1.e-15;
+  if (!(heat_dt_max_s > 0.)) {
+    fprintf(stderr,"P1J_DT_MAX_FS must be positive\n"); return 2;
+  }
+  read_arc_pressure_config();
+
+  /* Factor the finest cell counts so multigrid retains any exact common
+   * coarsening levels on a rectangular domain (e.g. 64x64x76 -> 16x16x19). */
+  mesh_gcd = gcd_positive(NC,NCZ);
+  dimensions (nx = NC/mesh_gcd, ny = NC/mesh_gcd, nz = NCZ/mesh_gcd);
+  size (Lbox);
+  origin (0.,0.,0.);
+  N = NC;
+  periodic (left);
+  periodic (bottom);
+  rho1 = rho_Ag_liquid;
+  rho2 = rho_air;
+  mu = viscous;
+  /* Hvol remains a bulk enthalpy tracer.  Ag, skeleton and unresolved-pore
+   * volume are concentrations carried by the composite sample VOF, so their
+   * geometric fluxes remain consistent with f without setting Ag equal to f. */
+  tracers = list_concat (tracers, {Hvol});
+  f.tracers = list_append (NULL, ag_marker);
+  f.tracers = list_append (f.tracers, sc_marker);
+  f.tracers = list_append (f.tracers, pore_marker);
+  /* The QSGS material map is cellwise discontinuous. Use donor-cell VOF
+   * concentration fluxes for these bounded component fractions; the
+   * second-order concentration reconstruction can overshoot the local
+   * material simplex at sharp Ag/ceramic transitions. */
+  ag_marker.gradient = zero;
+  sc_marker.gradient = zero;
+  pore_marker.gradient = zero;
+  TOLERANCE = 1.e-5;
+  NITERMAX = 200; /* allow extra iterations for the high-contrast liquid/mushy solve */
+  CFL = 0.2;
+  DT = heat_dt_max_s;
+  run();
+  delete (f.tracers); free (f.tracers); f.tracers = NULL;
+  delete (tracers); free (tracers); tracers = NULL;
+}
+
+event init (t = 0)
+{
+  if (restart_path[0]) {
+    if (!restore(file=restart_path)) {
+      fprintf(stderr,"cannot restore checkpoint %s\n",restart_path); exit(2);
+    }
+    p1g_restart_mode = 1;
+    if (!read_restart_state(restart_path)) exit(2);
+    resumed_from_checkpoint=1;
+    ag_mass_initial = rho_Ag*ag_volume_initial;
+    /* A checkpoint stores the already-normalized source field from its run.
+       Rescale that field uniformly so each calibration branch starts from the
+       identical thermal/flow state but applies its own requested total power. */
+    double restored_source_integral=0.;
+    foreach(reduction(+:restored_source_integral))
+      restored_source_integral += source_q[]*f[]*dv();
+    if (!(restored_source_integral > 0.)) {
+      fprintf(stderr,"P1M restart has zero integrated source field\n"); exit(2);
+    }
+    double p1m_source_factor=source_power_target/restored_source_integral;
+    foreach()
+      source_q[] *= p1m_source_factor;
+    applied_source_scale *= p1m_source_factor;
+    boundary ({source_q});
+    fprintf(stderr,"P1M_RESTART_SOURCE_RESCALED prior_integral_W=%.12g target_W=%.12g factor=%.12g\n",
+            restored_source_integral,source_power_target,p1m_source_factor);
+    refresh_properties();
+    open_arc_pressure_history(1);
+    history=fopen("p1h_history.csv","a");
+    if (!history) { perror("p1h_history.csv append"); exit(2); }
+    p1j_transport_history=fopen("p1j_transport_validation.csv","a");
+    if (!p1j_transport_history) { perror("p1j_transport_validation.csv append"); exit(2); }
+    fseek(p1j_transport_history,0,SEEK_END);
+    if (ftell(p1j_transport_history)==0) {
+      fprintf(p1j_transport_history,"time_ps,Ag_volume_nm3,Ag_mass_kg,Ag_mass_drift_pct,skeleton_volume_nm3,pore_volume_nm3,sample_volume_nm3,partition_error_max,Ag_min,Ag_max,skeleton_min,skeleton_max,pore_min,pore_max,Ag_out_of_bounds_cells,skeleton_out_of_bounds_cells,pore_out_of_bounds_cells,Ag_in_near_gas_cells\n");
+      fflush(p1j_transport_history);
+    }
+    fseek(history,0,SEEK_END);
+    if (ftell(history)==0) {
+      fprintf(history,"time_ps,heat_on_after_step,Tmax_K,Tmax_Ag_K,Tmax_skeleton_K,mean_Ag_T_K,max_velocity_m_s,Ag_volume_nm3,Ag_volume_drift_pct,liquid_Ag_volume_nm3,skeleton_volume_nm3,composite_volume_nm3,mean_surface_depression_nm,source_center_depression_nm,source_power_W,enthalpy_J,input_energy_J,bottom_sink_energy_J,energy_residual_J,pressure_iterations,pressure_residual,thermal_iterations,thermal_residual,thermal_nonlinear_iterations,thermal_nonlinear_change_K,viscosity_iterations,viscosity_residual,dt_fs,heat_scale,input_minus_bottom_mW,balance_steps\n");
+      fflush(history);
+    }
+#ifndef P1M_NO_AUX_SNAPSHOTS
+    write_pool_field_snapshot(restored_time_ps,"restart_loaded");
+#endif
+    double restored_ag=0., restored_sc=0., restored_sample=0., restored_pin=0.;
+    double restored_liquid=0., restored_Tmax_sc=300., restored_Tmax_Ag=300.;
+    foreach(reduction(+:restored_ag) reduction(+:restored_sc) reduction(+:restored_sample)
+            reduction(+:restored_pin) reduction(+:restored_liquid)
+            reduction(max:restored_Tmax_sc) reduction(max:restored_Tmax_Ag)) {
+      restored_ag+=ag_marker[]*dv();
+      restored_sc+=sc_marker[]*dv();
+      restored_sample+=f[]*dv();
+      restored_pin+=source_q[]*f[]*dv();
+      restored_liquid+=ag_marker[]*ag_liquid_fraction(Tfield[])*dv();
+      if (sc_marker[] > 1.e-8) restored_Tmax_sc=max(restored_Tmax_sc,Tfield[]);
+      if (ag_marker[] > 1.e-8) restored_Tmax_Ag=max(restored_Tmax_Ag,Tfield[]);
+    }
+    fprintf(stderr,"RESTARTED t_ps=%.9g event_i=%d heat_on=%d Ag_nm3=%.12g skeleton_nm3=%.12g sample_nm3=%.12g source_power_mW=%.12g\n",
+            restored_time_ps,i,heat_on,restored_ag/cube(1.e-9),restored_sc/cube(1.e-9),
+            restored_sample/cube(1.e-9),restored_pin*1.e3);
+    fprintf(stderr,"P1M_RESTART_STATE t_ps=%.9g Tmax_skeleton_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.12g\n",
+            restored_time_ps,restored_Tmax_sc,restored_Tmax_Ag,restored_liquid/cube(1.e-9));
+    return 0;
+  }
+  double dx = Lbox/NC;
+  foreach() {
+    int i = clamp((int)((x-X0)/dx),0,NC-1);
+    int j = clamp((int)((y-Y0)/dx),0,NC-1);
+    int k = clamp((int)((z-Z0)/dx),0,NCZ-1);
+    int code = material_code[index3(i,j,k)];
+    d[] = 53.*delta_x - z; /* CLSVOF builds f from this signed-distance plane. */
+    ag_marker[] = code == 1 ? 1. : 0.;
+    sc_marker[] = code == 2 ? 1. : 0.;
+    pore_marker[] = 0.;
+#if defined(P1J_FORCE_SMOKE_INIT) || defined(P1J_ACTIVE_THERMAL_DIAG)
+    /* Manufactured hot-state gradient used only by the isolated force smoke
+     * test; never enabled in the production heating configuration. */
+    Tfield[] = 1400. + 10.*clampd((x - X0)/Lbox,0.,1.);
+#else
+    Tfield[] = 300.;
+#endif
+    p[] = 0.;
+    u.x[] = u.y[] = u.z[] = 0.;
+    source_q[] = source_map[index3(i,j,k)];
+  }
+  boundary ({d,ag_marker,sc_marker,pore_marker,Tfield,p,u,source_q});
+}
+
+/* The CLSVOF init event builds f from d during i=0.  At i=1, initialize the
+ * material tracers from that populated VOF field before starting heat flow. */
+event initialize_material_fields (i = 1)
+{
+  if (resumed_from_checkpoint) return 0;
+  double init_ag=0., init_sc=0., init_sample=0.;
+  foreach() {
+    int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+    int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+    int kk=clamp((int)((z-Z0)/Delta),0,NCZ-1);
+    int code=material_code[index3(ii,jj,kk)];
+    ag_marker[] = code == 1 ? f[] : 0.;
+    sc_marker[] = code == 2 ? f[] : 0.;
+    pore_marker[] = max(0.,f[] - ag_marker[] - sc_marker[]);
+    arc_pressure_raw[] = arc_pressure_mask[] = arc_pressure_effective[] = 0.;
+    total_normal_stress_field[] = 0.;
+  }
+  boundary ({ag_marker,sc_marker,pore_marker});
+  double source_integral = 0.;
+  foreach(reduction(+:source_integral))
+    source_integral += source_q[]*f[]*dv();
+  if (!(source_integral > 0.)) {
+    fprintf(stderr,"ERROR: source integral is zero after VOF initialization\n");
+    exit(2);
+  }
+  applied_source_scale = source_power_target/source_integral;
+  foreach()
+    source_q[] *= applied_source_scale;
+  boundary ({source_q});
+  refresh_properties();
+  foreach(reduction(+:init_ag) reduction(+:init_sc) reduction(+:init_sample)) {
+    init_ag+=ag_marker[]*dv();
+    init_sc+=sc_marker[]*dv();
+    init_sample+=f[]*dv();
+  }
+  ag_volume_initial = init_ag;
+  sc_volume_initial = init_sc;
+  ag_mass_initial = rho_Ag*init_ag;
+  for (int ij=0; ij<NC*NC; ij++)
+    initial_surface_height[ij] = -HUGE;
+  foreach() {
+    if (f[] > 0.5) {
+      int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+      int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+      int ij=ii*NC+jj;
+      initial_surface_height[ij] = max(initial_surface_height[ij],z + 0.5*Delta);
+    }
+  }
+  fprintf(stderr,"INIT_FIELDS ag_m3=%.12g sc_m3=%.12g sample_m3=%.12g\n",init_ag,init_sc,init_sample);
+  energy_initial = total_enthalpy();
+  history = fopen("p1h_history.csv","w");
+  if (!history) { perror("p1h_history.csv"); exit(2); }
+  open_arc_pressure_history(0);
+  fprintf(history,"time_ps,heat_on_after_step,Tmax_K,Tmax_Ag_K,Tmax_skeleton_K,mean_Ag_T_K,max_velocity_m_s,Ag_volume_nm3,Ag_volume_drift_pct,liquid_Ag_volume_nm3,skeleton_volume_nm3,composite_volume_nm3,mean_surface_depression_nm,source_center_depression_nm,source_power_W,enthalpy_J,input_energy_J,bottom_sink_energy_J,energy_residual_J,pressure_iterations,pressure_residual,thermal_iterations,thermal_residual,thermal_nonlinear_iterations,thermal_nonlinear_change_K,viscosity_iterations,viscosity_residual,dt_fs,heat_scale,input_minus_bottom_mW,balance_steps\n");
+  fprintf(stderr,"INIT case=%s marangoni=%d marangoni_tangential_multiplier=%.9g top_boundary=%s grid=%dx%dx%d multigrid_factors=%dx%dx%d levels=%d drag_s-1=%.6g cells=%ld dx_m=%.9g dt_max_ps=%.6g source_power_W=%.12g source_scale=%.9g\n",
+          sigma_case < 0 ? "negative_dsigma_dT" : "positive_dsigma_dT",marangoni_enabled,marangoni_multiplier,
+          P1H_TOP_OPEN ? "open_ambient_pressure" : "closed_no_penetration",NC,NC,NCZ,
+          NC/mesh_gcd,NC/mesh_gcd,NCZ/mesh_gcd,(int)grid->depth,solid_drag_s,
+          grid->tn,delta_x,DT*1.e12,source_power_target,applied_source_scale);
+  write_pool_field_snapshot(0.,"initial");
+#ifndef P1I_PREFLIGHT
+  write_restart_checkpoint(0.,i);
+#endif
+}
+
+event thermal_step (i++,last)
+{
+  if (i == 0 || !(dt > 0.))
+    return 0;
+  if (!p1j_transport_history) {
+    p1j_transport_history=fopen("p1j_transport_validation.csv","w");
+    if (!p1j_transport_history) { perror("p1j_transport_validation.csv"); return 1; }
+    fprintf(p1j_transport_history,"time_ps,Ag_volume_nm3,Ag_mass_kg,Ag_mass_drift_pct,skeleton_volume_nm3,pore_volume_nm3,sample_volume_nm3,partition_error_max,Ag_min,Ag_max,skeleton_min,skeleton_max,pore_min,pore_max,Ag_out_of_bounds_cells,skeleton_out_of_bounds_cells,pore_out_of_bounds_cells,Ag_in_near_gas_cells\n");
+  }
+  double audit_ag=0., audit_sc=0., audit_pore=0., audit_sample=0.;
+  double min_ag=HUGE,min_sc=HUGE,min_pore=HUGE;
+  double max_ag=-HUGE,max_sc=-HUGE,max_pore=-HUGE,partition_error=0.;
+  int bad_ag=0,bad_sc=0,bad_pore=0,ag_near_gas=0;
+  foreach(reduction(+:audit_ag) reduction(+:audit_sc) reduction(+:audit_pore)
+          reduction(+:audit_sample) reduction(min:min_ag) reduction(min:min_sc)
+          reduction(min:min_pore) reduction(max:max_ag) reduction(max:max_sc)
+          reduction(max:max_pore) reduction(max:partition_error)
+          reduction(+:bad_ag) reduction(+:bad_sc) reduction(+:bad_pore)
+          reduction(+:ag_near_gas)) {
+    double a=ag_marker[], s=sc_marker[], v=pore_marker[], sample=f[];
+    audit_ag+=a*dv(); audit_sc+=s*dv(); audit_pore+=v*dv();
+    audit_sample+=sample*dv();
+    min_ag=min(min_ag,a); max_ag=max(max_ag,a);
+    min_sc=min(min_sc,s); max_sc=max(max_sc,s);
+    min_pore=min(min_pore,v); max_pore=max(max_pore,v);
+    partition_error=max(partition_error,fabs(a+s+v-sample));
+    if (a < -1.e-8 || a > sample + 1.e-8) bad_ag++;
+    if (s < -1.e-8 || s > sample + 1.e-8) bad_sc++;
+    if (v < -1.e-8 || v > sample + 1.e-8) bad_pore++;
+    if (sample < 1.e-3 && a > sample + 1.e-8) ag_near_gas++;
+  }
+  double ag_mass=rho_Ag*audit_ag;
+  double ag_mass_drift_pct=ag_mass_initial > 0. ?
+    100.*(ag_mass-ag_mass_initial)/ag_mass_initial : NAN;
+  fprintf(p1j_transport_history,
+          "%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%d,%d,%d,%d\n",
+          t*1.e12,audit_ag/cube(1.e-9),ag_mass,ag_mass_drift_pct,
+          audit_sc/cube(1.e-9),audit_pore/cube(1.e-9),audit_sample/cube(1.e-9),
+          partition_error,min_ag,max_ag,min_sc,max_sc,min_pore,max_pore,
+          bad_ag,bad_sc,bad_pore,ag_near_gas);
+  fflush(p1j_transport_history);
+  if (bad_ag || bad_sc || bad_pore || partition_error > 1.e-7 ||
+      fabs(ag_mass_drift_pct) > 0.1) {
+    fprintf(stderr,"STOP P1J component transport bounds/mass failed t_ps=%.9g mass_drift_pct=%.9g partition_error=%.9g bad_ag=%d bad_sc=%d bad_pore=%d\n",
+            t*1.e12,ag_mass_drift_pct,partition_error,bad_ag,bad_sc,bad_pore);
+    dump(file="p1j_failed_component_transport.dump");
+    return 1;
+  }
+#if defined(P1J_FORCE_SMOKE_INIT) && !defined(P1J_ACTIVE_THERMAL_DIAG)
+  /* The manufactured-force smoke test intentionally freezes the thermal
+   * field; it validates only interface forcing and composition transport. */
+  return 0;
+#endif
+  /* Hvol has already passed through Basilisk's conservative tracer advection.
+   * Recover the mixture temperature before applying conduction and the source. */
+  foreach() {
+    Hadv[] = Hvol[];
+    double scfrac=clampd(sc_marker[],0.,1.);
+    double agfrac=clampd(ag_marker[],0.,1.-scfrac);
+    Tfield[]=temperature_from_enthalpy(Hadv[],agfrac,scfrac);
+  }
+  boundary ({Hadv,Tfield});
+  int heat_was_on = heat_on;
+  double max_sc_now = 300.;
+  double heat_step_scale = 1.; /* 4 mW until target/plateau, then follow the bottom sink. */
+  if (heat_on) {
+    foreach(reduction(max:max_sc_now)) {
+      double scfrac = clampd(sc_marker[],0.,1.);
+      if (scfrac > 1.e-8)
+        max_sc_now = max(max_sc_now,Tfield[]);
+    }
+    if (!heat_hold_started && max_sc_now >= heat_target_K) {
+      heat_hold_started=1;
+      heat_hold_start_s=t;
+      heat_hold_end_s=t+heat_hold_duration_s;
+      heat_hold_snapshot_mask=0;
+      fprintf(stderr,"HEAT_HOLD_STARTED t_ps=%.9g Tmax_skeleton_K=%.9g hold_duration_ps=%.9g hold_end_ps=%.9g\n",
+              t*1.e12,max_sc_now,heat_hold_duration_s*1.e12,heat_hold_end_s*1.e12);
+      write_peak_pool_stats(t*1.e12,max_sc_now);
+      write_pool_field_snapshot(t*1.e12,"hold_start_2100K");
+      write_restart_checkpoint(t*1.e12,i);
+    }
+  }
+  if (heat_on && heat_hold_started) {
+    double source_at_unit_scale = p1m_source_power_at_unit_scale();
+    double sink_pre_step = p1m_bottom_sink_power();
+    if (!(source_at_unit_scale > 0.)) {
+      fprintf(stderr,"STOP P1M balanced hold has zero source support t_ps=%.9g\n",t*1.e12);
+      return 1;
+    }
+    balance_command_power_W = min(source_power_target,max(0.,sink_pre_step));
+    heat_step_scale = clampd(balance_command_power_W/source_at_unit_scale,0.,1.);
+  }
+  /* A hard pre-step cutoff is a second, independent protection.  The
+     predictive ramp forecast can miss when the local peak rises sharply
+     within a nonlinear enthalpy update.  Switch the source off before the
+     next thermal solve once the pre-step skeleton temperature is within
+     50 K of the property-table ceiling. */
+  if (heat_on && max_sc_now >= SC_Tmax - SC_preemptive_shutdown_margin_K &&
+      (!heat_hold_started || t+1.e-18 < heat_hold_end_s)) {
+    stop_heat_and_pressure_at(t);
+    fprintf(stderr,"HEAT_OFF_PRESTEP_PROPERTY_GUARD t_ps=%.9g Tmax_skeleton_K=%.9g margin_K=%.9g ceiling_K=%.9g hold_started=%d hold_age_ps=%.9g\n",
+            t*1.e12,max_sc_now,SC_preemptive_shutdown_margin_K,SC_Tmax,
+            heat_hold_started,heat_hold_started ? (t-heat_hold_start_s)*1.e12 : 0.);
+  }
+  double heat_source_scale = heat_source_scale_at(t + 0.5*dt);
+
+  double pin = 0., psink = 0.;
+  foreach(reduction(+:pin))
+    pin += heat_step_scale*heat_source_scale*source_q[]*f[]*dv();
+  input_energy += dt*pin;
+
+  /* Solve rho [h(Tnew)-h(Told)]/dt = div(k grad Tnew) + Q with a damped
+   * Newton linearization of enthalpy.  This resolves the steep apparent Cp
+   * across the Ag mushy interval without replacing latent heat by a clipped
+   * temperature jump.  Scaling by dt/cv_ref conditions the Poisson solve. */
+  const double cv_ref = 2.5e6; /* J m^-3 K^-1, conditioning scale only */
+  foreach() {
+    Told[] = Tfield[];
+    Tguess[] = Tfield[];
+  }
+  boundary ({Told,Tguess});
+  mgstats heat_mg;
+  int thermal_nl_i = 0, thermal_nl_converged = 0;
+  double thermal_nl_change = HUGE;
+#ifdef P1K_ENTHALPY_RESIDUAL
+  {
+    const int direct_max_iterations = 400;
+    const double omega_H = 0.25;
+    static FILE *hfp = NULL;
+    if (!hfp) {
+      hfp = fopen("p1k_enthalpy_iteration.csv","w");
+      if (!hfp) { perror("p1k_enthalpy_iteration.csv"); exit(2); }
+      fprintf(hfp,"time_ps,iteration,dt_fs,omega_H,residual_before_rms_K,residual_after_rms_K,residual_ratio_to_initial,max_temperature_update_K,max_temperature_K\n");
+      fflush(hfp);
+    }
+    foreach() {
+      p1k_Hiter[] = Hadv[];
+      double scfrac=clampd(sc_marker[],0.,1.);
+      double agfrac=clampd(ag_marker[],0.,1.-scfrac);
+      Tfield[] = temperature_from_enthalpy(p1k_Hiter[],agfrac,scfrac);
+    }
+    boundary ({p1k_Hiter,Tfield});
+    double initial_rms=HUGE;
+    int direct_i=0;
+    for (direct_i=0; direct_i<direct_max_iterations; direct_i++) {
+      foreach() p1k_Tprevious[] = Tfield[];
+      boundary ({p1k_Tprevious});
+      double rbefore=HUGE, rmaxbefore=HUGE;
+      p1k_full_residual(dt,heat_step_scale*heat_source_scale,cv_ref,&rbefore,&rmaxbefore);
+      if (direct_i==0) initial_rms=rbefore;
+      foreach() p1k_Hnext[] = p1k_Hiter[] - omega_H*dt*p1k_residual[];
+      double update=0., tmax=0.;
+      foreach(reduction(max:update) reduction(max:tmax)) {
+        double scfrac=clampd(sc_marker[],0.,1.);
+        double agfrac=clampd(ag_marker[],0.,1.-scfrac);
+        double tnext=temperature_from_enthalpy(p1k_Hnext[],agfrac,scfrac);
+        update=max(update,fabs(tnext-p1k_Tprevious[]));
+        tmax=max(tmax,tnext);
+        Tfield[]=tnext;
+        p1k_Hiter[]=p1k_Hnext[];
+      }
+      boundary ({p1k_Hiter,Tfield});
+      double rafter=HUGE, rmaxafter=HUGE;
+      p1k_full_residual(dt,heat_step_scale*heat_source_scale,cv_ref,&rafter,&rmaxafter);
+      double ratio=initial_rms>0. ? rafter/initial_rms : HUGE;
+      fprintf(hfp,"%.12g,%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g\n",
+              t*1.e12,direct_i+1,dt*1.e15,omega_H,rbefore,rafter,ratio,update,tmax);
+      fflush(hfp);
+      thermal_nl_change=update;
+      if (update < 1.e-2 && ratio < 1.e-6) {
+        thermal_nl_converged=1;
+        break;
+      }
+    }
+    thermal_nl_i=direct_i;
+  }
+#else
+  for (thermal_nl_i = 0; thermal_nl_i < 80; thermal_nl_i++) {
+    foreach() {
+      Tguess[] = Tfield[];
+      double scfrac = clampd(sc_marker[],0.,1.);
+      double agfrac = clampd(ag_marker[],0.,1. - scfrac);
+      double cvg, kval, hg;
+      material_state(Tguess[],agfrac,scfrac,&cvg,&kval,&hg);
+      double cv_eff = max(cvg, 1.);
+      cpvol[] = cv_eff;
+      kcell[] = kval;
+      Hvol[] = hg;
+      rhs_heat[] = ((hg - Hadv[] - cv_eff*Tguess[])/cv_ref -
+                    heat_step_scale*heat_source_scale*source_q[]*f[]*dt/cv_ref);
+      lambda_heat[] = -cv_eff/cv_ref;
+    }
+    boundary ({cpvol,kcell,Hvol,rhs_heat,lambda_heat,Tguess});
+    foreach_face() {
+      double kl=max(kcell[],1.e-8), kr=max(kcell[-1],1.e-8);
+      kappa_heat.x[]=2.*kl*kr/(kl+kr)*dt/cv_ref;
+    }
+    heat_mg = poisson (Tfield, rhs_heat, kappa_heat, lambda_heat);
+    boundary ({Tfield});
+#ifdef P1K_RESIDUAL_LINE_SEARCH
+    {
+      static FILE *lsfp = NULL;
+      if (!lsfp) {
+        lsfp = fopen("p1k_line_search.csv","w");
+        if (!lsfp) { perror("p1k_line_search.csv"); exit(2); }
+        fprintf(lsfp,"time_ps,iteration,dt_fs,residual_start_rms_K,residual_start_max_K,residual_raw_rms_K,residual_raw_max_K,accepted_alpha,residual_accepted_rms_K,residual_accepted_max_K,line_search_trials\n");
+        fflush(lsfp);
+      }
+      foreach() p1k_raw_candidate[] = Tfield[];
+      foreach() Tfield[] = Tguess[];
+      boundary ({Tfield});
+      double r0=HUGE, r0max=HUGE, rraw=HUGE, rrawmax=HUGE;
+      double rbest=HUGE, rbestmax=HUGE, best_alpha=0.;
+      p1k_full_residual(dt,heat_step_scale*heat_source_scale,cv_ref,&r0,&r0max);
+      foreach() Tfield[] = p1k_raw_candidate[];
+      boundary ({Tfield});
+      p1k_full_residual(dt,heat_step_scale*heat_source_scale,cv_ref,&rraw,&rrawmax);
+      rbest=r0; rbestmax=r0max;
+      int ntrial=0;
+      for (int ls=0; ls<=12; ls++) {
+        double alpha = ldexp(1.,-ls);
+        foreach() Tfield[] = Tguess[] + alpha*(p1k_raw_candidate[] - Tguess[]);
+        boundary ({Tfield});
+        double rt=HUGE, rtmax=HUGE;
+        p1k_full_residual(dt,heat_step_scale*heat_source_scale,cv_ref,&rt,&rtmax);
+        ntrial++;
+        if (rt < rbest) { rbest=rt; rbestmax=rtmax; best_alpha=alpha; }
+        if (rt < r0*(1. - 1.e-4*alpha)) {
+          rbest=rt; rbestmax=rtmax; best_alpha=alpha;
+          break;
+        }
+      }
+      if (best_alpha > 0.) {
+        foreach() Tfield[] = Tguess[] + best_alpha*(p1k_raw_candidate[] - Tguess[]);
+        boundary ({Tfield});
+      } else {
+        foreach() Tfield[] = p1k_raw_candidate[];
+        boundary ({Tfield});
+      }
+      fprintf(lsfp,"%.12g,%d,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%d\n",
+              t*1.e12,thermal_nl_i+1,dt*1.e15,r0,r0max,rraw,rrawmax,
+              best_alpha,rbest,rbestmax,ntrial);
+      fflush(lsfp);
+      if (!(best_alpha > 0.)) {
+        fprintf(stderr,"P1K_LINE_SEARCH_NO_DECREASE t_ps=%.12g iteration=%d residual_start=%.12g residual_raw=%.12g\n",
+                t*1.e12,thermal_nl_i+1,r0,rraw);
+        break;
+      }
+    }
+#endif
+    thermal_nl_change = 0.;
+    foreach(reduction(max:thermal_nl_change))
+      thermal_nl_change = max(thermal_nl_change,fabs(Tfield[] - Tguess[]));
+#ifdef P1H_THERMAL_NL_DIAGNOSTICS
+    {
+      double tmin=HUGE, tmax=-HUGE, gmin=HUGE, gmax=-HUGE;
+      int bad=0;
+      foreach(reduction(min:tmin) reduction(max:tmax)
+              reduction(min:gmin) reduction(max:gmax) reduction(+:bad)) {
+        if (isfinite(Tfield[]) && isfinite(Tguess[])) {
+          tmin=min(tmin,Tfield[]); tmax=max(tmax,Tfield[]);
+          gmin=min(gmin,Tguess[]); gmax=max(gmax,Tguess[]);
+        }
+        else bad++;
+      }
+      fprintf(stderr,"THERMAL_NL_DIAG t_ps=%.12g iteration=%d poisson_i=%d poisson_resb=%.12g poisson_resa=%.12g change_K=%.12g T_range_K=[%.12g,%.12g] guess_range_K=[%.12g,%.12g] nonfinite_cells=%d\n",
+              t*1.e12,thermal_nl_i+1,heat_mg.i,heat_mg.resb,heat_mg.resa,
+              thermal_nl_change,tmin,tmax,gmin,gmax,bad);
+    }
+#endif
+#ifdef P1I_FULL_THERMAL_RESIDUAL_DIAGNOSTICS
+    {
+      static FILE *diag_fp = NULL;
+      if (!diag_fp) {
+        diag_fp = fopen("thermal_nl_iterations.csv", "w");
+        if (!diag_fp) { perror("thermal_nl_iterations.csv"); exit(2); }
+        fprintf(diag_fp,
+          "time_ps,iteration,dt_fs,poisson_cycles,poisson_resb_scaled,poisson_resa_scaled,poisson_max_residual_scaled,poisson_residual_ratio,max_update_K,update_i,update_j,update_k,update_x_nm,update_y_nm,update_z_nm,update_Tguess_K,update_Tnew_K,update_Ag,update_SC,update_Hadv_J_m3,update_hguess_J_m3,update_hnew_J_m3,update_Cp_guess_J_m3K,update_Cp_new_J_m3K,update_dHdT_fd_J_m3K,update_k_guess_W_mK,update_k_new_W_mK,max_linearized_residual_W_m3,poisson_equivalent_linearized_residual_W_m3,linearized_identity_error_W_m3,linear_i,linear_j,linear_k,linear_x_nm,linear_y_nm,linear_z_nm,max_full_enthalpy_residual_W_m3,full_i,full_j,full_k,full_x_nm,full_y_nm,full_z_nm,full_Tguess_K,full_Tnew_K,full_Ag,full_SC,full_Hadv_J_m3,full_hguess_J_m3,full_hnew_J_m3,full_Cp_guess_J_m3K,full_Cp_new_J_m3K,full_dHdT_fd_J_m3K,full_k_guess_W_mK,full_k_new_W_mK,full_residual_rms_W_m3,max_full_residual_frozen_k_W_m3,max_dHdT_fd_relative_error_pct,dHdT_error_i,dHdT_error_j,dHdT_error_k,dHdT_error_T_K,dHdT_error_Ceff_J_m3K,dHdT_error_fd_J_m3K,Cvol_min_J_m3K,Cvol_max_J_m3K,k_candidate_min_W_mK,k_candidate_max_W_mK,nonfinite_cells,source_power_W,bottom_sink_est_W,heat_step_scale,heat_source_scale,top_boundary\n");
+        fflush(diag_fp);
+      }
+      foreach(serial) {
+        double cvdiag,kdiag,hdiag;
+        double agdiag=clampd(ag_marker[],0.,1.);
+        double scdiag=clampd(sc_marker[],0.,1.-agdiag);
+        material_state(Tfield[],agdiag,scdiag,&cvdiag,&kdiag,&hdiag);
+        p1i_k_candidate_diag[]=kdiag;
+      }
+      boundary ({p1i_k_candidate_diag});
+      foreach_face() {
+        double kl=max(p1i_k_candidate_diag[],1.e-8);
+        double kr=max(p1i_k_candidate_diag[-1],1.e-8);
+        p1i_kappa_candidate_diag.x[]=2.*kl*kr/(kl+kr);
+      }
+      boundary ({p1i_kappa_candidate_diag});
+      double max_du = -1., max_rlin = -1., max_rp = -1., max_rfull = -1., max_rfrozen = -1.;
+      double max_linear_identity_error = 0., max_dhdt_relerr_pct = 0.;
+      int dh_i=0,dh_j=0,dh_k=0;
+      double dh_T=0.,dh_cvol=0.,dh_fd=0.;
+      double min_cvol = HUGE, max_cvol = -HUGE, min_kcandidate = HUGE, max_kcandidate = -HUGE;
+      double sum_rfull2 = 0., volume_sum = 0.;
+      double ux=0.,uy=0.,uz=0.,uTg=0.,uTn=0.,uAg=0.,uSC=0.,uHadv=0.,uhg=0.,uhn=0.,uCp0=0.,uCp1=0.,udHdT=0.,uk0=0.,uk1=0.;
+      double lxi=0.,lyi=0.,lzi=0., fxi=0.,fyi=0.,fzi=0.;
+      int ui=0,uj=0,uk=0, li=0,lj=0,lk=0, fi=0,fj=0,fk=0, nonfinite=0;
+      double fTg=0.,fTn=0.,fAg=0.,fSC=0.,fHadv=0.,fhg=0.,fhn=0.,fCp0=0.,fCp1=0.,fdHdT=0.,fk0=0.,fk1=0.;
+      double sink_iter = 0.;
+      foreach(serial) {
+        double ag = clampd(ag_marker[],0.,1.);
+        double sc = clampd(sc_marker[],0.,1. - ag);
+        double cvg, kg, hg, cvn, kn, hn;
+        material_state(Tguess[],ag,sc,&cvg,&kg,&hg);
+        material_state(Tfield[],ag,sc,&cvn,&kn,&hn);
+        double epsT = 0.05;
+        double cva,kva,hva, cvb,kvb,hvb;
+        material_state(Tfield[] + epsT,ag,sc,&cva,&kva,&hva);
+        material_state(Tfield[] - epsT,ag,sc,&cvb,&kvb,&hvb);
+        double dhdt_fd = (hva-hvb)/(2.*epsT);
+        double div_alpha = 0.;
+        foreach_dimension()
+          div_alpha += (kappa_heat.x[1]*face_gradient_x(Tfield,1) -
+                        kappa_heat.x[]*face_gradient_x(Tfield,0))/Delta;
+        double rp = rhs_heat[] - lambda_heat[]*Tfield[] - div_alpha;
+        double qvol = heat_step_scale*heat_source_scale*source_q[]*f[];
+        double div_k_guess = cv_ref/dt*div_alpha;
+        double div_k_candidate = 0.;
+        foreach_dimension()
+          div_k_candidate += (p1i_kappa_candidate_diag.x[1]*face_gradient_x(Tfield,1) -
+                              p1i_kappa_candidate_diag.x[]*face_gradient_x(Tfield,0))/Delta;
+        double rlin = (hg + cvg*(Tfield[]-Tguess[]) - Hadv[])/dt - div_k_guess - qvol;
+        double rfrozen = (hn - Hadv[])/dt - div_k_guess - qvol;
+        double rfull = (hn - Hadv[])/dt - div_k_candidate - qvol;
+        double linear_identity_error = fabs(rlin - cv_ref/dt*rp);
+        double dhdt_relerr_pct = 100.*fabs(cvn-dhdt_fd)/max(fabs(dhdt_fd),1.);
+        double du = fabs(Tfield[]-Tguess[]);
+        int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+        int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+        int kk=clamp((int)((z-Z0)/Delta),0,NCZ-1);
+        double xn=x*1.e9, yn=y*1.e9, zn=z*1.e9;
+        if (!isfinite(Tguess[]) || !isfinite(Tfield[]) || !isfinite(rp) || !isfinite(rfull) ||
+            !isfinite(cvg) || !isfinite(cvn) || !isfinite(kg) || !isfinite(kn) || !isfinite(dhdt_fd)) {
+          nonfinite++;
+        } else {
+          sum_rfull2 += rfull*rfull*dv();
+          volume_sum += dv();
+          max_linear_identity_error=max(max_linear_identity_error,linear_identity_error);
+          if (dhdt_relerr_pct > max_dhdt_relerr_pct) {
+            max_dhdt_relerr_pct=dhdt_relerr_pct; dh_i=ii;dh_j=jj;dh_k=kk;
+            dh_T=Tfield[];dh_cvol=cvn;dh_fd=dhdt_fd;
+          }
+          min_cvol=min(min_cvol,cvn); max_cvol=max(max_cvol,cvn);
+          min_kcandidate=min(min_kcandidate,kn); max_kcandidate=max(max_kcandidate,kn);
+          if (du > max_du) {
+            max_du=du; ui=ii;uj=jj;uk=kk; ux=xn;uy=yn;uz=zn;
+            uTg=Tguess[];uTn=Tfield[];uAg=ag;uSC=sc;uHadv=Hadv[];uhg=hg;uhn=hn;
+            uCp0=cvg;uCp1=cvn;udHdT=dhdt_fd;uk0=kg;uk1=kn;
+          }
+          if (fabs(rp) > max_rp) {
+            max_rp=fabs(rp);li=ii;lj=jj;lk=kk;lxi=xn;lyi=yn;lzi=zn;
+          }
+          max_rlin=max(max_rlin,fabs(rlin));
+          max_rfrozen=max(max_rfrozen,fabs(rfrozen));
+          if (fabs(rfull) > max_rfull) {
+            max_rfull=fabs(rfull);fi=ii;fj=jj;fk=kk;fxi=xn;fyi=yn;fzi=zn;
+            fTg=Tguess[];fTn=Tfield[];fAg=ag;fSC=sc;fHadv=Hadv[];fhg=hg;fhn=hn;
+            fCp0=cvg;fCp1=cvn;fdHdT=dhdt_fd;fk0=kg;fk1=kn;
+          }
+        }
+        if (fabs(z - (Z0 + 0.5*Delta)) < 0.25*Delta) {
+          int ix=clamp((int)((x-X0)/Delta),0,NC-1);
+          int iy=clamp((int)((y-Y0)/Delta),0,NC-1);
+          if (material_code[index3(ix,iy,0)] != 0)
+            sink_iter += 2.*kcell[]*max(0.,Tfield[]-300.)/Delta*sq(Delta);
+        }
+      }
+      double linear_scaled_max = max_rp;
+      double residual_ratio = heat_mg.resa != 0. ? linear_scaled_max/heat_mg.resa : NAN;
+      double poisson_equivalent_linearized_residual = heat_mg.resa*cv_ref/dt;
+      double rms_full = volume_sum > 0. ? sqrt(sum_rfull2/volume_sum) : NAN;
+#define P1I_CSV_D(v) fprintf(diag_fp,"%.12g,",(double)(v))
+      P1I_CSV_D(t*1.e12); P1I_CSV_D(thermal_nl_i+1); P1I_CSV_D(dt*1.e15); P1I_CSV_D(heat_mg.i);
+      P1I_CSV_D(heat_mg.resb); P1I_CSV_D(heat_mg.resa); P1I_CSV_D(linear_scaled_max); P1I_CSV_D(residual_ratio);
+      P1I_CSV_D(max_du); P1I_CSV_D(ui); P1I_CSV_D(uj); P1I_CSV_D(uk); P1I_CSV_D(ux); P1I_CSV_D(uy); P1I_CSV_D(uz);
+      P1I_CSV_D(uTg); P1I_CSV_D(uTn); P1I_CSV_D(uAg); P1I_CSV_D(uSC); P1I_CSV_D(uHadv); P1I_CSV_D(uhg); P1I_CSV_D(uhn);
+      P1I_CSV_D(uCp0); P1I_CSV_D(uCp1); P1I_CSV_D(udHdT); P1I_CSV_D(uk0); P1I_CSV_D(uk1);
+      P1I_CSV_D(max_rlin); P1I_CSV_D(poisson_equivalent_linearized_residual); P1I_CSV_D(max_linear_identity_error); P1I_CSV_D(li); P1I_CSV_D(lj); P1I_CSV_D(lk); P1I_CSV_D(lxi); P1I_CSV_D(lyi); P1I_CSV_D(lzi);
+      P1I_CSV_D(max_rfull); P1I_CSV_D(fi); P1I_CSV_D(fj); P1I_CSV_D(fk); P1I_CSV_D(fxi); P1I_CSV_D(fyi); P1I_CSV_D(fzi);
+      P1I_CSV_D(fTg); P1I_CSV_D(fTn); P1I_CSV_D(fAg); P1I_CSV_D(fSC); P1I_CSV_D(fHadv); P1I_CSV_D(fhg); P1I_CSV_D(fhn);
+      P1I_CSV_D(fCp0); P1I_CSV_D(fCp1); P1I_CSV_D(fdHdT); P1I_CSV_D(fk0); P1I_CSV_D(fk1); P1I_CSV_D(rms_full);
+      P1I_CSV_D(max_rfrozen); P1I_CSV_D(max_dhdt_relerr_pct); P1I_CSV_D(dh_i); P1I_CSV_D(dh_j); P1I_CSV_D(dh_k);
+      P1I_CSV_D(dh_T); P1I_CSV_D(dh_cvol); P1I_CSV_D(dh_fd); P1I_CSV_D(min_cvol); P1I_CSV_D(max_cvol);
+      P1I_CSV_D(min_kcandidate); P1I_CSV_D(max_kcandidate); P1I_CSV_D(nonfinite); P1I_CSV_D(pin);
+      P1I_CSV_D(sink_iter); P1I_CSV_D(heat_step_scale); P1I_CSV_D(heat_source_scale);
+      fprintf(diag_fp,"%s\n",P1H_TOP_OPEN?"open":"dirichlet");
+#undef P1I_CSV_D
+      fflush(diag_fp);
+    }
+#endif
+    if (thermal_nl_change < 1.e-2) {
+      thermal_nl_converged = 1;
+      break;
+    }
+    /* Mild damping keeps the Newton step stable when it crosses a material
+     * property knot.  The converged fixed point is unchanged. */
+    foreach()
+      Tfield[] = 0.5*Tfield[] + 0.5*Tguess[];
+    boundary ({Tfield});
+  }
+#endif
+  if (!thermal_nl_converged) {
+    fprintf(stderr,"STOP nonlinear enthalpy solve failed at t_ps=%.9g, change_K=%.9g after %d iterations\n",
+            t*1.e12,thermal_nl_change,thermal_nl_i+1);
+    dump(file="p1h_failed_nonlinear.dump");
+    if (history) { fflush(history); fclose(history); history = NULL; }
+    return 1;
+  }
+  boundary ({Tfield});
+  refresh_properties();
+
+  foreach(reduction(+:psink)) {
+    if (fabs(z - (Z0 + 0.5*Delta)) < 0.25*Delta) {
+      int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+      int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+      int kk=0;
+      int code=material_code[index3(ii,jj,kk)];
+      if (code != 0)
+        psink += 2.*kcell[]*max(0.,Tfield[]-300.)/Delta*sq(Delta);
+    }
+  }
+  sink_energy += dt*psink;
+
+  double Tmax=300., Tmax_Ag=300., Tmax_SC=300., agvol=0., liquidvol=0., scvol=0., samplevol=0., agtemp=0., agweight=0.;
+  double umax=0., umax_vof_liquid=0., umax_vof_gas=0., umax_vof_interface=0.;
+  double surface_dep_sum=0., surface_count=0.;
+  double source_dep_sum=0., source_dep_count=0.;
+  double heights[NC*NC];
+  for (int ii=0; ii<NC*NC; ii++) heights[ii]=-HUGE;
+  foreach(reduction(max:Tmax) reduction(max:Tmax_Ag) reduction(max:Tmax_SC) reduction(+:agvol) reduction(+:liquidvol)
+          reduction(+:scvol) reduction(+:samplevol) reduction(+:agtemp) reduction(+:agweight)
+          reduction(max:umax) reduction(max:umax_vof_liquid) reduction(max:umax_vof_gas)
+          reduction(max:umax_vof_interface)) {
+    int ii=clamp((int)((x-X0)/Delta),0,NC-1);
+    int jj=clamp((int)((y-Y0)/Delta),0,NC-1);
+    Tmax=max(Tmax,Tfield[]);
+    double cell_u=norm(u);
+    umax=max(umax,cell_u);
+    if (f[] > 0.5) umax_vof_liquid=max(umax_vof_liquid,cell_u);
+    else umax_vof_gas=max(umax_vof_gas,cell_u);
+    if (f[] > 1.e-8 && f[] < 1. - 1.e-8)
+      umax_vof_interface=max(umax_vof_interface,cell_u);
+    samplevol+=f[]*dv();
+    double a=clampd(ag_marker[],0.,1. - clampd(sc_marker[],0.,1.));
+    double s=clampd(sc_marker[],0.,1.);
+    agvol+=a*dv();
+    liquidvol+=a*ag_liquid_fraction(Tfield[])*dv();
+    agtemp+=Tfield[]*a*dv();
+    agweight+=a*dv();
+    if (a > 1.e-8) Tmax_Ag=max(Tmax_Ag,Tfield[]);
+    scvol+=s*dv();
+    if (s > 1.e-8) Tmax_SC=max(Tmax_SC,Tfield[]);
+    if (f[] > 0.5) {
+      int ij=ii*NC+jj;
+      heights[ij]=max(heights[ij],z+0.5*Delta);
+    }
+  }
+  for (int ii=0; ii<NC; ii++)
+    for (int jj=0; jj<NC; jj++) {
+      int ij=ii*NC+jj;
+      if (heights[ij] <= -HUGE/2. || initial_surface_height[ij] <= -HUGE/2.)
+        continue;
+      double depression=initial_surface_height[ij] - heights[ij];
+      surface_dep_sum += depression;
+      surface_count += 1.;
+      double xc=(ii + 0.5)*delta_x;
+      double yc=(jj + 0.5)*delta_x;
+      if (sq(xc-source_x) + sq(yc-source_y) <= sq(5.e-9)) {
+        source_dep_sum += depression;
+        source_dep_count += 1.;
+      }
+    }
+  double depression_nm=surface_count>0. ? surface_dep_sum/surface_count*1.e9 : NAN;
+  double source_depression_nm=source_dep_count>0. ? source_dep_sum/source_dep_count*1.e9 : NAN;
+  double input_minus_bottom_mW=(pin-psink)*1.e3;
+  if (heat_on && !heat_hold_started && fabs(pin-psink) <= 0.01e-3)
+    balanced_steps++;
+  else
+    balanced_steps=0;
+  /* If the temperature crosses the target during this thermal update, begin
+     the prescribed hold at this measured state. Do not stop on input/sink
+     balance during the hold. */
+  if (heat_on && !heat_hold_started && Tmax_SC >= heat_target_K) {
+    heat_hold_started=1;
+    heat_hold_start_s=t;
+    heat_hold_end_s=t+heat_hold_duration_s;
+    heat_hold_snapshot_mask=0;
+    fprintf(stderr,"HEAT_HOLD_STARTED_2100K t_ps=%.9g Tmax_skeleton_K=%.9g next_step_power_balance=1 hold_duration_ps=%.9g hold_end_ps=%.9g\n",
+            t*1.e12,Tmax_SC,heat_hold_duration_s*1.e12,heat_hold_end_s*1.e12);
+    write_peak_pool_stats(t*1.e12,Tmax_SC);
+    write_pool_field_snapshot(t*1.e12,"hold_start_2100K");
+    write_restart_checkpoint(t*1.e12,i);
+  }
+  if (heat_on && !heat_hold_started) {
+    if (!isfinite(plateau_window_start_s)) {
+      plateau_window_start_s=t;
+      plateau_window_start_T_K=Tmax_SC;
+    }
+    else if (t-plateau_window_start_s >= plateau_window_s) {
+      double plateau_delta_K=Tmax_SC-plateau_window_start_T_K;
+      if (fabs(plateau_delta_K) <= plateau_tolerance_K)
+        plateau_stable_windows++;
+      else
+        plateau_stable_windows=0;
+      fprintf(stderr,"P1M_TEMPERATURE_WINDOW t_ps=%.9g Tmax_skeleton_K=%.9g window_ps=%.9g delta_K=%.9g stable_windows=%d required=%d\n",
+              t*1.e12,Tmax_SC,(t-plateau_window_start_s)*1.e12,
+              plateau_delta_K,plateau_stable_windows,plateau_windows_required);
+      plateau_window_start_s=t;
+      plateau_window_start_T_K=Tmax_SC;
+      if (Tmax_SC < heat_target_K &&
+          plateau_stable_windows >= plateau_windows_required) {
+        heat_hold_started=1;
+        heat_hold_start_s=t;
+        heat_hold_end_s=t+heat_hold_duration_s;
+        heat_hold_snapshot_mask=0;
+        fprintf(stderr,"HEAT_HOLD_STARTED_TEMPERATURE_PLATEAU t_ps=%.9g Tmax_skeleton_K=%.9g next_step_power_balance=1 hold_duration_ps=%.9g hold_end_ps=%.9g\n",
+                t*1.e12,Tmax_SC,heat_hold_duration_s*1.e12,heat_hold_end_s*1.e12);
+        write_peak_pool_stats(t*1.e12,Tmax_SC);
+        write_pool_field_snapshot(t*1.e12,"hold_start_temperature_plateau");
+        write_restart_checkpoint(t*1.e12,i);
+      }
+    }
+  }
+  /* If the source and bottom sink naturally balance before 2100 K, retain the
+     same 5 ps hold. The controller will keep the source matched to the sink. */
+  if (heat_on && !heat_hold_started &&
+      balanced_steps >= heat_balance_required_steps) {
+    heat_hold_started=1;
+    heat_hold_start_s=t;
+    heat_hold_end_s=t+heat_hold_duration_s;
+    heat_hold_snapshot_mask=0;
+    fprintf(stderr,"HEAT_HOLD_STARTED_INPUT_SINK_BALANCE t_ps=%.9g Tmax_skeleton_K=%.9g input_minus_bottom_mW=%.9g consecutive_steps=%d hold_duration_ps=%.9g hold_end_ps=%.9g\n",
+            t*1.e12,Tmax_SC,input_minus_bottom_mW,balanced_steps,
+            heat_hold_duration_s*1.e12,heat_hold_end_s*1.e12);
+    write_peak_pool_stats(t*1.e12,Tmax_SC);
+    write_pool_field_snapshot(t*1.e12,"hold_start_input_sink_balance");
+    write_restart_checkpoint(t*1.e12,i);
+  }
+  if (heat_on && heat_hold_started) {
+    const double offsets_ps[1]={5.};
+    const char * stages[1]={"hold_complete_5ps"};
+    for (int j=0; j<1; j++) {
+      uint32_t bit=1u<<j;
+      double event_s=heat_hold_start_s+offsets_ps[j]*1.e-12;
+      if (!(heat_hold_snapshot_mask & bit) && t+1.e-18 >= event_s) {
+        write_pool_field_snapshot(t*1.e12,stages[j]);
+        heat_hold_snapshot_mask |= bit;
+        fprintf(stderr,"HEAT_HOLD_SNAPSHOT offset_ps=%.1f actual_t_ps=%.9g hold_age_ps=%.9g Tmax_skeleton_K=%.9g\n",
+                offsets_ps[j],t*1.e12,(t-heat_hold_start_s)*1.e12,Tmax_SC);
+        write_restart_checkpoint(t*1.e12,i);
+      }
+    }
+  }
+  double rise_K = Tmax_SC - max_sc_now;
+  double rate_K_s = rise_K > 0. && dt > 0. ? rise_K/dt : 0.;
+  /* Forecast through the remaining source/pressure off-ramp and one full
+     next step. Keep a 5 K buffer below the tabulated ceiling so the hard
+     post-step guard cannot be reached by an accelerating temperature rise. */
+  double forecast_horizon_s = heat_source_ramp_s*0.5 + heat_dt_max_s;
+  double ramp_peak_prediction_K = Tmax_SC + rate_K_s*forecast_horizon_s;
+  if (heat_on && Tmax_SC <= SC_Tmax &&
+      rate_K_s > 0. &&
+      ramp_peak_prediction_K >= SC_Tmax - SC_predictive_margin_K &&
+      (!heat_hold_started || t+1.e-18 < heat_hold_end_s)) {
+    stop_heat_and_pressure_at(t);
+    write_peak_pool_stats(t*1.e12,Tmax_SC);
+    fprintf(stderr,"HEAT_OFF_PROPERTY_GUARD t_ps=%.9g Tmax_skeleton_K=%.9g predicted_after_ramp_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.9g ceiling_K=%.9g hold_started=%d hold_age_ps=%.9g hold_complete=0\n",
+            t*1.e12,Tmax_SC,ramp_peak_prediction_K,Tmax_Ag,
+            liquidvol/cube(1.e-9),SC_Tmax,heat_hold_started,
+            heat_hold_started ? (t-heat_hold_start_s)*1.e12 : 0.);
+  }
+  if (heat_on && heat_hold_started && t+1.e-18 >= heat_hold_end_s) {
+    stop_heat_and_pressure_at(t);
+    write_peak_pool_stats(t*1.e12,Tmax_SC);
+    fprintf(stderr,"HEAT_OFF_AFTER_BALANCED_HOLD t_ps=%.9g Tmax_skeleton_K=%.9g Tmax_Ag_K=%.9g liquid_Ag_nm3=%.9g hold_age_ps=%.9g hold_complete=1 balance_command_mW=%.9g\n",
+            t*1.e12,Tmax_SC,Tmax_Ag,liquidvol/cube(1.e-9),
+            (t-heat_hold_start_s)*1.e12,balance_command_power_W*1.e3);
+  }
+  /* Apply predictive timestep shrinking only while heating is still commanded
+     on.  Once heat is switched off, the smooth source/pressure off-ramp is
+     midpoint-integrated over the configured maximum step.  Keeping the
+     temperature-rise cap active during this prescribed ramp caused a severe
+     timestep collapse even while the measured peak temperature was falling.
+     The hard 2300 K guard below remains active and never clips temperature. */
+  double pending_heat_scale=heat_source_scale_at(t);
+  double predictive_limit_K=SC_Tmax-SC_predictive_margin_K;
+  if (heat_on && pending_heat_scale > 1.e-12 && Tmax_SC < predictive_limit_K &&
+      predictive_limit_K - Tmax_SC < 20. && rate_K_s > 0.) {
+    double safe_dt = 0.5*(predictive_limit_K - Tmax_SC)/rate_K_s;
+    DT = min(heat_dt_max_s,max(2.e-18,safe_dt));
+  }
+  else
+    DT = heat_dt_max_s;
+  if (heat_was_on && !heat_on) {
+    write_pool_field_snapshot(t*1.e12,"heat_off");
+    write_restart_checkpoint(t*1.e12,i);
+  }
+  double E=total_enthalpy();
+  double residual=(E-energy_initial)-input_energy+sink_energy;
+  double ag_drift_pct=ag_volume_initial>0. ? 100.*(agvol-ag_volume_initial)/ag_volume_initial : NAN;
+  max_temperature_seen=max(max_temperature_seen,Tmax);
+  if (history && (i%1==0)) {
+  fprintf(history,"%.9g,%d,%.9g,%.9g,%.9g,%.9g,%.9g,%.12g,%.9g,%.12g,%.12g,%.12g,%.9g,%.9g,%.12g,%.12g,%.12g,%.12g,%.12g,%d,%.9g,%d,%.9g,%d,%.9g,%d,%.9g,%.9g,%.9g,%.9g,%d\n",
+            t*1.e12,heat_on,Tmax,Tmax_Ag,Tmax_SC,agweight>0.?agtemp/agweight:300.,umax,
+            agvol/cube(1.e-9),ag_drift_pct,liquidvol/cube(1.e-9),scvol/cube(1.e-9),samplevol/cube(1.e-9),depression_nm,
+            source_depression_nm,
+            pin,E,input_energy,sink_energy,residual,mgp.i,mgp.resa,heat_mg.i,heat_mg.resa,thermal_nl_i+1,
+            thermal_nl_change,mgu.i,mgu.resa,dt*1.e15,heat_step_scale,input_minus_bottom_mW,balanced_steps);
+    fflush(history);
+  }
+  if (i%10==0) {
+    double ufmax=0.;
+    foreach_face(reduction(max:ufmax))
+      ufmax=max(ufmax,fabs(uf.x[]));
+    fprintf(stderr,"STEP i=%d t_ps=%.6g Tmax=%.6gK Tmax_Ag=%.6gK Tmax_SC=%.6gK liquid_Ag_nm3=%.6g depression_nm=%.6g heat=%d dt_fs=%.9g dtmax_fs=%.9g ufmax_m_s=%.9g\n",
+            i,t*1.e12,Tmax,Tmax_Ag,Tmax_SC,liquidvol/cube(1.e-9),depression_nm,heat_on,
+            dt*1.e15,DT*1.e15,ufmax);
+    if (heat_on && heat_hold_started)
+      fprintf(stderr,"P1M_BALANCED_HOLD t_ps=%.9g max_power_mW=%.9g commanded_mW=%.9g measured_input_mW=%.9g measured_sink_mW=%.9g net_mW=%.9g\n",
+              t*1.e12,source_power_target*1.e3,balance_command_power_W*1.e3,
+              pin*1.e3,psink*1.e3,input_minus_bottom_mW);
+  }
+  fprintf(stderr,"VELOCITY_PHASE_DIAGNOSTIC t_ps=%.9g liquid_f_gt_0p5_m_s=%.9g gas_f_le_0p5_m_s=%.9g interface_m_s=%.9g global_m_s=%.9g\n",
+          t*1.e12,umax_vof_liquid,umax_vof_gas,umax_vof_interface,umax);
+  if (Tmax_SC>SC_Tmax) {
+    fprintf(stderr,"STOP Ti3SiC2 property ceiling exceeded: %.9g K > %.9g K\n",Tmax_SC,SC_Tmax);
+    dump(file="p1h_failed_property_ceiling.dump");
+    if (history) { fflush(history); fclose(history); history = NULL; }
+    return 1;
+  }
+  /* The incompressible air cap is a numerical ambient, not a material whose
+   * velocity is part of the Ag-flow question.  Guard the liquid-side VOF
+   * velocity; retain finite-value checks on the full field. */
+  if (!isfinite(Tmax) || !isfinite(umax) || !isfinite(umax_vof_liquid) ||
+      umax_vof_liquid > 1000. || dt < 1.e-18) {
+    fprintf(stderr,"STOP flow/thermal divergence guard: Tmax=%.9g K umax_global=%.9g m/s umax_liquid_f_gt_0p5=%.9g m/s umax_gas_f_le_0p5=%.9g m/s dt=%.9g s\n",
+            Tmax,umax,umax_vof_liquid,umax_vof_gas,dt);
+    dump(file="p1h_failed_divergence.dump");
+    if (history) { fflush(history); fclose(history); history = NULL; }
+    return 1;
+  }
+  if (!heat_on && heat_source_scale_at(t) <= 1.e-12 &&
+      liquidvol/cube(1.e-9) <= 1.e-8)
+    solidified_steps++;
+  else
+    solidified_steps = 0;
+  if (solidified_steps >= 2) {
+    write_pool_field_snapshot(t*1.e12,"solidified");
+    write_restart_checkpoint(t*1.e12,i);
+#ifndef P1M_NO_FINAL_DUMP
+    dump(file="p1h_final_solidified.dump");
+#endif
+    fprintf(stderr,"DONE_SOLIDIFIED t_ps=%.9g Tmax=%.9g K Tmax_Ag=%.9g K Tmax_skeleton=%.9g K\n",
+            t*1.e12,Tmax,Tmax_Ag,Tmax_SC);
+    return 1;
+  }
+}
+
+/* Lightweight mid-run dimension reporting.  Use an iteration event and an
+ * explicit physical-time threshold: Basilisk time events can be skipped when
+ * dt adapts across their scheduled time in this coupled multiphysics run. */
+event periodic_pool_dimensions (i++,last)
+{
+  double time_ps = t*1.e12;
+  if (time_ps + 1.e-9 >= next_pool_report_ps) {
+    double Tmax_SC=300.;
+    foreach(reduction(max:Tmax_SC))
+      if (sc_marker[]>1.e-8)
+        Tmax_SC=max(Tmax_SC,Tfield[]);
+    write_peak_pool_stats(time_ps,Tmax_SC);
+    fprintf(stderr,"POOL_DIMENSIONS t_ps=%.9g Tmax_skeleton_K=%.9g\n",time_ps,Tmax_SC);
+    if (time_ps + 1.e-9 >= next_pool_field_snapshot_ps) {
+      write_pool_field_snapshot(time_ps,"regular");
+      do {
+        next_pool_field_snapshot_ps += POOL_FIELD_INTERVAL_PS;
+      } while (next_pool_field_snapshot_ps <= time_ps + 1.e-9);
+    }
+    if (time_ps + 1.e-9 >= next_pool_checkpoint_ps) {
+      write_restart_checkpoint(time_ps,i);
+      do {
+        next_pool_checkpoint_ps += POOL_CHECKPOINT_INTERVAL_PS;
+      } while (next_pool_checkpoint_ps <= time_ps + 1.e-9);
+    }
+    do {
+      next_pool_report_ps += POOL_REPORT_INTERVAL_PS;
+    } while (next_pool_report_ps <= time_ps + 1.e-9);
+  }
+}
+
+event acceleration (i++)
+{
+  /* Use Basilisk's 3-D height-function curvature for normal capillary
+   * stress.  integral.h's distance-curvature/tensor implementation in this
+   * pinned source is 2-D and must not be used on the octree grid. */
+  cstats curvature_stats = curvature (f, kappa_field);
+  (void) curvature_stats;
+  phi_normal = new scalar;
+  double pressure_max = 0., max_tangent_gamma_gradient = 0.;
+  double max_marangoni_acceleration = 0., max_near_gas_marangoni_acceleration = 0.;
+  foreach(reduction(max:pressure_max)
+          reduction(max:max_tangent_gamma_gradient)
+          reduction(max:max_marangoni_acceleration)
+          reduction(max:max_near_gas_marangoni_acceleration)) {
+    double p_raw = p1h_arc_pressure_at(&arc_pressure_cfg,x,y,t);
+    double p_mask = 0., p_effective = 0.;
+    coord grad_f = {0.,0.,0.};
+    marangoni_cell.x[] = marangoni_cell.y[] = marangoni_cell.z[] = 0.;
+    if (f[] > 1.e-8 && f[] < 1. - 1.e-8) {
+      grad_f = (coord){
+        (f[1] - f[-1])/(2.*Delta),
+        (f[0,1] - f[0,-1])/(2.*Delta),
+        (f[0,0,1] - f[0,0,-1])/(2.*Delta)
+      };
+      coord grad_gamma = {
+        (gamma_field[1] - gamma_field[-1])/(2.*Delta),
+        (gamma_field[0,1] - gamma_field[0,-1])/(2.*Delta),
+        (gamma_field[0,0,1] - gamma_field[0,0,-1])/(2.*Delta)
+      };
+      double gn = sqrt(sq(grad_f.x) + sq(grad_f.y) + sq(grad_f.z));
+      if (gn > 1.e-12) {
+        coord n = {grad_f.x/gn, grad_f.y/gn, grad_f.z/gn};
+        double ag_surface_coverage = f[] > 1.e-12 ?
+          clampd(ag_marker[]/f[],0.,1.) : 0.;
+        double liquid_ag_surface_coverage =
+          ag_surface_coverage*liquid_fraction[];
+        p_mask = p1h_arc_pressure_mask(ag_surface_coverage,liquid_fraction[],n.z);
+        p_effective = p_raw*p_mask;
+        double normal_gradient = grad_gamma.x*n.x + grad_gamma.y*n.y + grad_gamma.z*n.z;
+        double tangent_x=grad_gamma.x - normal_gradient*n.x;
+        double tangent_y=grad_gamma.y - normal_gradient*n.y;
+        double tangent_z=grad_gamma.z - normal_gradient*n.z;
+        double rho_mix = max(1., f[]*rho1 + (1. - f[])*rho2);
+        /* Surface traction is weighted by the locally exposed liquid-Ag
+         * fraction before division by mixture inertia. This prevents a
+         * near-pure gas cell from receiving the full Ag stress divided by
+         * air density. The normal capillary potential above is unchanged. */
+        double marangoni_weight = f[]*liquid_ag_surface_coverage/rho_mix;
+        marangoni_cell.x[] = tangent_x*gn*marangoni_weight;
+        marangoni_cell.y[] = tangent_y*gn*marangoni_weight;
+        marangoni_cell.z[] = tangent_z*gn*marangoni_weight;
+        marangoni_cell.x[] *= marangoni_multiplier;
+        marangoni_cell.y[] *= marangoni_multiplier;
+        marangoni_cell.z[] *= marangoni_multiplier;
+        double tangent_gradient=sqrt(sq(tangent_x)+sq(tangent_y)+sq(tangent_z));
+        double local_acceleration=sqrt(sq(marangoni_cell.x[])+sq(marangoni_cell.y[])+sq(marangoni_cell.z[]));
+        max_tangent_gamma_gradient=max(max_tangent_gamma_gradient,tangent_gradient);
+        max_marangoni_acceleration=max(max_marangoni_acceleration,local_acceleration);
+        if (f[] < 1.e-3)
+          max_near_gas_marangoni_acceleration=max(max_near_gas_marangoni_acceleration,local_acceleration);
+      }
+    }
+    double capillary_potential = kappa_field[] < nodata ?
+      sigmaf[]*kappa_field[] : 0.;
+    int interface_cell = f[] > 1.e-8 && f[] < 1. - 1.e-8;
+    total_normal_stress_field[] = interface_cell ?
+      capillary_potential + p_effective : 0.;
+    phi_normal[] = interface_cell ? total_normal_stress_field[] : nodata;
+    arc_pressure_raw[] = p_raw;
+    arc_pressure_mask[] = p_mask;
+    arc_pressure_effective[] = p_effective;
+    pressure_max = max(pressure_max,p_effective);
+  }
+  boundary ({phi_normal,marangoni_cell,arc_pressure_raw,arc_pressure_mask,
+             arc_pressure_effective,total_normal_stress_field});
+  double pressure_force_z = 0.;
+  foreach_face(z, reduction(+:pressure_force_z)) {
+    int current_interface = f[] > 1.e-8 && f[] < 1. - 1.e-8;
+    int lower_interface = f[0,0,-1] > 1.e-8 && f[0,0,-1] < 1. - 1.e-8;
+    if (f[] != f[0,0,-1] && (current_interface || lower_interface)) {
+      double p_face = current_interface && lower_interface ?
+        0.5*(arc_pressure_effective[] + arc_pressure_effective[0,0,-1]) :
+        current_interface ? arc_pressure_effective[] : arc_pressure_effective[0,0,-1];
+      pressure_force_z += p_face*(f[] - f[0,0,-1])/Delta*dv();
+    }
+  }
+  arc_pressure_force_z_N = pressure_force_z;
+  arc_pressure_max_effective_Pa = pressure_max;
+  fprintf(stderr,"P1J_FORCE_AUDIT t_ps=%.9g gamma_gradient_tan_max_N_m2=%.9g marangoni_accel_max_m_s2=%.9g near_gas_accel_max_m_s2=%.9g arc_pressure_max_Pa=%.9g arc_force_z_N=%.9g\n",
+          t*1.e12,max_tangent_gamma_gradient,max_marangoni_acceleration,
+          max_near_gas_marangoni_acceleration,pressure_max,pressure_force_z);
+  f.phi = phi_normal;
+
+  if (arc_pressure_history) {
+    fprintf(arc_pressure_history,"%.12g,%.12g,%.12g,%.12g,%.12g,%d,%s\n",
+            t*1.e12,heat_source_scale_at(t),arc_pressure_cfg.peak_Pa,arc_pressure_max_effective_Pa,
+            arc_pressure_force_z_N,arc_pressure_cfg.enabled,
+            arc_pressure_cfg.profile == P1H_PRESSURE_UNIFORM ? "uniform" : "periodic_gaussian");
+    fflush(arc_pressure_history);
+  }
+
+  foreach_face() {
+    double drag=0.5*(drag_cell[]+drag_cell[-1]);
+    a.x[] += (marangoni_enabled ? 0.5*(marangoni_cell.x[] + marangoni_cell.x[-1]) : 0.) - drag*u.x[];
+  }
+}
+
+event stop (t = max_time_s)
+{
+  double ufmax=0., umax=0.;
+  foreach_face(reduction(max:ufmax))
+    ufmax=max(ufmax,fabs(uf.x[]));
+  foreach(reduction(max:umax))
+    umax=max(umax,norm(u));
+  fprintf(stderr,"STOP_DIAG t_ps=%.9g dt_fs=%.9g dtmax_fs=%.9g ufmax_m_s=%.9g umax_m_s=%.9g\n",
+          t*1.e12,dt*1.e15,DT*1.e15,ufmax,umax);
+#ifndef P1M_NO_AUX_SNAPSHOTS
+  write_pool_field_snapshot(t*1.e12,"max_time");
+#endif
+#ifndef P1I_PREFLIGHT
+  write_restart_checkpoint(t*1.e12,i);
+#ifndef P1M_NO_FINAL_DUMP
+  dump(file="p1h_final.dump");
+#endif
+#endif
+  fprintf(stderr,"MAX_TIME_STOP t_ps=%.9g; check liquid_Ag_volume_nm3 in p1h_history.csv to determine whether cooling completed\n",
+          t*1.e12);
+  if (history) fclose(history);
+  if (arc_pressure_history) { fclose(arc_pressure_history); arc_pressure_history = NULL; }
+  return 1;
+}
