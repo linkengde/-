@@ -220,7 +220,12 @@ class AgEnthalpy:
 
 
 class Ti3SiC2ThermalProperties:
-    """Linear first-pass Cp/k interpolation with a hard upper data limit."""
+    """Barsoum-based Ti3SiC2 Cp(T), k(T), and analytically integrated enthalpy.
+
+    Cp_molar = 164.4 - 16419/T (T in K), from Barsoum et al. (1999).
+    k = 38.6 - 0.0045*T, from the same paper (reported fit R^2=0.86).
+    The 2000 K endpoint is an extrapolation, not a measured property value.
+    """
 
     def __init__(
         self,
@@ -228,24 +233,78 @@ class Ti3SiC2ThermalProperties:
         config_path: Path = DEFAULT_CONFIG,
     ) -> None:
         config = json.loads(config_path.read_text())
-        self.molar_mass_kg_mol = float(config["ti3sic2"]["molar_mass_kg_mol"])
-        self.density_kg_m3 = float(config["ti3sic2"]["density_kg_m3"])
+        material = config["ti3sic2"]
+        self.molar_mass_kg_mol = float(material["molar_mass_kg_mol"])
+        self.density_kg_m3 = float(material["density_kg_m3"])
+        self.reference_temperature_K = float(material["reference_temperature_K"])
+        self.maximum_temperature_K = float(material["maximum_temperature_K"])
+        cp_model = material["cp_model"]
+        k_model = material["conductivity_model"]
+        self.cp_a_J_mol_K = float(cp_model["a_J_mol_K"])
+        self.cp_b_J_mol = float(cp_model["b_J_mol"])
+        self.k_intercept_W_m_K = float(k_model["intercept_W_m_K"])
+        self.k_slope_W_m_K2 = float(k_model["slope_W_m_K2"])
+
         rows = _rows_for(Path(table_path), "Ti3SiC2", "solid")
         self.temperature_K = _column(rows, "temperature_K")
-        self.cp_mass_J_kg_K = _column(rows, "Cp_molar_J_mol_K") / self.molar_mass_kg_mol
-        self.conductivity_data_W_m_K = _column(rows, "thermal_conductivity_W_m_K")
+        table_cp_molar = _column(rows, "Cp_molar_J_mol_K")
+        table_k = _column(rows, "thermal_conductivity_W_m_K")
+        if not np.isclose(self.temperature_K[0], self.reference_temperature_K):
+            raise ValueError("Ti3SiC2 candidate table must start at the configured reference temperature")
+        if not np.isclose(self.temperature_K[-1], self.maximum_temperature_K):
+            raise ValueError("Ti3SiC2 candidate table must end at the configured maximum temperature")
 
-    def _interpolate(self, values: np.ndarray, temperature_K: np.ndarray | float) -> np.ndarray | float:
+        expected_cp = np.asarray(self.cp_molar_J_mol_K(self.temperature_K))
+        expected_k = np.asarray(self.conductivity_W_m_K(self.temperature_K))
+        if not np.allclose(table_cp_molar, expected_cp, rtol=1.0e-10, atol=1.0e-8):
+            raise ValueError("Ti3SiC2 CSV Cp checkpoints do not match the configured Barsoum relation")
+        if not np.allclose(table_k, expected_k, rtol=1.0e-10, atol=1.0e-10):
+            raise ValueError("Ti3SiC2 CSV conductivity checkpoints do not match the configured Barsoum relation")
+        self.cp_mass_J_kg_K = expected_cp / self.molar_mass_kg_mol
+        self.conductivity_data_W_m_K = expected_k
+
+    def _check_temperature(self, temperature_K: np.ndarray | float) -> np.ndarray:
         temperature = np.asarray(temperature_K, dtype=float)
-        if np.any((temperature < self.temperature_K[0]) | (temperature > self.temperature_K[-1])):
+        if np.any(temperature <= 0.0):
+            raise ValueError("Ti3SiC2 temperature must be positive")
+        if np.any(temperature > self.maximum_temperature_K + 1.0e-9):
             raise ValueError(
-                f"Ti3SiC2 candidate table only covers {self.temperature_K[0]}–{self.temperature_K[-1]} K"
+                f"Ti3SiC2 property model upper limit is {self.maximum_temperature_K:.2f} K"
             )
-        result = np.interp(temperature, self.temperature_K, values)
+        return temperature
+
+    def cp_molar_J_mol_K(self, temperature_K: np.ndarray | float) -> np.ndarray | float:
+        temperature = self._check_temperature(temperature_K)
+        effective = np.maximum(temperature, self.reference_temperature_K)
+        result = self.cp_a_J_mol_K - self.cp_b_J_mol / effective
         return _scalarize(temperature_K, result)
 
     def cp_J_kg_K(self, temperature_K: np.ndarray | float) -> np.ndarray | float:
-        return self._interpolate(self.cp_mass_J_kg_K, temperature_K)
+        result = np.asarray(self.cp_molar_J_mol_K(temperature_K)) / self.molar_mass_kg_mol
+        return _scalarize(temperature_K, result)
+
+    def specific_enthalpy_J_kg(self, temperature_K: np.ndarray | float) -> np.ndarray | float:
+        """Specific sensible enthalpy relative to 300 K, in J/kg."""
+        temperature = self._check_temperature(temperature_K)
+        reference = self.reference_temperature_K
+        effective = np.maximum(temperature, reference)
+        integrated = (
+            self.cp_a_J_mol_K * (effective - reference)
+            - self.cp_b_J_mol * np.log(effective / reference)
+        ) / self.molar_mass_kg_mol
+        cp_reference = (
+            self.cp_a_J_mol_K - self.cp_b_J_mol / reference
+        ) / self.molar_mass_kg_mol
+        result = np.where(
+            temperature < reference,
+            cp_reference * (temperature - reference),
+            integrated,
+        )
+        return _scalarize(temperature_K, result)
 
     def conductivity_W_m_K(self, temperature_K: np.ndarray | float) -> np.ndarray | float:
-        return self._interpolate(self.conductivity_data_W_m_K, temperature_K)
+        temperature = self._check_temperature(temperature_K)
+        result = self.k_intercept_W_m_K + self.k_slope_W_m_K2 * temperature
+        if np.any(result <= 0.0):
+            raise ValueError("Ti3SiC2 conductivity relation returned a nonpositive value")
+        return _scalarize(temperature_K, result)
