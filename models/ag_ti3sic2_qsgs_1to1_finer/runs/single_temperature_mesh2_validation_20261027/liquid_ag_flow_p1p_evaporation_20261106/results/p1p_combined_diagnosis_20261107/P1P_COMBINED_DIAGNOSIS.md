@@ -77,6 +77,12 @@ The available evidence supports **one resolved dominant liquid pool plus disconn
 
 The isolated C replay confirmed the immediate status as a property-table range error and recorded cell coordinates, reconstructed interface temperatures, fractions, and advected enthalpy. Gas-dominated inversion of the logged `Hadv` explains the temperature scale, and the current permissive nonzero-fraction checks let these nearly empty interface cells reach the Ag property lookup. The original run's 7-cell event was not exactly reproduced: the replay stopped earlier with 5 cells. Before another evaporation-enabled full run, reconcile that difference and trace why enthalpy remains in cells whose VOF and material fractions are nearly zero. Validate a minimum-interface criterion and phase-consistent temperature reconstruction before changing production code. Also repair the pre-step enthalpy/property guard diagnostic so it distinguishes an inversion sentinel from an actual material temperature. No further heating run was launched as part of this report.
 
+### Follow-up: baseline nonlinear failure is a separate event
+
+The implementation handoff also records an evaporation-off synthetic smoke failure in the second thermal step. The matched evaporation-on/off 1 fs pair reaches the same first-step state and then fails at `0.00026446281 ps` after 81 reported iterations with a `102.081935 K` update. This proves that the observed nonlinear convergence failure is independent of the evaporation source. It is not the same event as C's property-range stop at about `9.3 ps`, which occurs earlier in the P1P source path, before thermal iteration. The common `Hvol`/`Hadv` and composition inversion route warrants audit, but the shared root cause remains unproven. See `P1P_BASELINE_FAILURE_CORRELATION.md` for the separated evidence and next diagnostic sequence.
+
+An offline restore of the archived no-evap failed dump found no above-2000 K enthalpy-inversion cells and no stored component-partition error. The maximum local mismatch between the inverted `Hadv` temperature and the terminal `Tfield` was `59.793 K`, at a full Ti₃SiC₂ cell. This confirms the dump represents an unconverged nonlinear endpoint; it does not identify the convergence cause. Because `Hvol` is overwritten by nonlinear candidate enthalpy while `Hadv` retains the target, their difference in this terminal dump is not a conservative-advection error metric. See `P1P_NO_EVAP_FAILED_DUMP_FIELD_AUDIT.csv`.
+
 ## Generated files
 
 - `P1P_ABC_FULL_FINAL_COMPARISON.csv`

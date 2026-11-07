@@ -12,6 +12,10 @@ The solver's mixture inversion uses `air_fraction = max(0, 1 - Ag_fraction - Ti3
 
 The current evaporation loop accepts any interface cell with `f > 1×10⁻¹²`, then accepts any Ag coverage above `1×10⁻¹²`. The five replay cells pass those checks: `f` is `5.96×10⁻¹¹–1.17×10⁻⁹`, Ag coverage is `0.0137–0.0432`, and PLIC area is only `4.45×10⁻⁸–3.86×10⁻⁷` of a nominal cell face. They therefore pass the current “nonzero interface” test despite containing vanishingly small total material volume. This explains how gas-dominated cells reach the Ag evaporation property lookup. No threshold or production code was changed; a defensible minimum-interface criterion and a phase-consistent temperature reconstruction need separate validation.
 
+## Relation to the evaporation-off enthalpy failure
+
+This C replay localizes the immediate stop in the P1P property lookup before the thermal nonlinear solve. It must not be conflated with the separately archived second-step nonlinear enthalpy failure in the synthetic evaporation-off smoke control. The implementation handoff explicitly required that no-evaporation baseline failure to be understood before judging P1P. The two events share the `Hvol`/`Hadv` and composition-to-temperature inversion path, but current logs do not demonstrate a common root cause. The matched 1 fs smoke control fails at `0.00026446281 ps` after 81 reported nonlinear iterations with a `102.081935 K` update whether evaporation is on or off; C stops around `9.3 ps` during interface property-range validation. See `../p1p_combined_diagnosis_20261107/P1P_BASELINE_FAILURE_CORRELATION.md` for the evidence and frozen next diagnostic.
+
 ## Preserved artifacts and hashes
 
 - Restart field SHA256: `685f96295a5618a8bb76b40ac65c3e8f4e547bcc147d647a6ecc53ed723fb07a`

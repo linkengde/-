@@ -41,6 +41,14 @@ The completed evidence supports: **A and B each had one resolved dominant liquid
 
 Do not claim that pressure or Marangoni has no physical role, or that real nanoscale contacts cannot form pits. The present grid, voxelized surface representation, constitutive assumptions, and incomplete C run limit that inference. The immediate C stop is confirmed as a property-table range rejection in an instrumented replay, but the anomalous reconstructed interface temperature and tiny cell fractions still need root-cause analysis before any further evaporation-enabled full case. No new long calculation was started here.
 
+## Follow-up correction: keep the two enthalpy failures separate
+
+The P1P implementation handoff records a second-step nonlinear enthalpy failure in the synthetic evaporation-off baseline and requires it to be understood before P1P acceptance. The archived matched 1 fs smoke pair confirms the same failure with evaporation on and off, at `0.00026446281 ps`, after 81 reported iterations with a `102.081935 K` update. This is independent of the evaporation source and is a baseline solver issue under the manufactured hot initial condition.
+
+An offline read of the archived no-evap failed dump restored all `311,296` cells and found no inversion temperatures above `1409.80 K`, no above-2000 K cells, and no component partition error. The terminal nonconverged iterate still differs from `T(Hadv,composition)` by up to `59.793 K`; the dump narrows the symptom to nonlinear thermal convergence but does not establish its cause. The differing terminal `Hvol` and `Hadv` values are not an advection residual because `Hvol` holds the last nonlinear candidate enthalpy. Full field summary: `P1P_NO_EVAP_FAILED_DUMP_FIELD_AUDIT.csv`.
+
+That failure is distinct from C's later stop: the C run is rejected during P1P interface-property validation, before the thermal nonlinear solve. Both use the advected enthalpy and composition inversion route, so that route is a shared audit target; a common root cause has not been proven. The C-cell trace/near-gas interpretation remains an explanation of the immediate C property-range rejection only. Formal flow remains frozen; no production changes or new heating runs are authorized by this report. See `P1P_BASELINE_FAILURE_CORRELATION.md` and `P1P_FAILURE_PATH_COMPARISON.csv`.
+
 ## Files
 
 - `P1P_ABC_FULL_FINAL_COMPARISON.csv`: case settings, stop/completion status, peak pool, mass/energy totals, evaporation, and pressure load.
