@@ -19,11 +19,11 @@ The GPAW method is PBE/LCAO/dzp, non-spin-polarized, Fermi–Dirac width 0.1 eV,
 | 1×1 Ti/top method-control path, 3×3×1 | Nominal gaps 10, 8, 6 and 5 Å each converged; the 5 Å point took 44 SCF cycles | Tests the code and electronic settings only. This cell has 2.25% strain and only 9 atoms; it is not the low-mismatch interface. |
 | 13:12 low-strain Ti/top, 3×3×1 at 10 Å | Stopped after 10 minutes before the first SCF iteration; no energy/force accepted | 2,565 DZP basis functions, 748 bands and 5 irreducible k-points made this initial screen too costly in the local run. It is not evidence of non-convergence. |
 | 13:12 low-strain Ti/top, Γ only at 10 Å | SCF converged in 44 cycles: native energy −576.23719063 eV/cell; free energy −578.34881261 eV/cell; Ag-film total Fz −0.02559 eV/Å; maximum atomic force 1.2884 eV/Å | A valid Γ-point SCF diagnostic on the unrelaxed starting geometry. The large residual force means this is not a relaxed surface or interface reference. Do not use it to calculate binding energy. |
-| 13:12 low-strain Ti/top, Γ only at 3 Å | Resumed after the saved 10 Å point. At the time of this repository update (04:48 UTC), 8 SCF iterations had completed and the point was not converged. | In progress; no 3 Å energy or force is accepted until GPAW reports convergence. |
+| 13:12 low-strain Ti/top, Γ only at 3 Å | Resumed after the saved 10 Å point. At the time of this repository update (05:13 UTC), 29 SCF iterations had completed; the latest electronic energy was −587.732560 eV/cell, but the point was not converged. | In progress; no 3 Å energy or force is accepted until GPAW reports convergence. |
 
 The 10 Å point was written before the explicit post-save MPICH barrier failed with `Message truncated`. The continuation therefore skips that per-point barrier. The successful launch uses the MPICH `mpiexec.hydra` shipped with the GPAW environment; the system OpenMPI launcher is ABI-incompatible with this GPAW build. The failed 3×3 and barrier attempts are logged separately; no failed or unfinished energy was copied into the accepted point list.
 
-The run logs and progress JSON files remain in the local working directory and are not included in this documentation-only branch. The 3 Å Γ-point continuation was active when this status was recorded; until its SCF convergence is confirmed, it has no accepted contact energy.
+The run logs and progress JSON files remain in the local working directory and are not included in this documentation-only branch. The 3 Å Γ-point continuation remained active at 05:13 UTC; until GPAW reports SCF convergence, the partial energy is not an accepted contact energy and must not enter a binding-energy calculation.
 
 ## What remains before an interface curve is admissible
 
