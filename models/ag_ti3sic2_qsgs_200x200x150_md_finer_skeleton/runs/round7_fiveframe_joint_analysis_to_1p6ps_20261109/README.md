@@ -21,7 +21,7 @@ These values demonstrate that the code advanced and kept a small numerical energ
 
 ## Five-frame Q6/PTM/MSD screen
 
-The screen uses the same five frames spanning 0.60–1.60 ps and the same initial Newton-layer Ag atoms inside the central source-core region. Per-atom displacement is drift-corrected and accumulated with x/y minimum-image unwrapping. The temporary rules are:
+The screen uses the same five frames spanning 0.60–1.60 ps and the initial Newton-layer Ag subset selected by the legacy spatial mask. Per-atom displacement is drift-corrected and accumulated with x/y minimum-image unwrapping. The temporary rules are:
 
 - mean Ag Q₆ < 0.408106928, using a 4.0 Å neighbor cutoff;
 - PTM non-FCC fraction ≥ 0.80 over the five frames;
@@ -30,7 +30,7 @@ The screen uses the same five frames spanning 0.60–1.60 ps and the same initia
 
 The numerical criteria were borrowed from Round5 pure-Ag development-potential references. Round7-specific solid/liquid calibration has not been done. Treat these as mobile, disordered Ag candidates, not confirmed liquid atoms.
 
-The source core contains 6,448 Ag atoms: 2,989 pass all three criteria and 3,459 fail at least one. The screen finds 148 Ag candidate clusters. The largest contains 1,683 atoms, with a periodicity-aware bounding box of approximately 84.3 × 147.0 × 40.2 Å and a geometric convex-hull envelope of 201,756 Å³. The elongated, scaffold-interrupted shape and box dimensions do not mean a spherical or fully connected macroscopic melt pool exists.
+The script's spatial prefilter contains 6,448 Ag atoms: 2,989 pass all three criteria and 3,459 fail at least one. A code audit found that the prefilter omits its computed y displacement, so this is an x–z band spanning y, not a true central radial source core. The screen finds 148 Ag candidate clusters. The largest contains 1,683 atoms, with a periodicity-aware bounding box of approximately 84.3 × 147.0 × 40.2 Å and a geometric convex-hull envelope of 201,756 Å³. The elongated, scaffold-interrupted shape and box dimensions do not mean a spherical or fully connected macroscopic melt pool exists. Treat these as provisional joint-screen candidates; see `ROUND7_1P6PS_Q6_PTM_MSD_AUDIT.md` for the exact rules, count breakdown, and limitations.
 
 For comparison, the preceding 0.40–1.40 ps screen found 2,667 joint candidates, 159 clusters, and a largest cluster of 1,454 atoms (177,958 Å³ hull envelope; 83.5 × 171.3 × 33.6 Å bounding box). The rolling-window screen therefore shows more mobile/disordered candidates and a larger largest component at 1.60 ps, while the component count falls. Because the windows are shifted, candidate membership and dimensions change, and the MTP is uncalibrated, this is evidence of increased candidate connectivity only—not proof that a specific pair of pools merged.
 
@@ -41,7 +41,9 @@ For comparison, the preceding 0.40–1.40 ps screen found 2,667 joint candidates
 - `round7_1p6ps_joint_screen.json` — complete metrics, rules, and limitations.
 - `round7_1p6ps_joint_candidates.dump` — all Ag atoms passing the joint screen in the endpoint frame.
 - `round7_1p6ps_largest_candidate_cluster.dump` — endpoint atoms in the largest connected candidate component.
-- `round7_1p6ps_source_core_ag.csv` — per-atom Q₆/PTM/MSD values for the source-core Ag subset.
+- `round7_1p6ps_source_core_ag.csv` — per-atom Q₆/PTM/displacement values for the Ag subset selected by the legacy spatial mask (filename retained for traceability).
+- `ROUND7_1P6PS_Q6_PTM_MSD_AUDIT.md` — code-level parameter audit, Round5 threshold provenance, recomputed intersections, and known spatial-mask defect.
+- `round5_threshold_provenance/` — the calibration report, JSON thresholds, reference metrics, and Round5 analyzer used to trace inherited cutoffs.
 - `run_summary_1p6ps.json` — continuation summary and checkpoint records.
 - `SHA256SUMS.json` — file sizes and SHA-256 checksums for the package files.
 - `extract_round7_joint_snapshot.py`, `pack_fiveframe_full_trajectory.py` — analysis and trajectory packaging utilities.

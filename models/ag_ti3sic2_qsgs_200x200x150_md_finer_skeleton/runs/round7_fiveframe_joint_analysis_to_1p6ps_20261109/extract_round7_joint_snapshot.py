@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exploratory 0.4 ps Q6/PTM/MSD screen for the active Round7 TTMD run."""
+"""Exploratory multi-frame Q6/PTM/displacement screen for the active Round7 TTMD run."""
 from __future__ import annotations
 
 import csv
@@ -57,6 +57,8 @@ def load_initial():
     dx = (xyz[:, 0] - 100.0 + BOX_XY / 2) % BOX_XY - BOX_XY / 2
     dy = (xyz[:, 1] - 100.0 + BOX_XY / 2) % BOX_XY - BOX_XY / 2
     depth = np.maximum(0.0, 150.0 - xyz[:, 2])
+    # Historical 1.6 ps screen: dy is computed but omitted below. This is an x-z
+    # band spanning y, not a radial source core; see the accompanying audit.
     core = newton & (types == 4) & ((dx / 30.0) ** 2 + depth / 20.0 <= 2.0)
     return ids, types, newton, core
 
@@ -200,7 +202,8 @@ def main():
         "source_run": str(RUN), "snapshot_endpoint_ps": float(END_PS), "window_ps": [float(TIMES[0]), float(TIMES[-1])],
         "window_duration_ps": WINDOW_PS, "sample_interval_ps": SAMPLE_INTERVAL_PS,
         "potential": "Round7 energy-force pilot MTP; not independently validated for liquid Ag/interface behavior",
-        "same_atoms": "initial Newton-layer Ag atoms in the central TTM source core",
+        "same_atoms": "initial Newton-layer Ag atoms selected by the legacy x-z spatial prefilter (dy omitted; not a radial source core)",
+        "spatial_prefilter_note": "The legacy predicate computes dy but does not use it; selected atoms span y wherever the x-z condition passes.",
         "source_core_ag_atoms": int(core.sum()), "joint_candidate_atoms": int(joint.sum()),
         "rule": {
             "q6": f"mean per-atom Ag q6 over this window < {Q6_SCREEN:.9f}; cutoff {Q6_CUTOFF_A} A",
@@ -223,7 +226,8 @@ def main():
 
     with (OUT / f"round7_{END_TAG}ps_source_core_ag.csv").open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream)
-        writer.writerow(["atom_id", "mean_q6_0p4ps", "ptm_nonfcc_fraction_0p4ps", "msd_i_0p4ps_A2", "joint_candidate"])
+        window_tag = f"{WINDOW_PS:g}ps"
+        writer.writerow(["atom_id", f"mean_q6_{window_tag}", f"ptm_nonfcc_fraction_{window_tag}", f"msd_i_{window_tag}_A2", "joint_candidate"])
         for i in np.flatnonzero(core):
             writer.writerow([int(ids0[i]), float(q6_mean[i]), float(nonfcc[i]), float(msd_i[i]), int(joint[i])])
     timestep = int(round(END_PS * 10000))
