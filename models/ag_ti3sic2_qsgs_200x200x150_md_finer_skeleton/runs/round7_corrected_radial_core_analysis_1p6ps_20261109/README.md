@@ -22,3 +22,10 @@ The per-criterion counts and fail-pattern breakdown are in `CORRECTED_RADIAL_COR
 - `round7_1p6ps_joint_screen.json` — machine-readable settings and cluster summary.
 - `round7_1p6ps_source_core_ag.csv` — per-atom values for the 1,787-atom corrected subset.
 - `reanalyze_corrected_radial_core.py` — analysis script with the radial y term restored.
+- `round7_1p6ps_corrected_full_system.ovito` — five-frame full-system OVITO state: black Ti₃SiC₂, pale-blue Ag, and 0.38-transparent orange joint candidates.
+- `round7_1p6ps_largest_cluster.ovito` — independent OVITO state for the 693-atom largest candidate cluster.
+- `make_ovito_visualizations.py` — recreates both OVITO states from the full-system trajectory, corrected candidate CSV, and cluster dump.
+- `ptm_coordination_diagnostic.json`, `diagnose_ptm_coordination.py` — framewise FCC/HCP/BCC/Other counts and Ag-only 4 Å neighbor-count diagnostics.
+- Full-system five-frame LAMMPS trajectory: `../round7_fiveframe_joint_analysis_to_1p6ps_20261109/round7_5frames_full_system_0p6_to_1p6ps.dump.gz` (all 352,637 atoms per frame).
+
+The OVITO states reference the trajectory in the neighboring results folder. If the repository is downloaded to a different path and OVITO cannot find the trajectory, select that adjacent `.dump.gz` file or rerun `make_ovito_visualizations.py` with OVITO's Python interpreter to recreate states with the local path.

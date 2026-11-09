@@ -34,6 +34,41 @@ Thresholds are unchanged from the prior screen and were inherited from Round5 re
 
 Failure patterns among the 913 that fail: Q6 only 860; displacement only 21; Q6 and displacement 18; Q6 and PTM 7; PTM only 7; all other combinations 0. The stored joint flags equal the recomputed AND for all 1,787 rows.
 
+## Why PTM is nearly always non-FCC
+
+The PTM breakdown for these same 1,787 Ag atoms is:
+
+| Frame (ps) | FCC | HCP | BCC | Other |
+|---:|---:|---:|---:|---:|
+| 0.60 | 58 | 0 | 0 | 1,729 |
+| 0.85 | 15 | 0 | 0 | 1,772 |
+| 1.10 | 3 | 0 | 0 | 1,784 |
+| 1.35 | 0 | 0 | 0 | 1,787 |
+| 1.60 | 0 | 0 | 0 | 1,787 |
+
+Thus the non-FCC persistence pass is almost entirely PTM **Other**, not conversion to HCP or BCC. The script does not save RMSD, so the data cannot distinguish thermal disorder from insufficient Ag neighbors or a local environment rejected by PTM's default normalized RMSD cutoff (0.1). At 1.60 ps, the Ag-only neighbor count within 4.0 Å has mean 9.61 among the 874 joint candidates; 669/874 have fewer than 12 neighbors, 408/874 fewer than 10, and 157/874 fewer than 8. The noncandidate subset is even more under-coordinated (mean 5.97). These counts show that coordination is a material confounder to check, not proof that PTM Other candidates are solid or liquid. Full per-frame class and coordination diagnostics are in `ptm_coordination_diagnostic.json` and can be regenerated with `diagnose_ptm_coordination.py`.
+
 ## Endpoint clusters
 
 At 1.60 ps, the 874 candidate Ag atoms form 41 connected components using ≤3.5 Å Ag–Ag edges, periodic x/y, and open z. There is no minimum-size filter. The largest component contains 693 atoms (79.3% of candidates), with periodicity-aware dimensions 77.262 × 72.421 × 26.633 Å and convex-hull envelope 52,326.7 Å³. These are geometry statistics of the selected candidate atoms, not a validated liquid volume. The same potential and threshold limitations described in the neighboring Round7 audit still apply.
+
+## Controlled comparison to the legacy spatial mask
+
+Both columns use the same 0.60–1.60 ps frames, Q6/PTM/displacement thresholds, and 3.5 Å clustering. Only the spatial prefilter changes; the corrected mask adds the missing periodic y term.
+
+| Statistic | Legacy x–z mask | Corrected radial mask |
+|---|---:|---:|
+| Selected Newton-layer Ag | 6,448 | 1,787 |
+| Q6 passing | 3,078 | 902 |
+| PTM non-FCC fraction passing | 6,418 | 1,773 |
+| Displacement passing | 6,304 | 1,748 |
+| Q6 ∩ PTM | 3,067 | 895 |
+| Q6 ∩ displacement | 3,000 | 881 |
+| PTM ∩ displacement | 6,276 | 1,734 |
+| Joint candidates | 2,989 | 874 |
+| Candidate components | 148 | 41 |
+| Largest component | 1,683 | 693 |
+| Largest-component dimensions (Å) | 84.32 × 146.96 × 40.21 | 77.26 × 72.42 × 26.63 |
+| Largest-component convex-hull envelope (Å³) | 201,755.8 | 52,326.7 |
+
+The largest component's y span falls from 146.96 Å to 72.42 Å under the radial mask, removing the spurious box-scale extension associated with omitting y. The corrected set is still a temporary candidate classification, not a validated melt pool.
