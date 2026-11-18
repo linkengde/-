@@ -1,0 +1,17 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+read_data /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12j_ticpair_candidate/tic_center_validation_v12j/v12h_cold_10fs_pair3/local.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style snap
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12j_ticpair_candidate/SNAP/AgTiSiC_SNAP_v12j.snapcoeff /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12j_ticpair_candidate/SNAP/AgTiSiC_SNAP_v12j.snapparam Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step atoms pe
+run 0
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12j_ticpair_candidate/tic_center_validation_v12j/v12h_cold_10fs_pair3/SNAP_v12j/forces.dump id type fx fy fz modify sort id

@@ -1,8 +1,8 @@
-# Round7 POD/SNAP v12f–v12i 归档
+# Round7 POD/SNAP v12f–v12j 归档
 
-最新结果见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md) 和 [v12i 独立复核记录](v12i/ROUND7_STATUS_V12I_20261118.md)。v12i 普通验证误差达到探索性 RMSE 目标，但完整 458,248 原子无激光冷态 10 fs 后从 300 K 升至 740 K、势能下降约 24.25 keV，并产生 1 对 Ti–C <1.8 Å；**不启动加热、冷却或凝固**。POD 静态 Fmax 17.01、SNAP 107.78 eV/Å；两者均无 >500 eV/Å 原子。SNAP 暂不进入全模型 MD。
+最新状态见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md) 和 [v12j 复核记录](v12j/ROUND7_STATUS_V12J_20261118.md)。v12j 保持 128/12 训练验证划分与 Si01 留出，加入 1 个收敛的 36 原子 Ti–C DFT 局部标签。12 帧验证 RMSE 为 POD E/F 0.077857 eV/atom、0.590685 eV/Å；SNAP E/F 0.063033 eV/atom、0.722126 eV/Å。
 
-Fmax 500 eV/Å 仅为紧急停止线，不是稳定性通过标准。Si01 继续保留为开发留出：v12i 中心力误差 POD 7.60、SNAP 41.73 eV/Å。旧 347k FIRE 丢原子报错在同设置诊断重放中未复现为 z 边界逃逸，根因仍未解释；新 458k v12g FIRE 则保留所有原子但未收敛且发生结构塌缩。
+完整 458,248 原子 POD 冷态 10 fs 温度从 300 K 升至 715.5 K，势能降低 22.90 keV；末态没有丢原子，最短 Ti–C 为 1.813 Å。比 v12i 略有改善，仍未通过冷态稳定性，**不启动加热、冷却或凝固**。Fmax 500 eV/Å 仅是紧急异常线。
 
 # Round7 POD/SNAP v12f 拟合与已完成验证归档
 
@@ -59,3 +59,8 @@ sha256sum -c SHA256SUMS.txt
 ## v12i 更新
 
 `v12i/` 保存新增 Ti–C DFT 标签、POD/SNAP v12i 完整拟合候选、Si01 留出评估、两模型全模型静态筛查、POD 冷态 10 fs 日志和压缩坐标，以及复现脚本。详细判定见 `v12i/ROUND7_STATUS_V12I_20261118.md`。
+
+
+## v12j 更新
+
+`v12j/` 包含完整 v12j POD/SNAP 拟合候选、Si01 留出、新 pair4 DFT 标签、完整模型静态与冷态日志、压缩末态坐标及复现脚本。详细结果见 `v12j/ROUND7_STATUS_V12J_20261118.md`。
