@@ -1,6 +1,6 @@
 # Round7 POD/SNAP v12f/v12g 归档
 
-最新进度见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md)。v12g Si04 补标签和重新拟合、完整模型静态及冷态短跑结果已加入；v12g 全模型 FIRE 正在运行，完成后再补充终态审计。当前没有加热许可。
+最新进度见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md)。v12f/v12g 冷态 Ti–C 短接触审计和新的 Ti–C 局部 DFT 候选也已加入。v12g Si04 补标签和重新拟合、完整模型静态及冷态短跑结果已加入；v12g 全模型 FIRE 正在运行，完成后再补充终态审计。当前没有加热许可。
 
 # Round7 POD/SNAP v12f 拟合与已完成验证归档
 

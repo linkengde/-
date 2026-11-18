@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g Si04 refit and full 458248-atom static/cold checks added; v12g full FIRE in progress locally",
+  "latest_update": "2026-11-18: v12g full FIRE at step 40; Ti-C short-contact diagnostics added; DFT Ti-C initial label running",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -307,5 +307,44 @@
     },
     "full_v12g_FIRE": "in progress locally; not yet included as a completed result",
     "heating_started": false
+  },
+  "v12g_full_FIRE_progress": {
+    "status": "RUNNING_AT_STEP_40_OF_100",
+    "atoms": 458248,
+    "atoms_preserved": true,
+    "energy_initial_eV": -2873741.7434,
+    "energy_step40_eV": -2966201.529,
+    "Fmax_step40_eV_per_A": 19.2178,
+    "step30_short_pairs_below_1p8_A": 23,
+    "step40_short_pairs_below_1p8_A": 98,
+    "step40_minimum_neighbor_A": 1.72391,
+    "step40_pair_types_nearest_by_affected_atom": {
+      "C-Ti": 191,
+      "Ag-Ti": 4
+    },
+    "ftol_eV_per_A": 0.5,
+    "dmax_A": 0.02,
+    "heating_started": false
+  },
+  "v12g_tic_hotspot_followup": {
+    "candidate_pair_ids": [
+      62864,
+      62871
+    ],
+    "elements": [
+      "Ti",
+      "C"
+    ],
+    "initial_separation_A": 2.07927,
+    "cold_10fs_separation_A": 1.68265,
+    "cold_v12f_unique_TiC_pairs_below_1p8_A": 47,
+    "cold_v12g_unique_TiC_pairs_below_1p8_A": 53,
+    "initial_net_force_mass_weighted_relative_projection_along_Ti_to_C": -0.89717,
+    "interpretation": "negative projection indicates the v12g net-force acceleration initially tends to close this pair; DFT verification pending",
+    "local_candidates": {
+      "initial": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_initial.extxyz",
+      "cold_10fs": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_cold_10fs.extxyz"
+    },
+    "DFT_status": "initial-state SCF running; compressed-state label pending"
   }
 }
