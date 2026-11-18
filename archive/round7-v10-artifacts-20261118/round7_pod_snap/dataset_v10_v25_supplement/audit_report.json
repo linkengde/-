@@ -1,0 +1,96 @@
+{
+  "status": "passed_with_limits",
+  "dataset_id": "Ag-Ti-Si-C_Round7_POD-SNAP_exploratory_v10_v25_supplement",
+  "train": {
+    "configurations": 128,
+    "atoms": 5491,
+    "species_atom_counts": {
+      "Ag": 1288,
+      "Ti": 2033,
+      "Si": 737,
+      "C": 1433
+    }
+  },
+  "validation": {
+    "configurations": 12,
+    "atoms": 412,
+    "species_atom_counts": {
+      "Ag": 172,
+      "Ti": 120,
+      "Si": 40,
+      "C": 80
+    }
+  },
+  "challenge": {
+    "configurations": 2,
+    "atoms": 96,
+    "species_atom_counts": {
+      "Ag": 0,
+      "Ti": 48,
+      "Si": 16,
+      "C": 32
+    }
+  },
+  "train_validation_geometry_overlap": 0,
+  "fit_challenge_geometry_overlap": 0,
+  "all_labels_finite": true,
+  "v25_deduplication": {
+    "source_train_frames": 19,
+    "added_train_frames": 15,
+    "exact_train_duplicates_excluded": [
+      {
+        "v25_frame": 1,
+        "config_id": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_m002A_k10x10x2_v21",
+        "existing_train_frame": 39,
+        "energy_abs_delta_eV": 0.0,
+        "force_max_abs_delta_eV_A": 0.0
+      },
+      {
+        "v25_frame": 2,
+        "config_id": "Ti3SiC2_JN1967_primitive_Ti4f_id0003_z_p002A_k10x10x2_v21",
+        "existing_train_frame": 40,
+        "energy_abs_delta_eV": 0.0,
+        "force_max_abs_delta_eV_A": 0.0
+      },
+      {
+        "v25_frame": 3,
+        "config_id": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_m002A_k10x10x2_v21",
+        "existing_train_frame": 41,
+        "energy_abs_delta_eV": 0.0,
+        "force_max_abs_delta_eV_A": 0.0
+      },
+      {
+        "v25_frame": 4,
+        "config_id": "Ti3SiC2_JN1967_primitive_C4f_id0009_z_p002A_k10x10x2_v21",
+        "existing_train_frame": 42,
+        "energy_abs_delta_eV": 0.0,
+        "force_max_abs_delta_eV_A": 0.0
+      }
+    ],
+    "development_frames_added_to_validation": 4,
+    "max_native_vs_free_energy_abs_eV_per_atom": 0.005538427487360072
+  },
+  "notes": [
+    "No fresh independent test split exists; challenge labels are historically monitored.",
+    "v9 already includes small-cell DFT hot/cooling Ti3SiC2, liquid Ag, and Ag/Ti3SiC2 melt/cooling/solid-hold labels; coverage is sparse for disordered/liquid interface environments.",
+    "v25 adds 15 static Ti3SiC2 structures, not high-temperature or Ag-interface labels.",
+    "Dataset is suitable for exploratory fit comparison, not final force-field approval."
+  ],
+  "coverage_summary": {
+    "inherited_v9_training": [
+      "6 small-cell Ti3SiC2 hot/cooling DFT labels: 5 hot proposal frames spanning 1500\u20132800 K and 1 cooling frame at 2200 K",
+      "7 52-atom Ag/Ti3SiC2 melt, cooling, and solid-hold labels",
+      "2 64-atom liquid-Ag training labels at 1250 K and 1600 K, plus 1 independent 64-atom Ag validation label",
+      "additional small-cell Ag/Ti3SiC2 interface active-learning frames and pure-Ag cooling labels"
+    ],
+    "v25_added": [
+      "15 new 12-atom periodic Ti3SiC2 baseline/displacement/strain/random-distortion training labels",
+      "4 12-atom v25 development labels in validation"
+    ],
+    "gaps": [
+      "high-temperature Ag/Ti3SiC2 labels are sparse and use small cells",
+      "no DFT-labelled trajectory of a fully liquid Ag pool contacting a thermally disordered ceramic skeleton",
+      "no fresh untouched blind test set"
+    ]
+  }
+}

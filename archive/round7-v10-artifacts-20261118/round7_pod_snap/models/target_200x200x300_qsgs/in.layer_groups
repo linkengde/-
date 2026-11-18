@@ -1,0 +1,35 @@
+# Ag-Ti3SiC2 target geometry; type order: 1 Ti, 2 Si, 3 C, 4 Ag
+# This file defines intended groups and is not a heating run.
+units metal
+atom_style atomic
+boundary p p f
+read_data Ag_Ti3SiC2_bicontinuous_200x200x300.data.gz
+
+# Set the fitted POD potential separately when preparing a dynamics input.
+# pair_style pod
+# pair_coeff * * /path/to/AgTiSiC_POD.pod /path/to/pod_coefficients.pod Ti Si C Ag
+
+region z_fixed block INF INF INF INF 0.0 20.0 units box
+region z_bath block INF INF INF INF 20.0 40.0 units box
+region z_newton block INF INF INF INF 40.0 200.0 units box
+region z_sputter block INF INF INF INF 200.0 250.0 units box
+region z_evaporation block INF INF INF INF 250.0 300.0 units box
+
+group skeleton type 1 2 3
+group silver type 4
+group fixed_z region z_fixed
+group fixed_skeleton intersect fixed_z skeleton
+group bath region z_bath
+group newton_initial region z_newton
+# Observation groups update as atoms move; they do not control dynamics.
+group sputter_observation dynamic all region z_sputter every 1
+group evaporation_observation dynamic all region z_evaporation every 1
+# The two observation regions remain ordinary mobile MD atoms.
+group mobile subtract all fixed_skeleton
+
+# Intended dynamics pattern for a later input (not executed here):
+# fix hold fixed_skeleton setforce 0.0 0.0 0.0
+# fix integrate mobile nve
+# fix sink bath langevin 300.0 300.0 0.1 817263 zero yes
+# The thermostat acts only on the initial z=20-40 A group.
+# Define a two-dimensional x,y source explicitly in the later TTM input.

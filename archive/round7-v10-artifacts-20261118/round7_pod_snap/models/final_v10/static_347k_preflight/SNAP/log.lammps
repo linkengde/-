@@ -1,0 +1,115 @@
+LAMMPS (22 Jul 2025)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs/md_runs/attempt_008_POD_TTM_mpi_big/start_wrapped.data
+Reading data file ...
+  orthogonal box = (0 0 -0.28800875) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  347464 atoms
+  reading velocities ...
+  347464 velocities
+  read_data CPU = 4.986 seconds
+# Source data types Ti/Si/C/Ag -> model types Ag/C/Si/Ti.
+group source_Ti type 1
+133395 atoms in group source_Ti
+group source_Si type 2
+44465 atoms in group source_Si
+group source_C type 3
+88930 atoms in group source_C
+group source_Ag type 4
+80674 atoms in group source_Ag
+set group source_Ti type 4
+Setting atom values ...
+  133395 settings made for type
+set group source_Si type 3
+Setting atom values ...
+  44465 settings made for type
+set group source_C type 2
+Setting atom values ...
+  88930 settings made for type
+set group source_Ag type 1
+Setting atom values ...
+  80674 settings made for type
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style snap
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/final_v10/SNAP/AgTiSiC_SNAP_final_v10.snapcoeff /workspace/potential-fit/round7_pod_snap/models/final_v10/SNAP/AgTiSiC_SNAP_final_v10.snapparam Ag C Si Ti
+SNAP Element = Ag, Radius 2.5, Weight 1
+SNAP Element = C, Radius 2.5, Weight 1
+SNAP Element = Si, Radius 2.5, Weight 1
+SNAP Element = Ti, Radius 2.5, Weight 1
+SNAP keyword rcutfac 1.0
+SNAP keyword twojmax 4
+SNAP keyword rfac0 0.99363
+SNAP keyword rmin0 0.0
+SNAP keyword bzeroflag 0
+SNAP keyword wselfallflag 0
+SNAP keyword chemflag 1
+SNAP keyword bnormflag 0
+SNAP keyword switchinnerflag 0
+SNAP keyword quadraticflag 0
+WARNING: bnormflag and chemflag are not equal.This is probably not what you intended (src/ML-SNAP/sna.cpp:132)
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 1
+thermo_style custom step atoms temp pe etotal c_fmax
+thermo_modify lost error flush yes format float %.16g
+dump d all custom 1 /workspace/potential-fit/round7_pod_snap/models/final_v10/static_347k_preflight/SNAP/forces.dump id type x y z fx fy fz
+dump_modify d sort id
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 58 58 86
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair snap, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 4929 | 4929 | 4929 Mbytes
+   Step        Atoms         Temp          PotEng         TotEng         c_fmax    
+         0      347464  384.1051373976804 -1783548.334671525 -1766296.975402542 138.6366607117453
+Loop time of 7.0748e-05 on 1 procs for 0 steps with 347464 atoms
+
+154.1% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 7.075e-05  |            |       |100.00
+
+Nlocal:         347464 ave      347464 max      347464 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          47672 ave       47672 max       47672 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  2.81663e+07 ave 2.81663e+07 max 2.81663e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 28166268
+Ave neighs/atom = 81.062406
+Neighbor list builds = 0
+Dangerous builds = 0
+undump d
+Total wall time: 0:06:06

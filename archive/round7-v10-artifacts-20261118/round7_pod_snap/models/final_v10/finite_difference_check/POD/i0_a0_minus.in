@@ -1,0 +1,15 @@
+clear
+units metal
+atom_style atomic
+boundary p p f
+read_data /workspace/potential-fit/round7_pod_snap/models/final_v10/finite_difference_check/POD/i0_a0_minus.data
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/final_v10/POD/AgTiSiC_POD.pod /workspace/potential-fit/round7_pod_snap/models/final_v10/POD/pod_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+thermo 1
+thermo_style custom step atoms pe
+thermo_modify lost error flush yes format float %.16g
+run 0
+print "ENERGY $(pe:%.17g)" file /workspace/potential-fit/round7_pod_snap/models/final_v10/finite_difference_check/POD/i0_a0_minus.energy screen no
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/final_v10/finite_difference_check/POD/i0_a0_minus.dump id fx fy fz modify sort id
