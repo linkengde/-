@@ -1,0 +1,38 @@
+clear
+units metal
+atom_style atomic
+boundary p p m
+processors 4 1 1
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/cold_v12l_initial_458k_1fs/end_0p01ps.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12l_ticpair_candidate/POD/AgTiSiC_POD_v12l.pod /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12l_ticpair_candidate/POD/pod_v12l_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group skeleton type 2 3 4
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+region bath_layer block INF INF INF INF 20.0 40.0 units box
+group fixed_z region fixed_layer
+group fixed intersect skeleton fixed_z
+group bath region bath_layer
+group mobile subtract all fixed
+velocity fixed set 0.0 0.0 0.0
+fix freeze fixed setforce 0.0 0.0 0.0
+compute Tmobile mobile temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+variable fmax_now equal c_fmax
+thermo 1
+thermo_style custom step time atoms c_Tmobile pe ke etotal c_fmax
+thermo_modify temp Tmobile lost error flush yes format float %.16g
+timestep 0.001
+fix integrate mobile nve
+fix heat_bath bath langevin 300.0 300.0 0.1 639829 tally yes
+fix stop all halt 1 v_fmax_now > 500.0 error soft message yes
+run 40
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/cold_v12l_force_spike_diagnostic/first_force_over_500.dump id type x y z vx vy vz fx fy fz modify sort id
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/cold_v12l_force_spike_diagnostic/first_force_over_500.data

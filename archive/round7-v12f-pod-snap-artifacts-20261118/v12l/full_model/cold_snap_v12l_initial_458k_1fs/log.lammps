@@ -1,0 +1,173 @@
+LAMMPS (22 Jul 2025)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p m
+processors 4 1 1
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/Ag_Ti3SiC2_bicontinuous_200x200x300.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  4 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  read_data CPU = 2.413 seconds
+# Source types Ti/Si/C/Ag -> model types Ag/C/Si/Ti.
+group src_Ti type 1
+175926 atoms in group src_Ti
+group src_Si type 2
+58642 atoms in group src_Si
+group src_C type 3
+117284 atoms in group src_C
+group src_Ag type 4
+106396 atoms in group src_Ag
+set group src_Ti type 4
+Setting atom values ...
+  175926 settings made for type
+set group src_Si type 3
+Setting atom values ...
+  58642 settings made for type
+set group src_C type 2
+Setting atom values ...
+  117284 settings made for type
+set group src_Ag type 1
+Setting atom values ...
+  106396 settings made for type
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style snap
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12l_ticpair_candidate/SNAP/AgTiSiC_SNAP_v12l.snapcoeff /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/v12l_ticpair_candidate/SNAP/AgTiSiC_SNAP_v12l.snapparam Ag C Si Ti
+SNAP Element = Ag, Radius 2.5, Weight 1
+SNAP Element = C, Radius 2.5, Weight 1
+SNAP Element = Si, Radius 2.5, Weight 1
+SNAP Element = Ti, Radius 2.5, Weight 1
+SNAP keyword rcutfac 1.0
+SNAP keyword twojmax 4
+SNAP keyword rfac0 0.99363
+SNAP keyword rmin0 0.0
+SNAP keyword bzeroflag 0
+SNAP keyword wselfallflag 0
+SNAP keyword chemflag 1
+SNAP keyword bnormflag 1
+SNAP keyword switchinnerflag 0
+SNAP keyword quadraticflag 0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group skeleton type 2 3 4
+351852 atoms in group skeleton
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+region bath_layer block INF INF INF INF 20.0 40.0 units box
+group fixed_z region fixed_layer
+47494 atoms in group fixed_z
+group fixed intersect skeleton fixed_z
+35845 atoms in group fixed
+group bath region bath_layer
+46913 atoms in group bath
+group mobile subtract all fixed
+422403 atoms in group mobile
+velocity mobile create 300.0 882733 mom yes rot no dist gaussian
+velocity fixed set 0.0 0.0 0.0
+fix freeze fixed setforce 0.0 0.0 0.0
+compute Tmobile mobile temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+timestep 0.001
+thermo 1
+thermo_style custom step time atoms c_Tmobile pe ke etotal c_fmax
+thermo_modify temp Tmobile lost error flush yes format float %.16g
+WARNING: Temperature for thermo pressure is not for group all (src/thermo.cpp:569)
+fix integrate mobile nve
+fix heat_bath bath langevin 300.0 300.0 0.1 639827 tally yes
+run 0
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 58 58 86
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair snap, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 1619 | 1636 | 1660 Mbytes
+   Step          Time         Atoms      c_Tmobile        PotEng         KinEng         TotEng         c_fmax    
+         0  0     458248  299.9999999999995 -3031934.708653992 16379.92313048697 -3015554.785523505 92.38069514285304
+Loop time of 4.296e-06 on 4 procs for 0 steps with 458248 atoms
+
+133.8% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 4.296e-06  |            |       |100.00
+
+Nlocal:         114562 ave      116224 max      113358 min
+Histogram: 1 0 1 0 1 0 0 0 0 1
+Nghost:          42479 ave       44300 max       41085 min
+Histogram: 1 0 1 0 0 1 0 0 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:  9.56686e+06 ave 9.73155e+06 max 9.46632e+06 min
+Histogram: 2 0 0 0 1 0 0 0 0 1
+
+Total # of neighbors = 38267434
+Ave neighs/atom = 83.508131
+Neighbor list builds = 0
+Dangerous builds = 0
+run 10
+Per MPI rank memory allocation (min/avg/max) = 1621 | 1638 | 1661 Mbytes
+   Step          Time         Atoms      c_Tmobile        PotEng         KinEng         TotEng         c_fmax    
+         0  0     458248  299.9999999999995 -3031934.708653992 16379.92313048697 -3015554.785523505 92.38069514285304
+         1  0.001     458248  337.0145075221345 -3033977.895978244 18400.90575690499 -3015576.990221338 92.40570898429621
+         2  0.002     458248  448.458958576451 -3040079.734132791 24485.7442288684 -3015593.989903923 92.03738096182636
+         3  0.003     458248  630.8382272789828 -3050078.285816569 34443.60556867476 -3015634.680247894 90.70027286590538
+         4  0.004     458248  879.2311678562436 -3063711.843748119 48005.79647804527 -3015706.047270074 87.47689914237498
+         5  0.005     458248  1187.059520360201 -3080627.922508311 64813.14564937619 -3015814.776858935 81.65185061930968
+         6  0.006     458248  1546.363833400223 -3100398.039978927 84431.06907620284 -3015966.970902725 86.31690112645977
+         7  0.007     458248  1948.416009215507 -3122547.279039603 106383.0148572009 -3016164.264182402 95.49528688822501
+         8  0.008     458248  2384.475948849404 -3146597.566431579 130191.7758288276 -3016405.790602752 102.4439703227878
+         9  0.009000000000000001     458248  2846.822757828093 -3172127.329367192 155435.7931311506 -3016691.536236041 103.9746386183131
+        10  0.01     458248  3330.092925386538 -3198845.924084573 181822.2204507003 -3017023.703633873 96.14447315969268
+Loop time of 666.692 on 4 procs for 10 steps with 458248 atoms
+
+Performance: 0.001 ns/day, 18519.215 hours/ns, 0.015 timesteps/s, 6.873 katom-step/s
+99.2% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 628.87     | 650.5      | 665.7      |  62.1 | 97.57
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.57713    | 15.782     | 37.408     | 399.0 |  2.37
+Output  | 0.17062    | 0.18308    | 0.20796    |   3.5 |  0.03
+Modify  | 0.12516    | 0.15502    | 0.17319    |   4.8 |  0.02
+Other   |            | 0.07257    |            |       |  0.01
+
+Nlocal:         114562 ave      116224 max      113358 min
+Histogram: 1 0 1 0 1 0 0 0 0 1
+Nghost:          42479 ave       44300 max       41085 min
+Histogram: 1 0 1 0 0 1 0 0 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:  9.56686e+06 ave 9.73155e+06 max 9.46632e+06 min
+Histogram: 2 0 0 0 1 0 0 0 0 1
+
+Total # of neighbors = 38267434
+Ave neighs/atom = 83.508131
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/cold_snap_v12l_initial_458k_1fs/end_0p01ps.dump id type x y z vx vy vz fx fy fz modify sort id
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/cold_snap_v12l_initial_458k_1fs/end_0p01ps.data
+System init for write_data ...
+Total wall time: 0:13:54

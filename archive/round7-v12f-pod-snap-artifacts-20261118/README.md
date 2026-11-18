@@ -69,3 +69,8 @@ sha256sum -c SHA256SUMS.txt
 ## Latest validation: v12k
 
 The current Round7 exploratory POD/SNAP candidate and its validation package are in `v12k/`. See `ROUND7_CURRENT_STATUS_20261118.md` for the current decision and measurements. The package includes the 128/12 data split, 20 local training frames, fitted POD/SNAP coefficients, pair5 DFT label, Si01 holdout evaluation, full-model static summaries, and a compressed 10 fs POD cold-run trajectory. POD cold run reaches about 707 K in 10 fs. The SNAP cold run reaches about 3975 K and creates 2352 Ti-C contacts under 1.8 A; neither model is approved for heating, and SNAP shows severe collapse.
+
+
+## Latest validation: v12l
+
+The latest POD/SNAP model is v12l. See `ROUND7_CURRENT_STATUS_20261118.md` and `v12l/README.md`. Both models meet the small validation RMSE target, but Si01 remains a difficult holdout and full-model no-laser cold tests reveal instability: POD develops a local Ag-C-C collapse at cumulative 37 fs with Fmax 1399.8 eV/A; SNAP reaches 3330 K and has 1989 Ti-C pairs below 1.8 A at 10 fs. No heating, cooling, or solidification run has started.
