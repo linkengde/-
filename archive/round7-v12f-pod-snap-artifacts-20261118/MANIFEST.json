@@ -3,7 +3,7 @@
   "branch": "codex/round7-v12f-pod-snap-artifacts-20261118",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "v12h candidate artifacts archived; no heating approval; one further targeted DFT label is pending",
+  "status": "v12i archived; no heating approval; full-model cold stability failed",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g full FIRE completed but not converged and showed Ti-C/skeleton collapse; no-heat cold 10 fs released energy and formed 53 short Ti-C pairs; initial and compressed-state DFT labels for Ti 62864/C 62871 converged; independent second-pair DFT running",
+  "latest_update": "2026-11-18: v12i fitted from 128 baseline train + 18 local force frames; Si01 remains excluded; complete 458248-atom static screens and POD 10fs cold screen completed.",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -523,5 +523,47 @@
       "crop_atoms": 46,
       "status": "SCF in progress; excluded from fitted models until converged and reviewed"
     }
+  },
+  "latest_v12i": {
+    "candidate_path": "v12i/candidate/v12i_ticpair_candidate/",
+    "local_frames": 18,
+    "new_target_force_rows": 8,
+    "baseline_training_configurations": 128,
+    "validation_configurations": 12,
+    "POD_validation_energy_RMSE_eV_per_atom": 0.077876,
+    "POD_validation_force_RMSE_eV_per_A": 0.597438,
+    "SNAP_validation_energy_RMSE_eV_per_atom": 0.0616921,
+    "SNAP_validation_force_RMSE_eV_per_A": 0.784423,
+    "SNAP_validation_force_R2": -1.71112,
+    "Si01_development_holdout_center_error_eV_per_A": {
+      "POD": 7.600977,
+      "SNAP": 41.732642
+    },
+    "full_model_atoms": 458248,
+    "full_model_box_A": [
+      200,
+      200,
+      300
+    ],
+    "POD_static_Fmax_eV_per_A": 17.0105,
+    "POD_static_F99_eV_per_A": 5.4421,
+    "SNAP_static_Fmax_eV_per_A": 107.779,
+    "SNAP_static_F99_eV_per_A": 21.776,
+    "POD_cold_10fs": {
+      "dt_fs": 1,
+      "mobile_temperature_K": [
+        300.0,
+        740.1141
+      ],
+      "atom_loss": 0,
+      "potential_energy_delta_eV": -24249.5918,
+      "kinetic_energy_delta_eV": 24030.119,
+      "min_TiC_A_initial": 2.079,
+      "min_TiC_A_final": 1.7984,
+      "TiC_pairs_below_1p8A_final": 1
+    },
+    "decision": "No heating, cooling, or solidification; cold-stability check failed.",
+    "status_report": "v12i/ROUND7_STATUS_V12I_20261118.md",
+    "completed_DFT_label": "v12i/labels/tic_pair3_v12h_cold_10fs_pw350_gamma/"
   }
 }
