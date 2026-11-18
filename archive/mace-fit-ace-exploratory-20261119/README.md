@@ -32,4 +32,4 @@ From this directory, verify the archived files with:
 sha256sum -c SHA256SUMS.txt
 ```
 
-The separate cloud-environment setup draft is not part of this archive.
+The next 7–8 hour compute plan is in `NEXT_8H_PLAN.md`. The separate cloud-environment setup draft is not part of this archive.
