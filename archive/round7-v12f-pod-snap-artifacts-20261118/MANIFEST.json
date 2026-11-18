@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g full FIRE at step 40; Ti-C short-contact diagnostics added; DFT Ti-C initial label running",
+  "latest_update": "2026-11-18: v12g full FIRE at step 50; Ti-C/Ag-Ti short-contact counts rising; initial Ti-C DFT at SCF iteration 8",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -309,7 +309,7 @@
     "heating_started": false
   },
   "v12g_full_FIRE_progress": {
-    "status": "RUNNING_AT_STEP_40_OF_100",
+    "status": "RUNNING_AT_STEP_50_OF_100",
     "atoms": 458248,
     "atoms_preserved": true,
     "energy_initial_eV": -2873741.7434,
@@ -324,7 +324,15 @@
     },
     "ftol_eV_per_A": 0.5,
     "dmax_A": 0.02,
-    "heating_started": false
+    "heating_started": false,
+    "energy_step50_eV": -2982772.4918,
+    "Fmax_step50_eV_per_A": 17.8141,
+    "step50_short_pairs_below_1p8_A": 300,
+    "step50_minimum_neighbor_A": 1.6401,
+    "step50_pair_types_nearest_by_affected_atom": {
+      "C-Ti": 588,
+      "Ag-Ti": 10
+    }
   },
   "v12g_tic_hotspot_followup": {
     "candidate_pair_ids": [
@@ -345,6 +353,6 @@
       "initial": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_initial.extxyz",
       "cold_10fs": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_cold_10fs.extxyz"
     },
-    "DFT_status": "initial-state SCF running; compressed-state label pending"
+    "DFT_status": "initial-state SCF iteration 8; not converged; compressed-state label pending"
   }
 }
