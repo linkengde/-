@@ -1,0 +1,35 @@
+clear
+units metal
+atom_style atomic
+boundary p p m
+processors 5 1 1
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs/md_runs/attempt_008_POD_TTM_mpi_big/start_wrapped.data
+group src_Ti type 1
+group src_Si type 2
+group src_C type 3
+group src_Ag type 4
+set group src_Ti type 4
+set group src_Si type 3
+set group src_C type 2
+set group src_Ag type 1
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/POD/AgTiSiC_POD_v12f.pod /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/POD/pod_v12f_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+fix freeze fixed setforce 0.0 0.0 0.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 10
+thermo_style custom step atoms pe c_fmax
+thermo_modify lost ignore flush yes format float %.16g
+dump xyz all custom 1 xyz_by_step.dump id x y z
+min_style fire
+min_modify dmax 0.02
+minimize 0.0 0.5 62 5000
