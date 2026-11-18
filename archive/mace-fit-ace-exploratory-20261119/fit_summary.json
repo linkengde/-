@@ -1,0 +1,291 @@
+{
+  "data_basis": "MACE repository v19+v25 plus 16 verified v21-v24 interface labels; no Round7 data",
+  "split": {
+    "train_frames": 71,
+    "development_frames": 7,
+    "test_frames": 0,
+    "train_atoms": 2823,
+    "development_atoms": 204
+  },
+  "exploratory_gates": {
+    "energy_rmse_meV_atom_max": 10.0,
+    "force_component_rmse_eV_A_max": 0.1,
+    "si_hotspot_center_vector_error_eV_A_max": 0.5
+  },
+  "fits": {
+    "ACE_6A_B1616_alpha0.001": {
+      "model_yaml": "ace_mace_cutoff6/AgCSiTi_B1616_E10000_F1_a0.001.ace.yaml",
+      "model_yace": "ace_mace_cutoff6/AgCSiTi_B1616_E10000_F1_a0.001.yace",
+      "train": {
+        "energy_rmse_meV_atom": 0.3532991017122028,
+        "force_component_rmse_eV_A": 0.09315441209080523
+      },
+      "development": {
+        "energy_rmse_meV_atom": 5.54629486289105,
+        "force_component_rmse_eV_A": 0.09298808865041415,
+        "si_site_vector_error_max_eV_A": 0.24489609684613306,
+        "per_configuration": [
+          {
+            "config_type": "AgC_v19_independent_dev_01",
+            "energy_error_eV_atom": 0.0025796061316120025,
+            "force_component_rmse_eV_A": 0.0661115956721606
+          },
+          {
+            "config_type": "AgSi_v19_independent_dev_01",
+            "energy_error_eV_atom": 0.009360985103119045,
+            "force_component_rmse_eV_A": 0.08480152041449578
+          },
+          {
+            "config_type": "AgTi_v19_independent_dev_01",
+            "energy_error_eV_atom": 0.010859468262084376,
+            "force_component_rmse_eV_A": 0.0646072669400635
+          },
+          {
+            "config_type": "bulk_random_dev_seed8201_rms0p02_v25",
+            "energy_error_eV_atom": -0.0004077621371732694,
+            "force_component_rmse_eV_A": 0.07584277365132812
+          },
+          {
+            "config_type": "bulk_random_dev_seed8202_rms0p03_v25",
+            "energy_error_eV_atom": -0.0004504542278915835,
+            "force_component_rmse_eV_A": 0.0952879336419352
+          },
+          {
+            "config_type": "bulk_random_dev_seed8203_rms0p045_v25",
+            "energy_error_eV_atom": -0.0014925232817487217,
+            "force_component_rmse_eV_A": 0.1564130253125926
+          },
+          {
+            "config_type": "bulk_random_dev_seed8204_rms0p06_v25",
+            "energy_error_eV_atom": 0.0007228010750803074,
+            "force_component_rmse_eV_A": 0.19876732152918283
+          }
+        ]
+      },
+      "aggregate_energy_pass": true,
+      "aggregate_force_pass": true,
+      "formal_hotspot_center_metric": "unscorable; no hotspot IDs in MACE split"
+    },
+    "ACE_5A_B1616_alpha0.0001": {
+      "train": {
+        "energy_rmse_meV_atom": 0.47655977567433816,
+        "force_component_rmse_eV_A": 0.09506308218703659
+      },
+      "development": {
+        "energy_rmse_meV_atom": 2.840845049172313,
+        "force_component_rmse_eV_A": 0.17472062806693084
+      }
+    },
+    "MTP10_F0.05": {
+      "model": "MTP10_AgCSiTi_v19v25_v24_trained.mtp",
+      "development": {
+        "energy_rmse_meV_atom": 5.347610155511532,
+        "energy_mae_meV_atom": 4.421422080787575,
+        "force_component_rmse_eV_A": 0.2687457952847434,
+        "force_vector_rmse_eV_A": 0.4835574082009338,
+        "max_force_vector_error_eV_A": 1.1127699051563182,
+        "si_site_vector_error_rmse_eV_A": 0.3437054513580025,
+        "si_site_vector_error_max_eV_A": 0.9803259050289833,
+        "max_reference_force_Si_site_error_eV_A": 0.9803259050289833,
+        "si_center_metric_status": "proxy only: maximum-force Si site in each development frame; no registered hotspot center IDs were found",
+        "per_configuration": [
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": 0.007060872666397262,
+            "force_component_rmse_eV_A": 0.2758778604209411,
+            "force_vector_rmse_eV_A": 0.47783447093246506,
+            "max_force_vector_error_eV_A": 1.0813917201274594,
+            "max_reference_force_Si_site_error_eV_A": 0.35017931660902446
+          },
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": 0.0006353506919105292,
+            "force_component_rmse_eV_A": 0.28952018546197267,
+            "force_vector_rmse_eV_A": 0.5014636710369008,
+            "max_force_vector_error_eV_A": 0.9514221439574798,
+            "max_reference_force_Si_site_error_eV_A": 0.36616913105087656
+          },
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": -0.004812835627648637,
+            "force_component_rmse_eV_A": 0.21150407581390596,
+            "force_vector_rmse_eV_A": 0.3663358053175849,
+            "max_force_vector_error_eV_A": 0.8331255709133412,
+            "max_reference_force_Si_site_error_eV_A": 0.2621829092170086
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.0007678526976633293,
+            "force_component_rmse_eV_A": 0.1031186555424716,
+            "force_vector_rmse_eV_A": 0.17860675060775483,
+            "max_force_vector_error_eV_A": 0.32308585043948196,
+            "max_reference_force_Si_site_error_eV_A": 0.13254272020579363
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.002261823897557728,
+            "force_component_rmse_eV_A": 0.1825074430159899,
+            "force_vector_rmse_eV_A": 0.31611216406317616,
+            "max_force_vector_error_eV_A": 0.509058047604688,
+            "max_reference_force_Si_site_error_eV_A": 0.04650370825807874
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.006633863221981784,
+            "force_component_rmse_eV_A": 0.36000776259782086,
+            "force_vector_rmse_eV_A": 0.6235517359386202,
+            "max_force_vector_error_eV_A": 1.1127699051563182,
+            "max_reference_force_Si_site_error_eV_A": 0.4149661522885974
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.008777355762353759,
+            "force_component_rmse_eV_A": 0.4091278581404605,
+            "force_vector_rmse_eV_A": 0.7086302370911096,
+            "max_force_vector_error_eV_A": 0.9803259050289833,
+            "max_reference_force_Si_site_error_eV_A": 0.9803259050289833
+          }
+        ]
+      }
+    },
+    "MTP10_F0.20": {
+      "model": "MTP10_AgCSiTi_v19v25_v24_F02_trained.mtp",
+      "development": {
+        "energy_rmse_meV_atom": 11.892802865961945,
+        "energy_mae_meV_atom": 11.015128118511171,
+        "force_component_rmse_eV_A": 0.25352867315034555,
+        "force_vector_rmse_eV_A": 0.4518662345237275,
+        "max_force_vector_error_eV_A": 1.3686984149798382,
+        "si_site_vector_error_rmse_eV_A": 0.4577020495255641,
+        "si_site_vector_error_max_eV_A": 1.0290443801571367,
+        "max_reference_force_Si_site_error_eV_A": 0.8281904999814134,
+        "si_center_metric_status": "proxy only: maximum-force Si site in each development frame; no registered hotspot center IDs were found",
+        "per_configuration": [
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": -0.008659460133660427,
+            "force_component_rmse_eV_A": 0.25833436273843474,
+            "force_vector_rmse_eV_A": 0.44744824160389723,
+            "max_force_vector_error_eV_A": 0.8281904999814134,
+            "max_reference_force_Si_site_error_eV_A": 0.8281904999814134
+          },
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": -0.0010676973897432163,
+            "force_component_rmse_eV_A": 0.23696093107271393,
+            "force_vector_rmse_eV_A": 0.4104283720267672,
+            "max_force_vector_error_eV_A": 1.031550048795114,
+            "max_reference_force_Si_site_error_eV_A": 0.2531735063704613
+          },
+          {
+            "natoms": 52,
+            "energy_error_eV_atom": -0.014303562201284046,
+            "force_component_rmse_eV_A": 0.24899061789479912,
+            "force_vector_rmse_eV_A": 0.4312644008017605,
+            "max_force_vector_error_eV_A": 0.8012703974639002,
+            "max_reference_force_Si_site_error_eV_A": 0.6451201618583892
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.012825355619330736,
+            "force_component_rmse_eV_A": 0.08963764523932032,
+            "force_vector_rmse_eV_A": 0.15525695582533727,
+            "max_force_vector_error_eV_A": 0.28887381371663523,
+            "max_reference_force_Si_site_error_eV_A": 0.11002989843743063
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.011618940153224363,
+            "force_component_rmse_eV_A": 0.14233004426880821,
+            "force_vector_rmse_eV_A": 0.24652286811710336,
+            "max_force_vector_error_eV_A": 0.3681749075745224,
+            "max_reference_force_Si_site_error_eV_A": 0.2570299703295172
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.01431476529064805,
+            "force_component_rmse_eV_A": 0.3800831357864458,
+            "force_vector_rmse_eV_A": 0.6583233022822247,
+            "max_force_vector_error_eV_A": 1.3686984149798382,
+            "max_reference_force_Si_site_error_eV_A": 0.46065977525773116
+          },
+          {
+            "natoms": 12,
+            "energy_error_eV_atom": -0.014316116041687366,
+            "force_component_rmse_eV_A": 0.3446560987787178,
+            "force_vector_rmse_eV_A": 0.5969618742232168,
+            "max_force_vector_error_eV_A": 1.0290443801571367,
+            "max_reference_force_Si_site_error_eV_A": 0.1711961929292097
+          }
+        ]
+      }
+    }
+  },
+  "data_sha256": {
+    "train.extxyz": "d439734db7a9162f5c1b12508da2e2ec69d285295f900bc9df01aa841c34d417",
+    "dev.extxyz": "6efada57f83be14311c2fd8a6c452de6d152ef43306e2dcca157d0002a511f48",
+    "train.cfg": "ce6c224519f7e0385eb2b29d2642571b8176248fad72e1e86fa90b7682959e5c",
+    "dev.cfg": "c06d14043cd699fc49b3cda80bccf68a154dd541c5dd4696c1c227e9827c1f1b"
+  },
+  "lammps_checks": {
+    "ACE": "2-rank PACE run0; energy difference 3.03e-6 eV; force component RMSE 6.02e-7 eV/A",
+    "MTP": "2-rank MLIP pair run0 completed"
+  },
+  "limitations": [
+    "No blind/test split.",
+    "Aggregate gates pass for ACE only; worst per-frame ACE development force component RMSE is 0.1988 eV/A.",
+    "Maximum all-Si development site vector error is a proxy, not the registered hotspot-center metric.",
+    "No million-atom performance benchmark.",
+    "No liquid Ag/high-temperature or physical MD validation."
+  ],
+  "follow_up_sensitivity_candidate": {
+    "model": "sensitivity_Ti_gap_weight/AgCSiTi_B1616_E10000_F1_a0.001_Ti_gap_weight0.05.ace.yaml",
+    "force_weight_scale_for_Ti_gap_rank_recovery_frame": 0.05,
+    "training_energy_rmse_meV_atom": 0.19084928839255802,
+    "training_force_component_rmse_eV_A": 0.09961921010360945,
+    "development_energy_rmse_meV_atom": 4.552495503374042,
+    "development_force_component_rmse_eV_A": 0.05545971590466783,
+    "development_worst_frame_force_component_rmse_eV_A": 0.09886035006819116,
+    "development_max_abs_frame_energy_error_meV_atom": 8.97069172070093,
+    "training_Ti_gap_frame_force_component_rmse_eV_A": 0.9135394869431197,
+    "formal_hotspot_center_metric": "not scored; atom IDs not registered",
+    "lammps_2rank_zero_step_force_component_rmse_eV_A": 2.7983232856726004e-07,
+    "status": "exploratory sensitivity candidate; not production-qualified"
+  },
+  "Ti_gap_provenance_follow_up": {
+    "frame": "Ti_gap_2p3_rank_recovery_v17_01",
+    "source_dataset": "v16 train frame 0, included in MACE v19 training split as a V17 Gamma relabel",
+    "input_sha256": "ffd97014cd348708b86612c5442650bde1f7b8bf90616c627df7dd5c5862ab2c",
+    "gamma_output_sha256": "07b1aa0cfdcdd125555d2dc82dec8a8b8c57e07b0a6adc6eb5067ea76cc6f57c",
+    "gamma_scf_converged": true,
+    "scf_iterations": 50,
+    "gamma_kpoints": [
+      1,
+      1,
+      1
+    ],
+    "source_declared_kpoints": [
+      1,
+      4,
+      2
+    ],
+    "kpoint_convergence": "unresolved; exploratory 1x4x2 rerun terminated after two SCF iterations and produced no label"
+  },
+  "follow_up_MTP_filtered_sensitivity": {
+    "model": "sensitivity_no_v17_rank_recovery/mtp/MTP10_no_Ti_gap_F005.mtp",
+    "train_frames": 70,
+    "energy_weight": 1.0,
+    "force_weight": 0.05,
+    "max_iterations": 1000,
+    "train": {
+      "energy_rmse_meV_atom": 58.60965019992333,
+      "force_component_rmse_eV_A": 0.5628549343940972
+    },
+    "development": {
+      "energy_rmse_meV_atom": 78.46482702896922,
+      "force_component_rmse_eV_A": 0.49512105816319424,
+      "si_site_vector_error_max_eV_A": 1.01245362471386
+    },
+    "status": "FAIL; sensitivity only, do not remove Ti_gap row from shared/MTP data based on this result"
+  }
+}

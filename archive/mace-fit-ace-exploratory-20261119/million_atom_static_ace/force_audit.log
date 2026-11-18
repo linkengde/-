@@ -1,0 +1,101 @@
+LAMMPS (30 Sep 2026 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+# Million-atom static force distribution audit; no integration.
+units metal
+atom_style atomic
+boundary p p f
+read_data /workspace/-/models/ag_ti3sic2_qsgs_1to1/ag_ti3sic2_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (299.635 301.85748 258.6115)
+  2 by 2 by 1 MPI processor grid
+  reading atoms ...
+  1021793 atoms
+  read_data CPU = 15.074 seconds
+pair_style pace
+ACE version: 2025.12.4p1
+Recursive evaluator is used
+pair_coeff * * /workspace/potential-comparison/mace_fit_data_20261118/sensitivity_Ti_gap_weight/AgCSiTi_B1616_E10000_F1_a0.001_Ti_gap_weight0.05.yace Ti Si C Ag
+Loading /workspace/potential-comparison/mace_fit_data_20261118/sensitivity_Ti_gap_weight/AgCSiTi_B1616_E10000_F1_a0.001_Ti_gap_weight0.05.yace
+Total number of basis functions
+	Ag: 32 (r=1) 372 (r>1)
+	C: 32 (r=1) 372 (r>1)
+	Si: 32 (r=1) 372 (r>1)
+	Ti: 32 (r=1) 372 (r>1)
+Mapping LAMMPS atom type #1(Ti) -> ACE species type #3
+Mapping LAMMPS atom type #2(Si) -> ACE species type #2
+Mapping LAMMPS atom type #3(C) -> ACE species type #1
+Mapping LAMMPS atom type #4(Ag) -> ACE species type #0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable gt05 atom v_fmag > 0.5
+variable gt1 atom v_fmag > 1.0
+variable gt5 atom v_fmag > 5.0
+compute fmax all reduce max v_fmag
+compute n05 all reduce sum v_gt05
+compute n1 all reduce sum v_gt1
+compute n5 all reduce sum v_gt5
+group Ti type 1
+392277 atoms in group Ti
+group Si type 2
+130759 atoms in group Si
+group C type 3
+261518 atoms in group C
+group Ag type 4
+237239 atoms in group Ag
+compute n05Ti Ti reduce sum v_gt05
+compute n05Si Si reduce sum v_gt05
+compute n05C C reduce sum v_gt05
+compute n05Ag Ag reduce sum v_gt05
+thermo 1
+thermo_style custom step atoms pe c_fmax c_n05 c_n1 c_n5 c_n05Ti c_n05Si c_n05C c_n05Ag
+dump hot all custom 1 force_hotspots.lammpstrj id type x y z v_fmag fx fy fz
+dump_modify hot sort id thresh v_fmag > 0.5
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8
+  ghost atom cutoff = 8
+  binsize = 4, bins = 75 76 65
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 204 | 209.7 | 213.9 Mbytes
+   Step        Atoms        PotEng         c_fmax         c_n05           c_n1           c_n5         c_n05Ti        c_n05Si         c_n05C        c_n05Ag    
+         0     1021793  -6979106.6      10.33617       330452         203536         2143           129055         41907          77658          81832        
+Loop time of 1.64135e-05 on 4 procs for 0 steps with 1021793 atoms
+
+102.1% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.641e-05  |            |       |100.00
+
+Nlocal:         255448 ave      257887 max      251697 min
+Histogram: 1 0 0 0 1 0 0 0 0 2
+Nghost:        58883.5 ave       61088 max       56355 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:  3.95115e+07 ave 4.02368e+07 max 3.83693e+07 min
+Histogram: 1 0 0 0 0 1 0 0 1 1
+
+Total # of neighbors = 1.580461e+08
+Ave neighs/atom = 154.67527
+Neighbor list builds = 0
+Dangerous builds = 0
+print "MACE_ACE_MILLION_FORCE_AUDIT_COMPLETE"
+MACE_ACE_MILLION_FORCE_AUDIT_COMPLETE
+Total wall time: 0:00:51

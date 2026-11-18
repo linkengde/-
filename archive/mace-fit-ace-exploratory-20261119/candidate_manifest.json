@@ -1,0 +1,323 @@
+{
+  "status": "EXPLORATORY_MTP_ACE_CANDIDATE_NOT_OFFICIAL",
+  "target_energy_convention": "GPAW native extrapolated total energy (force_consistent=False); forces from Fermi-Dirac sigma=0.10 eV",
+  "source_datasets": {
+    "v19": {
+      "path": "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/mace_periodic_v19_residual_response/data",
+      "status": "A_APPROVED_V19_DATASET",
+      "train_sha256": "a247f7619e613297a1c11d7dc97abec888aa0bbb8cc6889bcbbe05825ade0c9c",
+      "dev_sha256": "e9e86e3a353c50c8173cefede370e2653ec2e81506f4b8122b01b7a8efe76e4c",
+      "energy_convention": "native extrapolated total energy"
+    },
+    "v25": {
+      "path": "/workspace/-/research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v25_tisic_skeleton_acquisition/dataset",
+      "status": "non_official_skeleton_train_and_development_candidate",
+      "train_sha256": "299f89567754a55c5c174e47d5b380831424bcfdc9df05c331ae939652e347f7",
+      "dev_sha256": "a69b523c7b64e264a660822dbf981573684b35f74b06884a09495fa6e35d6dd0",
+      "original_energy_convention": "finite-width free energy at sigma=0.10 eV",
+      "staged_energy_key": "PW_PBE_energy_eV (native extrapolated total energy)",
+      "native_minus_free_eV_range": [
+        0.0627468530960158,
+        0.06646112984832087
+      ]
+    }
+  },
+  "roles": {
+    "train": {
+      "frames": 71,
+      "atoms_total": 2823,
+      "atom_count_range": [
+        12,
+        52
+      ],
+      "symbols": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "formulas": {
+        "C13Ag17Si8Ti13": 14,
+        "C13Ag2Si10Ti23": 12,
+        "C11Ag28SiTi9": 9,
+        "C8Ag10Si2Ti12": 1,
+        "C4Si2Ti6": 19,
+        "C16Ag4Si8Ti24": 16
+      },
+      "pbc_values": [
+        [
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true
+        ]
+      ],
+      "max_force_eV_A_range": [
+        0.85573759,
+        11.501233288358927
+      ]
+    },
+    "development": {
+      "frames": 7,
+      "atoms_total": 204,
+      "atom_count_range": [
+        12,
+        52
+      ],
+      "symbols": [
+        "Ag",
+        "C",
+        "Si",
+        "Ti"
+      ],
+      "formulas": {
+        "C16Ag4Si8Ti24": 3,
+        "C4Si2Ti6": 4
+      },
+      "pbc_values": [
+        [
+          true,
+          true,
+          false
+        ],
+        [
+          true,
+          true,
+          true
+        ]
+      ],
+      "max_force_eV_A_range": [
+        0.9777653969817064,
+        2.651649038698776
+      ]
+    }
+  },
+  "geometry_hash_intersections": {},
+  "limitations": [
+    "No blind/test set exists.",
+    "The three v19 development frames share one COD 9009647 source family.",
+    "All v25 labels derive from one Jeitschko\u2013Nowotny 1967 Ti3SiC2 source family and its dev rows correlate with the train family.",
+    "The v21-v24 response acquisitions also share that Jeitschko\u2013Nowotny reconstructed source family and intentionally probe near-parent geometries.",
+    "The combined candidate mixes Gamma-point v19 older interface labels, 6x6x1 slab interface response labels, and 10x10x2 bulk skeleton labels; their PBE/PW cutoff/PAW and smearing are aligned, but k-point and source-family limitations remain.",
+    "All v21-v24 additions are individually integrity/method-verified fixed-geometry PBE labels; they remain non-official exploratory training candidates.",
+    "Fit scores are recorded in FIT_REPORT.md and fit_summary.json. The ACE aggregate energy/force gates pass; the formal Si hotspot-center metric is unscorable because no center IDs were registered in this MACE split."
+  ],
+  "files_sha256": {
+    "train.extxyz": "d439734db7a9162f5c1b12508da2e2ec69d285295f900bc9df01aa841c34d417",
+    "dev.extxyz": "6efada57f83be14311c2fd8a6c452de6d152ef43306e2dcca157d0002a511f48",
+    "train.cfg": "ce6c224519f7e0385eb2b29d2642571b8176248fad72e1e86fa90b7682959e5c",
+    "dev.cfg": "c06d14043cd699fc49b3cda80bccf68a154dd541c5dd4696c1c227e9827c1f1b"
+  },
+  "added_sources": {
+    "v21_v22_v23_v24_verified_interface_force_response": [
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/calculations/AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21/AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21_PW_PBE.extxyz",
+        "sha256": "990b57b4eee3890c67bdb951624b8db18a06963b166ae2ccf1ef0aeb0222004c",
+        "verification": "PASS_RECOVERED_HASH_AND_SCF",
+        "config_type": "AgSi_JN1967_registryB_k6x6x1_sigma0p10_preflight_v21",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/calculations/AgC_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21/AgC_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21_PW_PBE.extxyz",
+        "sha256": "d01b807b425dba9bd51a477ccfaca5d63087b403806bfc182d8a6f0a71649576",
+        "verification": "PASS_HASH_SUMMARY_METHOD",
+        "config_type": "AgC_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v21_jeitschko_interface_acquisition/calculations/AgTi_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21/AgTi_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21_PW_PBE.extxyz",
+        "sha256": "3fc7fcbc91ff12a33811643ccc70e5cdbfd02046cdbeef4cd581de83615be0e4",
+        "verification": "PASS_HASH_SUMMARY_METHOD",
+        "config_type": "AgTi_JN1967_registryB_k6x6x1_sigma0p10_acquisition_v21",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgC_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22/AgC_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "6e683e8b2efbd7af62afa7e2564771412b75b455f273f70f8eefa000bf09f195",
+        "verification": "PASS",
+        "config_type": "AgC_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgC_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22/AgC_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "0d0a40d8c429bb2056b58f245a515fdae3d28ebf22dcf03fb8e5797acb785134",
+        "verification": "PASS",
+        "config_type": "AgC_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgSi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22/AgSi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "8c7467a4b07189ebc5aeb0bec83fc030276103ad115d86f5d0f3129d8432f426",
+        "verification": "PASS",
+        "config_type": "AgSi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgSi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22/AgSi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "e2f584c55ae0fe1862a7ddc03d263237062b3a2aff662b15eb5ad9ce3ec92008",
+        "verification": "PASS",
+        "config_type": "AgSi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgTi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22/AgTi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "1452f76e5c7092086dd77f99b6994ad987ebfeab34c62592f810889f4b529be9",
+        "verification": "PASS",
+        "config_type": "AgTi_JN1967_registryB_gap_m0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v22_force_response_acquisition/calculations/AgTi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22/AgTi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22_PW_PBE.extxyz",
+        "sha256": "9490531f47c89a1dc2bf3badcf1c822eca414eb6c73833d1bac844d876424367",
+        "verification": "PASS",
+        "config_type": "AgTi_JN1967_registryB_gap_p0p20_sigma0p10_k6x6x1_v22",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23/AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "2dd1ffa469d09c626d5ebb26876db81ae125a4302c442ccef43285d88f26c784",
+        "verification": "PASS",
+        "config_type": "AgC_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23/AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "ae082510dffdfce536271809097c8db46f56ca35c2a9a145a1c721bf7919dd55",
+        "verification": "PASS",
+        "config_type": "AgC_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23/AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "217df088d96b4e5139ccdd0220714a3e284f18e360114ef7e9e263632d4a04a1",
+        "verification": "PASS",
+        "config_type": "AgSi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23/AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "b20e126d0595468f5d91970b4b24d29adf6243a30426a1cb93502e98f1823ec1",
+        "verification": "PASS",
+        "config_type": "AgSi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23/AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "01ac3348b3d696e36917c0ea0cc139818a8d0a476bba409572985ed70323f50f",
+        "verification": "PASS",
+        "config_type": "AgTi_JN1967_registryB_surfaceTi_dz_m0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v23_ti_substrate_force_response_acquisition/calculations/AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23/AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23_PW_PBE.extxyz",
+        "sha256": "b39233c573865cb1b85e4a438b2bce73b0551c545cb2d5690bb94237ef3a0891",
+        "verification": "PASS",
+        "config_type": "AgTi_JN1967_registryB_surfaceTi_dz_p0p02_sigma0p10_k6x6x1_v23",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      },
+      {
+        "path": "research/mace-v12-transfer/periodic_interface_v4/pbe_interface_v24_carbon_force_response_acquisition/calculations/AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24/AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24_PW_PBE.extxyz",
+        "sha256": "f9768592dc8b056b32a104fbcee00cc924e23d764aba25ebe076871ceb937c66",
+        "verification": "PASS",
+        "config_type": "AgTi_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24",
+        "atoms": 52,
+        "formula": "C16Ag4Si8Ti24",
+        "method": "GPAW PBE/PW 500 eV, sigma 0.10 eV; input manifest checked"
+      }
+    ],
+    "file_count": 16
+  },
+  "geometry_hash_intersections_train_vs_dev": [],
+  "fit_evaluation": {
+    "report": "FIT_REPORT.md",
+    "summary": "fit_summary.json",
+    "selected_model": "ace_mace_cutoff6/AgCSiTi_B1616_E10000_F1_a0.001.ace.yaml",
+    "aggregate_development_energy_rmse_meV_atom": 5.54629486289105,
+    "aggregate_development_force_component_rmse_eV_A": 0.09298808865041415,
+    "overall_status": "ACE_PASS_AGGREGATE_GATES; MTP_FAIL",
+    "alternate_sensitivity_candidate": {
+      "model": "sensitivity_Ti_gap_weight/AgCSiTi_B1616_E10000_F1_a0.001_Ti_gap_weight0.05.ace.yaml",
+      "force_weight_scale_for_Ti_gap_rank_recovery_frame": 0.05,
+      "training_energy_rmse_meV_atom": 0.19084928839255802,
+      "training_force_component_rmse_eV_A": 0.09961921010360945,
+      "development_energy_rmse_meV_atom": 4.552495503374042,
+      "development_force_component_rmse_eV_A": 0.05545971590466783,
+      "development_worst_frame_force_component_rmse_eV_A": 0.09886035006819116,
+      "development_max_abs_frame_energy_error_meV_atom": 8.97069172070093,
+      "training_Ti_gap_frame_force_component_rmse_eV_A": 0.9135394869431197,
+      "formal_hotspot_center_metric": "not scored; atom IDs not registered",
+      "lammps_2rank_zero_step_force_component_rmse_eV_A": 2.7983232856726004e-07,
+      "status": "exploratory sensitivity candidate; not production-qualified"
+    },
+    "Ti_gap_provenance_follow_up": {
+      "frame": "Ti_gap_2p3_rank_recovery_v17_01",
+      "source_dataset": "v16 train frame 0, included in MACE v19 training split as a V17 Gamma relabel",
+      "input_sha256": "ffd97014cd348708b86612c5442650bde1f7b8bf90616c627df7dd5c5862ab2c",
+      "gamma_output_sha256": "07b1aa0cfdcdd125555d2dc82dec8a8b8c57e07b0a6adc6eb5067ea76cc6f57c",
+      "gamma_scf_converged": true,
+      "scf_iterations": 50,
+      "gamma_kpoints": [
+        1,
+        1,
+        1
+      ],
+      "source_declared_kpoints": [
+        1,
+        4,
+        2
+      ],
+      "kpoint_convergence": "unresolved; exploratory 1x4x2 rerun terminated after two SCF iterations and produced no label"
+    },
+    "MTP_filtered_sensitivity": {
+      "model": "sensitivity_no_v17_rank_recovery/mtp/MTP10_no_Ti_gap_F005.mtp",
+      "train_frames": 70,
+      "energy_weight": 1.0,
+      "force_weight": 0.05,
+      "max_iterations": 1000,
+      "train": {
+        "energy_rmse_meV_atom": 58.60965019992333,
+        "force_component_rmse_eV_A": 0.5628549343940972
+      },
+      "development": {
+        "energy_rmse_meV_atom": 78.46482702896922,
+        "force_component_rmse_eV_A": 0.49512105816319424,
+        "si_site_vector_error_max_eV_A": 1.01245362471386
+      },
+      "status": "FAIL; sensitivity only, do not remove Ti_gap row from shared/MTP data based on this result"
+    }
+  }
+}

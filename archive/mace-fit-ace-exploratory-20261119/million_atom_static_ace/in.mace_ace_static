@@ -1,0 +1,15 @@
+# Million-atom ACE performance check only: no integration or heating.
+units metal
+atom_style atomic
+boundary p p f
+read_data /workspace/-/models/ag_ti3sic2_qsgs_1to1/ag_ti3sic2_qsgs.data.gz
+pair_style pace
+pair_coeff * * /workspace/potential-comparison/mace_fit_data_20261118/sensitivity_Ti_gap_weight/AgCSiTi_B1616_E10000_F1_a0.001_Ti_gap_weight0.05.yace Ti Si C Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fnmax all reduce max v_fn
+thermo 1
+thermo_style custom step atoms pe c_fnmax
+run 0
+print "MACE_ACE_MILLION_STATIC_COMPLETE"
