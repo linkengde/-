@@ -44,3 +44,7 @@ SI01 的常规 12 构型总体力 RMSE 仍为 POD 0.613、SNAP 0.652 eV/Å；压
 cd archive/round7-v12f-pod-snap-artifacts-20261118
 sha256sum -c SHA256SUMS.txt
 ```
+
+## 修正高度模型（单独构建）
+
+另归档了符合 0–200 Å 材料层、200–300 Å 真空区的新几何，458,248 原子，Ag:Ti₃SiC₂ 质量比约 1:1，两相均连续。初始 POD v12f `run 0` 得到 Fmax 22.35 eV/Å。FIRE 和冷态稳定性检查仍待完成；这不是加热准入结论。详见 `models/target_200x200x300_qsgs_material200/`。
