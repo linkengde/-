@@ -3,7 +3,7 @@
   "branch": "codex/round7-v12f-pod-snap-artifacts-20261118",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "v12j archived; no heating approval; full-model cold stability still fails",
+  "status": "v12k archived; no heating approval; full-model cold stability still fails",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -632,5 +632,78 @@
     "decision": "No heating, cooling, or solidification; cold-stability check failed.",
     "status_report": "v12j/ROUND7_STATUS_V12J_20261118.md",
     "completed_DFT_label": "v12j/labels/tic_pair4_v12i_cold_10fs_pw350_gamma/"
+  },
+  "latest_v12k": {
+    "status": "completed exploratory fit and short-screen; cold stability not passed",
+    "candidate_path": "v12k/candidate/v12k_ticpair_candidate",
+    "status_report": "v12k/ROUND7_STATUS_V12K_20261118.md",
+    "data_split": {
+      "baseline_training_configurations": 128,
+      "validation_configurations": 12,
+      "local_force_frames": 20,
+      "total_fitpod_training_configurations": 148,
+      "cumulative_DFT_center_force_rows": 12,
+      "Si01_center_104359": "held out"
+    },
+    "POD_validation": {
+      "energy_RMSE_eV_per_atom": 0.078198,
+      "force_RMSE_eV_per_A": 0.596576
+    },
+    "SNAP_validation": {
+      "energy_RMSE_eV_per_atom": 0.0644964,
+      "force_RMSE_eV_per_A": 0.66821,
+      "force_R2": -0.967313,
+      "chemflag": 1,
+      "bnormflag": 1
+    },
+    "Si01_center_holdout_error_eV_per_A": {
+      "POD": 7.93726,
+      "SNAP": 32.942823
+    },
+    "pair5_DFT_label": {
+      "center_atom_ids": [
+        213809,
+        213812
+      ],
+      "species": [
+        "Ti",
+        "C"
+      ],
+      "pair_distance_A": 1.8131706,
+      "crop_atoms": 34,
+      "SCF_iterations": 49,
+      "method": "GPAW PBE/PW350 Gamma; Fermi-Dirac sigma 0.10 eV",
+      "energy_eV": -147.0861551,
+      "free_energy_eV": -147.8618218
+    },
+    "full_model_static": {
+      "atoms": 458248,
+      "box_A": [
+        200,
+        200,
+        300
+      ],
+      "POD_Fmax_eV_per_A": 15.994939,
+      "POD_F99_eV_per_A": 5.374806,
+      "SNAP_Fmax_eV_per_A": 113.739375,
+      "SNAP_F99_eV_per_A": 20.424835,
+      "atoms_over_500": 0
+    },
+    "POD_cold_10fs": {
+      "temperature_mobile_K": [
+        300.0,
+        707.1797
+      ],
+      "potential_energy_delta_eV": -22437.7145,
+      "kinetic_energy_delta_eV": 22231.9085,
+      "total_energy_delta_eV": -205.806,
+      "atom_loss": 0,
+      "max_displacement_A": 0.366893,
+      "min_TiC_distance_A": [
+        2.079014,
+        1.810974
+      ]
+    },
+    "decision": "No laser heating, cooling, or solidification until cold stability and local extrapolation improve."
   }
 }

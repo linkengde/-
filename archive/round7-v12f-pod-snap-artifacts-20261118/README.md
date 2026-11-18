@@ -64,3 +64,8 @@ sha256sum -c SHA256SUMS.txt
 ## v12j 更新
 
 `v12j/` 包含完整 v12j POD/SNAP 拟合候选、Si01 留出、新 pair4 DFT 标签、完整模型静态与冷态日志、压缩末态坐标及复现脚本。详细结果见 `v12j/ROUND7_STATUS_V12J_20261118.md`。
+
+
+## Latest validation: v12k
+
+The current Round7 exploratory POD/SNAP candidate and its validation package are in `v12k/`. See `ROUND7_CURRENT_STATUS_20261118.md` for the current decision and measurements. The package includes the 128/12 data split, 20 local training frames, fitted POD/SNAP coefficients, pair5 DFT label, Si01 holdout evaluation, full-model static summaries, and a compressed 10 fs POD cold-run trajectory. The current cold run is not stable enough to authorize heating.
