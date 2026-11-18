@@ -20,8 +20,9 @@ Do not start heating. The ordinary 12-frame validation errors are below the expl
 
 ## Local DFT follow-up
 
-- The initial 36-atom crop around Ti 62864–C 62871 converged with GPAW PBE/PW350/Gamma in 34 SCF iterations. v12g center-force errors are 2.625 eV/Å (Ti) and 10.171 eV/Å (C).
-- DFT labels for that pair in the 10 fs cold snapshot and for an independent short Ti–C pair (IDs 324028/324034) are in progress. GPAW MPI failed due launcher/library incompatibility and a parallel matrix-distribution error; the active retries use single-process BLAS threads. No incomplete result will enter training.
+- The initial 36-atom crop around Ti 62864–C 62871 converged with GPAW PBE/PW350/Gamma in 34 SCF iterations. v12g center-force errors are 2.625 eV/Å (Ti) and 10.171 eV/Å (C). The mass-weighted relative net-force projection along Ti→C is -0.897 for v12g and -0.0219 for DFT, so the DFT forces are nearly neutral in this relative coordinate; this is a comparison of atomic net forces, not a pairwise bond-force decomposition.
+- The 10 fs compressed crop around the same pair also converged in 34 SCF iterations. At 1.683 Å, the DFT center-force errors are 2.995 eV/Å (Ti) and 7.234 eV/Å (C). Its mass-weighted relative net-force projection is +0.625 for DFT and -0.0106 for v12g: DFT tends to separate the pair, while v12g is nearly neutral. This is a local atomic-net-force comparison, not a pairwise bond-force decomposition.
+- DFT for an independent short Ti–C pair (IDs 324028/324034) is still running. GPAW MPI failed due launcher/library incompatibility and a parallel matrix-distribution error; the active retry uses single-process BLAS threads. No incomplete result will enter training.
 - If labels converge, prepare a separate v12h candidate from the 128 baseline train / 12 ordinary validation split, the established local-force set, and the new targeted Ti–C rows. Keep Si01 center ID 104359 held out.
 
 ## Heating gate

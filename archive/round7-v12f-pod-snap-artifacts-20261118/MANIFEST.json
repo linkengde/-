@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g full FIRE completed but not converged and showed Ti-C/skeleton collapse; cold 10 fs release energy and formed 53 short Ti-C pairs; initial Ti-C DFT converged in 34 SCF steps; compressed-state and independent-pair labels running",
+  "latest_update": "2026-11-18: v12g full FIRE completed but not converged and showed Ti-C/skeleton collapse; no-heat cold 10 fs released energy and formed 53 short Ti-C pairs; initial and compressed-state DFT labels for Ti 62864/C 62871 converged; independent second-pair DFT running",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -424,7 +424,7 @@
       "initial": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_initial.extxyz",
       "cold_10fs": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_cold_10fs.extxyz"
     },
-    "DFT_status": "initial-state SCF iteration 29; not converged; compressed-state label pending",
+    "DFT_status": "initial and pair1 cold-compressed states converged; independent pair2 DFT remains running",
     "training_coverage": {
       "configurations": 142,
       "TiC_pairs_below_1p8_A": 32,
@@ -458,10 +458,22 @@
       "cold_10fs_separation_A": 1.686817,
       "crop_atoms": 38,
       "DFT_status": "running single-process GPAW calculation; incomplete and excluded from fitting"
+    },
+    "compressed_state_DFT": {
+      "status": "CONVERGED",
+      "SCF_iterations": 34,
+      "pair_distance_A": 1.682648,
+      "center_force_errors_eV_per_A": {
+        "Ti_62864": 2.994636,
+        "C_62871": 7.233921
+      },
+      "DFT_mass_weighted_relative_net_force_projection_along_Ti_to_C": 0.624674,
+      "POD_v12g_mass_weighted_relative_net_force_projection_along_Ti_to_C": -0.010551,
+      "interpretation": "DFT net-force trend separates the pair; POD v12g is nearly neutral. This projects atomic net forces and is not a pairwise bond-force decomposition."
     }
   },
   "v12h_candidate": {
-    "status": "preparation script archived; refit pending converged compressed-state and independent-pair DFT labels",
+    "status": "preparation script archived; refit waits for independent pair2 DFT label to converge",
     "training_split": "128 baseline train configurations; 12 ordinary validation configurations; Si00/02/03 training and Si01 center 104359 held out",
     "local_force_weight": 10.0,
     "planned_force_targets": "two center atoms per each converged local Ti-C crop; crop-edge forces anchored to POD v10"

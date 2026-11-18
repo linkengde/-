@@ -99,7 +99,12 @@ def main() -> None:
         shutil.copy2(V12G/'POD'/name, OUT/'POD'/name)
     for name in ('fitsnap.in',):
         shutil.copy2(V12G/'SNAP'/name, OUT/'SNAP'/name)
-    shutil.copy2(HERE/'sanitize_v12g_fit_data.py', OUT/'sanitize_local_fit_data.py')
+    shutil.copy2(V12G/'holdout_si_hotspot_104359.extxyz',
+                 OUT/'holdout_si_hotspot_104359.extxyz')
+    holdout_data = V12G/'holdout_label_evaluation/POD_v12f_si01/local.data'
+    holdout_data_dst = OUT/'holdout_label_evaluation/POD_v12f_si01/local.data'
+    holdout_data_dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(holdout_data, holdout_data_dst)
 
     added = []
     fit_frames = []
@@ -162,6 +167,29 @@ def main() -> None:
         fit_frames.append(clean)
     write(OUT/'dataset/train/local_dft_targets.xyz', fit_frames, format='extxyz')
     write(OUT/'SNAP/data/Local.xyz', fit_frames, format='extxyz')
+    audit_files = [OUT/'dataset/train/local_dft_targets.xyz', OUT/'SNAP/data/Local.xyz']
+    for path in audit_files:
+        check = read(path, index=':')
+        if len(check) != len(fit_frames):
+            raise RuntimeError(f'Frame count mismatch in {path}')
+        for i, (expected, actual) in enumerate(zip(fit_frames, check)):
+            if not np.array_equal(expected.numbers, actual.numbers):
+                raise RuntimeError(f'Species order changed in {path}, frame {i}')
+            if not np.allclose(expected.positions, actual.positions, atol=0, rtol=0):
+                raise RuntimeError(f'Positions changed in {path}, frame {i}')
+            if not np.allclose(expected.arrays['forces'], actual.get_forces(), atol=1e-12, rtol=0):
+                raise RuntimeError(f'Forces changed in {path}, frame {i}')
+            if float(expected.info['energy']) != float(actual.get_potential_energy()):
+                raise RuntimeError(f'Energy changed in {path}, frame {i}')
+        if 'Properties=species:S:1:pos:R:3:forces:R:3' not in path.read_text().splitlines()[1]:
+            raise RuntimeError(f'Unexpected force-column order in {path}')
+    (OUT/'local_fit_input_audit.json').write_text(json.dumps({
+        'status': 'PASS', 'local_frames': len(fit_frames),
+        'fitter_files': [str(p) for p in audit_files],
+        'property_order': 'species, position[3], forces[3]',
+        'new_DFT_target_rows': 6,
+        'note': 'For each new crop, only the Ti-C pair center forces are DFT targets; all other crop forces are POD v10 anchors.'
+    }, indent=2, ensure_ascii=False)+'\n')
 
     desc = OUT/'POD/AgTiSiC_POD_v12h.pod'
     shutil.copy2(OUT/'POD/AgTiSiC_POD_v12g.pod', desc)
@@ -178,13 +206,16 @@ def main() -> None:
 
     manifest = json.loads((V12G/'local_training_manifest.json').read_text())
     manifest.update({'status': 'prepared; waiting for independent fit and validation',
-                     'candidate': 'v12h_two_state_full200_Ti-C_hotspot_refit',
+                     'candidate': 'v12h_full200_Ti-C_cold-stability_refit',
                      'local_force_frames': 17,
                      'si01_holdout_center_atom_id': 104359,
                      'holdout_excluded_from_training': True,
                      'new_tic_hotspot_labels': added,
                      'fit_input_property_order': 'species:S:1,pos:R:3,forces:R:3',
                      'local_force_semantics': 'DFT forces on central Ti-C pair; POD v10 force anchors on crop edge atoms; local force group weight=10.0'})
+    manifest['source_labels'] = list(dict.fromkeys(
+        list(manifest.get('source_labels', [])) + [str(p) for p in label_paths]))
+    manifest['total_fitpod_training_configurations'] = 128 + len(sources)
     (OUT/'local_training_manifest.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False)+'\n')
     (OUT/'run_v12h_fits.sh').write_text('''#!/usr/bin/env bash
 set -euo pipefail
@@ -198,6 +229,37 @@ test -s "$root/SNAP/AgTiSiC_SNAP_v12h.snapparam"
 test -s "$root/SNAP/SNAP_v12h_metrics.md"
 ''')
     (OUT/'run_v12h_fits.sh').chmod(0o755)
+    evaluator = (V12G/'evaluate_v12g_si01.py').read_text()
+    evaluator = evaluator.replace('MODEL = ROOT.parent', 'MODEL = ROOT')
+    evaluator = evaluator.replace('POD_v12g', 'POD_v12h').replace('SNAP_v12g', 'SNAP_v12h')
+    evaluator = evaluator.replace('v12g', 'v12h')
+    (OUT/'evaluate_v12h_si01.py').write_text(evaluator)
+    (OUT/'evaluate_v12h_si01.py').chmod(0o755)
+    small_test = (HERE/'run_small_cold_pod_v12f_1fs.py').read_text()
+    small_test = small_test.replace('AgTiSiC_POD_v12f.pod', 'AgTiSiC_POD_v12h.pod')
+    small_test = small_test.replace('pod_v12f_coefficients.pod', 'pod_v12h_coefficients.pod')
+    small_test = small_test.replace('corrected POD v12f', 'POD v12h')
+    small_test = small_test.replace('small_cold_14007_1fs', 'small_cold_v12h_14007_1fs')
+    (OUT/'run_small_cold_pod_v12h_1fs.py').write_text(small_test)
+    (OUT/'run_small_cold_pod_v12h_1fs.py').chmod(0o755)
+    small_snap = small_test.replace("OUT=HERE/'small_cold_v12h_14007_1fs'/'POD'",
+                                     "OUT=HERE/'small_cold_v12h_14007_1fs'/'SNAP'")
+    small_snap = small_snap.replace("pair_style pod", "pair_style snap")
+    small_snap = small_snap.replace(
+        "pair_coeff * * {HERE/'POD/AgTiSiC_POD_v12h.pod'} {HERE/'POD/pod_v12h_coefficients.pod'} Ag C Si Ti",
+        "pair_coeff * * {HERE/'SNAP/AgTiSiC_SNAP_v12h.snapcoeff'} {HERE/'SNAP/AgTiSiC_SNAP_v12h.snapparam'} Ag C Si Ti")
+    small_snap = small_snap.replace('Potential: POD v12h', 'Potential: SNAP v12h')
+    (OUT/'run_small_cold_snap_v12h_1fs.py').write_text(small_snap)
+    (OUT/'run_small_cold_snap_v12h_1fs.py').chmod(0o755)
+    full_root = HERE.parent/'target_200x200x300_qsgs_material200'
+    cold_full = (full_root/'run_cold_v12g_initial_458k.py').read_text()
+    cold_full = cold_full.replace('v12g_si04_candidate', 'v12h_ticpair_candidate').replace('v12g', 'v12h')
+    (full_root/'run_cold_v12h_initial_458k.py').write_text(cold_full)
+    (full_root/'run_cold_v12h_initial_458k.py').chmod(0o755)
+    static_full = (full_root/'run_static_v12g_458k.py').read_text()
+    static_full = static_full.replace('v12g_si04_candidate', 'v12h_ticpair_candidate').replace('v12g', 'v12h')
+    (full_root/'run_static_v12h_458k.py').write_text(static_full)
+    (full_root/'run_static_v12h_458k.py').chmod(0o755)
     print(json.dumps({'status': 'PREPARED', 'output': str(OUT), 'baseline_train': 128,
                       'local_train_frames': len(sources), 'validation': 12,
                       'SI01_holdout_center_atom_id': 104359, 'new_labels': added},
