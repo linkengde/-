@@ -1,3 +1,7 @@
+# Round7 POD/SNAP v12f/v12g 归档
+
+最新进度见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md)。v12g Si04 补标签和重新拟合、完整模型静态及冷态短跑结果已加入；v12g 全模型 FIRE 正在运行，完成后再补充终态审计。当前没有加热许可。
+
 # Round7 POD/SNAP v12f 拟合与已完成验证归档
 
 本归档建立在分支 `codex/round7-v11-si-hotspot-labels-20261118` 的提交

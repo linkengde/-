@@ -1,5 +1,5 @@
 {
-  "archive_id": "Round7_v12f_POD_SNAP_fit_and_completed_validation_20261118",
+  "archive_id": "Round7_v12f_v12g_POD_SNAP_fit_and_validation_20261118",
   "branch": "codex/round7-v12f-pod-snap-artifacts-20261118",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
@@ -262,6 +262,50 @@
     "POD_v12f_atoms_above_500_eV_A": 0,
     "FIRE": "in progress locally; not yet passed",
     "cold_stability": "not yet run on this geometry",
-    "status": "geometry and run0 screened; no heating approval"
+    "status": "geometry and run0 screened; no heating approval",
+    "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
+    "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
+  },
+  "latest_update": "2026-11-18: v12g Si04 refit and full 458248-atom static/cold checks added; v12g full FIRE in progress locally",
+  "v12g_si04_refit": {
+    "baseline_train_configurations": 128,
+    "local_force_frames": 14,
+    "total_fitpod_training_configurations": 142,
+    "baseline_validation_configurations": 12,
+    "si_holdout_center_id": 104359,
+    "training_si_hotspot_indices": [
+      0,
+      2,
+      3,
+      4
+    ],
+    "holdout_si_hotspot_indices": [
+      1
+    ],
+    "POD_validation_force_RMSE_eV_per_A": 0.604641,
+    "POD_validation_energy_RMSE_eV_per_atom": 0.079462,
+    "SNAP_validation_force_RMSE_eV_per_A": 0.627317,
+    "SNAP_validation_energy_RMSE_eV_per_atom": 0.0570302,
+    "si01_center_vector_error_eV_per_A": {
+      "POD_v12f": 13.1586,
+      "SNAP_v12f": 48.0077,
+      "POD_v12g": 7.19236,
+      "SNAP_v12g": 54.5
+    },
+    "full_458248_static_v12g_POD_Fmax_eV_per_A": 18.2217,
+    "full_458248_static_v12g_POD_F99_eV_per_A": 6.1584,
+    "full_cold_checks": {
+      "dt_fs": 1,
+      "steps": 10,
+      "lost_atoms": 0,
+      "v12f_final_mobile_temperature_K": 999.374,
+      "v12f_minimum_neighbor_A": 1.6865,
+      "v12f_atoms_nearest_neighbor_below_1p8_A": 94,
+      "v12g_final_mobile_temperature_K": 977.869,
+      "v12g_minimum_neighbor_A": 1.68265,
+      "v12g_atoms_nearest_neighbor_below_1p8_A": 106
+    },
+    "full_v12g_FIRE": "in progress locally; not yet included as a completed result",
+    "heating_started": false
   }
 }
