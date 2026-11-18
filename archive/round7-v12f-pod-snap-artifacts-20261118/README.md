@@ -1,6 +1,6 @@
 # Round7 POD/SNAP v12f/v12g 归档
 
-最新进度见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md)。v12f/v12g 冷态 Ti–C 短接触审计和新的 Ti–C 局部 DFT 候选也已加入。v12g Si04 补标签和重新拟合、完整模型静态及冷态短跑结果已加入；v12g 全模型 FIRE 已完成 100 步但未收敛，终态检查发现骨架塌缩；初始 Ti–C 局部 DFT 标签仍在运行。当前没有加热许可。
+最新进度见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md)。458,248 原子 POD v12g 全模型 FIRE 已完成 100 步但未收敛，终态出现严重短接触和结构塌缩；无热源冷态 10 fs 检查也出现明显升温及 53 对短 Ti–C 接触，未丢原子。Ti 62864–C 62871 初始态局部 DFT 已收敛；压缩态和第二处独立 Ti–C 接触正在补算，随后将建立隔离的 v12h 候选。当前没有启动加热。
 
 # Round7 POD/SNAP v12f 拟合与已完成验证归档
 

@@ -234,7 +234,7 @@
     "method": "GPAW PBE/PW350/Gamma; Fermi-Dirac width 0.10 eV",
     "note": "No converged DFT force label is included yet; do not fit using this geometry until its DFT run passes convergence and force audit."
   },
-  "heating_status": "not_started: cold stability failed; exact FIRE remains unconverged and original atom-count error remains unexplained",
+  "heating_status": "not_started: POD v12g failed full-model cold stability and FIRE shape checks; no heating/cooling/solidification run",
   "geometry_note": "The 347,464-atom model box is 200x200x300 A, but its material occupies z=-0.258..150.53 A, not through z=200 A; resolve geometry before claiming the requested layer layout.",
   "corrected_height_geometry": {
     "archive_path": "models/target_200x200x300_qsgs_material200",
@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g full FIRE completed but not converged; collapsed Ti-C/Ag-skeleton contacts audited; Ti-C initial DFT SCF at iteration 29",
+  "latest_update": "2026-11-18: v12g full FIRE completed but not converged and showed Ti-C/skeleton collapse; cold 10 fs release energy and formed 53 short Ti-C pairs; initial Ti-C DFT converged in 34 SCF steps; compressed-state and independent-pair labels running",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -305,8 +305,13 @@
       "v12g_minimum_neighbor_A": 1.68265,
       "v12g_atoms_nearest_neighbor_below_1p8_A": 106
     },
-    "full_v12g_FIRE": "in progress locally; not yet included as a completed result",
-    "heating_started": false
+    "full_v12g_FIRE": "completed; 100-step iteration cap reached without convergence; severe short-contact collapse, not usable for MD",
+    "heating_started": false,
+    "cold_screen_energy_change_eV": {
+      "potential_energy": -37333.475,
+      "kinetic_energy": 37011.458,
+      "total_energy": -322.017
+    }
   },
   "v12g_full_FIRE_progress": {
     "status": "COMPLETED_MAXITER_NOT_CONVERGED",
@@ -429,6 +434,36 @@
       "frame_0107_force_RMSE_eV_per_A": 2.036851,
       "DFT_mass_weighted_relative_force_projection_along_Ti_to_C": 3.78316,
       "interpretation": "short Ti-C training environments exist; investigate full-structure local transfer/stability rather than treating this as no-short-contact data"
+    },
+    "initial_DFT": {
+      "status": "CONVERGED",
+      "SCF_iterations": 34,
+      "method": "GPAW PBE/PW350 Gamma, Fermi-Dirac sigma 0.10 eV",
+      "center_force_errors_eV_per_A": {
+        "Ti_62864": 2.624834,
+        "C_62871": 10.171403
+      },
+      "label": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/labels/tic_pair_initial_pw350_gamma.extxyz"
+    },
+    "compressed_DFT_status": "running single-process GPAW calculation; incomplete and excluded from fitting",
+    "second_independent_pair": {
+      "ids": [
+        324028,
+        324034
+      ],
+      "elements": [
+        "Ti",
+        "C"
+      ],
+      "cold_10fs_separation_A": 1.686817,
+      "crop_atoms": 38,
+      "DFT_status": "running single-process GPAW calculation; incomplete and excluded from fitting"
     }
+  },
+  "v12h_candidate": {
+    "status": "preparation script archived; refit pending converged compressed-state and independent-pair DFT labels",
+    "training_split": "128 baseline train configurations; 12 ordinary validation configurations; Si00/02/03 training and Si01 center 104359 held out",
+    "local_force_weight": 10.0,
+    "planned_force_targets": "two center atoms per each converged local Ti-C crop; crop-edge forces anchored to POD v10"
   }
 }
