@@ -26,7 +26,7 @@ start=time.time(); log=outdir/f'{stem}.txt'
 atoms.calc=GPAW(mode=PW(350),xc='PBE',kpts=(1,1,1),symmetry='off',
     occupations=FermiDirac(0.10),mixer=Mixer(beta=0.05,nmaxold=8,weight=100),
     convergence={'density':1e-5,'eigenstates':1e-5,'energy':1e-5},maxiter=160,
-    parallel={'domain':max(1,world.size)},txt=str(log))
+    parallel={'domain':1,'band':max(1,world.size)},txt=str(log))
 energy=float(atoms.get_potential_energy())
 free_energy=float(atoms.get_potential_energy(force_consistent=True))
 forces=np.asarray(atoms.get_forces(),dtype=float)
