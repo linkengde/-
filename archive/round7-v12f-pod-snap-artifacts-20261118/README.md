@@ -68,4 +68,4 @@ sha256sum -c SHA256SUMS.txt
 
 ## Latest validation: v12k
 
-The current Round7 exploratory POD/SNAP candidate and its validation package are in `v12k/`. See `ROUND7_CURRENT_STATUS_20261118.md` for the current decision and measurements. The package includes the 128/12 data split, 20 local training frames, fitted POD/SNAP coefficients, pair5 DFT label, Si01 holdout evaluation, full-model static summaries, and a compressed 10 fs POD cold-run trajectory. The current cold run is not stable enough to authorize heating.
+The current Round7 exploratory POD/SNAP candidate and its validation package are in `v12k/`. See `ROUND7_CURRENT_STATUS_20261118.md` for the current decision and measurements. The package includes the 128/12 data split, 20 local training frames, fitted POD/SNAP coefficients, pair5 DFT label, Si01 holdout evaluation, full-model static summaries, and a compressed 10 fs POD cold-run trajectory. POD cold run reaches about 707 K in 10 fs. The SNAP cold run reaches about 3975 K and creates 2352 Ti-C contacts under 1.8 A; neither model is approved for heating, and SNAP shows severe collapse.
