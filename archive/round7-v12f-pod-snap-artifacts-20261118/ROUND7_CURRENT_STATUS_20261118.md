@@ -1,30 +1,53 @@
-# Round7 POD/SNAP v12g validation status — 2026-11-18
+# Round7 POD/SNAP v12h 复核进度（2026-11-18）
 
-## Decision
+## 当前判断
 
-Do not start heating. The ordinary 12-frame validation errors are below the exploratory force-RMSE target of 3 eV/Å, but the current potentials fail transfer/stability checks on the 458,248-atom bicontinuous model.
+**不启动加热、冷却或凝固。** v12h 的常规 12 构型误差符合探索性目标，但完整模型短时冷态仍释放应变能，且仍有 Ti–C 短接触。POD v12h 可继续作为优先候选做局部补标签和冷态稳定性改进；SNAP v12h 作为对照保留，暂不做全模型 MD。
 
-## Metrics and what they mean
+这里的探索性误差目标是能量 RMSE 约 0.1 eV/atom、全局力 RMSE 约 3 eV/Å。单个热点的中心力误差不是全局 RMSE。Fmax 500 eV/Å 只是应急上限，不是 MD 通过标准。
 
-- POD v12g: energy RMSE 0.0795 eV/atom; force RMSE 0.6046 eV/Å on the ordinary validation set.
-- SNAP v12g: energy RMSE 0.0570 eV/atom; force RMSE 0.6273 eV/Å on the ordinary validation set.
-- On the separate held-out Si01 center (ID 104359), the vector force errors are 7.192 eV/Å for POD and 54.500 eV/Å for SNAP. These are one-atom local errors, not global RMSE. Si01 remains excluded from training.
-- A max force of 500 eV/Å is only an emergency ceiling. It is not a pass criterion for relaxation or MD; the present structure shows severe collapse at much lower Fmax.
+## 拟合和验证
 
-## Full-model checks
+- 数据划分：128 个基线训练构型、17 个局部训练构型、12 个常规验证构型。Si 00/02/03 为训练候选，Si 01 中心原子 ID 104359 继续留出。
+- 三个新增 Ti–C DFT 局部标签均已收敛，且每个局部构型仅将中心 Ti、C 两行 DFT 力作为拟合目标；边缘原子的力不作为 DFT 标签。
+- POD v12h：常规验证能量 RMSE 0.078307 eV/atom，力 RMSE 0.603860 eV/Å。
+- SNAP v12h：常规验证能量 RMSE 0.059408 eV/atom，力 RMSE 0.684857 eV/Å。
+- SNAP LAMMPS 参数为 `chemflag=1`、`bnormflag=0`，运行时发出配置组合警告。静态结果是按导出的参数计算的；在继续把 SNAP 当成候选前，需要核实本次化学 SNAP 是否应使用匹配的 `bnormflag` 并在必要时重新拟合。
+- Si01 留出中心力误差：POD 7.632 eV/Å（方向余弦 0.791），SNAP 49.805 eV/Å（方向余弦 −0.113）。该热点仍未被可靠描述；Si01 没有进入训练。
+- 已加入的三个 Ti–C 局部 DFT 构型上，两模型的中心力误差均明显下降，但这些构型参与了 v12h 训练，属于训练内局部检查，不能当独立盲测。
 
-- Model: 458,248 atoms, corrected 200 × 200 × 300 Å geometry.
-- POD v12g static screen: Fmax 18.222 eV/Å, F99 6.158 eV/Å; no force exceeded 500 eV/Å.
-- Short cold screen: 10 steps at dt=1 fs, 300 K velocity initialization, bottom skeleton fixed and bath layer at 300 K, no laser/TTM heat. All 458,248 atoms retained, but mobile temperature rose to 977.9 K. Potential energy fell by 37,333 eV while kinetic energy rose by 37,011 eV; the temperature increase is from rapid structural energy release, not applied heating. There are 53 unique Ti–C pairs below 1.8 Å (106 atoms); shortest pair is IDs 62864/62871 at 1.68265 Å. This is not cold stability.
-- Full-model FIRE: 100 iterations reached the iteration cap, not the minimizer convergence criterion. All atoms retained; final Fmax 17.844 eV/Å and F99 4.621 eV/Å. The potential energy fell by 0.3943 eV/atom, with 4,418 nearest-neighbor pairs below 1.8 Å, including 4,277 Ti–C pairs; the shortest contact is 1.37239 Å. The minimized structure is unusable for MD.
+## 458,248 原子完整模型（200 × 200 × 300 Å）
 
-## Local DFT follow-up
+### POD v12h 静态力筛查
 
-- The initial 36-atom crop around Ti 62864–C 62871 converged with GPAW PBE/PW350/Gamma in 34 SCF iterations. v12g center-force errors are 2.625 eV/Å (Ti) and 10.171 eV/Å (C). The mass-weighted relative net-force projection along Ti→C is -0.897 for v12g and -0.0219 for DFT, so the DFT forces are nearly neutral in this relative coordinate; this is a comparison of atomic net forces, not a pairwise bond-force decomposition.
-- The 10 fs compressed crop around the same pair also converged in 34 SCF iterations. At 1.683 Å, the DFT center-force errors are 2.995 eV/Å (Ti) and 7.234 eV/Å (C). Its mass-weighted relative net-force projection is +0.625 for DFT and -0.0106 for v12g: DFT tends to separate the pair, while v12g is nearly neutral. This is a local atomic-net-force comparison, not a pairwise bond-force decomposition.
-- DFT for an independent short Ti–C pair (IDs 324028/324034) is still running. GPAW MPI failed due launcher/library incompatibility and a parallel matrix-distribution error; the active retry uses single-process BLAS threads. No incomplete result will enter training.
-- If labels converge, prepare a separate v12h candidate from the 128 baseline train / 12 ordinary validation split, the established local-force set, and the new targeted Ti–C rows. Keep Si01 center ID 104359 held out.
+- 原子数/唯一 ID：458,248 / 458,248。
+- Fmax 18.016 eV/Å，F99 5.489 eV/Å；各元素 Fmax：Ag 18.016、C 9.683、Si 11.562、Ti 13.096 eV/Å。
+- 非有限力 0，超过 500 eV/Å 的原子 0。
+- 初始最近 Ti–C 距离 2.0784 Å，没有 Ti–C 间距低于 1.8 Å。
 
-## Heating gate
+### POD v12h 无热源冷态短跑
 
-No heating, cooling, or solidification run has been started. A candidate must first improve the local validation/stability behavior and pass a short cold full-model check without continuing Ti–C collapse or unphysical temperature growth.
+- `dt = 0.001 ps`（1 fs），10 步（0.01 ps）；固定底部骨架 z=0–20 Å，20–40 Å 层 Langevin 维持 300 K，其余原子积分；没有激光或 TTM 热源。
+- 完成后仍有 458,248 个原子，没有丢原子；移动组温度从 300 K 升至 814.13 K，Fmax 为 18.534 eV/Å。
+- 势能变化 −28,315.77 eV，动能变化 +28,071.23 eV；温升来自初始构型释放能量并与热沉交换，不是外部加热。
+- 最短 Ti–C 距离为 1.76010 Å，共有 7 对 Ti–C 间距小于 1.8 Å；起始构型为 0 对。比 v12g 同条件下的 53 对减少，但仍未通过冷态稳定性。
+- 新发现最短剩余接触 Ti 67572–C 67576（1.76010 Å）的 46 原子 DFT 标签已启动，结果待 SCF 收敛审查；完成前不加入下一版拟合。
+
+### SNAP v12h 静态筛查
+
+- 原子数/唯一 ID：458,248 / 458,248。
+- Fmax 106.049 eV/Å，F99 23.304 eV/Å；非有限力 0，超过 500 eV/Å 的原子 0。
+- 相较 POD v12h 的全模型初始力分布明显更差，因此当前优先继续 POD；SNAP 暂不进行全模型冷态 MD。
+
+## 14,007 原子旧 Round7 小模型诊断
+
+该输入是旧 Round7 的 `start.data`，不是 200 × 200 × 300 Å 新双连续模型；边界为固定侧边的旧设置，结果不可直接替代完整模型结论。
+
+- POD v12h：10 步后无原子丢失，但温度 300 → 3603 K，势能释放约 4813 eV，不能视为冷态稳定。
+- SNAP v12h：10 步后无原子丢失，但温度 300 → 16895 K，势能释放约 24161 eV，不能视为冷态稳定。
+
+## FIRE 状态与接下来
+
+- 已完成的 POD v12g 完整模型 FIRE 到达 100 次迭代上限，未收敛；没有丢原子，但出现大量短接触和结构塌缩，因此 FIRE 终态不能用于 MD。
+- 当前没有对 v12h 再跑长 FIRE；10 fs 冷态复核已显示结构仍在明显重排。待新 DFT 标签审查后，先检查剩余热点并拟合独立 v12i 候选，再决定是否重做 FIRE。
+- v12h 所有结果只支持探索性筛选，不代表势函数已适用于长时间加热、冷却或凝固。

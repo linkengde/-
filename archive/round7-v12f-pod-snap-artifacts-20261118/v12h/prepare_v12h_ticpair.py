@@ -101,7 +101,7 @@ def main() -> None:
         shutil.copy2(V12G/'SNAP'/name, OUT/'SNAP'/name)
     shutil.copy2(V12G/'holdout_si_hotspot_104359.extxyz',
                  OUT/'holdout_si_hotspot_104359.extxyz')
-    holdout_data = V12G/'holdout_label_evaluation/POD_v12f_si01/local.data'
+    holdout_data = HERE/'holdout_label_evaluation/POD_v12f_si01/local.data'
     holdout_data_dst = OUT/'holdout_label_evaluation/POD_v12f_si01/local.data'
     holdout_data_dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(holdout_data, holdout_data_dst)
@@ -158,11 +158,17 @@ def main() -> None:
     # preserve strict species,pos,forces ordering.
     fit_frames = []
     for src in sources:
-        force = np.asarray(src.arrays['forces'], dtype=float)
+        if 'forces' in src.arrays:
+            force = np.asarray(src.arrays['forces'], dtype=float)
+        else:
+            force = np.asarray(src.get_forces(apply_constraint=False), dtype=float)
         clean = Atoms(symbols=src.get_chemical_symbols(), positions=src.positions,
                       cell=src.cell, pbc=src.pbc)
         clean.new_array('forces', force.copy())
-        clean.info['energy'] = float(src.info['energy'])
+        if 'energy' in src.info:
+            clean.info['energy'] = float(src.info['energy'])
+        else:
+            clean.info['energy'] = float(src.get_potential_energy())
         clean.info['config_type'] = str(src.info['config_type'])
         fit_frames.append(clean)
     write(OUT/'dataset/train/local_dft_targets.xyz', fit_frames, format='extxyz')

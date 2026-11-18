@@ -1,9 +1,9 @@
 {
-  "archive_id": "Round7_v12f_v12g_POD_SNAP_fit_and_validation_20261118",
+  "archive_id": "Round7_v12f_v12g_v12h_POD_SNAP_fit_and_validation_20261118",
   "branch": "codex/round7-v12f-pod-snap-artifacts-20261118",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "candidate artifacts archived; not approved for heating",
+  "status": "v12h candidate artifacts archived; no heating approval; one further targeted DFT label is pending",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -477,5 +477,51 @@
     "training_split": "128 baseline train configurations; 12 ordinary validation configurations; Si00/02/03 training and Si01 center 104359 held out",
     "local_force_weight": 10.0,
     "planned_force_targets": "two center atoms per each converged local Ti-C crop; crop-edge forces anchored to POD v10"
+  },
+  "latest_v12h": {
+    "candidate": {
+      "baseline_train_configurations": 128,
+      "local_train_configurations": 17,
+      "ordinary_validation_configurations": 12,
+      "si_indices_train": [
+        0,
+        2,
+        3
+      ],
+      "si01_holdout_center_atom_id": 104359,
+      "new_targeted_DFT_crops_in_fit": 3
+    },
+    "validation": {
+      "POD_energy_RMSE_eV_per_atom": 0.078307,
+      "POD_force_RMSE_eV_per_A": 0.60386,
+      "SNAP_energy_RMSE_eV_per_atom": 0.0594084,
+      "SNAP_force_RMSE_eV_per_A": 0.684857,
+      "Si01_POD_center_vector_error_eV_per_A": 7.63198,
+      "Si01_POD_direction_cosine": 0.791087,
+      "Si01_SNAP_center_vector_error_eV_per_A": 49.805,
+      "Si01_SNAP_direction_cosine": -0.112875
+    },
+    "full_model_458248": {
+      "POD_static_Fmax_eV_per_A": 18.0164,
+      "POD_static_F99_eV_per_A": 5.48874,
+      "SNAP_static_Fmax_eV_per_A": 106.0493,
+      "SNAP_static_F99_eV_per_A": 23.3035,
+      "POD_cold_dt_fs": 1,
+      "POD_cold_steps": 10,
+      "POD_cold_atoms_retained": 458248,
+      "POD_cold_mobile_temperature_final_K": 814.128,
+      "POD_cold_TiC_pairs_below_1p8A": 7,
+      "cold_screen_passed": false
+    },
+    "SNAP_parameter_warning": "chemflag=1 and bnormflag=0; LAMMPS warning needs configuration audit before further SNAP candidate use",
+    "next_DFT_label": {
+      "pair_source_ids": [
+        67572,
+        67576
+      ],
+      "distance_A": 1.760099,
+      "crop_atoms": 46,
+      "status": "SCF in progress; excluded from fitted models until converged and reviewed"
+    }
   }
 }
