@@ -1,0 +1,14 @@
+units metal
+atom_style atomic
+boundary p p p
+read_data data.lammps
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style mlip mlip.ini
+pair_coeff * *
+thermo 1
+thermo_style custom step pe
+run 0
+write_dump all custom forces.dump id type x y z fx fy fz

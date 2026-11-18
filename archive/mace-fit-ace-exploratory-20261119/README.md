@@ -32,4 +32,8 @@ From this directory, verify the archived files with:
 sha256sum -c SHA256SUMS.txt
 ```
 
-The next 7–8 hour compute plan is in `NEXT_8H_PLAN.md`. The separate cloud-environment setup draft is not part of this archive.
+The original 7–8 hour compute plan is retained in `NEXT_8H_PLAN.md`; its completed follow-up results are in `followup_20261119/REPORT.md`. The separate cloud-environment setup draft is not part of this archive.
+
+## Follow-up compute results
+
+The subsequent 1×6×3 DFT k-point recheck, ACE and MTP refits, grouped source-family validation, five LAMMPS load checks, and DFT label-design shortlist are documented in [`followup_20261119/REPORT.md`](followup_20261119/REPORT.md). Verify the complete updated archive with `sha256sum -c SHA256SUMS.txt`.
