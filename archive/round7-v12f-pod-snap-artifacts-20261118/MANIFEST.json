@@ -266,7 +266,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12g full FIRE at step 90; 3,224 short pairs and min neighbor 1.392 A; initial Ti-C DFT at SCF iteration 22",
+  "latest_update": "2026-11-18: v12g full FIRE completed but not converged; collapsed Ti-C/Ag-skeleton contacts audited; Ti-C initial DFT SCF at iteration 29",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -309,7 +309,7 @@
     "heating_started": false
   },
   "v12g_full_FIRE_progress": {
-    "status": "RUNNING_AT_STEP_90_OF_100",
+    "status": "COMPLETED_MAXITER_NOT_CONVERGED",
     "atoms": 458248,
     "atoms_preserved": true,
     "energy_initial_eV": -2873741.7434,
@@ -379,7 +379,26 @@
     },
     "step90_max_displacement_A": 1.24455,
     "step90_atoms_z_above_200_A": 0,
-    "step90_fixed_bottom_max_displacement_A": 0.000691
+    "step90_fixed_bottom_max_displacement_A": 0.000691,
+    "iterations": 100,
+    "energy_final_eV": -3054426.8678,
+    "energy_change_eV_per_atom": -0.3942955,
+    "Fmax_final_eV_per_A": 17.844405,
+    "F99_final_eV_per_A": 4.620678,
+    "atoms_force_above_500": 0,
+    "pairs_below_1p8_A": 4418,
+    "minimum_neighbor_A": 1.372392,
+    "pair_types_unique_below_1p8_A": {
+      "C-Ti": 4277,
+      "Ag-C": 89,
+      "Ag-Ti": 39,
+      "Ag-Si": 10,
+      "Si-Si": 3
+    },
+    "max_displacement_A": 1.349498,
+    "atoms_z_above_200_A": 0,
+    "fixed_bottom_skeleton_max_displacement_A": 0.000691,
+    "minimized_geometry_suitable_for_MD": false
   },
   "v12g_tic_hotspot_followup": {
     "candidate_pair_ids": [
@@ -400,7 +419,7 @@
       "initial": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_initial.extxyz",
       "cold_10fs": "models/target_200x200x300_qsgs_material200/active_tic_hotspot_expansion/candidates/tic_pair_cold_10fs.extxyz"
     },
-    "DFT_status": "initial-state SCF iteration 22; not converged; compressed-state label pending",
+    "DFT_status": "initial-state SCF iteration 29; not converged; compressed-state label pending",
     "training_coverage": {
       "configurations": 142,
       "TiC_pairs_below_1p8_A": 32,

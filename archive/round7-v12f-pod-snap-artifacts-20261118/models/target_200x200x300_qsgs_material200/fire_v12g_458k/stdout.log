@@ -1,0 +1,131 @@
+LAMMPS (22 Jul 2025)
+  using 1 OpenMP thread(s) per MPI task
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  4 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  read_data CPU = 2.724 seconds
+175926 atoms in group src_Ti
+58642 atoms in group src_Si
+117284 atoms in group src_C
+106396 atoms in group src_Ag
+Setting atom values ...
+  175926 settings made for type
+Setting atom values ...
+  58642 settings made for type
+Setting atom values ...
+  117284 settings made for type
+Setting atom values ...
+  106396 settings made for type
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+351852 atoms in group skeleton
+47494 atoms in group fixed_z
+35845 atoms in group fixed
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 58 58 86
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up fire style minimization ...
+  Unit style    : metal
+  Current step  : 0
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.02     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 65.65 | 66.08 | 66.89 Mbytes
+   Step        Atoms        PotEng         c_fmax    
+         0      458248  -2873741.743416813 18.22176037751321
+        10      458248  -2903918.078194994 18.86858414075313
+        20      458248  -2929610.73546183 18.6710084643076
+        30      458248  -2949928.508430855 20.78500083898803
+        40      458248  -2966201.528965104 19.2177783324015
+        50      458248  -2982772.491779651 17.81407064169664
+        60      458248  -3000382.608899026 17.64123717406553
+        70      458248  -3015722.540046873 19.03057861950025
+        80      458248  -3029442.766122748 20.47184830220239
+        90      458248  -3041573.973887811 17.86580388181115
+       100      458248  -3054426.867837433 17.84439236443416
+Loop time of 2868.96 on 4 procs for 100 steps with 458248 atoms
+
+84.0% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -2873741.74341681  -3053043.77713615  -3054426.86783743
+  Force two-norm initial, final = 1633.9059 1057.6845
+  Force max component initial, final = 18.202038 17.222487
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 100 101
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2690.1     | 2734.3     | 2778.5     |  66.1 | 95.30
+Neigh   | 0.67438    | 0.69119    | 0.70398    |   1.3 |  0.02
+Comm    | 84.205     | 128.49     | 172.73     | 305.1 |  4.48
+Output  | 3.3447     | 3.4996     | 3.6434     |   6.0 |  0.12
+Modify  | 0.090601   | 0.10481    | 0.11797    |   3.4 |  0.00
+Other   |            | 1.916      |            |       |  0.07
+
+Nlocal:         114562 ave      115321 max      113295 min
+Histogram: 1 0 0 0 0 0 1 0 1 1
+Nghost:        42475.2 ave       43073 max       41410 min
+Histogram: 1 0 0 0 0 0 1 0 0 2
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:  9.57695e+06 ave 9.70845e+06 max 9.37389e+06 min
+Histogram: 1 0 0 0 0 0 1 1 0 1
+
+Total # of neighbors = 38307812
+Ave neighs/atom = 83.596245
+Neighbor list builds = 1
+Dangerous builds = 0
+System init for write_data ...
+Total wall time: 0:48:17
