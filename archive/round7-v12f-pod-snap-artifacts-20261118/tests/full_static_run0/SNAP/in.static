@@ -1,0 +1,32 @@
+clear
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs/md_runs/attempt_008_POD_TTM_mpi_big/start_wrapped.data
+# Source data types Ti/Si/C/Ag -> model types Ag/C/Si/Ti.
+group source_Ti type 1
+group source_Si type 2
+group source_C type 3
+group source_Ag type 4
+set group source_Ti type 4
+set group source_Si type 3
+set group source_C type 2
+set group source_Ag type 1
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.085
+mass 4 47.867
+pair_style snap
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/SNAP/AgTiSiC_SNAP_v12f.snapcoeff /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/SNAP/AgTiSiC_SNAP_v12f.snapparam Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 1
+thermo_style custom step atoms temp pe etotal c_fmax
+thermo_modify lost error flush yes format float %.16g
+dump d all custom 1 /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/full_static_run0/SNAP/forces.dump id type x y z fx fy fz
+dump_modify d sort id
+run 0
+undump d

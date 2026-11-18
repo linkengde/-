@@ -1,0 +1,150 @@
+LAMMPS (22 Jul 2025)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary f f f
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/small_fire_14007/POD/minimized.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (50 50 220)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  14007 atoms
+  reading velocities ...
+  14007 velocities
+  read_data CPU = 0.072 seconds
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/POD/AgTiSiC_POD_v12f.pod /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/POD/pod_v12f_coefficients.pod Ag C Si Ti
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region xlo block 0 7 INF INF INF INF units box
+region xhi block 43 50 INF INF INF INF units box
+region ylo block INF INF 0 7 INF INF units box
+region yhi block INF INF 43 50 INF INF units box
+group gxlo region xlo
+733 atoms in group gxlo
+group gxhi region xhi
+784 atoms in group gxhi
+group gylo region ylo
+709 atoms in group gylo
+group gyhi region yhi
+757 atoms in group gyhi
+group side union gxlo gxhi gylo gyhi
+2813 atoms in group side
+fix rim side setforce 0.0 0.0 0.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 10
+thermo_style custom step atoms pe c_fmax
+thermo_modify lost error flush yes format float %.16g
+min_style fire
+min_modify dmax 0.02
+minimize 0.0 0.2 100 2000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 15 15 63
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.02     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 6.933 | 6.933 | 6.933 Mbytes
+   Step        Atoms        PotEng         c_fmax    
+         0       14007  -91100.79216519231 38.47052004272296
+        10       14007  -91647.22938971242 18.16481264010768
+        20       14007  -92466.6825072803 22.2841699853651
+        30       14007  -93183.35718524792 25.52362647289227
+        40       14007  -93763.2996951863 26.74338033535064
+        50       14007  -94284.40277087454 28.17110187691576
+        60       14007  -94790.31421655342 23.50265282945538
+        70       14007  -95403.84267382098 26.62757234671088
+        80       14007  -95898.71672009511 29.64548150566912
+        90       14007  -96360.87436868425 37.15792871556249
+       100       14007  -96821.84627276679 31.34283825643099
+Loop time of 128.439 on 1 procs for 100 steps with 14007 atoms
+
+99.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -91100.7921651923  -96774.2462300592  -96821.8462727668
+  Force two-norm initial, final = 283.53296 257.74204
+  Force max component initial, final = 27.755351 25.330038
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 100 101
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 128.34     | 128.34     | 128.34     |   0.0 | 99.92
+Neigh   | 0.03302    | 0.03302    | 0.03302    |   0.0 |  0.03
+Comm    | 0.00056332 | 0.00056332 | 0.00056332 |   0.0 |  0.00
+Output  | 0.0091746  | 0.0091746  | 0.0091746  |   0.0 |  0.01
+Modify  | 0.0097493  | 0.0097493  | 0.0097493  |   0.0 |  0.01
+Other   |            | 0.04773    |            |       |  0.04
+
+Nlocal:          14007 ave       14007 max       14007 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  1.02424e+06 ave 1.02424e+06 max 1.02424e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 1024238
+Ave neighs/atom = 73.123295
+Neighbor list builds = 1
+Dangerous builds = 0
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/small_fire_14007_iter2/POD/forces_minimized.dump id type x y z fx fy fz modify sort id
+write_data /workspace/potential-fit/round7_pod_snap/models/v12_candidate_forceorder_fixed/small_fire_14007_iter2/POD/minimized.data
+System init for write_data ...
+Total wall time: 0:02:09
