@@ -55,6 +55,10 @@ ACE weight 1.0 and 0.05, and all three MTP variants, loaded in the matching LAMM
 
 The separately supplied `full_model_severe_contact_edges.csv` has 12,062 edges with listed distances 1.000–2.008 Å. Comparing its atom IDs against the archived million-atom QSGS target finds all IDs in range but zero matching endpoint element types. It is therefore a different atom-ID geometry and is preserved under `unmatched_source_input/` without being added to the MACE fitting set. Its source structure is needed before those rows can be used.
 
+I also checked the available MACE QSGS fine/finer and relaxed-backbone geometries, the Round7 V10 input and wrapped start, and three local Round7 checkpoints. None reproduces the table: the QSGS variants have zero matching endpoint types; the 347,464-atom Round7 snapshots have only 14 matching edge types out of 12,062, and none of those 14 distances agrees within 0.001 Å. The tested files and counts are in `unmatched_source_input/source_geometry_search.json`. The table's source geometry remains unidentified.
+
+As a diagnostic of the JN1967 fold, the full-force ACE fitted on all training data fits the 21 training-frame `config_type` labels that explicitly name JN1967 at 0.155 meV/atom energy RMSE and 0.00492 eV/Å force-component RMSE. The 35-frame grouped holdout still fails across unseen configurations: the Ag–Ti subset has 643.97 meV/atom and 1.586 eV/Å RMSE; Ag–C has 618.83 meV/atom and 0.754 eV/Å; Ag–Si has 25.97 meV/atom and 0.806 eV/Å. This is a transfer failure across withheld source configurations, despite low training error on the included JN1967-named frames.
+
 ## Decision and next work
 
 Keep the full-force ACE as the leading exploratory candidate for follow-up label acquisition. Do not run production or heating dynamics with it yet. Next, identify the source geometry for the supplied contact table, generate and DFT-label reviewed local structures from the 81-center shortlist, and add coverage for the JN1967 family. Refit and rerun source-family validation only after those labels are reviewed. No blind test set exists yet.
