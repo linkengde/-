@@ -57,7 +57,7 @@
     "sha256": "4170c70647fe98c4b1c25960dbae2a557a74adbf48a8a93daf686c8fd16722e7"
   },
   "followup_fire_diagnostic": {
-    "status": "EXACT_SETTINGS_REPLAY_COMPLETED_NOT_CONVERGED",
+    "status": "STRICT_REPLAY_COMPLETED_NOT_CONVERGED; original lost-atoms event not reproduced; internal cause remains unresolved",
     "source_model_atoms": 347464,
     "original_reports": [
       {
@@ -207,6 +207,21 @@
       "bytes": 663977600,
       "sha256": "d567b00ceedca28d278fc685b1e8f94bb4f0e67e8c8bfd6afa20cbd5044bbdf1",
       "included_in_archive": false
+    },
+    "strict_replay_20261119": {
+      "status": "COMPLETED_RC0_NO_LOST_ATOMS",
+      "settings": "same start_wrapped.data; POD v12f; p p m; 5 MPI ranks; all atoms z=0..20 A fixed; FIRE dmax=0.02 A; ftol=0.5 eV/A; thermo lost error",
+      "iterations": 62,
+      "atoms_all_frames": 347464,
+      "step60_coordinates_vs_prior_lost_ignore_replay_max_abs_delta_A": 0.0,
+      "step60_energy_eV": -2237746.355850081,
+      "step60_Fmax_eV_per_A": 49.70195885936715,
+      "steps60_62_unique_IDs": 347464,
+      "steps60_62_z_boundary_crossings": 0,
+      "max_abs_xy_primary_box_excursion_A": 0.032,
+      "lost_error_reproduced": false,
+      "minimization_converged": false,
+      "interpretation": "Not reproduced as physical escape; possible intermittent MPI/periodic-boundary migration/count issue is unconfirmed."
     }
   },
   "si_01_full_model_center_force": {
@@ -889,6 +904,13 @@
       "cold_stability_pass": false
     },
     "heating_started": false,
-    "archive_path": "archive/round7-v12f-pod-snap-artifacts-20261118/v12n/"
+    "archive_path": "archive/round7-v12f-pod-snap-artifacts-20261118/v12n/",
+    "fire_diagnostic_20261119": {
+      "status": "strict lost-error replay complete; no loss through step62; not converged",
+      "step60_coordinate_match_to_lost_ignore_replay": true,
+      "lost_error_reproduced": false,
+      "root_cause": "unresolved; physical boundary escape not observed",
+      "archive_path": "archive/round7-v12f-pod-snap-artifacts-20261118/tests/full_fire_strict_replay_20261119/"
+    }
   }
 }
