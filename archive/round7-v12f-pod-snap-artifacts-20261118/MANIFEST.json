@@ -1,9 +1,9 @@
 {
-  "archive_id": "Round7_v12f_v12g_v12h_v12i_v12j_v12k_v12l_v12m_v12n_POD_SNAP_fit_and_validation_20261119",
+  "archive_id": "Round7_v12f_v12g_v12h_v12i_v12j_v12k_v12l_v12m_v12n_v12o_POD_SNAP_fit_and_validation_20261119",
   "branch": "codex/round7-v12m-cold-diagnostics-20261119",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "v12n archived; targeted C-C collapse pair no longer collapses, but full-model cold stability fails for POD and SNAP; no heating approval",
+  "status": "v12o fitted and archived; POD and SNAP both failed 10fs full-model no-laser cold stability; no heating approval",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -30,6 +30,7 @@
     }
   },
   "independent_si_01_center_force": {
+    "definition": "Development holdout center force vector error against DFT (not Fmax).",
     "POD_vector_error_eV_per_A": 13.1586132,
     "POD_direction_cosine": 0.364132,
     "SNAP_vector_error_eV_per_A": 48.007731,
@@ -281,7 +282,7 @@
     "FIRE_v12f": "completed 100 iterations but not converged; structure audit found severe short C-Ti contacts and skeleton collapse; minimized geometry not suitable for MD",
     "cold_stability_v12f_v12g": "10 fs each, no atoms lost, but rapid temperature rise and sub-1.8 A nearest-neighbor contacts; failed cold-stability screen"
   },
-  "latest_update": "2026-11-18: v12j adds one converged Ti-C DFT crop to v12i, keeps Si01 excluded, completes full-model static screens and POD 10fs cold check.",
+  "latest_update": "2026-11-19: v12o POD/SNAP fit on 128 baseline + 26 local force frames, Si01 holdout evaluated, 458248-atom static and 10fs cold screens completed; both cold screens fail; no heating.",
   "v12g_si04_refit": {
     "baseline_train_configurations": 128,
     "local_force_frames": 14,
@@ -747,7 +748,7 @@
       "run_wall_s": 788.663
     }
   },
-  "latest_version": "v12n",
+  "latest_version": "v12o",
   "v12l": {
     "path": "v12l/",
     "files": 294,
@@ -914,7 +915,7 @@
     }
   },
   "latest_v12o_hotspot_labels": {
-    "status": "both targeted DFT labels converged; v12o preparation and fit next",
+    "status": "both targeted DFT labels converged; v12o fitted and screened",
     "source_state": "POD v12n cold no-laser cumulative 50 fs",
     "targets": [
       {
@@ -1034,6 +1035,84 @@
       }
     ],
     "DFT_labels_converged": true,
-    "fit_started": false
+    "fit_started": true,
+    "v12o_status": "fitted; Si01 development holdout and full-model cold screens complete; neither model cold-stable"
+  },
+  "latest_v12o": {
+    "archive_path": "v12o/README.md",
+    "baseline_train_configurations": 128,
+    "local_force_frames": 26,
+    "total_training_configurations": 154,
+    "baseline_validation_configurations": 12,
+    "si01_holdout_center_atom_id": 104359,
+    "si01_holdout_is_blind_test": false,
+    "validation_rmse": {
+      "POD": {
+        "energy_eV_per_atom": 0.076972,
+        "force_eV_per_A": 0.567965
+      },
+      "SNAP": {
+        "energy_eV_per_atom": 0.065099,
+        "force_eV_per_A": 0.686343
+      }
+    },
+    "si01_center_force_vector_error_eV_per_A": {
+      "POD": 7.921826,
+      "SNAP": 25.482571
+    },
+    "full_model_atoms": 458248,
+    "static_Fmax_F99_eV_per_A": {
+      "POD": [
+        18.014845,
+        5.436535
+      ],
+      "SNAP": [
+        102.294023,
+        21.397481
+      ]
+    },
+    "atoms_above_500_eV_per_A": {
+      "POD": 0,
+      "SNAP": 0
+    },
+    "cold_screen": {
+      "dt_fs": 1,
+      "steps": 10,
+      "duration_fs": 10,
+      "atom_loss": {
+        "POD": 0,
+        "SNAP": 0
+      },
+      "POD": {
+        "temperature_initial_final_K": [
+          300.0,
+          702.01
+        ],
+        "potential_energy_delta_eV": -22151.118,
+        "kinetic_energy_delta_eV": 21949.642,
+        "total_energy_delta_eV": -201.477,
+        "max_displacement_A": 0.343192,
+        "TiC_pairs_below_1p8A": 1,
+        "minimum_TiC_A": 1.782724,
+        "LAMMPS_loop_wall_s": 226.318,
+        "command_wall_s": 275.827
+      },
+      "SNAP": {
+        "temperature_initial_final_K": [
+          300.0,
+          4172.221
+        ],
+        "potential_energy_delta_eV": -213527.198,
+        "kinetic_energy_delta_eV": 211422.287,
+        "total_energy_delta_eV": -2104.911,
+        "max_displacement_A": 1.346445,
+        "TiC_pairs_below_1p8A": 2922,
+        "minimum_TiC_A": 1.358686,
+        "LAMMPS_loop_wall_s": 674.178,
+        "command_wall_s": 801.389
+      }
+    },
+    "heating_started": false,
+    "decision": "Both v12o candidates fail no-laser cold stability; do not heat."
   }
 }
