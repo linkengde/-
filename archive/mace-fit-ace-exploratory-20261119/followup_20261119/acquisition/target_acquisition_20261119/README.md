@@ -1,6 +1,6 @@
 # Acquisition follow-up — 2026-11-19
 
-This folder records the prepared data and active label-acquisition plan for the exploratory Ag–Ti₃SiC₂ ACE fit. No new fit result is claimed yet.
+This folder records the prepared data and active label-acquisition plan for the exploratory Ag–Ti₃SiC₂ ACE fit. The verified DFT labels and ACE refit are recorded in `v24_verified_labels/`, `fit_candidate_acquisition/`, `ace_acquisition_refits/`, and `FINAL_REPORT.md`.
 
 ## Existing ACE baseline
 
@@ -16,7 +16,7 @@ This folder records the prepared data and active label-acquisition plan for the 
 
 ## Active v24 acquisition
 
-As of 2026-11-19T01:34:45.883289+00:00, sequence status is `running`. No selected v24 archive has completed. The first running label is `AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`; selected follow-ups are AgTi +0.02 Å and AgC −0.02/+0.02 Å interface response structures. Inputs, runtime scripts, and the sequence status snapshot are included under `v24_c_response_run/`. The live workspace supervisor will verify each output before the automatic fit stage starts.
+Latest sequence status: `failed_stop_no_retry`; verified labels: 0/3. No selected v24 archive has completed. The first running label is `AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`; selected follow-ups are AgTi +0.02 Å and AgC −0.02/+0.02 Å interface response structures. Inputs, runtime scripts, and the sequence status snapshot are included under `v24_c_response_run/`. The live workspace supervisor will verify each output before the automatic fit stage starts.
 
 For the later runtime observation and verified checkpoint metadata, see `progress_snapshot_20261119T0726Z.md`; it supersedes the original ~7.2 h runtime estimate.
 
