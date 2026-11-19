@@ -1,9 +1,9 @@
 {
-  "archive_id": "Round7_v12f_v12g_v12h_POD_SNAP_fit_and_validation_20261118",
-  "branch": "codex/round7-v12l-pod-snap-artifacts-20261118",
+  "archive_id": "Round7_v12f_v12g_v12h_v12i_v12j_v12k_v12l_v12m_POD_SNAP_fit_and_validation_20261119",
+  "branch": "codex/round7-v12m-cold-diagnostics-20261119",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "v12l archived; full-model cold stability fails; no heating approval",
+  "status": "v12m archived; full-model cold stability fails at a C-C local collapse; no heating approval; two C-C DFT labels pending",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -732,7 +732,7 @@
       "run_wall_s": 788.663
     }
   },
-  "latest_version": "v12l",
+  "latest_version": "v12m",
   "v12l": {
     "path": "v12l/",
     "files": 294,
@@ -745,6 +745,74 @@
     "POD_cold_halt_at_cumulative_fs": 37,
     "POD_cold_Fmax_eV_A": 1399.8335,
     "SNAP_cold_10fs_final_T_K": 3330.0929,
+    "heating_started": false
+  },
+  "latest_v12m": {
+    "status": "fitted and screened; not cold-stable",
+    "candidate_path": "v12m/candidate/v12m_agctriad_candidate/",
+    "status_report": "ROUND7_CURRENT_STATUS_20261119.md",
+    "baseline_train_configurations": 128,
+    "baseline_validation_configurations": 12,
+    "local_force_frames": 22,
+    "total_training_configurations": 150,
+    "si01_holdout_center_atom_id": 104359,
+    "POD_validation": {
+      "energy_RMSE_eV_per_atom": 0.077437,
+      "force_RMSE_eV_per_A": 0.594663
+    },
+    "SNAP_validation": {
+      "energy_RMSE_eV_per_atom": 0.064477,
+      "force_RMSE_eV_per_A": 0.700378,
+      "force_R2": -1.161
+    },
+    "si01_center_force_vector_error_eV_per_A": {
+      "POD": 7.735,
+      "SNAP": 36.967
+    },
+    "full_model_atoms": 458248,
+    "POD_static_Fmax_eV_per_A": 17.0191,
+    "POD_static_F99_eV_per_A": 5.4968,
+    "SNAP_static_Fmax_eV_per_A": 101.135,
+    "SNAP_static_F99_eV_per_A": 18.89,
+    "POD_cold_10fs": {
+      "temperature_K": [
+        300.0,
+        720.3414
+      ],
+      "potential_energy_delta_eV": -23162.6549,
+      "kinetic_energy_delta_eV": 22950.5335,
+      "total_energy_delta_eV": -212.1214,
+      "atom_loss": 0
+    },
+    "SNAP_cold_10fs": {
+      "temperature_K": [
+        300.0,
+        3432.215
+      ],
+      "TiC_pairs_below_1p8A": 2112,
+      "min_TiC_distance_A": 1.391
+    },
+    "POD_C_C_cold_failure": {
+      "atom_ids": [
+        128985,
+        134363
+      ],
+      "relative_step": 21,
+      "cumulative_time_fs": 31,
+      "pair_distance_final_A": 0.148571,
+      "Fmax_eV_per_A": 1.253359e+20,
+      "force_direction_prior_steps": "attractive"
+    },
+    "pending_C_C_DFT_labels": [
+      {
+        "pair_distance_A": 1.385826,
+        "status": "running"
+      },
+      {
+        "pair_distance_A": 1.11418,
+        "status": "running"
+      }
+    ],
     "heating_started": false
   }
 }

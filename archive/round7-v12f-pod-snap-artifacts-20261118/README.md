@@ -1,4 +1,6 @@
-# Round7 POD/SNAP v12f–v12j 归档
+# Round7 POD/SNAP v12f–v12m 归档
+
+最新状态见 [2026-11-19 当前状态](ROUND7_CURRENT_STATUS_20261119.md)。v12m 的新增拟合和失稳诊断见 [v12m 归档](v12m/README.md)。v12m 仍未通过全模型冷态稳定性，不进行加热、冷却或凝固。
 
 最新状态见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md) 和 [v12j 复核记录](v12j/ROUND7_STATUS_V12J_20261118.md)。v12j 保持 128/12 训练验证划分与 Si01 留出，加入 1 个收敛的 36 原子 Ti–C DFT 局部标签。12 帧验证 RMSE 为 POD E/F 0.077857 eV/atom、0.590685 eV/Å；SNAP E/F 0.063033 eV/atom、0.722126 eV/Å。
 
@@ -74,3 +76,8 @@ The current Round7 exploratory POD/SNAP candidate and its validation package are
 ## Latest validation: v12l
 
 The latest POD/SNAP model is v12l. See `ROUND7_CURRENT_STATUS_20261118.md` and `v12l/README.md`. Both models meet the small validation RMSE target, but Si01 remains a difficult holdout and full-model no-laser cold tests reveal instability: POD develops a local Ag-C-C collapse at cumulative 37 fs with Fmax 1399.8 eV/A; SNAP reaches 3330 K and has 1989 Ti-C pairs below 1.8 A at 10 fs. No heating, cooling, or solidification run has started.
+
+
+## 最新诊断：v12m
+
+v12m 的详细系数、训练集、验证集、静态/冷态输入与结果，以及 C–C 短程塌缩分析已归档在 `v12m/`。两项补充 C–C DFT 标签尚在计算，完成后另行归档。当前状态见 `ROUND7_CURRENT_STATUS_20261119.md`。
