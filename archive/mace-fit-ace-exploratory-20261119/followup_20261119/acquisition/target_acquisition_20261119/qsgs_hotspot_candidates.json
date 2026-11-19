@@ -1,0 +1,89 @@
+{
+  "status": "geometry_candidate_crops_built_DFT_labels_pending",
+  "source_data": "/workspace/-/models/ag_ti3sic2_qsgs_1to1/ag_ti3sic2_qsgs.data.gz",
+  "source_data_sha256": "d4e89883f32cb1c42a0b858b264109e214de82cfb5f7757f7858fd7f52727821",
+  "source_atoms": 1021793,
+  "source_boundary_policy": "periodic x/y, open z",
+  "crop_radius_A": 7.0,
+  "model_cutoff_A": 6.0,
+  "crop_cell_A": 26.0,
+  "center_image_gap_A": 12.0,
+  "DFT_candidate_method": "PBE/PW350/Gamma, center-force-only, finite crop energy and edge forces excluded",
+  "training_centers": [
+    819467,
+    35127,
+    783134
+  ],
+  "development_centers": [
+    558025
+  ],
+  "development_is_blind_test": false,
+  "records": [
+    {
+      "atom_id": 819467,
+      "role": "training",
+      "reason": "highest-force Ag center in the 81-center shortlist",
+      "center_species": "Ag",
+      "model_force_eV_A": 10.3362,
+      "nearest_neighbor_A": 2.275218250778073,
+      "nearest_neighbor_element": "Ti",
+      "neighbors_within_6A": 58,
+      "crop_atoms": 87,
+      "crop_formula": "C23Ag15Si11Ti38",
+      "center_image_gap_A": 12.0,
+      "source_coordinate_match": true,
+      "label_role": "training"
+    },
+    {
+      "atom_id": 35127,
+      "role": "training",
+      "reason": "highest-force Ti center in the 81-center shortlist",
+      "center_species": "Ti",
+      "model_force_eV_A": 9.69057,
+      "nearest_neighbor_A": 2.088188382582152,
+      "nearest_neighbor_element": "C",
+      "neighbors_within_6A": 49,
+      "crop_atoms": 72,
+      "crop_formula": "C7Ag52SiTi12",
+      "center_image_gap_A": 12.0,
+      "source_coordinate_match": true,
+      "label_role": "training"
+    },
+    {
+      "atom_id": 783134,
+      "role": "training",
+      "reason": "high-force Si center with Ti nearest neighbor",
+      "center_species": "Si",
+      "model_force_eV_A": 5.62791,
+      "nearest_neighbor_A": 2.6810301826982057,
+      "nearest_neighbor_element": "Ti",
+      "neighbors_within_6A": 71,
+      "crop_atoms": 104,
+      "crop_formula": "C34Ag3Si12Ti55",
+      "center_image_gap_A": 12.0,
+      "source_coordinate_match": true,
+      "label_role": "training"
+    },
+    {
+      "atom_id": 558025,
+      "role": "development_holdout",
+      "reason": "highest-force Si center; held out to score the registered Si-center metric",
+      "center_species": "Si",
+      "model_force_eV_A": 5.77398,
+      "nearest_neighbor_A": 2.417030988248087,
+      "nearest_neighbor_element": "Ag",
+      "neighbors_within_6A": 49,
+      "crop_atoms": 68,
+      "crop_formula": "C12Ag40Si5Ti11",
+      "center_image_gap_A": 12.0,
+      "source_coordinate_match": true,
+      "label_role": "development_holdout"
+    }
+  ],
+  "output_sha256": "98c3277e68a105f9a3c2112ff4b2a2cc49cb1ef579846bd3b924409f893dfd56",
+  "center_species_counts": {
+    "Ag": 1,
+    "Ti": 1,
+    "Si": 2
+  }
+}
