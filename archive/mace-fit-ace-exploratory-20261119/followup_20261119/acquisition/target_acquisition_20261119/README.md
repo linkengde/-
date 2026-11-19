@@ -20,6 +20,6 @@ As of 2026-11-19T01:34:45.883289+00:00, sequence status is `running`. No selecte
 
 ## Provenance and next action
 
-The fitting candidate data is built only after all three registered v24 outputs pass SCF, input-hash, result, and archive checks. After the fit, the model weights that meet every exploratory gate will be recorded together with per-configuration metrics. If no candidate meets the Si-center gate, the four direct QSGS crop geometries are the next DFT labeling set; no DFT values are inferred from the MACE forces.
+An automatic archive step waits for the DFT and fit status files, validates labels, writes the report and SHA-256 manifest, and pushes only this independent branch. The fitting candidate data is built only after all three registered v24 outputs pass SCF, input-hash, result, and archive checks. After the fit, the model weights that meet every exploratory gate will be recorded together with per-configuration metrics. If no candidate meets the Si-center gate, the four direct QSGS crop geometries are the next DFT labeling set; no DFT values are inferred from the MACE forces.
 
 The manifest `SHA256SUMS.txt` covers every file in this folder except itself.
