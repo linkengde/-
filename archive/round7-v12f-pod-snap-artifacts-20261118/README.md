@@ -91,3 +91,8 @@ v12n/ 归档了 POD/SNAP 系数、完整 128/12 数据划分、两个 C–C DFT 
 ## FIRE 丢原子严格复核（2026-11-19）
 
 按原设置保留 `lost error` 重放到第 62 步，未丢 ID，也未复现报错。第 60 步坐标与之前 lost-ignore 重放完全一致；没有 z 越界，x/y 的微小出盒坐标处于周期方向。FIRE 仍未收敛；确切的历史触发机制未知。详见 `tests/full_fire_strict_replay_20261119/`。
+
+
+## v12n 50 fs 新热点 DFT（进行中）
+
+两个短接触局部构型和提取/标签脚本已归档在 `tests/v12n_50fs_hotspots_20261119/`。Ti–C 与 C–C 的 GPAW 标签运行状态见该目录 README 和根状态文件。
