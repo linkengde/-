@@ -1,6 +1,6 @@
-# Round7 POD/SNAP v12f–v12m 归档
+# Round7 POD/SNAP v12f–v12n 归档
 
-最新状态见 [2026-11-19 当前状态](ROUND7_CURRENT_STATUS_20261119.md)。v12m 的新增拟合和失稳诊断见 [v12m 归档](v12m/README.md)。v12m 仍未通过全模型冷态稳定性，不进行加热、冷却或凝固。
+最新状态见 [2026-11-19 当前状态](ROUND7_CURRENT_STATUS_20261119.md)。v12n 的拟合和冷态复核见 [v12n 归档](v12n/README.md)。v12n POD/SNAP 均未通过全模型冷态稳定性，不进行加热、冷却或凝固。
 
 最新状态见 [ROUND7_CURRENT_STATUS_20261118.md](ROUND7_CURRENT_STATUS_20261118.md) 和 [v12j 复核记录](v12j/ROUND7_STATUS_V12J_20261118.md)。v12j 保持 128/12 训练验证划分与 Si01 留出，加入 1 个收敛的 36 原子 Ti–C DFT 局部标签。12 帧验证 RMSE 为 POD E/F 0.077857 eV/atom、0.590685 eV/Å；SNAP E/F 0.063033 eV/atom、0.722126 eV/Å。
 
@@ -80,4 +80,9 @@ The latest POD/SNAP model is v12l. See `ROUND7_CURRENT_STATUS_20261118.md` and `
 
 ## 最新诊断：v12m
 
-v12m 的详细系数、训练集、验证集、静态/冷态输入与结果，以及 C–C 短程塌缩分析已归档在 `v12m/`。两项补充 C–C DFT 标签尚在计算，完成后另行归档。当前状态见 `ROUND7_CURRENT_STATUS_20261119.md`。
+v12m 的详细系数、训练集、验证集、静态/冷态输入与结果，以及 C–C 短程塌缩分析已归档在 `v12m/`。当时待算的两项 C–C DFT 标签已完成并用于 v12n，见 `v12n/`。当前状态见 `ROUND7_CURRENT_STATUS_20261119.md`。
+
+
+## 最新验证：v12n
+
+v12n/ 归档了 POD/SNAP 系数、完整 128/12 数据划分、两个 C–C DFT 热点标签、Si01 留出评估、458,248 原子静态力筛查和 1 fs 冷态轨迹。POD v12n 没有再复现旧的单对 C–C 崩塌，但全模型在 50 fs 达到 3381 K，产生大量短 Ti–C/C–C 接触；SNAP 在 10 fs 达到 3523 K。两者均未通过冷态门槛。

@@ -1,9 +1,9 @@
 {
-  "archive_id": "Round7_v12f_v12g_v12h_v12i_v12j_v12k_v12l_v12m_POD_SNAP_fit_and_validation_20261119",
+  "archive_id": "Round7_v12f_v12g_v12h_v12i_v12j_v12k_v12l_v12m_v12n_POD_SNAP_fit_and_validation_20261119",
   "branch": "codex/round7-v12m-cold-diagnostics-20261119",
   "base_branch": "codex/round7-v11-si-hotspot-labels-20261118",
   "base_commit": "beb4c8794c3edbb754d0efc8c00090184ca852b4",
-  "status": "v12m archived; full-model cold stability fails at a C-C local collapse; no heating approval; two C-C DFT labels pending",
+  "status": "v12n archived; targeted C-C collapse pair no longer collapses, but full-model cold stability fails for POD and SNAP; no heating approval",
   "training_split": {
     "baseline_train_configurations": 128,
     "local_force_frames": 13,
@@ -732,7 +732,7 @@
       "run_wall_s": 788.663
     }
   },
-  "latest_version": "v12m",
+  "latest_version": "v12n",
   "v12l": {
     "path": "v12l/",
     "files": 294,
@@ -814,5 +814,81 @@
       }
     ],
     "heating_started": false
+  },
+  "latest_v12n": {
+    "training_split": {
+      "baseline_train_configurations": 128,
+      "local_force_frames": 24,
+      "total_fitpod_training_configurations": 152,
+      "baseline_validation_configurations": 12,
+      "si01_holdout_center_atom_id": 104359
+    },
+    "added_dft_labels": {
+      "method": "GPAW PBE/PW350 Gamma",
+      "pair_atom_ids": [
+        128985,
+        134363
+      ],
+      "separations_A": [
+        1.3858258368,
+        1.1141797207
+      ],
+      "DFT_target_force_rows": 4,
+      "all_scf_converged": true
+    },
+    "validation_rmse": {
+      "POD": {
+        "energy_eV_per_atom": 0.076566,
+        "force_eV_per_A": 0.594333
+      },
+      "SNAP": {
+        "energy_eV_per_atom": 0.0618761,
+        "force_eV_per_A": 0.718041
+      }
+    },
+    "si01_center_vector_error_eV_per_A": {
+      "POD": 7.644907,
+      "SNAP": 36.710199
+    },
+    "full_model_atoms": 458248,
+    "static_Fmax_F99_eV_per_A": {
+      "POD": [
+        17.220141,
+        5.479237
+      ],
+      "SNAP": [
+        102.321408,
+        19.198244
+      ]
+    },
+    "cold_pod_10fs": {
+      "temperature_initial_final_K": [
+        300,
+        710.143
+      ],
+      "atom_loss": 0,
+      "max_displacement_A": 0.37115
+    },
+    "cold_pod_50fs": {
+      "temperature_final_K": 3381.323,
+      "Fmax_final_eV_per_A": 87.7615,
+      "atom_loss": 0,
+      "max_displacement_A": 4.08993,
+      "TiC_pairs_below_1p8A": 12622,
+      "min_TiC_A": 1.24832,
+      "min_CC_A": 1.01386,
+      "tracked_old_CC_pair_final_A": 2.55319,
+      "cold_stability_pass": false
+    },
+    "cold_snap_10fs": {
+      "temperature_final_K": 3522.851,
+      "atom_loss": 0,
+      "max_displacement_A": 1.04598,
+      "TiC_pairs_below_1p8A": 2143,
+      "min_TiC_A": 1.44078,
+      "cold_stability_pass": false
+    },
+    "heating_started": false,
+    "archive_path": "archive/round7-v12f-pod-snap-artifacts-20261118/v12n/"
   }
 }
