@@ -1,6 +1,6 @@
 # DFT acquisition and ACE refit report
 
-Updated: 2026-11-19T13:14:24.207171+00:00
+Updated: 2026-11-20T23:16:07.168889+00:00
 DFT sequence status: `failed_stop_no_retry`
 ACE pipeline status: `blocked_by_dft_stop`
 
@@ -13,8 +13,8 @@ ACE pipeline status: `blocked_by_dft_stop`
 
 ## Verified DFT labels
 
-- `AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `missing`, SCF converged `False`.
-- `AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24`: verification `missing`, SCF converged `False`.
+- `AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `PASS`, SCF converged `True`.
+- `AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24`: verification `PASS`, SCF converged `True`.
 - `AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `missing`, SCF converged `False`.
 
 ACE fit summary not present; inspect the archived fit status and logs before using these labels.
