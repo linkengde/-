@@ -1,8 +1,8 @@
 # DFT acquisition and ACE refit report
 
-Updated: 2026-11-20T23:16:07.168889+00:00
-DFT sequence status: `failed_stop_no_retry`
-ACE pipeline status: `blocked_by_dft_stop`
+Updated: 2026-11-21T11:34:19.030825+00:00
+DFT sequence status: `selected_three_archives_verified`
+ACE pipeline status: `fit_complete_needs_review`
 
 ## Registered exploratory gates
 
@@ -15,9 +15,14 @@ ACE pipeline status: `blocked_by_dft_stop`
 
 - `AgTi_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `PASS`, SCF converged `True`.
 - `AgC_JN1967_registryB_surfaceC_dz_m0p02_sigma0p10_k6x6x1_v24`: verification `PASS`, SCF converged `True`.
-- `AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `missing`, SCF converged `False`.
+- `AgC_JN1967_registryB_surfaceC_dz_p0p02_sigma0p10_k6x6x1_v24`: verification `PASS`, SCF converged `True`.
 
-ACE fit summary not present; inspect the archived fit status and logs before using these labels.
+## ACE candidates
+
+Passing models: none
+- `AgCSiTi_B1616_E10000_F1_a0.001_hotspot_center_weight1.ace.yaml`: gate_pass=False; periodic-dev energy=4.3989366732541715 meV/atom; force-component RMSE=0.044635648187655474 eV/Å; Si-center vector error=6.7672534418853205 eV/Å.
+- `AgCSiTi_B1616_E10000_F1_a0.001_hotspot_center_weight10.ace.yaml`: gate_pass=False; periodic-dev energy=4.398809367614074 meV/atom; force-component RMSE=0.04463936047057714 eV/Å; Si-center vector error=6.767363785463602 eV/Å.
+- `AgCSiTi_B1616_E10000_F1_a0.001_hotspot_center_weight100.ace.yaml`: gate_pass=False; periodic-dev energy=4.398795012252506 meV/atom; force-component RMSE=0.04463975490415603 eV/Å; Si-center vector error=6.767376049522513 eV/Å.
 
 ## Limits and next step
 
