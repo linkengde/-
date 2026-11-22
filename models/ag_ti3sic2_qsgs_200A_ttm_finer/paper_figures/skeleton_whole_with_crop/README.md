@@ -2,6 +2,8 @@
 
 可直接下载的论文图件：整体骨架及局部放大图，以及局部分叉间距图。PNG、TIFF 与 PDF 均按 300 dpi 导出。
 
+- 全部图件压缩包：`Ti3SiC2_branch_spacing_figures_20261122.zip`
+
 ## 整体与局部组合图
 
 - `Ti3SiC2_whole_skeleton_local_spacing_9p37A_orange.png`
