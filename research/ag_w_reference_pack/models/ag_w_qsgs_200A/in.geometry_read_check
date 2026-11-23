@@ -1,0 +1,18 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs.data.gz
+group tungsten type 1
+group silver type 2
+region fixed_zone block INF INF INF INF 0 20 units box
+group fixed region fixed_zone
+region thermo_zone block INF INF INF INF 20 40 units box
+group thermostat region thermo_zone
+region newton_zone block INF INF INF INF 40 200 units box
+group newton region newton_zone
+variable nW equal count(tungsten)
+variable nAg equal count(silver)
+variable nFix equal count(fixed)
+variable nThermo equal count(thermostat)
+variable nNewton equal count(newton)
+print "GEOMETRY_READ_OK W=${nW} Ag=${nAg} fixed=${nFix} thermostat=${nThermo} newton=${nNewton}"

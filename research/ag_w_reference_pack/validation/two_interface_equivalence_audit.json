@@ -1,0 +1,135 @@
+{
+  "title": "Independent audit of both periodic interfaces in the relaxed EFS screening cells",
+  "potential_sha256": "215c53d03029736f3be4de5f8833a0d5a0e99fd18cd72b9ba118a0b583ff04f0",
+  "method": {
+    "cells": "periodic x/y/z with two Ag/W boundaries per cell; bulk-like central cores fixed; same EFS minimized structures and 2.8 A initial gap as the reported lowest-energy registry",
+    "locality_window_A": 10.0,
+    "per_atom_energy_partition": "LAMMPS pe/atom; subtract same-strain element bulk energy and divide by the lateral area",
+    "cross_pair_distance_bins_A": [
+      0.0,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.3,
+      4.6
+    ],
+    "caveat": "Local pe/atom windows are diagnostic, not a unique thermodynamic partition. The pair of interfaces is still thermodynamically reported as an average unless their local environments match."
+  },
+  "DFT_reference_conditions_from_He_2018": {
+    "method": "CASTEP PBE; 360 eV cutoff; bulk 9x9x9 k mesh; surfaces/interfaces 9x9x1; energy convergence 5e-5 eV/atom; force 0.03 eV/A; displacement 0.01 A",
+    "surface_slabs": "7 atomic layers reported converged; two free surfaces with 15 A vacuum",
+    "interface_cell": "interface slab in vacuum (one internal interface), Table 4 Wsep and gamma definitions",
+    "Ag100_W100_orientation": "[010]Ag parallel [011]W; reported mismatch about 3.44%",
+    "Ag111_W110_orientation": "[-2,1,1]Ag parallel [1,-1,0]W; reported mismatch about 3.44%"
+  },
+  "orientations": {
+    "Ag100_W100": {
+      "registry": "top",
+      "initial_gap_A": 2.8,
+      "final_total_energy_eV": -1167.5299572175,
+      "window_half_width_A": 5.0,
+      "interfaces": {
+        "Ag_top_W_bottom": {
+          "center_z_A": 15.715,
+          "atoms_within_window": {
+            "Ag": 16,
+            "W": 24
+          },
+          "local_excess_energy_per_area_J_m2": 0.8175249505734109,
+          "Ag_W_pairs_within_4p6_A": 40,
+          "minimum_Ag_W_distance_A": 3.583491764592184,
+          "Ag_W_pair_distance_histogram": [
+            0,
+            0,
+            0,
+            0,
+            32,
+            0,
+            8
+          ]
+        },
+        "W_top_Ag_bottom_periodic": {
+          "center_z_A": 39.055,
+          "atoms_within_window": {
+            "Ag": 16,
+            "W": 24
+          },
+          "local_excess_energy_per_area_J_m2": 0.8175249505734109,
+          "Ag_W_pairs_within_4p6_A": 40,
+          "minimum_Ag_W_distance_A": 3.583495777578789,
+          "Ag_W_pair_distance_histogram": [
+            0,
+            0,
+            0,
+            0,
+            32,
+            0,
+            8
+          ]
+        }
+      },
+      "comparison": {
+        "absolute_local_excess_energy_difference_J_m2": 0.0,
+        "relative_cross_pair_count_difference": 0.0,
+        "pair_histogram_L1_fraction": 0.0,
+        "minimum_distance_difference_A": 4.012986604795543e-06,
+        "interpretation": "localized EAM per-atom energy is a diagnostic partition; the total cell energy remains the reported thermodynamic value."
+      }
+    },
+    "Ag111_W110": {
+      "registry": "shift_mixed",
+      "initial_gap_A": 2.8,
+      "final_total_energy_eV": -12149.173126568,
+      "window_half_width_A": 5.0,
+      "interfaces": {
+        "Ag_top_W_bottom": {
+          "center_z_A": 20.290900807884555,
+          "atoms_within_window": {
+            "Ag": 240,
+            "W": 252
+          },
+          "local_excess_energy_per_area_J_m2": 0.09171521973266046,
+          "Ag_W_pairs_within_4p6_A": 744,
+          "minimum_Ag_W_distance_A": 2.5593040167201724,
+          "Ag_W_pair_distance_histogram": [
+            0,
+            0,
+            88,
+            92,
+            444,
+            24,
+            96
+          ]
+        },
+        "W_top_Ag_bottom_periodic": {
+          "center_z_A": 38.73210280773099,
+          "atoms_within_window": {
+            "Ag": 240,
+            "W": 252
+          },
+          "local_excess_energy_per_area_J_m2": 0.12566102367183968,
+          "Ag_W_pairs_within_4p6_A": 724,
+          "minimum_Ag_W_distance_A": 2.557524000995472,
+          "Ag_W_pair_distance_histogram": [
+            0,
+            0,
+            88,
+            104,
+            418,
+            28,
+            86
+          ]
+        }
+      },
+      "comparison": {
+        "absolute_local_excess_energy_difference_J_m2": 0.03394580393917922,
+        "relative_cross_pair_count_difference": 0.026881720430107527,
+        "pair_histogram_L1_fraction": 0.035422343324250684,
+        "minimum_distance_difference_A": 0.0017800157247003234,
+        "interpretation": "localized EAM per-atom energy is a diagnostic partition; the total cell energy remains the reported thermodynamic value."
+      }
+    }
+  }
+}

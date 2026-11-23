@@ -178,6 +178,40 @@ def direct_efs_energy(atoms: Atoms) -> float:
     return (pair_energy - np.sqrt(density).sum()) / len(atoms)
 
 
+def direct_b2_shell_energy(lattice_A: float) -> float:
+    """Independent B2 lattice-shell sum, without a neighbor-list implementation."""
+    parameters = json.loads(PARAMETERS.read_text())
+    pure = parameters["pure_element_parameters"]
+    cross = parameters["cross_parameters"]["Ag_W"]
+
+    def pair_value(item: dict, r: float) -> float:
+        if r > item["c_A"]:
+            return 0.0
+        polynomial = sum(item[f"c{power}"] * r**power for power in range(5))
+        return (r - item["c_A"]) ** 2 * polynomial
+
+    def density_value(item: dict, r: float) -> float:
+        if r > item["d_A"]:
+            return 0.0
+        delta = r - item["d_A"]
+        phi = delta**2 + item["B"] ** 2 * delta**4
+        return item["A"] ** 2 * phi
+
+    r_cross = np.sqrt(3.0) * lattice_A / 2.0  # eight Ag-W nearest neighbors
+    r_same_1 = lattice_A  # six same-species second-shell neighbors
+    r_same_2 = np.sqrt(2.0) * lattice_A  # twelve Ag same-species third-shell neighbors
+    pair_per_atom = 0.25 * (
+        16.0 * pair_value(cross, r_cross)
+        + 6.0 * pair_value(pure["Ag"], r_same_1)
+        + 12.0 * pair_value(pure["Ag"], r_same_2)
+        + 6.0 * pair_value(pure["W"], r_same_1)
+    )
+    rho_ag = 8.0 * density_value(cross, r_cross) + 6.0 * density_value(pure["Ag"], r_same_1)
+    rho_w = 8.0 * density_value(cross, r_cross) + 6.0 * density_value(pure["W"], r_same_1)
+    embedding_per_atom = 0.5 * (np.sqrt(rho_ag) + np.sqrt(rho_w))
+    return float(pair_per_atom - embedding_per_atom)
+
+
 def run_alloy_crystal(lammps: str, name: str, parameters: dict, work: Path) -> dict:
     directory = work / name
     directory.mkdir()
@@ -232,6 +266,14 @@ print "RESULT compound {name} epa=$(v_epa:%.12g) lattice=$(v_lat:%.12g)"
         "direct_efs_initial_energy_eV_atom": formula_energy,
         "lammps_eamfs_initial_energy_eV_atom": lammps_initial_energy,
         "direct_formula_vs_lammps_initial_error_eV_atom": abs(formula_energy - lammps_initial_energy),
+        **(
+            {
+                "independent_b2_shell_sum_energy_eV_atom": direct_b2_shell_energy(a),
+                "shell_sum_vs_neighbor_sum_error_eV_atom": abs(direct_b2_shell_energy(a) - formula_energy),
+            }
+            if name == "AgW_B2"
+            else {}
+        ),
         "lattice_A": lattice,
         "lattice_table7_A": parameters["lattice_A"],
         "lattice_absolute_error_A": abs(lattice - parameters["lattice_A"]),
