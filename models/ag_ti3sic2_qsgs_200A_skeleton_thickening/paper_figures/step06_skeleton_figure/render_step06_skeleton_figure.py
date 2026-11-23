@@ -126,8 +126,8 @@ def main() -> None:
 
     # 按用户标记，将箭头斜跨上、下两条相对枝臂之间的开口。
     # 端点选择对应插图中箭头头部落在两侧显示表面的位置。
-    start_pixel = (577.5, 445.5)
-    end_pixel = (764.5, 660.0)
+    start_pixel = (584.0, 393.0)
+    end_pixel = (754.0, 679.0)
     # 沿箭头端点的相机射线取两侧实际显示表面，使用模型 Å 坐标算间距。
     measured_a = helper.surface_point_on_camera_ray(local_vertices, local_faces, start_pixel, local_viewport, LOCAL_SIZE)
     measured_b = helper.surface_point_on_camera_ray(local_vertices, local_faces, end_pixel, local_viewport, LOCAL_SIZE)
