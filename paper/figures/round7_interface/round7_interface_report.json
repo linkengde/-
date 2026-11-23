@@ -1,0 +1,123 @@
+{
+  "status": "exploratory_round7_interface_and_MAX_local_structure_analysis",
+  "times_ps": [
+    0.6,
+    0.85,
+    1.1,
+    1.35,
+    1.6
+  ],
+  "trajectory": "/workspace/round7-source/models/ag_ti3sic2_qsgs_200x200x150_md_finer_skeleton/runs/round7_fiveframe_joint_analysis_to_1p6ps_20261109/round7_5frames_full_system_0p6_to_1p6ps.dump.gz",
+  "trajectory_sha256": "302063807ba042ee73987ab6af088c576244d67fa2a0dcfb3e7953f70165a23c",
+  "corrected_source_core_csv_sha256": "e79f8acdbaba5d52aa821aac78c0b03cce75a071ed27f60309dc881613d84908",
+  "atom_count_per_frame": [
+    352637,
+    352637,
+    352637,
+    352637,
+    352637
+  ],
+  "type_counts": {
+    "Ti": 135381,
+    "Si": 45127,
+    "C": 90254,
+    "Ag": 81875
+  },
+  "source_core_ag_count": 1787,
+  "baseline_interface_ag_count_nearest_scaffold_within_3p5A_at_0p60ps": 1220,
+  "interface_contact_cutoff_A": 3.5,
+  "rdf_definition": "Ag-core-centered partial g_AB(r), normalized by whole-material-slab element density and exact open-z shell accessibility; the bicontinuous local domain is inhomogeneous, so long-range convergence to unity is not assumed.",
+  "rdf_center_population": "same 1778 corrected source-core Ag IDs that remain at z<150 A in all frames; atoms that leave the material slab are excluded from the RDF only",
+  "rdf_center_count": 1778,
+  "rdf_pair_types": [
+    "Ag-Ag",
+    "Ag-Ti",
+    "Ag-Si",
+    "Ag-C"
+  ],
+  "rdf_material_z_slab_A": [
+    0.0,
+    150.0
+  ],
+  "rdf_bin_width_A": 0.05,
+  "rdf_max_A": 6.0,
+  "max_first_shell_cutoffs_A": {
+    "Ti-C": 3.0,
+    "Ti-Si": 3.85
+  },
+  "max_shell_definition": "Fixed at first minimum after the first peak in 0.60 ps partial-distance histogram; geometric near-neighbor proxy, not bond-energy decomposition.",
+  "max_skeleton_graph_cutoff_A": 3.25,
+  "max_skeleton_connectivity": [
+    {
+      "time_ps": 0.6,
+      "scaffold_atoms": 270762,
+      "same_phase_distance_cutoff_A": 3.25,
+      "connected_components": 409,
+      "largest_component_atoms": 270254,
+      "largest_component_fraction": 0.9981238135336569,
+      "geometric_edges": 1343563
+    },
+    {
+      "time_ps": 0.85,
+      "scaffold_atoms": 270762,
+      "same_phase_distance_cutoff_A": 3.25,
+      "connected_components": 385,
+      "largest_component_atoms": 270298,
+      "largest_component_fraction": 0.9982863178732614,
+      "geometric_edges": 1345359
+    },
+    {
+      "time_ps": 1.1,
+      "scaffold_atoms": 270762,
+      "same_phase_distance_cutoff_A": 3.25,
+      "connected_components": 370,
+      "largest_component_atoms": 270294,
+      "largest_component_fraction": 0.9982715447514792,
+      "geometric_edges": 1347880
+    },
+    {
+      "time_ps": 1.35,
+      "scaffold_atoms": 270762,
+      "same_phase_distance_cutoff_A": 3.25,
+      "connected_components": 339,
+      "largest_component_atoms": 270346,
+      "largest_component_fraction": 0.9984635953346481,
+      "geometric_edges": 1349089
+    },
+    {
+      "time_ps": 1.6,
+      "scaffold_atoms": 270762,
+      "same_phase_distance_cutoff_A": 3.25,
+      "connected_components": 362,
+      "largest_component_atoms": 270306,
+      "largest_component_fraction": 0.9983158641168258,
+      "geometric_edges": 1348481
+    }
+  ],
+  "baseline_MAX_pair_counts": {
+    "Ti-C": 455958,
+    "Ti-Si": 211731
+  },
+  "min_Ag_to_scaffold_distance_by_type_at_0p60ps_A": {
+    "Ti": 2.1421477166619516,
+    "Si": 2.0862107761441386,
+    "C": 1.688519247743427
+  },
+  "potential_status": "The Round7 development MTP is not independently validated for liquid Ag or Ag/Ti3SiC2 interface transferability; the run summary reports a maximum force of 133.006 eV/A during the continuation.",
+  "limitations": [
+    "The QSGS phases form a bicontinuous, curved interface, so there is no unique global interface normal. Figure 11 uses source-core Ag distance and local cross-species contacts instead of an arbitrary planar concentration profile.",
+    "The trajectory has only five stored frames 0.25 ps apart; sub-frame diffusion paths and fast bond rearrangements are not resolved.",
+    "Geometric pair counts and distances do not measure bond energy or chemical bonding strength.",
+    "No per-atom stress or force vectors are present in the trajectory dump; stress concentrations at scaffold branches cannot be inferred from these files.",
+    "Connected components use a geometric 3.25 A criterion and do not prove mechanical load-bearing continuity.",
+    "Results describe this exploratory trajectory and do not establish validated interfacial diffusion, reaction, melting, or welding."
+  ],
+  "outputs": [
+    "Figure11_Round7_interface_contact_migration.png/.pdf/.tif",
+    "Figure12_Round7_interfacial_partial_RDF.png/.pdf/.tif",
+    "Figure13_Round7_MAX_skeleton_local_order.png/.pdf/.tif",
+    "Figure11_round7_interface_metrics.csv",
+    "Figure12_round7_interfacial_partial_RDF.csv",
+    "Figure13_round7_max_local_order.csv"
+  ]
+}
