@@ -1,6 +1,6 @@
 # Ag-W research reference pack
 
-This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deliberately kept separate from the legacy Ag-Ti3SiC2 research. No production MD run has been launched from these materials.
+This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. This means approximately 63.02 at.% Ag and 36.98 at.% W (not a 50:50 atomic mixture); see `composition_target.md` for the atom-count and volume-fraction conversions. It is deliberately kept separate from the legacy Ag-Ti3SiC2 research. No production MD run has been launched from these materials.
 
 ## 1. Highest-priority Ag-W potential papers
 
@@ -52,7 +52,7 @@ This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deli
 1. Reconstruct the Dai-2006 Ag-W EFS functions from the tabulated parameters and verify units/sign conventions.
 2. Test pure Ag and pure W lattice constants, cohesive energies, elastic constants and equations of state.
 3. Test Ag and W melting/coexistence; the W melting discrepancy is a known warning.
-4. Test Ag/W interface energies and work of separation for more than one orientation against He et al. (2018) DFT.
+4. Compare constrained, zero-temperature Ag/W interface energy scans for Ag(100)/W(100) and Ag(111)/W(110) against He et al. (2018) DFT; see `validation/relaxed_interface_summary.md`. These are preliminary screenings, not a converged DFT reproduction.
 5. Test immiscibility/formation enthalpies and surface diffusion against Zhang et al. (2004) and available DFT.
 6. Only then build the 1:1 mass-ratio QSGS morphology and run minimization/300 K equilibration.
 
@@ -76,7 +76,10 @@ This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deli
 - Rebuild and check it from the repository root with `python3 research/ag_w_reference_pack/scripts/convert_dai_efs_to_eamfs.py --force` followed by `python3 research/ag_w_reference_pack/scripts/validate_dai_efs_eamfs.py`. The validation script accepts `--lammps /path/to/lmp` when LAMMPS is outside `/workspace/.venvs/ag-qsgs/bin/lmp`.
 - `parameter_audit.md` records the primary-source equations, page numbers, parameter tables, and a unit correction. The original PDF prints A in eV Å⁻¹. A previous JSON revision incorrectly said eV¹ᐟ² Å⁻¹. The potential values and generated table did not change because of that metadata correction.
 - `scripts/validate_dai_efs_eamfs.py` runs pure Ag and W bulk checks, the AgW B2 and Ag3W L12 structures from Table 7, and a small Ag(100)/W(100) BCC-site interface separation scan. Results are in `validation/dai_2006_efs_validation_report.json`.
+- `scripts/relax_and_compare_ag_w_interfaces.py` relaxes Ag(100)/W(100) and Ag(111)/W(110) interface cells with the central bulk-like layers held fixed, scans several lateral registries and initial gaps, and compares work of separation/interface energy with He et al. Table 4. Results are in `validation/relaxed_interface_report.json`.
 - Pure Ag and W lattice constants and cohesive energies reproduce Tables 4 and 1 within 0.0005 eV/atom and 0.00003 Å. The B2 and L12 cohesive energies are close to the Table 7 VASP values, but the B2 result differs from Table 7's own EFS value by 0.0859 eV/atom. That inconsistency remains unresolved.
 - The rigid interface scan gives a maximum work of separation of 2.923 J/m² versus the DFT value 2.80 J/m² in He et al. Table 4. The scan uses the paper's in-plane orientation relationship and BCC-site registry but does not relax the interface or reproduce a converged DFT comparison.
+- The relaxed interface scans minimize interfacial atoms while holding bulk-like cores fixed. The best Ag(100)/W(100) sampled registry gives Wsep = 2.894 J/m² and interface energy 1.127 J/m² versus DFT 2.80 and 0.72 J/m². Ag(111)/W(110) gives Wsep = 3.222 and interface energy 0.127 J/m² in its best sampled registry versus DFT 2.45 and 0.86 J/m². Full results and constraints are in `validation/relaxed_interface_summary.md` and `validation/relaxed_interface_report.json`; these checks are preliminary and do not clear the potential for production MD.
+- The B2 energy from a direct evaluation of Dai's EFS equations agrees with the LAMMPS `eam/fs` initial energy to about 1e-12 eV/atom, while still differing by 0.0859 eV/atom from the EFS value printed in Table 7. The reported discrepancy is retained pending an explanation from the source calculation/convention.
 - Dai et al. report a W melting point of 4500 K versus 3695 K experimentally. This EFS set is not ready for production or high-temperature MD until the alloy benchmark discrepancy and remaining thermodynamic/interface tests are resolved.
 - The reference pure-element Ackland files remain separate. They were not concatenated into the Ag–W potential.

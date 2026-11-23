@@ -38,6 +38,9 @@
       "cohesive_table7_vasp_eV_atom": 4.7212,
       "cohesive_absolute_error_vs_this_work_eV_atom": 0.08591465274000054,
       "cohesive_absolute_error_vs_vasp_eV_atom": 0.008114652739999784,
+      "direct_efs_initial_energy_eV_atom": -4.71308533316124,
+      "lammps_eamfs_initial_energy_eV_atom": -4.71308533316,
+      "direct_formula_vs_lammps_initial_error_eV_atom": 1.240785252321075e-12,
       "lattice_A": 3.22004079062,
       "lattice_table7_A": 3.22,
       "lattice_absolute_error_A": 4.079061999995304e-05,
@@ -50,6 +53,9 @@
       "cohesive_table7_vasp_eV_atom": 3.4542,
       "cohesive_absolute_error_vs_this_work_eV_atom": 0.01911491845000013,
       "cohesive_absolute_error_vs_vasp_eV_atom": 0.005985081549999993,
+      "direct_efs_initial_energy_eV_atom": -3.4482146807474434,
+      "lammps_eamfs_initial_energy_eV_atom": -3.44821468075,
+      "direct_formula_vs_lammps_initial_error_eV_atom": 2.5566215811068105e-12,
       "lattice_A": 4.13040692474,
       "lattice_table7_A": 4.13,
       "lattice_absolute_error_A": 0.0004069247400000364,
@@ -218,10 +224,11 @@
     ]
   },
   "limits": [
-    "Pure-crystal checks compare the tabulated implementation with the benchmarks transcribed in the literature JSON.",
+    "Cohesive energy is reported as -E_total/N because an isolated atom has zero energy under the paper's EFS formula. Pure-phase reproduction confirms this reference matches the paper's cohesive-energy convention.",
+    "An independent analytic evaluation of the Dai equations agrees with the LAMMPS eam/fs energies for B2 and L12 at their reported initial lattice constants.",
     "The small coherent Ag(100)/W(100) scan uses the reported in-plane orientation relationship and a rigid BCC-site registry. Its work of separation is compared with the He et al. DFT target, but it is not a relaxed, converged, independent DFT validation.",
     "The reference pack notes a reported W melting point of 4500 K versus 3695 K experimentally. High-temperature W behavior remains unvalidated.",
     "The AgW_B2 cohesive energy differs from Dai Table 7's EFS result by 0.0859 eV/atom, while differing from its VASP value by 0.0081 eV/atom. The Ag3W_L12 energy differs from the EFS result by 0.0191 eV/atom and from VASP by 0.0060 eV/atom. Resolve the Table 7 discrepancy before production use."
   ],
-  "status": "PURE_PHASES_PASS_DFT_TARGETS_CLOSE_TABLE7_B2_DISCREPANCY_REMAINS"
+  "status": "PURE_PHASES_AND_ANALYTIC_MAPPING_PASS_TABLE7_B2_DISCREPANCY_REMAINS"
 }
