@@ -23,7 +23,7 @@ Research date: 2026-11-23. This is a source and access register, not a claim tha
 - DOI: https://doi.org/10.1103/PhysRevB.102.064302
 - Includes W and Ag (G(T_e)) calculations using XTANT-3 dynamical coupling. It explicitly compares with Lin et al. and notes substantial model/experimental spread. Use as a distinct model branch, not a replacement for the 2014 W pump-probe calibration.
 
-### Akhmetov, Milov & Medvedev (2024)
+### Medvedev, Akhmetov & Milov (2024)
 **Electronic heat conductivity in a two-temperature state.** International Journal of Heat and Mass Transfer 228, 125674 (2024).
 - Free arXiv PDF: https://arxiv.org/pdf/2311.12458
 - arXiv: https://arxiv.org/abs/2311.12458
@@ -66,7 +66,8 @@ Research date: 2026-11-23. This is a source and access register, not a claim tha
 - Experiment: 100 fs, 800 nm Ti:sapphire pulses; 1/e spot size ~40 µm; pulse energies 9–185 µJ; repetition rate 10 Hz–1 kHz.
 - Initial polished-surface Fresnel reflectance at 800 nm: Ag 0.981, W 0.496.
 - Single-shot threshold fluences: Ag (1.5\pm0.4) J cm⁻²; W (0.44\pm0.02) J cm⁻².
-- The fitted ~100-shot low-fluence thresholds are Ag (0.83\pm0.02) J cm⁻² and W (0.22\pm0.01) J cm⁻². Effective penetration depths from that ablation analysis are Ag (100\pm6) nm and W (25\pm1) nm; low-fluence effective absorptances are 0.294 and 0.960 respectively.
+- The fitted first-~100-pulse low-fluence thresholds are Ag (0.83\pm0.02) J cm⁻² and W (0.22\pm0.01) J cm⁻². Effective penetration depths from that ablation analysis are Ag (100\pm6) nm and W (25\pm1) nm; effective absorptances inferred for the first ~100 pulses are 0.294 and 0.960 respectively.
+- These effective depths/absorptances include incubation and are not pristine optical constants. The paper notes Ag's effective depth (100 nm) greatly exceeds its ~12 nm optical depth, attributed mainly to ballistic electrons; W's 25 nm is close to its ~23 nm optical depth. At high fluence, fitted absorptance differs (Ag 0.248, W 0.457).
 - Important: these are pure-metal ablation data with incubation/surface evolution, not laser welding of an Ag–W composite. The initial reflectance and multi-shot effective absorptance are different physical conditions.
 
 ### Daraszewicz et al. (2014) W pump-probe
@@ -81,7 +82,8 @@ Research date: 2026-11-23. This is a source and access register, not a claim tha
 ### Vijayakumar, Sriramamurthy & Nagender Naidu (1988)
 **Calculated phase diagrams of Cu–W, Ag–W and Au–W binary systems.** Calphad 12(2), 177–184 (1988).
 - DOI: https://doi.org/10.1016/0364-5916(88)90019-3
-- No free full-text PDF was verified. The paper assumes no mutual solid solubility and calculates liquid equilibria with a sub-regular solution model using Miedema interaction parameters.
+- Full text is readable on an Academia.edu page: https://www.academia.edu/83090758/Calculated_phase_diagrams_of_Cu_W_Ag_W_and_Au_W_binary_systems . The page exposes a PDF-download option, but a direct freely downloadable PDF binary was not verified, so the DOI remains the formal citation.
+- The paper assumes no mutual solid solubility and calculates liquid equilibria with a sub-regular solution model using Miedema parameters; for Ag-W it reports very positive liquid interaction parameters (H_1=156) and (H_2=161) kJ mol⁻¹.
 
 ### Torre et al. (2021)
 **Investigation on the Thermodynamic Stability of Nanocrystalline W-Based Alloys: A Combined Theoretical and Experimental Approach.** Materials 14, 7179 (2021).
