@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
-from collections import Counter
 from pathlib import Path
 import sys
 
 import numpy as np
-from ase.io import read, write
+from ase.io import read
 from scipy import ndimage as ndi
+from skimage.morphology import skeletonize
 
 HERE = Path(__file__).resolve().parent
 MODEL = HERE.parents[1]
@@ -21,11 +21,10 @@ ATOM_FILE = STEP06 / "ag_ti3sic2_coarsened_networks_step06.extxyz"
 OUT = HERE
 
 # 与参考图一致的 25 × 25 × 25 Å 局部取景，避开盒壁。
-# 该局部窗口在 step06 相场中包含两条显著枝干与多个末端分支，尺寸仍为 25 Å。
-LOCAL_START = (40, 25, 63)
+# 该局部窗口含一个 6 邻接连通的分叉骨架，保留该连通体的全部枝条，尺寸为 25 Å。
+LOCAL_START = (53, 19, 14)
 LOCAL_SIZE = (10, 10, 10)
 VOXEL_A = 2.5
-MIN_COMPONENT_VOXELS = 10
 REPORT = OUT / "mesh_build_report.json"
 
 
@@ -71,6 +70,25 @@ def write_local_atom_crop(atoms, selected: np.ndarray, path: Path) -> dict:
     return {s: int(np.count_nonzero(symbols[ids] == s)) for s in ("Ti", "Si", "C")}
 
 
+def count_surface_components(faces: np.ndarray, vertex_count: int) -> int:
+    """统计三角网格的面连通分量数，确认局部表面没有断开。"""
+    parent = np.arange(vertex_count, dtype=np.int64)
+
+    def find(index: int) -> int:
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = int(parent[index])
+        return index
+
+    for face in faces:
+        root0 = find(int(face[0]))
+        for vertex in face[1:]:
+            root = find(int(vertex))
+            if root != root0:
+                parent[root] = root0
+    return int(len({find(i) for i in range(vertex_count)}))
+
+
 def main() -> None:
     if not FIELD_FILE.is_file() or not ATOM_FILE.is_file():
         raise FileNotFoundError("step06 原子文件或平滑相场缺失")
@@ -84,20 +102,27 @@ def main() -> None:
     crop = mask[sx:sx + nx, sy:sy + ny, sz:sz + nz]
     labels, n_components = ndi.label(crop, structure=ndi.generate_binary_structure(3, 1))
     counts = np.bincount(labels.ravel())
-    largest = int(counts[1:].max())
-    threshold = max(MIN_COMPONENT_VOXELS, int(np.ceil(0.05 * largest)))
-    kept_ids = np.flatnonzero(counts >= threshold)
-    kept_ids = kept_ids[kept_ids != 0]
-    if len(kept_ids) < 2:
-        raise RuntimeError(f"局部范围内没有找到至少两条可辨识枝干：{counts[1:].tolist()}")
-    selected = np.isin(labels, kept_ids)
+    if n_components != 1:
+        raise RuntimeError(f"局部 ROI 必须是一个 6 邻接连通骨架，实际连通分量数：{n_components}")
+    selected = labels == 1
 
     whole_mesh_path = OUT / "Ti3SiC2_step06_whole_surface_mesh.npz"
     local_mesh_path = OUT / "Ti3SiC2_step06_local_branch_surface_mesh.npz"
     whole_info = mesh_builder.build_mesh(mask, (0, 0, 0), whole_mesh_path, iso_value=0.55)
     local_info = mesh_builder.build_mesh(
-        selected, LOCAL_START, local_mesh_path, iso_value=0.60, keep_largest_surface=False
+        selected, LOCAL_START, local_mesh_path, iso_value=0.60, keep_largest_surface=True
     )
+    local_mesh = np.load(local_mesh_path)
+    surface_components = count_surface_components(local_mesh["faces"], len(local_mesh["vertices"]))
+    if surface_components != 1:
+        raise RuntimeError(f"局部三角网格没有保持连续，表面连通分量数：{surface_components}")
+    centerline = skeletonize(selected)
+    neighbor_count = ndi.convolve(centerline.astype(np.uint8), np.ones((3, 3, 3), dtype=np.uint8), mode="constant") - centerline
+    branch_voxels = centerline & (neighbor_count > 3)
+    branch_clusters, branch_cluster_count = ndi.label(
+        branch_voxels, structure=np.ones((3, 3, 3), dtype=bool)
+    )
+    endpoint_count = int(np.count_nonzero(centerline & (neighbor_count == 1)))
     atoms = read(ATOM_FILE)
     local_atom_counts = write_local_atom_crop(
         atoms, selected, OUT / "Ti3SiC2_step06_local_branch_atoms.extxyz"
@@ -118,9 +143,15 @@ def main() -> None:
             "z": [LOCAL_START[2] * VOXEL_A, (LOCAL_START[2] + LOCAL_SIZE[2]) * VOXEL_A],
         },
         "local_roi_occupied_voxels": int(crop.sum()),
-        "local_roi_face_connected_components": int(n_components),
-        "kept_local_component_voxels": {str(int(i)): int(counts[i]) for i in kept_ids},
-        "local_component_filter_threshold_voxels": int(threshold),
+        "local_roi_6_neighbor_connected_components": int(n_components),
+        "retained_connected_branch_voxels": int(selected.sum()),
+        "local_surface_connected_components": surface_components,
+        "skeleton_topology": {
+            "centerline_voxels": int(centerline.sum()),
+            "terminal_branches": endpoint_count,
+            "branch_junction_clusters": int(branch_cluster_count),
+            "branch_junction_voxels": int(branch_voxels.sum()),
+        },
         "local_atom_counts_by_element": local_atom_counts,
         "whole_mesh": whole_info,
         "local_mesh": local_info,

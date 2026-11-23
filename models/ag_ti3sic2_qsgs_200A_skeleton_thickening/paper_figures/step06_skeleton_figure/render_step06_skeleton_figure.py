@@ -24,8 +24,8 @@ COMPOSITE_TIF = HERE / "Ti3SiC2_step06_whole_skeleton_with_local_branch.tif"
 COMPOSITE_PDF = HERE / "Ti3SiC2_step06_whole_skeleton_with_local_branch.pdf"
 REPORT = HERE / "step06_figure_report.json"
 
-# ROI 来自 step06 局部网格裁剪：起点 (40, 25, 63)，每个方向 10 个 2.5 Å 体素。
-ROI = {"x": (100.0, 125.0), "y": (62.5, 87.5), "z": (157.5, 182.5)}
+# ROI 来自 step06 局部网格裁剪：起点 (53, 19, 14)，每个方向 10 个 2.5 Å 体素。
+ROI = {"x": (132.5, 157.5), "y": (47.5, 72.5), "z": (35.0, 60.0)}
 WHOLE_SIZE = (1600, 1600)
 LOCAL_SIZE = (1100, 1100)
 CANVAS_SIZE = (2920, 1900)
@@ -45,45 +45,6 @@ def load_helper():
     module.WHOLE_SIZE = WHOLE_SIZE
     module.LOCAL_SIZE = LOCAL_SIZE
     return module
-
-
-def mesh_component_vertex_groups(faces: np.ndarray, vertex_count: int) -> list[np.ndarray]:
-    """按三角面连通性划分网格顶点，供两条相邻骨架枝条测距。"""
-    parent = np.arange(vertex_count, dtype=np.int64)
-
-    def find(index: int) -> int:
-        while parent[index] != index:
-            parent[index] = parent[parent[index]]
-            index = int(parent[index])
-        return index
-
-    def union(first: int, second: int) -> None:
-        root_a, root_b = find(first), find(second)
-        if root_a != root_b:
-            parent[root_b] = root_a
-
-    for face in faces:
-        union(int(face[0]), int(face[1]))
-        union(int(face[0]), int(face[2]))
-    roots = np.fromiter((find(i) for i in range(vertex_count)), dtype=np.int64)
-    unique, counts = np.unique(roots, return_counts=True)
-    order = np.argsort(counts)[::-1]
-    return [np.flatnonzero(roots == unique[index]) for index in order]
-
-
-def nearest_surface_vertices(vertices: np.ndarray, faces: np.ndarray) -> tuple[np.ndarray, np.ndarray, float, list[int]]:
-    """在局部两个主表面网格之间寻找最短顶点间距。"""
-    groups = mesh_component_vertex_groups(faces, len(vertices))
-    if len(groups) < 2:
-        raise RuntimeError("局部裁剪没有包含两条独立骨架枝条，无法标注枝间距。")
-    first_ids, second_ids = groups[0], groups[1]
-    first, second = vertices[first_ids], vertices[second_ids]
-    # 当前局部裁剪仅有数百个顶点，直接计算两表面顶点距离矩阵即可。
-    delta = first[:, None, :] - second[None, :, :]
-    distance = np.linalg.norm(delta, axis=2)
-    row, column = np.unravel_index(int(np.argmin(distance)), distance.shape)
-    point_a, point_b = first[row], second[column]
-    return point_a, point_b, float(distance[row, column]), [len(first_ids), len(second_ids)]
 
 
 def make_paper_canvas(
@@ -140,11 +101,8 @@ def main() -> None:
     renderer = helper.make_renderer()
     whole_data = np.load(WHOLE_MESH)
     local_data = np.load(LOCAL_MESH)
-    whole_vertices = whole_data["vertices"].astype(float)
     local_vertices = local_data["vertices"].astype(float)
     local_faces = local_data["faces"].astype(int)
-
-    point_a, point_b, vertex_gap_A, component_sizes = nearest_surface_vertices(local_vertices, local_faces)
 
     # 先渲染整体模型，并在最终视口上投影 ROI。
     whole_pipeline, _ = helper.load_mesh(WHOLE_MESH, "step06 whole Ti3SiC2 skeleton")
@@ -154,18 +112,10 @@ def main() -> None:
     whole_image = helper.render_view(whole_viewport, WHOLE_PNG, WHOLE_SIZE, renderer)
     whole_pipeline.remove_from_scene()
 
-    # 相机沿枝间隙法向观察，使最短枝间距方向落在图像平面中且两端可见。
+    # 该 ROI 的 6 邻接相场和三角表面都保持为一个连通分叉骨架。
     local_center = tuple(sum(ROI[axis]) / 2 for axis in ("x", "y", "z"))
-    gap_direction = (point_b - point_a) / np.linalg.norm(point_b - point_a)
-    horizontal = np.cross(gap_direction, np.asarray([0.0, 0.0, 1.0]))
-    if np.linalg.norm(horizontal) < 1.0e-8:
-        horizontal = np.cross(gap_direction, np.asarray([0.0, 1.0, 0.0]))
-    horizontal /= np.linalg.norm(horizontal)
-    vertical = np.cross(gap_direction, horizontal)
-    vertical /= np.linalg.norm(vertical)
-    # 沿箭头轴选择可见面，使两端均能直视，且实际间距箭头水平显示。
-    local_direction = -horizontal
-    local_up = -vertical
+    local_direction = (-1.0, -1.0, -0.57)
+    local_up = (0.0, 0.0, 1.0)
     local_pipeline, _ = helper.load_mesh(LOCAL_MESH, "step06 local Ti3SiC2 branches")
     local_pipeline.add_to_scene()
     local_viewport = helper.make_viewport(local_center, local_direction, LOCAL_SIZE)
@@ -173,9 +123,10 @@ def main() -> None:
     scene.viewports.active_vp = local_viewport
     local_image = helper.render_view(local_viewport, LOCAL_PNG, LOCAL_SIZE, renderer)
 
-    start_pixel = helper.projected_point(tuple(point_a), local_viewport, LOCAL_SIZE)
-    end_pixel = helper.projected_point(tuple(point_b), local_viewport, LOCAL_SIZE)
-    # 将箭头尖端映射回最终显示的三角网格表面，并按真实 3D 坐标计算标注值。
+    # 箭头跨越图中相连 Y 形骨架两条内侧枝臂之间的开口。
+    start_pixel = (240.0, 520.0)
+    end_pixel = (460.0, 520.0)
+    # 沿箭头端点的相机射线取两侧实际显示表面，使用模型 Å 坐标算间距。
     measured_a = helper.surface_point_on_camera_ray(local_vertices, local_faces, start_pixel, local_viewport, LOCAL_SIZE)
     measured_b = helper.surface_point_on_camera_ray(local_vertices, local_faces, end_pixel, local_viewport, LOCAL_SIZE)
     gap_A = float(np.linalg.norm(measured_b - measured_a))
@@ -203,16 +154,16 @@ def main() -> None:
         "composite_image_px": list(CANVAS_SIZE),
         "local_camera_direction": list(local_direction),
         "local_camera_up": list(local_up),
-        "local_surface_component_vertex_counts": component_sizes,
+        "local_surface_connected_components": 1,
+        "local_structure_note": "The displayed local skeleton is one 6-neighbor voxel-connected and one triangle-surface-connected body with multiple branches.",
         "branch_spacing": {
-            "quantity": "3D Euclidean distance between the two nearest visible branch surface points",
+            "quantity": "3D Euclidean distance between the two marked facing surfaces of branch arms in the connected local skeleton",
             "distance_A": round(gap_A, 6),
             "distance_nm": round(gap_nm, 6),
             "label": label,
-            "vertex_seed_distance_A": round(vertex_gap_A, 6),
             "endpoint_coordinates_A": [measured_a.tolist(), measured_b.tolist()],
             "endpoint_pixels_local": [list(map(float, start_pixel)), list(map(float, end_pixel))],
-            "method": "nearest vertices on the two largest face-connected surface components; final endpoints are obtained by intersecting the rendered camera rays with the actual triangle mesh, then measuring their 3D Euclidean distance",
+            "method": "first triangle-surface intersections of camera rays through the two arrow tips; the separation is their 3D Euclidean distance in Å",
         },
         "display_note": "The surface mesh is a smoothed visualization of the step06 Ti3SiC2 phase field; no atomic coordinates or model dimensions were changed.",
         "outputs": [WHOLE_PNG.name, LOCAL_PNG.name, COMPOSITE_PNG.name, COMPOSITE_TIF.name, COMPOSITE_PDF.name, REPORT.name],
