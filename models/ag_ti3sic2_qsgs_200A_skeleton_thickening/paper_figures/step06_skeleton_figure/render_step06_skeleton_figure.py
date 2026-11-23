@@ -124,15 +124,17 @@ def main() -> None:
     scene.viewports.active_vp = local_viewport
     local_image = helper.render_view(local_viewport, LOCAL_PNG, LOCAL_SIZE, renderer)
 
-    # 箭头跨越该连通枝状骨架两条相对枝臂之间的开口。
-    start_pixel = (420.0, 600.0)
-    end_pixel = (780.0, 600.0)
+    # 按用户标记，将箭头斜跨上、下两条相对枝臂之间的开口。
+    # 端点选择对应插图中箭头头部落在两侧显示表面的位置。
+    start_pixel = (577.5, 445.5)
+    end_pixel = (764.5, 660.0)
     # 沿箭头端点的相机射线取两侧实际显示表面，使用模型 Å 坐标算间距。
     measured_a = helper.surface_point_on_camera_ray(local_vertices, local_faces, start_pixel, local_viewport, LOCAL_SIZE)
     measured_b = helper.surface_point_on_camera_ray(local_vertices, local_faces, end_pixel, local_viewport, LOCAL_SIZE)
     gap_A = float(np.linalg.norm(measured_b - measured_a))
     gap_nm = gap_A / 10.0
-    label = f"{gap_A:.2f} Å"
+    gap_um = gap_A / 10000.0
+    label = f"{gap_um:.3f} μm"
     helper.draw_branch_gap_annotation(local_image, start_pixel, end_pixel, label, ImageFont.truetype("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", 36, index=0))
     local_image.save(LOCAL_PNG, "PNG", dpi=(300, 300), optimize=True)
     local_pipeline.remove_from_scene()
@@ -161,6 +163,7 @@ def main() -> None:
             "quantity": "3D Euclidean distance between the two marked facing surfaces of branch arms in the connected local skeleton",
             "distance_A": round(gap_A, 6),
             "distance_nm": round(gap_nm, 6),
+            "distance_um": round(gap_um, 9),
             "label": label,
             "endpoint_coordinates_A": [measured_a.tolist(), measured_b.tolist()],
             "endpoint_pixels_local": [list(map(float, start_pixel)), list(map(float, end_pixel))],
