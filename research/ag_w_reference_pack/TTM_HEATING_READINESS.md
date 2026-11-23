@@ -14,7 +14,7 @@ The spatial heat-source formula and candidate values were migrated into an indep
 
 The Ag–W reference pack currently has no verified temperature-dependent electronic heat capacity `Ce(Te)`, electronic thermal conductivity `ke(Te)`, or electron–lattice coupling `G(Te)` tables for W, nor an approved rule for electron transport and coupling in cells containing both phases. The exploratory spatial source profile is specified, but `S(t)` has no pulse width or temporal envelope, and no Ag–W-specific absorbed fluence is specified. These inputs are needed before the TTM prototype can be adapted and its energy ledger checked.
 
-For those reasons, TTM is `NOT_RUN`. The initial geometry failed static acceptance, and v1/v2 reconstruction audits have not produced a valid starting structure. Do not start even a zero-source 300 K MD run until a candidate passes the static gate; the initial perfect-lattice assignment has a 0.08 Å Ag–W distance and must not be integrated directly. See `models/ag_w_qsgs_200A/interface_reconstruction_v2/RECONSTRUCTION_V2_AUDIT.md`.
+For those reasons, TTM is `NOT_RUN`. V3 local slabs are mechanically relaxed, but v1/v2 did not produce a valid full-size starting structure; the raw perfect-lattice assignment has a 0.08 Å Ag–W distance and must not be integrated directly. Qualitative use of the potential is accepted for graduate-level exploration, but any 300 K MD still requires a full 3D candidate to pass static structure, density, and connectivity checks. TTM also requires the missing W data and mixed-phase closure. See `models/ag_w_qsgs_200A/interface_reconstruction_v3/LOCAL_INTERFACE_V3_AUDIT.md`.
 
 ## TTM acceptance inputs
 
@@ -25,4 +25,4 @@ Before a small laser-heating pilot, record:
 3. Temporal envelope `S(t)` or absorbed fluence/total deposited energy, pulse duration, confirmation that the candidate lateral radius/depth are appropriate for Ag–W, and whether the 20–40 Å layer is a heat sink during the pulse.
 4. Energy-accounting checks for source deposition and equal-and-opposite electron-lattice transfer before any trajectory is interpreted.
 
-No current structure has passed static acceptance. The original candidate and v1/v2 repair candidates have not been equilibrated at 300 K, heated, or used for production MD.
+No full-size 3D structure has passed static acceptance. The original and v1/v2 candidates have not been equilibrated at 300 K, heated, or used for production MD. V3's small local slabs were zero-temperature EFS minimizations only.
