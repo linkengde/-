@@ -34,3 +34,12 @@ This file records verified public access status for the priority papers and dist
 ## Download note
 
 The public access links were verified in the earlier paper-access check. In this task, the Dai and He PDFs were supplied as chat attachments and those exact files were committed to the branch. The current running environment could not fetch the ACS supplementary-information file. Its direct link and contents are documented in the Ag–W reference pack README. The Jiao manuscript was also user supplied and is covered by its hash entry.
+
+## 4. Additional user-supplied papers and TTM data — 2026-11-24
+
+- `papers/Vijayakumar_1988_CuW_AgW_AuW_phase_diagrams.pdf`: user-supplied scan of H. Vijayakumar, A. H. Sriramamurthy, and S. V. Nagender Naidu, “Calculated Phase Diagrams of Cu-W, Ag-W and Au-W Binary Systems,” *CALPHAD* 12(2), 177–184 (1988). The article itself says there were no experimentally determined thermodynamic/phase-diagram data for Ag-W and builds a calculated diagram with assumptions. It is not an experimental phase diagram.
+- `papers/Waseda_Ohtani_1974_Liquid_noble_transition_metals_Xray.pdf`: user-supplied paper, *Physica Status Solidi (b)* 62, 535–546. It reports X-ray structure for liquid Ag and other metals, not liquid W or Ag-W alloy structure.
+- `papers/Torre_2021_Nanocrystalline_W_alloy_thermodynamic_stability.pdf`: user-supplied *Materials* 14, 7179 article, DOI 10.3390/ma14237179. It reports W-Ag segregation and demixing under the study's nanocrystalline mechanical-processing/annealing conditions.
+- `papers/Li_2024_Electronic_interface_thermal_conductance_metal_nanofilms.pdf`: user-supplied *International Journal of Heat and Mass Transfer* 229, 125717 paper, DOI 10.1016/j.ijheatmasstransfer.2024.125717. It measures Au/Pt and Au/Al electronic interface conductance, not Ag/W; it highlights sensitivity to interface state/oxide.
+- The user-provided XTANT-3 Ag/W Ce, G, and K data were copied unchanged to `ttm_data/xtant3_ag_w_source/` with the accompanying source README and license. `ttm_data/XTANT3_AG_W_DATA_AUDIT_20261124.md` records their contents and model limitations; hashes are stored in the TTM data folder.
+- The XTANT source README cites Medvedev, Akhmetov & Milov's 2023 arXiv preprint for electronic conductivity data. Downloading that PDF returned HTTP 403 in this environment; the uploaded README and citation are retained, and no PDF copy was fabricated.

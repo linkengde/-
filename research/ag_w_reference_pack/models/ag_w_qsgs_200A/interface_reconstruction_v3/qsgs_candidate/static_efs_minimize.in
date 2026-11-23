@@ -1,0 +1,30 @@
+# Exploratory zero-temperature EFS relaxation of the retained-atom QSGS candidate.
+# This is a static geometry check only. It is not an MD or TTM trajectory.
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs_v3_exploratory_geometry.data
+
+pair_style eam/fs/omp
+pair_coeff * * /workspace/-/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+region anchored block INF INF INF INF 0.0 20.0 units box
+group anchored region anchored
+group mobile subtract all anchored
+fix anchor anchored setforce 0.0 0.0 0.0
+
+variable atom_force atom sqrt(fx*fx+fy*fy+fz*fz)
+compute mobile_fmax mobile reduce max v_atom_force
+thermo 100
+thermo_style custom step atoms pe c_mobile_fmax fmax
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 0.0 0.01 10000 100000
+run 0
+variable final_energy equal pe
+print "STATIC_RESULT atoms=$(atoms) energy_eV=$(v_final_energy:%.14g) max_mobile_force_eV_A=$(c_mobile_fmax:%.12g)"
+write_data minimized.data
+write_dump all custom minimized.dump id type x y z fx fy fz modify sort id

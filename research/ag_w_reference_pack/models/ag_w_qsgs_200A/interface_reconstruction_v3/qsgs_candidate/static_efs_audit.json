@@ -1,0 +1,91 @@
+{
+  "title": "Ag-W full-size QSGS exploratory EFS static relaxation audit",
+  "status": "NOT_READY_FOR_THERMAL_DYNAMICS",
+  "input_geometry": "ag_w_qsgs_v3_exploratory_geometry.data.gz",
+  "minimizer": "LAMMPS conjugate-gradient; 10000 iterations; stopped at iteration cap",
+  "potential": "Dai 2006 EFS converted to LAMMPS eam/fs",
+  "boundary": "p p f",
+  "fixed_region_A": "z=0..20",
+  "counts": {
+    "W": 178435,
+    "Ag": 304036,
+    "total": 482471
+  },
+  "mass_ratio_Ag_over_W": 0.9997660509687712,
+  "atoms_outside_material_z_0_200_A": 1604,
+  "position_bounds_A": {
+    "x": [
+      0.0,
+      200.0
+    ],
+    "y": [
+      0.0,
+      200.0
+    ],
+    "z": [
+      0.0,
+      202.387
+    ]
+  },
+  "minimum_distances_A": {
+    "Ag_W": 2.2668317207062363,
+    "W_W": 2.4118814025569306,
+    "Ag_Ag": 2.0985818783168417
+  },
+  "pairs_below_local_scan_extrema": {
+    "Ag_W_below_2_54_A": 5920,
+    "W_W_below_2_60_A": 25462,
+    "Ag_Ag_below_2_48_A": 6630
+  },
+  "forces_eV_A": {
+    "mobile_max_vector": 0.6503504869260882,
+    "mobile_rms_vector": 0.004112260586756858,
+    "mobile_99th_percentile_vector": 0.00620709591588971,
+    "anchored_max_vector": 0.0,
+    "criterion_max_eV_A": 0.1,
+    "criterion_rms_eV_A": 0.02,
+    "pass": false
+  },
+  "energy_eV": -2421889.9132037,
+  "energy_eV_atom": -5.019762665950285,
+  "maximum_displacement_A": 4.651605309527801,
+  "displacement_percentiles_A": {
+    "50": 0.4147225065895608,
+    "90": 1.169379650731829,
+    "95": 1.4296717590014025,
+    "99": 2.0812250575848275
+  },
+  "atoms_displaced_over_1_A": 71886,
+  "topology": {
+    "W": {
+      "atoms": 178435,
+      "components": 540,
+      "largest_component_atoms": 175290,
+      "largest_component_share": 0.982374534144086,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        201.815
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 304036,
+      "components": 729,
+      "largest_component_atoms": 303070,
+      "largest_component_share": 0.9968227446749727,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        202.387
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "bicontinuous_practical_95_percent_screen": true,
+  "static_force_screen_pass": false,
+  "thermal_dynamics_started": false,
+  "interpretation": "The minimizer reached its 10000-step cap with residual forces above the stated criterion. It also produced distances below the local-collapse screen and atoms above the material surface; do not start TTM or melt/quench dynamics from this structure."
+}
