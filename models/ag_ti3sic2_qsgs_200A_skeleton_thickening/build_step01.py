@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""在原始 20 nm Ag/Ti3SiC2 原子模型上做一档 1 Å/侧的骨架加粗。"""
+"""在原始 20 nm Ag/Ti3SiC2 原子模型上按指定档位加粗骨架。"""
 from __future__ import annotations
 
 import importlib.util
@@ -88,7 +88,14 @@ def connected_phase(base, positions: np.ndarray, symbols: np.ndarray,
     return positions, symbols, 0, cleanup
 
 
-def main() -> None:
+def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
+    """从原始模型重建指定累计加粗档位，另存到独立目录。"""
+    global THICKEN_A
+    if offset_each_side_A <= 0 or step < 1:
+        raise ValueError("加粗幅度和档位必须为正数")
+    THICKEN_A = float(offset_each_side_A)
+    step_label = f"{step:02d}"
+    output_dir = OUT if step == 1 else OUT / f"step{step_label}"
     for path in (BASE_MODEL, BASE_PHASE, BASE_REPORT, BUILDER_PATH):
         if not path.exists():
             raise FileNotFoundError(f"缺少输入文件：{path}")
@@ -108,7 +115,7 @@ def main() -> None:
     field = signed_distance(mask)
     ti_pool, ti_pool_symbols, ag_pool, _, lattice = lattice_builder.build_lattice_pools(base)
 
-    # 原相场内的 Ti 位点全保留；仅将相界面外 1 Å 内的晶格位点并入骨架。
+    # 原相场内的 Ti 位点全保留；将相界面外指定距离内的晶格位点并入骨架。
     ti_inside = base.at_mask(mask, ti_pool)
     ti_distance = sample_field(field, ti_pool)
     ti_selected = ti_inside | ((~ti_inside) & (ti_distance >= -THICKEN_A))
@@ -145,20 +152,21 @@ def main() -> None:
     atoms.new_array("sputtering_layer", ((positions[:, 2] >= 200.0) & (positions[:, 2] < 250.0)).astype(np.int32))
     atoms.new_array("evaporation_layer", ((positions[:, 2] >= 250.0) & (positions[:, 2] < 300.0)).astype(np.int32))
     atoms.info.update({
-        "status": "UNRELAXED_GEOMETRY_CANDIDATE_STEP01_SKELETON_THICKENED",
+        "status": f"UNRELAXED_GEOMETRY_CANDIDATE_STEP{step_label}_SKELETON_THICKENED",
+        "thickening_step": step,
         "thickening_each_side_A": THICKEN_A,
         "material_region_A": SIZE.tolist(),
         "phase_order": "phase 1=Ti3SiC2, phase 2=Ag",
     })
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    extxyz = OUT / "ag_ti3sic2_skeleton_thickened_step01.extxyz"
-    datafile = OUT / "ag_ti3sic2_skeleton_thickened_step01.data"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    extxyz = output_dir / f"ag_ti3sic2_skeleton_thickened_step{step_label}.extxyz"
+    datafile = output_dir / f"ag_ti3sic2_skeleton_thickened_step{step_label}.data"
     write(extxyz, atoms, format="extxyz")
     write(datafile, atoms, format="lammps-data", atom_style="atomic",
           specorder=["Ti", "Si", "C", "Ag"], masses=True)
     np.savez_compressed(
-        OUT / "thickened_step01_phase_field.npz",
+        output_dir / f"thickened_step{step_label}_phase_field.npz",
         original_Ti3SiC2_mask=mask.astype(np.uint8),
         signed_distance_A=field.astype(np.float32),
         thickness_increase_each_side_A=np.asarray(THICKEN_A),
@@ -179,8 +187,9 @@ def main() -> None:
             "new_atoms_added": int((~new_to_old).sum()),
         }
     report = {
-        "status": "UNRELAXED_GEOMETRY_CANDIDATE_STEP01_SKELETON_THICKENED",
-        "description": "在原纳米原子模型同尺寸材料区内，将 Ti3SiC2 相界面向 Ag 侧外扩 1.0 Å；Ag 只保留扩张后空隙中的连通位点。",
+        "status": f"UNRELAXED_GEOMETRY_CANDIDATE_STEP{step_label}_SKELETON_THICKENED",
+        "thickening_step": step,
+        "description": f"在原纳米原子模型同尺寸材料区内，将 Ti3SiC2 相界面向 Ag 侧累计外扩 {THICKEN_A:.2f} Å/侧；Ag 只保留扩张后空隙中的连通位点。",
         "baseline_model": str(BASE_MODEL.relative_to(REPO)),
         "baseline_atoms": len(original),
         "baseline_element_counts": original_counts,
@@ -205,16 +214,24 @@ def main() -> None:
             "形貌可作为后续粗化/微米风格结构的比较版本，但不表示实体模型尺寸已经达到微米。",
         ],
         "outputs": {"extxyz": extxyz.name, "lammps_data": datafile.name,
-                    "phase_field": "thickened_step01_phase_field.npz", "report": "thickened_step01_report.json"},
+                    "phase_field": f"thickened_step{step_label}_phase_field.npz",
+                    "report": f"thickened_step{step_label}_report.json"},
     }
-    (OUT / "thickened_step01_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    (output_dir / f"thickened_step{step_label}_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"status": report["status"], "atoms": len(atoms),
                       "counts": final_counts, "mass_ratio": ag_mass_ratio,
                       "material_A": SIZE.tolist(), "box_A": BOX.tolist(),
+                      "step": step,
                       "thicken_each_side_A": THICKEN_A,
                       "Ti3SiC2_cleanup": ti_cleanup, "Ag_cleanup": ag_cleanup},
                      ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="从纳米基准模型构建指定档位的 Ti3SiC2 骨架加粗版本")
+    parser.add_argument("--offset-each-side-a", type=float, default=THICKEN_A,
+                        help="相界面相对原始 QSGS 骨架的累计外扩量，单位 Å")
+    parser.add_argument("--step", type=int, default=1, help="输出版本编号")
+    args = parser.parse_args()
+    main(offset_each_side_A=args.offset_each_side_a, step=args.step)

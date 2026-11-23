@@ -1,0 +1,107 @@
+{
+  "status": "UNRELAXED_GEOMETRY_CANDIDATE_STEP02_SKELETON_THICKENED",
+  "thickening_step": 2,
+  "description": "在原纳米原子模型同尺寸材料区内，将 Ti3SiC2 相界面向 Ag 侧累计外扩 2.00 Å/侧；Ag 只保留扩张后空隙中的连通位点。",
+  "baseline_model": "models/ag_ti3sic2_qsgs_200A_ttm_finer/ag_ti3sic2_qsgs.extxyz",
+  "baseline_atoms": 437235,
+  "baseline_element_counts": {
+    "Ti": 167859,
+    "Si": 55953,
+    "C": 111906,
+    "Ag": 101517
+  },
+  "dimensions": {
+    "material_region_A": [
+      200.0,
+      200.0,
+      200.0
+    ],
+    "simulation_box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "pbc": [
+      true,
+      true,
+      false
+    ]
+  },
+  "thickening": {
+    "offset_each_side_A": 2.0,
+    "method": "QSGS voxel-center signed-distance interpolation sampled at Ti3SiC2 and Ag crystal sites",
+    "qsgs_grid": [
+      80,
+      80,
+      80
+    ],
+    "qsgs_voxel_size_A": [
+      2.5,
+      2.5,
+      2.5
+    ]
+  },
+  "final_atoms": 495437,
+  "final_element_counts": {
+    "Ti": 206199,
+    "Si": 68733,
+    "C": 137466,
+    "Ag": 83039
+  },
+  "Ti3SiC2_formula_units": 68733,
+  "Ag_over_Ti3SiC2_mass_ratio": 0.6658887281475401,
+  "Ag_available_before_connectivity_filter": 87510,
+  "Ti3SiC2_connectivity_cleanup": [
+    {
+      "components": 3,
+      "largest_atoms": 413306,
+      "discarded_atoms": 2,
+      "cutoff_A": 3.25
+    },
+    {
+      "components": 1,
+      "largest_atoms": 412398,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.25
+    }
+  ],
+  "Ag_connectivity_cleanup": [
+    {
+      "components": 2002,
+      "largest_atoms": 83039,
+      "discarded_atoms": 4471,
+      "cutoff_A": 3.15
+    },
+    {
+      "components": 1,
+      "largest_atoms": 83039,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.15
+    }
+  ],
+  "phase_atom_changes_vs_baseline": {
+    "Ti3SiC2": {
+      "baseline_atoms_retained": 335718,
+      "baseline_atoms_removed": 0,
+      "new_atoms_added": 76680
+    },
+    "Ag": {
+      "baseline_atoms_retained": 81410,
+      "baseline_atoms_removed": 20107,
+      "new_atoms_added": 1629
+    }
+  },
+  "Ti3SiC2_atoms_added_vs_baseline_count": 76680,
+  "limitations": [
+    "此版本保持 200×200×200 Å 材料区及 200×200×300 Å 模拟盒，物理尺寸仍为纳米级。",
+    "这是未弛豫的几何原子模型；还没有进行势函数力学稳定性或 TTM/MD 加热验证。",
+    "Ag 按扩张后的可用晶格位点填充；若骨架继续加粗，Ag/Ti3SiC2 质量比会继续变化。",
+    "形貌可作为后续粗化/微米风格结构的比较版本，但不表示实体模型尺寸已经达到微米。"
+  ],
+  "outputs": {
+    "extxyz": "ag_ti3sic2_skeleton_thickened_step02.extxyz",
+    "lammps_data": "ag_ti3sic2_skeleton_thickened_step02.data",
+    "phase_field": "thickened_step02_phase_field.npz",
+    "report": "thickened_step02_report.json"
+  }
+}

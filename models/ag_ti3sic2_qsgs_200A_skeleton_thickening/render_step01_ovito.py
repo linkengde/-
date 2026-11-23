@@ -21,6 +21,10 @@ PNG = FIG / "Ag_Ti3SiC2_skeleton_thickened_step01_comparison.png"
 PDF = FIG / "Ag_Ti3SiC2_skeleton_thickened_step01_comparison.pdf"
 TIFF = FIG / "Ag_Ti3SiC2_skeleton_thickened_step01_comparison.tif"
 REPORT = FIG / "render_report.json"
+TITLE = "Ag–Ti3SiC2 原子模型：骨架加粗初版"
+SUBTITLE = "同一纳米模型尺寸与模拟盒；比较 Ti3SiC2 骨架第一档加粗前后"
+LEFT_LABEL = "原始模型"
+RIGHT_LABEL = "骨架外扩 1 Å/侧"
 
 COLORS = {
     1: np.asarray((0.055, 0.078, 0.102)),  # Ti3SiC2 骨架：深灰蓝
@@ -96,10 +100,10 @@ def main() -> None:
 
     canvas = Image.new("RGB", CANVAS, "white")
     draw = ImageDraw.Draw(canvas)
-    draw.text((90, 55), "Ag–Ti3SiC2 原子模型：骨架加粗初版", font=font(52, True), fill="#1e2d39")
-    draw.text((94, 126), "同一纳米模型尺寸与模拟盒；比较 Ti3SiC2 骨架第一档加粗前后", font=font(28), fill="#607382")
-    draw.text((105, 215), "原始模型", font=font(32, True), fill="#273846")
-    draw.text((1720, 215), "骨架外扩 1 Å/侧", font=font(32, True), fill="#273846")
+    draw.text((90, 55), TITLE, font=font(52, True), fill="#1e2d39")
+    draw.text((94, 126), SUBTITLE, font=font(28), fill="#607382")
+    draw.text((105, 215), LEFT_LABEL, font=font(32, True), fill="#273846")
+    draw.text((1720, 215), RIGHT_LABEL, font=font(32, True), fill="#273846")
     draw.text((105, 270), f"Ti3SiC2 {base_counts[1]:,}  ·  Ag {base_counts[2]:,}  ·  总计 {base_n:,}", font=font(23), fill="#526574")
     draw.text((1720, 270), f"Ti3SiC2 {new_counts[1]:,}  ·  Ag {new_counts[2]:,}  ·  总计 {new_n:,}", font=font(23), fill="#526574")
     with Image.open(left_path) as left, Image.open(right_path) as right:

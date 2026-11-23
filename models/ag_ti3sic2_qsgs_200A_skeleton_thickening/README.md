@@ -1,4 +1,4 @@
-# Ag/Ti3SiC2 原子模型：骨架加粗迭代第 1 版
+# Ag/Ti3SiC2 原子模型：骨架加粗迭代
 
 本目录从现有 437,235 原子纳米模型出发，对 Ti3SiC2 骨架做第一档小幅加粗，供查看和决定后续是否继续加粗。原模型没有覆盖或改写。
 
@@ -19,6 +19,17 @@
 
 这只是第一档几何加粗。盒子物理长度仍为 20 nm；是否把后续达到的粗化形貌作为“微米风格模型”，由你看图后决定。它不会因为骨架变粗就自动变成真实微米尺寸。
 
+## 第二档：累计外扩 2 Å/侧
+
+第二档在第一档基础上继续加粗 1 Å/侧，仍从同一原始几何重建。第一档的 356,166 个 Ti3SiC2 原子全部保留；第二档新增 56,232 个 Ti3SiC2 原子，并移除余下区域中 18,433 个 Ag 原子。Ag 主相仍保持连通。
+
+- 第二档总原子数：495,437；Ti3SiC2：412,398；Ag：83,039。
+- Ag/Ti3SiC2 质量比约 0.666，低于第一档的 0.942。
+- 材料区和模拟盒的物理尺寸、边界条件不变。
+- 对比图：`visualization/Ag_Ti3SiC2_skeleton_thickened_step01_vs_step02.png`。
+- 第二档 OVITO 原子文件：`output/step02/ag_ti3sic2_skeleton_thickened_step02.extxyz`。
+- 第二档结构报告：`output/step02/thickened_step02_report.json`。
+
 ## 查看
 
 - `visualization/Ag_Ti3SiC2_skeleton_thickened_step01_comparison.png`：原模型与加粗版的 OVITO 标准渲染并排图。
@@ -33,6 +44,7 @@
 
 ```bash
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step01.py
+python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step02.py
 ```
 
 图由 OVITO 3.17.2 的 StandardRenderer 输出。当前云机无系统级 Vulkan 驱动，因此使用下载到 `/tmp` 的 Mesa lavapipe CPU Vulkan ICD 生成；该临时驱动不属于模型文件。
@@ -40,5 +52,5 @@ python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step01.py
 ## 限制
 
 - 模型尚未做能量最小化、冷态稳定性检查或 TTM/MD 加热。
-- 加粗改变了相比例：本版 Ag/Ti3SiC2 质量比约 0.942；继续加粗时银相可用体积会继续减少。
+- 加粗改变了相比例：第一、二档 Ag/Ti3SiC2 质量比分别约 0.942、0.666；继续加粗时银相可用体积会继续减少。
 - 本版用于看形貌和继续迭代，不代表势函数或界面力学已通过验证。
