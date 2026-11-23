@@ -1,0 +1,80 @@
+{
+  "title": "Dai et al. (2006) Extended Finnis-Sinclair parameters for Ag-W",
+  "doi": "10.1088/0953-8984/18/19/008",
+  "citation": "X. D. Dai, Y. Kong, J. H. Li, B. X. Liu, Journal of Physics: Condensed Matter 18 (2006) 4527-4542.",
+  "model": "Extended Finnis-Sinclair (EFS)",
+  "functional_form": {
+    "total_energy": "U = 0.5 * sum_ij V_ij(r_ij) - sum_i sqrt(rho_i)",
+    "pair_term": "V(r) = (r-c)^2 * (c0 + c1*r + c2*r^2 + c3*r^3 + c4*r^4), for r <= c; 0 otherwise",
+    "density_term": "phi(r) = (r-d)^2 + B^2*(r-d)^4, for r <= d; 0 otherwise",
+    "host_density": "rho_i = sum_j A^2 * phi_ij(r_ij)"
+  },
+  "parameter_units": {
+    "A": "eV^0.5 Angstrom^-1 (as tabulated in the paper's A parameter header: eV Angstrom^-1)",
+    "d": "Angstrom",
+    "c": "Angstrom",
+    "c0": "eV Angstrom^-2",
+    "c1": "eV Angstrom^-3",
+    "c2": "eV Angstrom^-4",
+    "c3": "eV Angstrom^-5",
+    "c4": "eV Angstrom^-6",
+    "B": "Angstrom^-2"
+  },
+  "pure_element_parameters": {
+    "Ag": {
+      "A": 0.325514,
+      "d_A": 4.41,
+      "c_A": 4.76,
+      "c0": 10.6812,
+      "c1": -12.04517,
+      "c2": 5.203072,
+      "c3": -1.013304,
+      "c4": 0.0742308,
+      "B": -1.293394
+    },
+    "W": {
+      "A": 1.885948,
+      "d_A": 4.41,
+      "c_A": 3.25,
+      "c0": 48.52796,
+      "c1": -33.79621,
+      "c2": 5.854334,
+      "c3": -0.0098221,
+      "c4": 0.033338,
+      "B": 0
+    }
+  },
+  "cross_parameters": {
+    "Ag_W": {
+      "A": 0.6962,
+      "d_A": 4.6,
+      "c_A": 4.3,
+      "c0": 25.618,
+      "c1": -26.3407,
+      "c2": 9.1414,
+      "c3": -1.0693,
+      "c4": 0,
+      "B": 0
+    }
+  },
+  "paper_benchmarks": {
+    "Ag": {
+      "lattice_A": 4.09,
+      "cohesive_energy_eV_atom": 2.95,
+      "melting_point_MD_K": 1175,
+      "melting_point_experiment_K": 1235
+    },
+    "W": {
+      "lattice_A": 3.16,
+      "cohesive_energy_eV_atom": 8.916,
+      "melting_point_MD_K": 4500,
+      "melting_point_experiment_K": 3695
+    },
+    "warning": "Dai et al. report a ~21.8% high melting-point prediction for W. This EFS set is a candidate for validation, not automatically a production-quality high-temperature Ag-W model."
+  },
+  "usage_status": "Literature parameters transcribed for reproducibility. No LAMMPS Ag-W .eam.fs file has been generated or validated from this parameter set yet.",
+  "source_access": {
+    "publisher": "https://doi.org/10.1088/0953-8984/18/19/008",
+    "author_uploaded_full_text": "https://www.researchgate.net/publication/231128055_Extended_Finnis-Sinclair_potential_for_bcc_and_fcc_metals_and_alloys"
+  }
+}
