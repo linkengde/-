@@ -1,0 +1,25 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs_interface_v2.prepruned.data.gz
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+group mobile subtract all fixed
+fix bottom fixed setforce 0.0 0.0 0.0
+variable f2 atom fx*fx+fy*fy+fz*fz
+variable fmag atom sqrt(v_f2)
+compute mobile_fmax mobile reduce max v_fmag
+compute mobile_f2sum mobile reduce sum v_f2
+variable mobile_rms equal sqrt(c_mobile_f2sum/count(mobile))
+thermo 50
+thermo_style custom step atoms pe etotal c_mobile_fmax v_mobile_rms fmax
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 1.0e-8 1.0e-3 1200 30000
+unfix bottom
+write_data ag_w_qsgs_interface_v2.efs_static.data

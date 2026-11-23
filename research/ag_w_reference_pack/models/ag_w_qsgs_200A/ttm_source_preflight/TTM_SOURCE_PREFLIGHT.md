@@ -2,6 +2,8 @@
 
 This is a static mapping of the migrated Ag-only candidate source onto the actual Ag–W QSGS atom coordinates. It does not run TTM or MD.
 
+**Historical geometry-specific result:** the coordinates used here are the original overlapping QSGS assignment, which subsequently failed static EFS/reconstruction acceptance. The 9,784.983951 eV/ps power and its Ag mask must not be reused for a future reconstructed structure. Recompute the mapping only after that structure passes static acceptance.
+
 ## Source and mask
 
 ```text

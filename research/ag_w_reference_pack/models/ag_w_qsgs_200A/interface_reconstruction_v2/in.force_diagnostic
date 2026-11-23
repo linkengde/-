@@ -1,0 +1,18 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs_interface_v2.efs_static_final.data.gz
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+fix bottom fixed setforce 0.0 0.0 0.0
+dump force_dump all custom 1 force_diagnostic.dump.gz id type x y z fx fy fz
+dump_modify force_dump sort id
+thermo 1
+thermo_style custom step atoms pe fmax
+thermo_modify lost error
+run 0
+undump force_dump

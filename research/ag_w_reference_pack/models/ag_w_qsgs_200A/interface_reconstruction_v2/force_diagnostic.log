@@ -1,0 +1,73 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs_interface_v2.efs_static_final.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  432802 atoms
+  reading velocities ...
+  432802 velocities
+  read_data CPU = 1.164 seconds
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+44722 atoms in group fixed
+fix bottom fixed setforce 0.0 0.0 0.0
+dump force_dump all custom 1 force_diagnostic.dump id type x y z fx fy fz
+dump_modify force_dump sort id
+thermo 1
+thermo_style custom step atoms pe fmax
+thermo_modify lost error
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 151.9 | 151.9 | 151.9 Mbytes
+   Step        Atoms        PotEng          Fmax
+         0      432802  -2153281.1      1.2714603
+Loop time of 3.605e-06 on 1 procs for 0 steps with 432802 atoms
+
+194.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 3.605e-06  |            |       |100.00
+
+Nlocal:         432802 ave      432802 max      432802 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          64454 ave       64454 max       64454 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.44417e+07 ave 1.44417e+07 max 1.44417e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 14441676
+Ave neighs/atom = 33.367859
+Neighbor list builds = 0
+Dangerous builds = 0
+undump force_dump
+Total wall time: 0:00:03

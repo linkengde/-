@@ -1,0 +1,128 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style bond
+boundary p p f
+bond_style harmonic
+read_data ../overlap_repair_v1/bonded_precondition.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  scanning bonds ...
+  7 = max bonds/atom
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  2202206 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 10.724 seconds
+  read_data CPU = 15.025 seconds
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+special_bonds lj 1.0 1.0 1.0
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    1        1        1
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 6.087 seconds
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+49129 atoms in group fixed
+group mobile subtract all fixed
+433342 atoms in group mobile
+fix bottom fixed setforce 0.0 0.0 0.0
+variable f2 atom fx*fx+fy*fy+fz*fz
+variable fmag atom sqrt(v_f2)
+compute mobile_fmax mobile reduce max v_fmag
+compute mobile_f2sum mobile reduce sum v_f2
+variable mobile_rms equal sqrt(c_mobile_f2sum/count(mobile))
+thermo 100
+thermo_style custom step atoms pe ebond etotal c_mobile_fmax v_mobile_rms fmax
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.002 line quadratic
+minimize 1.0e-8 1.0e-3 1500 30000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 609.6 | 609.6 | 609.6 Mbytes
+   Step        Atoms        PotEng         E_bond         TotEng     c_mobile_fmax   v_mobile_rms       Fmax
+         0      482471  -1350714.6      104.54265     -1350714.6      642.13967      33.792669      642.13958
+       100      482471  -1509219.8      1297.8807     -1509219.8      380.26388      26.631077      380.26378
+       200      482471  -1669156.6      6624.3483     -1669156.6      210.39699      19.474985      210.39536
+       300      482471  -1815833.5      19730.317     -1815833.5      105.91507      12.831283      105.89454
+       400      482471  -1933877.9      44132.422     -1933877.9      47.90852       7.3668114      46.790128
+       500      482471  -2011069.7      70938.084     -2011069.7      28.093665      4.0653779      27.962542
+       600      482471  -2051235.9      81286.071     -2051235.9      22.603703      2.8421145      20.817916
+       700      482471  -2080538.2      82333.569     -2080538.2      23.546933      2.1973355      17.87695
+       800      482471  -2100391.5      80189.474     -2100391.5      21.461978      1.8252167      17.240195
+       900      482471  -2115160.4      77543.339     -2115160.4      19.605732      1.5663197      16.211891
+      1000      482471  -2127386.2      74851.249     -2127386.2      22.144961      1.3598666      14.293346
+      1100      482471  -2137449.4      72361.523     -2137449.4      21.251459      1.1937761      13.774422
+      1200      482471  -2145223.5      70294.239     -2145223.5      18.603208      1.0669182      14.952646
+      1300      482471  -2151238.1      68618.859     -2151238.1      17.755935      0.96958753     14.420105
+      1400      482471  -2156768        67027.52      -2156768        15.611169      0.88161314     12.30325
+      1500      482471  -2161897.7      65513.046     -2161897.7      14.079532      0.80144478     11.768453
+Loop time of 589.611 on 1 procs for 1500 steps with 482471 atoms
+
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -1350714.60520389  -2161850.36890618  -2161897.70655509
+  Force two-norm initial, final = 22245.28 527.58082
+  Force max component initial, final = 642.13958 11.768453
+  Final line search alpha, max atom move = 0.00016983916 0.0019987442
+  Iterations, force evaluations = 1500 1500
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 525.29     | 525.29     | 525.29     |   0.0 | 89.09
+Bond    | 38.047     | 38.047     | 38.047     |   0.0 |  6.45
+Neigh   | 3.3633     | 3.3633     | 3.3633     |   0.0 |  0.57
+Comm    | 2.4625     | 2.4625     | 2.4625     |   0.0 |  0.42
+Output  | 0.6169     | 0.6169     | 0.6169     |   0.0 |  0.10
+Modify  | 0.74225    | 0.74225    | 0.74225    |   0.0 |  0.13
+Other   |            | 19.08      |            |       |  3.24
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70924 ave       70924 max       70924 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.77492e+07 ave 1.77492e+07 max 1.77492e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17749216
+Ave neighs/atom = 36.788151
+Ave special neighs/atom = 98.06662
+Neighbor list builds = 3
+Dangerous builds = 0
+unfix bottom
+write_data ag_w_qsgs_interface_v2.lattice_constrained.data
+System init for write_data ...
+Total wall time: 0:10:14

@@ -1,0 +1,111 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data ag_w_qsgs_interface_v2.prepruned.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  432802 atoms
+  read_data CPU = 0.760 seconds
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_layer block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_layer
+44661 atoms in group fixed
+group mobile subtract all fixed
+388141 atoms in group mobile
+fix bottom fixed setforce 0.0 0.0 0.0
+variable f2 atom fx*fx+fy*fy+fz*fz
+variable fmag atom sqrt(v_f2)
+compute mobile_fmax mobile reduce max v_fmag
+compute mobile_f2sum mobile reduce sum v_f2
+variable mobile_rms equal sqrt(c_mobile_f2sum/count(mobile))
+thermo 50
+thermo_style custom step atoms pe etotal c_mobile_fmax v_mobile_rms fmax
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 1.0e-8 1.0e-3 1200 30000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 186.8 | 186.8 | 186.8 Mbytes
+   Step        Atoms        PotEng         TotEng     c_mobile_fmax   v_mobile_rms       Fmax
+         0      432802  -2127238.6     -2127238.6      4.0857954      0.45165786     3.7192246
+        50      432802  -2133599.7     -2133599.7      2.9062091      0.2435213      2.7438641
+       100      432802  -2136569.8     -2136569.8      3.1918254      0.1751971      3.0690749
+       150      432802  -2138329.2     -2138329.2      2.8174287      0.14123434     2.7997339
+       200      432802  -2139559.9     -2139559.9      2.8002424      0.11941061     2.7757456
+       250      432802  -2140579.3     -2140579.3      2.1797896      0.10356065     1.994405
+       300      432802  -2141390.9     -2141390.9      2.6374475      0.093775801    2.303153
+       350      432802  -2142060.1     -2142060.1      2.2733326      0.086512211    2.0725355
+       400      432802  -2142741.6     -2142741.6      2.6153338      0.079063344    2.2392487
+       450      432802  -2143237.5     -2143237.5      2.4052595      0.07538954     2.1285814
+       500      432802  -2143802.4     -2143802.4      2.3991158      0.070786806    1.8936624
+       550      432802  -2144293       -2144293        2.4673194      0.067616389    2.2359793
+       600      432802  -2144742.9     -2144742.9      1.9127766      0.064566847    1.6916635
+       650      432802  -2145132.1     -2145132.1      2.1984993      0.062515486    2.1972071
+       700      432802  -2145487.5     -2145487.5      2.2220078      0.060036651    2.1402095
+       750      432802  -2145815.6     -2145815.6      2.3392564      0.058283352    2.0764846
+       800      432802  -2146128.6     -2146128.6      2.4473548      0.056382193    2.4156879
+       850      432802  -2146421.1     -2146421.1      1.8557842      0.054521766    1.656217
+       900      432802  -2146742.3     -2146742.3      1.8270728      0.052672732    1.7676206
+       950      432802  -2147023.9     -2147023.9      2.0541452      0.051588546    1.8917205
+      1000      432802  -2147312.8     -2147312.8      2.4336828      0.05002315     2.0715603
+      1050      432802  -2147608.2     -2147608.2      2.1404903      0.048911729    1.7300639
+      1100      432802  -2147871.7     -2147871.7      2.2346188      0.047409447    1.7774828
+      1150      432802  -2148126.9     -2148126.9      2.0264319      0.046708942    1.5296595
+      1200      432802  -2148383.1     -2148383.1      1.9340659      0.045963927    1.8777473
+Loop time of 340.157 on 1 procs for 1200 steps with 432802 atoms
+
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -2127238.56399931  -2148378.71606396  -2148383.14616309
+  Force two-norm initial, final = 281.3872 28.635969
+  Force max component initial, final = 3.7192246 1.8777473
+  Final line search alpha, max atom move = 0.005402406 0.010144353
+  Iterations, force evaluations = 1200 1200
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 320.03     | 320.03     | 320.03     |   0.0 | 94.08
+Neigh   | 3.7927     | 3.7927     | 3.7927     |   0.0 |  1.11
+Comm    | 1.6885     | 1.6885     | 1.6885     |   0.0 |  0.50
+Output  | 0.77982    | 0.77982    | 0.77982    |   0.0 |  0.23
+Modify  | 0.51237    | 0.51237    | 0.51237    |   0.0 |  0.15
+Other   |            | 13.35      |            |       |  3.92
+
+Nlocal:         432802 ave      432802 max      432802 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          64584 ave       64584 max       64584 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.44305e+07 ave 1.44305e+07 max 1.44305e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 14430536
+Ave neighs/atom = 33.342119
+Neighbor list builds = 10
+Dangerous builds = 0
+unfix bottom
+write_data ag_w_qsgs_interface_v2.efs_static.data
+System init for write_data ...
+Total wall time: 0:05:42

@@ -10,11 +10,11 @@ The installed LAMMPS build contains TTM styles, but the existing project preflig
 
 There is an Ag-only finite-volume TTM reference solver in `models/ag_ti3sic2_qsgs_1to1_finer/ag_ttm_reference.py`. It supports periodic x/y and zero-flux open z faces and has been coupled to short LAMMPS Python API pilots. It is a custom numerical prototype, not a compiled LAMMPS fix, and it does not provide W parameters or a validated Ag–W mixture closure. It is a possible implementation starting point; the Ag-only table from that separate project must not be presented as an Ag–W parameter set.
 
-The spatial heat-source formula and candidate values have now been migrated into an independent Ag–W static preflight. The 10 Å Ag mask is built from actual type-2 atom coordinates; at `S(t)=1`, the mapped Newton-layer Ag power is 9,784.984 eV/ps for the current geometry. This is a geometry-specific on-state power, not a pulse energy. The report, JSON, and mask/source arrays are in `models/ag_w_qsgs_200A/ttm_source_preflight/`. The legacy Ag–Ti₃SiC₂ files were not changed.
+The spatial heat-source formula and candidate values were migrated into an independent Ag–W static preflight. Its 10 Å Ag mask was built from the original, overlapping type-2 atom coordinates; at `S(t)=1`, the mapped Newton-layer Ag power was 9,784.984 eV/ps. This is a geometry-specific on-state power, not a pulse energy, and is **stale for any future reconstructed coordinates**. Do not reuse this power or mask: recalculate after a candidate passes static structural acceptance. The historical report, JSON, and mask/source arrays are in `models/ag_w_qsgs_200A/ttm_source_preflight/`. The legacy Ag–Ti₃SiC₂ files were not changed.
 
 The Ag–W reference pack currently has no verified temperature-dependent electronic heat capacity `Ce(Te)`, electronic thermal conductivity `ke(Te)`, or electron–lattice coupling `G(Te)` tables for W, nor an approved rule for electron transport and coupling in cells containing both phases. The exploratory spatial source profile is specified, but `S(t)` has no pulse width or temporal envelope, and no Ag–W-specific absorbed fluence is specified. These inputs are needed before the TTM prototype can be adapted and its energy ledger checked.
 
-For those reasons, the new QSGS geometry report records TTM as requested but `NOT_RUN`. A zero-source 300 K exploration is also pending until the raw close contacts are relaxed; the initial perfect-lattice assignment has a 0.08 Å Ag–W distance and must not be integrated directly.
+For those reasons, TTM is `NOT_RUN`. The initial geometry failed static acceptance, and v1/v2 reconstruction audits have not produced a valid starting structure. Do not start even a zero-source 300 K MD run until a candidate passes the static gate; the initial perfect-lattice assignment has a 0.08 Å Ag–W distance and must not be integrated directly. See `models/ag_w_qsgs_200A/interface_reconstruction_v2/RECONSTRUCTION_V2_AUDIT.md`.
 
 ## TTM acceptance inputs
 
@@ -25,4 +25,4 @@ Before a small laser-heating pilot, record:
 3. Temporal envelope `S(t)` or absorbed fluence/total deposited energy, pulse duration, confirmation that the candidate lateral radius/depth are appropriate for Ag–W, and whether the 20–40 Å layer is a heat sink during the pulse.
 4. Energy-accounting checks for source deposition and equal-and-opposite electron-lattice transfer before any trajectory is interpreted.
 
-The current structure is only an unrelaxed geometry candidate. It has not been energy minimized, equilibrated at 300 K, heated, or used for production MD.
+No current structure has passed static acceptance. The original candidate and v1/v2 repair candidates have not been equilibrated at 300 K, heated, or used for production MD.

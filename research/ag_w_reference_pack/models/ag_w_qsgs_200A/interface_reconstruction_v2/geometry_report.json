@@ -1,0 +1,110 @@
+{
+  "status": "REJECTED_AFTER_UNCONSTRAINED_DAI_EFS_STATIC_CHECKS",
+  "method": "mass-balanced greedy vertex cover on W-Ag lattice-site conflict graph",
+  "source_file": "../ag_w_qsgs.data.gz",
+  "source_sha256": "204961ff92491b02d3517a172377b997b378f47e74c47541457ca9b6e76d25f0",
+  "qsgs_mask": "retained unchanged from ../qsgs_morphology.npz",
+  "box_A": [
+    200.0,
+    200.0,
+    300.0
+  ],
+  "material_z_A": [
+    0.0,
+    200.0
+  ],
+  "boundary": "p p f",
+  "screening_cutoff_A": 2.8,
+  "screening_rationale": {
+    "note": "Geometric pruning radius only; final acceptance is based on unconstrained Dai EFS static forces and structure checks.",
+    "dai_efs_AgW_radial_pair_force_at_cutoff_eV_per_A": 0.8503182000000313,
+    "radial_pair_force_at_2_3_A_eV_per_A": 6.569095599999976,
+    "radial_pair_force_definition": "absolute derivative of V_AgW(r); embedding-density terms are not included"
+  },
+  "conflict_graph_edges_removed": 133879,
+  "removed_atom_counts": {
+    "W": 18369,
+    "Ag": 31300
+  },
+  "atom_counts": {
+    "W": 160066,
+    "Ag": 272736
+  },
+  "total_atoms": 432802,
+  "atom_fractions": {
+    "W": 0.3698365534355202,
+    "Ag": 0.6301634465644799
+  },
+  "mass_ratio_Ag_over_W": 0.9997623897896686,
+  "mass_ratio_relative_error": 0.00023761021033141816,
+  "minimum_cross_distance_A": 2.8000710512101503,
+  "same_phase_minimum_neighbor_distance_A": {
+    "W": 2.745077896545,
+    "Ag": 2.886150127291977
+  },
+  "topology": {
+    "W": {
+      "atoms": 160066,
+      "components": 221,
+      "largest_component_atoms": 157716,
+      "largest_component_share": 0.9853185560956106,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        199.08
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 272736,
+      "components": 44,
+      "largest_component_atoms": 272683,
+      "largest_component_share": 0.9998056728851343,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        198.36499999999998
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "static_dynamics": "NOT_RUN",
+  "decision": "REJECTED_STATIC_EFS_NOT_CONVERGED_AND_ATOM_DENSITY_LOSS",
+  "geometric_prechecks": {
+    "conflict_graph_covered": true,
+    "mass_ratio_error_below_0_1_percent": true,
+    "both_phases_bicontinuous": true
+  },
+  "candidate_file": "ag_w_qsgs_interface_v2.prepruned.data.gz",
+  "candidate_sha256": "e5798077f8bedb7702757aecdc2a7823e4f8f155f4b7058610c8912f2d644465",
+  "prepruning_decision": "GEOMETRY_CANDIDATE_READY_FOR_STATIC_EFS_CHECKS",
+  "static_efs": {
+    "candidate": "ag_w_qsgs_interface_v2.prepruned.data.gz",
+    "minimization": "conjugate-gradient; two stages; fixed z=0\u201320 A; 1200 + 1500 steps",
+    "converged": false,
+    "termination": "both stages reached iteration limits; potential energy was still decreasing",
+    "mobile_rms_force_eV_per_A": 0.028655,
+    "mobile_max_force_norm_eV_per_A": 1.96875,
+    "mobile_max_force_component_eV_per_A": 1.27146,
+    "final_minimum_distances_A": {
+      "Ag_W": 2.5347,
+      "W_W": 2.5161,
+      "Ag_Ag": 2.4291
+    },
+    "atoms_above_material_top_z_200_A": 0,
+    "bicontinuity_retained": true,
+    "rejection_reasons": [
+      "The unconstrained EFS minimization did not converge and retained a high maximum force.",
+      "The pruning removed 49,669 atoms (about 10.3%), so the candidate no longer represents the requested material density."
+    ]
+  },
+  "audit_report": "RECONSTRUCTION_V2_AUDIT.md",
+  "retained_checkpoint_sha256": {
+    "ag_w_qsgs_interface_v2.prepruned.data.gz": "e5798077f8bedb7702757aecdc2a7823e4f8f155f4b7058610c8912f2d644465",
+    "ag_w_qsgs_interface_v2.efs_static.data.gz": "2dd3fa2cfc6e9f1639b8aebe66e66fc37553b66e43d60768b0316828f632ec28",
+    "ag_w_qsgs_interface_v2.efs_static_final.data.gz": "5593f075fbb711b59867b1ae503bb6c79914ed25a94818b69d5b181c95a0601d",
+    "../overlap_repair_v1/bonded_precondition.data.gz": "a3598a942784d517d9b90e955ab001a02ec0cda30de38bd7781bf97b73d64d5f"
+  }
+}
