@@ -1,0 +1,283 @@
+{
+  "status": "ROUND7_STAGE1_FIGURES_2_AND_4_COMPLETE",
+  "branch_review": {
+    "main": {
+      "commit": "026a1411ebaab92dabfb9ac6df51060907db3032",
+      "finding": "包含上一版图件；指定完整五帧原始轨迹不在此分支。"
+    },
+    "codex/round7-main-pool-figure-20261121": {
+      "commit": "f64a0b48953a04162eba1afd703d5be3ed96bddb",
+      "finding": "包含 0.380 ps、458,248 原子候选图与说明；README 明确未包含原始 dump/运行日志。"
+    },
+    "codex/round7-v12m-cold-diagnostics-20261119": {
+      "commit": "df890b0bf62f6b4e4c60b9f6a14b69276873dd1d",
+      "finding": "包含 v12m 等冷态/势函数诊断归档，不含本次所需五帧 TTM-MD 全体系轨迹。"
+    },
+    "codex/upload-round7-fiveframe-trajectory-1p6ps-20261109": {
+      "commit": "878328378869ba4e5860a4081420fcdc59966c52",
+      "finding": "包含本次使用的 0.60–1.60 ps 五帧全体系 dump、运行汇总及原始五帧分析。"
+    },
+    "figure4_corrected_analysis": {
+      "branch": "codex/upload-round7-fiveframe-trajectory-1p6ps-20261109",
+      "commit": "878328378869ba4e5860a4081420fcdc59966c52",
+      "path": "models/ag_ti3sic2_qsgs_200x200x150_md_finer_skeleton/runs/round7_corrected_radial_core_analysis_1p6ps_20261109/",
+      "finding": "采用更正径向掩膜版本，避免旧版 6,448 原子 x-z 带状掩膜遗漏 y 条件的问题。"
+    }
+  },
+  "verified_source_hashes": {
+    "round7_5frames_full_system_0p6_to_1p6ps.dump.gz": {
+      "bytes": 42978446,
+      "sha256": "302063807ba042ee73987ab6af088c576244d67fa2a0dcfb3e7953f70165a23c",
+      "manifest_match": true
+    },
+    "run_summary_1p6ps.json": {
+      "bytes": 27857,
+      "sha256": "cfb157abdc4aaaae64de47e96621b0403474604b5844acd6c47bf2b2fb8b5e80",
+      "manifest_match": true
+    },
+    "round7_1p6ps_source_core_ag.csv": {
+      "bytes": 90576,
+      "sha256": "e79f8acdbaba5d52aa821aac78c0b03cce75a071ed27f60309dc881613d84908",
+      "manifest_match": true
+    },
+    "ptm_coordination_diagnostic.json": {
+      "bytes": 4828,
+      "sha256": "95e655a033362e74c9fd904de8443285b70c6e5ba4679790f0209e29b43f4453",
+      "manifest_match": true
+    },
+    "round7_1p6ps_joint_candidates.dump": {
+      "bytes": 52546,
+      "sha256": "89c6a7b6dbc5c4e700e54ffd9d25d93a74277c90a0540944f869b808151a8c3c",
+      "manifest_match": true
+    },
+    "round7_1p6ps_largest_candidate_cluster.dump": {
+      "bytes": 41644,
+      "sha256": "dbbe44ab5b992a007dc3d08a323536534b76924e03feb8f993f171bc3f2cfc41",
+      "manifest_match": true
+    },
+    "round7_1p6ps_joint_screen.json": {
+      "bytes": 24694,
+      "sha256": "226ce0091ab249a31ba27336e5bacca69d60862cf15ce87a661e03463093937f",
+      "manifest_match": true
+    }
+  },
+  "run_diagnostics": {
+    "atoms": 352637,
+    "duration_ps": 1.6,
+    "dt_fs": 0.1,
+    "potential_classification": "energy-force development candidate; not independently validated for melting or welding",
+    "max_checkpoint_force_eV_A": 133.00625488408275,
+    "max_checkpoint_force_time_ps": 1.4005,
+    "max_abs_combined_source_corrected_residual_eV": 11.9588806470001,
+    "signed_combined_source_corrected_residual_at_max_abs_eV": -11.9588806470001,
+    "time_of_max_abs_residual_ps": 1.6,
+    "final_source_corrected_combined_energy_residual_eV": -11.9588806470001,
+    "final_cumulative_ttm_grid_residual_eV": -3.8410239570851076e-10,
+    "limitations": [
+      "TTM electronic subsystem, source, and electron-lattice exchange are Ag-only; Ti3SiC2 receives heat through atomistic interactions.",
+      "Reference coupling is deterministic mean-field velocity scaling, not a compiled LAMMPS fix and not a production-validated TTM-MD method.",
+      "The initial geometry is unrelaxed and the TTM atom-to-cell map is held fixed during this short run.",
+      "The candidate Ag Ce/G/ke table and its sub-300 K continuation are exploratory fits.",
+      "The Round7 MTP is a development-only energy-force fit; energy, force, liquid-Ag and interface transferability remain exploratory.",
+      "This run does not by itself establish melting, a stable melt pool, or physical interfacial heat transfer.",
+      "This continuation preserves the static layer memberships from the original configuration, including atoms that crossed z-layer bounds before the restart.",
+      "Continuation energy closure is accumulated from the previous checkpoint; the MTP energy remains uncalibrated.",
+      "This continuation preserves the static layer memberships from the original configuration, including atoms that crossed z-layer bounds before the restart.",
+      "Continuation energy closure is accumulated from the previous checkpoint; the MTP energy remains uncalibrated.",
+      "This continuation preserves the static layer memberships from the original configuration, including atoms that crossed z-layer bounds before the restart.",
+      "Continuation energy closure is accumulated from the previous checkpoint; the MTP energy remains uncalibrated.",
+      "The earlier continuation was interrupted after the 1.40 ps restart pair was written; cumulative energy bookkeeping was reconstructed from that checkpoint record for resumption.",
+      "Cumulative electron substep count is incomplete after recovery; it is not used to alter dynamics.",
+      "This continuation preserves the static layer memberships from the original configuration, including atoms that crossed z-layer bounds before the restart.",
+      "Continuation energy closure is accumulated from the previous checkpoint; the MTP energy remains uncalibrated.",
+      "This continuation preserves the static layer memberships from the original configuration, including atoms that crossed z-layer bounds before the restart.",
+      "Continuation energy closure is accumulated from the previous checkpoint; the MTP energy remains uncalibrated."
+    ]
+  },
+  "figure2": {
+    "files": [
+      "Figure2_round7_fiveframe_structure_evolution.png",
+      "Figure2_round7_fiveframe_structure_evolution.tif",
+      "Figure2_round7_fiveframe_structure_evolution.pdf"
+    ],
+    "resolution_px": [
+      3980,
+      2320
+    ],
+    "panel_resolution_px": [
+      1240,
+      900
+    ],
+    "frame_records": [
+      {
+        "frame": 0,
+        "time_ps": 0.6,
+        "timestep": 6000,
+        "atoms": 352637,
+        "rms_net_displacement_from_0p60ps_A": 0.0
+      },
+      {
+        "frame": 1,
+        "time_ps": 0.85,
+        "timestep": 8500,
+        "atoms": 352637,
+        "rms_net_displacement_from_0p60ps_A": 0.889697
+      },
+      {
+        "frame": 2,
+        "time_ps": 1.1,
+        "timestep": 11000,
+        "atoms": 352637,
+        "rms_net_displacement_from_0p60ps_A": 1.340702
+      },
+      {
+        "frame": 3,
+        "time_ps": 1.35,
+        "timestep": 13500,
+        "atoms": 352637,
+        "rms_net_displacement_from_0p60ps_A": 1.762114
+      },
+      {
+        "frame": 4,
+        "time_ps": 1.6,
+        "timestep": 16000,
+        "atoms": 352637,
+        "rms_net_displacement_from_0p60ps_A": 2.174838
+      }
+    ],
+    "type_counts_each_frame": {
+      "1": 135381,
+      "2": 45127,
+      "3": 90254,
+      "4": 81875
+    },
+    "box_A": [
+      200.0,
+      200.0,
+      250.0
+    ],
+    "boundary": [
+      "periodic",
+      "periodic",
+      "free"
+    ],
+    "local_roi_A": {
+      "x_A": [
+        70.0,
+        130.0
+      ],
+      "y_A": [
+        70.0,
+        130.0
+      ],
+      "z_A": [
+        120.0,
+        175.0
+      ]
+    },
+    "local_roi_atoms_at_1p60ps": 6491,
+    "orthographic_scale_bar_lengths_A": {
+      "full_model": 50.0,
+      "local_view": 20.0
+    },
+    "scale_conversion": "bar length = physical length × panel pixel height / (2 × orthographic viewport fov)",
+    "element_colors": {
+      "Ti": [
+        0.34,
+        0.5,
+        0.66
+      ],
+      "Si": [
+        0.91,
+        0.61,
+        0.2
+      ],
+      "C": [
+        0.16,
+        0.2,
+        0.25
+      ],
+      "Ag": [
+        0.49,
+        0.76,
+        0.84
+      ]
+    }
+  },
+  "figure4": {
+    "files": [
+      "Figure4_round7_ag_disorder_candidate_region.png",
+      "Figure4_round7_ag_disorder_candidate_region.tif",
+      "Figure4_round7_ag_disorder_candidate_region.pdf"
+    ],
+    "source_core_atoms": 1787,
+    "source_core_unique_ids": 1787,
+    "joint_candidate_atoms": 874,
+    "noncandidate_atoms": 913,
+    "candidate_dump_ids_match_csv": true,
+    "largest_component_dump_matches_json": true,
+    "candidate_dump_position_max_abs_error_A": 0.0,
+    "recomputed_component_count": 41,
+    "recomputed_largest_component_atoms": 693,
+    "recomputed_largest_component_ids_match_dump": true,
+    "candidate_atoms_outside_largest_component": 181,
+    "q6_range": [
+      0.0,
+      0.9999999999999998
+    ],
+    "q6_zero_or_near_zero_count_le_1e-8": 1,
+    "q6_zero_or_near_zero_atoms": [
+      {
+        "atom_id": 303221,
+        "q6": 0.0,
+        "ptm_nonfcc_fraction": 1.0,
+        "ag_coordination_at_4A": 0,
+        "joint_candidate": true
+      }
+    ],
+    "ptm_nonfcc_fraction_range": [
+      0.4,
+      1.0
+    ],
+    "coordination_cutoff_A": 4.0,
+    "candidate_coordination_mean_recomputed": 9.6098,
+    "candidate_coordination_mean_from_diagnostic": 9.6098,
+    "candidate_coordination_min_median_max": [
+      0,
+      10.0,
+      15
+    ],
+    "candidate_coordination_counts_below_8_10_12": {
+      "8": 157,
+      "10": 408,
+      "12": 669
+    },
+    "spatial_bounds_A": [
+      [
+        50.0,
+        150.0
+      ],
+      [
+        50.0,
+        150.0
+      ],
+      [
+        100.0,
+        170.0
+      ]
+    ],
+    "metric_window_ps": [
+      0.6,
+      1.6
+    ],
+    "positions_frame_ps": 1.6,
+    "limitations": [
+      "Q6/PTM/displacement thresholds are Round5-derived and not calibrated for Round7.",
+      "The 874 joint candidates are not confirmed liquid atoms or a validated melt pool.",
+      "PTM non-FCC includes Other; low coordination can confound classification.",
+      "The stored displacement is a single-origin net displacement squared, not a time-averaged MSD.",
+      "One joint candidate (atom ID 303221) has Q6=0 and Ag-only CN=0 at 4 Å, consistent with an isolated low-coordination atom; it is not evidence of a liquid cluster."
+    ]
+  },
+  "scientific_scope": "只对归档轨迹进行后处理，不运行新 MD。Round7 开发版 MTP 与 Ag-only Python 参考 TTM 仍属探索性；874 个筛选原子不等同于已确认液态/熔池，图件不能单独证明熔焊或界面传热机制。"
+}
