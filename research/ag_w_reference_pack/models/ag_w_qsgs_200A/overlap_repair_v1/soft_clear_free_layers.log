@@ -1,0 +1,89 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  read_data CPU = 0.997 seconds
+pair_style soft 2.8
+pair_coeff 1 1 0.0
+pair_coeff 1 2 50.0
+pair_coeff 2 2 0.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region bottom_plane block INF INF INF INF 0.0 0.001 units box
+group bottom_plane region bottom_plane
+4613 atoms in group bottom_plane
+fix floorz bottom_plane setforce NULL NULL 0.0
+fix tether all spring/self 10.0
+thermo 25
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.05 line quadratic
+minimize 1.0e-8 5.0e-2 1000 20000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 4.8
+  ghost atom cutoff = 4.8
+  binsize = 2.4, bins = 84 84 125
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 170.1 | 170.1 | 170.1 Mbytes
+   Step        Atoms        PotEng         TotEng          Fmax          Fnorm
+         0      482471   2028191.6      2028191.6      66.535351      15314.343
+        25      482471   129887.34      129887.34      47.877999      2965.9036
+        50      482471   23884.09       23884.09       15.71239       370.74307
+        62      482471   18289.73       18289.73       5.4945485      156.42946
+Loop time of 8.64145 on 1 procs for 62 steps with 482471 atoms
+
+99.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final =
+      2028191.64568612   18289.7300062768   18289.7300062768
+  Force two-norm initial, final = 15314.343 156.42946
+  Force max component initial, final = 66.535351 5.4945485
+  Final line search alpha, max atom move = 2.6484278e-13 1.4551915e-12
+  Iterations, force evaluations = 62 98
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 6.811      | 6.811      | 6.811      |   0.0 | 78.82
+Neigh   | 0.42683    | 0.42683    | 0.42683    |   0.0 |  4.94
+Comm    | 0.11081    | 0.11081    | 0.11081    |   0.0 |  1.28
+Output  | 0.0066408  | 0.0066408  | 0.0066408  |   0.0 |  0.08
+Modify  | 0.35393    | 0.35393    | 0.35393    |   0.0 |  4.10
+Other   |            | 0.9323     |            |       | 10.79
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          51018 ave       51018 max       51018 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    5.34473e+06 ave 5.34473e+06 max 5.34473e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 5344730
+Ave neighs/atom = 11.077826
+Neighbor list builds = 2
+Dangerous builds = 0
+unfix tether
+write_data soft_clear_free_layers.data
+System init for write_data ...
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+WARNING: Not all mixed pair coeffs generated from mixing. Use write_data with 'pair ij' option to store all pair coeffs. (src/src/write_data.cpp:364)
+Total wall time: 0:00:10

@@ -1,0 +1,19 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+pair_style soft 3.0
+pair_coeff 1 1 0.0
+pair_coeff 1 2 1000.0
+pair_coeff 2 2 0.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 100.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.001 line quadratic
+minimize 1.0e-6 1.0e-3 2000 20000
+unfix tether
+write_data cross_soft_tether.data

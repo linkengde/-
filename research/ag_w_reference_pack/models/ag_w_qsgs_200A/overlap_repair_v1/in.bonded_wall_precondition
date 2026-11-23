@@ -1,0 +1,29 @@
+units metal
+atom_style bond
+boundary p p f
+bond_style harmonic
+read_data bonded_precondition.data.gz
+pair_style table linear 1200
+pair_coeff 1 1 cross_wall.table ZERO 2.4
+pair_coeff 1 2 cross_wall.table REPULSIVE 2.4
+pair_coeff 2 2 cross_wall.table ZERO 2.4
+special_bonds lj 0.0 0.0 0.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 2.0
+region zlo block INF INF INF INF 0.0 5.0 units box
+region zhi block INF INF INF INF 195.0 200.0 units box
+group zlo region zlo
+group zhi region zhi
+fix holdlo zlo setforce NULL NULL 0.0
+fix holdhi zhi setforce NULL NULL 0.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.002 line quadratic
+minimize 1.0e-6 1.0e-3 1500 30000
+unfix holdlo
+unfix holdhi
+unfix tether
+write_data bonded_wall_precondition.data

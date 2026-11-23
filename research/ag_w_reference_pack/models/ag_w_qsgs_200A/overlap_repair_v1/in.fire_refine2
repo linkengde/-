@@ -1,0 +1,18 @@
+units metal
+atom_style atomic
+boundary p p f
+pair_style eam/fs
+read_data efs_fire_refined.data
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_region block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_region
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 50
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 5.0e-2 1000 20000
+write_data efs_fire_refined2.data

@@ -1,0 +1,19 @@
+units metal
+atom_style bond
+boundary p p f
+bond_style harmonic
+read_data bonded_wall_refined.data
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+special_bonds lj 1.0 1.0 1.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 1.0
+thermo 25
+thermo_style custom step atoms pe ebond etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.002 line quadratic
+minimize 1.0e-8 1.0e-2 500 10000
+unfix tether
+write_data efs_bonded_audit.data

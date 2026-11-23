@@ -1,0 +1,22 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+pair_style soft 2.8
+pair_coeff 1 1 0.0
+pair_coeff 1 2 50.0
+pair_coeff 2 2 0.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region bottom_plane block INF INF INF INF 0.0 0.001 units box
+group bottom_plane region bottom_plane
+fix floorz bottom_plane setforce NULL NULL 0.0
+fix tether all spring/self 10.0
+thermo 25
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.05 line quadratic
+minimize 1.0e-8 5.0e-2 1000 20000
+unfix tether
+write_data soft_clear_free_layers.data

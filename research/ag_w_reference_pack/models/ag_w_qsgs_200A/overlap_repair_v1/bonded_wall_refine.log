@@ -1,0 +1,134 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style bond
+boundary p p f
+bond_style harmonic
+read_data bonded_wall_precondition.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  reading velocities ...
+  482471 velocities
+  scanning bonds ...
+  7 = max bonds/atom
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  2202206 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 8.631 seconds
+  read_data CPU = 13.215 seconds
+pair_style table linear 2400
+pair_coeff 1 1 cross_wall_v2.table SELF 2.4
+pair_coeff 1 2 cross_wall_v2.table REPULSIVE 2.4
+pair_coeff 2 2 cross_wall_v2.table SELF 2.4
+special_bonds lj 1.0 1.0 1.0
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    1        1        1
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 6.071 seconds
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 2.0
+region zlo block INF INF INF INF 0.0 5.0 units box
+region zhi block INF INF INF INF 195.0 200.0 units box
+group zlo region zlo
+14863 atoms in group zlo
+group zhi region zhi
+10106 atoms in group zhi
+fix holdlo zlo setforce NULL NULL 0.0
+fix holdhi zhi setforce NULL NULL 0.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.001 line quadratic
+minimize 1.0e-6 1.0e-3 1200 30000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+WARNING: Communication cutoff 4.4 is shorter than a bond length based estimate of 6.329000000000001. This may lead to errors. (src/src/comm.cpp:743)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 4.4
+  ghost atom cutoff = 4.4
+  binsize = 2.2, bins = 91 91 137
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair table, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+WARNING: Communication cutoff 4.4 is shorter than a bond length based estimate of 6.329000000000001. This may lead to errors. (src/src/comm.cpp:743)
+Per MPI rank memory allocation (min/avg/max) = 552.6 | 552.6 | 552.6 Mbytes
+   Step        Atoms        PotEng         TotEng          Fmax          Fnorm
+         0      482471   160789.35      160789.35      131.29915      1676.5701
+       100      482471   158736.96      158736.96      103.04683      1427.9419
+       200      482471   156782.04      156782.04      75.711719      1215.6541
+       300      482471   154727.87      154727.87      49.512847      1045.0073
+       400      482471   152202.57      152202.57      30.986238      917.1543
+       500      482471   149240.58      149240.58      23.692279      835.41827
+       600      482471   146269.36      146269.36      21.189039      780.37377
+       700      482471   143259.12      143259.12      18.293743      734.41439
+       800      482471   139956.42      139956.42      14.619994      688.44156
+       900      482471   136740.48      136740.48      15.878053      645.39872
+      1000      482471   134341.56      134341.56      19.864919      614.23392
+      1100      482471   132457.87      132457.87      21.486521      589.35955
+      1200      482471   130746.39      130746.39      21.584784      566.67014
+Loop time of 85.456 on 1 procs for 1200 steps with 482471 atoms
+
+99.6% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+      160789.345835418   130762.928949041   130746.394976708
+  Force two-norm initial, final = 1676.5701 566.67014
+  Force max component initial, final = 131.29915 21.584784
+  Final line search alpha, max atom move = 4.6326989e-05 0.00099995806
+  Iterations, force evaluations = 1200 1200
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 33.443     | 33.443     | 33.443     |   0.0 | 39.14
+Bond    | 28.939     | 28.939     | 28.939     |   0.0 | 33.86
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 1.3081     | 1.3081     | 1.3081     |   0.0 |  1.53
+Output  | 0.049234   | 0.049234   | 0.049234   |   0.0 |  0.06
+Modify  | 4.8701     | 4.8701     | 4.8701     |   0.0 |  5.70
+Other   |            | 16.85      |            |       | 19.71
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          47054 ave       47054 max       47054 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    4.20569e+06 ave 4.20569e+06 max 4.20569e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 4205694
+Ave neighs/atom = 8.7169882
+Ave special neighs/atom = 98.06662
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix holdlo
+unfix holdhi
+unfix tether
+write_data bonded_wall_refined.data
+System init for write_data ...
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+WARNING: Communication cutoff 4.4 is shorter than a bond length based estimate of 6.329000000000001. This may lead to errors. (src/src/comm.cpp:743)
+Total wall time: 0:01:46

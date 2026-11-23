@@ -1,0 +1,104 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+pair_style eam/fs
+read_data efs_relaxed.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  reading velocities ...
+  482471 velocities
+  read_data CPU = 1.367 seconds
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+region fixed_region block INF INF INF INF 0.0 20.0 units box
+group fixed region fixed_region
+49202 atoms in group fixed
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 25
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 5.0e-2 500 10000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 173.1 | 173.1 | 173.1 Mbytes
+   Step        Atoms        PotEng         TotEng          Fmax          Fnorm
+         0      482471  -2398754.6     -2398754.6      1.7945315      18.048872
+        25      482471  -2398761.5     -2398756.2      1.82624        18.031997
+        50      482471  -2398895.2     -2398787.6      1.422064       16.836024
+        75      482471  -2399206.6     -2398972.4      1.7702819      18.044017
+       100      482471  -2399469.7     -2399209.4      1.1889402      17.233521
+       125      482471  -2399778.3     -2399558.5      1.531816       18.883568
+       150      482471  -2400038.1     -2399843.4      0.92750492     19.0206
+       175      482471  -2400277.2     -2400107.6      1.8729049      19.450796
+       200      482471  -2400505.1     -2400322.4      1.1723984      23.224827
+       225      482471  -2400716.2     -2400531.7      1.5398323      23.607531
+       250      482471  -2400920.3     -2400718.7      1.1116021      27.261212
+       275      482471  -2401117.9     -2400888.3      1.512948       31.9499
+       300      482471  -2401317.3     -2401059.8      1.8340117      35.499848
+       325      482471  -2401520.7     -2401219.1      1.657428       40.484887
+       350      482471  -2401725       -2401369.7      1.5757275      44.994822
+       375      482471  -2401902.6     -2401504.9      1.9500535      48.867829
+       400      482471  -2402086.3     -2401627.7      2.4037191      54.180205
+       425      482471  -2402239.6     -2401735        2.7376448      57.949121
+       450      482471  -2402397.7     -2401831.5      2.4266489      63.9046
+       475      482471  -2402729.2     -2402558.4      0.99648867     24.062159
+       500      482471  -2402970.2     -2402806.4      0.78590758     9.0328454
+Loop time of 209.343 on 1 procs for 500 steps with 482471 atoms
+
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -2398754.55701835   -2402965.8136388  -2402970.18354633
+  Force two-norm initial, final = 18.048872 9.0328454
+  Force max component initial, final = 1.7945315 0.78590758
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 500 502
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 192.97     | 192.97     | 192.97     |   0.0 | 92.18
+Neigh   | 10.61      | 10.61      | 10.61      |   0.0 |  5.07
+Comm    | 0.84285    | 0.84285    | 0.84285    |   0.0 |  0.40
+Output  | 0.065987   | 0.065987   | 0.065987   |   0.0 |  0.03
+Modify  | 0.23652    | 0.23652    | 0.23652    |   0.0 |  0.11
+Other   |            | 4.615      |            |       |  2.20
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70458 ave       70458 max       70458 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.74664e+07 ave 1.74664e+07 max 1.74664e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17466414
+Ave neighs/atom = 36.201998
+Neighbor list builds = 22
+Dangerous builds = 0
+write_data efs_fire_refined.data
+System init for write_data ...
+Total wall time: 0:03:32

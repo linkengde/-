@@ -1,0 +1,90 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  read_data CPU = 0.985 seconds
+pair_style soft 3.2
+pair_coeff 1 1 100.0
+pair_coeff 1 2 50.0
+pair_coeff 2 2 100.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 10.0
+region zlo block INF INF INF INF 0.0 5.0 units box
+region zhi block INF INF INF INF 195.0 200.0 units box
+group zlo region zlo
+14863 atoms in group zlo
+group zhi region zhi
+10105 atoms in group zhi
+fix holdlo zlo setforce NULL NULL 0.0
+fix holdhi zhi setforce NULL NULL 0.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.005 line quadratic
+minimize 1.0e-6 5.0e-3 600 20000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.2
+  ghost atom cutoff = 5.2
+  binsize = 2.6, bins = 77 77 116
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 182.6 | 182.6 | 182.6 Mbytes
+   Step        Atoms        PotEng         TotEng          Fmax          Fnorm
+         0      482471   16799340       16799340       157.66408      21237.619
+       100      482471   15873094       15873094       88.918745      10405.81
+       200      482471   15361755       15361755       65.20162       6457.0531
+       300      482471   15065798       15065798       59.43625       4781.8807
+       400      482471   14861140       14861140       51.035296      3738.2645
+       500      482471   14690764       14690764       46.670338      2934.0612
+       600      482471   14565112       14565112       40.769788      2380.3635
+Loop time of 108.479 on 1 procs for 600 steps with 482471 atoms
+
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+      16799340.1433443   14566267.1411441   14565111.8742812
+  Force two-norm initial, final = 21237.619 2380.3635
+  Force max component initial, final = 157.66408 40.769788
+  Final line search alpha, max atom move = 0.00012179864 0.0049657047
+  Iterations, force evaluations = 600 600
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 97.611     | 97.611     | 97.611     |   0.0 | 89.98
+Neigh   | 0.5151     | 0.5151     | 0.5151     |   0.0 |  0.47
+Comm    | 0.65222    | 0.65222    | 0.65222    |   0.0 |  0.60
+Output  | 0.021323   | 0.021323   | 0.021323   |   0.0 |  0.02
+Modify  | 2.4965     | 2.4965     | 2.4965     |   0.0 |  2.30
+Other   |            | 7.183      |            |       |  6.62
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          51427 ave       51427 max       51427 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    8.86958e+06 ave 8.86958e+06 max 8.86958e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 8869576
+Ave neighs/atom = 18.383646
+Neighbor list builds = 2
+Dangerous builds = 0

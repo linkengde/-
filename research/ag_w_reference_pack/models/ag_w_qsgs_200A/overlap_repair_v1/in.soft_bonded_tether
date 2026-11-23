@@ -1,0 +1,29 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+pair_style soft 3.2
+pair_coeff 1 1 100.0
+pair_coeff 1 2 50.0
+pair_coeff 2 2 100.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 10.0
+region zlo block INF INF INF INF 0.0 5.0 units box
+region zhi block INF INF INF INF 195.0 200.0 units box
+group zlo region zlo
+group zhi region zhi
+fix holdlo zlo setforce NULL NULL 0.0
+fix holdhi zhi setforce NULL NULL 0.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.005 line quadratic
+minimize 1.0e-6 5.0e-3 600 20000
+write_data soft_bonded_tether_stage1.data
+minimize 1.0e-6 5.0e-3 600 20000
+unfix holdlo
+unfix holdhi
+unfix tether
+write_data soft_bonded_tether.data

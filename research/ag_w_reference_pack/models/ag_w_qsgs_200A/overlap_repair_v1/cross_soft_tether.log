@@ -1,0 +1,53 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+read_data ../ag_w_qsgs.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  read_data CPU = 1.008 seconds
+pair_style soft 3.0
+pair_coeff 1 1 0.0
+pair_coeff 1 2 1000.0
+pair_coeff 2 2 0.0
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 100.0
+thermo 100
+thermo_style custom step atoms pe etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.001 line quadratic
+minimize 1.0e-6 1.0e-3 2000 20000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5
+  ghost atom cutoff = 5
+  binsize = 2.5, bins = 80 80 120
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 170.3 | 170.3 | 170.3 Mbytes
+   Step        Atoms        PotEng         TotEng          Fmax          Fnorm
+         0      482471   52546854       52546854       1502.044       330936.92
+       100      482471   45563785       45563785       1506.6801      314691.53
+       200      482471   39267696       39267696       1492.2294      297039.85
+       300      482471   33522568       33522568       1430.8169      277911.98
+       400      482471   28235138       28235138       1365.8087      257256.23
+       500      482471   23605252       23605252       1356.4766      236165.71
+       600      482471   19699733       19699733       1383.5355      215661.58
+       700      482471   16464839       16464839       1382.8314      196317.26
+       800      482471   13722981       13722981       1338.0655      177803.48
+       900      482471   11350316       11350316       1274.936       159804.38
+ERROR: Lost atoms: original 482471 current 482034
+For more information see https://docs.lammps.org/err0008 (src/src/thermo.cpp:526)

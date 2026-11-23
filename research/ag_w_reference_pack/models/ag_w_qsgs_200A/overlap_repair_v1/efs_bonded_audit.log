@@ -1,0 +1,126 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style bond
+boundary p p f
+bond_style harmonic
+read_data bonded_wall_refined.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482471 atoms
+  reading velocities ...
+  482471 velocities
+  scanning bonds ...
+  7 = max bonds/atom
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  2202206 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 11.140 seconds
+  read_data CPU = 16.170 seconds
+pair_style eam/fs
+pair_coeff * * ../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+special_bonds lj 1.0 1.0 1.0
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    1        1        1
+  special bond factors coul:  0        0        0
+    12 = max # of 1-2 neighbors
+   132 = max # of 1-3 neighbors
+  1584 = max # of 1-4 neighbors
+   146 = max # of special neighbors
+  special bonds CPU = 6.988 seconds
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+fix tether all spring/self 1.0
+thermo 25
+thermo_style custom step atoms pe ebond etotal fmax fnorm
+thermo_modify lost error
+min_style cg
+min_modify dmax 0.002 line quadratic
+minimize 1.0e-8 1.0e-2 500 10000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 626.6 | 626.6 | 626.6 Mbytes
+   Step        Atoms        PotEng         E_bond         TotEng          Fmax          Fnorm
+         0      482471  -2206420.8      101326.92     -2206420.8      38.790499      2380.7999
+        25      482471  -2213412.2      95202.008     -2213412.2      30.282649      2010.9349
+        50      482471  -2219505.1      89513.785     -2219505.1      26.45246       1664.5629
+        75      482471  -2224072.1      85034.612     -2224072.1      24.760876      1393.2292
+       100      482471  -2227561.2      81541.534     -2227561.2      23.070212      1186.2019
+       125      482471  -2230339.2      78802.294     -2230339.2      21.418454      1029.5302
+       150      482471  -2232650.9      76642.341     -2232650.9      19.671933      911.20213
+       175      482471  -2234679.3      74912.651     -2234679.3      17.820467      820.34647
+       200      482471  -2236534.9      73515.159     -2236534.9      16.006971      749.29431
+       225      482471  -2238292        72374.421     -2238292        14.269337      692.29988
+       250      482471  -2239999.7      71430.574     -2239999.7      12.736067      645.21703
+       275      482471  -2241669.1      70643.501     -2241669.1      11.562657      605.55265
+       300      482471  -2243259.2      69992.401     -2243259.2      11.17591       572.36782
+       325      482471  -2244707.6      69461.628     -2244707.6      11.469599      545.14527
+       350      482471  -2245995.8      69025.788     -2245995.8      11.829889      522.87908
+       375      482471  -2247150.7      68656.054     -2247150.7      12.304012      504.14267
+       400      482471  -2248197.9      68333.193     -2248197.9      12.646672      487.98721
+       425      482471  -2249165.1      68042.657     -2249165.1      12.843927      473.6574
+       450      482471  -2250073.2      67774.785     -2250073.2      12.901824      460.62977
+       475      482471  -2250937.3      67523         -2250937.3      12.838574      448.58988
+       500      482471  -2251768.9      67282.693     -2251768.9      12.672582      437.31374
+Loop time of 208.253 on 1 procs for 500 steps with 482471 atoms
+
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final =
+     -2206420.81049277  -2251736.11626636   -2251768.8725329
+  Force two-norm initial, final = 2380.7999 437.31374
+  Force max component initial, final = 38.790499 12.672582
+  Final line search alpha, max atom move = 0.0001577171 0.0019986828
+  Iterations, force evaluations = 500 500
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 185.61     | 185.61     | 185.61     |   0.0 | 89.13
+Bond    | 13.549     | 13.549     | 13.549     |   0.0 |  6.51
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.7025     | 0.7025     | 0.7025     |   0.0 |  0.34
+Output  | 0.10913    | 0.10913    | 0.10913    |   0.0 |  0.05
+Modify  | 1.786      | 1.786      | 1.786      |   0.0 |  0.86
+Other   |            | 6.497      |            |       |  3.12
+
+Nlocal:         482471 ave      482471 max      482471 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70899 ave       70899 max       70899 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.77877e+07 ave 1.77877e+07 max 1.77877e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17787715
+Ave neighs/atom = 36.867946
+Ave special neighs/atom = 98.06662
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix tether
+write_data efs_bonded_audit.data
+System init for write_data ...
+ERROR: Atom count is inconsistent, cannot write data file (src/src/write_data.cpp:179)
+Last input line: write_data efs_bonded_audit.data
