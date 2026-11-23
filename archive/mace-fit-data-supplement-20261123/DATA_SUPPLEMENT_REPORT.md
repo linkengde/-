@@ -90,3 +90,11 @@ GPAW 在第 20 次 SCF 收敛，完整运行耗时 10,452.68 s（约 2 h 54 min�
 输出已映射成一帧 `training_candidate_unassigned.extxyz`，只放在补充候选目录；没有并入旧 `train.extxyz` / `dev.extxyz`，没有启动拟合。力值较高且构型偏低密度（8.5170 g/cm³，对照 1384.28 K 文献拟合值 9.1784 g/cm³，低约 7.2%），故仅算探索性应力候选，不当作平衡液态数据。能量与力标签完整性通过，不等于物理覆盖或生产准入。
 
 最终输出、审查 JSON、原始日志、每次运行 SHA、方法与有限适用范围已收入 `ag_liquid_first_label/runs/attempt_001/`。约 2.36 GiB 的 GPAW checkpoint 未上传。下一步只建议按队列顺序逐帧标注密度比 1.00 的液态几何；本次没有额外 DFT 并发或重拟合。
+
+## Ag64 文献密度候选：预检未进入 SCF（2026-11-23 16:42 CST）
+
+已准备 `Ag_liquid_1600K_rho1.00_seed501_Abdullaev2020ref`（64 Ag，输入 SHA256 `c4dcf6b15edbf6d9bd24ef1da8e63a0530114d4cfa141853a809def608f702f8`）的 GPAW PBE/PW500、2×2×2 初始化预检。四个 rank 满载，RSS 约 1.4–1.7 GiB/rank，约 25 GiB 可用内存、无 Swap、剩余磁盘约 33 GB。运行 20 分 54 秒后仍停留在 `Converting LCAO to pw mode`；按预先说明的 20 分钟预检窗口向 mpiexec 发 SIGTERM，退出状态 130。预检未进入 SCF，未生成标签、能量、力或 checkpoint。
+
+预检日志、输入、协议脚本及资源/退出记录已归档在 `ag_liquid_density_reference_attempts/Ag_liquid_1600K_rho1.00_seed501/`。这次只说明初始化成本高，不能据此判断计算不收敛或候选物理失效。现有液态标签仍只有 1 帧 32 原子、完整性审查通过但密度偏低的探索性候选；新 64 原子构型仍无标签。没有重拟合 ACE/MTP，也没有启动热模拟。
+
+下一步先诊断该 GPAW 初始化瓶颈及可行的低成本预检路径，再决定是否对这帧启动正式 DFT；不改变标签精度协议、不把未标注几何计入已补齐数据。
