@@ -1,0 +1,18 @@
+# 对独立液态候选快照计算相态筛查量，不做时间积分。
+units metal
+atom_style atomic
+boundary p p p
+read_data ag_liquid_candidate.data
+mass 1 107.8682
+pair_style eam/alloy
+pair_coeff * * Ag.eam.alloy Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+compute cna all cna/atom 3.35
+compute bondorder all orientorder/atom degrees 2 4 6 nnn 12 cutoff 3.6
+thermo 1
+thermo_style custom step atoms temp pe press lx ly lz
+thermo_modify flush yes
+dump d1 all custom 1 candidate_structure.dump id type x y z c_cna c_bondorder[2]
+dump_modify d1 sort id
+run 0

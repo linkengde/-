@@ -1,0 +1,41 @@
+# 生成纯Ag液态候选构型；EAM仅用于取样，不能作为DFT标签。
+units metal
+atom_style atomic
+boundary p p p
+lattice fcc 4.085
+region box block 0 2 0 2 0 2 units lattice
+create_box 1 box
+create_atoms 1 box
+mass 1 107.8682
+pair_style eam/alloy
+pair_coeff * * Ag.eam.alloy Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.0005
+thermo 1000
+thermo_style custom step temp press pe ke etotal vol lx ly lz
+thermo_modify flush yes
+velocity all create 300.0 20261123 mom yes rot yes dist gaussian
+
+# 在300 K做短NPT平衡，使初始盒长贴近该势函数的平衡值。
+fix eq all npt temp 300.0 300.0 0.1 iso 0.0 0.0 1.0
+run 4000
+unfix eq
+
+# 高温熔化，随后在1500 K继续NPT以取得液态密度。
+fix melt all npt temp 2000.0 2000.0 0.1 iso 0.0 0.0 1.0
+run 20000
+unfix melt
+fix density all npt temp 1500.0 1500.0 0.1 iso 0.0 0.0 1.0
+run 10000
+unfix density
+
+# 固定平均体积，在1500 K采样；保存独立时刻的候选局部液态构型。
+fix sample all nvt temp 1500.0 1500.0 0.1
+ dump d1 all custom 1000 ag_liquid_sample.lammpstrj id type x y z vx vy vz fx fy fz
+ dump_modify d1 sort id
+run 10000
+undump d1
+unfix sample
+write_data ag_liquid_final.data
+write_restart ag_liquid_final.restart

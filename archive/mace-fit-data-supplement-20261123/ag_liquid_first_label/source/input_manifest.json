@@ -1,0 +1,58 @@
+{
+  "label": "Ag_liquid_WMH_1500K_seed20261123_step44000_PBE_PW500_k3x3x3",
+  "status": "candidate_geometry_preflight_pending",
+  "role": "exploratory_training_candidate_not_merged",
+  "source_snapshot": {
+    "file": "ag_liquid_sample.lammpstrj",
+    "timestep": 44000,
+    "nominal_hold_temperature_K": 1500.0,
+    "thermo_temperature_K": 1384.2831,
+    "geometry_generator": "in.generate_liquid.in",
+    "EAM_file": "Ag.eam.alloy",
+    "EAM_sha256": "958f4623e70b51c05e26e9b980f3c85bb1ac9852f3f260c8f75c6181e0c58447"
+  },
+  "input": "input.extxyz",
+  "input_sha256": "29f6ec59396c9ed18cf90a9ab86644711ec24fc12af93b3bffd2fdc66d933c79",
+  "natoms": 32,
+  "formula": "Ag32",
+  "cell_A": [
+    8.763314253397471,
+    8.763314253397471,
+    8.763314253397471
+  ],
+  "pbc": [
+    true,
+    true,
+    true
+  ],
+  "method": {
+    "xc": "PBE",
+    "basis": "plane wave",
+    "cutoff_eV": 500,
+    "kpts": [
+      3,
+      3,
+      3
+    ],
+    "smearing_eV": 0.1,
+    "mixer": {
+      "beta": 0.05,
+      "nmaxold": 8,
+      "weight": 100
+    },
+    "convergence": {
+      "energy": 1e-05,
+      "density": 1e-05,
+      "eigenstates": 1e-05
+    },
+    "maxiter": 160,
+    "mpi_ranks": 4,
+    "parallel": {
+      "kpt": 4,
+      "domain": 1,
+      "band": 1
+    }
+  },
+  "label_policy": "DFT total energy and all-atom forces become targets only after SCF, mapping, finite-force, and checksum audit; do not merge into train.extxyz before audit and family split update.",
+  "created_utc": "2026-11-23T05:04:00Z"
+}
