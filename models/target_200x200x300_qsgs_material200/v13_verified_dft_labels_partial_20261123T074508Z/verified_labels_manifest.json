@@ -1,0 +1,2002 @@
+{
+  "schema": "v13-verified-dft-label-snapshot-1",
+  "snapshot_time_utc": "2026-11-23T07:45:08.167196+00:00",
+  "status": "cumulative partial snapshot; only labels that passed incremental audit at snapshot time are included",
+  "counts": {
+    "accepted_training": 15,
+    "planned_training": 27,
+    "accepted_independent_validation": 4,
+    "planned_independent_validation": 6,
+    "accepted_total": 19,
+    "planned_total": 33
+  },
+  "accepted_category_counts": {
+    "training:unknown": 15,
+    "validation:unknown": 4
+  },
+  "acceptance_meaning": "SCF converged, finite energy and forces, matching frozen geometry hashes and atom count; this is an operational label audit, not a claim that the DFT numerical settings are fully converged.",
+  "dft_protocol": {
+    "code": "GPAW 26.7.0",
+    "ase": "3.29.0",
+    "xc": "PBE",
+    "paw_data": "GPAW PAW dataset 1.2.1",
+    "mode": "plane waves",
+    "cutoff_eV": 350,
+    "occupations": "Fermi-Dirac, sigma=0.10 eV",
+    "scf_tolerances": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "maximum_scf_iterations": 250,
+    "symmetry": "off",
+    "kpoints_by_category": {
+      "Ag_solid": [
+        2,
+        2,
+        2
+      ],
+      "Ag_liquid": [
+        2,
+        2,
+        2
+      ],
+      "Ti3SiC2_solid_thermal": [
+        3,
+        3,
+        1
+      ],
+      "Ag_solid_liquid_coexistence": [
+        3,
+        3,
+        1
+      ],
+      "Ag_Ti3SiC2_interface": [
+        4,
+        4,
+        1
+      ],
+      "Ag_rich_Si_local_environment": [
+        4,
+        4,
+        1
+      ]
+    },
+    "fit_energy_target": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+    "extrapolated_energy": "also saved for reference",
+    "stress": "recorded where available; not a fit target",
+    "qualification": "Exploratory labeling setting. It does not mean the earlier plane-wave/k-point/smearing convergence review was formally passed."
+  },
+  "source_manifest_sha256": {
+    "training_candidate_manifest_v13.json": "1f99d481d97277210a1bb0bebe524f113267d695429ef3b6942e3272024e0a07",
+    "validation_candidate_manifest_v13.json": "c212e31dfa0babb235c02a9553aab7bf17ac6b8a9ee5a0a535307ce43591f901"
+  },
+  "labels": [
+    {
+      "candidate_id": "V13_AG_SOLID_01",
+      "role": "training",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_SOLID_01",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "7a4e0cd4cf4e3cb529aec2c691dbd51bbc2cbff2f1e3298ecfafd23fcbbde723",
+        "canonical_geometry_sha256": "de3fa2b8a6c1ded5cb79daf8480448c43c80c50758a09743a54cbc7746076bf7",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_01/trajectory.dump",
+        "trajectory_sha256": "2569f71a81924262e0c0bd2b7255ccedad94a594e3fb2e2a90e64c0113b96636",
+        "parent_source_id": "AG_SOLID_T300_SEED13101",
+        "random_seed": 13101,
+        "target_temperature_K": 300.0,
+        "observed_temperature_K": 330.475436,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_01/in.sample.lmp",
+        "source_input_sha256": "e48ca1f5b40ff4856aee3587bec35fa2bfaeafc04c398c3bbacff94c11fdf338",
+        "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.5606008287019699,
+          "trajectory_MSD_A2": 0.037503582550303366,
+          "phase_screen": "solid-like"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_01/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_01/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_SOLID_01/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_SOLID_01.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_SOLID_01",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 17,
+        "max_force_norm_eV_A": 1.131994866854735,
+        "energy_fit_target_eV": -85.57395981858966,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "9d1bb5bb07a56f4cf0436cca926a18dc2e9135a8ea5fd4e032613778e0532342",
+        "per_element_max_force_eV_A": {
+          "Ag": 1.131994867241759
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 17,
+        "max_force_norm_eV_A": 1.131994866854735,
+        "energy_fit_target_eV": -85.57395981858966,
+        "energy_extrapolated_eV": -85.27926696613244,
+        "geometry_sha256": "7a4e0cd4cf4e3cb529aec2c691dbd51bbc2cbff2f1e3298ecfafd23fcbbde723",
+        "canonical_geometry_sha256": "de3fa2b8a6c1ded5cb79daf8480448c43c80c50758a09743a54cbc7746076bf7",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:22:01Z",
+        "finished_utc": "2026-11-23T02:59:15Z",
+        "elapsed_seconds": 2234.036
+      },
+      "files": {
+        "training/V13_AG_SOLID_01/geometry.extxyz": {
+          "sha256": "7a4e0cd4cf4e3cb529aec2c691dbd51bbc2cbff2f1e3298ecfafd23fcbbde723",
+          "bytes": 4048
+        },
+        "training/V13_AG_SOLID_01/label.extxyz": {
+          "sha256": "9d1bb5bb07a56f4cf0436cca926a18dc2e9135a8ea5fd4e032613778e0532342",
+          "bytes": 4491
+        },
+        "training/V13_AG_SOLID_01/label.json": {
+          "sha256": "ad8fc5f748896bdd529e885ae2b21deb4f4be1c79941f5742ed7abd6258616f1",
+          "bytes": 5708
+        },
+        "training/V13_AG_SOLID_01/gpaw_scf.txt": {
+          "sha256": "3c21cd2937aebd92231e3efe0673a8de456235fc119b90f6e922d2fd6df1f29b",
+          "bytes": 12856
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_02",
+      "role": "training",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_SOLID_02",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "a3a99d59565c68b429043ec94a906bb47f07ca9da4648e66bace72751704182f",
+        "canonical_geometry_sha256": "2e633c30e2bc5177e46239cb449161e92763341a41a2f864cd4958cc7c3feaa1",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_02/trajectory.dump",
+        "trajectory_sha256": "4208686137aa28655105e7444eeada6c72600e743a4fa0a896f566cec97c17b5",
+        "parent_source_id": "AG_SOLID_T600_SEED13102",
+        "random_seed": 13102,
+        "target_temperature_K": 600.0,
+        "observed_temperature_K": 597.1963499999999,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_02/in.sample.lmp",
+        "source_input_sha256": "219450710a6399332ecb295b66e9710b15edd0799e9e8ee4160d81180d7d036a",
+        "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.537294023197165,
+          "trajectory_MSD_A2": 0.06086304414807442,
+          "phase_screen": "solid-like"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_02/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_02/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_SOLID_02/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_SOLID_02.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_SOLID_02",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 1.4295348705890096,
+        "energy_fit_target_eV": -85.20455896280777,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "cb4cc8cbb5671d66d4f9dbeef7b385645a91810094f1d1ede7e4b669d22761e9",
+        "per_element_max_force_eV_A": {
+          "Ag": 1.4295348656284952
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 1.4295348705890096,
+        "energy_fit_target_eV": -85.20455896280777,
+        "energy_extrapolated_eV": -84.93959510512981,
+        "geometry_sha256": "a3a99d59565c68b429043ec94a906bb47f07ca9da4648e66bace72751704182f",
+        "canonical_geometry_sha256": "2e633c30e2bc5177e46239cb449161e92763341a41a2f864cd4958cc7c3feaa1",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:22:01Z",
+        "finished_utc": "2026-11-23T03:01:55Z",
+        "elapsed_seconds": 2394.128
+      },
+      "files": {
+        "training/V13_AG_SOLID_02/geometry.extxyz": {
+          "sha256": "a3a99d59565c68b429043ec94a906bb47f07ca9da4648e66bace72751704182f",
+          "bytes": 4048
+        },
+        "training/V13_AG_SOLID_02/label.extxyz": {
+          "sha256": "cb4cc8cbb5671d66d4f9dbeef7b385645a91810094f1d1ede7e4b669d22761e9",
+          "bytes": 4484
+        },
+        "training/V13_AG_SOLID_02/label.json": {
+          "sha256": "c0f8f1dd4312fb9d09c649ae932d18eb6e6af221ac21d81a7f624304774bd288",
+          "bytes": 5700
+        },
+        "training/V13_AG_SOLID_02/gpaw_scf.txt": {
+          "sha256": "238732b63102114a124d17e1eca46a10c367815d9613115bfc6b94f68a2e3655",
+          "bytes": 12909
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_03",
+      "role": "training",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_SOLID_03",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "808e15737e8c4a3bd6401b3fa32a457bd1681f2aea1c4ffe6efe8607af89a51e",
+        "canonical_geometry_sha256": "6fe3b4b79e59b3205482f4d69fc06b9091876a2fc2f290fe51d3ea9b2a69a4a3",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_03/trajectory.dump",
+        "trajectory_sha256": "e7c99ad7da12feb4c35a0f1331402595d7d2f3d76825efb7ffab25673488f4a5",
+        "parent_source_id": "AG_SOLID_T900_SEED13103",
+        "random_seed": 13103,
+        "target_temperature_K": 900.0,
+        "observed_temperature_K": 932.2625400000001,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_03/in.sample.lmp",
+        "source_input_sha256": "0ccf7366919afb26572e59f8e0f78c8d0835765c1251f2bec0ab5f19b9fa0bed",
+        "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.5025941313649904,
+          "trajectory_MSD_A2": 0.12265810485164112,
+          "phase_screen": "solid-like"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_03/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_03/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_SOLID_03/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_SOLID_03.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_SOLID_03",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 2.0387151107836416,
+        "energy_fit_target_eV": -83.46252570917824,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "2c315e57e44d5b146b91c6d0b0b4993af749406238504e87eb0847efc091a1b8",
+        "per_element_max_force_eV_A": {
+          "Ag": 2.038715114115784
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 2.0387151107836416,
+        "energy_fit_target_eV": -83.46252570917824,
+        "energy_extrapolated_eV": -83.21177925719002,
+        "geometry_sha256": "808e15737e8c4a3bd6401b3fa32a457bd1681f2aea1c4ffe6efe8607af89a51e",
+        "canonical_geometry_sha256": "6fe3b4b79e59b3205482f4d69fc06b9091876a2fc2f290fe51d3ea9b2a69a4a3",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:09:37Z",
+        "finished_utc": "2026-11-23T03:39:21Z",
+        "elapsed_seconds": 1783.767
+      },
+      "files": {
+        "training/V13_AG_SOLID_03/geometry.extxyz": {
+          "sha256": "808e15737e8c4a3bd6401b3fa32a457bd1681f2aea1c4ffe6efe8607af89a51e",
+          "bytes": 4045
+        },
+        "training/V13_AG_SOLID_03/label.extxyz": {
+          "sha256": "2c315e57e44d5b146b91c6d0b0b4993af749406238504e87eb0847efc091a1b8",
+          "bytes": 4477
+        },
+        "training/V13_AG_SOLID_03/label.json": {
+          "sha256": "6e24ee97ddddd37f3bd4837f54e2ec12539974d1b6d5da76327c1f3ec2f15582",
+          "bytes": 5674
+        },
+        "training/V13_AG_SOLID_03/gpaw_scf.txt": {
+          "sha256": "196c816febb6b2cbc08726130ba16ae6c95713c8f2dcb1e2681e15255b5743fd",
+          "bytes": 12964
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_04",
+      "role": "training",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_SOLID_04",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "bf13aa1f9185374cc345252b95c09c163014eb53943cb34630d3460744aafe17",
+        "canonical_geometry_sha256": "e616aff42aea1d3231ddf644ea6c2c7840875231b2dbd141b7b677f5be8e3c33",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_04/trajectory.dump",
+        "trajectory_sha256": "97a37199ff5cb8ef9958c110daf9e9dbda0c16cc052eac18bea63f000b22ac5b",
+        "parent_source_id": "AG_SOLID_T1050_SEED13104",
+        "random_seed": 13104,
+        "target_temperature_K": 1050.0,
+        "observed_temperature_K": 1147.3136319999999,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_04/in.sample.lmp",
+        "source_input_sha256": "17bf84907bd9eb8d4977811a8f60d9e4e9e272e6fa46593fdd02cfb55005d2ec",
+        "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.47757830356176345,
+          "trajectory_MSD_A2": 0.10129432901231925,
+          "phase_screen": "solid-like"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_04/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_04/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_SOLID_04/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_SOLID_04.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_SOLID_04",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 3.089723921038422,
+        "energy_fit_target_eV": -82.63903846145001,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "bf3bcc30c860e6fe3ec8aae0381f2a953f6c2e2261cfda4d4e49303a84697f3c",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.0897239228326305
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 3.089723921038422,
+        "energy_fit_target_eV": -82.63903846145001,
+        "energy_extrapolated_eV": -82.39072928123744,
+        "geometry_sha256": "bf13aa1f9185374cc345252b95c09c163014eb53943cb34630d3460744aafe17",
+        "canonical_geometry_sha256": "e616aff42aea1d3231ddf644ea6c2c7840875231b2dbd141b7b677f5be8e3c33",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:39:38Z",
+        "finished_utc": "2026-11-23T04:05:01Z",
+        "elapsed_seconds": 1523.447
+      },
+      "files": {
+        "training/V13_AG_SOLID_04/geometry.extxyz": {
+          "sha256": "bf13aa1f9185374cc345252b95c09c163014eb53943cb34630d3460744aafe17",
+          "bytes": 4050
+        },
+        "training/V13_AG_SOLID_04/label.extxyz": {
+          "sha256": "bf3bcc30c860e6fe3ec8aae0381f2a953f6c2e2261cfda4d4e49303a84697f3c",
+          "bytes": 4485
+        },
+        "training/V13_AG_SOLID_04/label.json": {
+          "sha256": "0cfef312cedb41ad299a4a60332720644db16157376a1e0dc755aa60a03c0e77",
+          "bytes": 5667
+        },
+        "training/V13_AG_SOLID_04/gpaw_scf.txt": {
+          "sha256": "02fe951b213e4ee33dbbfc439485a4559662ee603392f4eeb452614cc8bc8b02",
+          "bytes": 13010
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_05",
+      "role": "training",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_SOLID_05",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "1fb225570bbac97586d12201d59740ea4b0526a96330d1946b0392e9b2663f3e",
+        "canonical_geometry_sha256": "59ff4c244761ec1b9bba8f9e2a79e8b458caf6c4bff827e1ff92ce782f99cf39",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_05/trajectory.dump",
+        "trajectory_sha256": "e5e9dd6f51055d696a6789c1544af08cd22fab8cad5a4e701740186586a1e96b",
+        "parent_source_id": "AG_SOLID_T1150_SEED13105",
+        "random_seed": 13105,
+        "target_temperature_K": 1150.0,
+        "observed_temperature_K": 1187.1128,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_05/in.sample.lmp",
+        "source_input_sha256": "e5ffe7d29932f5cd15858e614cd49eeb1a944477527d47fa5f1eecdcd53532d4",
+        "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.46629704181674236,
+          "trajectory_MSD_A2": 0.20790571850023715,
+          "phase_screen": "solid-like"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_05/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_05/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_SOLID_05/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_SOLID_05.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_SOLID_05",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 2.858241796438529,
+        "energy_fit_target_eV": -82.10497741828355,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "c3239aa32966296f7068abbd8d91978ba81ee715c38925d936feb46de9c3762a",
+        "per_element_max_force_eV_A": {
+          "Ag": 2.8582418028820387
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 18,
+        "max_force_norm_eV_A": 2.858241796438529,
+        "energy_fit_target_eV": -82.10497741828355,
+        "energy_extrapolated_eV": -81.8638751708383,
+        "geometry_sha256": "1fb225570bbac97586d12201d59740ea4b0526a96330d1946b0392e9b2663f3e",
+        "canonical_geometry_sha256": "59ff4c244761ec1b9bba8f9e2a79e8b458caf6c4bff827e1ff92ce782f99cf39",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:51:13Z",
+        "finished_utc": "2026-11-23T04:20:21Z",
+        "elapsed_seconds": 1748.145
+      },
+      "files": {
+        "training/V13_AG_SOLID_05/geometry.extxyz": {
+          "sha256": "1fb225570bbac97586d12201d59740ea4b0526a96330d1946b0392e9b2663f3e",
+          "bytes": 4050
+        },
+        "training/V13_AG_SOLID_05/label.extxyz": {
+          "sha256": "c3239aa32966296f7068abbd8d91978ba81ee715c38925d936feb46de9c3762a",
+          "bytes": 4484
+        },
+        "training/V13_AG_SOLID_05/label.json": {
+          "sha256": "1d8aad2119e2d3637755c3b63ac63f03f7f795eaff7cfabc1045b3815ede3ac7",
+          "bytes": 5665
+        },
+        "training/V13_AG_SOLID_05/gpaw_scf.txt": {
+          "sha256": "111e82da04849c0a617ece10238ee4a9e3093f942a156587ffe104ee9e84f78e",
+          "bytes": 12876
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_03",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_03",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "e83b6ba5becd14ad1ac38f887f4fe8fdaead883bcaa40e88e8abe23f19bd1957",
+        "canonical_geometry_sha256": "992da3ce6d00e0b6544c94b30b69eee1de1bd6405208eeb4c8f37c769dca7615",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_03/trajectory.dump",
+        "trajectory_sha256": "c4be9b445c450c809b88b4207f06d0b32f63d0a198fb53f1ece199f5791052a5",
+        "parent_source_id": "AG_LIQUID_T1600_SEED13203",
+        "random_seed": 13203,
+        "target_temperature_K": 1600.0,
+        "observed_temperature_K": 1753.3822800000003,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_03/in.sample.lmp",
+        "source_input_sha256": "64efa5e444f466c757ff429ab4ec5b360f48225568fb825dfcc1495c6623dd01",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.3793788249201144,
+          "trajectory_MSD_A2": 41.764641762322555,
+          "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_03/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_03/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_03/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_03.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_03",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1632043004614094,
+        "energy_fit_target_eV": -77.7223607570441,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "46a0c63d97417086ccd751ff5929fe1ee6342a0d4e0daa9f1edfd35a6ae43e4c",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.163204302361529
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1632043004614094,
+        "energy_fit_target_eV": -77.7223607570441,
+        "energy_extrapolated_eV": -77.55631406675296,
+        "geometry_sha256": "e83b6ba5becd14ad1ac38f887f4fe8fdaead883bcaa40e88e8abe23f19bd1957",
+        "canonical_geometry_sha256": "992da3ce6d00e0b6544c94b30b69eee1de1bd6405208eeb4c8f37c769dca7615",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T04:05:16Z",
+        "finished_utc": "2026-11-23T04:37:17Z",
+        "elapsed_seconds": 1921.258
+      },
+      "files": {
+        "training/V13_AG_LIQUID_03/geometry.extxyz": {
+          "sha256": "e83b6ba5becd14ad1ac38f887f4fe8fdaead883bcaa40e88e8abe23f19bd1957",
+          "bytes": 4054
+        },
+        "training/V13_AG_LIQUID_03/label.extxyz": {
+          "sha256": "46a0c63d97417086ccd751ff5929fe1ee6342a0d4e0daa9f1edfd35a6ae43e4c",
+          "bytes": 4486
+        },
+        "training/V13_AG_LIQUID_03/label.json": {
+          "sha256": "06c54c29148a126d5348b51dd63df9062eae848922066df5d0e1f4963f9c19b4",
+          "bytes": 5667
+        },
+        "training/V13_AG_LIQUID_03/gpaw_scf.txt": {
+          "sha256": "40d5b1df05732b0b40bfee95aea8b3f630f8ae191b3ecc36153963603125dfbc",
+          "bytes": 13374
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_04",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_04",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "2d41d96c9c5900aa168491326de690c6c7782d5db08776cc5b296f3fceb6d0ba",
+        "canonical_geometry_sha256": "8bbe88050396728cf7fddc119608a8b85afc6a206baf70b07f56183d49cb1b35",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_04/trajectory.dump",
+        "trajectory_sha256": "07f5d8ee781c911be889aecb5940193ef6fa098970c8c4897ace16d71e0e35ad",
+        "parent_source_id": "AG_LIQUID_T1600_SEED13204",
+        "random_seed": 13204,
+        "target_temperature_K": 1600.0,
+        "observed_temperature_K": 1518.47482,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_04/in.sample.lmp",
+        "source_input_sha256": "b2bea283012ef2be6378697f748eb19dbe2ca2a3b749f191c1fec571eb13bb7e",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.37869347350000987,
+          "trajectory_MSD_A2": 21.2174991958996,
+          "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_04/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_04/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_04/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_04.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_04",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 4.749132259767257,
+        "energy_fit_target_eV": -77.5494586947399,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "b2c7d5b5f0659616fd49c7428ce586b1a8df52b57fc673a6d1641a656a00b2f1",
+        "per_element_max_force_eV_A": {
+          "Ag": 4.7491322625917185
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 4.749132259767257,
+        "energy_fit_target_eV": -77.5494586947399,
+        "energy_extrapolated_eV": -77.37897335608804,
+        "geometry_sha256": "2d41d96c9c5900aa168491326de690c6c7782d5db08776cc5b296f3fceb6d0ba",
+        "canonical_geometry_sha256": "8bbe88050396728cf7fddc119608a8b85afc6a206baf70b07f56183d49cb1b35",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T04:20:31Z",
+        "finished_utc": "2026-11-23T04:53:13Z",
+        "elapsed_seconds": 1962.401
+      },
+      "files": {
+        "training/V13_AG_LIQUID_04/geometry.extxyz": {
+          "sha256": "2d41d96c9c5900aa168491326de690c6c7782d5db08776cc5b296f3fceb6d0ba",
+          "bytes": 4054
+        },
+        "training/V13_AG_LIQUID_04/label.extxyz": {
+          "sha256": "b2c7d5b5f0659616fd49c7428ce586b1a8df52b57fc673a6d1641a656a00b2f1",
+          "bytes": 4479
+        },
+        "training/V13_AG_LIQUID_04/label.json": {
+          "sha256": "b5db3ff75f0ba57686ceaaf29fb82e09b17c18969faae8b2bb30fe6ce458fa9c",
+          "bytes": 5667
+        },
+        "training/V13_AG_LIQUID_04/gpaw_scf.txt": {
+          "sha256": "7cc3cc2caa07cb8bf98d2803062ed3000b75109cb053cef4a19c1a490585057d",
+          "bytes": 13141
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_05",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_05",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "015d8c8dac9ed6248cdf73e67faa96ac38d38988388faf23c584d7e6d6e989f6",
+        "canonical_geometry_sha256": "f4cab1167ee7ac8d5c7532e215a15ba452d0f88424e6f6e20c88939269ab5709",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_05/trajectory.dump",
+        "trajectory_sha256": "a3b1023ab989abb78f02f6901235a77cfd59f467a1c693e72ce958bc5c0c4555",
+        "parent_source_id": "AG_LIQUID_T2000_SEED13205",
+        "random_seed": 13205,
+        "target_temperature_K": 2000.0,
+        "observed_temperature_K": 2192.95016,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_05/in.sample.lmp",
+        "source_input_sha256": "5e4d4fa2108bfa50d082836dba1821fc69285a32324615474747bdae81c31be4",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.3770333073430043,
+          "trajectory_MSD_A2": 71.08774586088926,
+          "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_05/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_05/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_05/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_05.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_05",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 21,
+        "max_force_norm_eV_A": 3.5239100144586755,
+        "energy_fit_target_eV": -73.46368278853389,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "6265c3a5ed3ffb29b44e0d97ab93d394a637a3fcf561e6e5113d0c0cebcdd41e",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.5239100165972124
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 21,
+        "max_force_norm_eV_A": 3.5239100144586755,
+        "energy_fit_target_eV": -73.46368278853389,
+        "energy_extrapolated_eV": -73.31243807603613,
+        "geometry_sha256": "015d8c8dac9ed6248cdf73e67faa96ac38d38988388faf23c584d7e6d6e989f6",
+        "canonical_geometry_sha256": "f4cab1167ee7ac8d5c7532e215a15ba452d0f88424e6f6e20c88939269ab5709",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T04:37:27Z",
+        "finished_utc": "2026-11-23T05:12:42Z",
+        "elapsed_seconds": 2115.0
+      },
+      "files": {
+        "training/V13_AG_LIQUID_05/geometry.extxyz": {
+          "sha256": "015d8c8dac9ed6248cdf73e67faa96ac38d38988388faf23c584d7e6d6e989f6",
+          "bytes": 4054
+        },
+        "training/V13_AG_LIQUID_05/label.extxyz": {
+          "sha256": "6265c3a5ed3ffb29b44e0d97ab93d394a637a3fcf561e6e5113d0c0cebcdd41e",
+          "bytes": 4488
+        },
+        "training/V13_AG_LIQUID_05/label.json": {
+          "sha256": "7e90516fee1835b68106bddc6b039e303624e53f42e68829a90ac394f6968817",
+          "bytes": 5661
+        },
+        "training/V13_AG_LIQUID_05/gpaw_scf.txt": {
+          "sha256": "88e09ec8551d6aee7cef955a84a5afd5e8a16f335307f5ce9d2ac4ef2e84598b",
+          "bytes": 13599
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_06",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_06",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "cb079780f589f5eec246445ef83b305db4e4616a2b4ef42399cb2112d7639fed",
+        "canonical_geometry_sha256": "a70c3b41dba4bd02b6550c6fe08affc894ca3430d871f5ac5b02b941690a9a28",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_06/trajectory.dump",
+        "trajectory_sha256": "e23171ee700fd051f35398f43f35058252042df475cb18fc91375b74f68d9795",
+        "parent_source_id": "AG_LIQUID_T2000_SEED13206",
+        "random_seed": 13206,
+        "target_temperature_K": 2000.0,
+        "observed_temperature_K": 2275.3256599999995,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_06/in.sample.lmp",
+        "source_input_sha256": "103f42d5be40a195f0b12427c957bbc23b30586b6aa188e7f2a6b7c51c5e276a",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.3815567069900309,
+          "trajectory_MSD_A2": 85.49549711631155,
+          "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_06/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_06/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_06/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_06.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_06",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 3.913141719017075,
+        "energy_fit_target_eV": -73.76727491670744,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "6786478c00f715db9c94d2a0e8c66d05d61d248f06b75c03ce2b4c168d5b058b",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.913141723592378
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 3.913141719017075,
+        "energy_fit_target_eV": -73.76727491670744,
+        "energy_extrapolated_eV": -73.61557706989493,
+        "geometry_sha256": "cb079780f589f5eec246445ef83b305db4e4616a2b4ef42399cb2112d7639fed",
+        "canonical_geometry_sha256": "a70c3b41dba4bd02b6550c6fe08affc894ca3430d871f5ac5b02b941690a9a28",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T04:53:32Z",
+        "finished_utc": "2026-11-23T05:25:51Z",
+        "elapsed_seconds": 1939.24
+      },
+      "files": {
+        "training/V13_AG_LIQUID_06/geometry.extxyz": {
+          "sha256": "cb079780f589f5eec246445ef83b305db4e4616a2b4ef42399cb2112d7639fed",
+          "bytes": 4054
+        },
+        "training/V13_AG_LIQUID_06/label.extxyz": {
+          "sha256": "6786478c00f715db9c94d2a0e8c66d05d61d248f06b75c03ce2b4c168d5b058b",
+          "bytes": 4489
+        },
+        "training/V13_AG_LIQUID_06/label.json": {
+          "sha256": "975890d83bedcb5d4d8a006ef1530934f20745c8d505c313b55364ab44304e12",
+          "bytes": 5680
+        },
+        "training/V13_AG_LIQUID_06/gpaw_scf.txt": {
+          "sha256": "39777f26d2e2c7ac533209ad35fb9e1e853e929020e9cf8a3c03a1411f37d2aa",
+          "bytes": 13228
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_01_MELTCOOL1300",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_01_MELTCOOL1300",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "e423a11e26aca685d79a9c6ffcd2f9b49eef501bc9328a2aa24b968d7f0b6d7e",
+        "canonical_geometry_sha256": "c8dbb45330a1e504eec8e63859b11b6502090cbb5e240ef6c1d664d914b8bf07",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_01/trajectory.dump",
+        "trajectory_sha256": "b4086189ecbbd4f73dde31281ec8fd6488894541b0d84bb0046b95f45aea348e",
+        "parent_source_id": "AG_LIQUID_T1300_SEED13201_MELTCOOL",
+        "random_seed": 13201,
+        "target_temperature_K": 1300.0,
+        "observed_temperature_K": 1272.8822199999997,
+        "sampler": "Ag EAM melt-cool resampling at nominal 1300 K",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_01/in.meltcool.lmp",
+        "source_input_sha256": "1b31ef469f4c27a8dc7985ea08eeef6b783fa6a7750255b144684e653abdcbe7",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.3817939461735368,
+          "trajectory_MSD_A2": 129.44854447274696,
+          "phase_screen": "liquid-like; provisional, diffusion and disordered Q6 observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_01_MELTCOOL1300/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_01_MELTCOOL1300/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_01_MELTCOOL1300/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_01_meltcool.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_01_MELTCOOL1300",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1595655683657995,
+        "energy_fit_target_eV": -75.87428707990901,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "54b85b2532d49f4da69bf7d3a5af1cabec88baf1649924bf798f7ba8ac60d74d",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.1595655697061615
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1595655683657995,
+        "energy_fit_target_eV": -75.87428707990901,
+        "energy_extrapolated_eV": -75.69320936536099,
+        "geometry_sha256": "e423a11e26aca685d79a9c6ffcd2f9b49eef501bc9328a2aa24b968d7f0b6d7e",
+        "canonical_geometry_sha256": "c8dbb45330a1e504eec8e63859b11b6502090cbb5e240ef6c1d664d914b8bf07",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:22:01Z",
+        "finished_utc": "2026-11-23T03:08:53Z",
+        "elapsed_seconds": 2811.22
+      },
+      "files": {
+        "training/V13_AG_LIQUID_01_MELTCOOL1300/geometry.extxyz": {
+          "sha256": "e423a11e26aca685d79a9c6ffcd2f9b49eef501bc9328a2aa24b968d7f0b6d7e",
+          "bytes": 4091
+        },
+        "training/V13_AG_LIQUID_01_MELTCOOL1300/label.extxyz": {
+          "sha256": "54b85b2532d49f4da69bf7d3a5af1cabec88baf1649924bf798f7ba8ac60d74d",
+          "bytes": 4535
+        },
+        "training/V13_AG_LIQUID_01_MELTCOOL1300/label.json": {
+          "sha256": "8e7c4053083aaf3bdb26eccc8f866e72b09b5935b3089ca9736f72918f555c64",
+          "bytes": 5764
+        },
+        "training/V13_AG_LIQUID_01_MELTCOOL1300/gpaw_scf.txt": {
+          "sha256": "4fbf964eba9b2135efa7e279c09fad8a607596f9587377f29ca2a0fe7e8101d1",
+          "bytes": 13362
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_02_MELTCOOL1300",
+      "role": "training",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_AG_LIQUID_02_MELTCOOL1300",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "8eb38feccba0e8de7f2beb19884bc2433781418b5693f1991a75829ff817bf56",
+        "canonical_geometry_sha256": "5f9bb00b1868809f050f947cda0789339ea108c6658b6479d7019196ccf2b880",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_02/trajectory.dump",
+        "trajectory_sha256": "98d0ca2297e9f2c0822b9cb5f3502b5691475f70510a07def9f15e72b463262a",
+        "parent_source_id": "AG_LIQUID_T1300_SEED13202_MELTCOOL",
+        "random_seed": 13202,
+        "target_temperature_K": 1300.0,
+        "observed_temperature_K": 1292.6388499999998,
+        "sampler": "Ag EAM melt-cool resampling at nominal 1300 K",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_02/in.meltcool.lmp",
+        "source_input_sha256": "9c17a522549940cfaca78dfb5f653eba240cfa00e35aef24b9c21a5c9bf3201f",
+        "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+        "phase_evidence": {
+          "tail_Q6_mean": 0.39655002353627405,
+          "trajectory_MSD_A2": 112.17486268003074,
+          "phase_screen": "liquid-like; provisional, diffusion and disordered Q6 observed"
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_02_MELTCOOL1300/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_02_MELTCOOL1300/label.extxyz",
+        "geometry_archive_path": "training/V13_AG_LIQUID_02_MELTCOOL1300/geometry.extxyz",
+        "source_geometry_basename": "V13_AG_LIQUID_02_meltcool.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_AG_LIQUID_02_MELTCOOL1300",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 1.945940807484404,
+        "energy_fit_target_eV": -80.80818237068074,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "2901f9a64d08df05f9474b80c104bf4128e8764150eba2130274e42cf5b3080e",
+        "per_element_max_force_eV_A": {
+          "Ag": 1.9459408104434825
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 1.945940807484404,
+        "energy_fit_target_eV": -80.80818237068074,
+        "energy_extrapolated_eV": -80.60246171649412,
+        "geometry_sha256": "8eb38feccba0e8de7f2beb19884bc2433781418b5693f1991a75829ff817bf56",
+        "canonical_geometry_sha256": "5f9bb00b1868809f050f947cda0789339ea108c6658b6479d7019196ccf2b880",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T05:25:06Z",
+        "finished_utc": "2026-11-23T05:59:36Z",
+        "elapsed_seconds": 2070.601
+      },
+      "files": {
+        "training/V13_AG_LIQUID_02_MELTCOOL1300/geometry.extxyz": {
+          "sha256": "8eb38feccba0e8de7f2beb19884bc2433781418b5693f1991a75829ff817bf56",
+          "bytes": 4091
+        },
+        "training/V13_AG_LIQUID_02_MELTCOOL1300/label.extxyz": {
+          "sha256": "2901f9a64d08df05f9474b80c104bf4128e8764150eba2130274e42cf5b3080e",
+          "bytes": 4536
+        },
+        "training/V13_AG_LIQUID_02_MELTCOOL1300/label.json": {
+          "sha256": "2be911c2fcdb2814d34179b0472131cd8ac461f102a298075b7d8b63fd2391ab",
+          "bytes": 5760
+        },
+        "training/V13_AG_LIQUID_02_MELTCOOL1300/gpaw_scf.txt": {
+          "sha256": "1084c66a76b77c05c0dbafd8a2b3a710c1d267208576aa54a7292bd5d9172341",
+          "bytes": 12891
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_01_ANISO",
+      "role": "training",
+      "category": "Ti3SiC2_solid_thermal",
+      "source_metadata": {
+        "candidate_id": "V13_TSC_VIB_01_ANISO",
+        "category": "Ti3SiC2_solid_thermal",
+        "geometry_file_sha256": "9e0a1f8aaffd6e684339226c9829eec78f3d875a2aeccba6f30b84522dca1a42",
+        "canonical_geometry_sha256": "020e442b5ed07ca75e486394968f6ff2124911822039edf6cb87afb4e98deab6",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_01_ANISO/trajectory.dump",
+        "trajectory_sha256": "b73c405862d8ba441cdf0634124e7c364c366ce14a71aee1804d12ba28fddadb",
+        "parent_source_id": "TSC_VIB_T300_SEED13401_ANISO",
+        "random_seed": 13401,
+        "target_temperature_K": 300,
+        "observed_temperature_K": 301.45932600000003,
+        "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+        "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_01_ANISO/in.sample.lmp",
+        "source_input_sha256": "3345e825a5af2c84c0031c58bc485371958785084b924f03769dcc5a2e865996",
+        "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+        "phase_evidence": {
+          "final_Ti_C_CN_histogram": {
+            "3": 16,
+            "6": 8
+          },
+          "final_mean_Ti_C_CN": 4.0,
+          "final_mean_C_Ti_CN": 6.0,
+          "final_min_Ti_C_A": 2.096841782338447,
+          "tail_mean_C_CN6_fraction": 1.0,
+          "tail_min_Ti_C_A": 2.0321163217818605
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_01_ANISO/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_01_ANISO/label.extxyz",
+        "geometry_archive_path": "training/V13_TSC_VIB_01_ANISO/geometry.extxyz",
+        "source_geometry_basename": "V13_TSC_VIB_01_ANISO.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_TSC_VIB_01_ANISO",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 36,
+        "max_force_norm_eV_A": 3.7265198384189318,
+        "energy_fit_target_eV": -379.3636854621455,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "f5d8744f4d59ad00fbd9bc3e3581fa9766c20353423d6b14f68fc4b44122a901",
+        "per_element_max_force_eV_A": {
+          "C": 2.5112514088540867,
+          "Si": 1.1808369278130375,
+          "Ti": 3.726519836043982
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 36,
+        "max_force_norm_eV_A": 3.7265198384189318,
+        "energy_fit_target_eV": -379.3636854621455,
+        "energy_extrapolated_eV": -379.0964597639464,
+        "geometry_sha256": "9e0a1f8aaffd6e684339226c9829eec78f3d875a2aeccba6f30b84522dca1a42",
+        "canonical_geometry_sha256": "020e442b5ed07ca75e486394968f6ff2124911822039edf6cb87afb4e98deab6",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:22:01Z",
+        "finished_utc": "2026-11-23T03:12:42Z",
+        "elapsed_seconds": 3040.442
+      },
+      "files": {
+        "training/V13_TSC_VIB_01_ANISO/geometry.extxyz": {
+          "sha256": "9e0a1f8aaffd6e684339226c9829eec78f3d875a2aeccba6f30b84522dca1a42",
+          "bytes": 5779
+        },
+        "training/V13_TSC_VIB_01_ANISO/label.extxyz": {
+          "sha256": "f5d8744f4d59ad00fbd9bc3e3581fa9766c20353423d6b14f68fc4b44122a901",
+          "bytes": 6216
+        },
+        "training/V13_TSC_VIB_01_ANISO/label.json": {
+          "sha256": "8fa6907ee3e22f31bcf550e061db400741d9953de13d5683c97160acc8b7b007",
+          "bytes": 7187
+        },
+        "training/V13_TSC_VIB_01_ANISO/gpaw_scf.txt": {
+          "sha256": "01ba7e57f0b58c20395c64d6753ce3770d333920403671486c0be0dcad79bca3",
+          "bytes": 17453
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_02_ANISO",
+      "role": "training",
+      "category": "Ti3SiC2_solid_thermal",
+      "source_metadata": {
+        "candidate_id": "V13_TSC_VIB_02_ANISO",
+        "category": "Ti3SiC2_solid_thermal",
+        "geometry_file_sha256": "bd5840f1a36ef53bdc596e27da78c732c5d6adc4604b71d4b77220f14f732b01",
+        "canonical_geometry_sha256": "58fd0ced545f32f7b9a425ff722618d40a7f2534daa32f0f6a4a4aac4838e007",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_02_ANISO/trajectory.dump",
+        "trajectory_sha256": "0fcc7b3384f8f233ac5ad241d6b3bc5d4fa743d22fe90fda4cd1fe3787bfebd7",
+        "parent_source_id": "TSC_VIB_T600_SEED13402_ANISO",
+        "random_seed": 13402,
+        "target_temperature_K": 600,
+        "observed_temperature_K": 594.8299850000001,
+        "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+        "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_02_ANISO/in.sample.lmp",
+        "source_input_sha256": "5a2a6910532d6480d0faf4a7c8cd43a154a8117503203b561c4e9e8455551da7",
+        "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+        "phase_evidence": {
+          "final_Ti_C_CN_histogram": {
+            "3": 16,
+            "6": 8
+          },
+          "final_mean_Ti_C_CN": 4.0,
+          "final_mean_C_Ti_CN": 6.0,
+          "final_min_Ti_C_A": 1.988502215490097,
+          "tail_mean_C_CN6_fraction": 1.0,
+          "tail_min_Ti_C_A": 1.9927440482571213
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_02_ANISO/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_02_ANISO/label.extxyz",
+        "geometry_archive_path": "training/V13_TSC_VIB_02_ANISO/geometry.extxyz",
+        "source_geometry_basename": "V13_TSC_VIB_02_ANISO.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_TSC_VIB_02_ANISO",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 4.181418456310764,
+        "energy_fit_target_eV": -376.7902836110128,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "bd2498e2c56fdda62eb92e6edf35b091ae4aaab6c2ba8039b6e91f6726ae4fd2",
+        "per_element_max_force_eV_A": {
+          "C": 3.8561781591801583,
+          "Si": 1.6640425345590224,
+          "Ti": 4.181418459324988
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 4.181418456310764,
+        "energy_fit_target_eV": -376.7902836110128,
+        "energy_extrapolated_eV": -376.52415037001373,
+        "geometry_sha256": "bd5840f1a36ef53bdc596e27da78c732c5d6adc4604b71d4b77220f14f732b01",
+        "canonical_geometry_sha256": "58fd0ced545f32f7b9a425ff722618d40a7f2534daa32f0f6a4a4aac4838e007",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:22:01Z",
+        "finished_utc": "2026-11-23T02:56:09Z",
+        "elapsed_seconds": 2048.144
+      },
+      "files": {
+        "training/V13_TSC_VIB_02_ANISO/geometry.extxyz": {
+          "sha256": "bd5840f1a36ef53bdc596e27da78c732c5d6adc4604b71d4b77220f14f732b01",
+          "bytes": 5779
+        },
+        "training/V13_TSC_VIB_02_ANISO/label.extxyz": {
+          "sha256": "bd2498e2c56fdda62eb92e6edf35b091ae4aaab6c2ba8039b6e91f6726ae4fd2",
+          "bytes": 6214
+        },
+        "training/V13_TSC_VIB_02_ANISO/label.json": {
+          "sha256": "75ac46df175ef056e2fffc7ee3c18ee94a30e95bd3507654f14862f316c03fcc",
+          "bytes": 7175
+        },
+        "training/V13_TSC_VIB_02_ANISO/gpaw_scf.txt": {
+          "sha256": "a6ffc3ea84b8e48628aa78b8d9dbdb072815ffa9ab292eb66c8f05461f8e820b",
+          "bytes": 17391
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_03_ANISO",
+      "role": "training",
+      "category": "Ti3SiC2_solid_thermal",
+      "source_metadata": {
+        "candidate_id": "V13_TSC_VIB_03_ANISO",
+        "category": "Ti3SiC2_solid_thermal",
+        "geometry_file_sha256": "9d9d0c0cc0f80f2262720b6c972ad5065e9f0e5af8b55118c65c3c460de5c6e1",
+        "canonical_geometry_sha256": "d67194dd0627fe136a7b7eb07bb744658c2b6e836880f5fb826f3dce8af74c3e",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_03_ANISO/trajectory.dump",
+        "trajectory_sha256": "3369214d07441c6c45335d456b2fbd08075b1c9e7d58128aea1e6a85c807450e",
+        "parent_source_id": "TSC_VIB_T900_SEED13403_ANISO",
+        "random_seed": 13403,
+        "target_temperature_K": 900,
+        "observed_temperature_K": 895.7893559999999,
+        "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+        "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_03_ANISO/in.sample.lmp",
+        "source_input_sha256": "8db87791d53c68bd0c99b7793b53f60f98a04ad96a3f4177a214af519f283885",
+        "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+        "phase_evidence": {
+          "final_Ti_C_CN_histogram": {
+            "3": 16,
+            "6": 8
+          },
+          "final_mean_Ti_C_CN": 4.0,
+          "final_mean_C_Ti_CN": 6.0,
+          "final_min_Ti_C_A": 1.9574398769055463,
+          "tail_mean_C_CN6_fraction": 1.0,
+          "tail_min_Ti_C_A": 1.868414624466614
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_03_ANISO/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_03_ANISO/label.extxyz",
+        "geometry_archive_path": "training/V13_TSC_VIB_03_ANISO/geometry.extxyz",
+        "source_geometry_basename": "V13_TSC_VIB_03_ANISO.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_TSC_VIB_03_ANISO",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 3.5413717007333863,
+        "energy_fit_target_eV": -377.7449567284756,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "758eb7744d12190e3197e63ea7342324899bf676f073696a2f822890b85283c8",
+        "per_element_max_force_eV_A": {
+          "C": 2.999608271611126,
+          "Si": 1.967247430718768,
+          "Ti": 3.541371699153413
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 3.5413717007333863,
+        "energy_fit_target_eV": -377.7449567284756,
+        "energy_extrapolated_eV": -377.47761744088103,
+        "geometry_sha256": "9d9d0c0cc0f80f2262720b6c972ad5065e9f0e5af8b55118c65c3c460de5c6e1",
+        "canonical_geometry_sha256": "d67194dd0627fe136a7b7eb07bb744658c2b6e836880f5fb826f3dce8af74c3e",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:13:29Z",
+        "finished_utc": "2026-11-23T03:51:10Z",
+        "elapsed_seconds": 2261.141
+      },
+      "files": {
+        "training/V13_TSC_VIB_03_ANISO/geometry.extxyz": {
+          "sha256": "9d9d0c0cc0f80f2262720b6c972ad5065e9f0e5af8b55118c65c3c460de5c6e1",
+          "bytes": 5778
+        },
+        "training/V13_TSC_VIB_03_ANISO/label.extxyz": {
+          "sha256": "758eb7744d12190e3197e63ea7342324899bf676f073696a2f822890b85283c8",
+          "bytes": 6217
+        },
+        "training/V13_TSC_VIB_03_ANISO/label.json": {
+          "sha256": "f19380f95e041159281abdc4f9feb16ea205de634ec77c170bd9901e507e92dc",
+          "bytes": 7195
+        },
+        "training/V13_TSC_VIB_03_ANISO/gpaw_scf.txt": {
+          "sha256": "a489cb077aaefe9685b0a5bcc8b3c1e1448efcac8c0c5bbb9f930e811effd494",
+          "bytes": 17414
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_04_ANISO",
+      "role": "training",
+      "category": "Ti3SiC2_solid_thermal",
+      "source_metadata": {
+        "candidate_id": "V13_TSC_VIB_04_ANISO",
+        "category": "Ti3SiC2_solid_thermal",
+        "geometry_file_sha256": "3684acec8524eb3836c8b10c271ae39c1c09d870147e7418d343426bb85e9ad3",
+        "canonical_geometry_sha256": "3117bc81918a0230a4d5510a750a3406c8a3e31d40e7a1ef548c589fbb891e6a",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_04_ANISO/trajectory.dump",
+        "trajectory_sha256": "c6d461218fcd70139b6e75573d137d9d020b70bd1c39ea15c6d927684a8c961e",
+        "parent_source_id": "TSC_VIB_T1200_SEED13404_ANISO",
+        "random_seed": 13404,
+        "target_temperature_K": 1200,
+        "observed_temperature_K": 1184.03542,
+        "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+        "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+        "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_04_ANISO/in.sample.lmp",
+        "source_input_sha256": "11e3a2e52a42cde952e8080e4555830426006f2d3b860d08eb05e7c5a71fc6a1",
+        "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+        "phase_evidence": {
+          "final_Ti_C_CN_histogram": {
+            "3": 16,
+            "6": 8
+          },
+          "final_mean_Ti_C_CN": 4.0,
+          "final_mean_C_Ti_CN": 6.0,
+          "final_min_Ti_C_A": 1.9809823332336067,
+          "tail_mean_C_CN6_fraction": 0.9375,
+          "tail_min_Ti_C_A": 1.9114605714138506
+        },
+        "split_role": "training_candidate",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "not_started",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_04_ANISO/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_04_ANISO/label.extxyz",
+        "geometry_archive_path": "training/V13_TSC_VIB_04_ANISO/geometry.extxyz",
+        "source_geometry_basename": "V13_TSC_VIB_04_ANISO.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_TSC_VIB_04_ANISO",
+        "role": "training",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 4.712572278718905,
+        "energy_fit_target_eV": -373.54268776419025,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "fe0503efe16a0a253400acbe4f430160379c0f311b8c4097830e8f6d4e5ef823",
+        "per_element_max_force_eV_A": {
+          "C": 4.26343860640519,
+          "Si": 1.7808411452888535,
+          "Ti": 4.7125722774184275
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 35,
+        "max_force_norm_eV_A": 4.712572278718905,
+        "energy_fit_target_eV": -373.54268776419025,
+        "energy_extrapolated_eV": -373.26915097243,
+        "geometry_sha256": "3684acec8524eb3836c8b10c271ae39c1c09d870147e7418d343426bb85e9ad3",
+        "canonical_geometry_sha256": "3117bc81918a0230a4d5510a750a3406c8a3e31d40e7a1ef548c589fbb891e6a",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T05:26:09Z",
+        "finished_utc": "2026-11-23T06:08:48Z",
+        "elapsed_seconds": 2558.895
+      },
+      "files": {
+        "training/V13_TSC_VIB_04_ANISO/geometry.extxyz": {
+          "sha256": "3684acec8524eb3836c8b10c271ae39c1c09d870147e7418d343426bb85e9ad3",
+          "bytes": 5774
+        },
+        "training/V13_TSC_VIB_04_ANISO/label.extxyz": {
+          "sha256": "fe0503efe16a0a253400acbe4f430160379c0f311b8c4097830e8f6d4e5ef823",
+          "bytes": 6204
+        },
+        "training/V13_TSC_VIB_04_ANISO/label.json": {
+          "sha256": "83b80f6bf64f260a4dd7bf6676d009e0a747d6d6152f22eec07a207c83c5dd0b",
+          "bytes": 7153
+        },
+        "training/V13_TSC_VIB_04_ANISO/gpaw_scf.txt": {
+          "sha256": "38f5bc611981337b4ddda052fba3d6c075d9c4b0c459e13e6b06efdd4a087828",
+          "bytes": 17499
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_VAL_AG_SOLID_01",
+      "role": "validation",
+      "category": "Ag_solid",
+      "source_metadata": {
+        "candidate_id": "V13_VAL_AG_SOLID_01",
+        "category": "Ag_solid",
+        "geometry_file_sha256": "fd373fc3fa40d30b9cc48388af186edf00fc6743c39fbd4ca97b0c6bda22eed8",
+        "canonical_geometry_sha256": "21ec9cdb019edc8ae7007b6df85495649a3ddf65a587b5fbab8956894a708659",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_sources_v13/runs/V13_VAL_AG_SOLID_01/trajectory.dump",
+        "trajectory_sha256": "9da89947be7bc404ed2cfe0988431437415e8c731f6840485e600c0995c7b51a",
+        "parent_source_id": "AG_SOLID_T700_SEED13206",
+        "random_seed": 13206,
+        "target_temperature_K": 700.0,
+        "observed_temperature_K": 743.05717,
+        "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "phase_quality_screen": "sampler-only screen: final Q6 mean=0.5118, trajectory MSD=0.0664 A^2",
+        "split_role": "validation_only",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "validation_only_not_used_for_fit",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_SOLID_01/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_SOLID_01/label.extxyz",
+        "geometry_archive_path": "validation/V13_VAL_AG_SOLID_01/geometry.extxyz",
+        "source_geometry_basename": "V13_VAL_AG_SOLID_01.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_VAL_AG_SOLID_01",
+        "role": "validation",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 2.445370056895788,
+        "energy_fit_target_eV": -84.04436015629231,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "f997635d851e1e579c251774bdff90ae2dc116c743f1fb91bc992240ffcadb72",
+        "per_element_max_force_eV_A": {
+          "Ag": 2.4453700550406525
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 2.445370056895788,
+        "energy_fit_target_eV": -84.04436015629231,
+        "energy_extrapolated_eV": -83.77115526220017,
+        "geometry_sha256": "fd373fc3fa40d30b9cc48388af186edf00fc6743c39fbd4ca97b0c6bda22eed8",
+        "canonical_geometry_sha256": "21ec9cdb019edc8ae7007b6df85495649a3ddf65a587b5fbab8956894a708659",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T02:56:44Z",
+        "finished_utc": "2026-11-23T03:21:16Z",
+        "elapsed_seconds": 1472.741
+      },
+      "files": {
+        "validation/V13_VAL_AG_SOLID_01/geometry.extxyz": {
+          "sha256": "fd373fc3fa40d30b9cc48388af186edf00fc6743c39fbd4ca97b0c6bda22eed8",
+          "bytes": 4079
+        },
+        "validation/V13_VAL_AG_SOLID_01/label.extxyz": {
+          "sha256": "f997635d851e1e579c251774bdff90ae2dc116c743f1fb91bc992240ffcadb72",
+          "bytes": 4514
+        },
+        "validation/V13_VAL_AG_SOLID_01/label.json": {
+          "sha256": "d41dd525b0b343c3c286b8ea4b33d78b775eafd2cb1537c53070299d7131fc77",
+          "bytes": 5734
+        },
+        "validation/V13_VAL_AG_SOLID_01/gpaw_scf.txt": {
+          "sha256": "c339146e1265ff313c4774602b6ebee72254b9418e4168e2f9fb1812740440be",
+          "bytes": 12961
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_VAL_AG_LIQUID_01",
+      "role": "validation",
+      "category": "Ag_liquid",
+      "source_metadata": {
+        "candidate_id": "V13_VAL_AG_LIQUID_01",
+        "category": "Ag_liquid",
+        "geometry_file_sha256": "70c4f135f65ee8c92e2e251fc4172ae7fcc8da27c5e5946078cc88bbad8c4546",
+        "canonical_geometry_sha256": "7db839fd08b01d4dcf7751b1a3b49ca364d45e741f5a780ee319b22062f8a446",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_sources_v13/runs/V13_VAL_AG_LIQUID_01/trajectory.dump",
+        "trajectory_sha256": "2ea3262ba4089c6c0b35dc97a4268f1a05d40e228f79203f444506d58893768b",
+        "parent_source_id": "AG_LIQUID_MELTCOOL1300_SEED13207",
+        "random_seed": 13207,
+        "target_temperature_K": 1300.0,
+        "observed_temperature_K": 1253.6042,
+        "sampler": "Ag EAM melt-cool source; geometry generation only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "phase_quality_screen": "sampler-only liquid screen: final Q6 mean=0.3693, trajectory MSD=16.6541 A^2",
+        "split_role": "validation_only",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          2,
+          2,
+          2
+        ],
+        "POD_fit_status": "validation_only_not_used_for_fit",
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_LIQUID_01/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_LIQUID_01/label.extxyz",
+        "geometry_archive_path": "validation/V13_VAL_AG_LIQUID_01/geometry.extxyz",
+        "source_geometry_basename": "V13_VAL_AG_LIQUID_01.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_VAL_AG_LIQUID_01",
+        "role": "validation",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1999237725842535,
+        "energy_fit_target_eV": -77.80961055106836,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "4906b75a440ee7955e2a70fd8b68fab13d3256e6b29a5c70d87c28a8c9cd9e46",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.1999237695150144
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 19,
+        "max_force_norm_eV_A": 3.1999237725842535,
+        "energy_fit_target_eV": -77.80961055106836,
+        "energy_extrapolated_eV": -77.64552453899378,
+        "geometry_sha256": "70c4f135f65ee8c92e2e251fc4172ae7fcc8da27c5e5946078cc88bbad8c4546",
+        "canonical_geometry_sha256": "7db839fd08b01d4dcf7751b1a3b49ca364d45e741f5a780ee319b22062f8a446",
+        "ecut_eV": 350,
+        "kpts": [
+          2,
+          2,
+          2
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:02:32Z",
+        "finished_utc": "2026-11-23T03:28:56Z",
+        "elapsed_seconds": 1584.004
+      },
+      "files": {
+        "validation/V13_VAL_AG_LIQUID_01/geometry.extxyz": {
+          "sha256": "70c4f135f65ee8c92e2e251fc4172ae7fcc8da27c5e5946078cc88bbad8c4546",
+          "bytes": 2183
+        },
+        "validation/V13_VAL_AG_LIQUID_01/label.extxyz": {
+          "sha256": "4906b75a440ee7955e2a70fd8b68fab13d3256e6b29a5c70d87c28a8c9cd9e46",
+          "bytes": 4270
+        },
+        "validation/V13_VAL_AG_LIQUID_01/label.json": {
+          "sha256": "5ac2e49a9ae953d4cfeaf2da7422dde0903e3b6aaf0deb49ae2947b242f3f643",
+          "bytes": 5735
+        },
+        "validation/V13_VAL_AG_LIQUID_01/gpaw_scf.txt": {
+          "sha256": "8dd7db377a93244f36fe14a1e60e643dc97845ce451e02b4098b81b503f99fca",
+          "bytes": 13303
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_VAL_TSC_VIB_01",
+      "role": "validation",
+      "category": "Ti3SiC2_solid_thermal",
+      "source_metadata": {
+        "candidate_id": "V13_VAL_TSC_VIB_01",
+        "category": "Ti3SiC2_solid_thermal",
+        "geometry_file_sha256": "82ab7d13b56752e0ae85ffb00f150421916e3b280bf63cfc2f5b5e9acd51b13c",
+        "canonical_geometry_sha256": "eed2e5fab677e0b1ef52485f5398bbab87674504988302fac82758f384895df4",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_sources_v13/runs/V13_VAL_TSC_VIB_01/trajectory.dump",
+        "trajectory_sha256": "73025d9ae98d5ddbff7d525bc0cfaee596ea204de43e1bdde56ae3b297685779",
+        "parent_source_id": "TSC_VIB_T900_SEED13406_ANISO",
+        "random_seed": 13406,
+        "target_temperature_K": 900.0,
+        "observed_temperature_K": 983.64527,
+        "sampler": "TSCBOP anisotropic NPT sampler",
+        "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+        "phase_quality_screen": "MAX topology retained by final-geometry coordination screen; sampler-only provisional screen",
+        "split_role": "validation_only",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "validation_only_not_used_for_fit",
+        "phase_evidence": {
+          "final_metrics": {
+            "min_Ti_C_A": 2.003173321860434,
+            "mean_Ti_C_CN_below_2p5A": 4.0,
+            "mean_C_Ti_CN_below_2p5A": 6.0,
+            "Ti_C_CN_histogram": {
+              "3": 16,
+              "6": 8
+            },
+            "fraction_C_CN6": 1.0
+          },
+          "trajectory_min_Ti_C_A": 1.9148213841512127,
+          "trajectory_frame_count": 41
+        },
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_TSC_VIB_01/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_TSC_VIB_01/label.extxyz",
+        "geometry_archive_path": "validation/V13_VAL_TSC_VIB_01/geometry.extxyz",
+        "source_geometry_basename": "V13_VAL_TSC_VIB_01.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_VAL_TSC_VIB_01",
+        "role": "validation",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 37,
+        "max_force_norm_eV_A": 4.519740559684534,
+        "energy_fit_target_eV": -377.1329164516596,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "d6e42e17d56b5e66f5fcdf8c53317f0bfb2061ac87fe5283c863aa18caad0dfe",
+        "per_element_max_force_eV_A": {
+          "C": 3.4985609760171887,
+          "Si": 0.8652635270175776,
+          "Ti": 4.51974055723318
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 37,
+        "max_force_norm_eV_A": 4.519740559684534,
+        "energy_fit_target_eV": -377.1329164516596,
+        "energy_extrapolated_eV": -376.84838482731243,
+        "geometry_sha256": "82ab7d13b56752e0ae85ffb00f150421916e3b280bf63cfc2f5b5e9acd51b13c",
+        "canonical_geometry_sha256": "eed2e5fab677e0b1ef52485f5398bbab87674504988302fac82758f384895df4",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:23:36Z",
+        "finished_utc": "2026-11-23T04:04:18Z",
+        "elapsed_seconds": 2442.32
+      },
+      "files": {
+        "validation/V13_VAL_TSC_VIB_01/geometry.extxyz": {
+          "sha256": "82ab7d13b56752e0ae85ffb00f150421916e3b280bf63cfc2f5b5e9acd51b13c",
+          "bytes": 3061
+        },
+        "validation/V13_VAL_TSC_VIB_01/label.extxyz": {
+          "sha256": "d6e42e17d56b5e66f5fcdf8c53317f0bfb2061ac87fe5283c863aa18caad0dfe",
+          "bytes": 5970
+        },
+        "validation/V13_VAL_TSC_VIB_01/label.json": {
+          "sha256": "88892f2d2c10b908ab91dac9754e7293fa1d7d8b7ef1455617e5625bd4af8f5a",
+          "bytes": 7215
+        },
+        "validation/V13_VAL_TSC_VIB_01/gpaw_scf.txt": {
+          "sha256": "59511dcdadf2c001fd2dcfa5a210d5eef1d48b16374d37375b93dc9930cb08d7",
+          "bytes": 17509
+        }
+      }
+    },
+    {
+      "candidate_id": "V13_VAL_AG_COEX_01",
+      "role": "validation",
+      "category": "Ag_solid_liquid_coexistence",
+      "source_metadata": {
+        "candidate_id": "V13_VAL_AG_COEX_01",
+        "category": "Ag_solid_liquid_coexistence",
+        "geometry_file_sha256": "6d9621817d5e4c1f4bdc693db10ff7ec0773cb3b8023555fb73a7a90f0b4ea25",
+        "canonical_geometry_sha256": "9e9a275e6d160d1ac243a262aa001f8659776f1fddcf46fd33d3365ba8f2542e",
+        "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_sources_v13/coexistence_interface_sources/V13_AG_COEX_06/trajectory.dump",
+        "trajectory_sha256": "33d99ee7a096713d405b78da5cc195ff824704dda916901c2bf5a9865a97ae14",
+        "parent_source_id": "AG_COEX_SEED18106",
+        "random_seed": 18106,
+        "target_temperature_K": 1228.0,
+        "observed_temperature_K": 1228.0,
+        "sampler": "Ag_u3.eam; half-cell melt and whole-cell near-melting NVT; candidate generation only",
+        "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+        "phase_quality_screen": "provisional mixed-order Q6 frame selected from independent coexistence trajectory",
+        "split_role": "validation_only",
+        "DFT_label_status": "complete; independent output audit passed",
+        "dft_ecut_eV": 350,
+        "dft_kpoints": [
+          3,
+          3,
+          1
+        ],
+        "POD_fit_status": "validation_only_not_used_for_fit",
+        "selected_frame": 38,
+        "mixed_order_metrics": {
+          "Q6_mean": 0.4470307173371908,
+          "Q6_fraction_over_0p4": 0.6875,
+          "selection": "provisional mixed-order snapshot from independent EAM trajectory"
+        },
+        "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_COEX_01/label.json",
+        "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/validation_dft_labels/V13_VAL_AG_COEX_01/label.extxyz",
+        "geometry_archive_path": "validation/V13_VAL_AG_COEX_01/geometry.extxyz",
+        "source_geometry_basename": "V13_VAL_AG_COEX_01.extxyz"
+      },
+      "audit": {
+        "candidate_id": "V13_VAL_AG_COEX_01",
+        "role": "validation",
+        "status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 3.6840208469063707,
+        "energy_fit_target_eV": -163.66601310954653,
+        "geometry_file_sha_matches": true,
+        "canonical_hash_matches": true,
+        "extxyz_energy_finite": true,
+        "extxyz_forces_finite": true,
+        "extxyz_natoms_matches": true,
+        "label_extxyz_sha256": "a87bf1427eb0d80e6246394dfcca04ba9b10bfe782b58ba733aa790d5308d4e2",
+        "per_element_max_force_eV_A": {
+          "Ag": 3.684020847566568
+        },
+        "acceptance_pass": true
+      },
+      "label_summary": {
+        "run_status": "complete",
+        "scf_converged": true,
+        "finite_energy_force": true,
+        "scf_iterations": 20,
+        "max_force_norm_eV_A": 3.6840208469063707,
+        "energy_fit_target_eV": -163.66601310954653,
+        "energy_extrapolated_eV": -163.38973841140512,
+        "geometry_sha256": "6d9621817d5e4c1f4bdc693db10ff7ec0773cb3b8023555fb73a7a90f0b4ea25",
+        "canonical_geometry_sha256": "9e9a275e6d160d1ac243a262aa001f8659776f1fddcf46fd33d3365ba8f2542e",
+        "ecut_eV": 350,
+        "kpts": [
+          3,
+          3,
+          1
+        ],
+        "sigma_eV": 0.1,
+        "training_energy_quantity": "force-consistent finite-smearing free energy at sigma=0.10 eV",
+        "started_utc": "2026-11-23T03:32:13Z",
+        "finished_utc": "2026-11-23T06:27:15Z",
+        "elapsed_seconds": 10501.947
+      },
+      "files": {
+        "validation/V13_VAL_AG_COEX_01/geometry.extxyz": {
+          "sha256": "6d9621817d5e4c1f4bdc693db10ff7ec0773cb3b8023555fb73a7a90f0b4ea25",
+          "bytes": 3842
+        },
+        "validation/V13_VAL_AG_COEX_01/label.extxyz": {
+          "sha256": "a87bf1427eb0d80e6246394dfcca04ba9b10bfe782b58ba733aa790d5308d4e2",
+          "bytes": 7568
+        },
+        "validation/V13_VAL_AG_COEX_01/label.json": {
+          "sha256": "06f6cb92caaa6c88c21f26527a118d5b51e6633922d735448cf93beb84cedab9",
+          "bytes": 8627
+        },
+        "validation/V13_VAL_AG_COEX_01/gpaw_scf.txt": {
+          "sha256": "b77c4fe6f8d3062c7e91bc48484091c6219cb5f344c21c4a67b2c02b03727fae",
+          "bytes": 17152
+        }
+      }
+    }
+  ]
+}
