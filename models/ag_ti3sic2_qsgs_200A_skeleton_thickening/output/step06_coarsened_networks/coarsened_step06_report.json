@@ -1,0 +1,163 @@
+{
+  "status": "UNRELAXED_GEOMETRY_CANDIDATE_STEP06_COARSENED_NETWORKS",
+  "baseline_model": "models/ag_ti3sic2_qsgs_200A_skeleton_thickening/output/step05_both_phases/ag_ti3sic2_both_phases_thickened_step05.extxyz",
+  "dimensions": {
+    "material_region_A": [
+      200.0,
+      200.0,
+      200.0
+    ],
+    "simulation_box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "pbc": [
+      true,
+      true,
+      false
+    ]
+  },
+  "coarsening": {
+    "method": "对 step05 两相原子占位密度施加周期 x/y 的高斯平滑，再在原 Ti3SiC2 与 Ag 晶格上按平滑密度选回相同的元素原子数",
+    "gaussian_sigma_voxels": 1.5,
+    "approximate_smoothing_length_A": 3.75,
+    "Ti3SiC2_candidate_oversampling": 1.02,
+    "Ag_candidate_oversampling": 1.15,
+    "minimum_cross_phase_distance_A": 2.2,
+    "limitations": "此步骤将原子从细枝区域重新分配到较粗的平滑网络；相总原子数和质量保持不变，不是增加材料质量。"
+  },
+  "lattice": {
+    "Ti3SiC2_source_cif": "research/mace-v12-transfer/periodic_interface_v4/v19_cif_parent_structures/source/Ti3SiC2_COD_9009647.cif",
+    "Ti3SiC2_repeats": [
+      66,
+      38,
+      12
+    ],
+    "Ti3SiC2_strain_xyz": [
+      -0.008895165886171674,
+      -0.0061535151876306315,
+      0.0
+    ],
+    "Ti3SiC2_orientation": "c axis along z, matching the original nanomodel",
+    "Ag_lattice_constant_A": 4.09,
+    "Ag_repeats": [
+      49,
+      49,
+      49
+    ],
+    "Ag_strain_xyz": [
+      -0.002045806097500158,
+      -0.002045806097500158,
+      0.0
+    ]
+  },
+  "atoms": 456505,
+  "element_counts": {
+    "Ti": 175257,
+    "Si": 58419,
+    "C": 116838,
+    "Ag": 105991
+  },
+  "Ag_over_Ti3SiC2_mass_ratio": 0.9999993644924098,
+  "minimum_cross_phase_distance_A": 2.200008285931839,
+  "connectivity": {
+    "Ti3SiC2": {
+      "components": 1,
+      "largest_atoms": 350514,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.25
+    },
+    "Ag": {
+      "components": 1,
+      "largest_atoms": 105991,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.15
+    },
+    "Ti3SiC2_selection": {
+      "candidate_main_component": {
+        "components": 8,
+        "largest_atoms": 357362,
+        "discarded_atoms": 164,
+        "cutoff_A": 3.25
+      },
+      "initial_selected_connectivity": {
+        "components": 4,
+        "largest_atoms": 350511,
+        "discarded_atoms": 3,
+        "cutoff_A": 3.25
+      },
+      "final_connectivity": {
+        "components": 1,
+        "largest_atoms": 350514,
+        "discarded_atoms": 0,
+        "cutoff_A": 3.25
+      },
+      "candidate_pool_counts": {
+        "Ti": 178677,
+        "Si": 59563,
+        "C": 119122
+      }
+    },
+    "Ag_selection": {
+      "candidate_main_component": {
+        "components": 45,
+        "largest_atoms": 120838,
+        "discarded_atoms": 1052,
+        "cutoff_A": 3.15
+      },
+      "initial_selected_connectivity": {
+        "components": 37,
+        "largest_atoms": 104994,
+        "discarded_atoms": 997,
+        "cutoff_A": 3.15
+      },
+      "final_connectivity": {
+        "components": 1,
+        "largest_atoms": 105991,
+        "discarded_atoms": 0,
+        "cutoff_A": 3.15
+      },
+      "candidate_pool_counts": {
+        "Ag": 120838
+      }
+    }
+  },
+  "equal_volume_smooth_mask_thickness_proxy": {
+    "Ti3SiC2_step05": {
+      "mean_local_half_thickness_A": 2.644649813805901,
+      "median_local_half_thickness_A": 2.5,
+      "p90_local_half_thickness_A": 3.5355339059327378,
+      "occupied_voxels": 237456
+    },
+    "Ti3SiC2_step06": {
+      "mean_local_half_thickness_A": 3.958080359973118,
+      "median_local_half_thickness_A": 3.5355339059327378,
+      "p90_local_half_thickness_A": 6.123724356957945,
+      "occupied_voxels": 237456
+    },
+    "Ag_step05": {
+      "mean_local_half_thickness_A": 2.527511438181738,
+      "median_local_half_thickness_A": 2.5,
+      "p90_local_half_thickness_A": 2.5,
+      "occupied_voxels": 95752
+    },
+    "Ag_step06": {
+      "mean_local_half_thickness_A": 3.4635092446574163,
+      "median_local_half_thickness_A": 2.5,
+      "p90_local_half_thickness_A": 5.5901699437494745,
+      "occupied_voxels": 95752
+    }
+  },
+  "outputs": {
+    "extxyz": "ag_ti3sic2_coarsened_networks_step06.extxyz",
+    "lammps_data": "ag_ti3sic2_coarsened_networks_step06.data",
+    "phase_fields": "coarsened_step06_phase_fields.npz"
+  },
+  "caveats": [
+    "材料区与模拟盒物理尺寸未变化，模型仍为纳米尺寸。",
+    "该粗化通过原子位置重分配构造，属于未弛豫几何候选。",
+    "没有运行能量最小化、冷态稳定性检查或 TTM/MD 加热。",
+    "相的原子总数保持 step05，因此 1:1 质量比精确保留；局部枝干增粗伴随细枝平滑与重新分配。"
+  ]
+}
