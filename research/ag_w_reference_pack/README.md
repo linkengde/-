@@ -63,8 +63,20 @@ This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deli
 
 
 ## 7. PDF access/download status
-- The 2018 He et al. interface paper has an author-hosted full PDF link above.
-- The 2018 Jiao & Schuh manuscript has an open institutional-repository PDF link above.
-- The 2006 Dai et al. full text is available through the author-uploaded ResearchGate landing page above; its direct file endpoint did not resolve in this collection pass, so the PDF itself is not mirrored here.
+- `papers/Extended_Finnis-Sinclair_potential_for_bcc_and_fcc.pdf` is the uploaded 17-page Dai et al. (2006) paper. Its title, DOI, equations (1)–(5), and Tables 1, 4, 6, and 7 were checked against the saved PDF.
+- `papers/He_2018_AgW_Interface_Stability.pdf` is the uploaded He et al. (2018) interface paper. Table 4 provides DFT comparison values for Ag(100)/W(100) and Ag(111)/W(110).
+- `papers/Jiao_Nanocrystalline_Ag-W_Alloys.pdf` is the uploaded 35-page accepted manuscript of Jiao and Schuh. It is an author manuscript with a CC-BY-NC-ND notice. It studies 0.3–1.9 at.% W in nanocrystalline Ag and is background on segregation, not a 1:1 composite validation.
+- `papers/SHA256SUMS.txt` records hashes for the three uploaded PDFs.
 - The 2004 Zhang et al. JPSJ paper is marked authentication-gated by the journal/ResearchGate. Use the publisher or author-request route; no openly downloadable PDF or public parameter file was verified.
-- This repository branch contains the two pure-element reference `.eam.fs` text files and a machine-readable transcription of the Dai 2006 EFS parameters. It does **not** contain the publisher PDFs, and it does **not** yet contain a validated binary Ag-W alloy potential.
+- The He et al. paper links its supporting-information PDF at `https://pubs.acs.org/doi/suppl/10.1021/acs.jpcc.8b05920/suppl_file/jp8b05920_si_001.pdf`. Its listed contents are phonon spectra of Ag(111)/Ni(111), not Ag/W. The ACS host was not reachable under the running environment network policy, so the SI file has not been retrieved.
+- The 17-page Dai article includes no separate SI citation or file. No Dai SI was supplied with the uploaded article.
+
+## 8. Dai EFS to LAMMPS conversion and checks
+- `scripts/convert_dai_efs_to_eamfs.py` tabulates the paper's equations as a LAMMPS `eam/fs` setfl potential in `potential_files/derived/Dai_2006_EFS_AgW.eam.fs`.
+- Rebuild and check it from the repository root with `python3 research/ag_w_reference_pack/scripts/convert_dai_efs_to_eamfs.py --force` followed by `python3 research/ag_w_reference_pack/scripts/validate_dai_efs_eamfs.py`. The validation script accepts `--lammps /path/to/lmp` when LAMMPS is outside `/workspace/.venvs/ag-qsgs/bin/lmp`.
+- `parameter_audit.md` records the primary-source equations, page numbers, parameter tables, and a unit correction. The original PDF prints A in eV Å⁻¹. A previous JSON revision incorrectly said eV¹ᐟ² Å⁻¹. The potential values and generated table did not change because of that metadata correction.
+- `scripts/validate_dai_efs_eamfs.py` runs pure Ag and W bulk checks, the AgW B2 and Ag3W L12 structures from Table 7, and a small Ag(100)/W(100) BCC-site interface separation scan. Results are in `validation/dai_2006_efs_validation_report.json`.
+- Pure Ag and W lattice constants and cohesive energies reproduce Tables 4 and 1 within 0.0005 eV/atom and 0.00003 Å. The B2 and L12 cohesive energies are close to the Table 7 VASP values, but the B2 result differs from Table 7's own EFS value by 0.0859 eV/atom. That inconsistency remains unresolved.
+- The rigid interface scan gives a maximum work of separation of 2.923 J/m² versus the DFT value 2.80 J/m² in He et al. Table 4. The scan uses the paper's in-plane orientation relationship and BCC-site registry but does not relax the interface or reproduce a converged DFT comparison.
+- Dai et al. report a W melting point of 4500 K versus 3695 K experimentally. This EFS set is not ready for production or high-temperature MD until the alloy benchmark discrepancy and remaining thermodynamic/interface tests are resolved.
+- The reference pure-element Ackland files remain separate. They were not concatenated into the Ag–W potential.

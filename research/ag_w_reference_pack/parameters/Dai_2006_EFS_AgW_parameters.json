@@ -10,7 +10,7 @@
     "host_density": "rho_i = sum_j A^2 * phi_ij(r_ij)"
   },
   "parameter_units": {
-    "A": "eV^1/2 Angstrom^-1",
+    "A": "eV Angstrom^-1",
     "d": "Angstrom",
     "c": "Angstrom",
     "c0": "eV Angstrom^-2",
@@ -72,9 +72,21 @@
     },
     "warning": "Dai et al. report a ~21.8% high melting-point prediction for W. This EFS set is a candidate for validation, not automatically a production-quality high-temperature Ag-W model."
   },
-  "usage_status": "Literature parameters transcribed for reproducibility. No LAMMPS Ag-W .eam.fs file has been generated or validated from this parameter set yet.",
+  "usage_status": "The LAMMPS eam/fs table has been generated. Pure Ag and W bulk checks pass, and small AgW_B2 and Ag3W_L12 calculations lie close to the paper's VASP benchmarks. The AgW_B2 energy differs from the paper's Table 7 EFS value and remains under investigation. The interface scan is preliminary and does not authorize production MD.",
   "source_access": {
     "publisher": "https://doi.org/10.1088/0953-8984/18/19/008",
     "author_uploaded_full_text": "https://www.researchgate.net/publication/231128055_Extended_Finnis-Sinclair_potential_for_bcc_and_fcc_metals_and_alloys"
+  },
+  "primary_source_audit": {
+    "source_file": "papers/Extended_Finnis-Sinclair_potential_for_bcc_and_fcc.pdf",
+    "doi": "10.1088/0953-8984/18/19/008",
+    "model_equations_pages": [4528, 4529],
+    "parameter_tables": {
+      "W": 1,
+      "Ag": 4,
+      "Ag_W": 6
+    },
+    "cross_alloy_benchmarks_table": 7,
+    "audit_status": "TRANSCRIBED_VALUES_AND_FUNCTIONAL_FORM_CHECKED_AGAINST_UPLOADED_PDF"
   }
 }

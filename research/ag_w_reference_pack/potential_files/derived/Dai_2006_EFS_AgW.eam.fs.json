@@ -1,0 +1,25 @@
+{
+  "status": "GENERATED_EAMFS_TABLE_NOT_PRODUCTION_VALIDATED",
+  "source_parameters": "parameters/Dai_2006_EFS_AgW_parameters.json",
+  "source_parameters_sha256": "f67d22d8f0331492acb8e9a88db2287b85e07639fe66a28168be3c5b5414799b",
+  "potential_file": "potential_files/derived/Dai_2006_EFS_AgW.eam.fs",
+  "potential_file_sha256": "215c53d03029736f3be4de5f8833a0d5a0e99fd18cd72b9ba118a0b583ff04f0",
+  "elements": [
+    "Ag",
+    "W"
+  ],
+  "mapping": {
+    "embedding": "F(rho)=-sqrt(rho)",
+    "density": "rho_alpha,beta(r)=A_alpha,beta^2*((r-d)^2+B^2*(r-d)^4), zero for r>d",
+    "pair": "V_alpha,beta(r)=(r-c)^2*sum(k=0..4,c_k*r^k), zero for r>c",
+    "directional_cross_density": "symmetric, using the single Ag-W parameter set",
+    "lammps_eam_fs_density_order": "neighbor element beta sections, each listing center element alpha"
+  },
+  "grid": {
+    "nrho": 100001,
+    "rho_max": 1000.0,
+    "drho": 0.01,
+    "nr": 4761,
+    "dr": 0.001
+  }
+}
