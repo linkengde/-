@@ -22,7 +22,8 @@ OUT = HERE
 
 # 与参考图一致的 25 × 25 × 25 Å 局部取景，避开盒壁。
 # 该局部窗口含一个 6 邻接连通的分叉骨架，保留该连通体的全部枝条，尺寸为 25 Å。
-LOCAL_START = (53, 19, 14)
+# 该 ROI 的局部中心线有 4 个末端和 1 个分叉簇，能直接显示为连通树枝。
+LOCAL_START = (20, 52, 6)
 LOCAL_SIZE = (10, 10, 10)
 VOXEL_A = 2.5
 REPORT = OUT / "mesh_build_report.json"
