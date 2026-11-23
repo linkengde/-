@@ -1,0 +1,136 @@
+{
+  "status": "STATIC_ACTUAL_GEOMETRY_SOURCE_PREFLIGHT_ONLY",
+  "input_data": "models/ag_w_qsgs_200A/ag_w_qsgs.data.gz",
+  "source_reference": "Migrated spatial source form/parameters from models/ag_ti3sic2_qsgs_1to1_finer/TTM_SOURCE_STATIC_PREFLIGHT.md; legacy project files remain unchanged.",
+  "equation": "q_e = f_Ag(x,y,z) * (I0/l_skin) * exp(-r_xy^2/R^2) * exp(-(z_surface-z)/l_skin) * S(t)",
+  "source_parameters": {
+    "I0_eV_ps_A-2": 5.0,
+    "R_1e_A": 30.0,
+    "l_skin_A": 20.0,
+    "center_xy_A": [
+      100.0,
+      100.0
+    ],
+    "surface_z_A": 200.0,
+    "q0_at_center_surface_eV_ps_A-3_when_S1": 0.25,
+    "S_t": "unspecified; all reported on-state powers use S(t)=1"
+  },
+  "geometry": {
+    "box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "boundary": "p p f",
+    "material_z_A": [
+      0.0,
+      200.0
+    ],
+    "Newton_source_exchange_z_A": [
+      40.0,
+      200.0
+    ],
+    "atom_counts": {
+      "total": 482471,
+      "Ag": 304036,
+      "W": 178435,
+      "Newton_Ag": 238855
+    },
+    "mask_definition": "CIC mapping of actual type-2 Ag atom coordinates with FCC atomic-volume proxy; local cell fill is bounded to [0,1]. It is not the global Ag volume fraction.",
+    "Ag_atomic_volume_proxy_A3": 17.104482249999997,
+    "W_atomic_volume_proxy_A3": 15.777248000000002,
+    "global_Ag_volume_fraction_target_not_used_as_mask": 0.6473
+  },
+  "on_state_power_S1": {
+    "unmasked_continuum_over_material_box_eV_ps": 14136.456454668423,
+    "actual_all_material_Ag_atom_quadrature_eV_ps": 9787.700707183465,
+    "actual_Newton_layer_Ag_atom_quadrature_eV_ps": 9784.98395092946,
+    "actual_Newton_layer_Ag_grid_10A_eV_ps": 9784.983950929462,
+    "all_material_Ag_grid_10A_eV_ps": 9787.700707183467,
+    "W_direct_source_eV_ps": 0.0,
+    "all_material_Ag_mapped_volume_A3": 5200378.365360999,
+    "all_material_Ag_fraction_of_material_volume": 0.6500472956701249,
+    "all_material_Ag_mask_10A_stats": {
+      "raw_overfilled_cells": 1178,
+      "raw_max_fill_fraction": 1.1087369183189362,
+      "redistributed_Ag_volume_A3": 21067.90166546804
+    },
+    "Ag_share_of_unmasked_continuum_percent": 69.23729959180241,
+    "Newton_Ag_share_of_unmasked_continuum_percent": 69.2180815065438
+  },
+  "cumulative_input_energy": {
+    "time_envelope": null,
+    "value_eV": null,
+    "formula": "E_Ag(t)=P_Newton_Ag,on * integral_0^t S(t') dt'",
+    "energy_per_1ps_unit_S_integral_eV": 9784.98395092946,
+    "interpretation": "No numerical pulse energy is assigned without a specified S(t); with this source the coefficient per ps of unit S-integral equals P_Newton_Ag,on."
+  },
+  "grid_sensitivity": [
+    {
+      "nominal_spacing_A": 5.0,
+      "shape_xyz": [
+        40,
+        40,
+        40
+      ],
+      "actual_spacing_xyz_A": [
+        5.0,
+        5.0,
+        5.0
+      ],
+      "nonzero_Ag_cells": 48451,
+      "raw_overfilled_Ag_cells": 9821,
+      "raw_max_Ag_fill_fraction": 1.1235833515610707,
+      "redistributed_Ag_volume_A3": 42889.58373481916,
+      "Newton_Ag_atom_quadrature_power_eV_ps": 9784.98395092946,
+      "Newton_Ag_grid_power_eV_ps": 9784.983950929462,
+      "grid_vs_atom_power_relative_error": 2.220446049250313e-16
+    },
+    {
+      "nominal_spacing_A": 10.0,
+      "shape_xyz": [
+        20,
+        20,
+        20
+      ],
+      "actual_spacing_xyz_A": [
+        10.0,
+        10.0,
+        10.0
+      ],
+      "nonzero_Ag_cells": 6794,
+      "raw_overfilled_Ag_cells": 724,
+      "raw_max_Ag_fill_fraction": 1.008885365089548,
+      "redistributed_Ag_volume_A3": 2288.7833778877407,
+      "Newton_Ag_atom_quadrature_power_eV_ps": 9784.98395092946,
+      "Newton_Ag_grid_power_eV_ps": 9784.983950929462,
+      "grid_vs_atom_power_relative_error": 2.220446049250313e-16
+    },
+    {
+      "nominal_spacing_A": 20.0,
+      "shape_xyz": [
+        10,
+        10,
+        10
+      ],
+      "actual_spacing_xyz_A": [
+        20.0,
+        20.0,
+        20.0
+      ],
+      "nonzero_Ag_cells": 900,
+      "raw_overfilled_Ag_cells": 1,
+      "raw_max_Ag_fill_fraction": 1.003770779220713,
+      "redistributed_Ag_volume_A3": 30.1662337657026,
+      "Newton_Ag_atom_quadrature_power_eV_ps": 9784.98395092946,
+      "Newton_Ag_grid_power_eV_ps": 9784.983950929463,
+      "grid_vs_atom_power_relative_error": 4.440892098500626e-16
+    }
+  ],
+  "limitations": [
+    "This maps only the spatial source and Ag mask. It does not run or validate TTM/MD.",
+    "Only Newton-layer Ag is given a direct source, matching the source-only convention in the Ag-Ti3SiC2 reference; W receives zero direct electronic source in this exploratory assumption.",
+    "The QSGS raw geometry has failed the EFS minimization preflight and is not an MD-ready structure; this report is geometry-only.",
+    "The fixed I0, R and skin depth remain exploratory candidates, not Ag-W optical/absorption measurements. No pulse width or temporal envelope was specified."
+  ]
+}
