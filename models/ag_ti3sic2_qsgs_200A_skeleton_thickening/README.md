@@ -30,6 +30,17 @@
 - 第二档 OVITO 原子文件：`output/step02/ag_ti3sic2_skeleton_thickened_step02.extxyz`。
 - 第二档结构报告：`output/step02/thickened_step02_report.json`。
 
+## 第三档：累计外扩 3 Å/侧
+
+第三档再比第二档加粗 1 Å/侧，Ag 相仍保持连通并跨越 x/y 周期边界、贯穿 z 方向。
+
+- 第三档总原子数：537,561；Ti3SiC2：490,554；Ag：47,007。
+- 相对第二档增加 78,156 个 Ti3SiC2 原子，减少 36,032 个 Ag 原子。
+- Ag/Ti3SiC2 质量比约 0.317，银相占比已明显下降。
+- 对比图：`visualization/Ag_Ti3SiC2_skeleton_thickened_step02_vs_step03.png`。
+- 第三档 OVITO 原子文件：`output/step03/ag_ti3sic2_skeleton_thickened_step03.extxyz`。
+- 第三档结构报告：`output/step03/thickened_step03_report.json`。
+
 ## 查看
 
 - `visualization/Ag_Ti3SiC2_skeleton_thickened_step01_comparison.png`：原模型与加粗版的 OVITO 标准渲染并排图。
@@ -45,6 +56,7 @@
 ```bash
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step01.py
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step02.py
+python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step03.py
 ```
 
 图由 OVITO 3.17.2 的 StandardRenderer 输出。当前云机无系统级 Vulkan 驱动，因此使用下载到 `/tmp` 的 Mesa lavapipe CPU Vulkan ICD 生成；该临时驱动不属于模型文件。
@@ -52,5 +64,5 @@ python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step02.py
 ## 限制
 
 - 模型尚未做能量最小化、冷态稳定性检查或 TTM/MD 加热。
-- 加粗改变了相比例：第一、二档 Ag/Ti3SiC2 质量比分别约 0.942、0.666；继续加粗时银相可用体积会继续减少。
+- 加粗改变了相比例：第一、二、三档 Ag/Ti3SiC2 质量比分别约 0.942、0.666、0.317；继续加粗时银相可用体积会继续减少。
 - 本版用于看形貌和继续迭代，不代表势函数或界面力学已通过验证。
