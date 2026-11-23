@@ -1,6 +1,6 @@
 # Ag-W paper access check — 2026-11-23
 
-This file records verified public access status for the three priority papers. "Free PDF available" means a public/author-hosted full-text PDF page or direct PDF was verified. It does not mean the PDF binary has been copied into this GitHub repository.
+This file records verified public access status for the priority papers and distinguishes public access links from local PDF copies.
 
 ## 1. Dai et al. (2006) — Extended Finnis–Sinclair potential for bcc and fcc metals and alloys
 
@@ -9,6 +9,7 @@ This file records verified public access status for the three priority papers. "
 - Status: **Free author-uploaded full text found.**
 - Author-uploaded ResearchGate page: https://www.researchgate.net/publication/231128055_Extended_Finnis-Sinclair_potential_for_bcc_and_fcc_metals_and_alloys
 - The page explicitly labels the article PDF as available and the full text as public; the file was uploaded by co-author Yi Kong. Open the page and use "Download full-text PDF".
+- A user-supplied copy of the 17-page paper is committed in `papers/Extended_Finnis-Sinclair_potential_for_bcc_and_fcc.pdf`. Its SHA-256 is recorded in `papers/SHA256SUMS.txt`.
 - A second PDF mirror was also found, but the author-uploaded ResearchGate copy is the preferred access route.
 
 ## 2. Zhang et al. (2004) — Atomistic Modeling of Metastable Phase Selection of a Highly Immiscible Ag-W System
@@ -28,7 +29,8 @@ This file records verified public access status for the three priority papers. "
 - Status: **Free author-hosted PDF found and verified.**
 - Direct PDF: https://gr.xjtu.edu.cn/html/documents/upload/20776/jpcc2018.pdf
 - The PDF opens and identifies the exact title, authors, journal citation and DOI. It contains DFT results for Ag(100)/W(100) and Ag(111)/W(110) interfaces.
+- A user-supplied copy is committed in `papers/He_2018_AgW_Interface_Stability.pdf`; its SHA-256 is recorded in `papers/SHA256SUMS.txt`.
 
 ## Download note
 
-The direct PDF links above were verified through web access. The current execution environment could not fetch external binary files into the local container, so no publisher/author PDF binary is claimed to have been downloaded or committed here. The free access links and DOI-only fallback are preserved for the project.
+The public access links were verified in the earlier paper-access check. In this task, the Dai and He PDFs were supplied as chat attachments and those exact files were committed to the branch. The current running environment could not fetch the ACS supplementary-information file. Its direct link and contents are documented in the Ag–W reference pack README. The Jiao manuscript was also user supplied and is covered by its hash entry.
