@@ -8,9 +8,9 @@ This folder contains the paper-style overview and local branch inset rendered fr
 - `Ti3SiC2_step06_whole_skeleton_with_local_branch.tif` — 300 dpi LZW TIFF.
 - `Ti3SiC2_step06_whole_skeleton_with_local_branch.pdf` — PDF export.
 
-The whole Ti3SiC2 skeleton is shown at left. The blue dashed box selects the 25 × 25 × 25 Å region shown at right. The inset now shows a visibly continuous, tree-like branched body: the voxel phase field has one 6-neighbor-connected component, the surface mesh has one connected component, and the extracted centerline has four terminals and one junction cluster. The orange double arrow marks the actual 3D distance between two facing branch surfaces: **8.37 Å (0.837 nm)**.
+The whole Ti3SiC2 skeleton is shown at left. The blue dashed box selects the 25 × 25 × 25 Å region shown at right. This alternative inset has one 6-neighbor-connected phase component, one connected surface mesh, and a centerline with six terminals and two junction clusters. The orange double arrow marks the actual 3D distance between two facing branch surfaces: **17.85 Å (1.785 nm)**.
 
-The figure uses the step06 model's 200 × 200 × 200 Å material region. The selected inset ROI is x = 50–75 Å, y = 130–155 Å, and z = 15–40 Å. The displayed surfaces are extracted from `step06_equal_volume_Ti3SiC2_mask`; the atomic coordinates and the Ag/Ti3SiC2 model are unchanged by figure generation. The arrow tips correspond to visible points on the isosurface mesh, and their 3D separation is computed in Å.
+The figure uses the step06 model's 200 × 200 × 200 Å material region. The selected inset ROI is x = 25–50 Å, y = 65–90 Å, and z = 85–110 Å. The displayed surfaces are extracted from `step06_equal_volume_Ti3SiC2_mask`; the atomic coordinates and the Ag/Ti3SiC2 model are unchanged by figure generation. The arrow tips correspond to visible points on the isosurface mesh, and their 3D separation is computed in Å. The local isosurface threshold is 0.65 for display clarity; the source phase field and atom coordinates are unchanged.
 
 ## Rebuild
 

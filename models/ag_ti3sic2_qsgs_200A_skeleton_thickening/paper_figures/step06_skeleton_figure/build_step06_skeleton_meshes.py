@@ -22,8 +22,8 @@ OUT = HERE
 
 # 与参考图一致的 25 × 25 × 25 Å 局部取景，避开盒壁。
 # 该局部窗口含一个 6 邻接连通的分叉骨架，保留该连通体的全部枝条，尺寸为 25 Å。
-# 该 ROI 的局部中心线有 4 个末端和 1 个分叉簇，能直接显示为连通树枝。
-LOCAL_START = (20, 52, 6)
+# 该 ROI 的局部中心线有 6 个末端和 2 个分叉簇，能显示更丰富的连通枝条。
+LOCAL_START = (10, 26, 34)
 LOCAL_SIZE = (10, 10, 10)
 VOXEL_A = 2.5
 REPORT = OUT / "mesh_build_report.json"
@@ -111,7 +111,7 @@ def main() -> None:
     local_mesh_path = OUT / "Ti3SiC2_step06_local_branch_surface_mesh.npz"
     whole_info = mesh_builder.build_mesh(mask, (0, 0, 0), whole_mesh_path, iso_value=0.55)
     local_info = mesh_builder.build_mesh(
-        selected, LOCAL_START, local_mesh_path, iso_value=0.60, keep_largest_surface=True
+        selected, LOCAL_START, local_mesh_path, iso_value=0.65, keep_largest_surface=True
     )
     local_mesh = np.load(local_mesh_path)
     surface_components = count_surface_components(local_mesh["faces"], len(local_mesh["vertices"]))
@@ -159,7 +159,7 @@ def main() -> None:
         "display_processing": {
             "method": "step06 equal-volume smoothed Ti3SiC2 occupancy mask rendered as a Gaussian-smoothed isosurface",
             "isosurface_level_whole": 0.55,
-            "isosurface_level_local": 0.60,
+            "isosurface_level_local": 0.65,
             "mesh_smoothing": "windowed-sinc display smoothing only",
             "coordinate_system": "Å",
             "atom_model_modified": False,

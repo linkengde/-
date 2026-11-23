@@ -24,8 +24,8 @@ COMPOSITE_TIF = HERE / "Ti3SiC2_step06_whole_skeleton_with_local_branch.tif"
 COMPOSITE_PDF = HERE / "Ti3SiC2_step06_whole_skeleton_with_local_branch.pdf"
 REPORT = HERE / "step06_figure_report.json"
 
-# ROI 来自 step06 局部网格裁剪：起点 (20, 52, 6)，每个方向 10 个 2.5 Å 体素。
-ROI = {"x": (50.0, 75.0), "y": (130.0, 155.0), "z": (15.0, 40.0)}
+# ROI 来自 step06 局部网格裁剪：起点 (10, 26, 34)，每个方向 10 个 2.5 Å 体素。
+ROI = {"x": (25.0, 50.0), "y": (65.0, 90.0), "z": (85.0, 110.0)}
 WHOLE_SIZE = (1600, 1600)
 LOCAL_SIZE = (1100, 1100)
 CANVAS_SIZE = (2920, 1900)
@@ -114,8 +114,8 @@ def main() -> None:
 
     # 该 ROI 的 6 邻接相场和三角表面都保持为一个连通分叉骨架。
     local_center = tuple(sum(ROI[axis]) / 2 for axis in ("x", "y", "z"))
-    # 从相机另一侧观察，使局部分叉的主干连接清楚暴露出来。
-    local_direction = (-1.0, 1.0, -0.57)
+    # 选择能同时看到主干、上下分叉和两臂间开口的观察方向。
+    local_direction = (1.0, -1.0, -0.57)
     local_up = (0.0, 0.0, 1.0)
     local_pipeline, _ = helper.load_mesh(LOCAL_MESH, "step06 local Ti3SiC2 branches")
     local_pipeline.add_to_scene()
@@ -124,9 +124,9 @@ def main() -> None:
     scene.viewports.active_vp = local_viewport
     local_image = helper.render_view(local_viewport, LOCAL_PNG, LOCAL_SIZE, renderer)
 
-    # 箭头跨越图中相连 Y 形骨架两条内侧枝臂之间的开口。
-    start_pixel = (410.0, 525.0)
-    end_pixel = (545.0, 525.0)
+    # 箭头跨越该连通枝状骨架两条相对枝臂之间的开口。
+    start_pixel = (420.0, 600.0)
+    end_pixel = (780.0, 600.0)
     # 沿箭头端点的相机射线取两侧实际显示表面，使用模型 Å 坐标算间距。
     measured_a = helper.surface_point_on_camera_ray(local_vertices, local_faces, start_pixel, local_viewport, LOCAL_SIZE)
     measured_b = helper.surface_point_on_camera_ray(local_vertices, local_faces, end_pixel, local_viewport, LOCAL_SIZE)
