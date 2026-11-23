@@ -5,7 +5,7 @@ Purpose: organize the user-supplied Ag/W electronic-property tables for the expl
 
 ## Archived source files
 
-The original Ag/W-only files are in [`xtant3_ag_w_source/`](xtant3_ag_w_source/). The accompanying upstream README, `.gitattributes`, and GPL-3.0 license file are preserved beside them. The README describes the tables as XTANT-3 results and points to Medvedev and coauthors' papers; it also says the data are for non-commercial peaceful use. Keep that notice with any copy and check the source terms before use outside research/education.
+The original Ag/W-only files are in [`XTANT3_TTM_parameters_v3/`](XTANT3_TTM_parameters_v3/), copied unchanged from the public author repository at ref `TTM_parameters_v3`. Its repository README and source blob hashes are preserved there. The uploaded dataset README, `.gitattributes`, and GPL-3.0 file are also preserved beside the tables. The uploaded README says the data are for non-commercial peaceful use; keep that notice with any copy and check the source terms before use outside research/education.
 
 | File | Quantity and columns | Grid in supplied file |
 |---|---|---:|
@@ -37,6 +37,14 @@ These are materially different W electron-lattice coupling models. Do not averag
 
 The `K`-table total conductivity is internally consistent with the reciprocal combination of the listed electron-phonon and electron-electron contributions, `1/ke = 1/ke-ph + 1/ke-e`; do not add those two columns arithmetically. At 300 K the tables give `ke,total = 16.56 W m⁻¹ K⁻¹` for Ag and `30.09 W m⁻¹ K⁻¹` for W. These are candidate XTANT values, not independent validation against bulk conductivity. For W, Duffy et al.'s Drude closure has a separate 300 K electron-conductivity anchor of 130.5 W m⁻¹ K⁻¹; retain it as another model alternative rather than silently replacing the table.
 
+The raw files are in SI units. For a custom TTM solver using LAMMPS `metal` units (eV, ps, Å), the derived conversion factors are:
+
+- `Ce [J m⁻³ K⁻¹] × 6.241509074×10⁻¹² → eV Å⁻³ K⁻¹`
+- `G [W m⁻³ K⁻¹] × 6.241509074×10⁻²⁴ → eV ps⁻¹ Å⁻³ K⁻¹`
+- `ke [W m⁻¹ K⁻¹] × 6.241509074×10⁻⁴ → eV ps⁻¹ Å⁻¹ K⁻¹`
+
+These factors do not add temperature interpolation, out-of-range handling, or a mixed-cell rule; those remain explicit solver choices.
+
 ## Candidate use and limits
 
 - A common in-range window for the standalone Ag/W `Ce` and `G` files is 600–19,000 K. The `K` tables cover 300–50,000 K. Any use below/above the selected source's range needs an explicitly documented low-temperature model or boundary rule; do not infer coverage from another table's wider grid.
@@ -47,8 +55,8 @@ The `K`-table total conductivity is internally consistent with the reciprocal co
 
 ## Related papers now archived
 
-- Vijayakumar et al. (1988), “Calculated phase diagrams of Cu–W, Ag–W and Au–W binary systems,” *CALPHAD* 12(2), 177–184. The Ag–W diagram is a calculation: the paper states there was no experimentally determined phase diagram/thermodynamic data, assumes no mutual solid solubility, and models liquid equilibria with a subregular solution. Treat it as a model scenario, not a validated experimental phase diagram.
-- Waseda and Ohtani (1974), “Static Structure of Liquid Noble and Transition Metals by X-Ray Diffraction,” *Physica Status Solidi (b)* 62, 535–546. Includes liquid Ag structure but not liquid W or an Ag–W liquid alloy.
+- Vijayakumar et al. (1988), “Calculated phase diagrams of Cu–W, Ag–W and Au–W binary systems,” *CALPHAD* 12(2), 177–184, DOI 10.1016/0364-5916(88)90019-3. The Ag–W diagram is a calculation: the paper states there was no experimentally determined phase diagram/thermodynamic data, assumes no mutual solid solubility, and models liquid equilibria with a subregular solution. Treat it as a model scenario, not a validated experimental phase diagram.
+- Waseda and Ohtani (1974), “Static Structure of Liquid Noble and Transition Metals by X-Ray Diffraction,” *Physica Status Solidi (b)* 62, 535–546, DOI 10.1002/pssb.2220620224. Includes liquid Ag structure but not liquid W or an Ag–W liquid alloy.
 - Torre et al. (2021), “Investigation on the Thermodynamic Stability of Nanocrystalline W-Based Alloys,” *Materials* 14, 7179, DOI 10.3390/ma14237179. Reports persistent W–Ag segregation and demixing after moderate-temperature annealing in the studied mechanically processed nanocrystalline material; it is useful qualitative evidence, not a laser-melt/quench phase diagram.
 - Li et al. (2024), “Electronic interfacial thermal conductance between metal nano-films in sub-picosecond non-equilibrium transport process,” *International Journal of Heat and Mass Transfer* 229, 125717, DOI 10.1016/j.ijheatmasstransfer.2024.125717. Reports `hee=4.4±1.8 GW m⁻² K⁻¹` for Au/Pt and `0.13±0.05 GW m⁻² K⁻¹` for Au/Al; not a direct Ag/W measurement.
 

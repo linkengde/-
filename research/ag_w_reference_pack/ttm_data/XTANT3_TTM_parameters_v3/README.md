@@ -41,3 +41,6 @@ Source Git blob SHAs:
 - `K_metals/K_Ag.dat`: 3ad8513910533f0f1925badfe663aa3480211152
 
 No TTM or MD trajectory was run as part of this data import.
+
+
+User-uploaded source notices are retained as `SOURCE_README_user_upload.md`, `LICENSE_user_upload`, and `.gitattributes`. The uploaded README states “non-commercial peaceful purposes only”; preserve this notice along with the GPL-3.0 file and the author repository provenance above. The source audit and comparison for this Ag/W project are at `../XTANT3_AG_W_DATA_AUDIT_20261124.md`.

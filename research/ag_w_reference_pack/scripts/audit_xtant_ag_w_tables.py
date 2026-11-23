@@ -14,17 +14,17 @@ from pathlib import Path
 
 
 PACK = Path(__file__).resolve().parents[1]
-DATA = PACK / "ttm_data" / "xtant3_ag_w_source"
+DATA = PACK / "ttm_data" / "XTANT3_TTM_parameters_v3"
 LIN_W = PACK / "ttm_data" / "W_TTM_Lin2008_digitized_300_20000K.csv"
 OUTPUT = PACK / "ttm_data" / "XTANT3_AG_W_SOURCE_AUDIT.json"
 
 FILES = {
-    "Ce_Ag": ("Ce_Ag.txt", 2, "J/(m^3 K)"),
-    "Ce_W": ("Ce_W.txt", 2, "J/(m^3 K)"),
-    "G_Ag": ("G_e-ph_Ag.txt", 2, "W/(m^3 K)"),
-    "G_W": ("G_e-ph_W.txt", 2, "W/(m^3 K)"),
-    "K_Ag": ("K_Ag.dat", 6, "W/(m K), eV, J/(m^3 K)"),
-    "K_W": ("K_W.dat", 6, "W/(m K), eV, J/(m^3 K)"),
+    "Ce_Ag": ("Ce_metals/Ce_Ag.txt", 2, "J/(m^3 K)"),
+    "Ce_W": ("Ce_metals/Ce_W.txt", 2, "J/(m^3 K)"),
+    "G_Ag": ("G_e-ph_metals/G_e-ph_Ag.txt", 2, "W/(m^3 K)"),
+    "G_W": ("G_e-ph_metals/G_e-ph_W.txt", 2, "W/(m^3 K)"),
+    "K_Ag": ("K_metals/K_Ag.dat", 6, "W/(m K), eV, J/(m^3 K)"),
+    "K_W": ("K_metals/K_W.dat", 6, "W/(m K), eV, J/(m^3 K)"),
 }
 KEY_TEMPERATURES = [300, 500, 600, 1000, 3000, 5000, 11000, 15000, 19000, 20000, 23000, 50000]
 
@@ -156,8 +156,9 @@ def main() -> None:
 
     result = {
         "title": "Schema, provenance, and cross-source audit of user-supplied XTANT-3 Ag/W tables",
-        "source_metadata": "ttm_data/xtant3_ag_w_source/SOURCE_README.md",
-        "license_file": "ttm_data/xtant3_ag_w_source/LICENSE",
+        "source_metadata": "ttm_data/XTANT3_TTM_parameters_v3/README.md",
+        "user_supplied_source_readme": "ttm_data/XTANT3_TTM_parameters_v3/SOURCE_README_user_upload.md",
+        "license_file": "ttm_data/XTANT3_TTM_parameters_v3/LICENSE_user_upload",
         "lin_comparison_source": "ttm_data/W_TTM_Lin2008_digitized_300_20000K.csv",
         "tables": tables,
         "cross_source_comparisons": comparisons,

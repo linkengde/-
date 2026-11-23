@@ -4,7 +4,7 @@ The intended goal is a qualitative graduate-level simulation of laser-driven Ag�
 
 ## Priority 1: tungsten electronic properties
 
-**Sources and tables now supplied:** user-provided XTANT-3 tables for Ag and W `Ce(Te)`, `G(Te)`, and `ke(Te)`; Lin, Zhigilei & Celli (2008), including a candidate W curve digitized from Fig. 7; Daraszewicz et al. (2014) for an independent W low-`Te` coupling anchor and conductivity closure; and Medvedev & Milov (2020) as the source context for the XTANT coupling model. The input tables, upstream README/license, per-file hashes, and comparison are archived in `ttm_data/xtant3_ag_w_source/` and `ttm_data/XTANT3_AG_W_DATA_AUDIT_20261124.md`.
+**Sources and tables now supplied:** user-provided XTANT-3 tables for Ag and W `Ce(Te)`, `G(Te)`, and `ke(Te)`; Lin, Zhigilei & Celli (2008), including a candidate W curve digitized from Fig. 7; Daraszewicz et al. (2014) for an independent W low-`Te` coupling anchor and conductivity closure; and Medvedev & Milov (2020) as the source context for the XTANT coupling model. The input tables, upstream README/license, per-file hashes, and comparison are archived in `ttm_data/XTANT3_TTM_parameters_v3/` and `ttm_data/XTANT3_AG_W_DATA_AUDIT_20261124.md`.
 
 The W `G(Te)` options materially disagree: at sampled common temperatures the supplied XTANT table is 3.8–17.9 times lower than the Lin digitization. The supplied standalone `Ce` values also differ from the separate `Ce` columns bundled with the K tables because they use different calculation setups. Keep these curves separate and compare explicitly; they still need a model choice and sensitivity run. The source K tables have only `Te` dependence, not `ke(Te,Tl)`.
 
@@ -47,7 +47,7 @@ Search phrases:
 
 ## Priority 4: melt/quench checks for the EFS model
 
-The pack contains W thermophysical data from Tolias et al., elemental thermochemistry from Pankratz, Jiao et al. on dilute nanocrystalline Ag–W, the calculated 1988 Ag–W phase diagram, Torre et al. (2021) on W–Ag segregation/demixing, and Waseda & Ohtani's liquid Ag structure data. The 1988 phase diagram explicitly rests on model assumptions and notes absent experimental thermodynamic data; it is not an experimental phase diagram. Additional liquid Ag–W mixing data would help interpret the model. The Dai EFS W melting point is about 21.8% above the reference; report any model melt temperature as model-specific unless calibrated.
+The pack contains W thermophysical data from Tolias et al. and the uploaded NASA TM 87568 program-task report (including its tungsten high-temperature measurement section), Ag thermochemistry from Pankratz, Jiao et al. on dilute nanocrystalline Ag–W, the calculated 1988 Ag–W phase diagram, Torre et al. (2021) on W–Ag segregation/demixing, and Waseda & Ohtani's liquid Ag structure data. The 1988 phase diagram explicitly rests on model assumptions and notes absent experimental thermodynamic data; it is not an experimental phase diagram. Additional liquid Ag–W mixing data would help interpret the model. The Dai EFS W melting point is about 21.8% above the reference; report any model melt temperature as model-specific unless calibrated.
 
 Search phrases:
 
