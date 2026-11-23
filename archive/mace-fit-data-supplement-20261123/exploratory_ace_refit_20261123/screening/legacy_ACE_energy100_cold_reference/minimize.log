@@ -1,0 +1,132 @@
+LAMMPS (30 Sep 2026 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 34.005876) with tilt (-3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  52 atoms
+  read_data CPU = 0.002 seconds
+ACE version: 2025.12.4p1
+Recursive evaluator is used
+Loading /workspace/potential-comparison/rebuilt/ACE_energy100/AgCSiTi.yace
+Total number of basis functions
+	Ag: 24 (r=1) 168 (r>1)
+	C: 24 (r=1) 168 (r>1)
+	Si: 24 (r=1) 168 (r>1)
+	Ti: 24 (r=1) 168 (r>1)
+Mapping LAMMPS atom type #1(Ag) -> ACE species type #0
+Mapping LAMMPS atom type #2(C) -> ACE species type #1
+Mapping LAMMPS atom type #3(Si) -> ACE species type #2
+Mapping LAMMPS atom type #4(Ti) -> ACE species type #3
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 3 2 10
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up fire style minimization ...
+  Unit style    : metal
+  Current step  : 0
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+     0.1     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 3.082 | 3.082 | 3.082 Mbytes
+   Step          Temp          PotEng         TotEng       c_maxforce  
+         0   0             -379.69        -379.69         2.9621922    
+        10   134.2442      -380.55489     -379.66991      2.2079433    
+        20   406.31308     -381.67948     -379.00096      1.271425     
+        30   587.43407     -382.81373     -378.94121      0.36656917   
+        40   66.712683     -383.22957     -382.78978      0.14831801   
+        50   0.9225903     -383.25984     -383.25376      0.052987224  
+        60   3.162512      -383.27122     -383.25037      0.043017857  
+        70   5.0730297     -383.28274     -383.2493       0.014315204  
+        80   0.0019902825  -383.28503     -383.28502      0.0063796433 
+        90   0.013212065   -383.2851      -383.28501      0.0063238541 
+       100   0.033484744   -383.28521     -383.28499      0.0059853111 
+       110   0.09424293    -383.28555     -383.28493      0.0047512845 
+       120   0.084746211   -383.28601     -383.28546      0.0015082081 
+       130   3.1721601e-05 -383.28605     -383.28605      0.00034811289
+       140   0.00015051612 -383.28605     -383.28605      0.00028631677
+       143   0.00020746444 -383.28605     -383.28605      0.00027442525
+Loop time of 0.0966383 on 1 procs for 143 steps with 52 atoms
+
+100.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = force tolerance
+  Energy initial, next-to-last, final = 
+     -379.690000657811  -383.286054064949  -383.286054179416
+  Force two-norm initial, final = 8.3426091 0.00099650396
+  Force max component initial, final = 2.9618362 0.00022043649
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 143 148
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.095654   | 0.095654   | 0.095654   |   0.0 | 98.98
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0003314  | 0.0003314  | 0.0003314  |   0.0 |  0.34
+Output  | 0.00033028 | 0.00033028 | 0.00033028 |   0.0 |  0.34
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.0003228  |            |       |  0.33
+
+Nlocal:             52 ave          52 max          52 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:            592 ave         592 max         592 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         5280 ave        5280 max        5280 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 5280
+Ave neighs/atom = 101.53846
+Neighbor list builds = 0
+Dangerous builds = 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 143
+  Time step     : 0.001
+Per MPI rank memory allocation (min/avg/max) = 3.207 | 3.207 | 3.207 Mbytes
+   Step          Temp          PotEng         TotEng       c_maxforce  
+       143   0.00020746444 -383.28605     -383.28605      0.00027442525
+Loop time of 6.14e-07 on 1 procs for 0 steps with 52 atoms
+
+162.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 6.14e-07   |            |       |100.00
+
+Nlocal:             52 ave          52 max          52 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:            585 ave         585 max         585 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         5008 ave        5008 max        5008 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 5008
+Ave neighs/atom = 96.307692
+Neighbor list builds = 0
+Dangerous builds = 0
+FINAL_FMAX 0.0002744252482111044
+System init for write_data ...
+Total wall time: 0:00:00

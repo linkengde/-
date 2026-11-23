@@ -1,0 +1,195 @@
+LAMMPS (30 Sep 2026 - Update 1)
+  using 1 OpenMP thread(s) per MPI task
+# 中文说明：52原子 Ag/Ti3SiC2 开发界面冷态筛查；不施加热源。
+units metal
+atom_style atomic
+boundary p p f
+read_data interface_dev_52.data
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 34.005876) with tilt (-3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:214)
+  1 by 1 by 4 MPI processor grid
+  reading atoms ...
+  52 atoms
+  read_data CPU = 0.006 seconds
+pair_style pace
+ACE version: 2025.12.4p1
+Recursive evaluator is used
+pair_coeff * * ACE_6A_B1616_E10000_F1_a0.001.yace Ag C Si Ti
+Loading ACE_6A_B1616_E10000_F1_a0.001.yace
+Total number of basis functions
+	Ag: 32 (r=1) 372 (r>1)
+	C: 32 (r=1) 372 (r>1)
+	Si: 32 (r=1) 372 (r>1)
+	Ti: 32 (r=1) 372 (r>1)
+Mapping LAMMPS atom type #1(Ag) -> ACE species type #0
+Mapping LAMMPS atom type #2(C) -> ACE species type #1
+Mapping LAMMPS atom type #3(Si) -> ACE species type #2
+Mapping LAMMPS atom type #4(Ti) -> ACE species type #3
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# 记录初始力，用于检查异常大力和原子映射。
+variable fnorm atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fnorm
+thermo 1
+thermo_style custom step atoms temp pe ke etotal c_fmax
+thermo_modify flush yes
+thermo 100
+dump d0 all custom 1 initial_forces.dump id type fx fy fz
+dump_modify d0 sort id format float %.16g
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8
+  ghost atom cutoff = 8
+  binsize = 4, bins = 3 2 9
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 3.104 | 3.121 | 3.133 Mbytes
+   Step        Atoms         Temp          PotEng         KinEng         TotEng         c_fmax    
+         0          52   0             -379.25835      0             -379.25835      2.6118326    
+Loop time of 2.1155e-06 on 4 procs for 0 steps with 52 atoms
+
+106.4% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.116e-06  |            |       |100.00
+
+Nlocal:             13 ave          24 max           4 min
+Histogram: 2 0 0 0 0 0 0 0 1 1
+Nghost:         593.75 ave         812 max         333 min
+Histogram: 1 0 0 1 0 0 0 0 1 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:         1872 ave        3804 max         304 min
+Histogram: 2 0 0 0 0 0 0 1 0 1
+
+Total # of neighbors = 7488
+Ave neighs/atom = 144
+Neighbor list builds = 0
+Dangerous builds = 0
+undump d0
+
+# 短 FIRE 松弛，仅用于筛查势函数是否导致界面结构塌缩。
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 1.0e-3 200 2000
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 3.213 | 3.231 | 3.242 Mbytes
+   Step        Atoms         Temp          PotEng         KinEng         TotEng         c_fmax    
+         0          52   0             -379.25835      0             -379.25835      2.6118326    
+       100          52   16532.042     -719.96684      108.98364     -610.98319      86.061292    
+       200          52   7.9874829     -892.99939      0.052655623   -892.94673      29.388021    
+Loop time of 0.394652 on 4 procs for 200 steps with 52 atoms
+
+88.7% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -379.258346968122  -892.954229649471  -892.999390271132
+  Force two-norm initial, final = 7.4218581 94.639062
+  Force max component initial, final = 2.611819 25.365939
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 200 211
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.0072992  | 0.18316    | 0.3705     |  36.1 | 46.41
+Neigh   | 3.1825e-05 | 0.00031121 | 0.00065432 |   0.0 |  0.08
+Comm    | 0.016996   | 0.10174    | 0.25125    |  28.1 | 25.78
+Output  | 8.3427e-05 | 0.00011821 | 0.00022077 |   0.0 |  0.03
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.1093     |            |       | 27.70
+
+Nlocal:             13 ave          24 max           0 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+Nghost:         576.75 ave         859 max         320 min
+Histogram: 1 1 0 0 0 0 0 1 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:         1956 ave        3728 max           0 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 7824
+Ave neighs/atom = 150.46154
+Neighbor list builds = 4
+Dangerous builds = 0
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 3.213 | 3.231 | 3.242 Mbytes
+   Step        Atoms         Temp          PotEng         KinEng         TotEng         c_fmax    
+       200          52   7.9874829     -892.99939      0.052655623   -892.94673      29.388021    
+Loop time of 1.969e-06 on 4 procs for 0 steps with 52 atoms
+
+101.6% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.969e-06  |            |       |100.00
+
+Nlocal:             13 ave          24 max           0 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+Nghost:         582.75 ave         867 max         328 min
+Histogram: 1 1 0 0 0 0 0 1 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:         1960 ave        3744 max           0 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 7840
+Ave neighs/atom = 150.76923
+Neighbor list builds = 0
+Dangerous builds = 0
+print "POST_MIN_FMAX $(c_fmax:%.12g)"
+POST_MIN_FMAX 29.3880208657
+write_data minimized.data
+System init for write_data ...
+
+# 松弛后进行 0.1 ps 无热源 NVE，检查短时数值稳定性。
+velocity all create 300.0 293847 mom yes rot yes dist gaussian
+timestep 0.0001
+fix nve all nve
+dump d1 all custom 100 dump.nve id type x y z vx vy vz fx fy fz
+dump_modify d1 sort id
+thermo 100
+run 1000
+Per MPI rank memory allocation (min/avg/max) = 3.229 | 3.246 | 3.258 Mbytes
+   Step        Atoms         Temp          PotEng         KinEng         TotEng         c_fmax    
+       200          52   300           -892.99939      1.9776802     -891.02171      29.388021    
+       300          52   9403.6377     -953.00451      61.991294     -891.01322      101.58753    
+       400          52   71508.299     -719.41415      471.40183     -248.01232      10296.389    
+       500          52   110395.9      -635.43497      727.75929      92.324321      208.46159    
+       600          52   104753.91     -598.07754      690.56578      92.488239      603.70263    
+       700          52   99852.173     -566.51342      658.25223      91.738809      1200.8132    
+       800          52   98940.3       -559.86619      652.24091      92.374722      241.50893    
+       900          52   129918.2      -764.08294      856.45551      92.37257       96.546266    
+      1000          52   258284.7      -1610.2745      1702.6818      92.407295      216.23737    
+      1100          52   993267.21     -6455.3441      6547.883       92.538921      715.97878    
+ERROR: Lost atoms: original 52 current 49
+For more information see https://docs.lammps.org/err0008 (src/thermo.cpp:550)

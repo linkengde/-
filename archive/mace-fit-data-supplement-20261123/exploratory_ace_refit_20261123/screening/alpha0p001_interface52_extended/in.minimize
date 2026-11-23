@@ -1,0 +1,18 @@
+# 中文说明：对五个候选中初始松弛力最低的 alpha=0.001 模型延长 FIRE；只有 Fmax<=0.01 才运行 NVE。
+units metal
+atom_style atomic
+boundary p p f
+read_data interface_dev_52.data
+pair_style pace
+pair_coeff * * model.yace Ag C Si Ti
+neighbor 2.0 bin
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute maxforce all reduce max v_fmag
+thermo 100
+thermo_style custom step pe c_maxforce
+min_style fire
+min_modify dmax 0.05
+minimize 1e-10 0.01 50000 100000
+run 0
+print "MINIMIZED_FMAX $(c_maxforce:%.16g)"
+write_data minimized.data

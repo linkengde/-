@@ -1,0 +1,16 @@
+# 中文说明：开发集单点验证，不积分、不改变原始周期边界。
+units metal
+atom_style atomic
+boundary p p f
+read_data minimized.data
+pair_style pace
+pair_coeff * * /workspace/potential-comparison/rebuilt/ACE_energy100/AgCSiTi.yace Ag C Si Ti
+
+# 中文说明：无热源、无热浴的短时冷态守恒诊断。
+neighbor 2.0 bin
+timestep 0.0001
+velocity all create 300 20261118 mom yes rot no dist gaussian
+fix integrate all nve
+thermo 100
+thermo_style custom step temp pe ke etotal
+run 1000

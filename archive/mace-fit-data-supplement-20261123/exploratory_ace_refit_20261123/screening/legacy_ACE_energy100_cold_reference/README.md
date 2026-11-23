@@ -1,0 +1,1 @@
+Previously completed 52-atom cold-interface reference using legacy ACE_energy100. FIRE reached Fmax=2.744e-4 eV/A and 0.1 ps NVE preserved total energy within the archived trace. This does not establish liquid-Ag coverage or suitability for contact melting/freezing.

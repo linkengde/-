@@ -1,0 +1,40 @@
+# 中文说明：52原子 Ag/Ti3SiC2 开发界面冷态筛查；不施加热源。
+units metal
+atom_style atomic
+boundary p p f
+read_data interface_dev_52.data
+pair_style pace
+pair_coeff * * ACE_6A_B1616_E10000_F1_a0.001.yace Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# 记录初始力，用于检查异常大力和原子映射。
+variable fnorm atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fnorm
+thermo 1
+thermo_style custom step atoms temp pe ke etotal c_fmax
+thermo_modify flush yes
+thermo 100
+dump d0 all custom 1 initial_forces.dump id type fx fy fz
+dump_modify d0 sort id format float %.16g
+run 0
+undump d0
+
+# 短 FIRE 松弛，仅用于筛查势函数是否导致界面结构塌缩。
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 1.0e-3 200 2000
+run 0
+print "POST_MIN_FMAX $(c_fmax:%.12g)"
+write_data minimized.data
+
+# 松弛后进行 0.1 ps 无热源 NVE，检查短时数值稳定性。
+velocity all create 300.0 293847 mom yes rot yes dist gaussian
+timestep 0.0001
+fix nve all nve
+dump d1 all custom 100 dump.nve id type x y z vx vy vz fx fy fz
+dump_modify d1 sort id
+thermo 100
+run 1000
+unfix nve
+undump d1

@@ -1,0 +1,18 @@
+# 中文说明：52 原子 Ag/Ti3SiC2 界面冷态松弛筛查；未达到力门槛不运行 MD。
+units metal
+atom_style atomic
+boundary p p f
+read_data interface_dev_52.data
+pair_style pace
+pair_coeff * * model.yace Ag C Si Ti
+neighbor 2.0 bin
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute maxforce all reduce max v_fmag
+thermo 10
+thermo_style custom step pe c_maxforce
+min_style fire
+min_modify dmax 0.10
+minimize 1e-10 0.001 5000 20000
+run 0
+print "MINIMIZED_FMAX $(c_maxforce:%.16g)"
+write_data minimized.data

@@ -1,0 +1,19 @@
+# 中文说明：开发集单点验证，不积分、不改变原始周期边界。
+units metal
+atom_style atomic
+boundary p p f
+read_data atoms.data
+pair_style pace
+pair_coeff * * /workspace/potential-comparison/rebuilt/ACE_energy100/AgCSiTi.yace Ag C Si Ti
+
+# 中文说明：200 步最小化预算，检查力收敛后才运行 0.1 ps 的冷态诊断。
+neighbor 2.0 bin
+variable fm atom sqrt(fx*fx+fy*fy+fz*fz)
+compute maxforce all reduce max v_fm
+thermo 10
+thermo_style custom step temp pe etotal c_maxforce
+min_style fire
+minimize 1e-10 0.001 200 2000
+run 0
+print "FINAL_FMAX $(c_maxforce:%.16g)"
+write_data minimized.data
