@@ -1,0 +1,97 @@
+{
+  "status": "SKELETON_EXTRACTED_FROM_FINAL_ATOMISTIC_MODEL",
+  "input_atomic_model": "ag_ti3sic2_spacing10x.extxyz",
+  "input_atom_count": 407009,
+  "Ti3SiC2_atom_count": 312510,
+  "atomic_to_voxel_reconstruction": {
+    "method": "deposit final Ti/Si/C atoms onto 2.5 A voxels, Gaussian smooth sigma=0.8 voxel, threshold to final Ti phase volume fraction",
+    "target_volume_fraction_from_final_atoms": 0.4605625,
+    "selected_voxels_before_connectivity_cleanup": 235808,
+    "smoothed_atom_density_threshold_atoms_per_voxel": 0.5740407109260559,
+    "raw_component_count": 1,
+    "largest_component_share_before_cleanup": 1.0,
+    "extracted_voxels": 235808,
+    "extracted_volume_fraction": 0.4605625
+  },
+  "skeleton_metrics": {
+    "centerline_voxels": 1097,
+    "branchpoint_voxels_degree_ge_4": 4,
+    "branchpoint_clusters": 2,
+    "endpoint_voxels": 26,
+    "display_tube_radius_A": 7.5,
+    "display_tube_diameter_nm": 1.5,
+    "display_tube_fraction": 0.077515625
+  },
+  "measured_local_branch_surface_gap": {
+    "center_index_xyz": [
+      9,
+      45,
+      52
+    ],
+    "center_xyz_A": [
+      23.75,
+      113.75,
+      131.25
+    ],
+    "direction_xyz": [
+      0.6047078979069521,
+      0.6047078979069521,
+      0.5183210553488161
+    ],
+    "surface_points_xyz_A": [
+      [
+        6.242183619284251,
+        96.24218361928425,
+        116.24330024510078
+      ],
+      [
+        62.90482229650596,
+        152.90482229650596,
+        164.81127625414797
+      ]
+    ],
+    "gap_A": 93.70249482989311,
+    "gap_nm": 9.370249482989312,
+    "target_from_original_gap_A": 93.719,
+    "ratio_to_original_gap": 9.99823886617368,
+    "surface_points_display_A": [
+      [
+        71.24218361928425,
+        71.24218361928422,
+        116.24330024510078
+      ],
+      [
+        127.90482229650596,
+        127.90482229650593,
+        164.81127625414797
+      ]
+    ],
+    "ratio_to_source_gap": 9.998238866173681
+  },
+  "local_roi": {
+    "start_voxel_xyz": [
+      14,
+      14,
+      28
+    ],
+    "size_voxels_xyz": [
+      52,
+      52,
+      52
+    ],
+    "size_A": [
+      130.0,
+      130.0,
+      130.0
+    ],
+    "local_atom_count_including_Ag": 94507
+  },
+  "outputs": {
+    "whole_skeleton_stl": "Ti3SiC2_skeleton_from_atoms.stl",
+    "local_skeleton_stl": "Ti3SiC2_local_branch_from_atoms.stl",
+    "local_atomic_crop": "local_branch_atoms.extxyz",
+    "extraction_npz": "atomic_skeleton_extraction.npz",
+    "paper_figure_png": "../visualization/Ti3SiC2_spacing10x_atomic_whole_and_local.png"
+  },
+  "method_note": "骨架相表面与中轴均由最终 extxyz 中 phase=1 的 Ti/Si/C 原子坐标重建；枝间距在平滑后的实际 Ti3SiC2 相表面间测量。中轴显示管半径仅用于中轴拓扑检查，不用于枝间距标注。"
+}
