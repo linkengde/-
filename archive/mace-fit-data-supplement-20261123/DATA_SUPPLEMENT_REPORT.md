@@ -74,3 +74,19 @@
 | 19 | −81.632385 | −4.94 | 1.15×10⁻⁵ |
 
 第 19 次密度误差仍略高于 `1×10⁻⁵`，且计算进度仍为 `running`；正式标签未生成。能量从第 11 次后已基本稳定，但不能替代密度、本征态及 GPAW 完整 SCF 收敛判据。第 10 次检查点 `state.gpw` 已写出，大小约 2.36 GiB。总运行约 2 小时 46 分，四 rank 各约 98.9% CPU、RSS 约 1.25–1.37 GiB，Swap 为 0，磁盘余量约 33 GB。
+
+## 首条液态 Ag DFT 标签收敛与审查完成（2026-11-23 08:11 UTC）
+
+GPAW 在第 20 次 SCF 收敛，完整运行耗时 10,452.68 s（约 2 h 54 min）。`Converged in 20 steps` 与进度文件一致；`verify_label.py` 返回 `PASS_LABEL_INTEGRITY_TRAIN_SPLIT_PENDING`。独立复核确认 32 Ag 的元素、原子顺序、坐标和晶胞与输入一致，输入/输出 SHA 匹配，能量、free energy 和所有力有限。
+
+| 指标 | 结果 |
+|---|---:|
+| native extrapolated energy | −81.6323852432 eV/cell |
+| force-consistent free energy | −81.7484897629 eV/cell |
+| Fmax / F99 | 2.84448 / 2.81687 eV/Å |
+| vector force RMS | 1.45580 eV/Å |
+| SCF | 20 次，收敛 |
+
+输出已映射成一帧 `training_candidate_unassigned.extxyz`，只放在补充候选目录；没有并入旧 `train.extxyz` / `dev.extxyz`，没有启动拟合。力值较高且构型偏低密度（8.5170 g/cm³，对照 1384.28 K 文献拟合值 9.1784 g/cm³，低约 7.2%），故仅算探索性应力候选，不当作平衡液态数据。能量与力标签完整性通过，不等于物理覆盖或生产准入。
+
+最终输出、审查 JSON、原始日志、每次运行 SHA、方法与有限适用范围已收入 `ag_liquid_first_label/runs/attempt_001/`。约 2.36 GiB 的 GPAW checkpoint 未上传。下一步只建议按队列顺序逐帧标注密度比 1.00 的液态几何；本次没有额外 DFT 并发或重拟合。
