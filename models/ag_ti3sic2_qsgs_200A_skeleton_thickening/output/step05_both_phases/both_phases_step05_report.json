@@ -1,0 +1,137 @@
+{
+  "status": "UNRELAXED_GEOMETRY_CANDIDATE_STEP05_BOTH_PHASES_THICKENED",
+  "baseline_model": "models/ag_ti3sic2_qsgs_200A_ttm_finer/ag_ti3sic2_qsgs.extxyz",
+  "baseline_atoms": 437235,
+  "baseline_phase_atoms": {
+    "Ti3SiC2": 335718,
+    "Ag": 101517
+  },
+  "baseline_formula_units": 55953,
+  "dimensions": {
+    "material_region_A": [
+      200.0,
+      200.0,
+      200.0
+    ],
+    "simulation_box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "pbc": [
+      true,
+      true,
+      false
+    ]
+  },
+  "thickening": {
+    "Ti3SiC2_offset_each_side_A": 0.8,
+    "Ag_growth_radius_A": 8.5,
+    "Ag_minimum_clearance_from_Ti3SiC2_A": 2.2,
+    "Ag_connectivity_cutoff_A": 3.15,
+    "source_QSGS_grid": [
+      80,
+      80,
+      80
+    ],
+    "method": "Ti3SiC2 expands by signed-distance offset; Ag expands on original Ag lattice sites within 5.8 Å of its network, including atomic-scale voids inside the Ti mask"
+  },
+  "lattice": {
+    "Ti3SiC2_source_cif": "research/mace-v12-transfer/periodic_interface_v4/v19_cif_parent_structures/source/Ti3SiC2_COD_9009647.cif",
+    "Ti3SiC2_repeats": [
+      66,
+      38,
+      12
+    ],
+    "Ti3SiC2_strain_xyz": [
+      -0.008895165886171674,
+      -0.0061535151876306315,
+      0.0
+    ],
+    "Ti3SiC2_orientation": "c axis along z, matching the original nanomodel",
+    "Ag_lattice_constant_A": 4.09,
+    "Ag_repeats": [
+      49,
+      49,
+      49
+    ],
+    "Ag_strain_xyz": [
+      -0.002045806097500158,
+      -0.002045806097500158,
+      0.0
+    ]
+  },
+  "final_atoms": 456505,
+  "final_element_counts": {
+    "Ti": 175257,
+    "Si": 58419,
+    "C": 116838,
+    "Ag": 105991
+  },
+  "final_Ti3SiC2_atoms": 350514,
+  "final_Ag_atoms": 105991,
+  "Ti3SiC2_formula_units": 58419,
+  "Ag_over_Ti3SiC2_mass_ratio": 0.9999993644924098,
+  "target_Ag_over_Ti3SiC2_mass_ratio": 1.0,
+  "phase_net_atom_growth_vs_baseline": {
+    "Ti3SiC2": 14796,
+    "Ag": 4474
+  },
+  "phase_atom_growth_percent_vs_baseline": {
+    "Ti3SiC2": 4.407270387646775,
+    "Ag": 4.407143631115971
+  },
+  "baseline_atoms_retained": {
+    "Ti3SiC2": 335718,
+    "Ag": 99667
+  },
+  "minimum_cross_phase_distance_A": 2.200000331287344,
+  "connectivity": {
+    "Ti3SiC2": {
+      "components": 1,
+      "largest_atoms": 350514,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.25
+    },
+    "Ag": {
+      "components": 1,
+      "largest_atoms": 105991,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.15
+    },
+    "preselection_Ti3SiC2": {
+      "components": 1,
+      "largest_atoms": 350514,
+      "discarded_atoms": 0,
+      "cutoff_A": 3.25
+    },
+    "Ag_selection": {
+      "candidate_main_component": {
+        "components": 2398,
+        "largest_atoms": 106048,
+        "discarded_atoms": 4119,
+        "cutoff_A": 3.15
+      },
+      "baseline_ag_atoms_retained_in_candidate_component": 99667,
+      "trimmed_to_exact_mass_ratio": 57,
+      "final_connectivity": {
+        "components": 1,
+        "largest_atoms": 105991,
+        "discarded_atoms": 0,
+        "cutoff_A": 3.15
+      },
+      "candidate_shell_radius_A": 8.5,
+      "growth_rule": "从原 Ag 晶格网络 8.5 Å 邻近候选位点扩展；排除距加粗 Ti3SiC2 原子小于 2.2 Å 的位置"
+    }
+  },
+  "outputs": {
+    "extxyz": "ag_ti3sic2_both_phases_thickened_step05.extxyz",
+    "lammps_data": "ag_ti3sic2_both_phases_thickened_step05.data",
+    "phase_field": "both_phases_step05_phase_field.npz"
+  },
+  "limitations": [
+    "固定材料区 200 × 200 × 200 Å 和模拟盒 200 × 200 × 300 Å；此模型仍是纳米尺度。",
+    "两相在几何上同时扩展且保持约 1:1 质量比；为留出 Ag 扩展空间，Ag 可进入原 Ti 相掩膜内的原子级空位。",
+    "这是未弛豫的几何候选，尚未完成势函数力学稳定性、冷态准入或 TTM/MD 加热验证。"
+  ]
+}
