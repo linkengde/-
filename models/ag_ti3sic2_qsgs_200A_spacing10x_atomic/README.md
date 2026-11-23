@@ -45,6 +45,8 @@
 
 在 OVITO 中选择 **File → Load File**，打开 `output/ag_ti3sic2_spacing10x.extxyz` 查看原子模型。打开 STL 文件可单独查看提取的整体骨架或局部枝段。STL 是骨架表面模型，不包含元素原子。
 
+`visualization/Ag_Ti3SiC2_spacing10x_atomic_OVITO.png` 是 OVITO 标准视口直接渲染的完整原子模型预览；同名 PDF 和 TIFF 可用于排版与打印。渲染程序为 `render_atomic_model_ovito.py`。
+
 ## 适用范围
 
 该结构尚未做能量最小化、冷态稳定性检查或 TTM/MD 加热。现有 Ag–Ti/Si/C 界面势也未因此获得验证。它用于查看十倍枝间距粗化后的原子级几何，不应直接作为已验证的力学模型或微米尺度实物。
