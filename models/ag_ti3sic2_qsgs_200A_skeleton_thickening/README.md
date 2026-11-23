@@ -9,6 +9,19 @@
 - `models/ag_ti3sic2_qsgs_200A_ttm_finer/geometry_report.json`
 - `models/ag_ti3sic2_qsgs_200A_ttm_finer/build_model.py`
 
+## 按 1:1 质量比约束生成的版本
+
+第一至第三档是早先用于观察加粗趋势的几何候选，Ag/Ti3SiC2 质量比发生了变化；它们不符合后来提出的 1:1 约束。`step04` 是按该约束重新生成的候选，建议按此版本继续比较。
+
+- 在材料区和盒子尺寸不变、沿用当前两相晶格密度与界面间距时，最大测试可行加粗量为 **0.465625 Å/侧**。到 0.46875 Å/侧时，连通 Ag 位点数已少于 1:1 所需数量。
+- `step04` 总原子数 **447,144**：Ti3SiC2 **343,326**，Ag **103,818**；计算 Ag/Ti3SiC2 质量比 **1.000005**，即按原子整数计数实现 1:1。
+- 材料区为 **200 × 200 × 200 Å**，模拟盒为 **200 × 200 × 300 Å**，x/y 周期、z 非周期。
+- 对比图：`visualization/Ag_Ti3SiC2_skeleton_thickened_equal_mass_1to1.png`。
+- OVITO 模型：`output/step04/ag_ti3sic2_skeleton_thickened_step04.extxyz`。
+- 结构报告：`output/step04/thickened_step04_report.json`。
+
+在当前盒子和近似体相晶格密度设定下，继续明显加粗会挤掉达到 1:1 所需的 Ag 连通位点。因此 1:1 约束下的骨架增粗幅度很小；此前 1–3 档只是质量比变化的几何示例。
+
 ## 本版变化
 
 - Ti3SiC2 相的界面向 Ag 一侧外扩 **1.0 Å/侧**，用原有晶格位点生成新增骨架原子。
@@ -43,6 +56,8 @@
 
 ## 查看
 
+- 优先查看 `visualization/Ag_Ti3SiC2_skeleton_thickened_equal_mass_1to1.png`：原始模型与满足 1:1 质量比的加粗版 OVITO 对比图。
+- 1:1 质量比版本的模型和报告位于 `output/step04/`。
 - `visualization/Ag_Ti3SiC2_skeleton_thickened_step01_comparison.png`：原模型与加粗版的 OVITO 标准渲染并排图。
 - `visualization/Ag_Ti3SiC2_skeleton_thickened_step01_comparison.pdf`、`.tif`：排版和打印版本。
 - `output/ag_ti3sic2_skeleton_thickened_step01.extxyz`：OVITO 可直接打开的完整原子模型，含相和 z 层属性。
@@ -57,6 +72,7 @@
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step01.py
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step02.py
 python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step03.py
+python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step04_equal_mass.py
 ```
 
 图由 OVITO 3.17.2 的 StandardRenderer 输出。当前云机无系统级 Vulkan 驱动，因此使用下载到 `/tmp` 的 Mesa lavapipe CPU Vulkan ICD 生成；该临时驱动不属于模型文件。
@@ -64,5 +80,5 @@ python models/ag_ti3sic2_qsgs_200A_skeleton_thickening/build_step03.py
 ## 限制
 
 - 模型尚未做能量最小化、冷态稳定性检查或 TTM/MD 加热。
-- 加粗改变了相比例：第一、二、三档 Ag/Ti3SiC2 质量比分别约 0.942、0.666、0.317；继续加粗时银相可用体积会继续减少。
+- 前三档的 Ag/Ti3SiC2 质量比分别约 0.942、0.666、0.317，不满足 1:1；step04 按原子整数数目恢复到 1.000005。
 - 本版用于看形貌和继续迭代，不代表势函数或界面力学已通过验证。

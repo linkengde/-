@@ -88,11 +88,14 @@ def connected_phase(base, positions: np.ndarray, symbols: np.ndarray,
     return positions, symbols, 0, cleanup
 
 
-def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
+def main(offset_each_side_A: float = THICKEN_A, step: int = 1,
+         target_mass_ratio: float | None = None) -> None:
     """从原始模型重建指定累计加粗档位，另存到独立目录。"""
     global THICKEN_A
     if offset_each_side_A <= 0 or step < 1:
         raise ValueError("加粗幅度和档位必须为正数")
+    if target_mass_ratio is not None and target_mass_ratio <= 0:
+        raise ValueError("Ag/Ti3SiC2 目标质量比必须为正数")
     THICKEN_A = float(offset_each_side_A)
     step_label = f"{step:02d}"
     output_dir = OUT if step == 1 else OUT / f"step{step_label}"
@@ -138,8 +141,56 @@ def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
         base, ag_positions, np.full(len(ag_positions), "Ag"), mask, ti_phase=False
     )
 
-    # 写出实际可用的连通 Ag 位点；加粗后若不足以保持严格等质量比，如实记录。
+    # 需要守住指定质量比时，从连通 Ag 主相中按化学计量裁取目标数量。
     formula_mass = 3 * MASS["Ti"] + MASS["Si"] + 2 * MASS["C"]
+    target_ag_atoms = None
+    ag_selection = {"target_mass_ratio": target_mass_ratio, "trimmed_to_target": 0,
+                    "regrown_for_connectivity": 0}
+    if target_mass_ratio is not None:
+        target_ag_atoms = round(units * formula_mass * target_mass_ratio / MASS["Ag"])
+        if len(ag_positions) < target_ag_atoms:
+            raise RuntimeError(
+                f"加粗幅度 {THICKEN_A:g} Å/侧无法维持 Ag/Ti3SiC2 质量比 "
+                f"{target_mass_ratio:g}:1：连通 Ag 位点 {len(ag_positions)}，"
+                f"需要 {target_ag_atoms} 个"
+            )
+        all_connected_ag = ag_positions.copy()
+        ag_depth = base.tree(ti_positions).query(all_connected_ag, workers=2)[0]
+        trim_count = len(all_connected_ag) - target_ag_atoms
+        if trim_count:
+            selected = np.ones(len(all_connected_ag), dtype=bool)
+            selected[np.argsort(ag_depth, kind="stable")[:trim_count]] = False
+            ag_positions = all_connected_ag[selected]
+            keep, trim_info = base.component_filter(ag_positions, cutoff=3.15)
+            if not keep.all():
+                # 若裁剪使银网断开，从剩余主网沿可用 Ag 邻接位点补回目标数量。
+                ag_positions = ag_positions[keep]
+                connected_start_count = len(ag_positions)
+                occupied = base.tree(ag_positions).query(all_connected_ag, workers=2)[0] < 1.0e-7
+                while int(occupied.sum()) < target_ag_atoms:
+                    candidates = np.flatnonzero(~occupied)
+                    frontier_distance = base.tree(all_connected_ag[occupied]).query(
+                        all_connected_ag[candidates], workers=2
+                    )[0]
+                    candidates = candidates[frontier_distance <= 3.15]
+                    if not len(candidates):
+                        raise RuntimeError("裁剪后 Ag 连通生长前沿为空，无法守住目标质量比")
+                    candidates = candidates[np.argsort(-ag_depth[candidates], kind="stable")]
+                    occupied[candidates[:target_ag_atoms - int(occupied.sum())]] = True
+                ag_positions = all_connected_ag[occupied]
+                connected, trim_info = base.component_filter(ag_positions, cutoff=3.15)
+                if not connected.all() or len(ag_positions) != target_ag_atoms:
+                    raise RuntimeError("按目标质量比修剪后 Ag 连通性或原子数不合格")
+                ag_selection["regrown_for_connectivity"] = int(target_ag_atoms - connected_start_count)
+            else:
+                ag_positions = ag_positions[keep]
+            ag_selection["trimmed_to_target"] = int(trim_count)
+            ag_selection["connectivity_after_mass_trim"] = trim_info
+            ag_cleanup.append(trim_info)
+        if len(ag_positions) != target_ag_atoms:
+            raise RuntimeError("最终 Ag 原子数不等于目标质量比对应数量")
+
+    # 写出实际可用的连通 Ag 位点；加粗后若不足以保持严格等质量比，如实记录。
     ag_mass_ratio = len(ag_positions) * MASS["Ag"] / (units * formula_mass)
     positions = np.vstack((ti_positions, ag_positions))
     symbols = ti_symbols.tolist() + ["Ag"] * len(ag_positions)
@@ -155,6 +206,7 @@ def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
         "status": f"UNRELAXED_GEOMETRY_CANDIDATE_STEP{step_label}_SKELETON_THICKENED",
         "thickening_step": step,
         "thickening_each_side_A": THICKEN_A,
+        "target_Ag_over_Ti3SiC2_mass_ratio": target_mass_ratio,
         "material_region_A": SIZE.tolist(),
         "phase_order": "phase 1=Ti3SiC2, phase 2=Ag",
     })
@@ -202,6 +254,8 @@ def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
         "final_element_counts": final_counts,
         "Ti3SiC2_formula_units": int(units),
         "Ag_over_Ti3SiC2_mass_ratio": float(ag_mass_ratio),
+        "target_Ag_over_Ti3SiC2_mass_ratio": target_mass_ratio,
+        "Ag_mass_ratio_selection": ag_selection,
         "Ag_available_before_connectivity_filter": ag_available_before_connectivity,
         "Ti3SiC2_connectivity_cleanup": ti_cleanup,
         "Ag_connectivity_cleanup": ag_cleanup,
@@ -210,7 +264,8 @@ def main(offset_each_side_A: float = THICKEN_A, step: int = 1) -> None:
         "limitations": [
             "此版本保持 200×200×200 Å 材料区及 200×200×300 Å 模拟盒，物理尺寸仍为纳米级。",
             "这是未弛豫的几何原子模型；还没有进行势函数力学稳定性或 TTM/MD 加热验证。",
-            "Ag 按扩张后的可用晶格位点填充；若骨架继续加粗，Ag/Ti3SiC2 质量比会继续变化。",
+            ("Ag 数量按指定目标质量比从连通位点中裁取。" if target_mass_ratio is not None
+             else "Ag 使用扩张后全部可用的连通位点；加粗后质量比会偏离原模型。"),
             "形貌可作为后续粗化/微米风格结构的比较版本，但不表示实体模型尺寸已经达到微米。",
         ],
         "outputs": {"extxyz": extxyz.name, "lammps_data": datafile.name,
@@ -233,5 +288,8 @@ if __name__ == "__main__":
     parser.add_argument("--offset-each-side-a", type=float, default=THICKEN_A,
                         help="相界面相对原始 QSGS 骨架的累计外扩量，单位 Å")
     parser.add_argument("--step", type=int, default=1, help="输出版本编号")
+    parser.add_argument("--ag-to-ti3sic2-mass-ratio", type=float, default=None,
+                        help="可选：强制 Ag/Ti3SiC2 目标质量比；位点不足则停止")
     args = parser.parse_args()
-    main(offset_each_side_A=args.offset_each_side_a, step=args.step)
+    main(offset_each_side_A=args.offset_each_side_a, step=args.step,
+         target_mass_ratio=args.ag_to_ti3sic2_mass_ratio)
