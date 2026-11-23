@@ -117,3 +117,8 @@ Research date: 2026-11-23. This is a source and access register, not a claim tha
 - Free PDF links verified: Lin 2008, Daraszewicz 2014, Medvedev 2020, Akhmetov 2024, Giri 2023, Byskov thesis, Torre 2021, Tolias 2017, NASA TM 87568. Jiao–Schuh 2018 is already present in the repository.
 - DOI-only / no free PDF verified: Vijayakumar et al. 1988 Ag–W phase diagram; Waseda & Ohtani 1974 liquid Ag structure; 2024 Au/Pt–Au/Al electronic interface conductance. Zhang et al. 2004 Ag–W EAM remains DOI-only as recorded in the earlier literature register.
 - PDF binary mirroring status: external PDF binaries could not be fetched into this execution environment, so these are verified direct PDF links, not files claimed to have been downloaded into GitHub. Existing user-uploaded PDFs remain archived.
+
+### Pure silver melting and thermodynamic reference
+- CDC/NBS thermodynamic tables, free PDF: https://stacks.cdc.gov/view/cdc/219421/cdc_219421_DS1.pdf
+- Gives the Ag melting point as 1235.08 K and a tabulated fusion enthalpy jump of 2.700 kcal mol⁻¹ (about 11.30 kJ mol⁻¹). The independent NASA levitation report above gives (10.916\pm0.415) kJ mol⁻¹, which is a useful experimental comparison.
+
