@@ -24,13 +24,14 @@ This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deli
 ### He et al., 2018 — Ag/W interface DFT
 - Citation: C. He, M. Cheng, M. Zhang, W. X. Zhang, *J. Phys. Chem. C* 122 (2018) 17928-17935.
 - DOI: https://doi.org/10.1021/acs.jpcc.8b05920
-- Author-hosted PDF: https://gr.xjtu.edu.cn/html/documents/upload/20776/jpcc2018.pdf
+- Direct author-hosted PDF: https://gr.xjtu.edu.cn/html/documents/upload/20776/jpcc2018.pdf
 - Publisher page: https://pubs.acs.org/doi/10.1021/acs.jpcc.8b05920
 - Useful interface orientations: Ag(100)/W(100) and Ag(111)/W(110); the paper reports work of separation, interface energy and electronic properties. Use these as DFT validation targets, not as a potential by themselves.
 
 ### Jiao et al., 2018 — nanocrystalline Ag-W stability
 - Open repository record: https://ira.lib.polyu.edu.hk/handle/10397/106467?mode=full
-- The record provides an accepted-manuscript PDF on nanocrystalline Ag-W, W segregation and thermal stability. It is useful for materials context and interpreting segregation, not as an atomistic force field.
+- Direct accepted-manuscript PDF: https://ira.lib.polyu.edu.hk/bitstream/10397/106467/1/Jiao_Nanocrystalline_Ag-W_Alloys.pdf
+- Scope caution: this study is dilute W in nanocrystalline Ag (0.3-1.9 at.% W), not the 1:1 mass-ratio bicontinuous composite. It is useful for grain-boundary segregation mechanisms, not as a direct composition/force-field validation.
 
 ## 3. Pure-element reference potentials (downloaded text files in this folder)
 
@@ -59,3 +60,11 @@ This is a curated starter pack for the Ag:W = 1:1 mass-ratio project. It is deli
 - The two `.eam.fs` files are sourced from the NIST Interatomic Potentials Repository's public file listings, mirrored in the lmhale99/potentials-library repository.
 - The Dai parameter JSON is a transcription of the paper's Tables 1, 4 and 6 and equations (1)-(5), for audit/reconstruction. It is not a fitted or validated potential file.
 - No legacy Ag-Ti-Si-C file has been overwritten.
+
+
+## 7. PDF access/download status
+- The 2018 He et al. interface paper has an author-hosted full PDF link above.
+- The 2018 Jiao & Schuh manuscript has an open institutional-repository PDF link above.
+- The 2006 Dai et al. full text is available through the author-uploaded ResearchGate landing page above; its direct file endpoint did not resolve in this collection pass, so the PDF itself is not mirrored here.
+- The 2004 Zhang et al. JPSJ paper is marked authentication-gated by the journal/ResearchGate. Use the publisher or author-request route; no openly downloadable PDF or public parameter file was verified.
+- This repository branch contains the two pure-element reference `.eam.fs` text files and a machine-readable transcription of the Dai 2006 EFS parameters. It does **not** contain the publisher PDFs, and it does **not** yet contain a validated binary Ag-W alloy potential.
