@@ -1,0 +1,164 @@
+{
+  "status": "FULL_TWO_PHASE_GEOMETRY_BUILT_THEN_SKELETON_EXTRACTED",
+  "source": {
+    "file": "models/ag_ti3sic2_qsgs_200A_ttm_finer/qsgs_morphology.npz",
+    "sha256": "95e5bfb4f65774fa5f0e1518a30394a7f6aaa09f1cda478f0a3cd8fc0344fd03",
+    "source_grid": [
+      80,
+      80,
+      80
+    ],
+    "source_material_A": [
+      200.0,
+      200.0,
+      200.0
+    ]
+  },
+  "construction": {
+    "order": [
+      "build_scaled_two_phase_model",
+      "extract_Ti3SiC2_centerline",
+      "crop_local_skeleton_from_full_model"
+    ],
+    "source_crop_start_voxel_xyz": [
+      24,
+      53,
+      41
+    ],
+    "source_crop_extent_voxels_xyz": [
+      8,
+      8,
+      8
+    ],
+    "source_crop_extent_A": [
+      20.0,
+      20.0,
+      20.0
+    ],
+    "spatial_scale_factor": 10,
+    "target_material_region_A": [
+      200.0,
+      200.0,
+      200.0
+    ],
+    "target_simulation_box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "grid_xyz": [
+      80,
+      80,
+      120
+    ],
+    "voxel_spacing_A": 2.5,
+    "nominal_pbc": [
+      true,
+      true,
+      false
+    ],
+    "display_coordinate_shift_A": [
+      50.0,
+      100.0,
+      0.0
+    ],
+    "local_roi_start_voxel_xyz": [
+      16,
+      0,
+      24
+    ],
+    "local_roi_extent_voxels_xyz": [
+      52,
+      52,
+      52
+    ],
+    "local_roi_extent_nm_xyz": [
+      13.0,
+      13.0,
+      13.0
+    ]
+  },
+  "full_two_phase_model": {
+    "source_crop_ti_fraction": 0.482421875,
+    "scaled_ti_fraction_before_cleanup": 0.452806640625,
+    "ti_components_before_cleanup": 2,
+    "ti_largest_component_share": 0.9981279951000056,
+    "ag_components_before_cleanup": 1,
+    "ag_largest_component_share_before_partition": 1.0,
+    "Ti3SiC2_volume_fraction": 0.451958984375,
+    "Ag_volume_fraction": 0.548041015625,
+    "Ti3SiC2_periodic_xy_components": 2,
+    "Ag_periodic_xy_components": 2,
+    "Ti3SiC2_largest_periodic_xy_share": 0.9985652735703513,
+    "Ag_largest_periodic_xy_share": 0.9846648396098319
+  },
+  "extracted_skeleton": {
+    "centerline_voxels": 1093,
+    "centerline_branchpoint_voxels_26_neighbor_degree_ge_4": 2,
+    "centerline_branchpoint_clusters": 2,
+    "centerline_endpoint_voxels": 19,
+    "display_tube_radius_A": 7.5,
+    "display_tube_diameter_nm": 1.5,
+    "display_tube_volume_fraction": 0.07530859375,
+    "display_tube_components": 1,
+    "display_tube_largest_component_share": 1.0,
+    "periodic_xy_components": 1,
+    "largest_periodic_xy_share": 1.0,
+    "measured_local_branch_gap": {
+      "center_index_xyz": [
+        17,
+        19,
+        20
+      ],
+      "center_xyz_A": [
+        43.75,
+        48.75,
+        51.25
+      ],
+      "direction_xyz": [
+        -0.4662524041201569,
+        -0.27975144247209416,
+        0.8392543274162825
+      ],
+      "surface_points_xyz_A": [
+        [
+          56.26683474298557,
+          56.26010084579134,
+          28.719697462625962
+        ],
+        [
+          12.373251861420869,
+          29.923951116852518,
+          107.72814664944244
+        ]
+      ],
+      "gap_A": 94.14124730229378,
+      "gap_nm": 9.414124730229378,
+      "target_from_original_gap_A": 93.719,
+      "ratio_to_original_gap": 10.045054610302476,
+      "surface_points_display_A": [
+        [
+          106.26683474298557,
+          156.26010084579133,
+          28.719697462625962
+        ],
+        [
+          62.37325186142087,
+          129.92395111685252,
+          107.72814664944244
+        ]
+      ],
+      "ratio_to_original_spacing": 10.045054610302477
+    }
+  },
+  "method_note": "这是几何形貌模型。枝间距在从完整粗化双相模型提取的骨架显示表面上测量；骨架管径是可视化厚度，不等同于物理原子结构。未进行原子重建或 MD 弛豫。",
+  "outputs": {
+    "phase_field_npz": "output/spacing10x_phase_field.npz",
+    "full_composite_vtk": "output/spacing10x_composite.vtk",
+    "extracted_skeleton_stl": "output/spacing10x_ti3sic2_skeleton.stl",
+    "local_skeleton_stl": "output/spacing10x_local_skeleton.stl",
+    "extracted_skeleton_vtk": "output/spacing10x_extracted_skeleton.vtk",
+    "paper_figure_png": "visualization/Ti3SiC2_spacing10x_whole_and_local.png",
+    "paper_figure_pdf": "visualization/Ti3SiC2_spacing10x_whole_and_local.pdf"
+  }
+}
