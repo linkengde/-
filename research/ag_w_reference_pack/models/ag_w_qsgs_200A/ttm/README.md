@@ -25,7 +25,7 @@ The smoke check uses a small synthetic two-phase mesh and a deliberately reduced
 
 ## LAMMPS coupling entry point
 
-`agw_ttm_md_pilot.py` adapts the earlier pure-Ag LAMMPS pilot pattern: 300 K equilibration, EFS `eam/fs`, x/y-periodic and free-z boundaries, fixed/bath/Newton layers, one Ag/W electron grid per phase, and the reused deterministic electron-to-lattice kinetic-energy handoff. It requires explicit pulse FWHM, center, cooling duration, a static audit with `md_start_gate: "PASS"`, and a matching `data_sha256`. The present v4 candidate has 0.08 Å initial Ag/W contacts and has not passed that gate, so the runner must refuse it.
+`agw_ttm_md_pilot.py` adapts the earlier pure-Ag LAMMPS pilot pattern: 300 K equilibration, EFS `eam/fs`, x/y-periodic and free-z boundaries, fixed/bath/Newton layers, one Ag/W electron grid per phase, and the reused deterministic electron-to-lattice kinetic-energy handoff. It requires explicit pulse FWHM, center, cooling duration, a matching `data_sha256`, and by default a static audit with `md_start_gate: "PASS"`. An explicitly separate `--exploratory` path accepts only a manifest marked `EXPLORATORY_ONLY` that also discloses `STATIC_EFS_FAIL`; it reports a software-link status and must not be interpreted as passing the static or physical model gate.
 
 Example invocation for a future statically accepted structure:
 
@@ -36,6 +36,10 @@ python research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.p
   --pulse-center-ps PULSE_CENTER --cooling-ps COOLING_TIME
 ```
 
-The run keeps the phase-fraction and atom-to-grid maps fixed after the initial 300 K setup. It is intended only for a short exploratory bridge; substantial melt migration, Ag/W redistribution, and a moving free surface are not modeled. The source is a peak-normalized temporal Gaussian, not normalized to a measured absorbed fluence. The 20–40 Å Langevin bath exchanges energy with the atomistic region; the report records its tallied energy separately from the laser input. The script has not been run because no Ag–W data file has passed the static gate.
+The run keeps the phase-fraction and atom-to-grid maps fixed after the initial 300 K setup. It is intended only for a short exploratory bridge; substantial melt migration, Ag/W redistribution, and a moving free surface are not modeled. The source is a peak-normalized temporal Gaussian, not normalized to a measured absorbed fluence. The 20–40 Å Langevin bath exchanges energy with the atomistic region; the report records its tallied energy separately from the laser input. Optional `--restart-dump` and `--restart-step` arguments restore an atomistic state after group membership is defined from the template data. The 40–300 Å Newton integration group keeps atoms in the monitor/vacuum region dynamic; only the 40–200 Å material subset couples to the TTM grid.
 
 The Ag/W electronic interface value defaults to a provisional `1 GW m⁻² K⁻¹` from non-Ag/W analogues, and omits sub-cell interface area. The temperature rescaling bridge conserves kinetic energy but does not preserve local momentum or add stochastic phonon fluctuations.
+
+## v6 link preflight
+
+The synthetic grid smoke check passed with a combined energy residual near `1.48e-14 eV`. The v6 finite-size LAMMPS/TTM pilot was attempted from the corrected NVE restart but did not reach a TTM step: the 10 Å atom-to-grid phase fill peaked at 1.31585, and the mapper correctly rejected the overfilled mesh instead of clipping fractions. Coarser tested meshes also remained overfull; only a single-cell whole-domain mapping passed, which cannot resolve phase interfaces or the Gaussian spot and was rejected as unusable. No laser pulse was applied and no matched source/no-source coupled trajectories were completed. See `AGW_TTM_LINK_PREFLIGHT_V6.md` for the mapping scan, environment/debug notes, and retained logs.

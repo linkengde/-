@@ -1,0 +1,120 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 2.061 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.0005
+region fixed_region block INF INF INF INF 0 19.999999 units box
+region bath_region block INF INF INF INF 20 39.999999 units box
+region newton_region block INF INF INF INF 40 300 units box
+group fixed region fixed_region
+46117 atoms in group fixed
+group bath region bath_region
+48210 atoms in group bath
+group newton region newton_region
+388274 atoms in group newton
+group mobile subtract all fixed
+436484 atoms in group mobile
+read_dump /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v6_exploratory/nve_fixedids_after_nvt_final.dump.gz 4200 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  482601 atoms before read
+  482601 atoms in snapshot
+  0 atoms purged
+  482601 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  482601 atoms after read
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 1
+thermo_style custom step time atoms temp pe ke etotal
+run 0 pre no post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 169.4 | 169.4 | 169.4 Mbytes
+   Step          Time         Atoms         Temp          PotEng         KinEng         TotEng    
+      4200   2.1               482601   265.64295     -2434434.4      16571.058     -2417863.3    
+Loop time of 1.552e-06 on 1 procs for 0 steps with 482601 atoms
+
+fix eq mobile nvt temp 300.0 300.0 0.1
+run 20
+Per MPI rank memory allocation (min/avg/max) = 169.4 | 169.4 | 169.4 Mbytes
+   Step          Time         Atoms         Temp          PotEng         KinEng         TotEng    
+      4200   2.1               482601   265.64295     -2434434.4      16571.058     -2417863.3    
+      4201   2.1005            482601   265.65723     -2434435.3      16571.95      -2417863.3    
+      4202   2.101             482601   265.67228     -2434436.2      16572.888     -2417863.3    
+      4203   2.1015            482601   265.68808     -2434437.1      16573.873     -2417863.3    
+      4204   2.102             482601   265.70463     -2434438.1      16574.906     -2417863.2    
+      4205   2.1025            482601   265.72194     -2434439.1      16575.986     -2417863.1    
+      4206   2.103             482601   265.74        -2434440.1      16577.113     -2417863      
+      4207   2.1035            482601   265.75882     -2434441.2      16578.287     -2417862.9    
+      4208   2.104             482601   265.7784      -2434442.3      16579.508     -2417862.8    
+      4209   2.1045            482601   265.79873     -2434443.4      16580.776     -2417862.6    
+      4210   2.105             482601   265.8198      -2434444.6      16582.091     -2417862.5    
+      4211   2.1055            482601   265.84161     -2434445.7      16583.451     -2417862.3    
+      4212   2.106             482601   265.86413     -2434446.9      16584.856     -2417862.1    
+      4213   2.1065            482601   265.88735     -2434448.2      16586.304     -2417861.9    
+      4214   2.107             482601   265.91127     -2434449.4      16587.796     -2417861.7    
+      4215   2.1075            482601   265.93587     -2434450.7      16589.331     -2417861.4    
+      4216   2.108             482601   265.96115     -2434452        16590.908     -2417861.1    
+      4217   2.1085            482601   265.98711     -2434453.4      16592.528     -2417860.9    
+      4218   2.109             482601   266.01374     -2434454.8      16594.188     -2417860.6    
+      4219   2.1095            482601   266.04101     -2434456.1      16595.89      -2417860.3    
+      4220   2.11              482601   266.06891     -2434457.6      16597.63      -2417859.9    
+Loop time of 8.16858 on 1 procs for 20 steps with 482601 atoms
+
+Performance: 0.106 ns/day, 226.905 hours/ns, 2.448 timesteps/s, 1.182 Matom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 7.9185     | 7.9185     | 7.9185     |   0.0 | 96.94
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.010159   | 0.010159   | 0.010159   |   0.0 |  0.12
+Output  | 0.034495   | 0.034495   | 0.034495   |   0.0 |  0.42
+Modify  | 0.17167    | 0.17167    | 0.17167    |   0.0 |  2.10
+Other   |            | 0.03371    |            |       |  0.41
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70441 ave       70441 max       70441 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:     1.7498e+07 ave  1.7498e+07 max  1.7498e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17497970
+Ave neighs/atom = 36.257633
+Neighbor list builds = 0
+Dangerous builds = 0

@@ -1,0 +1,246 @@
+{
+  "title": "Ag-W v6 TTM atom-grid link preflight",
+  "status": "SYNTHETIC_GRID_SMOKE_PASS; FULL_STATE_MAPPING_FAIL; NO_COUPLED_PULSE_RUN",
+  "purpose": "Test the handoff boundary between the v6 LAMMPS state and the existing Ag-W TTM solver; not a laser heating or melt/quench study.",
+  "cold_state": {
+    "metrics": "../interface_reconstruction_v6_exploratory/nvt_fixedids_metrics.json",
+    "n_atoms": 482601,
+    "original_fixed_ids": 46117,
+    "nvt_mobile_temperature_end_K": 293.794153973,
+    "nvt_Ag_temperature_end_K": 289.35049136,
+    "nvt_W_temperature_end_K": 301.081770208,
+    "nvt_temperature_slope_last_0p1ps_K": 8.511151267,
+    "nve_temperature_change_K": -0.084464749,
+    "nve_energy_drift_eV": 0.0003800001,
+    "static_EFS_audit": "STATIC_EFS_FAIL"
+  },
+  "synthetic_grid_smoke": {
+    "status": "PASS",
+    "report": "agw_ttm_grid_smoke_metrics.json",
+    "combined_energy_residual_eV": -1.4779844015322396e-14,
+    "interface_net_energy_eV": -3.3457801416544863e-20
+  },
+  "finite_size_link_preflight": {
+    "status": "FAIL_BEFORE_TTM_INITIALIZATION",
+    "data_file": "../interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz",
+    "restart_dump": "../interface_reconstruction_v6_exploratory/nve_fixedids_after_nvt_final.dump.gz",
+    "atoms_read": 482601,
+    "pilot_setup_steps": 20,
+    "pilot_setup_dt_ps": 0.0005,
+    "requested_grid_A": [
+      10,
+      10,
+      10
+    ],
+    "peak_phase_fill": 1.31585,
+    "capacity_limit": 1.0,
+    "source_applied": false,
+    "matched_no_source_trajectory_completed": false,
+    "matched_low_energy_source_trajectory_completed": false,
+    "interpretation": "Actual-atom Ag+W phase volume exceeds CIC cell capacity. No clipping/renormalization was applied."
+  },
+  "mapping_scan": [
+    {
+      "spacing_A": [
+        5,
+        5,
+        5
+      ],
+      "shape": [
+        40,
+        40,
+        32
+      ],
+      "peak_fill": 1.7468,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        10,
+        10,
+        10
+      ],
+      "shape": [
+        20,
+        20,
+        16
+      ],
+      "peak_fill": 1.316,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        20,
+        20,
+        20
+      ],
+      "shape": [
+        10,
+        10,
+        8
+      ],
+      "peak_fill": 1.08667,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        40,
+        40,
+        40
+      ],
+      "shape": [
+        5,
+        5,
+        4
+      ],
+      "peak_fill": 1.02725,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        20,
+        20,
+        40
+      ],
+      "shape": [
+        10,
+        10,
+        4
+      ],
+      "peak_fill": 1.05161,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        40,
+        40,
+        20
+      ],
+      "shape": [
+        5,
+        5,
+        8
+      ],
+      "peak_fill": 1.04867,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        50,
+        50,
+        40
+      ],
+      "shape": [
+        4,
+        4,
+        4
+      ],
+      "peak_fill": 1.02421,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        100,
+        100,
+        40
+      ],
+      "shape": [
+        2,
+        2,
+        4
+      ],
+      "peak_fill": 1.01451,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        100,
+        100,
+        20
+      ],
+      "shape": [
+        2,
+        2,
+        8
+      ],
+      "peak_fill": 1.02635,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        100,
+        100,
+        80
+      ],
+      "shape": [
+        2,
+        2,
+        2
+      ],
+      "peak_fill": 1.00666,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        200,
+        200,
+        40
+      ],
+      "shape": [
+        1,
+        1,
+        4
+      ],
+      "peak_fill": 1.01153,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        200,
+        200,
+        80
+      ],
+      "shape": [
+        1,
+        1,
+        2
+      ],
+      "peak_fill": 1.00571,
+      "status": "rejected"
+    },
+    {
+      "spacing_A": [
+        200,
+        200,
+        160
+      ],
+      "shape": [
+        1,
+        1,
+        1
+      ],
+      "peak_fill": 0.9959996404,
+      "status": "capacity_pass_but_spatially_unusable"
+    }
+  ],
+  "pulse_setup_not_applied": {
+    "I0_eV_ps_A2": 5.0,
+    "R_A": 30.0,
+    "skin_depth_A": 20.0,
+    "fwhm_fs": 10.0,
+    "center_fs": 20.0,
+    "cooling_fs": 20.0,
+    "interface_h_W_m2_K": 1000000000.0
+  },
+  "limitations": [
+    "No TTM solver step on the actual v6 geometry was executed.",
+    "Grid smoke used synthetic phase fields and does not validate full-size volume mapping.",
+    "Static audit remains failed; exploratory manifest does not imply md_start_gate PASS.",
+    "The full-size source/control pair remains unrun."
+  ],
+  "logs": [
+    "agw_ttm_attempt_thermo_segfault.lammps.log",
+    "agw_ttm_attempt_array_view_segfault.lammps.log",
+    "agw_ttm_attempt_mapping_overfill.lammps.log"
+  ]
+}

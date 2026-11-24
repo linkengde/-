@@ -2,9 +2,11 @@
 """Gated LAMMPS bridge for a short Ag-W TTM-MD pilot.
 
 The existing Ag-only LAMMPS/TTM pilot supplied the integration pattern. This
-version adds two phase electron grids and refuses to run until a static audit
-explicitly accepts the exact data-file hash. It is not a production melt-pool
-solver: the phase-fraction/CIC map stays fixed during the run.
+version adds two phase electron grids and refuses to run until a manifest
+matches the exact data-file hash. A static PASS is required by default;
+EXPLORATORY_ONLY requires an explicit command-line override and is reported as
+a software-link check. It is not a production melt-pool solver: the phase-
+fraction/CIC map stays fixed during the run.
 """
 from __future__ import annotations
 
@@ -34,7 +36,11 @@ from agw_ttm_reference import (  # noqa: E402
     rescale_lattice_kinetic,
 )
 
-POTENTIAL = PACK / "potential_files/derived/Dai_2006_EFS_AgW.eam.fs"
+POTENTIAL = next(
+    parent / "potential_files/derived/Dai_2006_EFS_AgW.eam.fs"
+    for parent in HERE.parents
+    if (parent / "potential_files/derived/Dai_2006_EFS_AgW.eam.fs").is_file()
+)
 MASS_BY_TYPE = {1: 183.84, 2: 107.8682}  # data-file convention: W=1, Ag=2
 
 
@@ -46,31 +52,41 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def require_static_gate(data_path: Path, audit_path: Path) -> dict:
+def require_static_gate(data_path: Path, audit_path: Path, exploratory: bool = False) -> dict:
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
-    if audit.get("md_start_gate") != "PASS":
-        raise SystemExit("Refusing MD: static audit must set md_start_gate to PASS")
     observed_hash = sha256_file(data_path)
     accepted_hash = audit.get("data_sha256")
     if not accepted_hash or accepted_hash.lower() != observed_hash:
-        raise SystemExit("Refusing MD: static audit data_sha256 does not match the supplied data file")
-    force_pass = audit.get("static_force_screen_pass")
-    if force_pass is None:
-        force_pass = audit.get("forces_eV_A", {}).get("pass")
-    if force_pass is not True:
-        raise SystemExit("Refusing MD: audit does not record a passed force screen")
-    if int(audit.get("atoms_outside_material_z_0_200_A", 0)) != 0:
-        raise SystemExit("Refusing MD: audit reports atoms outside the 0-200 A material region")
-    ratio = audit.get("mass_ratio_Ag_over_W")
-    if ratio is not None and (not math.isfinite(float(ratio)) or abs(float(ratio) - 1.0) > 1.0e-3):
-        raise SystemExit("Refusing MD: audited Ag/W mass ratio is outside 1:1 ±0.1%")
-    return {"audit": audit, "data_sha256": observed_hash}
+        raise SystemExit("Refusing TTM pilot: manifest data_sha256 does not match the supplied data file")
+    gate = audit.get("md_start_gate")
+    if gate == "PASS":
+        pass
+    elif exploratory and gate == "EXPLORATORY_ONLY":
+        if audit.get("static_audit_status") != "STATIC_EFS_FAIL":
+            raise SystemExit("Exploratory override requires the manifest to disclose STATIC_EFS_FAIL")
+    else:
+        raise SystemExit("Refusing MD: static audit must set md_start_gate to PASS (or use an explicit exploratory manifest and --exploratory)")
+    if gate == "PASS":
+        force_pass = audit.get("static_force_screen_pass")
+        if force_pass is None:
+            force_pass = audit.get("forces_eV_A", {}).get("pass")
+        if force_pass is not True:
+            raise SystemExit("Refusing MD: audit does not record a passed force screen")
+        if int(audit.get("atoms_outside_material_z_0_200_A", 0)) != 0:
+            raise SystemExit("Refusing MD: audit reports atoms outside the 0-200 A material region")
+        ratio = audit.get("mass_ratio_Ag_over_W")
+        if ratio is not None and (not math.isfinite(float(ratio)) or abs(float(ratio) - 1.0) > 1.0e-3):
+            raise SystemExit("Refusing MD: audited Ag/W mass ratio is outside 1:1 ±0.1%")
+    return {"audit": audit, "data_sha256": observed_hash, "gate": gate}
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, required=True, help="LAMMPS data file accepted by the static audit")
-    parser.add_argument("--audit", type=Path, required=True, help="Static audit JSON with md_start_gate=PASS and data_sha256")
+    parser.add_argument("--audit", type=Path, required=True, help="Matching static audit (PASS) or exploratory-state manifest")
+    parser.add_argument("--exploratory", action="store_true", help="Allow an explicit EXPLORATORY_ONLY manifest; results are software-link checks, not accepted MD predictions")
+    parser.add_argument("--restart-dump", type=Path, help="Optional LAMMPS custom dump to continue positions and velocities from")
+    parser.add_argument("--restart-step", type=int, default=4200, help="Timestep recorded in --restart-dump")
     parser.add_argument("--output", type=Path, required=True, help="Output JSON path")
     parser.add_argument("--pulse-fwhm-ps", type=float, required=True, help="Explicit Gaussian pulse FWHM")
     parser.add_argument("--pulse-center-ps", type=float, required=True, help="Explicit Gaussian pulse center")
@@ -93,7 +109,21 @@ def main() -> None:
         raise SystemExit("The requested data file and static audit must both exist")
     if output_path in {data_path, audit_path}:
         raise SystemExit("Output path must not overwrite the supplied structure or its static audit")
-    gate = require_static_gate(data_path, audit_path)
+    gate = require_static_gate(data_path, audit_path, exploratory=args.exploratory)
+    restart_path = args.restart_dump.resolve() if args.restart_dump else None
+    if restart_path is not None and not restart_path.is_file():
+        raise SystemExit(f"Restart dump not found: {restart_path}")
+    if args.exploratory:
+        expected_restart = gate["audit"].get("restart_dump_sha256")
+        expected_step = gate["audit"].get("restart_dump_timestep")
+        if restart_path is None or not expected_restart:
+            raise SystemExit("Exploratory TTM mode requires a restart dump whose hash is recorded in the manifest")
+        if sha256_file(restart_path).lower() != str(expected_restart).lower():
+            raise SystemExit("Exploratory restart dump hash does not match the manifest")
+        if expected_step is not None and int(expected_step) != args.restart_step:
+            raise SystemExit("Exploratory restart timestep does not match the manifest")
+    if args.restart_step < 0:
+        raise SystemExit("Restart timestep must be non-negative")
     if not POTENTIAL.is_file():
         raise SystemExit(f"The selected Dai EFS potential is missing: {POTENTIAL}")
     for name, value in (("pulse FWHM", args.pulse_fwhm_ps), ("cooling time", args.cooling_ps),
@@ -112,10 +142,13 @@ def main() -> None:
         raise SystemExit("Grid spacing must divide the 200x200x160 A Newton-layer mesh exactly")
 
     # Do not import the LAMMPS bindings until the no-run geometry gate passes.
-    from mpi4py import MPI
+    try:
+        from mpi4py import MPI
+    except ImportError:  # a serial LAMMPS Python build does not need mpi4py
+        MPI = None
     from lammps import lammps
 
-    if MPI.COMM_WORLD.Get_size() != 1:
+    if MPI is not None and MPI.COMM_WORLD.Get_size() != 1:
         raise SystemExit("This reference pilot currently requires one MPI rank")
     equil_steps = int(round(args.equilibration_ps / args.dt_ps))
     end_time_ps = args.pulse_center_ps + 4.0 * args.pulse_fwhm_ps + args.cooling_ps
@@ -140,16 +173,24 @@ def main() -> None:
             "neighbor 2.0 bin",
             "neigh_modify delay 0 every 1 check yes",
             f"timestep {args.dt_ps:.12g}",
+            # Define static groups from the base data before optional restart
+            # coordinates are loaded, preserving original fixed IDs.
             "region fixed_region block INF INF INF INF 0 19.999999 units box",
             "region bath_region block INF INF INF INF 20 39.999999 units box",
-            "region newton_region block INF INF INF INF 40 200 units box",
+            # Integrate atoms that have entered the monitor/vacuum region too;
+            # only the 40-200 A material subset is mapped to the TTM mesh.
+            "region newton_region block INF INF INF INF 40 300 units box",
             "group fixed region fixed_region",
             "group bath region bath_region",
             "group newton region newton_region",
             "group mobile subtract all fixed",
+        ]
+        if restart_path is not None:
+            commands.append(f"read_dump {restart_path} {args.restart_step} x y z vx vy vz box no replace yes")
+        commands += [
             "velocity fixed set 0.0 0.0 0.0",
             "fix hold fixed setforce 0.0 0.0 0.0",
-            "thermo 1",
+            "thermo 0",
             "thermo_style custom step time atoms temp pe ke etotal",
         ]
         for command in commands:
@@ -176,9 +217,18 @@ def main() -> None:
         lmp.command("fix bath_integrate bath nve")
         lmp.command("fix newton_integrate newton nve")
         lmp.command(f"fix bath_heat bath langevin 300.0 300.0 0.1 {args.seed} tally yes")
-        lmp.command("thermo_style custom step time atoms temp pe ke etotal f_bath_heat")
-        lmp.command("run 0 pre no post no")
+        # Keep LAMMPS thermo output off during the Python-coupled loop. The
+        # fix tally is read directly after each sampled step; asking LAMMPS's
+        # Thermo class to print this scalar in run-0 setup segfaulted in the
+        # bundled MPICH build before any TTM step.
+        lmp.command("thermo_style custom step time atoms temp pe ke etotal")
+        lmp.command("thermo 0")
+        # LAMMPS may reallocate atom arrays during the NVT equilibration.
+        # Refresh Python/NumPy views before reading or writing atom state.
+        positions_view = lmp.numpy.extract_atom("x")
+        types_view = lmp.numpy.extract_atom("type")
         positions_after_eq = np.array(positions_view[:nlocal], copy=True)
+        types = np.array(types_view[:nlocal], dtype=int, copy=True)
         mapped = map_agw_newton_layer(
             positions_after_eq, types, shape, spacing,
             source_kwargs={"allow_above_surface": True}, newton_mask=newton_mask,
@@ -211,6 +261,7 @@ def main() -> None:
 
         for step in range(1, total_steps + 1):
             lmp.command("run 1 pre no post no")
+            velocity_view = lmp.numpy.extract_atom("v")
             velocity = np.array(velocity_view[:nlocal], copy=True)
             tl_ag = lattice_temperature_by_cell(velocity[idx_ag], masses_ag, atom_map_ag, 1)
             tl_w = lattice_temperature_by_cell(velocity[idx_w], masses_w, atom_map_w, 1)
@@ -260,21 +311,24 @@ def main() -> None:
         combined_ledger_pass = combined_residual_max <= energy_tolerance_eV
         grid_ledger_pass = grid_residual_max <= max(1.0e-9, 1.0e-10 * max(abs(source_total), 1.0))
         energy_status = "PASS" if combined_ledger_pass and grid_ledger_pass else "FAIL"
+        status_prefix = "AGW_TTM_SOFTWARE_LINK_" if args.exploratory else "AGW_TTM_MD_PILOT_"
         output_path.parent.mkdir(parents=True, exist_ok=True)
         result = {
-            "status": "AGW_TTM_MD_PILOT_" + energy_status,
+            "status": status_prefix + energy_status,
             "purpose": "Short exploratory LAMMPS/TTM coupling run; not a validated melt/quench prediction.",
-            "static_gate": {"md_start_gate": "PASS", "data_sha256": gate["data_sha256"], "audit": str(audit_path)},
-            "atom_model": "Dai 2006 EFS eam/fs; type 1=W, type 2=Ag; p p f; fixed 0-20 A; 300 K bath 20-40 A; Newton 40-200 A",
+            "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
+            "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None},
+            "atom_model": "Dai 2006 EFS eam/fs; type 1=W, type 2=Ag; p p f; fixed 0-20 A; 300 K bath 20-40 A; TTM/material map 40-200 A; Newton integration 40-300 A to keep monitor-region atoms dynamic",
             "electron_model": "Reused Ag finite-volume reference core with separate Ag/W phase grids and provisional equal-opposite interface exchange",
             "source_model": "Ag-only Gaussian in x/y and exponential depth; temporal Gaussian with requested FWHM and center",
             "spatial_source_parameters": {"I0_eV_ps_A2": 5.0 * args.source_scale, "R_A": 30.0, "skin_depth_A": 20.0, "center_xy_A": [100.0, 100.0], "surface_z_A": 200.0},
             "temporal_parameters": {"pulse_fwhm_ps": args.pulse_fwhm_ps, "pulse_center_ps": args.pulse_center_ps, "cooling_after_center_plus_4fwhm_ps": args.cooling_ps},
-            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "grid_shape": list(shape), "spacing_A": list(spacing), "interface_h_W_m2_K": args.interface_h_W_m2_K},
+            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "grid_shape": list(shape), "spacing_A": list(spacing), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
             "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"]},
             "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_added_eV": final["bath_energy_added_eV"], "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
             "history": history,
             "limitations": [
+                "This pilot run used an exploratory-only override because the v5 EFS static audit remains STATIC_EFS_FAIL; an energy-ledger PASS is a software/numerical coupling result, not a static-structure or physical-validity pass.",
                 "The Ag/W phase-fraction and atom-to-grid maps are frozen at the post-read initial coordinates; large melt migration or composition redistribution is not represented.",
                 "The Ag/W electronic interface conductance is a provisional analogue-based 1 GW m^-2 K^-1 unless explicitly changed; it is not a measured Ag/W value.",
                 "The deterministic velocity-rescaling handoff conserves kinetic energy but does not preserve local momentum or add stochastic phonon fluctuations.",

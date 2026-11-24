@@ -1,0 +1,53 @@
+# Continue from the previous NVT endpoint with the original 46,117 fixed IDs.
+# Then perform a 1.0 ps NVT and a 0.05 ps NVE check; no heat source or TTM.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+
+# Define the original bottom group before restoring later coordinates. The
+# group is therefore keyed to the original NVE IDs, not current z membership.
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+group W type 1
+group Ag type 2
+group mobile subtract all fixed_bottom
+
+read_dump interface_reconstruction_v6_exploratory/nvt_end.dump.gz 2000 x y z vx vy vz box no replace yes
+include interface_reconstruction_v6_exploratory/restore_115_previously_fixed_ids.in
+fix anchor fixed_bottom setforce 0.0 0.0 0.0
+velocity fixed_bottom set 0.0 0.0 0.0
+
+group W_mobile intersect W mobile
+group Ag_mobile intersect Ag mobile
+variable force_mag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable force_sq atom fx*fx+fy*fy+fz*fz
+variable z_atom atom z
+compute T_mobile mobile temp
+compute T_W W_mobile temp
+compute T_Ag Ag_mobile temp
+compute Fmax_mobile mobile reduce max v_force_mag
+compute F2mean_mobile mobile reduce ave v_force_sq
+compute z_min all reduce min v_z_atom
+compute z_max all reduce max v_z_atom
+variable Frms_mobile equal sqrt(c_F2mean_mobile)
+
+timestep 0.00025
+reset_timestep 0
+thermo 200
+thermo_style custom step time atoms pe ke etotal c_T_mobile c_T_W c_T_Ag c_Fmax_mobile v_Frms_mobile c_z_min c_z_max
+thermo_modify flush yes lost error format float %.12g
+run 0
+write_dump all custom interface_reconstruction_v6_exploratory/nvt_fixedids_start.dump id type x y z vx vy vz fx fy fz modify sort id
+
+fix eq mobile nvt temp 300.0 300.0 0.1
+run 4000
+unfix eq
+write_dump all custom interface_reconstruction_v6_exploratory/nvt_fixedids_end.dump id type x y z vx vy vz fx fy fz modify sort id
+print "AG_W_EXPLORATORY_NVT_1PS_FIXEDIDS_DONE"
+
+fix prod mobile nve
+run 200
+write_dump all custom interface_reconstruction_v6_exploratory/nve_fixedids_after_nvt_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "AG_W_EXPLORATORY_NVE_0P05PS_FIXEDIDS_DONE"
