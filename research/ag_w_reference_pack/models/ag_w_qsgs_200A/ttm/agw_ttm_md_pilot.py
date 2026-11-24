@@ -36,6 +36,7 @@ from agw_ttm_reference import (  # noqa: E402
     lattice_temperature_by_cell,
     rescale_lattice_kinetic,
 )
+from agw_ttm_geometry_mapping import map_agw_newton_layer_geometry  # noqa: E402
 
 POTENTIAL = next(
     parent / "potential_files/derived/Dai_2006_EFS_AgW.eam.fs"
@@ -63,8 +64,8 @@ def require_static_gate(data_path: Path, audit_path: Path, exploratory: bool = F
     if gate == "PASS":
         pass
     elif exploratory and gate == "EXPLORATORY_ONLY":
-        if audit.get("static_audit_status") != "STATIC_EFS_FAIL":
-            raise SystemExit("Exploratory override requires the manifest to disclose STATIC_EFS_FAIL")
+        if audit.get("static_audit_status") not in {"STATIC_EFS_FAIL", "STATIC_EFS_EXPLORATORY"}:
+            raise SystemExit("Exploratory override requires an explicit static-audit status")
     else:
         raise SystemExit("Refusing MD: static audit must set md_start_gate to PASS (or use an explicit exploratory manifest and --exploratory)")
     if gate == "PASS":
@@ -95,6 +96,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--equilibration-ps", type=float, default=0.0, help="Optional shared 300 K equilibration before mapping; default preserves the supplied restart")
     parser.add_argument("--mapping-only", action="store_true", help="Run LAMMPS setup and the restart-to-grid mapping gate, then exit without a TTM step or laser source")
     parser.add_argument("--grid-A", type=float, default=10.0, help="CIC mesh spacing; box lengths must divide evenly")
+    parser.add_argument("--geometry-fractions-npz", type=Path, help="Optional V11 analytic Ag/W/void geometry fractions; atom CIC is then phase-restricted for kinetic-energy handoff")
     parser.add_argument("--grid-offset-x-A", type=float, default=0.0, help="Periodic x phase of the CIC mesh, in A")
     parser.add_argument("--grid-offset-y-A", type=float, default=0.0, help="Periodic y phase of the CIC mesh, in A")
     parser.add_argument("--box-xy-A", type=float, default=200.0, help="Square periodic x/y box length used by the data/restart and TTM mesh")
@@ -286,13 +288,35 @@ def main() -> None:
         types = np.array(types_view[:nlocal], dtype=int, copy=True)
         newton_mask = np.isin(current_ids, newton_group_ids)
         try:
-            mapped = map_agw_newton_layer(
-                positions_after_eq, types, shape, spacing,
-                source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
-                max_transfer_distance_A=args.max_map_transfer_A,
-                grid_offset_xy_A=grid_offset_xy,
-                box_xy_A=args.box_xy_A,
-            )
+            if args.geometry_fractions_npz is not None:
+                geometry_path = args.geometry_fractions_npz.resolve()
+                if not geometry_path.is_file():
+                    raise SystemExit(f"Geometry fraction file not found: {geometry_path}")
+                if np.any(np.abs(np.asarray(grid_offset_xy, dtype=float)) > 1.0e-10):
+                    raise SystemExit("V11 geometry fractions are authored at zero x/y grid offset")
+                if np.isclose(args.grid_A, 10.0):
+                    suffix = "10A"
+                elif np.isclose(args.grid_A, 5.0):
+                    suffix = "5A"
+                else:
+                    raise SystemExit("V11 geometry mapping supports the precomputed 5 A or 10 A grids")
+                with np.load(geometry_path) as geometry:
+                    fraction_ag = np.array(geometry[f"fraction_ag_{suffix}"], dtype=float, copy=True)
+                    fraction_w = np.array(geometry[f"fraction_w_{suffix}"], dtype=float, copy=True)
+                mapped = map_agw_newton_layer_geometry(
+                    positions_after_eq, types, fraction_ag, fraction_w, shape, spacing,
+                    source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
+                    grid_offset_xy_A=grid_offset_xy, box_xy_A=args.box_xy_A,
+                )
+                mapped["geometry_fractions_sha256"] = sha256_file(geometry_path)
+            else:
+                mapped = map_agw_newton_layer(
+                    positions_after_eq, types, shape, spacing,
+                    source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
+                    max_transfer_distance_A=args.max_map_transfer_A,
+                    grid_offset_xy_A=grid_offset_xy,
+                    box_xy_A=args.box_xy_A,
+                )
         except AgWMappingError as exc:
             if not args.mapping_only:
                 raise
