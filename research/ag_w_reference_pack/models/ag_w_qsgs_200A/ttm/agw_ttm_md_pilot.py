@@ -95,6 +95,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--equilibration-ps", type=float, default=0.0, help="Optional shared 300 K equilibration before mapping; default preserves the supplied restart")
     parser.add_argument("--mapping-only", action="store_true", help="Run LAMMPS setup and the restart-to-grid mapping gate, then exit without a TTM step or laser source")
     parser.add_argument("--grid-A", type=float, default=10.0, help="CIC mesh spacing; box lengths must divide evenly")
+    parser.add_argument("--map-z-min-A", type=float, default=40.0, help="Lower z boundary of the TTM mapping mesh")
+    parser.add_argument("--map-z-max-A", type=float, default=200.0, help="Upper z boundary of the TTM mapping mesh")
+    parser.add_argument("--allow-above-surface", action="store_true", help="Clamp source depth to zero for atoms above the nominal flat source plane; exploratory rough-surface approximation")
     parser.add_argument("--grid-offset-x-A", type=float, default=0.0, help="Periodic x phase of the CIC mesh, in A")
     parser.add_argument("--grid-offset-y-A", type=float, default=0.0, help="Periodic y phase of the CIC mesh, in A")
     parser.add_argument("--box-xy-A", type=float, default=200.0, help="Square periodic x/y box length used by the data/restart and TTM mesh")
@@ -135,6 +138,7 @@ def main() -> None:
     for name, value in (("pulse FWHM", args.pulse_fwhm_ps), ("cooling time", args.cooling_ps),
                         ("grid spacing", args.grid_A), ("box x/y length", args.box_xy_A),
                         ("maximum map transfer distance", args.max_map_transfer_A),
+                        ("mapping z minimum", args.map_z_min_A), ("mapping z maximum", args.map_z_max_A),
                         ("timestep", args.dt_ps)):
         if not math.isfinite(value) or value <= 0.0:
             raise SystemExit(f"{name} must be finite and positive")
@@ -154,8 +158,9 @@ def main() -> None:
     nx = int(round(args.box_xy_A / args.grid_A))
     if nx <= 0 or abs(args.box_xy_A / nx - args.grid_A) > args.grid_A * 0.1:
         raise SystemExit("The x/y box must be within 10% of an integer number of nominal grid cells")
-    if abs(160.0 / args.grid_A - round(160.0 / args.grid_A)) > 1.0e-9:
-        raise SystemExit("Grid spacing must divide the 160 A Newton-layer depth exactly")
+    map_depth_A = args.map_z_max_A - args.map_z_min_A
+    if map_depth_A <= 0.0 or abs(map_depth_A / args.grid_A - round(map_depth_A / args.grid_A)) > 1.0e-9:
+        raise SystemExit("The mapping z interval must be positive and divide evenly by --grid-A")
 
     # Do not import the LAMMPS bindings until the no-run geometry gate passes.
     try:
@@ -170,7 +175,7 @@ def main() -> None:
     end_time_ps = args.pulse_center_ps + 4.0 * args.pulse_fwhm_ps + args.cooling_ps
     total_steps = int(math.ceil(end_time_ps / args.dt_ps))
     fwhm2 = args.pulse_fwhm_ps**2
-    shape = (nx, nx, int(round(160.0 / args.grid_A)))
+    shape = (nx, nx, int(round(map_depth_A / args.grid_A)))
     spacing = (args.box_xy_A / nx, args.box_xy_A / nx, args.grid_A)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     log_path = output_path.with_suffix(".lammps.log")
@@ -288,10 +293,11 @@ def main() -> None:
         try:
             mapped = map_agw_newton_layer(
                 positions_after_eq, types, shape, spacing,
-                source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
+                source_kwargs={"allow_above_surface": bool(args.allow_above_surface)}, newton_mask=newton_mask,
                 max_transfer_distance_A=args.max_map_transfer_A,
                 grid_offset_xy_A=grid_offset_xy,
                 box_xy_A=args.box_xy_A,
+                map_z_bounds_A=(args.map_z_min_A, args.map_z_max_A),
             )
         except AgWMappingError as exc:
             if not args.mapping_only:
@@ -301,10 +307,10 @@ def main() -> None:
                 "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
                 "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
                 "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
-                "mapping_parameters": {"box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "max_transfer_distance_A": args.max_map_transfer_A},
+                "mapping_parameters": {"box_xy_A": args.box_xy_A, "map_z_bounds_A": [args.map_z_min_A, args.map_z_max_A], "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "max_transfer_distance_A": args.max_map_transfer_A, "allow_above_surface": bool(args.allow_above_surface)},
                 "static_Newton_group_atoms": int(newton_mask.sum()),
                 "LAMMPS_run0_force_screen": force_screen,
-                "current_Newton_group_atoms_outside_40_to_200A": int(np.count_nonzero(newton_mask & ((positions_after_eq[:, 2] < 40.0 - 1e-9) | (positions_after_eq[:, 2] > 200.0 + 1e-9)))),
+                "current_Newton_group_atoms_outside_map_z_bounds": int(np.count_nonzero(newton_mask & ((positions_after_eq[:, 2] < args.map_z_min_A - 1e-9) | (positions_after_eq[:, 2] > args.map_z_max_A + 1e-9)))),
                 "reason": str(exc),
                 "ttm_steps_executed": 0,
                 "laser_source_applied": False,
@@ -320,7 +326,7 @@ def main() -> None:
                 "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
                 "mapping_parameters": {"box_xy_A": args.box_xy_A, "grid_offset_xy_A": list(grid_offset_xy)},
                 "LAMMPS_run0_force_screen": force_screen,
-                "mapped_geometry": {"candidate_newton_atoms": mapped["candidate_newton_atoms"], "Ag_atoms": int(len(mapped["atom_indices_ag"])), "W_atoms": int(len(mapped["atom_indices_w"])), "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_quadrature_S1_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
+                "mapped_geometry": {"candidate_newton_atoms": mapped["candidate_newton_atoms"], "Ag_atoms": int(len(mapped["atom_indices_ag"])), "W_atoms": int(len(mapped["atom_indices_w"])), "map_z_bounds_A": mapped["map_z_bounds_A"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_quadrature_S1_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
                 "ttm_steps_executed": 0,
                 "laser_source_applied": False,
             }
