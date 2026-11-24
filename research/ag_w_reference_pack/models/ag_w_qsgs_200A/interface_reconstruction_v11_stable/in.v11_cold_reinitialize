@@ -1,0 +1,68 @@
+# V11 cold baseline rebuild from the frozen V9 geometry.
+# This input performs a spring-free minimization, fresh common 300 K velocities,
+# one shared NVT thermostat, then a short NVE check. No TTM or laser source.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+# Preserve fixed-bottom membership from the original structure.
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+group W type 1
+group Ag type 2
+group mobile subtract all fixed_bottom
+group W_mobile intersect W mobile
+group Ag_mobile intersect Ag mobile
+
+# Load the frozen V9 coordinates/velocities without changing the box.
+read_dump interface_reconstruction_v9_hybrid/v9_nve2_end.dump.gz 2200 x y z vx vy vz box no replace yes
+fix anchor fixed_bottom setforce 0.0 0.0 0.0
+velocity fixed_bottom set 0.0 0.0 0.0
+
+timestep 0.00025
+thermo 1000
+thermo_style custom step time atoms pe ke etotal fmax fnorm
+thermo_modify flush yes lost error format float %.12g
+
+# Remove residual structural stress before assigning a fresh Maxwell distribution.
+min_style fire
+min_modify dmax 0.10
+minimize 1.0e-6 1.0e-8 50000 500000
+write_dump all custom interface_reconstruction_v11_stable/v11_minimized.dump id type x y z fx fy fz modify sort id
+
+# Reinitialize all mobile atoms from one common 300 K distribution.
+# No separate Ag/W thermostat is used.
+velocity mobile create 300.0 918273 mom yes rot no dist gaussian
+velocity fixed_bottom set 0.0 0.0 0.0
+
+compute T_mobile mobile temp
+compute T_Ag Ag_mobile temp
+compute T_W W_mobile temp
+compute T_mobile_com mobile temp/com
+compute T_Ag_com Ag_mobile temp/com
+compute T_W_com W_mobile temp/com
+variable z_atom atom z
+compute z_max all reduce max v_z_atom
+thermo 100
+thermo_style custom step time atoms pe ke etotal c_T_mobile c_T_Ag c_T_W c_T_mobile_com c_T_Ag_com c_T_W_com c_z_max
+thermo_modify flush yes lost error format float %.12g
+
+fix eq mobile nvt temp 300.0 300.0 0.1
+run 8000
+unfix eq
+write_dump all custom interface_reconstruction_v11_stable/v11_nvt2ps.dump id type x y z vx vy vz fx fy fz modify sort id
+
+# Extend to 5 ps only if the 2 ps tail is still relaxing; this input provides
+# the first 2 ps checkpoint. A separate continuation can use this dump.
+fix prod mobile nve
+run 400
+write_dump all custom interface_reconstruction_v11_stable/v11_nve0p1ps.dump id type x y z vx vy vz fx fy fz modify sort id
+write_data interface_reconstruction_v11_stable/v11_cold_candidate.data
+print "AG_W_V11_COLD_2PS_NVT_0P1PS_NVE_DONE"
