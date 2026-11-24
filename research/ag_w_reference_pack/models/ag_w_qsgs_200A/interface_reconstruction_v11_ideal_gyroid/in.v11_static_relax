@@ -2,11 +2,11 @@
 units metal
 atom_style atomic
 boundary p p f
-read_data \${data}
+read_data ${data}
 mass 1 183.84
 mass 2 107.8682
 pair_style eam/fs
-pair_coeff * * \${potential} W Ag
+pair_coeff * * ${potential} W Ag
 neighbor 2.0 bin
 neigh_modify delay 0 every 1 check yes
 timestep 0.00025
@@ -22,5 +22,5 @@ min_style fire
 min_modify dmax 0.10
 minimize 1.0e-5 1.0e-3 10000 50000
 run 0
-write_data \${relaxed}
-write_dump all custom \${dump} id type x y z fx fy fz
+write_data ${relaxed}
+write_dump all custom ${dump} id type x y z fx fy fz

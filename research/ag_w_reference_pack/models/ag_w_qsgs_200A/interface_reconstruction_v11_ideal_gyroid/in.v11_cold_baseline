@@ -2,11 +2,11 @@
 units metal
 atom_style atomic
 boundary p p f
-read_data \${data}
+read_data ${data}
 mass 1 183.84
 mass 2 107.8682
 pair_style eam/fs
-pair_coeff * * \${potential} W Ag
+pair_coeff * * ${potential} W Ag
 neighbor 2.0 bin
 neigh_modify delay 0 every 1 check yes
 timestep 0.00025
@@ -31,10 +31,10 @@ fix_modify eq temp Tmobile
 thermo 100
 thermo_style custom step time c_Tmobile c_TAg c_TW pe ke etotal
 thermo_modify lost error flush yes
-fix metrics all ave/time 100 1 100 c_Tmobile c_TAg c_TW pe ke etotal file \${metrics}
+fix metrics all ave/time 100 1 100 c_Tmobile c_TAg c_TW pe ke etotal file ${metrics}
 run 8000
 unfix eq
 fix cold_nve mobile nve
 run 200
-write_restart \${restart}
-write_dump all custom \${dump} id type x y z vx vy vz fx fy fz
+write_restart ${restart}
+write_dump all custom ${dump} id type x y z vx vy vz fx fy fz
