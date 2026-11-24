@@ -46,7 +46,7 @@ jobs:
           POTENTIAL: research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs
           OUT: v11_artifacts
         run: |
-          lmp -log "$OUT/v11_static.lammps.log" \
+          mpirun -np 4 lmp -log "$OUT/v11_static.lammps.log" \
             -var data "$OUT/agw_v11_gyroid.data.gz" \
             -var potential "$POTENTIAL" \
             -var relaxed "$OUT/agw_v11_relaxed.data" \
@@ -59,7 +59,7 @@ jobs:
           POTENTIAL: research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs
           OUT: v11_artifacts
         run: |
-          lmp -log "$OUT/v11_cold.lammps.log" \
+          mpirun -np 4 lmp -log "$OUT/v11_cold.lammps.log" \
             -var data "$OUT/agw_v11_relaxed.data" \
             -var potential "$POTENTIAL" \
             -var metrics "$OUT/v11_cold_timeseries.dat" \
