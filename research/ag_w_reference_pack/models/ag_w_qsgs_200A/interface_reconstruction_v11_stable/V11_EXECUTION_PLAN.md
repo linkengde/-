@@ -120,3 +120,18 @@ Report separately:
 - TTM source/no-source PASS/FAIL.
 
 Do not collapse these into one overall PASS if one stage is still blocked.
+
+
+## H. If the inherited V9 geometry still cannot pass — build an idealized QSGS reference
+
+Do not continue an endless sequence of tiny grid adjustments. If the padded domain plus the allowed small in-plane dilation still cannot produce a local 20 Å map, create a separate idealized reference geometry from the original QSGS phase mask:
+
+1. Preserve the QSGS two-phase topology and target phase-volume ratio implied by 1:1 mass (approximately 64.7 vol% Ag / 35.3 vol% W at room temperature).
+2. Rebuild Ag on the validated EFS FCC reference lattice (initial lattice constant 4.09 Å) and W on the validated EFS BCC reference lattice (initial lattice constant 3.16 Å). Recheck the actual equilibrium lattice constants from the converted potential before generating the final atom coordinates.
+3. Choose near-commensurate periodic x/y cell lengths and allow small (<1%) strain to close the periodic cells. Keep a free z surface and enough vacuum above it.
+4. Place atoms according to the QSGS phase mask; reconstruct the interface with an explicit signed-distance/nearest-neighbour rule. Do not leave sub-ångström contacts. Do not use an arbitrary WCA repulsion as the final cross-phase interaction.
+5. Adjust Ag/W integer counts to a whole-model mass ratio of 0.999–1.001. A small atom-count difference from V5–V10 is acceptable; record every count and the resulting phase volume fractions.
+6. Verify each phase's percolation before and after EFS minimization. Relax interface atoms and then the full mobile structure with the bottom support layer fixed.
+7. Run the same padded 5 Å mapping and 300 K cold gates. If the new idealized reference passes, designate it `V11-IDEAL`; keep the inherited-coordinate candidate as `V11-REPAIRED` even if it fails.
+
+This is an explicitly idealized bicontinuous reference model, not a claim to reproduce the exact original QSGS atomic coordinates. It is acceptable for exploratory TTM-MD if its topology, density, interatomic distances, force screen, cold stability, mapping, and energy accounting are all reported transparently.
