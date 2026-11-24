@@ -1,0 +1,127 @@
+{
+  "baseline": "AgW_TTM_baseline_v1",
+  "selection_status": "selected exploratory parameter baseline; W low-temperature experimental G0 consistency check is not passed",
+  "parameter_branches": {
+    "Ag_Ce": {
+      "source": "Lin et al. (2008), Fig. 2(c), digitized candidate",
+      "table": "ttm_data/AgW_TTM_baseline_v1/Ag_TTM_Lin2008_digitized_300_20000K.csv",
+      "range_K": [
+        300.0,
+        20000.0
+      ]
+    },
+    "Ag_G": {
+      "source": "Lin et al. (2008), Fig. 2(d), digitized candidate",
+      "table": "ttm_data/AgW_TTM_baseline_v1/Ag_TTM_Lin2008_digitized_300_20000K.csv",
+      "range_K": [
+        300.0,
+        20000.0
+      ]
+    },
+    "Ag_ke": {
+      "source": "XTANT-3 supplied Ag K table kappa_tot column",
+      "table": "ttm_data/XTANT3_TTM_parameters_v3/K_metals/K_Ag.dat",
+      "range_K": [
+        300.0,
+        50000.0
+      ],
+      "temperature_dependent_variables": [
+        "Te"
+      ]
+    },
+    "W_Ce": {
+      "source": "Lin et al. (2008), Fig. 7(c), digitized candidate",
+      "table": "ttm_data/W_TTM_Lin2008_digitized_300_20000K.csv",
+      "range_K": [
+        300.0,
+        20000.0
+      ]
+    },
+    "W_G": {
+      "source": "Lin et al. (2008), Fig. 7(d), digitized candidate",
+      "table": "ttm_data/W_TTM_Lin2008_digitized_300_20000K.csv",
+      "range_K": [
+        300.0,
+        20000.0
+      ]
+    },
+    "W_ke": {
+      "source": "Daraszewicz et al. (2014), Drude model equation (6)",
+      "formula": "ke_W(Te,Tl)=130.5*[Ce_W_Lin(Te)/Ce_W_Lin(300)]*(300/Tl)^1.5 W m^-1 K^-1",
+      "ke0_W_m_K": 130.5,
+      "ke_W_at_Te_Tl_300K_W_m_K": 130.5,
+      "ke_W_at_Te_10000_Tl_300K_W_m_K": 8464.100586707938,
+      "ke_W_at_Te_10000_Tl_1000K_W_m_K": 1390.7936460997946,
+      "reference_fit_range_K": [
+        300,
+        2500
+      ],
+      "high_temperature_use": "extrapolative closure; high-Te nonequilibrium validity is not independently established",
+      "Ag_ke_source": "XTANT-3 K_Ag.dat kappa_tot column; Te-only, not a ke(Te,Tl) surface",
+      "Ag_ke_grid_K": [
+        300.0,
+        50000.0
+      ],
+      "Ag_ke_at_300K_W_m_K": 16.564221421169655
+    },
+    "W_G0_reference": {
+      "source": "Daraszewicz et al. (2014), measured and ab-initio near-equilibrium anchors",
+      "Te_K": 300.0,
+      "Lin_digitized_G_W_m3_K": 2.124262735e+17,
+      "Lin_300K_value_has_low_temperature_extrapolation": true,
+      "Daraszewicz_experimental_G0_W_m3_K": 1.4e+17,
+      "Daraszewicz_experimental_1sigma_interval_W_m3_K": [
+        1.1e+17,
+        1.7e+17
+      ],
+      "Daraszewicz_ab_initio_G0_W_m3_K": 1.65e+17,
+      "Lin_over_experiment_nominal": 1.517330525,
+      "Lin_relative_difference_from_experiment_nominal": 0.517330525,
+      "Lin_exceeds_experiment_upper_1sigma_by_fraction": 0.24956631470588236,
+      "Lin_relative_difference_from_ab_initio": 0.28743196060606063,
+      "within_experiment_1sigma": false,
+      "interpretation": "Lin's digitized low-Te value does not reproduce the Daraszewicz experimental G0 within its quoted 1-sigma range. The Lin value is itself extrapolated below 600 K; retain the discrepancy as a model/source limitation rather than rescaling the Lin curve."
+    }
+  },
+  "timescale_at_reference_states": {
+    "formula_tau_eph": "Ce/G",
+    "formula_tau_eq": "Ce*Cl/[G*(Ce+Cl)] at constant coefficients",
+    "W_300K": {
+      "Te_K": 300.0,
+      "Cl_J_m3_K": 2527082.635978985,
+      "tau_eph_ps": 0.19390256827152788,
+      "tau_eq_ps": 0.19079275560007844
+    },
+    "W_500K": {
+      "Te_K": 500.0,
+      "Cl_J_m3_K": 2626369.1050357753,
+      "tau_eph_ps": 0.3019213158975223,
+      "tau_eq_ps": 0.29423049905038545
+    },
+    "Cl_source": "Tolias 2017 recommended solid-W White-Minges Cp and density fits; Cp is used as a narrow-range Cv proxy"
+  },
+  "single_branch_W_energy_pilot": {
+    "pulse_energy_density_J_m3": 1716250.0,
+    "pulse_FWHM_ps": 0.1,
+    "time_step_ps": 0.001,
+    "end_time_ps": 20.0,
+    "max_Te_K": 518.4264257592154,
+    "final_Te_K": 500.63677694301623,
+    "final_Tl_K": 500.63677694300765,
+    "final_lattice_energy_J_m3": 1672507.4263193177,
+    "final_lattice_energy_fraction": 0.9745127028808843,
+    "time_to_50pct_pulse_energy_in_lattice_ps": 0.417,
+    "time_to_90pct_pulse_energy_in_lattice_ps": 0.965,
+    "max_abs_energy_ledger_residual_fraction": 6.252084434770444e-11,
+    "energy_ledger_pass_threshold_fraction": 1e-08,
+    "energy_ledger_status": "PASS"
+  },
+  "output_trajectory": "W_Lin_baseline_energy_pilot.csv",
+  "limitations": [
+    "The W Lin G curve below 600 K is extrapolated and differs from Daraszewicz's experimental G0; no empirical rescaling was applied.",
+    "The Ag Lin curves are digitized from plots; the low-temperature G plateau and short 5000–6607 K bridge are documented approximations.",
+    "Ag ke is Te-only and XTANT warns that room-temperature values may not be reliable.",
+    "No Ag/W electron-interface conductance, mixed-cell electronic transport rule, or jointly validated Ag/W TTM-MD closure is supplied.",
+    "The 0D energy pilot uses one normalized temporal Gaussian and tests energy accounting only; it is not the spatial laser calculation and does not test melting."
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "baseline_id": "AgW_TTM_baseline_v1",
+  "status": "selected exploratory baseline; W low-temperature Lin-versus-Daraszewicz G0 validation discrepancy remains open",
+  "selected_at": "2026-11-24",
+  "primary_references": [
+    "Lin, Zhigilei & Celli (2008), Phys. Rev. B 77, 075133, DOI 10.1103/PhysRevB.77.075133",
+    "Daraszewicz et al. (2014), Appl. Phys. Lett. 105, 023112, DOI 10.1063/1.4890413",
+    "Tolias (2017), tungsten thermophysical properties, arXiv:1703.06302"
+  ],
+  "temperature_units": "K",
+  "volumetric_units": {
+    "Ce": "J m^-3 K^-1",
+    "Cl": "J m^-3 K^-1",
+    "G": "W m^-3 K^-1",
+    "ke": "W m^-1 K^-1"
+  },
+  "material_parameters": {
+    "Ag": {
+      "Ce_Te": {
+        "source": "Lin, Zhigilei & Celli (2008), Fig. 2(c), plot-digitized candidate",
+        "table": "Ag_TTM_Lin2008_digitized_300_20000K.csv",
+        "source_report": "Ag_TTM_Lin2008_digitization_report.json",
+        "range_K": [300, 20000],
+        "uncertainty": "approximately 5% plot-reading estimate; source/model uncertainty is additional"
+      },
+      "G_Te": {
+        "source": "Lin, Zhigilei & Celli (2008), Fig. 2(d), plot-digitized candidate",
+        "table": "Ag_TTM_Lin2008_digitized_300_20000K.csv",
+        "source_report": "Ag_TTM_Lin2008_digitization_report.json",
+        "range_K": [300, 20000],
+        "low_temperature_rule": "0.25e17 W m^-3 K^-1 plateau through 5000 K, then an explicit linear bridge to the traced curve at about 6607 K",
+        "uncertainty": "approximately 5% plot-reading estimate for traced region; low-Te plateau/bridge and source/model uncertainty are additional"
+      },
+      "ke_Te": {
+        "source": "User-supplied XTANT-3 K_Ag.dat, kappa_tot column",
+        "table": "../XTANT3_TTM_parameters_v3/K_metals/K_Ag.dat",
+        "range_K": [300, 50000],
+        "temperature_dependent_variables": ["Te"],
+        "limitations": ["not a ke(Te,Tl) surface", "source description warns that room-temperature values may not be reliable"]
+      },
+      "kl_Tl": {
+        "status": "not assigned in baseline v1",
+        "reason": "The gathered Ag tables do not provide a separately validated lattice thermal conductivity curve."
+      }
+    },
+    "W": {
+      "Ce_Te": {
+        "source": "Lin, Zhigilei & Celli (2008), Fig. 7(c), plot-digitized candidate",
+        "table": "../W_TTM_Lin2008_digitized_300_20000K.csv",
+        "range_K": [300, 20000],
+        "uncertainty": "approximately 2-5% plot-reading estimate; source/model uncertainty is additional"
+      },
+      "G_Te": {
+        "source": "Lin, Zhigilei & Celli (2008), Fig. 7(d), plot-digitized candidate",
+        "table": "../W_TTM_Lin2008_digitized_300_20000K.csv",
+        "range_K": [300, 20000],
+        "low_temperature_rule": "documented extrapolation below 600 K",
+        "uncertainty": "approximately 2-5% plot-reading estimate; low-Te extrapolation and source/model uncertainty are additional"
+      },
+      "ke_Te_Tl": {
+        "source": "Daraszewicz et al. (2014), practical Drude parameterization, Eq. (6)",
+        "formula": "130.5 * Ce_W_Lin(Te)/Ce_W_Lin(300) * (300/Tl)^1.5 W m^-1 K^-1",
+        "ke0_W_m_K": 130.5,
+        "derivation": "174 W m^-1 K^-1 total conductivity at 300 K times an electronic fraction 0.75",
+        "n": 1.5,
+        "fit_interval_equilibrium_K": [300, 2500],
+        "limitations": ["extension to strong Te-Tl nonequilibrium is a model closure", "extension beyond the equilibrium fit interval is extrapolative"]
+      },
+      "kl_Tl": {
+        "source": "Daraszewicz et al. (2014) assumptions at 300 K",
+        "formula_or_value": "174 - 130.5 = 43.5 W m^-1 K^-1 at 300 K; paper assumes ionic conductivity independent of temperature",
+        "limitations": ["first-order constant-lattice-channel approximation", "high-temperature and liquid-phase validity not established"]
+      },
+      "G0_reference": {
+        "source": "Daraszewicz et al. (2014), near-equilibrium validation anchors; reference only",
+        "experiment_W_m3_K": 1.4e17,
+        "experiment_sigma_W_m3_K": 0.3e17,
+        "ab_initio_W_m3_K": 1.65e17,
+        "use": "compare with Lin G near 300 K; not a replacement curve and not averaged into Lin G"
+      }
+    }
+  },
+  "shared_spatial_heat_source": {
+    "status": "inherited exploratory spatial profile; time envelope and absorbed energy must be specified per case",
+    "formula": "q(r,z,t)=f_Ag(r,z)*(I0/l_skin)*exp(-r^2/R^2)*exp(-d/l_skin)*S(t)",
+    "I0_eV_ps_A2": 5.0,
+    "radius_A": 30.0,
+    "skin_depth_A": 20.0,
+    "lateral_center_A": [100.0, 100.0],
+    "absorbing_phase": "Ag mask only",
+    "surface_z_A": 200.0,
+    "time_envelope": "S(t) not fixed by baseline v1"
+  },
+  "unclosed_mixed_phase_terms": [
+    "Ag/W electronic interface conductance",
+    "cross-phase electron-temperature transport rule and mixed-cell parameterization",
+    "Ag lattice thermal conductivity versus temperature",
+    "laser temporal envelope, pulse duration, and absorbed energy for the target case"
+  ],
+  "validation_artifacts": {
+    "report": "BASELINE_V1_VALIDATION_20261124.md",
+    "machine_readable": "baseline_v1_validation.json",
+    "W_energy_pilot": "W_Lin_baseline_energy_pilot.csv",
+    "reproduction_script": "../../scripts/validate_agw_ttm_baseline_v1.py"
+  }
+}
