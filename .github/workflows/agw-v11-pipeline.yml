@@ -1,0 +1,140 @@
+name: Ag-W V11 ideal gyroid build and TTM pilot
+
+on:
+  push:
+    branches:
+      - research/ag-w-ideal-gyroid-v11-20261124
+    paths:
+      - "research/ag_w_reference_pack/scripts/build_agw_gyroid_v11.py"
+      - "research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_geometry_mapping.py"
+      - "research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py"
+      - "research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_ideal_gyroid/**"
+      - ".github/workflows/agw-v11-pipeline.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-md-ttm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install LAMMPS and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lammps python3-lammps python3-numpy python3-scipy python3-mpi4py
+
+      - name: Compile-check V11 scripts
+        run: |
+          /usr/bin/python3 -m py_compile \
+            research/ag_w_reference_pack/scripts/build_agw_gyroid_v11.py \
+            research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_geometry_mapping.py \
+            research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py \
+            research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_ideal_gyroid/analyze_v11_outputs.py
+
+      - name: Build ideal bicontinuous Ag-W structure and geometry fractions
+        run: |
+          /usr/bin/python3 research/ag_w_reference_pack/scripts/build_agw_gyroid_v11.py \
+            --output "$GITHUB_WORKSPACE/v11_artifacts"
+
+      - name: Static Dai EFS relaxation
+        env:
+          MODEL: research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_ideal_gyroid
+          POTENTIAL: research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs
+          OUT: v11_artifacts
+        run: |
+          lmp -log "$OUT/v11_static.lammps.log" \
+            -var data "$OUT/agw_v11_gyroid.data.gz" \
+            -var potential "$POTENTIAL" \
+            -var relaxed "$OUT/agw_v11_relaxed.data" \
+            -var dump "$OUT/v11_static.dump" \
+            -in "$MODEL/in.v11_static_relax"
+
+      - name: 300 K cold NVT/NVE baseline
+        env:
+          MODEL: research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_ideal_gyroid
+          POTENTIAL: research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs
+          OUT: v11_artifacts
+        run: |
+          lmp -log "$OUT/v11_cold.lammps.log" \
+            -var data "$OUT/agw_v11_relaxed.data" \
+            -var potential "$POTENTIAL" \
+            -var metrics "$OUT/v11_cold_timeseries.dat" \
+            -var restart "$OUT/v11_cold.restart" \
+            -var dump "$OUT/v11_cold.dump" \
+            -in "$MODEL/in.v11_cold_baseline"
+
+      - name: Analyze static and cold MD gates
+        run: |
+          /usr/bin/python3 research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_ideal_gyroid/analyze_v11_outputs.py \
+            --out-dir v11_artifacts \
+            --data v11_artifacts/agw_v11_gyroid.data.gz \
+            --static-dump v11_artifacts/v11_static.dump \
+            --cold-dump v11_artifacts/v11_cold.dump \
+            --cold-metrics v11_artifacts/v11_cold_timeseries.dat \
+            --manifest v11_artifacts/v11_exploratory_manifest.json \
+            --restart-step 8200
+
+      - name: Require a non-catastrophic cold state
+        run: |
+          /usr/bin/python3 - <<'PY'
+          import json, sys
+          x=json.load(open("v11_artifacts/v11_cold_metrics.json"))
+          d=x["NVT_end_Ag_W_delta_K"]
+          t=x["NVT_end_mobile_K"]
+          if not (250 <= t <= 350 and d <= 40 and x["atom_count_preserved"]):
+              print("Cold state too far from a usable exploratory start:", x)
+              sys.exit(1)
+          print("Exploratory cold-state gate accepted; strict 300 K phase balance is reported separately.")
+          PY
+
+      - name: Real LAMMPS geometry mapping-only preflight
+        run: |
+          /usr/bin/python3 research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py \
+            --data v11_artifacts/agw_v11_gyroid.data.gz \
+            --audit v11_artifacts/v11_exploratory_manifest.json \
+            --restart-dump v11_artifacts/v11_cold.dump --restart-step 8200 \
+            --geometry-fractions-npz v11_artifacts/agw_v11_geometry_fractions.npz \
+            --output v11_artifacts/v11_mapping_preflight.json \
+            --pulse-fwhm-ps 0.01 --pulse-center-ps 0.02 --cooling-ps 0.02 \
+            --grid-A 10 --box-xy-A 200 --mapping-only --exploratory
+          /usr/bin/python3 - <<'PY'
+          import json,sys
+          x=json.load(open("v11_artifacts/v11_mapping_preflight.json"))
+          print(json.dumps(x,indent=2))
+          if x.get("status")!="AGW_MAPPING_PREFLIGHT_PASS": sys.exit(1)
+          PY
+
+      - name: Source-free TTM coupling control
+        run: |
+          /usr/bin/python3 research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py \
+            --data v11_artifacts/agw_v11_gyroid.data.gz \
+            --audit v11_artifacts/v11_exploratory_manifest.json \
+            --restart-dump v11_artifacts/v11_cold.dump --restart-step 8200 \
+            --geometry-fractions-npz v11_artifacts/agw_v11_geometry_fractions.npz \
+            --output v11_artifacts/v11_ttm_no_source.json \
+            --pulse-fwhm-ps 0.01 --pulse-center-ps 0.02 --cooling-ps 0.02 \
+            --grid-A 10 --box-xy-A 200 --source-scale 0 --exploratory
+
+      - name: Low-energy Gaussian Ag source TTM coupling
+        run: |
+          /usr/bin/python3 research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py \
+            --data v11_artifacts/agw_v11_gyroid.data.gz \
+            --audit v11_artifacts/v11_exploratory_manifest.json \
+            --restart-dump v11_artifacts/v11_cold.dump --restart-step 8200 \
+            --geometry-fractions-npz v11_artifacts/agw_v11_geometry_fractions.npz \
+            --output v11_artifacts/v11_ttm_gaussian_source.json \
+            --pulse-fwhm-ps 0.01 --pulse-center-ps 0.02 --cooling-ps 0.02 \
+            --grid-A 10 --box-xy-A 200 --source-scale 1 --exploratory
+
+      - name: Upload V11 generated structure, MD, mapping and TTM results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agw-v11-ideal-gyroid-pipeline
+          path: v11_artifacts/
+          if-no-files-found: warn
+          retention-days: 30
