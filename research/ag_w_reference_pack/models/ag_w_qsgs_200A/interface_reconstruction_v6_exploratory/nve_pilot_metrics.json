@@ -1,0 +1,121 @@
+{
+  "title": "Ag-W exploratory Dai-EFS 300K no-source NVE pilot",
+  "status": "RUN_COMPLETED_EXPLORATORY_BASELINE_UNSTABLE",
+  "decision": "LEVEL_1_PROGRAM_CHECK_PASSED; COLD_BASELINE_NOT_ESTABLISHED; DO_NOT_START_TTM_OR_LASER_FROM_THIS_ENDPOINT",
+  "source": "v5 signed-normal/same-phase precondition candidate followed by finite spring-free Dai EFS minimization with only bottom z<20A fixed",
+  "boundary": "p p f",
+  "fixed_region": "atoms initially at z<20 A",
+  "timestep_fs": 0.25,
+  "steps": 100,
+  "duration_ps": 0.025,
+  "atoms_start_end": [
+    482601,
+    482601
+  ],
+  "mobile_atom_count": 436484,
+  "NVE_thermo_start": {
+    "step": 0.0,
+    "time_ps": 0.0,
+    "atoms": 482601.0,
+    "PE_eV": -2448128.8,
+    "KE_eV": 16925.957,
+    "Etot_eV": -2431202.8,
+    "T_mobile_K": 300.0,
+    "T_W_K": 300.14936,
+    "T_Ag_K": 299.91001,
+    "Fmax_mobile_eV_A": 0.38090802,
+    "Frms_mobile_eV_A": 0.003136427,
+    "zmin_A": 1.9367725,
+    "zmax_A": 201.54294
+  },
+  "NVE_thermo_end": {
+    "step": 100.0,
+    "time_ps": 0.025,
+    "atoms": 482601.0,
+    "PE_eV": -2442348.1,
+    "KE_eV": 11145.368,
+    "Etot_eV": -2431202.8,
+    "T_mobile_K": 197.54337,
+    "T_W_K": 160.00204,
+    "T_Ag_K": 220.4407,
+    "Fmax_mobile_eV_A": 3.3996757,
+    "Frms_mobile_eV_A": 0.66385344,
+    "zmin_A": 1.9367725,
+    "zmax_A": 201.5789
+  },
+  "energy_drift_eV": 0.0,
+  "energy_drift_fraction_abs_start": 0.0,
+  "thermo_energy_display_resolution_eV": 0.1,
+  "PE_change_eV": 5780.699999999721,
+  "KE_change_eV": -5780.588999999998,
+  "mobile_temperature_change_K": -102.45662999999999,
+  "maximum_mobile_force_change_eV_A": 3.01876768,
+  "minimum_pair_distances": {
+    "W_W": {
+      "start_A": 2.4402986067282826,
+      "end_A": 2.4095273395419317,
+      "screen_A_context_only": 2.6
+    },
+    "Ag_Ag": {
+      "start_A": 2.2945342533943376,
+      "end_A": 2.2706820363053963,
+      "screen_A_context_only": 2.48
+    },
+    "Ag_W": {
+      "start_A": 2.4343412455939717,
+      "end_A": 2.404758782081874,
+      "screen_A_context_only": 2.54
+    }
+  },
+  "mobile_species_motion_and_force": {
+    "W": {
+      "mobile_atoms": 165360,
+      "displacement_p50_p95_p99_max_A": [
+        0.04035944746510986,
+        0.07362502831709694,
+        0.08882147373835181,
+        0.13030272445347907
+      ],
+      "fraction_moved_over_1A": 0.0,
+      "end_force_p50_p95_p99_max_eV_A": [
+        0.8154578493443859,
+        1.5762260724714807,
+        1.9668181955383566,
+        3.3996769786103207
+      ]
+    },
+    "Ag": {
+      "mobile_atoms": 271124,
+      "displacement_p50_p95_p99_max_A": [
+        0.05557872794511701,
+        0.10100811618378848,
+        0.12162888307581307,
+        0.2069408369558801
+      ],
+      "fraction_moved_over_1A": 0.0,
+      "end_force_p50_p95_p99_max_eV_A": [
+        0.3290697223062552,
+        0.6893736188927184,
+        0.9703023149307677,
+        2.2865295404365544
+      ]
+    }
+  },
+  "z_bounds_A": {
+    "start": [
+      1.93677,
+      201.543
+    ],
+    "end": [
+      1.93677,
+      201.579
+    ]
+  },
+  "limitations": [
+    "No external heating, thermostat, TTM, pulse, or heat-flux analysis was run.",
+    "The original QSGS inputs remain unchanged; the test candidate uses the v5 volume-preserving mask regularization and is not a byte-for-byte reproduction of the original voxel mask.",
+    "NVE energy conservation verifies integration bookkeeping, not physical validity of the EFS alloy potential.",
+    "The strong PE-to-KE exchange and temperature drop indicate ongoing structural relaxation, so this is not an equilibrated 300 K baseline.",
+    "Distance screens are reported for context and are not treated as pass/fail gates for this exploratory test."
+  ]
+}

@@ -1,0 +1,151 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+# Exploratory Ag-W no-source NVE pilot from the v5 Dai-EFS preconditioned endpoint.
+# Only the bottom 0-20 A layer is fixed; all remaining W and Ag atoms are mobile.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 1.876 seconds
+
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+46117 atoms in group fixed_bottom
+group W type 1
+178555 atoms in group W
+group Ag type 2
+304046 atoms in group Ag
+group mobile subtract all fixed_bottom
+436484 atoms in group mobile
+group W_mobile intersect W mobile
+165360 atoms in group W_mobile
+group Ag_mobile intersect Ag mobile
+271124 atoms in group Ag_mobile
+fix anchor fixed_bottom setforce 0.0 0.0 0.0
+velocity fixed_bottom set 0.0 0.0 0.0
+
+variable force_mag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable force_sq atom fx*fx+fy*fy+fz*fz
+variable z_atom atom z
+compute T_mobile mobile temp
+compute T_W W_mobile temp
+compute T_Ag Ag_mobile temp
+compute Fmax_mobile mobile reduce max v_force_mag
+compute F2mean_mobile mobile reduce ave v_force_sq
+compute z_min all reduce min v_z_atom
+compute z_max all reduce max v_z_atom
+variable Frms_mobile equal sqrt(c_F2mean_mobile)
+
+velocity mobile create 300.0 20261124 mom yes rot no dist gaussian
+timestep 0.00025
+reset_timestep 0
+thermo 10
+thermo_style custom step time atoms pe ke etotal c_T_mobile c_T_W c_T_Ag c_Fmax_mobile v_Frms_mobile c_z_min c_z_max
+thermo_modify flush yes lost error
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/fs/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs/omp, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 221.1 | 221.1 | 221.1 Mbytes
+   Step          Time         Atoms        PotEng         KinEng         TotEng       c_T_mobile       c_T_W          c_T_Ag     c_Fmax_mobile  v_Frms_mobile     c_z_min        c_z_max
+         0   0                 482601  -2448128.8      16925.957     -2431202.8      300            300.14936      299.91001      0.38090802     0.003136427    1.9367725      201.54294
+Loop time of 1.5823e-05 on 4 procs for 0 steps with 482601 atoms
+
+113.8% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.582e-05  |            |       |100.00
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70585 ave       70585 max       70585 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.75126e+07 ave 1.75126e+07 max 1.75126e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17512614
+Ave neighs/atom = 36.287977
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom interface_reconstruction_v6_exploratory/nve_start.dump id type x y z vx vy vz fx fy fz modify sort id
+
+fix integrate mobile nve
+run 100
+Last active /omp style is pair_style eam/fs/omp
+Per MPI rank memory allocation (min/avg/max) = 238.1 | 238.1 | 238.1 Mbytes
+   Step          Time         Atoms        PotEng         KinEng         TotEng       c_T_mobile       c_T_W          c_T_Ag     c_Fmax_mobile  v_Frms_mobile     c_z_min        c_z_max
+         0   0                 482601  -2448128.8      16925.957     -2431202.8      300            300.14936      299.91001      0.38090802     0.003136427    1.9367725      201.54294
+        10   0.0025            482601  -2448056.6      16853.731     -2431202.8      298.71985      298.27626      298.9915       0.64760441     0.077438459    1.9367725      201.54663
+        20   0.005             482601  -2447841.9      16639.069     -2431202.8      294.91513      292.72514      296.2519       0.99447729     0.15400924     1.9367725      201.55032
+        30   0.0075            482601  -2447490.6      16287.796     -2431202.8      288.68908      283.69033      291.73889      1.3508293      0.22918683     1.9367725      201.55399
+        40   0.01              482601  -2447012.1      15809.319     -2431202.8      280.20842      271.48369      285.5307       1.6962468      0.30230631     1.9367725      201.55765
+        50   0.0125            482601  -2446419.1      15216.306     -2431202.8      269.6977       256.52171      277.73479      2.0196469      0.37273141     1.9367725      201.56128
+        60   0.015             482601  -2445727.1      14524.275     -2431202.8      257.43197      239.30967      268.48579      2.3126836      0.43984903     1.9367725      201.56489
+        70   0.0175            482601  -2444953.9      13751.07      -2431202.8      243.7275       220.42158      257.94277      2.6356155      0.50306683     1.9367725      201.56846
+        80   0.02              482601  -2444119.1      12916.294     -2431202.8      228.9317       200.47839      246.28633      2.9339465      0.56181973     1.9367725      201.57198
+        90   0.0225            482601  -2443243.4      12040.674     -2431202.8      213.41199      180.12457      233.71491      3.1907844      0.61556968     1.9367725      201.57547
+       100   0.025             482601  -2442348.1      11145.368     -2431202.8      197.54337      160.00204      220.4407       3.3996757      0.66385344     1.9367725      201.5789
+Loop time of 12.3798 on 4 procs for 100 steps with 482601 atoms
+
+Performance: 0.174 ns/day, 137.553 hours/ns, 8.078 timesteps/s, 3.898 Matom-step/s
+381.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 11.243     | 11.243     | 11.243     |   0.0 | 90.82
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.059341   | 0.059341   | 0.059341   |   0.0 |  0.48
+Output  | 0.44907    | 0.44907    | 0.44907    |   0.0 |  3.63
+Modify  | 0.49086    | 0.49086    | 0.49086    |   0.0 |  3.96
+Other   |            | 0.1378     |            |       |  1.11
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70585 ave       70585 max       70585 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.75126e+07 ave 1.75126e+07 max 1.75126e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17512614
+Ave neighs/atom = 36.287977
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom interface_reconstruction_v6_exploratory/nve_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "AG_W_EXPLORATORY_NVE_0P025PS_DONE_NO_SOURCE"
+AG_W_EXPLORATORY_NVE_0P025PS_DONE_NO_SOURCE
+Total wall time: 0:00:16

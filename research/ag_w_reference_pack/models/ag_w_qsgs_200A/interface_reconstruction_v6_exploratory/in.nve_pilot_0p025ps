@@ -1,0 +1,48 @@
+# Exploratory Ag-W no-source NVE pilot from the v5 Dai-EFS preconditioned endpoint.
+# Only the bottom 0-20 A layer is fixed; all remaining W and Ag atoms are mobile.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+group W type 1
+group Ag type 2
+group mobile subtract all fixed_bottom
+group W_mobile intersect W mobile
+group Ag_mobile intersect Ag mobile
+fix anchor fixed_bottom setforce 0.0 0.0 0.0
+velocity fixed_bottom set 0.0 0.0 0.0
+
+variable force_mag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable force_sq atom fx*fx+fy*fy+fz*fz
+variable z_atom atom z
+compute T_mobile mobile temp
+compute T_W W_mobile temp
+compute T_Ag Ag_mobile temp
+compute Fmax_mobile mobile reduce max v_force_mag
+compute F2mean_mobile mobile reduce ave v_force_sq
+compute z_min all reduce min v_z_atom
+compute z_max all reduce max v_z_atom
+variable Frms_mobile equal sqrt(c_F2mean_mobile)
+
+velocity mobile create 300.0 20261124 mom yes rot no dist gaussian
+timestep 0.00025
+reset_timestep 0
+thermo 10
+thermo_style custom step time atoms pe ke etotal c_T_mobile c_T_W c_T_Ag c_Fmax_mobile v_Frms_mobile c_z_min c_z_max
+thermo_modify flush yes lost error
+run 0
+write_dump all custom interface_reconstruction_v6_exploratory/nve_start.dump id type x y z vx vy vz fx fy fz modify sort id
+
+fix integrate mobile nve
+run 100
+write_dump all custom interface_reconstruction_v6_exploratory/nve_final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "AG_W_EXPLORATORY_NVE_0P025PS_DONE_NO_SOURCE"
