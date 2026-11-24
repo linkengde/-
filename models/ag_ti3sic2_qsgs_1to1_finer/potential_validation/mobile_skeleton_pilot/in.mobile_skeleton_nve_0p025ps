@@ -1,0 +1,41 @@
+# Exploratory 300 K, no-source mobility screen.
+# All Ag and all Ti/Si/C above z=20 A move; only the bottom slab is fixed.
+# Uses the geometry-only WCA Ag/skeleton interface from Model B, not a calibrated interface potential.
+units metal
+atom_style atomic
+boundary p p f
+read_data potential_validation/relaxed_backbone_candidate/ag_ti3sic2_qsgs.data.gz
+read_dump potential_validation/geometry_constraint_B/ag_minimized_100.dump.gz 100 x y z box no replace yes
+include potential_validation/geometry_constraint_B/potential.geometry_wca_candidate.inc
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+region r_bottom block INF INF INF INF 0.0 20.0 units box
+group bottom region r_bottom
+group skeleton type 1 2 3
+group Ag type 4
+group mobile subtract all bottom
+group mobile_skeleton intersect skeleton mobile
+group mobile_Ag intersect Ag mobile
+fix freeze_bottom bottom setforce 0.0 0.0 0.0
+velocity bottom set 0.0 0.0 0.0
+
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Tmobile mobile temp
+compute Tskel mobile_skeleton temp
+compute TAg mobile_Ag temp
+compute fmobile mobile reduce max v_fn
+compute fskel mobile_skeleton reduce max v_fn
+compute fAg mobile_Ag reduce max v_fn
+velocity mobile create 300.0 20261124 mom yes rot no dist gaussian
+thermo 10
+thermo_style custom step time c_Tmobile c_Tskel c_TAg pe ke etotal c_fmobile c_fskel c_fAg
+thermo_modify flush yes
+run 0
+write_dump all custom potential_validation/mobile_skeleton_pilot/start.dump id type x y z vx vy vz fx fy fz modify sort id
+
+timestep 0.00025
+fix integrate mobile nve
+run 100
+write_dump all custom potential_validation/mobile_skeleton_pilot/final.dump id type x y z vx vy vz fx fy fz modify sort id
+print "MOBILE_SKELETON_NVE_0P025PS_DONE_NO_SOURCE"

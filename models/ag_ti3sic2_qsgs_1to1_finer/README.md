@@ -77,6 +77,8 @@ LAMMPS仅run 0，最大原子力矢量模约**3.98779 eV/Å**，底层力未遮�
 
 已完成一次有限的 B 路线试验：固定 Ti₃SiC₂ 骨架，用 WCA 纯排斥壁取代 Ag–骨架 Morse 项，保留 Ag EAM。100步静态优化后移动 Ag 最大力降至1.45 eV/Å且仍连续；连续100 fs无热源NVT未发生温度/受力爆发，但温度降至184 K、Ag 有63个原子离开最大连通分量，因此仍未达到冷态验收。该模型只验证几何约束可行性，不代表真实界面；没有进行TTM或熔池计算。完整设置、结果和复现输入见[几何约束型 Model B 试验](potential_validation/geometry_constraint_B/README.md)。
 
+随后建立了独立的移动骨架试跑：只固定 z<20 Å 的底层，其余 Ag 与 Ti/Si/C 骨架原子全部积分运动。25 fs、300 K 初速、无热源 NVE 可完成且总能量漂移很小，但势能向动能转换约3.94 keV，移动温度下降约38 K，最大移动力升至6.14 eV/Å，说明该几何仍在明显调整。该短测只说明“底层固定、骨架上部可动”的边界设置能运行，不证明体系已平衡或具备定量热沉能力；没有启动热梯度、TTM或加热。输入、快照、机器指标及 SHA-256 见[移动骨架试跑](potential_validation/mobile_skeleton_pilot/README.md)。
+
 ```bash
 gzip -dk ag_ti3sic2_qsgs.data.gz ag_ti3sic2_qsgs.extxyz.gz
 python validate_geometry.py
