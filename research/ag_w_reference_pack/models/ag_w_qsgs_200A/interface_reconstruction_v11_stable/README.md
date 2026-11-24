@@ -52,3 +52,7 @@ Keep V5–V10 untouched. Store each geometry variant, data/restart SHA-256, LAMM
 - The existing `agw_ttm_md_pilot.py` now accepts `--map-z-min-A`, `--map-z-max-A`, and `--allow-above-surface`. Default behavior remains the old 40–200 Å mapping domain with above-surface rejection.
 
 All new code is committed but remains unexecuted here. Run the synthetic test and `py_compile` before the full scan.
+
+## Fallback if the inherited geometry cannot be repaired
+
+If the padded-z grid and small in-plane cell adjustments still cannot pass, the next route is a separate **V11-IDEAL** model: preserve the original QSGS Ag/W phase topology but repopulate it with the validated Ag FCC and W BCC EFS reference lattices, choose near-commensurate periodic x/y dimensions with less than 1% strain, mass-balance the integer atom counts, reconstruct the interface, and minimize. This is an idealized reference model, not an exact reproduction of the V5–V10 coordinates. The fallback is specified in `V11_EXECUTION_PLAN.md`.
