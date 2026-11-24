@@ -2,7 +2,7 @@
 
 **Purpose:** produce a runnable exploratory Ag–W bicontinuous reference model for TTM-MD and Gaussian laser heating. V11 is allowed to make small, explicitly measured changes to the simulation cell and, only as a last resort, a small mass-balanced atom-count adjustment.
 
-**Status at branch creation:** execution plan committed; no V11 structure has yet been generated and no LAMMPS/TTM run has yet been executed. Do not interpret this directory as a passing model.
+**Current status:** V11 padded-z support, a four-phase production-mapper scan script, a synthetic smoke test, and a cold-baseline LAMMPS input have been committed. The scan, smoke test, minimization, MD, and TTM runs have **not** been executed in this chat session. No V11 structure has yet been accepted. Do not interpret this directory as a passing model.
 
 ## Frozen evidence
 
@@ -40,3 +40,15 @@
 ## Reproducibility
 
 Keep V5–V10 untouched. Store each geometry variant, data/restart SHA-256, LAMMPS inputs/logs, phase-scan JSON, mapping-only JSON, cold metrics, TTM accounting, and a complete SHA256SUMS file in this directory. Each candidate must have an explicit PASS/FAIL gate. No step may be marked PASS unless it was actually executed.
+
+
+## Implemented V11 files
+
+- `scan_v11_padded_z_grid.py`: scans all four 5 Å phases on the padded 35–205 Å z domain using the same direct maximum-flow function as production.
+- `test_v11_padded_z_smoke.py`: small synthetic test for inclusion of atoms near both z guard layers.
+- `in.v11_cold_reinitialize`: spring-free minimization, fresh common 300 K velocities, one shared NVT thermostat, and a 0.1 ps NVE check.
+- `RUN_COMMANDS.md`: exact commands for the scan, LAMMPS mapping-only preflight, cold baseline, and later source/no-source pair.
+- The existing `agw_ttm_reference.py` mapper now accepts explicit `map_z_bounds_A` while retaining the previous 40–200 Å default for backward compatibility.
+- The existing `agw_ttm_md_pilot.py` now accepts `--map-z-min-A`, `--map-z-max-A`, and `--allow-above-surface`. Default behavior remains the old 40–200 Å mapping domain with above-surface rejection.
+
+All new code is committed but remains unexecuted here. Run the synthetic test and `py_compile` before the full scan.
