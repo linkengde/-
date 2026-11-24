@@ -1,0 +1,37 @@
+# V11 cold baseline; 2 ps NVT + 0.05 ps NVE, no TTM and no source
+units metal
+atom_style atomic
+boundary p p f
+read_data \${data}
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * \${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+group Ag type 2
+group W type 1
+group AgMobile intersect Ag mobile
+group WMobile intersect W mobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+velocity mobile create 300.0 20261124 mom yes rot no dist gaussian
+compute Tmobile mobile temp/com
+compute TAg AgMobile temp/com
+compute TW WMobile temp/com
+fix eq mobile nvt temp 300.0 300.0 0.1
+fix_modify eq temp Tmobile
+thermo 100
+thermo_style custom step time c_Tmobile c_TAg c_TW pe ke etotal
+thermo_modify lost error flush yes
+fix metrics all ave/time 100 1 100 c_Tmobile c_TAg c_TW pe ke etotal file \${metrics}
+run 8000
+unfix eq
+fix cold_nve mobile nve
+run 200
+write_restart \${restart}
+write_dump all custom \${dump} id type x y z vx vy vz fx fy fz
