@@ -1,0 +1,31 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/small_cold_screen_v13/V13_TSC_VIB_01_ANISO/start.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/AgTiSiC_POD_v13.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/v13_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+compute T all temp
+timestep 0.001000
+thermo 1
+thermo_style custom step time atoms c_T pe ke etotal c_fmax
+thermo_modify temp T lost error flush yes format float %.16g
+run 0
+velocity all create 300.0 291107 mom yes rot no dist gaussian
+run 0
+fix integ all nve
+dump traj all custom 100 /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/small_cold_screen_v13/V13_TSC_VIB_01_ANISO/end.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id format float %.12g
+run 100
+unfix integ
+undump traj
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/small_cold_screen_v13/V13_TSC_VIB_01_ANISO/end.data

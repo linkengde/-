@@ -1,0 +1,200 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/small_cold_screen_v13/V13_VAL_AG_RICH_SI_01/start.data
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 27.894785) with tilt (3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  64 atoms
+  read_data CPU = 0.001 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/AgTiSiC_POD_v13.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/v13_coefficients.pod Ag C Si Ti
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+compute T all temp
+timestep 0.001000
+thermo 1
+thermo_style custom step time atoms c_T pe ke etotal c_fmax
+thermo_modify temp T lost error flush yes format float %.16g
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 3 2 8
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 2.976 | 2.976 | 2.976 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         c_fmax    
+         0  0         64  0 -424.9330073393197 0 -424.9330073393197 1.126158537139354
+Loop time of 1.235e-06 on 1 procs for 0 steps with 64 atoms
+
+81.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.235e-06  |            |       |100.00
+
+Nlocal:             64 ave          64 max          64 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1126 ave        1126 max        1126 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         6792 ave        6792 max        6792 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 6792
+Ave neighs/atom = 106.125
+Neighbor list builds = 0
+Dangerous builds = 0
+velocity all create 1100.0 291109 mom yes rot no dist gaussian
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 3.101 | 3.101 | 3.101 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         c_fmax    
+         0  0         64  1100 -424.9330073393198 8.957728048499998 -415.9752792908199 1.126158537139355
+Loop time of 6e-07 on 1 procs for 0 steps with 64 atoms
+
+166.7% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 6e-07      |            |       |100.00
+
+Nlocal:             64 ave          64 max          64 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1126 ave        1126 max        1126 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:         6792 ave        6792 max        6792 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 6792
+Ave neighs/atom = 106.125
+Neighbor list builds = 0
+Dangerous builds = 0
+fix integ all nve
+dump traj all custom 100 /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/small_cold_screen_v13/V13_VAL_AG_RICH_SI_01/end.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id format float %.12g
+run 100
+Per MPI rank memory allocation (min/avg/max) = 3.101 | 3.101 | 3.101 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         c_fmax    
+         0  0         64  1100 -424.9330073393198 8.957728048499998 -415.9752792908199 1.126158537139355
+         1  0.001         64  1098.236586928481 -424.9185733623347 8.943367889652874 -415.9752054726818 1.135908186853163
+         2  0.002         64  1090.194665218844 -424.852888130316 8.877879391778093 -415.975008738538 1.146097193712902
+         3  0.003         64  1076.254089847612 -424.739044158186 8.764355861764356 -415.9746882964217 1.164550001448284
+         4  0.004         64  1057.036029791777 -424.5821048143092 8.607855720309891 -415.9742490939993 1.546618225478847
+         5  0.005         64  1033.388469374076 -424.3889913935304 8.415284433735129 -415.9737069597953 1.923088150018594
+         6  0.006         64  1006.353993878683 -424.1682202390505 8.195132179715523 -415.9730880593349 2.284669806158853
+         7  0.007         64  977.1206121375689 -423.9294975192304 7.957073376465627 -415.9724241427647 2.622469098235823
+         8  0.008         64  946.9621398714609 -423.6832296317406 7.711481201085604 -415.971748430655 2.928405513226013
+         9  0.009000000000000001         64  917.1751227351458 -423.4400067528255 7.468913929373678 -415.9710928234518 3.195295239624043
+        10  0.01         64  889.0172713483856 -423.2101002426885 7.23961358832579 -415.9704866543627 3.416858355982589
+        11  0.011         64  863.6503965632385 -423.0029971127623 7.033041255811518 -415.9699558569508 3.58778463933717
+        12  0.012         64  842.090100642476 -422.8269890126627 6.857467376262996 -415.9695216363997 3.703857110619396
+        13  0.013         64  825.1647780044808 -422.68883697213 6.719637887786376 -415.9691990843436 3.762103788067221
+        14  0.014         64  813.48653730517 -422.5935333335999 6.624537429359694 -415.9689959042402 3.760957338092861
+        15  0.015         64  807.436320978466 -422.5441796090319 6.575268163460413 -415.9689114455715 3.700411833332545
+        16  0.016         64  807.1645670314487 -422.5419921863536 6.573055165320878 -415.9689370210328 3.582168182825441
+        17  0.017         64  812.6070712664484 -422.5864325049982 6.617375595175367 -415.9690569098229 3.40976220800291
+        18  0.018         64  823.514528108401 -422.6754484348344 6.706199260712605 -415.9692491741218 3.188670750157761
+        19  0.019         64  839.49383389527 -422.8058118799199 6.836324965842236 -415.9694869140777 2.926373398040524
+        20  0.02         64  860.0584065782045 -422.9735307334134 7.003790283594364 -415.9697404498191 2.63228274213988
+        21  0.021         64  884.6833554626238 -423.1743012221861 7.204320824789674 -415.9699803973965 2.37522312515888
+        22  0.022         64  912.8601061190853 -423.4039559737232 7.433775069945106 -415.970180903778 2.418332153384712
+        23  0.023         64  944.1450634594149 -423.6588624210387 7.688540651639285 -415.9703217693994 2.453648992713753
+        24  0.024         64  978.1986352652195 -423.9362409794501 7.965852138290616 -415.9703888411594 2.481040135305056
+        25  0.025         64  1014.813619789204 -424.2343953600352 8.264022205441426 -415.9703731545937 2.50051111949861
+        26  0.026         64  1053.93438402319 -424.5528667623075 8.582597811857363 -415.9702689504502 2.512303772054018
+        27  0.027         64  1095.670434654192 -424.8925409760823 8.922470713103676 -415.9700702629786 2.596193416097036
+        28  0.028         64  1140.310259242553 -425.2557566730758 9.285990175644836 -415.969766497431 2.714029317530672
+        29  0.029         64  1188.342779067749 -425.6464762599907 9.677137675716017 -415.9693385842747 2.860443806711891
+        30  0.03         64  1240.494195527232 -426.0705810088028 10.10182695388703 -415.9687540549157 3.091777935827526
+        31  0.031         64  1297.791155490384 -426.5363746767862 10.56841839511949 -415.9679562816668 3.68437565949307
+        32  0.032         64  1361.671137180346 -427.0554615394696 11.08861794395752 -415.9668435955121 4.432563275926387
+        33  0.033         64  1434.180664444043 -427.6443200829199 11.6790912404607 -415.9652288424592 5.401062691694524
+        34  0.034         64  1518.342086405278 -428.3272050623162 12.36445044964597 -415.9627546126703 6.690530760762516
+        35  0.035         64  1618.86100848993 -429.1417167715916 13.18301514761204 -415.9587016239796 8.463234879655808
+        36  0.036         64  1743.569865699893 -430.1500899346788 14.19856790045392 -415.9515220342249 10.99173776629716
+        37  0.037         64  1906.588766388743 -431.4637051517046 15.52609424512314 -415.9376109065814 14.75585787866665
+        38  0.038         64  2135.854150309141 -433.300838374286 17.39309148157211 -415.9077468927139 20.64842219745724
+        39  0.039         64  2493.101776897106 -436.1371531696401 20.30229792243309 -415.834855247207 30.47563856768626
+        40  0.04         64  3139.67650409143 -441.1723124374267 25.56760753083293 -415.6047049065938 48.91779427932449
+        41  0.041         64  4794.554191995193 -452.8523432644306 39.04392051426236 -413.8084227501682 104.9668767003774
+        42  0.042         64  29527.78345593665 -538.5444171702765 240.4562309757073 -298.0881861945692 831.0853106016824
+        43  0.043         64  1.181520540474411e+21 3274482735.904796 9.621581532078643e+18 9.621581535353127e+18 276765303672.9213
+ERROR: Lost atoms: original 64 current 44
+For more information see https://docs.lammps.org/err0008 (src/src/thermo.cpp:526)
