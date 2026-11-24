@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import numpy as np
+from pathlib import Path
+import sys
 
-from agw_ttm_reference import map_agw_newton_layer
+MODEL = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(MODEL / "ttm"))
+from agw_ttm_reference import map_agw_newton_layer  # noqa: E402
 
 
 def main() -> None:
