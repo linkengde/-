@@ -95,6 +95,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--equilibration-ps", type=float, default=0.0, help="Optional shared 300 K equilibration before mapping; default preserves the supplied restart")
     parser.add_argument("--mapping-only", action="store_true", help="Run LAMMPS setup and the restart-to-grid mapping gate, then exit without a TTM step or laser source")
     parser.add_argument("--grid-A", type=float, default=10.0, help="CIC mesh spacing; box lengths must divide evenly")
+    parser.add_argument("--grid-offset-x-A", type=float, default=0.0, help="Periodic x phase of the CIC mesh, in A")
+    parser.add_argument("--grid-offset-y-A", type=float, default=0.0, help="Periodic y phase of the CIC mesh, in A")
+    parser.add_argument("--box-xy-A", type=float, default=200.0, help="Square periodic x/y box length used by the data/restart and TTM mesh")
     parser.add_argument("--max-map-transfer-A", type=float, default=20.0, help="Maximum joint Ag/W cell-volume transfer distance")
     parser.add_argument("--dt-ps", type=float, default=0.0005, help="LAMMPS metal-unit timestep")
     parser.add_argument("--source-scale", type=float, default=1.0, help="Scale on inherited I0=5 eV/(ps A^2)")
@@ -130,7 +133,8 @@ def main() -> None:
     if not POTENTIAL.is_file():
         raise SystemExit(f"The selected Dai EFS potential is missing: {POTENTIAL}")
     for name, value in (("pulse FWHM", args.pulse_fwhm_ps), ("cooling time", args.cooling_ps),
-                        ("grid spacing", args.grid_A), ("maximum map transfer distance", args.max_map_transfer_A),
+                        ("grid spacing", args.grid_A), ("box x/y length", args.box_xy_A),
+                        ("maximum map transfer distance", args.max_map_transfer_A),
                         ("timestep", args.dt_ps)):
         if not math.isfinite(value) or value <= 0.0:
             raise SystemExit(f"{name} must be finite and positive")
@@ -144,9 +148,14 @@ def main() -> None:
         raise SystemExit("Source scale must be finite and non-negative")
     if not math.isfinite(args.interface_h_W_m2_K) or args.interface_h_W_m2_K < 0.0:
         raise SystemExit("Interface conductance must be finite and non-negative")
-    if args.grid_A <= 0.0 or any(abs(length / args.grid_A - round(length / args.grid_A)) > 1.0e-9
-                                 for length in (200.0, 200.0, 160.0)):
-        raise SystemExit("Grid spacing must divide the 200x200x160 A Newton-layer mesh exactly")
+    if not math.isfinite(args.grid_offset_x_A) or not math.isfinite(args.grid_offset_y_A):
+        raise SystemExit("Grid offsets must be finite")
+    grid_offset_xy = (args.grid_offset_x_A % args.box_xy_A, args.grid_offset_y_A % args.box_xy_A)
+    nx = int(round(args.box_xy_A / args.grid_A))
+    if nx <= 0 or abs(args.box_xy_A / nx - args.grid_A) > args.grid_A * 0.1:
+        raise SystemExit("The x/y box must be within 10% of an integer number of nominal grid cells")
+    if abs(160.0 / args.grid_A - round(160.0 / args.grid_A)) > 1.0e-9:
+        raise SystemExit("Grid spacing must divide the 160 A Newton-layer depth exactly")
 
     # Do not import the LAMMPS bindings until the no-run geometry gate passes.
     try:
@@ -161,8 +170,8 @@ def main() -> None:
     end_time_ps = args.pulse_center_ps + 4.0 * args.pulse_fwhm_ps + args.cooling_ps
     total_steps = int(math.ceil(end_time_ps / args.dt_ps))
     fwhm2 = args.pulse_fwhm_ps**2
-    shape = (int(round(200.0 / args.grid_A)), int(round(200.0 / args.grid_A)), int(round(160.0 / args.grid_A)))
-    spacing = (args.grid_A, args.grid_A, args.grid_A)
+    shape = (nx, nx, int(round(160.0 / args.grid_A)))
+    spacing = (args.box_xy_A / nx, args.box_xy_A / nx, args.grid_A)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     log_path = output_path.with_suffix(".lammps.log")
     lmp = lammps(cmdargs=["-screen", "none", "-log", str(log_path)])
@@ -194,6 +203,11 @@ def main() -> None:
         ]
         for command in setup_commands:
             lmp.command(command)
+
+        boxlo, boxhi, *_ = lmp.extract_box()
+        actual_xy = np.asarray(boxhi[:2], dtype=float) - np.asarray(boxlo[:2], dtype=float)
+        if not np.allclose(actual_xy, args.box_xy_A, rtol=0.0, atol=1e-8):
+            raise RuntimeError(f"--box-xy-A={args.box_xy_A:g} does not match data box lengths {actual_xy.tolist()}")
 
         # The LAMMPS groups are assigned from the template data-file positions
         # before read_dump updates coordinates. Preserve that exact static
@@ -236,6 +250,18 @@ def main() -> None:
             raise RuntimeError("read_dump changed atom types relative to the template data")
         newton_mask = np.isin(current_ids, newton_group_ids)
         lmp.command("run 0 pre no post no")
+        force_view = lmp.numpy.extract_atom("f")
+        force_vectors = np.array(force_view[:nlocal], dtype=float, copy=True)
+        force_norms = np.linalg.norm(force_vectors, axis=1)
+        fixed_ids = template_ids[(template_positions[:, 2] >= 0.0) & (template_positions[:, 2] < 20.0)]
+        mobile_mask = ~np.isin(current_ids, fixed_ids)
+        force_screen = {
+            "all_max_eV_A": float(force_norms.max()),
+            "mobile_max_eV_A": float(force_norms[mobile_mask].max()),
+            "mobile_rms_eV_A": float(np.sqrt(np.mean(force_norms[mobile_mask] ** 2))),
+            "mobile_atoms": int(mobile_mask.sum()),
+            "not_an_equilibrium_acceptance": True,
+        }
         if equil_steps:
             lmp.command("fix eq mobile nvt temp 300.0 300.0 0.1")
             lmp.command(f"run {equil_steps}")
@@ -264,6 +290,8 @@ def main() -> None:
                 positions_after_eq, types, shape, spacing,
                 source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
                 max_transfer_distance_A=args.max_map_transfer_A,
+                grid_offset_xy_A=grid_offset_xy,
+                box_xy_A=args.box_xy_A,
             )
         except AgWMappingError as exc:
             if not args.mapping_only:
@@ -273,8 +301,9 @@ def main() -> None:
                 "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
                 "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
                 "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
-                "mapping_parameters": {"grid_shape": list(shape), "spacing_A": list(spacing), "max_transfer_distance_A": args.max_map_transfer_A},
+                "mapping_parameters": {"box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "max_transfer_distance_A": args.max_map_transfer_A},
                 "static_Newton_group_atoms": int(newton_mask.sum()),
+                "LAMMPS_run0_force_screen": force_screen,
                 "current_Newton_group_atoms_outside_40_to_200A": int(np.count_nonzero(newton_mask & ((positions_after_eq[:, 2] < 40.0 - 1e-9) | (positions_after_eq[:, 2] > 200.0 + 1e-9)))),
                 "reason": str(exc),
                 "ttm_steps_executed": 0,
@@ -289,6 +318,8 @@ def main() -> None:
                 "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
                 "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
                 "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
+                "mapping_parameters": {"box_xy_A": args.box_xy_A, "grid_offset_xy_A": list(grid_offset_xy)},
+                "LAMMPS_run0_force_screen": force_screen,
                 "mapped_geometry": {"candidate_newton_atoms": mapped["candidate_newton_atoms"], "Ag_atoms": int(len(mapped["atom_indices_ag"])), "W_atoms": int(len(mapped["atom_indices_w"])), "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_quadrature_S1_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
                 "ttm_steps_executed": 0,
                 "laser_source_applied": False,
@@ -386,7 +417,7 @@ def main() -> None:
             "source_model": "Ag-only Gaussian in x/y and exponential depth; temporal Gaussian with requested FWHM and center",
             "spatial_source_parameters": {"I0_eV_ps_A2": 5.0 * args.source_scale, "R_A": 30.0, "skin_depth_A": 20.0, "center_xy_A": [100.0, 100.0], "surface_z_A": 200.0},
             "temporal_parameters": {"pulse_fwhm_ps": args.pulse_fwhm_ps, "pulse_center_ps": args.pulse_center_ps, "cooling_after_center_plus_4fwhm_ps": args.cooling_ps},
-            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "grid_shape": list(shape), "spacing_A": list(spacing), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
+            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
             "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "candidate_newton_atoms": mapped["candidate_newton_atoms"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
             "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_added_eV": final["bath_energy_added_eV"], "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
             "history": history,

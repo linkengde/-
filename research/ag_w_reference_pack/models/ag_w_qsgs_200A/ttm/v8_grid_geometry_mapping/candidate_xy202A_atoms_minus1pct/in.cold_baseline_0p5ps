@@ -1,0 +1,50 @@
+# Exploratory cold-state check for the isolated v8 tuning copy only.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data candidate.data.gz
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ../../../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+
+# Fixed set is selected once from the candidate data's bottom 0-20 A layer.
+region fixed_region block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_region
+group mobile subtract all fixed
+group Ag type 2
+group W type 1
+group Ag_mobile intersect Ag mobile
+group W_mobile intersect W mobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+
+# The dump is the matching 4200-step frozen restart with the same IDs/types.
+read_dump candidate.restart.dump.gz 4200 x y z vx vy vz box no replace yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable fmag2 atom v_fmag*v_fmag
+compute T_mobile mobile temp
+compute T_Ag Ag_mobile temp
+compute T_W W_mobile temp
+compute Fmax mobile reduce max v_fmag
+compute Frms2 mobile reduce ave v_fmag2
+variable Frms equal sqrt(c_Frms2)
+thermo 100
+thermo_style custom step time atoms pe ke etotal c_T_mobile c_T_Ag c_T_W c_Fmax v_Frms
+thermo_modify lost error
+run 0
+write_dump all custom cold_start.dump id type x y z vx vy vz fx fy fz modify sort id
+
+fix eq mobile nvt temp 300.0 300.0 0.1
+run 2000
+unfix eq
+write_dump all custom cold_after_nvt.dump id type x y z vx vy vz fx fy fz modify sort id
+
+# Short unthermostatted check after the exploratory NVT segment.
+fix prod mobile nve
+run 200
+write_dump all custom cold_after_nve.dump id type x y z vx vy vz fx fy fz modify sort id

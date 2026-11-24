@@ -1,0 +1,1696 @@
+{
+  "title": "Ag-W TTM v8 mesh-phase and v5 geometry-fraction audit",
+  "status": "V8_NO_REAL_ATOM_MAP_PASSES_20A_LIMIT",
+  "frozen_inputs": {
+    "template_data": "research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz",
+    "template_data_sha256": "29bf0eccea5516f1e51e7454876d7f66a99fd3b4fcdb3905b2e0e27993d3bde8",
+    "restart_dump": "models/ag_w_qsgs_200A/interface_reconstruction_v6_exploratory/nve_fixedids_after_nvt_final.dump.gz",
+    "restart_sha256": "1814c0f9c26831b66ff85474ed1612ffd1ed2a76913e7493d96b1ca9f6b5abcc",
+    "atom_count_unchanged": 482601,
+    "mapped_atoms": 383784,
+    "mapped_Ag_atoms": 237404,
+    "mapped_W_atoms": 146380,
+    "grid_shape": [
+      20,
+      20,
+      16
+    ],
+    "grid_spacing_A": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "transfer_limit_A": 20.0
+  },
+  "phase_scan": {
+    "offset_values_A": [
+      0.0,
+      2.5,
+      5.0,
+      7.5
+    ],
+    "offset_count": 16,
+    "best_diagnostic_offset_xy_A": [
+      0.0,
+      2.5
+    ],
+    "best_diagnostic_rank_key": [
+      15656.286924423257,
+      2893.0,
+      1.1192246489721611,
+      0.20083535082315382
+    ],
+    "all_offsets": [
+      {
+        "offset_xy_A": [
+          0.0,
+          0.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.120205549323882,
+          "W_max_fill": 1.0684935919493488,
+          "combined_max_fill": 1.120205549323882,
+          "Ag_overfilled_cells": 1384,
+          "W_overfilled_cells": 469,
+          "combined_overfilled_cells": 2899,
+          "overflow_volume_A3": 48255.03975705718,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2899,
+          "recipient_cells": 3501,
+          "candidate_edges": 43169,
+          "overflow_demand_A3": 48255.03975705718,
+          "global_free_capacity_A3": 78108.97343805768,
+          "locally_assignable_volume_A3": 32543.59,
+          "locally_unassignable_overflow_A3": 15711.44975705718
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 107.925388 A^3 overflow at cell 176 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.15807940643884946,
+            0.23415778398228465,
+            0.319351114664705,
+            0.1348500782088757,
+            0.1315509283558531,
+            0.022000767563151554,
+            9.920786280720109e-06
+          ],
+          "radial_rms_A": 29.399514102508395,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.0
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.56224,
+          "atom_CIC_combined_fill_max": 1.120205549323882,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05351391093936726,
+              "p95_absolute_fraction_difference": 0.16581750377201837,
+              "max_absolute_fraction_difference": 0.36149065393792523,
+              "relative_L1_difference": 0.08413607265706863,
+              "pearson_correlation": 0.9835570188073607
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.046629391096628454,
+              "p95_absolute_fraction_difference": 0.16520165141826676,
+              "max_absolute_fraction_difference": 0.33678274822072984,
+              "relative_L1_difference": 0.1281168153126485,
+              "pearson_correlation": 0.9863380587857973
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04566305343338575,
+            "p95_absolute_fraction_difference": 0.1607460913472581,
+            "max_absolute_fraction_difference": 0.34433674017665006,
+            "relative_L1_difference": 0.1254617494621259,
+            "pearson_correlation": 0.986772240884763
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          0.0,
+          2.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1192246489721611,
+          "W_max_fill": 1.0799370766516025,
+          "combined_max_fill": 1.1192246489721611,
+          "Ag_overfilled_cells": 1379,
+          "W_overfilled_cells": 481,
+          "combined_overfilled_cells": 2893,
+          "overflow_volume_A3": 48476.06992442326,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367796,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2893,
+          "recipient_cells": 3507,
+          "candidate_edges": 43288,
+          "overflow_demand_A3": 48476.06992442326,
+          "global_free_capacity_A3": 78330.00360542376,
+          "locally_assignable_volume_A3": 32819.783,
+          "locally_unassignable_overflow_A3": 15656.286924423257
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 113.4648 A^3 overflow at cell 4352 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367796,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.1463319964542496,
+            0.2909695506954284,
+            0.23334169651345865,
+            0.16361073907249296,
+            0.14639581897470605,
+            0.01933992028742085,
+            1.027800224365533e-05
+          ],
+          "radial_rms_A": 29.397318932891864,
+          "depth_mean_A": 21.51703649218114,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.20083535082315382
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.56224,
+          "atom_CIC_combined_fill_max": 1.1192246489721611,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.0535652711356221,
+              "p95_absolute_fraction_difference": 0.16797307216237423,
+              "max_absolute_fraction_difference": 0.3695587695744772,
+              "relative_L1_difference": 0.08421682259905426,
+              "pearson_correlation": 0.9835379627325446
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04659609426545549,
+              "p95_absolute_fraction_difference": 0.1649062583154302,
+              "max_absolute_fraction_difference": 0.31473696799879236,
+              "relative_L1_difference": 0.12802533043863326,
+              "pearson_correlation": 0.9862773967057088
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04560571855746911,
+            "p95_absolute_fraction_difference": 0.1617419352666014,
+            "max_absolute_fraction_difference": 0.32307258673578126,
+            "relative_L1_difference": 0.12530421873877667,
+            "pearson_correlation": 0.9867402881393392
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          0.0,
+          5.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1175478020074165,
+          "W_max_fill": 1.0733267933605797,
+          "combined_max_fill": 1.1175478020074165,
+          "Ag_overfilled_cells": 1379,
+          "W_overfilled_cells": 458,
+          "combined_overfilled_cells": 2908,
+          "overflow_volume_A3": 48588.71037982564,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2908,
+          "recipient_cells": 3492,
+          "candidate_edges": 43184,
+          "overflow_demand_A3": 48588.71037982564,
+          "global_free_capacity_A3": 78442.64406082616,
+          "locally_assignable_volume_A3": 32736.79,
+          "locally_unassignable_overflow_A3": 15851.920379825642
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 112.065116 A^3 overflow at cell 4352 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.08665436369572073,
+            0.32049496596321514,
+            0.24987082308587052,
+            0.17062541528604955,
+            0.14632237325760922,
+            0.026020208039775915,
+            1.1850671758919122e-05
+          ],
+          "radial_rms_A": 29.39242042529119,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.2818106686439262
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1175478020074165,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05360513899320308,
+              "p95_absolute_fraction_difference": 0.16985323561040389,
+              "max_absolute_fraction_difference": 0.34461935476340966,
+              "relative_L1_difference": 0.08427950396364216,
+              "pearson_correlation": 0.9835616384026494
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04672968353798193,
+              "p95_absolute_fraction_difference": 0.1629969638678547,
+              "max_absolute_fraction_difference": 0.3097643893390659,
+              "relative_L1_difference": 0.12839237430846537,
+              "pearson_correlation": 0.9863759897157677
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04577419926234626,
+            "p95_absolute_fraction_difference": 0.16183343484885632,
+            "max_absolute_fraction_difference": 0.30793005257115047,
+            "relative_L1_difference": 0.12576712873701704,
+            "pearson_correlation": 0.9867794282269898
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          0.0,
+          7.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1199621670565234,
+          "W_max_fill": 1.0755692168227222,
+          "combined_max_fill": 1.1199621670565234,
+          "Ag_overfilled_cells": 1384,
+          "W_overfilled_cells": 467,
+          "combined_overfilled_cells": 2929,
+          "overflow_volume_A3": 48667.528070353714,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2929,
+          "recipient_cells": 3471,
+          "candidate_edges": 42969,
+          "overflow_demand_A3": 48667.528070353714,
+          "global_free_capacity_A3": 78521.4617513542,
+          "locally_assignable_volume_A3": 32789.682,
+          "locally_unassignable_overflow_A3": 15877.846070353713
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 108.033591 A^3 overflow at cell 4352 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.1652885694578127,
+            0.28254128653042315,
+            0.22259812425979295,
+            0.17048836815079202,
+            0.13990821739100082,
+            0.01916616262253924,
+            9.271587639133381e-06
+          ],
+          "radial_rms_A": 29.396229371843212,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933458,
+          "radial_profile_relative_L1_vs_zero_offset": 0.19917648908833172
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1199621670565234,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.053689299799979204,
+              "p95_absolute_fraction_difference": 0.16578202521361501,
+              "max_absolute_fraction_difference": 0.32687026551757303,
+              "relative_L1_difference": 0.0844118239460448,
+              "pearson_correlation": 0.9836230700325925
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.046925799207396285,
+              "p95_absolute_fraction_difference": 0.1612551722670614,
+              "max_absolute_fraction_difference": 0.2976564681662809,
+              "relative_L1_difference": 0.12893121289089954,
+              "pearson_correlation": 0.9864552719951958
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.045852134005850385,
+            "p95_absolute_fraction_difference": 0.1600499300529908,
+            "max_absolute_fraction_difference": 0.2877455567753398,
+            "relative_L1_difference": 0.12598125872896282,
+            "pearson_correlation": 0.9868628607422485
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          2.5,
+          0.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.119724672575492,
+          "W_max_fill": 1.062513149573229,
+          "combined_max_fill": 1.119724672575492,
+          "Ag_overfilled_cells": 1378,
+          "W_overfilled_cells": 462,
+          "combined_overfilled_cells": 2897,
+          "overflow_volume_A3": 48102.101756600896,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2897,
+          "recipient_cells": 3503,
+          "candidate_edges": 43380,
+          "overflow_demand_A3": 48102.101756600896,
+          "global_free_capacity_A3": 77956.03543760146,
+          "locally_assignable_volume_A3": 32262.191,
+          "locally_unassignable_overflow_A3": 15839.910756600897
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 112.348098 A^3 overflow at cell 6256 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.15788953292466978,
+            0.2793967663816399,
+            0.23168712753070117,
+            0.16356227681867558,
+            0.14825520526570204,
+            0.019199105402752856,
+            9.985675858968265e-06
+          ],
+          "radial_rms_A": 29.397098505494196,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.18131104561716452
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.119724672575492,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05386142740074436,
+              "p95_absolute_fraction_difference": 0.16709788943597506,
+              "max_absolute_fraction_difference": 0.319875043452449,
+              "relative_L1_difference": 0.08468244779076196,
+              "pearson_correlation": 0.9834671688952812
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04695173120811853,
+              "p95_absolute_fraction_difference": 0.16244256335528034,
+              "max_absolute_fraction_difference": 0.3378141972909713,
+              "relative_L1_difference": 0.1290024624883977,
+              "pearson_correlation": 0.9862993071582139
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04597167826063776,
+            "p95_absolute_fraction_difference": 0.15898044480735846,
+            "max_absolute_fraction_difference": 0.3260035709422159,
+            "relative_L1_difference": 0.12630971314048503,
+            "pearson_correlation": 0.9867136160002865
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          2.5,
+          2.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1172168399624547,
+          "W_max_fill": 1.0732820686124356,
+          "combined_max_fill": 1.1172168399624547,
+          "Ag_overfilled_cells": 1353,
+          "W_overfilled_cells": 475,
+          "combined_overfilled_cells": 2879,
+          "overflow_volume_A3": 48299.46999909028,
+          "Ag_volume_A3": 4060672.5040789987,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2879,
+          "recipient_cells": 3521,
+          "candidate_edges": 43141,
+          "overflow_demand_A3": 48299.46999909028,
+          "global_free_capacity_A3": 78153.40368009084,
+          "locally_assignable_volume_A3": 32426.303,
+          "locally_unassignable_overflow_A3": 15873.166999090281
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 108.567094 A^3 overflow at cell 320 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.11449991082641203,
+            0.29674709712494957,
+            0.2495626517582733,
+            0.18481851389395265,
+            0.13210818318469608,
+            0.022253946509627885,
+            9.696702088259812e-06
+          ],
+          "radial_rms_A": 29.39490315548431,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.22673636520612275
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1172168399624547,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.053918115352316366,
+              "p95_absolute_fraction_difference": 0.16936627414858652,
+              "max_absolute_fraction_difference": 0.3168437586638232,
+              "relative_L1_difference": 0.08477157417918173,
+              "pearson_correlation": 0.9834187990172651
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04700891326915706,
+              "p95_absolute_fraction_difference": 0.16269897117642554,
+              "max_absolute_fraction_difference": 0.33007175808659384,
+              "relative_L1_difference": 0.12915957334446887,
+              "pearson_correlation": 0.9862137139905067
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.045976824564674675,
+            "p95_absolute_fraction_difference": 0.15886637042695742,
+            "max_absolute_fraction_difference": 0.31189441094882286,
+            "relative_L1_difference": 0.12632385289372508,
+            "pearson_correlation": 0.9866503673113171
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          2.5,
+          5.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1169344117241684,
+          "W_max_fill": 1.0690427518725987,
+          "combined_max_fill": 1.1169344117241684,
+          "Ag_overfilled_cells": 1362,
+          "W_overfilled_cells": 475,
+          "combined_overfilled_cells": 2867,
+          "overflow_volume_A3": 48507.18685975134,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2867,
+          "recipient_cells": 3533,
+          "candidate_edges": 43113,
+          "overflow_demand_A3": 48507.18685975134,
+          "global_free_capacity_A3": 78361.12054075193,
+          "locally_assignable_volume_A3": 32586.921,
+          "locally_unassignable_overflow_A3": 15920.26585975134
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 110.738823 A^3 overflow at cell 160 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.0861853331899287,
+            0.2619307432947446,
+            0.3037045231868207,
+            0.1779139395837698,
+            0.14578890419167223,
+            0.024463085515365152,
+            1.3471037698547507e-05
+          ],
+          "radial_rms_A": 29.3900042452398,
+          "depth_mean_A": 21.51703649218114,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.17508132945360969
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1169344117241684,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05406930668596541,
+              "p95_absolute_fraction_difference": 0.16621628665061083,
+              "max_absolute_fraction_difference": 0.36333355931419387,
+              "relative_L1_difference": 0.0850092814371586,
+              "pearson_correlation": 0.9834780020406992
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04714667628644371,
+              "p95_absolute_fraction_difference": 0.16150946991264567,
+              "max_absolute_fraction_difference": 0.3283472436286453,
+              "relative_L1_difference": 0.1295380848074655,
+              "pearson_correlation": 0.986320630603045
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04618254378490103,
+            "p95_absolute_fraction_difference": 0.15851568550351203,
+            "max_absolute_fraction_difference": 0.3137991441861807,
+            "relative_L1_difference": 0.12688907775993416,
+            "pearson_correlation": 0.9867100469227651
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          2.5,
+          7.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1200925298475195,
+          "W_max_fill": 1.073014620629803,
+          "combined_max_fill": 1.1200925298475195,
+          "Ag_overfilled_cells": 1364,
+          "W_overfilled_cells": 466,
+          "combined_overfilled_cells": 2875,
+          "overflow_volume_A3": 48694.31634781312,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2875,
+          "recipient_cells": 3525,
+          "candidate_edges": 42970,
+          "overflow_demand_A3": 48694.31634781312,
+          "global_free_capacity_A3": 78548.2500288136,
+          "locally_assignable_volume_A3": 32803.035,
+          "locally_unassignable_overflow_A3": 15891.281347813114
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 112.515793 A^3 overflow at cell 320 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.1237467480008986,
+            0.2930287114771213,
+            0.2536520777415142,
+            0.17114881630681492,
+            0.13518681700051793,
+            0.023226636698241522,
+            1.0192774891678469e-05
+          ],
+          "radial_rms_A": 29.39381350488835,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933458,
+          "radial_profile_relative_L1_vs_zero_offset": 0.20006339072228324
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1200925298475195,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05407631956337166,
+              "p95_absolute_fraction_difference": 0.16495503641399656,
+              "max_absolute_fraction_difference": 0.32482496329651,
+              "relative_L1_difference": 0.08502030727983446,
+              "pearson_correlation": 0.983538255688811
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.0471637257300306,
+              "p95_absolute_fraction_difference": 0.15907350522225527,
+              "max_absolute_fraction_difference": 0.3102783495558047,
+              "relative_L1_difference": 0.12958492909094926,
+              "pearson_correlation": 0.9863833794355825
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04616817241204373,
+            "p95_absolute_fraction_difference": 0.15679146154188192,
+            "max_absolute_fraction_difference": 0.2978767670418633,
+            "relative_L1_difference": 0.12684959162299678,
+            "pearson_correlation": 0.9867921827867138
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          5.0,
+          0.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1185317169764013,
+          "W_max_fill": 1.0570317687768358,
+          "combined_max_fill": 1.1185317169764013,
+          "Ag_overfilled_cells": 1365,
+          "W_overfilled_cells": 484,
+          "combined_overfilled_cells": 2840,
+          "overflow_volume_A3": 48414.97368590436,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2840,
+          "recipient_cells": 3560,
+          "candidate_edges": 43103,
+          "overflow_demand_A3": 48414.97368590436,
+          "global_free_capacity_A3": 78268.90736690484,
+          "locally_assignable_volume_A3": 32623.686,
+          "locally_unassignable_overflow_A3": 15791.28768590436
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 110.282746 A^3 overflow at cell 6256 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.07897857309583184,
+            0.2961716015401629,
+            0.2568030035394859,
+            0.18435937352023157,
+            0.15695218349420667,
+            0.026722493735986175,
+            1.2771074095339785e-05
+          ],
+          "radial_rms_A": 29.397397013902037,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.2832978889364737
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1185317169764013,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05336470287496518,
+              "p95_absolute_fraction_difference": 0.16399479019298044,
+              "max_absolute_fraction_difference": 0.33667788473076526,
+              "relative_L1_difference": 0.08390148355066265,
+              "pearson_correlation": 0.9836753428816681
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.046581914286352395,
+              "p95_absolute_fraction_difference": 0.1600791114394969,
+              "max_absolute_fraction_difference": 0.36630771534254647,
+              "relative_L1_difference": 0.1279863701665567,
+              "pearson_correlation": 0.9864619954814546
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.045602495334181724,
+            "p95_absolute_fraction_difference": 0.1565989740581912,
+            "max_absolute_fraction_difference": 0.34838950506262023,
+            "relative_L1_difference": 0.12529536275561004,
+            "pearson_correlation": 0.9868877083656463
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          5.0,
+          2.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1154944711504455,
+          "W_max_fill": 1.0685117142777298,
+          "combined_max_fill": 1.1154944711504455,
+          "Ag_overfilled_cells": 1362,
+          "W_overfilled_cells": 485,
+          "combined_overfilled_cells": 2857,
+          "overflow_volume_A3": 48486.07732496873,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367794,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2857,
+          "recipient_cells": 3543,
+          "candidate_edges": 43149,
+          "overflow_demand_A3": 48486.07732496873,
+          "global_free_capacity_A3": 78340.01100596922,
+          "locally_assignable_volume_A3": 32574.612,
+          "locally_unassignable_overflow_A3": 15911.465324968733
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 112.346691 A^3 overflow at cell 656 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367794,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.0720747303927752,
+            0.26356481704274604,
+            0.2890162760680138,
+            0.19384582901091013,
+            0.15713630066767423,
+            0.024349329571842746,
+            1.2717246037394213e-05
+          ],
+          "radial_rms_A": 29.395201686185946,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.23267902928553028
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1154944711504455,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.053420817528845345,
+              "p95_absolute_fraction_difference": 0.16550503132790875,
+              "max_absolute_fraction_difference": 0.32838726134527335,
+              "relative_L1_difference": 0.0839897085843616,
+              "pearson_correlation": 0.9836377626051501
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04671563866546226,
+              "p95_absolute_fraction_difference": 0.16013978647532237,
+              "max_absolute_fraction_difference": 0.3676578056134333,
+              "relative_L1_difference": 0.12835378524915375,
+              "pearson_correlation": 0.9863561655158112
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04558650338985068,
+            "p95_absolute_fraction_difference": 0.15826537128639923,
+            "max_absolute_fraction_difference": 0.3456424416772549,
+            "relative_L1_difference": 0.12525142400946376,
+            "pearson_correlation": 0.9868214219084047
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          5.0,
+          5.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1194490243300483,
+          "W_max_fill": 1.0641577553801667,
+          "combined_max_fill": 1.1194490243300483,
+          "Ag_overfilled_cells": 1369,
+          "W_overfilled_cells": 475,
+          "combined_overfilled_cells": 2879,
+          "overflow_volume_A3": 48674.82296449285,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2879,
+          "recipient_cells": 3521,
+          "candidate_edges": 43336,
+          "overflow_demand_A3": 48674.82296449285,
+          "global_free_capacity_A3": 78528.75664549335,
+          "locally_assignable_volume_A3": 32818.9,
+          "locally_unassignable_overflow_A3": 15855.92296449285
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 113.359415 A^3 overflow at cell 160 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.04382657145372542,
+            0.2727323511114787,
+            0.31059942766393356,
+            0.1793788228145856,
+            0.16780506715717874,
+            0.02564029070594769,
+            1.7469093150458408e-05
+          ],
+          "radial_rms_A": 29.3903028257019,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.24600904397179094
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1194490243300483,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05344962108174248,
+              "p95_absolute_fraction_difference": 0.1652486684446454,
+              "max_absolute_fraction_difference": 0.34575058646223994,
+              "relative_L1_difference": 0.08403499433860373,
+              "pearson_correlation": 0.9837606241777752
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.0465499612518615,
+              "p95_absolute_fraction_difference": 0.15848937079519324,
+              "max_absolute_fraction_difference": 0.37775358901709855,
+              "relative_L1_difference": 0.1278985774477956,
+              "pearson_correlation": 0.9865028897679969
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04556208831983612,
+            "p95_absolute_fraction_difference": 0.15717251377766317,
+            "max_absolute_fraction_difference": 0.3576980448193823,
+            "relative_L1_difference": 0.12518434226247252,
+            "pearson_correlation": 0.9869323699838604
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          5.0,
+          7.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1197387387048388,
+          "W_max_fill": 1.0638321678101297,
+          "combined_max_fill": 1.1197387387048388,
+          "Ag_overfilled_cells": 1357,
+          "W_overfilled_cells": 483,
+          "combined_overfilled_cells": 2879,
+          "overflow_volume_A3": 48927.706469004246,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.5622400003,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2879,
+          "recipient_cells": 3521,
+          "candidate_edges": 43042,
+          "overflow_demand_A3": 48927.706469004246,
+          "global_free_capacity_A3": 78781.6401500048,
+          "locally_assignable_volume_A3": 33075.716,
+          "locally_unassignable_overflow_A3": 15851.990469004246
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 115.044765 A^3 overflow at cell 320 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.08358592634465749,
+            0.2480650602668394,
+            0.30312493937235585,
+            0.18030203528255156,
+            0.16037650868882034,
+            0.02453167616581275,
+            1.3853878962534076e-05
+          ],
+          "radial_rms_A": 29.39411204665663,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.18143931077308195
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.1197387387048388,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05340169826695897,
+              "p95_absolute_fraction_difference": 0.1641169690260499,
+              "max_absolute_fraction_difference": 0.32745184764226276,
+              "relative_L1_difference": 0.08395964874423809,
+              "pearson_correlation": 0.9837761885001302
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.046647332104797955,
+              "p95_absolute_fraction_difference": 0.15852861412144145,
+              "max_absolute_fraction_difference": 0.3560628698238665,
+              "relative_L1_difference": 0.12816610921883337,
+              "pearson_correlation": 0.9865505636693087
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04560706599749917,
+            "p95_absolute_fraction_difference": 0.1571345926223275,
+            "max_absolute_fraction_difference": 0.33755673818768805,
+            "relative_L1_difference": 0.12530792090432968,
+            "pearson_correlation": 0.9869841127089677
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          7.5,
+          0.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1226042084682808,
+          "W_max_fill": 1.0466163643331865,
+          "combined_max_fill": 1.1226042084682808,
+          "Ag_overfilled_cells": 1363,
+          "W_overfilled_cells": 479,
+          "combined_overfilled_cells": 2885,
+          "overflow_volume_A3": 48469.50433015997,
+          "Ag_volume_A3": 4060672.5040789996,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367796,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2885,
+          "recipient_cells": 3515,
+          "candidate_edges": 43187,
+          "overflow_demand_A3": 48469.50433015997,
+          "global_free_capacity_A3": 78323.43801116044,
+          "locally_assignable_volume_A3": 32780.659,
+          "locally_unassignable_overflow_A3": 15688.845330159973
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 109.26332 A^3 overflow at cell 6256 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367796,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.15738601751265738,
+            0.2809909069994303,
+            0.22751446221489793,
+            0.1680896116400462,
+            0.14669827930099638,
+            0.019311209573246207,
+            9.51275872553544e-06
+          ],
+          "radial_rms_A": 29.3988688071125,
+          "depth_mean_A": 21.51703649218114,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.19044001478691913
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.56224,
+          "atom_CIC_combined_fill_max": 1.1226042084682808,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05305176963430112,
+              "p95_absolute_fraction_difference": 0.16635084977529588,
+              "max_absolute_fraction_difference": 0.3220042738398875,
+              "relative_L1_difference": 0.08340948112715908,
+              "pearson_correlation": 0.9837643814035576
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04629349567443548,
+              "p95_absolute_fraction_difference": 0.15963383868522912,
+              "max_absolute_fraction_difference": 0.34276104459159207,
+              "relative_L1_difference": 0.1271939241755911,
+              "pearson_correlation": 0.9865274312686276
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04531875809877692,
+            "p95_absolute_fraction_difference": 0.1586135978944313,
+            "max_absolute_fraction_difference": 0.3221728742998625,
+            "relative_L1_difference": 0.12451577910395245,
+            "pearson_correlation": 0.9869668256265688
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          7.5,
+          2.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1211148950717782,
+          "W_max_fill": 1.0672566885148886,
+          "combined_max_fill": 1.1211148950717782,
+          "Ag_overfilled_cells": 1365,
+          "W_overfilled_cells": 479,
+          "combined_overfilled_cells": 2864,
+          "overflow_volume_A3": 48581.67589376298,
+          "Ag_volume_A3": 4060672.5040789996,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367794,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2864,
+          "recipient_cells": 3536,
+          "candidate_edges": 43129,
+          "overflow_demand_A3": 48581.67589376298,
+          "global_free_capacity_A3": 78435.6095747635,
+          "locally_assignable_volume_A3": 32781.394,
+          "locally_unassignable_overflow_A3": 15800.281893762978
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 112.36055 A^3 overflow at cell 160 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367794,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.11681780680129213,
+            0.2904039058811541,
+            0.259190109978968,
+            0.1789833039323426,
+            0.13151247040066033,
+            0.0230827985403434,
+            9.604465238881142e-06
+          ],
+          "radial_rms_A": 29.396673589309138,
+          "depth_mean_A": 21.517036492181145,
+          "depth_rms_about_mean_A": 18.983140016933454,
+          "radial_profile_relative_L1_vs_zero_offset": 0.2029227571990571
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.5040789996,
+          "atom_CIC_W_volume_A3": 2309473.56224,
+          "atom_CIC_combined_fill_max": 1.1211148950717782,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.05308623068146676,
+              "p95_absolute_fraction_difference": 0.1648900222277765,
+              "max_absolute_fraction_difference": 0.34288302942108095,
+              "relative_L1_difference": 0.08346366175266882,
+              "pearson_correlation": 0.9837587658439767
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04623218516424208,
+              "p95_absolute_fraction_difference": 0.16226652393896068,
+              "max_absolute_fraction_difference": 0.3304406291094787,
+              "relative_L1_difference": 0.127025470178521,
+              "pearson_correlation": 0.9864682453520108
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04524523437552596,
+            "p95_absolute_fraction_difference": 0.1602978869243924,
+            "max_absolute_fraction_difference": 0.30797647024706903,
+            "relative_L1_difference": 0.12431376863263147,
+            "pearson_correlation": 0.9869370622612649
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          7.5,
+          5.0
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.1209452344679023,
+          "W_max_fill": 1.064008230461702,
+          "combined_max_fill": 1.1209452344679023,
+          "Ag_overfilled_cells": 1372,
+          "W_overfilled_cells": 471,
+          "combined_overfilled_cells": 2896,
+          "overflow_volume_A3": 48720.55738952762,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2896,
+          "recipient_cells": 3504,
+          "candidate_edges": 43498,
+          "overflow_demand_A3": 48720.55738952762,
+          "global_free_capacity_A3": 78574.49107052817,
+          "locally_assignable_volume_A3": 32939.33,
+          "locally_unassignable_overflow_A3": 15781.227389527616
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 114.843963 A^3 overflow at cell 160 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.0863377606249082,
+            0.2622354231597873,
+            0.30809384690754477,
+            0.17285054405014955,
+            0.14580475090196887,
+            0.024664495862266756,
+            1.317849337448046e-05
+          ],
+          "radial_rms_A": 29.391774974153865,
+          "depth_mean_A": 21.51703649218115,
+          "depth_rms_about_mean_A": 18.983140016933458,
+          "radial_profile_relative_L1_vs_zero_offset": 0.16599782714220274
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.56224,
+          "atom_CIC_combined_fill_max": 1.1209452344679023,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.053128801553690944,
+              "p95_absolute_fraction_difference": 0.1671934281678283,
+              "max_absolute_fraction_difference": 0.346970210324806,
+              "relative_L1_difference": 0.08353059287273938,
+              "pearson_correlation": 0.9837826411412296
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04621762050284234,
+              "p95_absolute_fraction_difference": 0.16230089040592663,
+              "max_absolute_fraction_difference": 0.37398821438068486,
+              "relative_L1_difference": 0.12698545297068797,
+              "pearson_correlation": 0.9865479852648973
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04528308271930433,
+            "p95_absolute_fraction_difference": 0.16174787633688698,
+            "max_absolute_fraction_difference": 0.35076276311949117,
+            "relative_L1_difference": 0.12441775903773228,
+            "pearson_correlation": 0.9869706151226166
+          }
+        }
+      },
+      {
+        "offset_xy_A": [
+          7.5,
+          7.5
+        ],
+        "raw_atom_CIC": {
+          "Ag_max_fill": 1.122160469303845,
+          "W_max_fill": 1.0639085965217365,
+          "combined_max_fill": 1.122160469303845,
+          "Ag_overfilled_cells": 1370,
+          "W_overfilled_cells": 470,
+          "combined_overfilled_cells": 2890,
+          "overflow_volume_A3": 48897.65811941454,
+          "Ag_volume_A3": 4060672.504078999,
+          "W_volume_A3": 2309473.56224,
+          "Ag_source_power_eV_ps": 9907.477809367792,
+          "expected_Ag_source_power_eV_ps": 9907.477809367794
+        },
+        "local_capacity_flow_20A": {
+          "status": "NO_LOCAL_CAPACITY_ASSIGNMENT",
+          "diagnostic_only": true,
+          "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
+          "capacity_resolution_A3": 0.001,
+          "max_transfer_distance_A": 20.0,
+          "donor_cells": 2890,
+          "recipient_cells": 3510,
+          "candidate_edges": 42939,
+          "overflow_demand_A3": 48897.65811941454,
+          "global_free_capacity_A3": 78751.59180041502,
+          "locally_assignable_volume_A3": 33120.247,
+          "locally_unassignable_overflow_A3": 15777.411119414537
+        },
+        "joint_mapper": {
+          "status": "REJECTED",
+          "diagnostics": {
+            "reason": "Conservative greedy assignment leaves 109.107689 A^3 overflow at cell 160 within the configured 20 A transfer limit"
+          }
+        },
+        "Ag_source_spatial_distribution_raw": {
+          "total_power_eV_ps": 9907.477809367792,
+          "radial_bin_edges_A": [
+            0.0,
+            10.0,
+            20.0,
+            30.0,
+            40.0,
+            60.0,
+            100.0,
+            150.0
+          ],
+          "radial_power_fraction": [
+            0.12311324287384093,
+            0.30296955917591667,
+            0.24706709946642497,
+            0.17123921161399044,
+            0.13333562963382325,
+            0.022265319533207296,
+            9.937702796253019e-06
+          ],
+          "radial_rms_A": 29.395584004340527,
+          "depth_mean_A": 21.517036492181152,
+          "depth_rms_about_mean_A": 18.983140016933458,
+          "radial_profile_relative_L1_vs_zero_offset": 0.21450035752657673
+        },
+        "Ag_source_spatial_distribution_joint": null,
+        "v5_geometry_volume_fraction_comparison": {
+          "geometry_phase_fraction_sum_min": 1.0,
+          "geometry_phase_fraction_sum_max": 1.0,
+          "geometry_Ag_volume_A3": 4070656.25,
+          "geometry_W_volume_A3": 2329343.75,
+          "atom_CIC_Ag_volume_A3": 4060672.504078999,
+          "atom_CIC_W_volume_A3": 2309473.5622400003,
+          "atom_CIC_combined_fill_max": 1.122160469303845,
+          "geometry_vs_atom_CIC": {
+            "Ag": {
+              "mean_absolute_fraction_difference": 0.053150007186775775,
+              "p95_absolute_fraction_difference": 0.1651330586607564,
+              "max_absolute_fraction_difference": 0.342723152772134,
+              "relative_L1_difference": 0.08356393296421552,
+              "pearson_correlation": 0.983810740105314
+            },
+            "W": {
+              "mean_absolute_fraction_difference": 0.04639336920113173,
+              "p95_absolute_fraction_difference": 0.16211886802407913,
+              "max_absolute_fraction_difference": 0.38334131879554545,
+              "relative_L1_difference": 0.127468332180359,
+              "pearson_correlation": 0.9866119862091166
+            }
+          },
+          "geometry_W_vs_atom_derived_local_W_share": {
+            "mean_absolute_fraction_difference": 0.04538696784936086,
+            "p95_absolute_fraction_difference": 0.1601152401358491,
+            "max_absolute_fraction_difference": 0.3612024884820626,
+            "relative_L1_difference": 0.12470318914325526,
+            "pearson_correlation": 0.9870333430011048
+          }
+        }
+      }
+    ]
+  },
+  "v5_regularized_mask": {
+    "source_mask_file": "models/ag_w_qsgs_200A/qsgs_morphology.npz",
+    "source_mask_sha256": "9cdb52d21af46694b1e20c96dcdfb8b649d3c41c8bb62253fc5f6105280a95ce",
+    "v5_geometry_report": "models/ag_w_qsgs_200A/interface_reconstruction_v5/trials/smoothed2_gap1p35_decay10_normal2/geometry_precondition_report.json",
+    "v5_geometry_report_sha256": "5aba138b7555dbca90b810687351f4578e6110c2745e25d961e47e8f4c36af7e",
+    "parameters": {
+      "mask_smoothing_vox": 2.0,
+      "half_gap_A": 1.35,
+      "decay_A": 10.0,
+      "normal_smoothing_vox": 2.0,
+      "frozen_screen_distances_A": {
+        "Ag_W": 2.54,
+        "W_W": 2.6,
+        "Ag_Ag": 2.48
+      }
+    },
+    "source_W_voxels": 181504,
+    "regularized_W_voxels": 181504,
+    "reassigned_voxels": 43054,
+    "changed_fraction": 0.08408984375,
+    "mask_archive": "v5_regularized_qsgs_w_mask_2p5A.npz",
+    "mask_array_sha256": "58b2f1c8c1aa85a261472d9bb99102fdbc197704a58b6df1f5b205bed3138e3d",
+    "coarse_fraction_archive": "v5_geometry_fractions_10A_all_offsets.npz",
+    "geometry_fractions_are_diagnostic_only": true
+  },
+  "box_atom_tuning": {
+    "authorization": "User permits fine adjustment of box size and atom count.",
+    "applied_in_this_audit": false,
+    "reason": "First evaluate mesh phase and geometry-mask agreement on the frozen coordinates; any changed-box or changed-count candidate will be a separate copy with mass ratio and connectivity rechecked."
+  },
+  "decision": "Frozen v6 mapping remains failed. A separate 1% XY dilation plus 1% per-species deletion copy passes the real LAMMPS mapping check before and after a short cold NVT/NVE, but fails the exploratory two-phase cold-temperature criterion. Do not start source/no-source TTM until Ag/W cold temperatures are brought into acceptable agreement and the density/force impact of the tuning is reviewed.",
+  "limitations": [
+    "The 20 A transfer radius is an exploratory locality screen, not a calibrated physical length.",
+    "The v5 mask is a reconstructed geometry with exactly preserved W voxel count; its phase fractions are not verified as the frozen restart's local atomic-density field.",
+    "No TTM step or laser source is executed by this scan.",
+    "The v5 EFS static audit remains failed and Ag/W interface conductance remains exploratory."
+  ],
+  "real_LAMMPS_frozen_baseline_preflight": {
+    "file": "agw_ttm_mapping_v8_best_phase_lammps_preflight.json",
+    "status": "AGW_MAPPING_PREFLIGHT_FAIL",
+    "phase_offset_xy_A": [
+      0.0,
+      2.5
+    ],
+    "max_transfer_distance_A": 20.0,
+    "remaining_greedy_overflow_A3": 113.4648,
+    "ttm_steps_executed": 0,
+    "laser_source_applied": false,
+    "note": "The diagnostic max-flow says direct one-hop local assignment is also infeasible; the production greedy mapper routes through an ordered sequence and must be treated as a distinct assignment implementation."
+  },
+  "separate_tuned_candidate": {
+    "directory": "candidate_xy202A_atoms_minus1pct/",
+    "box_A": [
+      202.0,
+      202.0,
+      300.0
+    ],
+    "atom_count": 477775,
+    "removed_atoms": {
+      "Ag": 3040,
+      "W": 1786
+    },
+    "mass_ratio_Ag_over_W": 0.9991310777685841,
+    "mass_ratio_error_fraction": -0.0008689222314159,
+    "pre_cold_LAMMPS_mapping_status": "AGW_MAPPING_PREFLIGHT_PASS",
+    "post_cold_NVE_LAMMPS_mapping_status": "AGW_MAPPING_PREFLIGHT_PASS",
+    "cold_baseline_status": "COLD_BASELINE_FAIL_INTERPHASE_TEMPERATURE_MISMATCH",
+    "NVE_energy_drift_eV": -0.12308766786009073,
+    "NVE_phase_temperatures_K": {
+      "Ag": 287.01754,
+      "W": 324.07335
+    },
+    "phase_temperature_difference_K": 37.05581,
+    "ttm_steps_executed": 0,
+    "laser_source_applied": false,
+    "limitations": [
+      "The candidate is a sensitivity copy; frozen v6 and v5 inputs remain unchanged.",
+      "The candidate phase density is about 2.95% lower under the unchanged v5 morphology-volume assumption.",
+      "5 A voxel connectivity is only a coarse screen, not atomic bond-network validation.",
+      "Static EFS acceptance still fails."
+    ]
+  }
+}

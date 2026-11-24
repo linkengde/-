@@ -430,6 +430,7 @@ def gaussian_ag_source_power(
     center_xy_A: tuple[float, float] = (100.0, 100.0),
     surface_z_A: float = 200.0,
     allow_above_surface: bool = False,
+    periodic_box_xy_A: float = 200.0,
 ) -> np.ndarray:
     """Per-atom Ag source quadrature at S(t)=1, in eV/ps/A^3.
 
@@ -442,10 +443,12 @@ def gaussian_ag_source_power(
         raise ValueError("xyz_absolute_A must be a finite (N,3) array")
     if min(i0_eV_ps_A2, radius_A, skin_depth_A, ag_atomic_volume_A3) <= 0.0:
         raise ValueError("Source and atomic-volume parameters must be positive")
+    if not np.isfinite(periodic_box_xy_A) or periodic_box_xy_A <= 0.0:
+        raise ValueError("periodic_box_xy_A must be finite and positive")
     if not allow_above_surface and np.any(xyz[:, 2] > surface_z_A + 1e-9):
         raise ValueError("Atom is above the source surface; moving-surface handling is undefined")
     dxy = xyz[:, :2] - np.asarray(center_xy_A, dtype=float)
-    dxy = (dxy + 100.0) % 200.0 - 100.0
+    dxy = (dxy + periodic_box_xy_A / 2.0) % periodic_box_xy_A - periodic_box_xy_A / 2.0
     depth = np.maximum(0.0, surface_z_A - xyz[:, 2])
     return (i0_eV_ps_A2 / skin_depth_A) * np.exp(
         -np.sum(dxy**2, axis=1) / radius_A**2 - depth / skin_depth_A
@@ -727,10 +730,12 @@ def map_agw_newton_layer(
     source_kwargs: dict | None = None,
     newton_mask: np.ndarray | None = None,
     max_transfer_distance_A: float = 20.0,
+    grid_offset_xy_A: tuple[float, float] = (0.0, 0.0),
+    box_xy_A: float = 200.0,
 ) -> dict:
     """Map Newton-layer atom volumes/source to separate Ag/W phase grids.
 
-    Coordinates are assumed in the 200×200×300 Å geometry. ``newton_mask``
+    Coordinates use a square periodic x/y box and a 0–300 Å z box. ``newton_mask``
     marks static LAMMPS Newton-group membership, established from the template
     data before restart coordinates are loaded. Current coordinates are then
     filtered to 40≤z≤200 Å before CIC; out-of-range atoms are not clipped into
@@ -755,10 +760,18 @@ def map_agw_newton_layer(
     idx_w = np.flatnonzero(newton & (typ == 1))
     if not len(idx_ag) or not len(idx_w):
         raise ValueError("The mapped Newton layer must contain both Ag and W atoms")
-    origin = np.array([0.0, 0.0, 40.0])
+    if not np.isfinite(box_xy_A) or box_xy_A <= 0.0:
+        raise ValueError("box_xy_A must be finite and positive")
+    offset = np.asarray(grid_offset_xy_A, dtype=float)
+    if offset.shape != (2,) or np.any(~np.isfinite(offset)):
+        raise ValueError("grid_offset_xy_A must contain two finite values")
+    offset = np.mod(offset, np.asarray([box_xy_A, box_xy_A]))
+    origin = np.array([offset[0], offset[1], 40.0])
     xyz_ag = xyz[idx_ag] - origin
     xyz_w = xyz[idx_w] - origin
     kwargs = dict(source_kwargs or {})
+    kwargs.setdefault("center_xy_A", (box_xy_A / 2.0, box_xy_A / 2.0))
+    kwargs.setdefault("periodic_box_xy_A", box_xy_A)
     q_ag = gaussian_ag_source_power(xyz[idx_ag], **kwargs)
     joint = build_agw_grid_fields_joint(
         xyz_ag, xyz_w, q_ag, grid_shape, spacing_A, max_transfer_distance_A
@@ -772,6 +785,8 @@ def map_agw_newton_layer(
         "atom_indices_ag": idx_ag,
         "atom_indices_w": idx_w,
         "candidate_newton_atoms": int(candidate.sum()),
+        "grid_offset_xy_A": offset.tolist(),
+        "box_xy_A": float(box_xy_A),
         "excluded_outside_ttm_region": {
             "below_40A": int(np.count_nonzero(candidate & (xyz[:, 2] < 40.0 - 1e-9))),
             "above_200A": int(np.count_nonzero(candidate & (xyz[:, 2] > 200.0 + 1e-9))),

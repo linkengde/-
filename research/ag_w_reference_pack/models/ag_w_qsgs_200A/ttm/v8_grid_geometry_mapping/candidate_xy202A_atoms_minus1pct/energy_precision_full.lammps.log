@@ -1,0 +1,162 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data candidate.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (202 202 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  477775 atoms
+  read_data CPU = 1.088 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ../../../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 1
+thermo_style custom step pe ke etotal
+thermo_modify format float %.16g
+read_dump cold_start.dump.gz 4200 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (202 202 300)
+  477775 atoms before read
+  477775 atoms in snapshot
+  0 atoms purged
+  477775 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  477775 atoms after read
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 167.3 | 167.3 | 167.3 Mbytes
+   Step         PotEng         KinEng         TotEng    
+      4200  -2406845.432980655 16404.37983280063 -2390441.053147855
+Loop time of 2.854e-06 on 1 procs for 0 steps with 477775 atoms
+
+210.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.854e-06  |            |       |100.00
+
+Nlocal:         477775 ave      477775 max      477775 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          69204 ave       69204 max       69204 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.69633e+07 ave 1.69633e+07 max 1.69633e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 16963254
+Ave neighs/atom = 35.504692
+Neighbor list builds = 0
+Dangerous builds = 0
+read_dump cold_after_nvt.dump.gz 6200 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (202 202 300)
+  477775 atoms before read
+  477775 atoms in snapshot
+  0 atoms purged
+  477775 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  477775 atoms after read
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 167.3 | 167.3 | 167.3 Mbytes
+   Step         PotEng         KinEng         TotEng    
+      6200  -2406817.52332778 16760.94374997784 -2390056.579577802
+Loop time of 1.973e-06 on 1 procs for 0 steps with 477775 atoms
+
+304.1% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.973e-06  |            |       |100.00
+
+Nlocal:         477775 ave      477775 max      477775 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          68968 ave       68968 max       68968 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.69338e+07 ave 1.69338e+07 max 1.69338e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 16933786
+Ave neighs/atom = 35.443014
+Neighbor list builds = 0
+Dangerous builds = 0
+read_dump cold_after_nve.dump.gz 6400 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (202 202 300)
+  477775 atoms before read
+  477775 atoms in snapshot
+  0 atoms purged
+  477775 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  477775 atoms after read
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 167.3 | 167.3 | 167.3 Mbytes
+   Step         PotEng         KinEng         TotEng    
+      6400  -2406854.597789269 16797.89512379984 -2390056.70266547
+Loop time of 1.442e-06 on 1 procs for 0 steps with 477775 atoms
+
+346.7% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.442e-06  |            |       |100.00
+
+Nlocal:         477775 ave      477775 max      477775 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          68942 ave       68942 max       68942 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.69286e+07 ave 1.69286e+07 max 1.69286e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 16928590
+Ave neighs/atom = 35.432139
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:07
