@@ -324,7 +324,7 @@ def main() -> None:
                 "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
                 "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
                 "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
-                "mapping_parameters": {"box_xy_A": args.box_xy_A, "grid_offset_xy_A": list(grid_offset_xy)},
+                "mapping_parameters": {"box_xy_A": args.box_xy_A, "map_z_bounds_A": [args.map_z_min_A, args.map_z_max_A], "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "max_transfer_distance_A": args.max_map_transfer_A, "allow_above_surface": bool(args.allow_above_surface)},
                 "LAMMPS_run0_force_screen": force_screen,
                 "mapped_geometry": {"candidate_newton_atoms": mapped["candidate_newton_atoms"], "Ag_atoms": int(len(mapped["atom_indices_ag"])), "W_atoms": int(len(mapped["atom_indices_w"])), "map_z_bounds_A": mapped["map_z_bounds_A"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_quadrature_S1_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
                 "ttm_steps_executed": 0,
