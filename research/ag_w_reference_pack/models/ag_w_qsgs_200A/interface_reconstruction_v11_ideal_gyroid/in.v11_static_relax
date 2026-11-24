@@ -1,0 +1,26 @@
+# V11 ideal gyroid Ag-W static relaxation; type 1=W, type 2=Ag
+units metal
+atom_style atomic
+boundary p p f
+read_data \${data}
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * \${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 200
+thermo_style custom step atoms pe ke etotal press
+thermo_modify lost error flush yes
+min_style fire
+min_modify dmax 0.10
+minimize 1.0e-5 1.0e-3 10000 50000
+run 0
+write_data \${relaxed}
+write_dump all custom \${dump} id type x y z fx fy fz
