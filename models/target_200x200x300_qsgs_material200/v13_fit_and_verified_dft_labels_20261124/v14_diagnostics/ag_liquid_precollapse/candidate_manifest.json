@@ -1,7 +1,7 @@
 {
   "candidate_id": "V14_AG_LIQUID_PRECOLLAPSE_0060",
   "category": "Ag_liquid_precollapse",
-  "status": "geometry_extracted_DFT_pending",
+  "status": "DFT_converged_candidate_training_only",
   "role": "candidate_training_only_same_parent_group",
   "parent_source_id": "V13_VAL_AG_LIQUID_01",
   "parent_run_seed": 291106,
@@ -29,5 +29,32 @@
   "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ag_liquid_precollapse/V14_AG_LIQUID_PRECOLLAPSE_0060.extxyz",
   "geometry_sha256": "d0a322cb251e981d93eaff041e1593082e1ef6e3435de170c5099f5cadb5a4b3",
   "dft_protocol": "GPAW/PBE PW350 eV, 2x2x2 k-points, symmetry off, Fermi-Dirac sigma 0.10 eV; same exploratory protocol as V13 liquid labels; not a formally converged protocol",
-  "training_split_note": "If accepted for V14 training, this same trajectory must stay in training only; it cannot serve as V14 validation."
+  "training_split_note": "If accepted for V14 training, this same trajectory must stay in training only; it cannot serve as V14 validation.",
+  "source_trajectory_relative": "../../instability_replay_v13/V13_VAL_AG_LIQUID_01/trajectory_every_step.dump",
+  "dft_audit": {
+    "scf_converged": true,
+    "scf_iterations": 21,
+    "finite_energy_force_stress": true,
+    "energy_force_consistent_free_eV": -69.78242121540822,
+    "max_force_dft_eV_A": 17.43101457219982,
+    "max_position_mapping_error_A": 6.779417940028329e-09,
+    "force_rmse_vector_norm_eV_A": 4.976217852827215,
+    "force_error_p95_eV_A": 10.847304154244455,
+    "force_error_max_eV_A": 17.592668130193992,
+    "minimum_pair_radial_comparison": {
+      "lammps_ids": [
+        22,
+        27
+      ],
+      "distance_A": 1.9716581463917553,
+      "dft_repulsive_outward_force_on_j_eV_A": 17.405613143651227,
+      "dft_repulsive_outward_force_on_i_eV_A": 16.33695104163792,
+      "v13_repulsive_outward_force_on_j_eV_A": -0.06937338756053063,
+      "v13_repulsive_outward_force_on_i_eV_A": -0.38563138935790536
+    },
+    "use_note": "Training candidate only; high-force local environment must be balanced with nearby physical environments. If used, the full parent validation group is excluded from V14 validation."
+  },
+  "dft_label_sha256": "743c6f80e7cc0992d1520b644a4c94c0ea2b57c379aa5e833bc6b4b218298b86",
+  "dft_log_sha256": "8bc064ed22ff33265b215d9b7a3ab0b28796b77962fe2ed8e3dffd31a62513be",
+  "force_comparison_sha256": "a633da7d01576e2158cf23ab85e0502c0d271f39cd9443f3cb3a6a67ed85b014"
 }
