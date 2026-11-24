@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "models" / "ag_w_qsgs_200A"
 MATERIAL_SIZE = np.array([200.0, 200.0, 200.0])
 BOX_SIZE = np.array([200.0, 200.0, 300.0])
-GRID = (80, 80, 80)
+DEFAULT_GRID = (80, 80, 80)
 SEED = 20261123
 P_CORE = 0.0003
 P_GROW = 0.145
@@ -149,14 +149,18 @@ def main():
     parser.add_argument("--p-grow", type=float, default=P_GROW)
     parser.add_argument("--generations", type=int, default=MAX_GENERATIONS)
     parser.add_argument("--target-w-fraction", type=float, default=TARGET_W_FRACTION)
+    parser.add_argument("--grid", type=int, default=DEFAULT_GRID[0], help="cubic QSGS voxel count per side; default 80 preserves the original build")
     args = parser.parse_args()
+    if args.grid < 8:
+        parser.error("--grid must be at least 8 voxels per side")
+    grid = (args.grid, args.grid, args.grid)
     args.output.mkdir(parents=True, exist_ok=True)
     for name in ("ag_w_qsgs.data.gz", "ag_w_qsgs.extxyz.gz", "qsgs_morphology.npz", "geometry_report.json"):
         if (args.output / name).exists():
             raise FileExistsError(f"Refusing to overwrite {args.output / name}")
 
     w_mask, history = qsgs_mask(
-        GRID, args.seed, args.p_core, args.p_grow, args.generations, args.target_w_fraction
+        grid, args.seed, args.p_core, args.p_grow, args.generations, args.target_w_fraction
     )
     w_pool, w_strain = make_lattice_sites("W")
     ag_pool, ag_strain = make_lattice_sites("Ag")
@@ -210,7 +214,7 @@ def main():
         W_backbone=w_mask,
         Ag_matrix=~w_mask,
         material_size_A=MATERIAL_SIZE,
-        grid=np.asarray(GRID),
+        grid=np.asarray(grid),
         seed=np.asarray(args.seed),
         p_core=np.asarray(args.p_core),
         p_grow=np.asarray(args.p_grow),
@@ -241,8 +245,8 @@ def main():
             },
             "growth_rule": "26 directions; attachment probability p_grow/r; periodic x/y, open z",
             "seed": args.seed,
-            "grid": list(GRID),
-            "voxel_size_A": (MATERIAL_SIZE / np.asarray(GRID)).tolist(),
+            "grid": list(grid),
+            "voxel_size_A": (MATERIAL_SIZE / np.asarray(grid)).tolist(),
             "W_voxel_fraction_actual": float(w_mask.mean()),
             "Ag_voxel_fraction_actual": float((~w_mask).mean()),
             "generation_history": history,

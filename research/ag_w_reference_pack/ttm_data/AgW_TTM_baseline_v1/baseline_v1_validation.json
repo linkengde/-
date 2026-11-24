@@ -19,15 +19,21 @@
       ]
     },
     "Ag_ke": {
-      "source": "XTANT-3 supplied Ag K table kappa_tot column",
-      "table": "ttm_data/XTANT3_TTM_parameters_v3/K_metals/K_Ag.dat",
+      "source": "Lin et al. (2008), Sec. II C Drude form, normalized to the user-provided 300 K Ag room-temperature bulk conductivity anchor",
+      "formula": "429 * [Ce_Ag_Lin(Te)/Ce_Ag_Lin(300)] * [(300 + a*300^2)/(Tl + a*Te^2)] W m^-1 K^-1, with a=A/B",
+      "a_over_b_K_minus1": 1.8975588195631504e-05,
+      "Ag_ke_at_Te_Tl_300K_W_m_K": 429.0,
+      "Ag_A_over_B_K_minus1": 1.8975588195631504e-05,
+      "table": "ttm_data/AgW_TTM_baseline_v1/Ag_ke_Lin_Drude_room_anchor.csv",
       "range_K": [
         300.0,
-        50000.0
+        20000.0
       ],
       "temperature_dependent_variables": [
-        "Te"
-      ]
+        "Te",
+        "Tl"
+      ],
+      "status": "exploratory Lin-Drude closure; room anchored; A/B is inferred from the XTANT 300 K channel ratio and is not independently validated"
     },
     "W_Ce": {
       "source": "Lin et al. (2008), Fig. 7(c), digitized candidate",
@@ -57,12 +63,26 @@
         2500
       ],
       "high_temperature_use": "extrapolative closure; high-Te nonequilibrium validity is not independently established",
-      "Ag_ke_source": "XTANT-3 K_Ag.dat kappa_tot column; Te-only, not a ke(Te,Tl) surface",
+      "Ag_ke_source": "Lin et al. (2008), Sec. II C Drude relation, room-anchored with Ag Ce from Fig. 2(c)",
+      "Ag_ke_formula": "429 * [Ce_Ag_Lin(Te)/Ce_Ag_Lin(300)] * [(300 + a*300^2)/(Tl + a*Te^2)] W m^-1 K^-1, with a=A/B",
+      "Ag_ke0_W_m_K": 429.0,
+      "Ag_ke_anchor_provenance": "429 W m^-1 K^-1 at 300 K as supplied by the user; total bulk conductivity is used as an electronically-dominated proxy",
+      "Ag_A_over_B_K_minus1": 1.8975588195631504e-05,
+      "Ag_A_over_B_method": "(XTANT K_Ag 300 K kappa_e_ph / kappa_e_e) / 300 K, assuming the listed channel conductivities follow Lin's inverse-relaxation-time decomposition",
+      "Ag_XTANT_300K_channel_values_W_m_K": {
+        "kappa_tot": 16.564221421169655,
+        "kappa_e_ph": 16.658516174510467,
+        "kappa_e_e": 2926.306508967758
+      },
       "Ag_ke_grid_K": [
         300.0,
         50000.0
       ],
-      "Ag_ke_at_300K_W_m_K": 16.564221421169655
+      "Ag_XTANT_kappa_tot_at_300K_W_m_K": 16.564221421169655,
+      "Ag_ke_at_Te_Tl_300K_W_m_K": 429.0,
+      "Ag_ke_at_Te_10000_Tl_300K_W_m_K": 5129.15107140113,
+      "Ag_ke_at_Te_Tl_10000K_W_m_K": 947.3885647277014,
+      "Ag_ke_status": "exploratory Lin-Drude closure; room anchored; A/B is inferred from the XTANT 300 K channel ratio and is not independently validated"
     },
     "W_G0_reference": {
       "source": "Daraszewicz et al. (2014), measured and ab-initio near-equilibrium anchors",
@@ -116,12 +136,72 @@
     "energy_ledger_pass_threshold_fraction": 1e-08,
     "energy_ledger_status": "PASS"
   },
+  "synthetic_Ag_W_grid_smoke": {
+    "status": "PASS",
+    "purpose": "Parameter-load, Ag-only source, two-phase interface exchange, and energy-ledger smoke check; not a physical pulse or MD trajectory.",
+    "mesh_shape": [
+      8,
+      8,
+      4
+    ],
+    "spacing_A": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "interface_conductance_W_m2_K": 1000000000.0,
+    "interface_model": "face-based unlike-phase transfer; equal-and-opposite; no sub-cell interface term",
+    "inactive_phase_lattice_temperature_input": "NaN in empty-phase cells; finite values in active cells",
+    "test_source": "0.5 eV/ps to one Ag cell for 0.01 ps; then source off for 0.04 ps",
+    "dt_ps": 0.0005,
+    "steps": 100,
+    "source_energy_eV": 0.005000000000000003,
+    "electron_to_lattice_energy_eV": 0.0004686993179730513,
+    "initial_electron_energy_eV": 0.0,
+    "final_electron_energy_eV": 0.004531300682012172,
+    "interface_net_energy_eV": -3.3457801416544863e-20,
+    "synthetic_Ag_only_source_mapping_power_eV_ps": 4.067571701762544,
+    "synthetic_Ag_only_source_expected_power_eV_ps": 4.067571701762544,
+    "synthetic_mapping_max_total_phase_fill": 0.0082204325625,
+    "combined_energy_residual_eV": -1.4779844015322396e-14,
+    "max_step_internal_residual_eV": 9.067359020271329e-15,
+    "max_interface_substeps_per_step": 1,
+    "final_max_Te_Ag_K": 300.12489018213927,
+    "final_max_Te_W_K": 300.0611396916222,
+    "room_temperature_ke_Ag_W_m_K": 429.0,
+    "room_temperature_ke_W_W_m_K": 130.5,
+    "reused_core": "models/ag_ti3sic2_qsgs_1to1_finer/ag_ttm_reference.py",
+    "limitations": [
+      "No atoms or LAMMPS steps are used by this grid-only check.",
+      "The test pulse is reduced and numerical only; it does not set the physical pulse envelope or absorbed fluence.",
+      "Ag/W interface conductance is a provisional 1 GW m^-2 K^-1 sensitivity value, not an Ag/W measurement.",
+      "Full-size QSGS static acceptance and TTM-MD coupling remain outstanding."
+    ]
+  },
+  "Ag_W_solver_artifacts": {
+    "reference_module": "models/ag_w_qsgs_200A/ttm/agw_ttm_reference.py",
+    "gated_LAMMPS_driver": "models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py",
+    "grid_smoke_script": "models/ag_w_qsgs_200A/ttm/run_agw_ttm_grid_smoke.py",
+    "grid_smoke_status": "PASS",
+    "atomistic_TTM_MD_status": "NOT_RUN_STATIC_STRUCTURE_GATE_NOT_PASSED"
+  },
+  "provisional_Ag_W_electronic_interface": {
+    "conductance_W_m2_K": 1000000000.0,
+    "model": "finite face-based electron conductance; equal-and-opposite interphase energy transfer",
+    "source_basis": "Li et al. (2024) Au/Pt and Au/Al method analogues; selected value is not a direct Ag/W measurement",
+    "spatial_rule": "unlike-phase fractions across shared grid-cell faces; sub-cell interface area omitted",
+    "status": "numerically implemented and smoke-tested; material value remains exploratory"
+  },
   "output_trajectory": "W_Lin_baseline_energy_pilot.csv",
+  "output_Ag_ke_table": "Ag_ke_Lin_Drude_room_anchor.csv",
   "limitations": [
     "The W Lin G curve below 600 K is extrapolated and differs from Daraszewicz's experimental G0; no empirical rescaling was applied.",
     "The Ag Lin curves are digitized from plots; the low-temperature G plateau and short 5000–6607 K bridge are documented approximations.",
-    "Ag ke is Te-only and XTANT warns that room-temperature values may not be reliable.",
-    "No Ag/W electron-interface conductance, mixed-cell electronic transport rule, or jointly validated Ag/W TTM-MD closure is supplied.",
+    "Ag ke is a room-anchored Lin Drude closure; the user-provided 429 W m^-1 K^-1 anchor approximates total as electronic-dominated, and the A/B scattering ratio is inferred from XTANT's room-temperature channel split.",
+    "Ag ke high-Te nonequilibrium behavior is not independently validated; the raw XTANT kappa_tot table remains archived and is not used as the room-temperature amplitude.",
+    "Ag/W electron-interface conductance is set to a provisional 1 GW m^-2 K^-1 from non-Ag/W analogues; its material value and omitted sub-cell area are not validated.",
+    "The Ag/W solver is an exploratory Python reference bridge, not a compiled LAMMPS TTM fix; the gated atomistic driver has not run because no static structure passed.",
+    "No Ag lattice-conductivity curve or jointly validated Ag/W interface conductance is supplied.",
     "The 0D energy pilot uses one normalized temporal Gaussian and tests energy accounting only; it is not the spatial laser calculation and does not test melting."
   ]
 }

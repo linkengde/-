@@ -31,12 +31,24 @@
         "low_temperature_rule": "0.25e17 W m^-3 K^-1 plateau through 5000 K, then an explicit linear bridge to the traced curve at about 6607 K",
         "uncertainty": "approximately 5% plot-reading estimate for traced region; low-Te plateau/bridge and source/model uncertainty are additional"
       },
-      "ke_Te": {
-        "source": "User-supplied XTANT-3 K_Ag.dat, kappa_tot column",
-        "table": "../XTANT3_TTM_parameters_v3/K_metals/K_Ag.dat",
-        "range_K": [300, 50000],
-        "temperature_dependent_variables": ["Te"],
-        "limitations": ["not a ke(Te,Tl) surface", "source description warns that room-temperature values may not be reliable"]
+      "ke_Te_Tl": {
+        "source": "Lin, Zhigilei & Celli (2008), Sec. II C Drude relation, with Ag Ce from Fig. 2(c); normalized to the user-provided room-temperature Ag bulk conductivity",
+        "formula": "ke_Ag(Te,Tl)=429*[Ce_Ag_Lin(Te)/Ce_Ag_Lin(300)]*[(300+a*300^2)/(Tl+a*Te^2)] W m^-1 K^-1, a=A/B",
+        "table": "Ag_ke_Lin_Drude_room_anchor.csv",
+        "range_K": [300, 20000],
+        "temperature_dependent_variables": ["Te", "Tl"],
+        "ke0_W_m_K": 429.0,
+        "room_anchor_provenance": "429 W m^-1 K^-1 at 300 K supplied by the user; total bulk conductivity is used as an electronically-dominated proxy because no separately validated Ag lattice channel was identified",
+        "A_over_B_K_minus1": 1.8975588195631504e-05,
+        "A_over_B_derivation": "(XTANT K_Ag 300 K kappa_e_ph/kappa_e_e)/300 K, assuming the listed channel conductivities follow the inverse-relaxation-time decomposition in the Lin Drude model",
+        "XTANT_raw_reference": {
+          "table": "../XTANT3_TTM_parameters_v3/K_metals/K_Ag.dat",
+          "kappa_tot_at_300_W_m_K": 16.564221421169655,
+          "kappa_e_ph_at_300_W_m_K": 16.658516174510467,
+          "kappa_e_e_at_300_W_m_K": 2926.306508967758,
+          "use": "retained as a source comparison; not used as the room-temperature baseline magnitude"
+        },
+        "limitations": ["room anchor approximates total bulk conductivity as electronic because Ag is electron dominated", "A/B is inferred from one XTANT channel ratio at 300 K and is not independently validated", "not a measured ke(Te,Tl) surface", "high-Te nonequilibrium extrapolation is exploratory", "the user's 429 W m^-1 K^-1 citation was supplied as a De Gruyter search-result reference without an exact bibliographic URL"]
       },
       "kl_Tl": {
         "status": "not assigned in baseline v1",
@@ -91,9 +103,14 @@
     "surface_z_A": 200.0,
     "time_envelope": "S(t) not fixed by baseline v1"
   },
-  "unclosed_mixed_phase_terms": [
-    "Ag/W electronic interface conductance",
-    "cross-phase electron-temperature transport rule and mixed-cell parameterization",
+  "provisional_ag_w_electronic_interface_closure": {
+    "conductance_W_m2_K": 1000000000.0,
+    "model": "finite face-based Ag/W electron conductance; equal-and-opposite energy transfer",
+    "source_basis": "Li et al. (2024) reports 4.4±1.8 GW m^-2 K^-1 for Au/Pt and 0.13±0.05 GW m^-2 K^-1 for Au/Al; 1 GW m^-2 K^-1 is a provisional midpoint-scale sensitivity input, not an Ag/W measurement",
+    "spatial_rule": "couple unlike-phase volume fractions across shared grid-cell faces; zero interface area is assigned inside mixed cells",
+    "status": "numerically closed for exploratory tests; material value and sub-cell rule are unvalidated"
+  },
+  "remaining_unclosed_mixed_phase_terms": [
     "Ag lattice thermal conductivity versus temperature",
     "laser temporal envelope, pulse duration, and absorbed energy for the target case"
   ],
@@ -101,6 +118,10 @@
     "report": "BASELINE_V1_VALIDATION_20261124.md",
     "machine_readable": "baseline_v1_validation.json",
     "W_energy_pilot": "W_Lin_baseline_energy_pilot.csv",
+    "Ag_ke_room_anchor_grid": "Ag_ke_Lin_Drude_room_anchor.csv",
+    "AgW_grid_smoke": "../../models/ag_w_qsgs_200A/ttm/agw_ttm_grid_smoke_metrics.json",
+    "AgW_reference_solver": "../../models/ag_w_qsgs_200A/ttm/agw_ttm_reference.py",
+    "AgW_gated_LAMMPS_pilot": "../../models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py",
     "reproduction_script": "../../scripts/validate_agw_ttm_baseline_v1.py"
   }
 }

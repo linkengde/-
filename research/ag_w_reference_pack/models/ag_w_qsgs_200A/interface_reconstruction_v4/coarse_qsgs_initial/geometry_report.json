@@ -1,0 +1,150 @@
+{
+  "status": "PASS_UNRELAXED_BICONTINUOUS_GEOMETRY_ONLY",
+  "material_size_A": [
+    200.0,
+    200.0,
+    200.0
+  ],
+  "box_size_A": [
+    200.0,
+    200.0,
+    300.0
+  ],
+  "boundary": "p p f",
+  "material_z_A": [
+    0.0,
+    200.0
+  ],
+  "vacuum_z_A": [
+    200.0,
+    300.0
+  ],
+  "layer_atom_counts": {
+    "fixed_0_20_A": 49151,
+    "thermostat_20_40_A": 49208,
+    "newton_40_200_A": 383199,
+    "sputter_monitor_200_250_A": 0,
+    "evaporation_monitor_250_300_A": 0
+  },
+  "total_atoms": 481558,
+  "atom_counts": {
+    "W": 177227,
+    "Ag": 304331
+  },
+  "atom_fractions": {
+    "W": 0.36802835795480504,
+    "Ag": 0.631971642045195
+  },
+  "mass_ratio_Ag_over_W": 1.0075572383608888,
+  "mass_ratio_relative_error": 0.0075572383608888405,
+  "minimum_initial_Ag_W_distance_A": 0.0800000000000125,
+  "initial_geometry_note": "Distinct perfect lattices have close cross-interface contacts; overlap relaxation is required before MD.",
+  "qsgs": {
+    "four_parameters": {
+      "core_seed_probability": 0.01925,
+      "growth_probability_base": 0.145,
+      "maximum_generations": 10,
+      "target_W_voxel_fraction": 0.3527
+    },
+    "growth_rule": "26 directions; attachment probability p_grow/r; periodic x/y, open z",
+    "seed": 20261124,
+    "grid": [
+      20,
+      20,
+      20
+    ],
+    "voxel_size_A": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "W_voxel_fraction_actual": 0.35275,
+    "Ag_voxel_fraction_actual": 0.64725,
+    "generation_history": [
+      {
+        "generation": 0,
+        "occupied": 153,
+        "fraction": 0.019125
+      },
+      {
+        "generation": 1,
+        "new_voxels_available": 388,
+        "new_voxels_added": 388,
+        "occupied": 541,
+        "fraction": 0.067625,
+        "target_reached": false
+      },
+      {
+        "generation": 2,
+        "new_voxels_available": 1084,
+        "new_voxels_added": 1084,
+        "occupied": 1625,
+        "fraction": 0.203125,
+        "target_reached": false
+      },
+      {
+        "generation": 3,
+        "new_voxels_available": 2164,
+        "new_voxels_added": 1197,
+        "occupied": 2822,
+        "fraction": 0.35275,
+        "target_reached": true
+      }
+    ]
+  },
+  "lattices": {
+    "W": {
+      "structure": "bcc",
+      "lattice_parameter_A": 3.16,
+      "xy_strain": [
+        0.004621257785814681,
+        0.004621257785814681
+      ]
+    },
+    "Ag": {
+      "structure": "fcc",
+      "lattice_parameter_A": 4.09,
+      "xy_strain": [
+        -0.002045806097500158,
+        -0.002045806097500158
+      ]
+    }
+  },
+  "atomic_phase_topology": {
+    "W": {
+      "atoms": 177227,
+      "components": 15,
+      "largest_component_atoms": 176336,
+      "largest_component_share": 0.9949725493293912,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        199.08
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 304331,
+      "components": 1,
+      "largest_component_atoms": 304331,
+      "largest_component_share": 1.0,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        198.36499999999998
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "TTM": {
+    "requested": true,
+    "status": "NOT_RUN",
+    "note": "Stock fix ttm/mod does not support the free-z boundary; the workspace has an Ag-only finite-volume reference solver, but W electronic data and an Ag-W mixed-phase closure are not yet verified."
+  },
+  "md_start_gate": "FAIL",
+  "data_sha256": "2e03092947acff98c704598bde9657c378898bf86bf87a7ebd7a43e7408c39c3",
+  "static_force_screen_pass": false,
+  "static_start_gate_reason": "Unrelaxed QSGS projection; initial Ag-W nearest distance is 0.08 A. No force minimization or thermal equilibration has been performed."
+}
