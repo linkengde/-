@@ -130,6 +130,13 @@ def main() -> None:
             raise SystemExit("Exploratory restart dump hash does not match the manifest")
         if expected_step is not None and int(expected_step) != args.restart_step:
             raise SystemExit("Exploratory restart timestep does not match the manifest")
+    if args.geometry_fractions_npz is not None:
+        geometry_path = args.geometry_fractions_npz.resolve()
+        if not geometry_path.is_file():
+            raise SystemExit(f"Geometry fraction file not found: {geometry_path}")
+        expected_geometry = gate["audit"].get("geometry_fractions_sha256")
+        if not expected_geometry or sha256_file(geometry_path).lower() != str(expected_geometry).lower():
+            raise SystemExit("V11 geometry fraction file hash does not match the manifest")
     if args.restart_step < 0:
         raise SystemExit("Restart timestep must be non-negative")
     if not POTENTIAL.is_file():
@@ -446,7 +453,7 @@ def main() -> None:
             "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_added_eV": final["bath_energy_added_eV"], "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
             "history": history,
             "limitations": [
-                "This pilot run used an exploratory-only override because the v5 EFS static audit remains STATIC_EFS_FAIL; an energy-ledger PASS is a software/numerical coupling result, not a static-structure or physical-validity pass.",
+                "This pilot run used an explicit exploratory-only override; an energy-ledger PASS is a software/numerical coupling result, not a quantitative melting or physical-validity pass.",
                 "The Ag/W phase-fraction and atom-to-grid maps are frozen at the post-read initial coordinates; large melt migration or composition redistribution is not represented.",
                 "The Ag/W electronic interface conductance is a provisional analogue-based 1 GW m^-2 K^-1 unless explicitly changed; it is not a measured Ag/W value.",
                 "The deterministic velocity-rescaling handoff conserves kinetic energy but does not preserve local momentum or add stochastic phonon fluctuations.",
