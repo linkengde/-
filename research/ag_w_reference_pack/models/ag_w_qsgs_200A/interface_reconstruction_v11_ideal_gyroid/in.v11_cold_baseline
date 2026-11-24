@@ -23,6 +23,9 @@ velocity mobile create 300.0 20261124 mom yes rot no dist gaussian
 compute Tmobile mobile temp/com
 compute TAg AgMobile temp/com
 compute TW WMobile temp/com
+compute PE all pe
+compute KE all ke
+variable Etotal equal c_PE+c_KE
 fix eq mobile nvt temp 300.0 300.0 0.1
 fix_modify eq temp Tmobile
 thermo 100
