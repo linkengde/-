@@ -1,0 +1,180 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+fitpod AgTiSiC_POD_v13.pod fitpod.data
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Data File ****************
+file format: extxyz
+file extension: xyz
+path to training data set: /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/training
+path to test data set: /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/validation
+path to environment configuration set: 
+basename for output files: v13
+training fraction: 1
+test fraction: 1
+randomize training data set: 0
+randomize test data set: 0
+error analysis for training data set: 1
+error analysis for test data set: 1
+energy/force calculation for training data set: 0
+energy/force calculation for test data set: 0
+fitting weight for energy: 100
+fitting weight for force: 1
+fitting weight for stress: 0
+save pod descriptors: 0
+compute pod descriptors: 0
+**************** End of Data File ****************
+**************** Begin of Training Data Set ****************
+-------------------------------------------------------------------------------
+             data file             | number of configurations | number of atoms
+-------------------------------------------------------------------------------
+ V13_AG_COEX_01.xyz                |                 1        |          64
+ V13_AG_COEX_02.xyz                |                 1        |          64
+ V13_AG_COEX_03.xyz                |                 1        |          64
+ V13_AG_COEX_04.xyz                |                 1        |          64
+ V13_AG_LIQUID_01_MELTCOOL1300.xyz |                 1        |          32
+ V13_AG_LIQUID_02_MELTCOOL1300.xyz |                 1        |          32
+ V13_AG_LIQUID_03.xyz              |                 1        |          32
+ V13_AG_LIQUID_04.xyz              |                 1        |          32
+ V13_AG_LIQUID_05.xyz              |                 1        |          32
+ V13_AG_LIQUID_06.xyz              |                 1        |          32
+ V13_AG_RICH_SI_01.xyz             |                 1        |          64
+ V13_AG_RICH_SI_02.xyz             |                 1        |          64
+ V13_AG_SOLID_01.xyz               |                 1        |          32
+ V13_AG_SOLID_02.xyz               |                 1        |          32
+ V13_AG_SOLID_03.xyz               |                 1        |          32
+ V13_AG_SOLID_04.xyz               |                 1        |          32
+ V13_AG_SOLID_05.xyz               |                 1        |          32
+ V13_IFACE_01.xyz                  |                 1        |          64
+ V13_IFACE_02.xyz                  |                 1        |          64
+ V13_IFACE_03.xyz                  |                 1        |          64
+ V13_IFACE_04.xyz                  |                 1        |          64
+ V13_IFACE_05.xyz                  |                 1        |          64
+ V13_TSC_VIB_01_ANISO.xyz          |                 1        |          48
+ V13_TSC_VIB_02_ANISO.xyz          |                 1        |          48
+ V13_TSC_VIB_03_ANISO.xyz          |                 1        |          48
+ V13_TSC_VIB_04_ANISO.xyz          |                 1        |          48
+ V13_TSC_VIB_05_ANISO.xyz          |                 1        |          48
+-------------------------------------------------------------------------------
+number of files: 27
+number of configurations in all files: 27
+number of atoms in all files: 1296
+minimum number of atoms: 32
+maximum number of atoms: 64
+**************** End of Training Data Set ****************
+**************** Begin of Test Data Set ****************
+-----------------------------------------------------------------------
+         data file         | number of configurations | number of atoms
+-----------------------------------------------------------------------
+ V13_VAL_AG_COEX_01.xyz    |                 1        |          64
+ V13_VAL_AG_LIQUID_01.xyz  |                 1        |          32
+ V13_VAL_AG_RICH_SI_01.xyz |                 1        |          64
+ V13_VAL_AG_SOLID_01.xyz   |                 1        |          32
+ V13_VAL_INTERFACE_01.xyz  |                 1        |          64
+ V13_VAL_TSC_VIB_01.xyz    |                 1        |          48
+-----------------------------------------------------------------------
+number of files: 6
+number of configurations in all files: 6
+number of atoms in all files: 304
+minimum number of atoms: 32
+maximum number of atoms: 64
+**************** End of Test Data Set ****************
+**************** Begin of Memory Allocation ****************
+maximum number of atoms in periodic domain: 64
+maximum number of atoms in extended domain: 1728
+maximum number of neighbors in extended domain: 110592
+size of double memory: 24582504
+size of descriptor matrix: 3572 x 3572
+**************** End of Memory Allocation ****************
+**************** Begin of Least-Squares Fitting ****************
+Configuration: # 1
+**************** Begin of Error Calculation ****************
+Configuration: # 1
+**************** End of Error Calculation ****************
+**************** Begin of Error Analysis for the Training Data Set ****************
+-------------------------------------------------------------------------------------------------------------------
+                File                 | # configs |  # atoms  | MAE energy  | RMSE energy | MAE force  | RMSE force
+-------------------------------------------------------------------------------------------------------------------
+V13_AG_COEX_01.xyz                           1          64     0.086427      0.086427      0.530360      0.809263  
+V13_AG_COEX_02.xyz                           1          64     0.104733      0.104733      0.639806      0.858002  
+V13_AG_COEX_03.xyz                           1          64     0.106807      0.106807      0.635466      0.813350  
+V13_AG_COEX_04.xyz                           1          64     0.083894      0.083894      0.565438      0.765238  
+V13_AG_LIQUID_01_MELTCOOL1300.xyz            1          32     0.112677      0.112677      0.663790      0.854309  
+V13_AG_LIQUID_02_MELTCOOL1300.xyz            1          32     0.069491      0.069491      0.578758      0.723090  
+V13_AG_LIQUID_03.xyz                         1          32     0.076973      0.076973      0.717707      0.890804  
+V13_AG_LIQUID_04.xyz                         1          32     0.085599      0.085599      0.717877      0.963359  
+V13_AG_LIQUID_05.xyz                         1          32     0.021464      0.021464      0.851830      1.050722  
+V13_AG_LIQUID_06.xyz                         1          32     0.001984      0.001984      0.878593      1.151417  
+V13_AG_RICH_SI_01.xyz                        1          64     0.013437      0.013437      0.264686      0.454695  
+V13_AG_RICH_SI_02.xyz                        1          64     0.010759      0.010759      0.204216      0.313370  
+V13_AG_SOLID_01.xyz                          1          32     0.004955      0.004955      0.145393      0.169849  
+V13_AG_SOLID_02.xyz                          1          32     0.078556      0.078556      0.201751      0.255302  
+V13_AG_SOLID_03.xyz                          1          32     0.097947      0.097947      0.356379      0.447464  
+V13_AG_SOLID_04.xyz                          1          32     0.005476      0.005476      0.444299      0.606723  
+V13_AG_SOLID_05.xyz                          1          32     0.141969      0.141969      0.463587      0.570095  
+V13_IFACE_01.xyz                             1          64     0.001030      0.001030      0.268457      0.424128  
+V13_IFACE_02.xyz                             1          64     0.007830      0.007830      0.251737      0.358784  
+V13_IFACE_03.xyz                             1          64     0.011517      0.011517      0.224708      0.345671  
+V13_IFACE_04.xyz                             1          64     0.014828      0.014828      0.254435      0.366671  
+V13_IFACE_05.xyz                             1          64     0.009266      0.009266      0.196838      0.303296  
+V13_TSC_VIB_01_ANISO.xyz                     1          48     0.081774      0.081774      0.211857      0.274397  
+V13_TSC_VIB_02_ANISO.xyz                     1          48     0.075961      0.075961      0.335273      0.426271  
+V13_TSC_VIB_03_ANISO.xyz                     1          48     0.074652      0.074652      0.351133      0.478382  
+V13_TSC_VIB_04_ANISO.xyz                     1          48     0.048817      0.048817      0.463848      0.622337  
+V13_TSC_VIB_05_ANISO.xyz                     1          48     0.052976      0.052976      0.415579      0.517436  
+-------------------------------------------------------------------------------------------------------------------
+All files                                   27        1296     0.054881      0.068885      0.413797      0.614599  
+-------------------------------------------------------------------------------------------------------------------
+**************** End of Error Analysis for the Training Data Set ****************
+**************** Begin of Error Calculation ****************
+Configuration: # 1
+**************** End of Error Calculation ****************
+**************** Begin of Error Analysis for the Test Data Set ****************
+-----------------------------------------------------------------------------------------------------------
+            File             | # configs |  # atoms  | MAE energy  | RMSE energy | MAE force  | RMSE force
+-----------------------------------------------------------------------------------------------------------
+V13_VAL_AG_COEX_01.xyz               1          64     0.110621      0.110621      0.622463      0.815992  
+V13_VAL_AG_LIQUID_01.xyz             1          32     0.054093      0.054093      0.764751      0.920155  
+V13_VAL_AG_RICH_SI_01.xyz            1          64     0.007025      0.007025      0.299076      0.511106  
+V13_VAL_AG_SOLID_01.xyz              1          32     0.004804      0.004804      0.274220      0.337677  
+V13_VAL_INTERFACE_01.xyz             1          64     0.018513      0.018513      0.237944      0.390066  
+V13_VAL_TSC_VIB_01.xyz               1          48     0.227383      0.227383      0.377579      0.477173  
+-----------------------------------------------------------------------------------------------------------
+All files                            6         304     0.070406      0.105894      0.413085      0.603560  
+-----------------------------------------------------------------------------------------------------------
+**************** End of Error Analysis for the Test Data Set ****************
+Total wall time: 0:01:01

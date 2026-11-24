@@ -1,0 +1,1093 @@
+{
+  "schema": "v13-training-candidate-manifest-v1",
+  "status": "27 labels accepted; 0 in progress; 0 not started; no POD fit unless all split labels pass",
+  "created_utc_date": "2026-11-23",
+  "selected_candidate_count": 27,
+  "planned_candidate_count": 27,
+  "planned_candidate_distribution": {
+    "Ag_solid": 5,
+    "Ag_liquid": 6,
+    "Ag_solid_liquid_coexistence": 4,
+    "Ti3SiC2_solid_thermal": 5,
+    "Ag_Ti3SiC2_interface": 5,
+    "Ag_rich_Si_local_environment": 2
+  },
+  "actual_candidate_distribution": {
+    "Ag_solid": 5,
+    "Ag_liquid": 6,
+    "Ag_solid_liquid_coexistence": 4,
+    "Ti3SiC2_solid_thermal": 5,
+    "Ag_Ti3SiC2_interface": 5,
+    "Ag_rich_Si_local_environment": 2
+  },
+  "pending_category_slots": {},
+  "same_parent_split_rule": "all frames from one trajectory/source stay in one split; these candidate sources are training-only and not final blind-test data",
+  "candidate_label_policy": {
+    "code": "GPAW 26.7.0",
+    "xc": "PBE",
+    "paw": "GPAW PAW data 1.2.1",
+    "cutoff_eV": 350,
+    "fermi_dirac_sigma_eV": 0.1,
+    "scf_tolerances": {
+      "density": 1e-05,
+      "eigenstates": 1e-05,
+      "energy": 1e-05
+    },
+    "max_scf_iterations": 250,
+    "symmetry": "off",
+    "energy_for_fit": "GPAW force-consistent free energy at sigma=0.10 eV; extrapolated energy retained as a separate audit field",
+    "stress": "record for audit, excluded from current POD fit target",
+    "kpoints_by_category": {
+      "Ag_solid": [
+        2,
+        2,
+        2
+      ],
+      "Ag_liquid": [
+        2,
+        2,
+        2
+      ],
+      "Ti3SiC2_solid_thermal": [
+        3,
+        3,
+        1
+      ],
+      "Ag_solid_liquid_coexistence": [
+        3,
+        3,
+        1
+      ],
+      "Ag_Ti3SiC2_interface": [
+        4,
+        4,
+        1
+      ],
+      "Ag_rich_Si_local_environment": [
+        4,
+        4,
+        1
+      ]
+    },
+    "status": "exploratory common E/F labeling protocol: PW350 with dense k meshes; stress excluded; not a universal convergence claim"
+  },
+  "candidates": [
+    {
+      "candidate_id": "V13_AG_SOLID_01",
+      "category": "Ag_solid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_SOLID_01.extxyz",
+      "geometry_file_sha256": "7a4e0cd4cf4e3cb529aec2c691dbd51bbc2cbff2f1e3298ecfafd23fcbbde723",
+      "canonical_geometry_sha256": "de3fa2b8a6c1ded5cb79daf8480448c43c80c50758a09743a54cbc7746076bf7",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_01/trajectory.dump",
+      "trajectory_sha256": "2569f71a81924262e0c0bd2b7255ccedad94a594e3fb2e2a90e64c0113b96636",
+      "parent_source_id": "AG_SOLID_T300_SEED13101",
+      "random_seed": 13101,
+      "target_temperature_K": 300.0,
+      "observed_temperature_K": 330.475436,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_01/in.sample.lmp",
+      "source_input_sha256": "e48ca1f5b40ff4856aee3587bec35fa2bfaeafc04c398c3bbacff94c11fdf338",
+      "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.5606008287019699,
+        "trajectory_MSD_A2": 0.037503582550303366,
+        "phase_screen": "solid-like"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_01/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_01/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_02",
+      "category": "Ag_solid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_SOLID_02.extxyz",
+      "geometry_file_sha256": "a3a99d59565c68b429043ec94a906bb47f07ca9da4648e66bace72751704182f",
+      "canonical_geometry_sha256": "2e633c30e2bc5177e46239cb449161e92763341a41a2f864cd4958cc7c3feaa1",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_02/trajectory.dump",
+      "trajectory_sha256": "4208686137aa28655105e7444eeada6c72600e743a4fa0a896f566cec97c17b5",
+      "parent_source_id": "AG_SOLID_T600_SEED13102",
+      "random_seed": 13102,
+      "target_temperature_K": 600.0,
+      "observed_temperature_K": 597.1963499999999,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_02/in.sample.lmp",
+      "source_input_sha256": "219450710a6399332ecb295b66e9710b15edd0799e9e8ee4160d81180d7d036a",
+      "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.537294023197165,
+        "trajectory_MSD_A2": 0.06086304414807442,
+        "phase_screen": "solid-like"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_02/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_02/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_03",
+      "category": "Ag_solid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_SOLID_03.extxyz",
+      "geometry_file_sha256": "808e15737e8c4a3bd6401b3fa32a457bd1681f2aea1c4ffe6efe8607af89a51e",
+      "canonical_geometry_sha256": "6fe3b4b79e59b3205482f4d69fc06b9091876a2fc2f290fe51d3ea9b2a69a4a3",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_03/trajectory.dump",
+      "trajectory_sha256": "e7c99ad7da12feb4c35a0f1331402595d7d2f3d76825efb7ffab25673488f4a5",
+      "parent_source_id": "AG_SOLID_T900_SEED13103",
+      "random_seed": 13103,
+      "target_temperature_K": 900.0,
+      "observed_temperature_K": 932.2625400000001,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_03/in.sample.lmp",
+      "source_input_sha256": "0ccf7366919afb26572e59f8e0f78c8d0835765c1251f2bec0ab5f19b9fa0bed",
+      "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.5025941313649904,
+        "trajectory_MSD_A2": 0.12265810485164112,
+        "phase_screen": "solid-like"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_03/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_03/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_04",
+      "category": "Ag_solid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_SOLID_04.extxyz",
+      "geometry_file_sha256": "bf13aa1f9185374cc345252b95c09c163014eb53943cb34630d3460744aafe17",
+      "canonical_geometry_sha256": "e616aff42aea1d3231ddf644ea6c2c7840875231b2dbd141b7b677f5be8e3c33",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_04/trajectory.dump",
+      "trajectory_sha256": "97a37199ff5cb8ef9958c110daf9e9dbda0c16cc052eac18bea63f000b22ac5b",
+      "parent_source_id": "AG_SOLID_T1050_SEED13104",
+      "random_seed": 13104,
+      "target_temperature_K": 1050.0,
+      "observed_temperature_K": 1147.3136319999999,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_04/in.sample.lmp",
+      "source_input_sha256": "17bf84907bd9eb8d4977811a8f60d9e4e9e272e6fa46593fdd02cfb55005d2ec",
+      "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.47757830356176345,
+        "trajectory_MSD_A2": 0.10129432901231925,
+        "phase_screen": "solid-like"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_04/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_04/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_SOLID_05",
+      "category": "Ag_solid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_SOLID_05.extxyz",
+      "geometry_file_sha256": "1fb225570bbac97586d12201d59740ea4b0526a96330d1946b0392e9b2663f3e",
+      "canonical_geometry_sha256": "59ff4c244761ec1b9bba8f9e2a79e8b458caf6c4bff827e1ff92ce782f99cf39",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_05/trajectory.dump",
+      "trajectory_sha256": "e5e9dd6f51055d696a6789c1544af08cd22fab8cad5a4e701740186586a1e96b",
+      "parent_source_id": "AG_SOLID_T1150_SEED13105",
+      "random_seed": 13105,
+      "target_temperature_K": 1150.0,
+      "observed_temperature_K": 1187.1128,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_SOLID_05/in.sample.lmp",
+      "source_input_sha256": "e5ffe7d29932f5cd15858e614cd49eeb1a944477527d47fa5f1eecdcd53532d4",
+      "phase_quality_screen": "solid-like by high Q6 and low MSD; sampler-only provisional screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.46629704181674236,
+        "trajectory_MSD_A2": 0.20790571850023715,
+        "phase_screen": "solid-like"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_05/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_SOLID_05/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_03",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_LIQUID_03.extxyz",
+      "geometry_file_sha256": "e83b6ba5becd14ad1ac38f887f4fe8fdaead883bcaa40e88e8abe23f19bd1957",
+      "canonical_geometry_sha256": "992da3ce6d00e0b6544c94b30b69eee1de1bd6405208eeb4c8f37c769dca7615",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_03/trajectory.dump",
+      "trajectory_sha256": "c4be9b445c450c809b88b4207f06d0b32f63d0a198fb53f1ece199f5791052a5",
+      "parent_source_id": "AG_LIQUID_T1600_SEED13203",
+      "random_seed": 13203,
+      "target_temperature_K": 1600.0,
+      "observed_temperature_K": 1753.3822800000003,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_03/in.sample.lmp",
+      "source_input_sha256": "64efa5e444f466c757ff429ab4ec5b360f48225568fb825dfcc1495c6623dd01",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.3793788249201144,
+        "trajectory_MSD_A2": 41.764641762322555,
+        "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_03/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_03/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_04",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_LIQUID_04.extxyz",
+      "geometry_file_sha256": "2d41d96c9c5900aa168491326de690c6c7782d5db08776cc5b296f3fceb6d0ba",
+      "canonical_geometry_sha256": "8bbe88050396728cf7fddc119608a8b85afc6a206baf70b07f56183d49cb1b35",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_04/trajectory.dump",
+      "trajectory_sha256": "07f5d8ee781c911be889aecb5940193ef6fa098970c8c4897ace16d71e0e35ad",
+      "parent_source_id": "AG_LIQUID_T1600_SEED13204",
+      "random_seed": 13204,
+      "target_temperature_K": 1600.0,
+      "observed_temperature_K": 1518.47482,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_04/in.sample.lmp",
+      "source_input_sha256": "b2bea283012ef2be6378697f748eb19dbe2ca2a3b749f191c1fec571eb13bb7e",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.37869347350000987,
+        "trajectory_MSD_A2": 21.2174991958996,
+        "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_04/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_04/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_05",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_LIQUID_05.extxyz",
+      "geometry_file_sha256": "015d8c8dac9ed6248cdf73e67faa96ac38d38988388faf23c584d7e6d6e989f6",
+      "canonical_geometry_sha256": "f4cab1167ee7ac8d5c7532e215a15ba452d0f88424e6f6e20c88939269ab5709",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_05/trajectory.dump",
+      "trajectory_sha256": "a3b1023ab989abb78f02f6901235a77cfd59f467a1c693e72ce958bc5c0c4555",
+      "parent_source_id": "AG_LIQUID_T2000_SEED13205",
+      "random_seed": 13205,
+      "target_temperature_K": 2000.0,
+      "observed_temperature_K": 2192.95016,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_05/in.sample.lmp",
+      "source_input_sha256": "5e4d4fa2108bfa50d082836dba1821fc69285a32324615474747bdae81c31be4",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.3770333073430043,
+        "trajectory_MSD_A2": 71.08774586088926,
+        "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_05/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_05/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_06",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/geometries/V13_AG_LIQUID_06.extxyz",
+      "geometry_file_sha256": "cb079780f589f5eec246445ef83b305db4e4616a2b4ef42399cb2112d7639fed",
+      "canonical_geometry_sha256": "a70c3b41dba4bd02b6550c6fe08affc894ca3430d871f5ac5b02b941690a9a28",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_06/trajectory.dump",
+      "trajectory_sha256": "e23171ee700fd051f35398f43f35058252042df475cb18fc91375b74f68d9795",
+      "parent_source_id": "AG_LIQUID_T2000_SEED13206",
+      "random_seed": 13206,
+      "target_temperature_K": 2000.0,
+      "observed_temperature_K": 2275.3256599999995,
+      "sampler": "LAMMPS EAM/alloy Ag_u3.eam; candidate geometry only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/runs/V13_AG_LIQUID_06/in.sample.lmp",
+      "source_input_sha256": "103f42d5be40a195f0b12427c957bbc23b30586b6aa188e7f2a6b7c51c5e276a",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.3815567069900309,
+        "trajectory_MSD_A2": 85.49549711631155,
+        "phase_screen": "liquid-like; provisional, trajectory diffusion observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_06/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_06/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_01_MELTCOOL1300",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/geometries/V13_AG_LIQUID_01_meltcool.extxyz",
+      "geometry_file_sha256": "e423a11e26aca685d79a9c6ffcd2f9b49eef501bc9328a2aa24b968d7f0b6d7e",
+      "canonical_geometry_sha256": "c8dbb45330a1e504eec8e63859b11b6502090cbb5e240ef6c1d664d914b8bf07",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_01/trajectory.dump",
+      "trajectory_sha256": "b4086189ecbbd4f73dde31281ec8fd6488894541b0d84bb0046b95f45aea348e",
+      "parent_source_id": "AG_LIQUID_T1300_SEED13201_MELTCOOL",
+      "random_seed": 13201,
+      "target_temperature_K": 1300.0,
+      "observed_temperature_K": 1272.8822199999997,
+      "sampler": "Ag EAM melt-cool resampling at nominal 1300 K",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_01/in.meltcool.lmp",
+      "source_input_sha256": "1b31ef469f4c27a8dc7985ea08eeef6b783fa6a7750255b144684e653abdcbe7",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.3817939461735368,
+        "trajectory_MSD_A2": 129.44854447274696,
+        "phase_screen": "liquid-like; provisional, diffusion and disordered Q6 observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_01_MELTCOOL1300/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_01_MELTCOOL1300/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_LIQUID_02_MELTCOOL1300",
+      "category": "Ag_liquid",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/geometries/V13_AG_LIQUID_02_meltcool.extxyz",
+      "geometry_file_sha256": "8eb38feccba0e8de7f2beb19884bc2433781418b5693f1991a75829ff817bf56",
+      "canonical_geometry_sha256": "5f9bb00b1868809f050f947cda0789339ea108c6658b6479d7019196ccf2b880",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_02/trajectory.dump",
+      "trajectory_sha256": "98d0ca2297e9f2c0822b9cb5f3502b5691475f70510a07def9f15e72b463262a",
+      "parent_source_id": "AG_LIQUID_T1300_SEED13202_MELTCOOL",
+      "random_seed": 13202,
+      "target_temperature_K": 1300.0,
+      "observed_temperature_K": 1292.6388499999998,
+      "sampler": "Ag EAM melt-cool resampling at nominal 1300 K",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/liquid_resampling_1300/V13_AG_LIQUID_02/in.meltcool.lmp",
+      "source_input_sha256": "9c17a522549940cfaca78dfb5f653eba240cfa00e35aef24b9c21a5c9bf3201f",
+      "phase_quality_screen": "liquid-like by disordered Q6 and trajectory diffusion; provisional EAM sampler screen",
+      "phase_evidence": {
+        "tail_Q6_mean": 0.39655002353627405,
+        "trajectory_MSD_A2": 112.17486268003074,
+        "phase_screen": "liquid-like; provisional, diffusion and disordered Q6 observed"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        2,
+        2,
+        2
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_02_MELTCOOL1300/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_LIQUID_02_MELTCOOL1300/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_01_ANISO",
+      "category": "Ti3SiC2_solid_thermal",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_01_ANISO.extxyz",
+      "geometry_file_sha256": "9e0a1f8aaffd6e684339226c9829eec78f3d875a2aeccba6f30b84522dca1a42",
+      "canonical_geometry_sha256": "020e442b5ed07ca75e486394968f6ff2124911822039edf6cb87afb4e98deab6",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_01_ANISO/trajectory.dump",
+      "trajectory_sha256": "b73c405862d8ba441cdf0634124e7c364c366ce14a71aee1804d12ba28fddadb",
+      "parent_source_id": "TSC_VIB_T300_SEED13401_ANISO",
+      "random_seed": 13401,
+      "target_temperature_K": 300,
+      "observed_temperature_K": 301.45932600000003,
+      "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+      "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_01_ANISO/in.sample.lmp",
+      "source_input_sha256": "3345e825a5af2c84c0031c58bc485371958785084b924f03769dcc5a2e865996",
+      "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+      "phase_evidence": {
+        "final_Ti_C_CN_histogram": {
+          "3": 16,
+          "6": 8
+        },
+        "final_mean_Ti_C_CN": 4.0,
+        "final_mean_C_Ti_CN": 6.0,
+        "final_min_Ti_C_A": 2.096841782338447,
+        "tail_mean_C_CN6_fraction": 1.0,
+        "tail_min_Ti_C_A": 2.0321163217818605
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_01_ANISO/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_01_ANISO/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_02_ANISO",
+      "category": "Ti3SiC2_solid_thermal",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_02_ANISO.extxyz",
+      "geometry_file_sha256": "bd5840f1a36ef53bdc596e27da78c732c5d6adc4604b71d4b77220f14f732b01",
+      "canonical_geometry_sha256": "58fd0ced545f32f7b9a425ff722618d40a7f2534daa32f0f6a4a4aac4838e007",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_02_ANISO/trajectory.dump",
+      "trajectory_sha256": "0fcc7b3384f8f233ac5ad241d6b3bc5d4fa743d22fe90fda4cd1fe3787bfebd7",
+      "parent_source_id": "TSC_VIB_T600_SEED13402_ANISO",
+      "random_seed": 13402,
+      "target_temperature_K": 600,
+      "observed_temperature_K": 594.8299850000001,
+      "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+      "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_02_ANISO/in.sample.lmp",
+      "source_input_sha256": "5a2a6910532d6480d0faf4a7c8cd43a154a8117503203b561c4e9e8455551da7",
+      "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+      "phase_evidence": {
+        "final_Ti_C_CN_histogram": {
+          "3": 16,
+          "6": 8
+        },
+        "final_mean_Ti_C_CN": 4.0,
+        "final_mean_C_Ti_CN": 6.0,
+        "final_min_Ti_C_A": 1.988502215490097,
+        "tail_mean_C_CN6_fraction": 1.0,
+        "tail_min_Ti_C_A": 1.9927440482571213
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_02_ANISO/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_02_ANISO/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_03_ANISO",
+      "category": "Ti3SiC2_solid_thermal",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_03_ANISO.extxyz",
+      "geometry_file_sha256": "9d9d0c0cc0f80f2262720b6c972ad5065e9f0e5af8b55118c65c3c460de5c6e1",
+      "canonical_geometry_sha256": "d67194dd0627fe136a7b7eb07bb744658c2b6e836880f5fb826f3dce8af74c3e",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_03_ANISO/trajectory.dump",
+      "trajectory_sha256": "3369214d07441c6c45335d456b2fbd08075b1c9e7d58128aea1e6a85c807450e",
+      "parent_source_id": "TSC_VIB_T900_SEED13403_ANISO",
+      "random_seed": 13403,
+      "target_temperature_K": 900,
+      "observed_temperature_K": 895.7893559999999,
+      "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+      "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_03_ANISO/in.sample.lmp",
+      "source_input_sha256": "8db87791d53c68bd0c99b7793b53f60f98a04ad96a3f4177a214af519f283885",
+      "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+      "phase_evidence": {
+        "final_Ti_C_CN_histogram": {
+          "3": 16,
+          "6": 8
+        },
+        "final_mean_Ti_C_CN": 4.0,
+        "final_mean_C_Ti_CN": 6.0,
+        "final_min_Ti_C_A": 1.9574398769055463,
+        "tail_mean_C_CN6_fraction": 1.0,
+        "tail_min_Ti_C_A": 1.868414624466614
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_03_ANISO/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_03_ANISO/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_04_ANISO",
+      "category": "Ti3SiC2_solid_thermal",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_04_ANISO.extxyz",
+      "geometry_file_sha256": "3684acec8524eb3836c8b10c271ae39c1c09d870147e7418d343426bb85e9ad3",
+      "canonical_geometry_sha256": "3117bc81918a0230a4d5510a750a3406c8a3e31d40e7a1ef548c589fbb891e6a",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_04_ANISO/trajectory.dump",
+      "trajectory_sha256": "c6d461218fcd70139b6e75573d137d9d020b70bd1c39ea15c6d927684a8c961e",
+      "parent_source_id": "TSC_VIB_T1200_SEED13404_ANISO",
+      "random_seed": 13404,
+      "target_temperature_K": 1200,
+      "observed_temperature_K": 1184.03542,
+      "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+      "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_04_ANISO/in.sample.lmp",
+      "source_input_sha256": "11e3a2e52a42cde952e8080e4555830426006f2d3b860d08eb05e7c5a71fc6a1",
+      "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+      "phase_evidence": {
+        "final_Ti_C_CN_histogram": {
+          "3": 16,
+          "6": 8
+        },
+        "final_mean_Ti_C_CN": 4.0,
+        "final_mean_C_Ti_CN": 6.0,
+        "final_min_Ti_C_A": 1.9809823332336067,
+        "tail_mean_C_CN6_fraction": 0.9375,
+        "tail_min_Ti_C_A": 1.9114605714138506
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_04_ANISO/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_04_ANISO/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_TSC_VIB_05_ANISO",
+      "category": "Ti3SiC2_solid_thermal",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_05_ANISO.extxyz",
+      "geometry_file_sha256": "cd459a7c0dd81e1a71c5218d1a85027023da60b74997cf647acb5e6120aacf23",
+      "canonical_geometry_sha256": "c42ba18701181086838502825207b50cbf0568b1026ed126a5d7deff2c457479",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_05_ANISO/trajectory.dump",
+      "trajectory_sha256": "7213ffa8ed19d5869f4cf618f4f8737bb9b4fb06b0bccb7928dedce83d2d3536",
+      "parent_source_id": "TSC_VIB_T1500_SEED13405_ANISO",
+      "random_seed": 13405,
+      "target_temperature_K": 1500,
+      "observed_temperature_K": 1448.3741300000002,
+      "sampler": "TSCBOP anisotropic NPT sampler; zero-pressure-relaxed parent",
+      "sampler_potential_sha256": "729273a6488d75756ed7927432c77c7347a1b115cecbaefae4981bafcec80fd7",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/tsc_aniso_resampling/V13_TSC_VIB_05_ANISO/in.sample.lmp",
+      "source_input_sha256": "74d317a28f6f9e93a7304b2c5b7cf85443fc9a789d4ff7ff5dfa6ca5b72f00dc",
+      "phase_quality_screen": "MAX coordination retained in final geometry; sampler-only provisional screen",
+      "phase_evidence": {
+        "final_Ti_C_CN_histogram": {
+          "3": 16,
+          "6": 8
+        },
+        "final_mean_Ti_C_CN": 4.0,
+        "final_mean_C_Ti_CN": 6.0,
+        "final_min_Ti_C_A": 1.952627777122583,
+        "tail_mean_C_CN6_fraction": 0.975,
+        "tail_min_Ti_C_A": 1.9186194976493105
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_05_ANISO/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_TSC_VIB_05_ANISO/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_COEX_01",
+      "category": "Ag_solid_liquid_coexistence",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_01.extxyz",
+      "geometry_file_sha256": "659b04fc8db59c5c623faaa884e5c8ac2a144e377df3c6519ec340777dd53e8f",
+      "canonical_geometry_sha256": "71b596ae3e68e4a40027871f510e50ae0512e8a6c4c4e356bcb6c5d3acdd09f9",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_01/trajectory.dump",
+      "trajectory_sha256": "81d96bc4d76dcd9e2cc07434738a67e7de1d007c909e72f767cb0221e7e965a1",
+      "parent_source_id": "AG_COEX_SEED18101",
+      "random_seed": 18101,
+      "target_temperature_K": 1220.0,
+      "observed_temperature_K": 1220.0,
+      "sampler": "Ag_u3.eam; half-cell melt and whole-cell near-melting NVT; candidate generation only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_01/in.sample.lmp",
+      "source_input_sha256": "391c8f746cad7ceec7e8b102e8955e2718532ec43081ba51ae0c88d9d280e22e",
+      "phase_quality_screen": "provisional mixed-order frame selected from independent EAM-sampled near-melting trajectories",
+      "phase_evidence": {
+        "selected_frame": 1,
+        "mixed_order_metrics": {
+          "frame": 1,
+          "timestep": 4200,
+          "Q6_mean": 0.47063307962055767,
+          "Q6_fraction_over_0p4": 0.734375,
+          "coordination_mean_within_3p8A": 12.75
+        },
+        "coexistence_screen": "mixed_order_window_found; provisional solid-liquid coexistence candidate"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_01/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_01/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_COEX_02",
+      "category": "Ag_solid_liquid_coexistence",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_02.extxyz",
+      "geometry_file_sha256": "8e6d5e56e2f5482d27201302abeca765cb117acbd67d99f33b4eb2de40229f65",
+      "canonical_geometry_sha256": "169c454c10e9f488f08396d27c831908ebf259d0d40e781d642e9f6dc27139a1",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_02/trajectory.dump",
+      "trajectory_sha256": "1579d29d74148e13cf2f9f69fa42a56d34e0b13dc757537a4546732f7ef22307",
+      "parent_source_id": "AG_COEX_SEED18102",
+      "random_seed": 18102,
+      "target_temperature_K": 1228.0,
+      "observed_temperature_K": 1228.0,
+      "sampler": "Ag_u3.eam; half-cell melt and whole-cell near-melting NVT; candidate generation only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_02/in.sample.lmp",
+      "source_input_sha256": "a6c7c986a9c7dbec8c2155570027a83a2a248a4305ff9182968052095a263e53",
+      "phase_quality_screen": "provisional mixed-order frame selected from independent EAM-sampled near-melting trajectories",
+      "phase_evidence": {
+        "selected_frame": 89,
+        "mixed_order_metrics": {
+          "frame": 89,
+          "timestep": 21800,
+          "Q6_mean": 0.44646589786287255,
+          "Q6_fraction_over_0p4": 0.75,
+          "coordination_mean_within_3p8A": 12.9375
+        },
+        "coexistence_screen": "mixed_order_window_found; provisional solid-liquid coexistence candidate"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_02/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_02/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_COEX_03",
+      "category": "Ag_solid_liquid_coexistence",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_03.extxyz",
+      "geometry_file_sha256": "e37df0ffa6bac707c1a9a1c2c252f837d90c3deaabcb45e18aa3d9af57dbdc9a",
+      "canonical_geometry_sha256": "df5e350faf8f47ba66b13abf3d8e593346c75b19d9bcaede7313a71e1430fbeb",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_03/trajectory.dump",
+      "trajectory_sha256": "de086f092dc91971adbc6ee028f5536425c789644e4a51eb73ccdf319a1457b1",
+      "parent_source_id": "AG_COEX_SEED18103",
+      "random_seed": 18103,
+      "target_temperature_K": 1236.0,
+      "observed_temperature_K": 1236.0,
+      "sampler": "Ag_u3.eam; half-cell melt and whole-cell near-melting NVT; candidate generation only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_03/in.sample.lmp",
+      "source_input_sha256": "6b5fe45e3c9f230915277c00ab5219e655c1c0b3824533f06016cdf89d764889",
+      "phase_quality_screen": "provisional mixed-order frame selected from independent EAM-sampled near-melting trajectories",
+      "phase_evidence": {
+        "selected_frame": 71,
+        "mixed_order_metrics": {
+          "frame": 71,
+          "timestep": 18200,
+          "Q6_mean": 0.4509841829386825,
+          "Q6_fraction_over_0p4": 0.78125,
+          "coordination_mean_within_3p8A": 12.875
+        },
+        "coexistence_screen": "mixed_order_window_found; provisional solid-liquid coexistence candidate"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_03/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_03/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_COEX_04",
+      "category": "Ag_solid_liquid_coexistence",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_04.extxyz",
+      "geometry_file_sha256": "90e5060c647decc1a2eb3341782660aa827e452129b93cb6c97852919ecaa9d3",
+      "canonical_geometry_sha256": "5d18a82351eb666ced88ae2de48794c39db89b3df1f1306ff177c21de577ffc4",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_04/trajectory.dump",
+      "trajectory_sha256": "9ece475dff62afaa4a5d3467e02027fa14759cb09202a5469b007915642ebfa5",
+      "parent_source_id": "AG_COEX_SEED18104",
+      "random_seed": 18104,
+      "target_temperature_K": 1244.0,
+      "observed_temperature_K": 1244.0,
+      "sampler": "Ag_u3.eam; half-cell melt and whole-cell near-melting NVT; candidate generation only",
+      "sampler_potential_sha256": "cb3d605cd27ec6efb50c4dd7462c2ab3d967e63775dc4400de9134315a44d807",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_COEX_04/in.sample.lmp",
+      "source_input_sha256": "4f14d2c5c7e5ece7c3d390df9818802d9837689d0f083f766353db20dc5758ef",
+      "phase_quality_screen": "provisional mixed-order frame selected from independent EAM-sampled near-melting trajectories",
+      "phase_evidence": {
+        "selected_frame": 88,
+        "mixed_order_metrics": {
+          "frame": 88,
+          "timestep": 21600,
+          "Q6_mean": 0.46052267255733426,
+          "Q6_fraction_over_0p4": 0.765625,
+          "coordination_mean_within_3p8A": 12.875
+        },
+        "coexistence_screen": "mixed_order_window_found; provisional solid-liquid coexistence candidate"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        3,
+        3,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_04/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_COEX_04/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_IFACE_01",
+      "category": "Ag_Ti3SiC2_interface",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_01.extxyz",
+      "geometry_file_sha256": "36bbc66f9a580ddb352a52d5b8bf82e8104a9e3fafa317ed6943c6a760a4a2ee",
+      "canonical_geometry_sha256": "202fd5080f661b678a624cbddcee6fb9e1bbea6c3cf5a731270f5a11bd383c78",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_01/trajectory.dump",
+      "trajectory_sha256": "85af545c5dccfa5de7db0a4f81b3a2c6ac2fd1ed7f989a99837fd73e0974643d",
+      "parent_source_id": "TSC_COD_surface_shift0.000_Ag111_seed19101",
+      "random_seed": 19101,
+      "target_temperature_K": 300.0,
+      "observed_temperature_K": 300.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_01/in.sample.lmp",
+      "source_input_sha256": "dbd6edeff4a0027b0aad400bb76c7c2a78c54b614a169abb68fd1ae683866901",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.0881883825821608,
+        "failed_sampler_final_minimum_any_pair_A": 1.1689878845394428,
+        "Ag_Si_coordination": {
+          "mean": 0.0,
+          "max": 0,
+          "fraction_CN_ge2": 0.0
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_01/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_01/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_IFACE_02",
+      "category": "Ag_Ti3SiC2_interface",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_02.extxyz",
+      "geometry_file_sha256": "f1fb6290bc6732f31a0fb680dd7713fb1c9d66dac563bbaf5ec1c018ba0f1691",
+      "canonical_geometry_sha256": "40cc6a28fef0712dcd7d276b60a7a20fea11829d17a8b078649437cb4a9c936e",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_02/trajectory.dump",
+      "trajectory_sha256": "6bff5487e9a94a84d66a838b85a34b8abea14e3993725ed61a21f7c7ee6525cc",
+      "parent_source_id": "TSC_COD_surface_shift2.000_Ag111_seed19102",
+      "random_seed": 19102,
+      "target_temperature_K": 600.0,
+      "observed_temperature_K": 600.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_02/in.sample.lmp",
+      "source_input_sha256": "2b37e91a92726fc97baaf9fecad8baf0ea3f95d8abc4763d78a1fa06b707eeff",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.0881883825821594,
+        "failed_sampler_final_minimum_any_pair_A": 1.4718723369912212,
+        "Ag_Si_coordination": {
+          "mean": 0.0,
+          "max": 0,
+          "fraction_CN_ge2": 0.0
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_02/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_02/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_IFACE_03",
+      "category": "Ag_Ti3SiC2_interface",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_03.extxyz",
+      "geometry_file_sha256": "49c6a8eb4525ef9eeef8c4b6f8657059b75cf47f1a418b67d42343a88a2141db",
+      "canonical_geometry_sha256": "707620081cfe623c9a56f6c7a6cb93c1fb130ee3635ba891e9f067533405d20b",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_03/trajectory.dump",
+      "trajectory_sha256": "2aabe4ed433f9c24f8689e71cdb432b58290de40fd950ccce7cf709a2f5d24a4",
+      "parent_source_id": "TSC_COD_surface_shift0.000_Ag111_seed19103",
+      "random_seed": 19103,
+      "target_temperature_K": 900.0,
+      "observed_temperature_K": 900.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_03/in.sample.lmp",
+      "source_input_sha256": "158bfc5c545f30342f819cc589b1d84c26a6521d637960996c05d4f285ad8116",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.088188382582161,
+        "failed_sampler_final_minimum_any_pair_A": 1.472431750982028,
+        "Ag_Si_coordination": {
+          "mean": 0.0,
+          "max": 0,
+          "fraction_CN_ge2": 0.0
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_03/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_03/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_IFACE_04",
+      "category": "Ag_Ti3SiC2_interface",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_04.extxyz",
+      "geometry_file_sha256": "fd4db14a4a27ed1d3db5128074f377c08a535922aff0d4e6db83be1b5625564d",
+      "canonical_geometry_sha256": "93aa842cbcc38196b8a27655f420e0098faf2c00d42a08e68e33dcd296338d20",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_04/trajectory.dump",
+      "trajectory_sha256": "6001f344a543f02f357620d448a00b2626c80bbf4eab97bdab215008af51dd39",
+      "parent_source_id": "TSC_COD_surface_shift2.000_Ag111_seed19104",
+      "random_seed": 19104,
+      "target_temperature_K": 1200.0,
+      "observed_temperature_K": 1200.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_04/in.sample.lmp",
+      "source_input_sha256": "4c57cfd2a4765a9b5febf5812ac3aab85a89e07a7a0253e56bd80467fb267f4b",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.0881883825821594,
+        "failed_sampler_final_minimum_any_pair_A": 1.502562721685853,
+        "Ag_Si_coordination": {
+          "mean": 0.0,
+          "max": 0,
+          "fraction_CN_ge2": 0.0
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_04/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_04/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_IFACE_05",
+      "category": "Ag_Ti3SiC2_interface",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_05.extxyz",
+      "geometry_file_sha256": "741e50e4ecc9fcc005b503031265086fb88f19d2b90a30e637f54f09e71c197d",
+      "canonical_geometry_sha256": "655ec8bc008d77d76996cc34b4d5e5c175622d8642f7456ae9d11e20de980c81",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_05/trajectory.dump",
+      "trajectory_sha256": "42c3f443d443ba7349bf6a78fba2f142fd7af670570dc876088185df4aa77a34",
+      "parent_source_id": "TSC_COD_surface_shift0.000_Ag111_seed19105",
+      "random_seed": 19105,
+      "target_temperature_K": 1500.0,
+      "observed_temperature_K": 1500.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_IFACE_05/in.sample.lmp",
+      "source_input_sha256": "963243df2f610b10e727411150fda381905c98151f60efaeebd649c51e3af7bb",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.0881883825821603,
+        "failed_sampler_final_minimum_any_pair_A": 1.3415887902408856,
+        "Ag_Si_coordination": {
+          "mean": 0.0,
+          "max": 0,
+          "fraction_CN_ge2": 0.0
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_05/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_IFACE_05/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_RICH_SI_01",
+      "category": "Ag_rich_Si_local_environment",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_01.extxyz",
+      "geometry_file_sha256": "820a1638c66845d6b836a842fbf7c1bb55da19cd012b328241264f5a95d7227a",
+      "canonical_geometry_sha256": "0553088876bc573d33e00e30a6a78aa51d85bb505239a329b73068e35fd2d2fe",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_01/trajectory.dump",
+      "trajectory_sha256": "3264667e9959e2b81547cc899e46ebe116246175612e260e2abbc29618c228e7",
+      "parent_source_id": "TSC_COD_surface_shift4.000_Ag111_seed19201",
+      "random_seed": 19201,
+      "target_temperature_K": 900.0,
+      "observed_temperature_K": 900.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_01/in.sample.lmp",
+      "source_input_sha256": "aec6ff8d6a1ca05b45e8f90966d4c87785e4a8f17e2c359310d70c8305d129ff",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.088188382582162,
+        "failed_sampler_final_minimum_any_pair_A": 1.6338104356687162,
+        "Ag_Si_coordination": {
+          "mean": 1.5,
+          "max": 3,
+          "fraction_CN_ge2": 0.5
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_RICH_SI_01/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_RICH_SI_01/label.extxyz"
+    },
+    {
+      "candidate_id": "V13_AG_RICH_SI_02",
+      "category": "Ag_rich_Si_local_environment",
+      "geometry_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_02.extxyz",
+      "geometry_file_sha256": "fc1e8705677cabf6fe659305a76b78ae6c71c11ce144927523632a32f10ec742",
+      "canonical_geometry_sha256": "37f1ee0198adc1585bba6a08966d1621c8389a32e8ea6cde9b59f6d9545ebc6d",
+      "trajectory_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_02/trajectory.dump",
+      "trajectory_sha256": "beba86c8d44cc13902358566ced966f2fe3a3d752c6587369ee453a687b502b3",
+      "parent_source_id": "TSC_COD_surface_shift12.000_Ag111_seed19202",
+      "random_seed": 19202,
+      "target_temperature_K": 1200.0,
+      "observed_temperature_K": 1200.0,
+      "sampler": "v12q POD used as failed candidate sampler; DFT geometry is the pre-sampler construction",
+      "sampler_potential_sha256": "2883e12d27436eb2760d37e97aeb0199f2d6d80222406d3bb66a8c1015828e88",
+      "source_input_file": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/missing_source_sampling/V13_AG_RICH_SI_02/in.sample.lmp",
+      "source_input_sha256": "35db6a3043596e4333ccf76848df380e05be1d4f3ce7e3d99ffc2b10230f30b7",
+      "phase_quality_screen": "unrelaxed constructed interface retained; old-POD relaxation collapsed and was excluded",
+      "phase_evidence": {
+        "training_geometry_source": "initial constructed interface before rejected old-POD FIRE/NVT response",
+        "initial_minimum_any_pair_A": 2.0881883825821603,
+        "failed_sampler_final_minimum_any_pair_A": 1.5456002255771055,
+        "Ag_Si_coordination": {
+          "mean": 1.5,
+          "max": 3,
+          "fraction_CN_ge2": 0.5
+        },
+        "screen": "initial interface geometry retained for DFT review; old-POD relaxation was rejected"
+      },
+      "split_role": "training_candidate",
+      "DFT_label_status": "complete; independent output audit passed",
+      "dft_ecut_eV": 350,
+      "dft_kpoints": [
+        4,
+        4,
+        1
+      ],
+      "POD_fit_status": "not_started",
+      "DFT_label_json": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_RICH_SI_02/label.json",
+      "DFT_label_extxyz": "/workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_candidate_sources_20261123/dft_labels/V13_AG_RICH_SI_02/label.extxyz"
+    }
+  ],
+  "completed_dft_labels": 27,
+  "active_or_partial_dft_labels": 0,
+  "pending_dft_labels": 0
+}

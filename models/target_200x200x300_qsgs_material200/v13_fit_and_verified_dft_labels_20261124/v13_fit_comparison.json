@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-24",
+  "candidate": "V13 POD four-element Ag-C-Si-Ti",
+  "variants": [
+    {
+      "directory": "fit_v13",
+      "energy_weight": 100.0,
+      "training_energy_rmse_eV_atom": 0.068885,
+      "training_force_rmse_eV_A": 0.614599,
+      "validation_energy_rmse_eV_atom": 0.105894,
+      "validation_force_rmse_eV_A": 0.60356,
+      "selected": true
+    },
+    {
+      "directory": "fit_v13_energyweight300",
+      "energy_weight": 300.0,
+      "training_energy_rmse_eV_atom": null,
+      "training_force_rmse_eV_A": null,
+      "validation_energy_rmse_eV_atom": 0.107373,
+      "validation_force_rmse_eV_A": 1.2657,
+      "selected": false
+    }
+  ],
+  "selection_reason": "Energy weight 300 did not improve either validation metric; retain weight 100 as exploratory candidate.",
+  "limits": [
+    "Validation has six independent configurations and is not a final blind test.",
+    "Validation energy RMSE is slightly above 0.1 eV/atom target.",
+    "Ti3SiC2 thermal validation frame energy error is 0.227383 eV/atom.",
+    "DFT PW350 protocol remains exploratory; no large-model cold stability validation yet."
+  ]
+}
