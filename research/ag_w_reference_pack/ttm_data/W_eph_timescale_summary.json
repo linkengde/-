@@ -1,0 +1,172 @@
+{
+  "title": "Source-separated tungsten electron-phonon time-scale comparison",
+  "formula": "tau_e-ph = Ce(Te)/G(Te); for Ce in J m^-3 K^-1 and G in W m^-3 K^-1, tau is seconds; output values are converted to ps.",
+  "interpretation_limit": "Ce/G is a characteristic electron energy-transfer time for a simple fixed-lattice estimate. A two-reservoir relaxation eigen-time also depends on lattice heat capacity; transport and nonlinear temperature evolution are omitted.",
+  "branches": {
+    "Lin_2008": "Both Ce and G are candidate curves digitized from the paper; G below 600 K is extrapolated and digitization uncertainty is about 2-5% before model/source uncertainty.",
+    "XTANT3": "Ce and G are the supplied dynamical tables, retained as a separate branch.",
+    "Daraszewicz_2014": "The paper obtains Ce using the Lin et al. method and reports a near-equilibrium experimental G0=1.4(3)e17 and ab-initio G0=1.65e17 W m^-3 K^-1. The displayed tau values combine Lin-digitized Ce with those G0 anchors only at selected comparison points; they are not a high-Te G(Te) model."
+  },
+  "duffy_anchor_display_temperatures_K": [
+    300,
+    500,
+    600,
+    1000
+  ],
+  "source_files": {
+    "Lin_Ce_G": "ttm_data/W_TTM_Lin2008_digitized_300_20000K.csv",
+    "XTANT_Ce": "ttm_data/XTANT3_TTM_parameters_v3/Ce_metals/Ce_W.txt",
+    "XTANT_G": "ttm_data/XTANT3_TTM_parameters_v3/G_e-ph_metals/G_e-ph_W.txt",
+    "Daraszewicz": "papers/Daraszewicz_2014_Tungsten_electron_phonon_coupling.pdf"
+  },
+  "temperature_ranges_K": {
+    "Lin_digitized_Ce_G": [
+      300,
+      20000
+    ],
+    "XTANT_dynamic_Ce_G": [
+      500,
+      19000
+    ]
+  },
+  "tau_ranges_ps_on_native_grids": {
+    "Lin_2008_digitized": [
+      0.19390256827152788,
+      2.998446672358535
+    ],
+    "XTANT3_dynamic": [
+      2.7168637199456263,
+      14.470163692347285
+    ]
+  },
+  "pointwise_XTANT_over_Lin_ratios_on_common_grid": {
+    "temperature_range_K": [
+      500,
+      19000
+    ],
+    "Ce_ratio_min_max": [
+      0.9501385037761728,
+      1.577782184687695
+    ],
+    "G_ratio_min_max": [
+      0.05590366038352766,
+      0.3137062352873771
+    ],
+    "tau_ratio_min_max": [
+      3.184010268637496,
+      24.024187906299602
+    ],
+    "tau_ratio_min_at_K": 1600,
+    "tau_ratio_max_at_K": 500,
+    "ratio_definition": "(Ce_XTANT/G_XTANT)/(Ce_Lin/G_Lin); values are pointwise at matching Te, no interpolation"
+  },
+  "sample_comparisons": [
+    {
+      "Te_K": 300,
+      "tau_Lin_ps": 0.19390256827152788,
+      "tau_XTANT_ps": null,
+      "XTANT_over_Lin_tau": null,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": 0.2942142857142857,
+      "tau_Duffy_experiment_G0_uncertainty_ps": [
+        0.24229411764705883,
+        0.37445454545454543
+      ],
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": 0.24963636363636366
+    },
+    {
+      "Te_K": 500,
+      "tau_Lin_ps": 0.3019213158975223,
+      "tau_XTANT_ps": 7.253414426039317,
+      "XTANT_over_Lin_tau": 24.024187906299602,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": 0.4903571428571428,
+      "tau_Duffy_experiment_G0_uncertainty_ps": [
+        0.40382352941176475,
+        0.6240909090909091
+      ],
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": 0.4160606060606061
+    },
+    {
+      "Te_K": 600,
+      "tau_Lin_ps": 0.35077328769645977,
+      "tau_XTANT_ps": 6.1429682778430985,
+      "XTANT_over_Lin_tau": 17.512645612738023,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": 0.5884285714285714,
+      "tau_Duffy_experiment_G0_uncertainty_ps": [
+        0.48458823529411765,
+        0.7489090909090909
+      ],
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": 0.4992727272727273
+    },
+    {
+      "Te_K": 1000,
+      "tau_Lin_ps": 0.6103875205621626,
+      "tau_XTANT_ps": 2.866143855088629,
+      "XTANT_over_Lin_tau": 4.695613456266162,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": 1.02393617,
+      "tau_Duffy_experiment_G0_uncertainty_ps": [
+        0.8432415517647058,
+        1.303191489090909
+      ],
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": 0.868794326060606
+    },
+    {
+      "Te_K": 3000,
+      "tau_Lin_ps": 1.6984335396728152,
+      "tau_XTANT_ps": 7.9632012667100405,
+      "XTANT_over_Lin_tau": 4.688556296553155,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    },
+    {
+      "Te_K": 5000,
+      "tau_Lin_ps": 2.574887207290641,
+      "tau_XTANT_ps": 12.824086136696703,
+      "XTANT_over_Lin_tau": 4.980445784338071,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    },
+    {
+      "Te_K": 11000,
+      "tau_Lin_ps": 2.8276574477014464,
+      "tau_XTANT_ps": 14.337589997489557,
+      "XTANT_over_Lin_tau": 5.070483346256929,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    },
+    {
+      "Te_K": 15000,
+      "tau_Lin_ps": 2.7529393027265785,
+      "tau_XTANT_ps": 13.93380859862914,
+      "XTANT_over_Lin_tau": 5.061429645335353,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    },
+    {
+      "Te_K": 19000,
+      "tau_Lin_ps": 2.68041655494873,
+      "tau_XTANT_ps": 14.450755935878824,
+      "XTANT_over_Lin_tau": 5.391235145596701,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    },
+    {
+      "Te_K": 20000,
+      "tau_Lin_ps": 2.6630170789577194,
+      "tau_XTANT_ps": null,
+      "XTANT_over_Lin_tau": null,
+      "tau_Duffy_experiment_G0_using_Lin_Ce_ps": null,
+      "tau_Duffy_experiment_G0_uncertainty_ps": null,
+      "tau_Duffy_ab_initio_G0_using_Lin_Ce_ps": null
+    }
+  ],
+  "outputs": {
+    "csv": "W_eph_timescale_comparison.csv",
+    "json": "W_eph_timescale_summary.json",
+    "markdown": "W_EPH_TIMESCALE_AUDIT_20261124.md"
+  }
+}
