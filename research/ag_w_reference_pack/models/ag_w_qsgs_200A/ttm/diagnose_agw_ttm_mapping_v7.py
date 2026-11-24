@@ -23,6 +23,7 @@ from agw_ttm_reference import (
     build_agw_grid_fields_joint,
     cloud_in_cell_atom_map,
     gaussian_ag_source_power,
+    joint_capacity_maxflow,
     map_agw_newton_layer,
     _raw_cic_volume_power,
 )
@@ -155,82 +156,11 @@ def run_outside_filter_check() -> dict:
 
 
 def local_capacity_flow(raw_total: np.ndarray, spacing: tuple[float, float, float], max_distance_A: float) -> dict:
-    """Check whether all overflow can reach local free volume, independent of donor order."""
-    if coo_matrix is None or maximum_flow is None:
-        return {"status": "SCIPY_UNAVAILABLE", "diagnostic_only": True}
-    shape = tuple(int(v) for v in raw_total.shape)
-    cell_volume = float(np.prod(spacing))
-    excess = np.maximum(raw_total.ravel() - cell_volume, 0.0)
-    free = np.maximum(cell_volume - raw_total.ravel(), 0.0)
-    donors = np.flatnonzero(excess > cell_volume * 1e-12)
-    receivers = np.flatnonzero(free > cell_volume * 1e-12)
-    ncell = int(np.prod(shape))
-    donor_node = np.full(ncell, -1, dtype=int)
-    receiver_node = np.full(ncell, -1, dtype=int)
-    source = 0
-    donor_node[donors] = np.arange(1, len(donors) + 1)
-    receiver_offset = 1 + len(donors)
-    receiver_node[receivers] = receiver_offset + np.arange(len(receivers))
-    sink = receiver_offset + len(receivers)
-    scale = 1000  # integer max-flow units correspond to 0.001 A^3
-    demand_units = np.rint(excess[donors] * scale).astype(np.int64)
-    free_units = np.floor(free[receivers] * scale).astype(np.int64)
-    total_demand_units = int(demand_units.sum())
-    rows: list[int] = []
-    cols: list[int] = []
-    caps: list[int] = []
-    supply_limit = total_demand_units
-    nx, ny, nz = shape
-    sx, sy, sz = spacing
-    rx = min(nx // 2, int(np.ceil(max_distance_A / sx)))
-    ry = min(ny // 2, int(np.ceil(max_distance_A / sy)))
-    rz = min(nz - 1, int(np.ceil(max_distance_A / sz)))
-    for donor, units in zip(donors, demand_units):
-        dn = int(donor_node[donor])
-        rows.append(source); cols.append(dn); caps.append(int(units))
-        ix = donor // (ny * nz)
-        iy = (donor // nz) % ny
-        iz = donor % nz
-        seen: set[int] = set()
-        for dx in range(-rx, rx + 1):
-            tx = (ix + dx) % nx
-            ddx = min(abs(dx), nx - abs(dx)) * sx
-            for dy in range(-ry, ry + 1):
-                ty = (iy + dy) % ny
-                ddy = min(abs(dy), ny - abs(dy)) * sy
-                for dz in range(-rz, rz + 1):
-                    tz = iz + dz
-                    if tz < 0 or tz >= nz or (dx == 0 and dy == 0 and dz == 0):
-                        continue
-                    if float(np.sqrt(ddx * ddx + ddy * ddy + (dz * sz) ** 2)) > max_distance_A + 1e-12:
-                        continue
-                    target = int(np.ravel_multi_index((tx, ty, tz), shape))
-                    rn = int(receiver_node[target])
-                    if rn < 0 or target in seen:
-                        continue
-                    seen.add(target)
-                    rows.append(dn); cols.append(rn); caps.append(supply_limit)
-    for receiver, units in zip(receivers, free_units):
-        rows.append(int(receiver_node[receiver])); cols.append(sink); caps.append(int(units))
-    graph = coo_matrix(
-        (np.asarray(caps, dtype=np.int64), (rows, cols)), shape=(sink + 1, sink + 1)
-    ).tocsr()
-    solved = maximum_flow(graph, source, sink, method="dinic")
-    flow_units = int(solved.flow_value)
-    return {
-        "status": "PASS" if flow_units >= total_demand_units else "NO_LOCAL_CAPACITY_ASSIGNMENT",
-        "diagnostic_only": True,
-        "algorithm": "SciPy maximum flow on donor-to-recipient edges within the fixed transfer bound",
-        "capacity_resolution_A3": 1.0 / scale,
-        "max_transfer_distance_A": float(max_distance_A),
-        "donor_cells": int(len(donors)),
-        "recipient_cells": int(len(receivers)),
-        "candidate_edges": int(graph.nnz),
-        "overflow_demand_A3": float(excess.sum()),
-        "global_free_capacity_A3": float(free.sum()),
-        "locally_assignable_volume_A3": flow_units / scale,
-        "locally_unassignable_overflow_A3": max(0.0, float(excess.sum()) - flow_units / scale),
-    }
+    """Run the exact direct-flow solver used by production atom mapping."""
+    result = joint_capacity_maxflow(raw_total, spacing, max_distance_A)
+    result["diagnostic_only"] = True
+    result.pop("transfer_fractions", None)
+    return result
 
 
 def main() -> None:

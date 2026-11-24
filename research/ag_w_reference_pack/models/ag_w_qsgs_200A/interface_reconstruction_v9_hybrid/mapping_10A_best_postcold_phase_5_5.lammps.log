@@ -1,0 +1,75 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 2.013 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.0005
+region fixed_region block INF INF INF INF 0 19.999999 units box
+region bath_region block INF INF INF INF 20 39.999999 units box
+region newton_region block INF INF INF INF 40 300 units box
+group fixed region fixed_region
+46117 atoms in group fixed
+group bath region bath_region
+48210 atoms in group bath
+group newton region newton_region
+388274 atoms in group newton
+group mobile subtract all fixed
+436484 atoms in group mobile
+read_dump /workspace/ag-w-exploratory-pilot/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v9_hybrid/v9_nve2_end.dump.gz 2200 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  482601 atoms before read
+  482601 atoms in snapshot
+  0 atoms purged
+  482601 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  482601 atoms after read
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 0
+thermo_style custom step time atoms temp pe ke etotal
+run 0 pre no post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 221.1 | 221.1 | 221.1 Mbytes
+   Step          Time         Atoms         Temp          PotEng         KinEng         TotEng    
+      2200   1.1               482601   275.69477     -2436088.1      17198.101     -2418890      
+Loop time of 1.983e-06 on 4 procs for 0 steps with 482601 atoms
+
+reset_timestep 0
+fix bath_integrate bath nve
+fix newton_integrate newton nve
+fix bath_heat bath langevin 300.0 300.0 0.1 20261124 tally yes
+thermo_style custom step time atoms temp pe ke etotal
+thermo 0
+Total wall time: 0:00:04

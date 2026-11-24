@@ -21,6 +21,12 @@ import sys
 
 import numpy as np
 
+try:
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import maximum_flow
+except ImportError:  # NumPy-only installs can still use the non-redistributing helpers.
+    coo_matrix = maximum_flow = None
+
 
 def _load_legacy_core():
     for parent in Path(__file__).resolve().parents:
@@ -459,6 +465,235 @@ class AgWMappingError(ValueError):
     """A conservative Ag/W grid mapping cannot satisfy its stated constraints."""
 
 
+def joint_capacity_maxflow(
+    raw_total_A3: np.ndarray,
+    spacing_A: tuple[float, float, float],
+    max_transfer_distance_A: float,
+    capacity_resolution_A3: float = 1.0e-12,
+) -> dict:
+    """Directly assign overflow to originally free cells, with no cascading.
+
+    Both the production mapper and diagnostic call this routine. Every graph
+    edge runs from an initially overfilled donor to an initially underfilled
+    receiver within the Euclidean transfer bound; x/y are periodic and z is
+    open. Returned fractions preserve each donor's Ag/W mixture and source.
+    """
+    raw = np.asarray(raw_total_A3, dtype=float)
+    spacing = tuple(float(v) for v in spacing_A)
+    if raw.ndim != 3 or not raw.size or np.any(~np.isfinite(raw)) or np.any(raw < 0.0):
+        raise ValueError("raw_total_A3 must be a non-empty finite non-negative 3D array")
+    if len(spacing) != 3 or any(not np.isfinite(v) or v <= 0.0 for v in spacing):
+        raise ValueError("spacing_A must contain three finite positive values")
+    if not np.isfinite(max_transfer_distance_A) or max_transfer_distance_A < 0.0:
+        raise ValueError("max_transfer_distance_A must be finite and non-negative")
+    if not np.isfinite(capacity_resolution_A3) or capacity_resolution_A3 <= 0.0:
+        raise ValueError("capacity_resolution_A3 must be finite and positive")
+
+    shape = tuple(int(v) for v in raw.shape)
+    cell_volume = float(np.prod(spacing))
+    flat = raw.ravel()
+    excess = np.maximum(flat - cell_volume, 0.0)
+    free = np.maximum(cell_volume - flat, 0.0)
+    threshold = max(cell_volume * 1.0e-12, 1.0e-14)
+    donors = np.flatnonzero(excess > threshold)
+    receivers = np.flatnonzero(free > threshold)
+    demand_A3 = float(excess.sum())
+    free_A3 = float(free.sum())
+    # SciPy's sparse maximum-flow backend is signed-int32 per total flow value.
+    # Cap the network at 1e9 integer units, while retaining the requested
+    # resolution whenever that total-capacity bound permits it.
+    scale = min(
+        1.0 / capacity_resolution_A3,
+        1.0e9 / max(demand_A3, float(free.max(initial=0.0)), 1.0e-30),
+    )
+    actual_resolution_A3 = 1.0 / scale
+
+    def result(status: str, assigned_A3: float, edge_count: int, transfers: dict) -> dict:
+        quantization_bound = actual_resolution_A3 * (len(donors) + len(receivers))
+        return {
+            "status": status,
+            "diagnostic_only": False,
+            "algorithm": "direct donor-to-original-free-recipient maximum flow; no cascading",
+            "capacity_resolution_A3": float(actual_resolution_A3),
+            "capacity_quantization_residual_bound_A3": float(quantization_bound),
+            "max_transfer_distance_A": float(max_transfer_distance_A),
+            "donor_cells": int(len(donors)),
+            "recipient_cells": int(len(receivers)),
+            "candidate_edges": int(edge_count),
+            "overflow_demand_A3": demand_A3,
+            "global_free_capacity_A3": free_A3,
+            "locally_assignable_volume_A3": float(assigned_A3),
+            "locally_unassignable_overflow_A3": max(0.0, demand_A3 - assigned_A3),
+            "transfer_fractions": transfers,
+        }
+
+    empty: dict[int, list[tuple[int, float]]] = {}
+    if not len(donors):
+        return result("PASS", 0.0, 0, empty)
+    if not len(receivers):
+        return result("NO_LOCAL_CAPACITY_ASSIGNMENT", 0.0, 0, empty)
+    if coo_matrix is None or maximum_flow is None:
+        return result("SCIPY_UNAVAILABLE", 0.0, 0, empty)
+
+    demand_units = np.floor(excess[donors] * scale).astype(np.int64)
+    free_units = np.floor(free[receivers] * scale).astype(np.int64)
+    active_donors = demand_units > 0
+    active_receivers = free_units > 0
+    donors, demand_units = donors[active_donors], demand_units[active_donors]
+    receivers, free_units = receivers[active_receivers], free_units[active_receivers]
+    if not len(donors):
+        return result("PASS", 0.0, 0, empty)
+    if not len(receivers):
+        return result("NO_LOCAL_CAPACITY_ASSIGNMENT", 0.0, 0, empty)
+
+    ncell = int(np.prod(shape))
+    source_node = 0
+    donor_nodes = np.full(ncell, -1, dtype=np.int64)
+    receiver_nodes = np.full(ncell, -1, dtype=np.int64)
+    donor_nodes[donors] = np.arange(1, len(donors) + 1, dtype=np.int64)
+    receiver_offset = 1 + len(donors)
+    receiver_nodes[receivers] = receiver_offset + np.arange(len(receivers), dtype=np.int64)
+    sink_node = receiver_offset + len(receivers)
+    total_demand_units = int(demand_units.sum(dtype=np.int64))
+    rows: list[int] = []
+    cols: list[int] = []
+    caps: list[int] = []
+    for donor, units in zip(donors, demand_units):
+        rows.append(source_node); cols.append(int(donor_nodes[donor])); caps.append(int(units))
+
+    nx, ny, nz = shape
+    sx, sy, sz = spacing
+    rx = min(nx // 2, int(np.ceil(max_transfer_distance_A / sx)))
+    ry = min(ny // 2, int(np.ceil(max_transfer_distance_A / sy)))
+    rz = min(nz - 1, int(np.ceil(max_transfer_distance_A / sz)))
+    edge_count = 0
+    for donor in donors:
+        dn = int(donor_nodes[donor])
+        ix = int(donor // (ny * nz))
+        iy = int((donor // nz) % ny)
+        iz = int(donor % nz)
+        seen: set[int] = set()
+        for dx in range(-rx, rx + 1):
+            tx = (ix + dx) % nx
+            ddx = min(abs(dx), nx - abs(dx)) * sx
+            for dy in range(-ry, ry + 1):
+                ty = (iy + dy) % ny
+                ddy = min(abs(dy), ny - abs(dy)) * sy
+                for dz in range(-rz, rz + 1):
+                    tz = iz + dz
+                    if tz < 0 or tz >= nz or (dx == 0 and dy == 0 and dz == 0):
+                        continue
+                    distance = float(np.sqrt(ddx * ddx + ddy * ddy + (dz * sz) ** 2))
+                    if distance > max_transfer_distance_A + 1.0e-12:
+                        continue
+                    target = int(np.ravel_multi_index((tx, ty, tz), shape))
+                    rn = int(receiver_nodes[target])
+                    if rn < 0 or target in seen:
+                        continue
+                    seen.add(target)
+                    rows.append(dn); cols.append(rn); caps.append(total_demand_units)
+                    edge_count += 1
+    for receiver, units in zip(receivers, free_units):
+        rows.append(int(receiver_nodes[receiver])); cols.append(sink_node); caps.append(int(units))
+
+    graph = coo_matrix(
+        (np.asarray(caps, dtype=np.int64), (rows, cols)),
+        shape=(sink_node + 1, sink_node + 1),
+    ).tocsr()
+    solved = maximum_flow(graph, source_node, sink_node, method="dinic")
+    assigned_units = int(solved.flow_value)
+    assigned_A3 = assigned_units * actual_resolution_A3
+    quantization_bound = actual_resolution_A3 * (len(donors) + len(receivers))
+    unresolved = max(0.0, demand_A3 - assigned_A3)
+    status = "PASS" if unresolved <= quantization_bound + 1.0e-12 else "NO_LOCAL_CAPACITY_ASSIGNMENT"
+    if status != "PASS":
+        output = result(status, assigned_A3, edge_count, {})
+        output["flow_units"] = assigned_units
+        output["unmet_integer_demand_units"] = max(0, total_demand_units - assigned_units)
+        return output
+
+    flow = solved.flow.tocsr()
+    transfers: dict[int, list[tuple[int, float]]] = {}
+    assigned_by_donor_A3: dict[int, float] = {}
+    assigned_by_receiver_A3: dict[int, float] = {}
+    for donor in donors:
+        dn = int(donor_nodes[donor])
+        start, end = flow.indptr[dn], flow.indptr[dn + 1]
+        for node, units in zip(flow.indices[start:end], flow.data[start:end]):
+            if units <= 0 or node < receiver_offset or node >= sink_node:
+                continue
+            receiver = int(receivers[int(node) - receiver_offset])
+            amount_A3 = float(units) * actual_resolution_A3
+            transfers.setdefault(int(donor), []).append((receiver, amount_A3 / float(flat[donor])))
+            assigned_by_donor_A3[int(donor)] = assigned_by_donor_A3.get(int(donor), 0.0) + amount_A3
+            assigned_by_receiver_A3[receiver] = assigned_by_receiver_A3.get(receiver, 0.0) + amount_A3
+
+    # Recover the fractional tails discarded by integer quantization, using
+    # only residual capacity in original receiver cells. This does not permit
+    # an overfill or a second transfer hop.
+    assigned_A3 = assigned_units * actual_resolution_A3
+    residual_placed_A3 = 0.0
+    max_unassigned_donor_A3 = 0.0
+    cell_roundoff_A3 = cell_volume * 1.0e-12
+    donor_fill_tolerance_A3 = cell_volume * 1.0e-10
+    for donor in donors:
+        donor = int(donor)
+        need = max(0.0, float(excess[donor]) - assigned_by_donor_A3.get(donor, 0.0))
+        if need <= cell_roundoff_A3:
+            max_unassigned_donor_A3 = max(max_unassigned_donor_A3, need)
+            continue
+        ix = donor // (ny * nz)
+        iy = (donor // nz) % ny
+        iz = donor % nz
+        candidates: list[tuple[float, int]] = []
+        seen: set[int] = set()
+        for dx in range(-rx, rx + 1):
+            tx = (ix + dx) % nx
+            ddx = min(abs(dx), nx - abs(dx)) * sx
+            for dy in range(-ry, ry + 1):
+                ty = (iy + dy) % ny
+                ddy = min(abs(dy), ny - abs(dy)) * sy
+                for dz in range(-rz, rz + 1):
+                    tz = iz + dz
+                    if tz < 0 or tz >= nz or (dx == 0 and dy == 0 and dz == 0):
+                        continue
+                    distance = float(np.sqrt(ddx * ddx + ddy * ddy + (dz * sz) ** 2))
+                    if distance > max_transfer_distance_A + 1.0e-12:
+                        continue
+                    target = int(np.ravel_multi_index((tx, ty, tz), shape))
+                    if target in seen or receiver_nodes[target] < 0:
+                        continue
+                    seen.add(target)
+                    candidates.append((distance, target))
+        for _, target in sorted(candidates):
+            receiver_free = max(0.0, float(free[target]) - assigned_by_receiver_A3.get(target, 0.0))
+            if receiver_free <= cell_roundoff_A3:
+                continue
+            amount_A3 = min(need, receiver_free)
+            transfers.setdefault(donor, []).append((target, amount_A3 / float(flat[donor])))
+            assigned_by_donor_A3[donor] = assigned_by_donor_A3.get(donor, 0.0) + amount_A3
+            assigned_by_receiver_A3[target] = assigned_by_receiver_A3.get(target, 0.0) + amount_A3
+            residual_placed_A3 += amount_A3
+            assigned_A3 += amount_A3
+            need -= amount_A3
+            if need <= cell_roundoff_A3:
+                break
+        max_unassigned_donor_A3 = max(max_unassigned_donor_A3, need)
+
+    unresolved = max(0.0, demand_A3 - assigned_A3)
+    # PASS uses the same per-cell fill tolerance enforced after remapping; the
+    # larger integer quantization bound is diagnostic only, never a capacity
+    # allowance.
+    status = "PASS" if max_unassigned_donor_A3 <= donor_fill_tolerance_A3 else "NO_LOCAL_CAPACITY_ASSIGNMENT"
+    output = result(status, assigned_A3, edge_count, transfers if status == "PASS" else {})
+    output["flow_units"] = assigned_units
+    output["unmet_integer_demand_units"] = max(0, total_demand_units - assigned_units)
+    output["quantization_residual_bound_A3"] = float(quantization_bound)
+    output["fractional_tail_reassigned_A3"] = float(residual_placed_A3)
+    output["max_unassigned_donor_A3"] = float(max_unassigned_donor_A3)
+    return output
+
+
 def _raw_cic_volume_power(
     xyz_A: np.ndarray,
     power_density_eV_ps_A3: np.ndarray,
@@ -530,11 +765,12 @@ def build_agw_grid_fields_joint(
 ) -> dict:
     """Conservatively map both phases together under one cell-capacity limit.
 
-    Raw CIC contributions from Ag and W share the same cell capacity. Any
-    overflow is moved as a mixed Ag/W volume package to the nearest cells with
-    real remaining capacity. Ag source power and atom-to-grid weights follow
-    the same transfer fractions, so species volume, source power, and lattice
-    energy handoff remain conservative. x/y are periodic; z is open.
+    Raw CIC contributions from Ag and W share the same cell capacity. One
+    direct maximum-flow solve assigns mixed Ag/W donor volume only to cells
+    that had initial free capacity; no cascading or capacity reuse is allowed.
+    Ag source power and atom-to-grid weights follow the same transfer fractions,
+    preserving species volume, source power, and lattice energy handoff. x/y
+    are periodic; z is open.
     """
     xyz_ag = np.asarray(xyz_ag_A, dtype=float)
     xyz_w = np.asarray(xyz_w_A, dtype=float)
@@ -562,6 +798,7 @@ def build_agw_grid_fields_joint(
     )
     cell_volume = float(np.prod(spacing))
     raw_total = volume_ag_raw + volume_w_raw
+    excess = np.maximum(raw_total - cell_volume, 0.0)
     total_material = float(raw_total.sum())
     total_capacity = int(np.prod(shape)) * cell_volume
     tolerance = max(cell_volume * 1e-12, total_material * 1e-13, 1e-10)
@@ -570,97 +807,53 @@ def build_agw_grid_fields_joint(
             f"Global Ag+W volume {total_material:.9g} A^3 exceeds grid capacity {total_capacity:.9g} A^3"
         )
 
-    excess = np.maximum(raw_total - cell_volume, 0.0).ravel()
-    donors = np.flatnonzero(excess > tolerance)
+    assignment = joint_capacity_maxflow(raw_total, spacing, max_transfer_distance_A)
+    if assignment["status"] != "PASS":
+        raise AgWMappingError(
+            "Direct joint maximum-flow mapping cannot assign "
+            f"{assignment['locally_unassignable_overflow_A3']:.9g} A^3 within "
+            f"{max_transfer_distance_A:g} A (status={assignment['status']})"
+        )
+    transfer_fractions = assignment["transfer_fractions"]
     volume_ag = volume_ag_raw.ravel().copy()
     volume_w = volume_w_raw.ravel().copy()
     source = source_raw.ravel().copy()
-    occupancy = raw_total.ravel().copy()
-    transfer_fractions: dict[int, list[tuple[int, float]]] = {}
     transfer_distances: list[float] = []
     transferred_volume_A3 = 0.0
     transfer_edges = 0
     nx, ny, nz = shape
     sx, sy, sz = spacing
-
-    def nearby_cells(donor: int) -> list[tuple[int, float]]:
+    for donor, targets in transfer_fractions.items():
+        donor_total = float(raw_total.ravel()[donor])
+        moved_fraction = sum(fraction for _, fraction in targets)
+        if moved_fraction > 1.0 + 1.0e-12:
+            raise AgWMappingError(f"Maximum-flow result overdraws donor cell {donor}")
         ix = donor // (ny * nz)
         iy = (donor // nz) % ny
         iz = donor % nz
-        rx = min(nx // 2, int(np.ceil(max_transfer_distance_A / sx)))
-        ry = min(ny // 2, int(np.ceil(max_transfer_distance_A / sy)))
-        rz = min(nz - 1, int(np.ceil(max_transfer_distance_A / sz)))
-        candidates: dict[int, float] = {}
-        for dx in range(-rx, rx + 1):
-            tx = (ix + dx) % nx
-            ddx = min(abs(dx), nx - abs(dx)) * sx
-            for dy in range(-ry, ry + 1):
-                ty = (iy + dy) % ny
-                ddy = min(abs(dy), ny - abs(dy)) * sy
-                for dz in range(-rz, rz + 1):
-                    tz = iz + dz
-                    if tz < 0 or tz >= nz or (dx == 0 and dy == 0 and dz == 0):
-                        continue
-                    distance = float(np.sqrt(ddx * ddx + ddy * ddy + (dz * sz) ** 2))
-                    if distance > max_transfer_distance_A + 1e-12:
-                        continue
-                    target = int(np.ravel_multi_index((tx, ty, tz), shape))
-                    previous = candidates.get(target)
-                    if previous is None or distance < previous:
-                        candidates[target] = distance
-        return sorted(candidates.items(), key=lambda item: (item[1], item[0]))
-
-    donor_candidates: dict[int, list[tuple[int, float]]] = {}
-    donor_priority: list[tuple[float, float, int, int]] = []
-    for donor_value in donors:
-        donor = int(donor_value)
-        candidates = nearby_cells(donor)
-        donor_candidates[donor] = candidates
-        nearby_free = sum(
-            max(0.0, cell_volume - float(raw_total.ravel()[target]))
-            for target, _ in candidates
-        )
-        scarcity = nearby_free / max(float(excess[donor]), tolerance)
-        donor_priority.append((scarcity, nearby_free, -float(excess[donor]), donor))
-
-    # Handle donors with the fewest nearby free-volume options first. This
-    # reduces (but does not conceal) allocation failure from a poor greedy
-    # ordering when nearby capacity is shared by several overfilled cells.
-    for _, _, _, donor in sorted(donor_priority):
-        donor_excess = float(excess[donor])
-        remaining = donor_excess
-        donor_total = float(raw_total.ravel()[donor])
-        if donor_total <= 0.0:
-            raise AgWMappingError(f"Invalid non-positive donor volume in cell {donor}")
-        for target, distance in donor_candidates[donor]:
-            free = cell_volume - occupancy[target]
-            if free <= tolerance:
-                continue
-            amount = min(remaining, float(free))
-            fraction = amount / donor_total
+        for target, fraction in targets:
+            tx = target // (ny * nz)
+            ty = (target // nz) % ny
+            tz = target % nz
+            ddx = min((tx - ix) % nx, (ix - tx) % nx) * sx
+            ddy = min((ty - iy) % ny, (iy - ty) % ny) * sy
+            distance = float(np.sqrt(ddx * ddx + ddy * ddy + ((tz - iz) * sz) ** 2))
+            if distance > max_transfer_distance_A + 1.0e-10:
+                raise AgWMappingError("Maximum-flow result exceeds its configured transfer distance")
             d_ag = float(volume_ag_raw.ravel()[donor]) * fraction
             d_w = float(volume_w_raw.ravel()[donor]) * fraction
             d_source = float(source_raw.ravel()[donor]) * fraction
+            amount = donor_total * fraction
             volume_ag[donor] -= d_ag
             volume_w[donor] -= d_w
             source[donor] -= d_source
             volume_ag[target] += d_ag
             volume_w[target] += d_w
             source[target] += d_source
-            occupancy[donor] -= amount
-            occupancy[target] += amount
-            transfer_fractions.setdefault(donor, []).append((target, fraction))
             transfer_distances.append(distance)
             transferred_volume_A3 += amount
             transfer_edges += 1
-            remaining -= amount
-            if remaining <= tolerance:
-                break
-        if remaining > tolerance:
-            raise AgWMappingError(
-                f"Conservative greedy assignment leaves {remaining:.9g} A^3 overflow at cell {donor} "
-                f"within the configured {max_transfer_distance_A:g} A transfer limit"
-            )
+    assignment_summary = {k: v for k, v in assignment.items() if k != "transfer_fractions"}
 
     volume_ag = volume_ag.reshape(shape)
     volume_w = volume_w.reshape(shape)
@@ -695,6 +888,7 @@ def build_agw_grid_fields_joint(
         "grid_total_capacity_A3": total_capacity,
         "raw_total_free_capacity_A3": float(np.maximum(cell_volume - raw_total, 0.0).sum()),
         "raw_total_excess_volume_A3": float(excess.sum()),
+        "capacity_assignment": assignment_summary,
         "joint_overfilled_cells": int(np.count_nonzero(total_fill > 1.0 + 1e-10)),
         "joint_fill_max_combined": float(total_fill.max()),
         "joint_fill_max_ag": float(fraction_ag.max()),
