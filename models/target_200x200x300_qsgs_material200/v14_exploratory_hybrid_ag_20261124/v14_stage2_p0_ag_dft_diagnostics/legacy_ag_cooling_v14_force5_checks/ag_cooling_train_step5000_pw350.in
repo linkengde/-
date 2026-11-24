@@ -1,0 +1,18 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/legacy_ag_cooling_v14_force5_checks/ag_cooling_train_step5000_pw350.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/AgTiSiC_POD_v14.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/v14_targeted_ag_f5_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo_style custom step atoms pe press
+thermo 1
+run 0
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/legacy_ag_cooling_v14_force5_checks/ag_cooling_train_step5000_pw350.dump id type x y z fx fy fz modify sort id

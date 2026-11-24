@@ -1,0 +1,139 @@
+LAMMPS (22 Jul 2025)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+clear
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/hybrid_458k_original_static/fire_fixedbase_100/minimized.data
+Reading data file ...
+  orthogonal box = (0 0 -0.03) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  reading velocities ...
+  458248 velocities
+  read_data CPU = 2.154 seconds
+mass 1 47.867
+mass 2 28.0855
+mass 3 12.011
+mass 4 107.8682
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 1.5 2.4
+pair_coeff 4 4 eam /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam
+Reading eam potential file /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 4 1 morse 0.678644 1.155035 2.989514 8.0
+pair_coeff 4 2 morse 0.020000 3.107766 1.400605 8.0
+pair_coeff 4 3 morse 0.020000 7.804451 1.400000 8.0
+pair_coeff 4 1 zbl 47 22
+pair_coeff 4 2 zbl 47 14
+pair_coeff 4 3 zbl 47 6
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region base block INF INF INF INF 0.0 20.0 units box
+group base region base
+47732 atoms in group base
+group mobile subtract all base
+410516 atoms in group mobile
+fix hold base setforce 0.0 0.0 0.0
+velocity base set 0.0 0.0 0.0
+velocity mobile create 300.0 42177 mom yes rot yes dist gaussian
+compute tmobile mobile temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+timestep 0.001
+fix int mobile nve
+thermo 1
+thermo_style custom step time atoms c_tmobile pe ke etotal press c_fmax
+thermo_modify lost error flush yes
+dump tr all custom 10 nve.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 10
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 40 40 61
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, copy from (3)
+      attributes: half, newton on, omp
+      pair build: copy
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 648.6 | 648.6 | 648.6 Mbytes
+   Step          Time         Atoms      c_tmobile        PotEng         KinEng         TotEng         Press          c_fmax    
+         0   0                 458248   300           -2447662.7      15918.969     -2431743.7     -71713.159      3.1785237    
+         1   0.001             458248   298.44758     -2447580        15836.592     -2431743.4     -71708.258      3.1695481    
+         2   0.002             458248   293.90473     -2447338.2      15595.534     -2431742.7     -71690.471      3.166906     
+         3   0.003             458248   286.66942     -2446953.1      15211.605     -2431741.5     -71660.875      3.1703661    
+         4   0.004             458248   277.21001     -2446449.5      14709.658     -2431739.9     -71620.977      3.1792525    
+         5   0.005             458248   266.12597     -2445860.1      14121.503     -2431738.5     -71573.043      3.1924114    
+         6   0.006             458248   254.09841     -2445220.1      13483.282     -2431736.8     -71519.188      3.5730607    
+         7   0.007             458248   241.83451     -2444567.8      12832.52      -2431735.3     -71462.534      3.957171     
+         8   0.008             458248   230.01112     -2443939.6      12205.133     -2431734.5     -71405.913      4.2518092    
+         9   0.009             458248   219.22265     -2443366.6      11632.661     -2431734       -71352.077      4.4498306    
+        10   0.01              458248   209.93789     -2442874.3      11139.982     -2431734.3     -71303.576      4.546967     
+Loop time of 17.1193 on 4 procs for 10 steps with 458248 atoms
+
+Performance: 0.050 ns/day, 475.535 hours/ns, 0.584 timesteps/s, 267.680 katom-step/s
+342.2% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 15.971     | 15.971     | 15.971     |   0.0 | 93.29
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.010458   | 0.010458   | 0.010458   |   0.0 |  0.06
+Output  | 1.0482     | 1.0482     | 1.0482     |   0.0 |  6.12
+Modify  | 0.062518   | 0.062518   | 0.062518   |   0.0 |  0.37
+Other   |            | 0.02697    |            |       |  0.16
+
+Nlocal:         458248 ave      458248 max      458248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          93169 ave       93169 max       93169 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data final.data
+System init for write_data ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Total wall time: 0:00:24

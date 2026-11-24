@@ -1,0 +1,111 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/interface_cold_nve/heldout_interface.data
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 28.068243) with tilt (3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  64 atoms
+  read_data CPU = 0.001 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style hybrid eam tersoff morse 8.0
+pair_coeff 1 1 eam /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+Reading eam potential file /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/TSCBOP.tersoff NULL C Si Ti
+pair_coeff 1 2 morse 0.020000 7.804451 1.400000 8.0
+pair_coeff 1 3 morse 0.020000 3.107766 1.400605 8.0
+pair_coeff 1 4 morse 0.678644 1.155035 2.989514 8.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 10
+thermo_style custom step time temp pe ke etotal press
+velocity all create 300.0 24601 mom yes rot yes dist gaussian
+fix int all nve
+timestep 0.001
+dump tr all custom 10 /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/interface_cold_nve/hybrid_eam_TSCBOP_fitted_Morse/traj.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 100
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 2 2 6
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 5.817 | 5.817 | 5.817 Mbytes
+   Step          Time           Temp          PotEng         KinEng         TotEng         Press     
+         0   0              300           -369.22354      2.4430167     -366.78052     -96700.334    
+        10   0.01           410.23811     -370.11777      3.3407285     -366.77704     -95841.606    
+        20   0.02           291.99888     -369.14978      2.3778605     -366.77192     -94670.276    
+        30   0.03           468.59557     -370.60454      3.8159561     -366.78858     -99620.953    
+        40   0.04           493.79476     -370.83228      4.0211629     -366.81112     -106946.98    
+        50   0.05           579.6991      -371.56084      4.7207154     -366.84013     -114485.73    
+        60   0.06           751.85355     -372.99811      6.122636      -366.87547     -123235.13    
+        70   0.07           788.01625     -373.35125      6.417123      -366.93413     -133354       
+        80   0.08           1017.6772     -375.3185       8.2873415     -367.03116     -144524.56    
+        90   0.09           881.1585      -374.27234      7.1756166     -367.09673     -149262.79    
+       100   0.1            854.2436      -374.09012      6.956438      -367.13369     -143963.65    
+Loop time of 0.082837 on 1 procs for 100 steps with 64 atoms
+
+Performance: 104.301 ns/day, 0.230 hours/ns, 1207.190 timesteps/s, 77.260 katom-step/s
+97.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.079942   | 0.079942   | 0.079942   |   0.0 | 96.50
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.00086005 | 0.00086005 | 0.00086005 |   0.0 |  1.04
+Output  | 0.0017384  | 0.0017384  | 0.0017384  |   0.0 |  2.10
+Modify  | 8.5648e-05 | 8.5648e-05 | 8.5648e-05 |   0.0 |  0.10
+Other   |            | 0.0002115  |            |       |  0.26
+
+Nlocal:             64 ave          64 max          64 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           2445 ave        2445 max        2445 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/interface_cold_nve/hybrid_eam_TSCBOP_fitted_Morse/final.data
+System init for write_data ...
+Total wall time: 0:00:00

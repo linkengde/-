@@ -1,0 +1,133 @@
+LAMMPS (22 Jul 2025)
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+clear
+  using 4 OpenMP thread(s) per MPI task
+package omp 0
+using multi-threaded neighbor list subroutines
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/Ag_Ti3SiC2_bicontinuous_200x200x300.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  read_data CPU = 1.231 seconds
+mass 1 47.867
+mass 2 28.0855
+mass 3 12.011
+mass 4 107.8682
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 1.5 2.4
+pair_coeff 4 4 eam /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam
+Reading eam potential file /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 4 1 morse 0.678644 1.155035 2.989514 8.0
+pair_coeff 4 2 morse 0.020000 3.107766 1.400605 8.0
+pair_coeff 4 3 morse 0.020000 7.804451 1.400000 8.0
+pair_coeff 4 1 zbl 47 22
+pair_coeff 4 2 zbl 47 14
+pair_coeff 4 3 zbl 47 6
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region base block INF INF INF INF 0.0 20.0 units box
+group base region base
+47494 atoms in group base
+fix hold base setforce 0.0 0.0 0.0
+thermo 25
+thermo_style custom step atoms pe press fmax
+min_style fire
+min_modify dmax 0.01
+minimize 1.0e-6 0.5 100 1000
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 40 40 61
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on, omp
+      pair build: skip/omp
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, copy from (3)
+      attributes: half, newton on, omp
+      pair build: copy
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on, omp
+      pair build: halffull/newton/omp
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on, omp
+      pair build: full/bin/atomonly/omp
+      stencil: full/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.01     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 642.3 | 642.3 | 642.3 Mbytes
+   Step        Atoms        PotEng         Press           Fmax     
+         0      458248  -2401258.6     -70823.688      8.59872      
+        25      458248  -2426876.7     -67566.391      3.5118427    
+        50      458248  -2436726       -65465.889      2.7502525    
+        75      458248  -2442706       -65951.452      2.3083864    
+       100      458248  -2447662.7     -66910.262      2.3767356    
+Loop time of 171.063 on 4 procs for 100 steps with 458248 atoms
+
+327.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -2401258.58628862  -2447486.66355342  -2447662.69975957
+  Force two-norm initial, final = 1112.5834 185.81096
+  Force max component initial, final = 8.59872 2.3767356
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 100 101
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 169.08     | 169.08     | 169.08     |   0.0 | 98.84
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.1169     | 0.1169     | 0.1169     |   0.0 |  0.07
+Output  | 0.01631    | 0.01631    | 0.01631    |   0.0 |  0.01
+Modify  | 0.41006    | 0.41006    | 0.41006    |   0.0 |  0.24
+Other   |            | 1.439      |            |       |  0.84
+
+Nlocal:         458248 ave      458248 max      458248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          92997 ave       92997 max       92997 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom minimized.dump id type x y z fx fy fz modify sort id
+write_data minimized.data
+System init for write_data ...
+Hybrid pair style last /omp style zbl
+Last active /omp style is pair_style zbl
+Total wall time: 0:02:57

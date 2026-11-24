@@ -1,0 +1,48 @@
+clear
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data ../fire_fixedbase_100/minimized.data
+mass 1 47.867
+mass 2 28.0855
+mass 3 12.011
+mass 4 107.8682
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 1.5 2.4
+pair_coeff 4 4 eam ../../../../../../models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+pair_coeff * * tersoff ../../../../../../models/ag_ti3sic2_qsgs_1to1_finer/potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 4 1 morse 0.678644 1.155035 2.989514 8.0
+pair_coeff 4 2 morse 0.020000 3.107766 1.400605 8.0
+pair_coeff 4 3 morse 0.020000 7.804451 1.400000 8.0
+pair_coeff 4 1 zbl 47 22
+pair_coeff 4 2 zbl 47 14
+pair_coeff 4 3 zbl 47 6
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region rbase block INF INF INF INF 0.0 20.0 units box
+region rbath block INF INF INF INF 20.0 40.0 units box
+region rnewt block INF INF INF INF 40.0 200.0 units box
+group base region rbase
+group mobile subtract all base
+group bathgeom region rbath
+group bath intersect mobile bathgeom
+group newtgeom region rnewt
+group newton intersect mobile newtgeom
+fix hold base setforce 0.0 0.0 0.0
+velocity base set 0.0 0.0 0.0
+velocity mobile create 300.0 52217 mom yes rot yes dist gaussian
+compute tmobile mobile temp
+compute tbath bath temp
+compute tnewton newton temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+fix bathfix bath nvt temp 300.0 300.0 0.1
+fix_modify bathfix temp tbath
+fix int newton nve
+timestep 0.001
+thermo 10
+thermo_style custom step time atoms c_tmobile c_tbath c_tnewton pe ke etotal press fmax
+thermo_modify temp tmobile lost error flush yes
+run 100
+write_dump all custom final.dump id type x y z fx fy fz modify sort id
+write_data final.data

@@ -1,0 +1,12 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ag_u3_reference_eos/a_3.30A.data
+mass 1 107.8682
+pair_style eam
+pair_coeff * * /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+thermo_style custom step atoms pe press lx
+thermo 1
+run 0

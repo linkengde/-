@@ -1,0 +1,38 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data v14_stage2_p0_ag_dft_diagnostics/ag_eam_256_npt_cycle/ag256.data
+mass 1 107.8682
+pair_style eam
+pair_coeff * * /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+compute q6 all orientorder/atom degrees 1 6 nnn 12
+compute q6mean all reduce ave c_q6[1]
+compute q6min all reduce min c_q6[1]
+compute msd all msd com yes
+thermo 100
+thermo_style custom step time temp pe ke etotal press vol lx ly lz c_q6mean c_q6min c_msd[4]
+thermo_modify lost error flush yes format float %.12g
+timestep 0.001
+run 0
+velocity all create 300.0 719203 mom yes rot no dist gaussian
+fix eq all npt temp 300.0 300.0 0.05 iso 0.0 0.0 1.0
+run 1000
+unfix eq
+fix heat all npt temp 300.0 1800.0 0.05 iso 0.0 0.0 1.0
+run 500
+unfix heat
+fix melt all npt temp 1800.0 1800.0 0.05 iso 0.0 0.0 1.0
+run 2000
+unfix melt
+fix cool all npt temp 1800.0 300.0 0.05 iso 0.0 0.0 1.0
+run 3000
+unfix cool
+fix hold all npt temp 300.0 300.0 0.05 iso 0.0 0.0 1.0
+run 1000
+unfix hold
+write_dump all custom v14_stage2_p0_ag_dft_diagnostics/ag_eam_256_npt_cycle/final.dump id type x y z vx vy vz modify sort id
+write_data v14_stage2_p0_ag_dft_diagnostics/ag_eam_256_npt_cycle/final.data

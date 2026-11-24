@@ -1,0 +1,119 @@
+LAMMPS (22 Jul 2025)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+clear
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p m
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/Ag_Ti3SiC2_bicontinuous_200x200x300.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  read_data CPU = 1.176 seconds
+mass 1 47.867
+mass 2 28.0855
+mass 3 12.011
+mass 4 107.8682
+pair_style hybrid/overlay eam tersoff morse 8.0 zbl 1.5 2.4
+pair_coeff 4 4 eam /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam
+Reading eam potential file /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/sampler_potentials/TSCBOP.tersoff Ti Si C NULL
+pair_coeff 4 1 morse 0.678644 1.155035 2.989514 8.0
+pair_coeff 4 2 morse 0.020000 3.107766 1.400605 8.0
+pair_coeff 4 3 morse 0.020000 7.804451 1.400000 8.0
+pair_coeff 4 1 zbl 47 22
+pair_coeff 4 2 zbl 47 14
+pair_coeff 4 3 zbl 47 6
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+group ti type 1
+175926 atoms in group ti
+group si type 2
+58642 atoms in group si
+group cgrp type 3
+117284 atoms in group cgrp
+group aggrp type 4
+106396 atoms in group aggrp
+compute fmax all reduce max v_fmag
+compute fti ti reduce max v_fmag
+compute fsi si reduce max v_fmag
+compute fc cgrp reduce max v_fmag
+compute fag aggrp reduce max v_fmag
+thermo 1
+thermo_style custom step atoms pe etotal press c_fmax c_fti c_fsi c_fc c_fag
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 40 40 61
+  6 neighbor lists, perpetual/occasional/extra = 6 0 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (6)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) pair zbl, perpetual, copy from (3)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual, half/full from (6)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+  (6) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 585.5 | 585.5 | 585.5 Mbytes
+   Step        Atoms        PotEng         TotEng         Press          c_fmax         c_fti          c_fsi           c_fc          c_fag     
+         0      458248  -2401258.6     -2401258.6     -70823.688      8.9888339      8.9888339      3.5069848      3.048134       8.4347197    
+Loop time of 3.211e-06 on 1 procs for 0 steps with 458248 atoms
+
+155.7% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 3.211e-06  |            |       |100.00
+
+Nlocal:         458248 ave      458248 max      458248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          92997 ave       92997 max       92997 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom static_forces.dump id type x y z fx fy fz modify sort id
+Total wall time: 0:00:10

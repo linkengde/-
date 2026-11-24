@@ -1,0 +1,228 @@
+{
+  "status": "BUILT_GEOMETRY_ONLY_NOT_RELAXED",
+  "box_A": [
+    200.0,
+    200.0,
+    300.0
+  ],
+  "material_z_A": [
+    0.0,
+    200.0
+  ],
+  "vacuum_z_A": [
+    200.0,
+    300.0
+  ],
+  "boundary": [
+    "periodic",
+    "periodic",
+    "fixed_nonperiodic"
+  ],
+  "layers_A": {
+    "fixed_skeleton": [
+      0.0,
+      20.0
+    ],
+    "300K_ideal_heat_sink_thermostat": [
+      20.0,
+      40.0
+    ],
+    "newton_dynamics_heating_cooling": [
+      40.0,
+      200.0
+    ],
+    "sputter_observation": [
+      200.0,
+      250.0
+    ],
+    "evaporation_observation": [
+      250.0,
+      300.0
+    ],
+    "empty_part_of_newton_region_before_heating": [
+      200.0,
+      200.0
+    ]
+  },
+  "layer_atom_counts_initial": {
+    "fixed_slab_z0_20": {
+      "all_atoms": 47494,
+      "Ag": 11649,
+      "Ti3SiC2": 35845
+    },
+    "fixed_skeleton_atoms_z0_20": 35845,
+    "thermostat_z20_40": {
+      "all_atoms": 46913,
+      "Ag": 11154,
+      "Ti3SiC2": 35759
+    },
+    "Newton_z40_200": {
+      "all_atoms": 363841,
+      "Ag": 83593,
+      "Ti3SiC2": 280248
+    },
+    "sputter_observation_z200_250": {
+      "all_atoms": 0,
+      "Ag": 0,
+      "Ti3SiC2": 0
+    },
+    "evaporation_observation_z250_300": {
+      "all_atoms": 0,
+      "Ag": 0,
+      "Ti3SiC2": 0
+    }
+  },
+  "heat_sink_representation": "Ideal 300 K thermostat slab on the existing Ag-Ti3SiC2 atoms; no explicit Al atoms because the current fitted POD/SNAP models contain Ag, Ti, Si, C only.",
+  "qsgs_controls": {
+    "seed_nucleation_probability": 0.0064,
+    "growth_probability_prefactor": 0.18,
+    "directional_rule": "26 neighbors; probability prefactor divided by Euclidean neighbor distance; periodic x/y, open z",
+    "target_Ag_to_Ti3SiC2_mass_ratio": 1.0,
+    "selected_skeleton_voxel_fraction_bracket": 0.5189849853515627,
+    "available_mass_ratio_before_Ag_trim": 1.100018473684222,
+    "random_seed": 20261116,
+    "growth_generations": 6,
+    "cleanup_voxel_changes": [
+      23628,
+      0
+    ],
+    "measured_cleaned_skeleton_voxel_fraction": 0.527122,
+    "morphology_metrics": {
+      "mean_skeleton_line_intercept_A_xyz": [
+        9.15587438338081,
+        9.187471677066267,
+        8.996330619698599
+      ],
+      "voxel_interface_area_per_material_volume_per_A": 0.3435765,
+      "same_target_p0_0p0032_reference": {
+        "mean_skeleton_line_intercept_A_xyz": [
+          19.1346147381,
+          19.3553636367,
+          19.0785788975
+        ],
+        "line_intercept_change_fraction_xyz": [
+          -0.5215020261082113,
+          -0.5253268370713655,
+          -0.5284590813586514
+        ],
+        "note": "Comparison against the prior 1:1-mass QSGS candidate with seed probability 0.0032. The prior voxel pitch was about 3 A and the new pitch is 2 A, so this is a morphology indicator rather than a grid-converged or atomistic ligament measurement."
+      }
+    }
+  },
+  "atoms": 458248,
+  "counts": {
+    "Ag": 106396,
+    "Ti": 175926,
+    "Si": 58642,
+    "C": 117284
+  },
+  "chemical_formula_Ti3SiC2_units": 58642,
+  "actual_Ag_to_Ti3SiC2_mass_ratio": 1.000003177844927,
+  "target_Ag_to_Ti3SiC2_mass_ratio": 1.0,
+  "available_Ag_connectivity_before_mass_trim": {
+    "components_before_largest_component_selection": 1433,
+    "atoms_in_largest_component": 114627,
+    "cutoff_A": 3.15,
+    "xy_periodic_winding_rank": 2,
+    "z_extent_A": [
+      0.0,
+      198.36499999999995
+    ],
+    "spans_material_thickness": true
+  },
+  "Ag_atoms_trimmed_to_mass_ratio": 8231,
+  "stoichiometry_trimmed_atoms": 1650,
+  "atomic_connectivity": {
+    "Ti3SiC2": {
+      "components_before_largest_component_selection": 1,
+      "atoms_in_largest_component": 351852,
+      "cutoff_A": 3.25,
+      "xy_periodic_winding_rank": 2,
+      "z_extent_A": [
+        0.0,
+        198.26437499999997
+      ],
+      "spans_material_thickness": true
+    },
+    "Ag": {
+      "components_before_largest_component_selection": 1,
+      "atoms_in_largest_component": 106396,
+      "cutoff_A": 3.15,
+      "xy_periodic_winding_rank": 2,
+      "z_extent_A": [
+        0.0,
+        198.36499999999995
+      ],
+      "spans_material_thickness": true
+    }
+  },
+  "lattice": {
+    "Ti3SiC2_repeats": [
+      65,
+      38,
+      12
+    ],
+    "Ti3SiC2_xy_strain": [
+      0.00635260079250255,
+      -0.0061535151876306315
+    ],
+    "Ag_repeats": [
+      49,
+      49,
+      49
+    ],
+    "Ag_xy_strain": [
+      -0.002045806097500158,
+      -0.002045806097500158
+    ],
+    "Ag_fcc_a_A": 4.09,
+    "minimum_Ag_skeleton_clearance_A": 2.2
+  },
+  "files": {
+    "lammps_data_gz": "Ag_Ti3SiC2_bicontinuous_200x200x300.data.gz",
+    "extxyz_gz": "Ag_Ti3SiC2_bicontinuous_200x200x300.extxyz.gz",
+    "qsgs_mask": "qsgs_bicontinuous_mask.npz"
+  },
+  "sha256": {
+    "Ag_Ti3SiC2_bicontinuous_200x200x300.data": "fbf9697a97dac456145b4063b29e36f65533a156582668f4f1bbb7a7371ef69a",
+    "Ag_Ti3SiC2_bicontinuous_200x200x300.extxyz": "e5d78f08517c72f7147dc5f676a22289026854b968aa6b1a7ab2e1d3f6ca6f59"
+  },
+  "limitations": [
+    "Geometry build only; no minimization, thermal equilibration, heating, or cooling performed.",
+    "The ideal Al-Si heat sink is represented by the requested 300 K thermostat slab, not explicit Al-Si atoms.",
+    "The random QSGS mask is bicontinuous at the voxel level; atomic phase connectivity is separately checked.",
+    "The present 4-element POD/SNAP potential has not been validated on this new target geometry."
+  ],
+  "neighbor_distance_audit": {
+    "method": "minimum image in x/y periodic directions; z treated nonperiodic",
+    "minimum_all_atom_neighbor_distance_A": 2.0790140722593495,
+    "minimum_pair": [
+      "Ti",
+      "C"
+    ],
+    "atoms_with_nearest_neighbor_below_1p8_A": 0,
+    "atoms_with_nearest_neighbor_below_2p0_A": 0,
+    "minimum_Ag_to_skeleton_distance_A": 2.292504691367692,
+    "Ag_atoms_with_skeleton_neighbor_below_2p0_A": 0,
+    "Ag_atoms_with_skeleton_neighbor_below_2p2_A": 0,
+    "status": "geometry-only screen; static potential force check and relaxation pending"
+  },
+  "potential_static_screen": {
+    "status": "PASS_STATIC_FORCE_SCREEN_ONLY",
+    "model": "separate corrected-height geometry, material z=0..200 A, box 200x200x300 A",
+    "atoms": 458248,
+    "potential": "POD v12f",
+    "calculation": "LAMMPS run 0; no coordinates moved",
+    "total_energy_eV": -2861487.5,
+    "Fmax_eV_A": 22.35457098989806,
+    "Fmax_by_element_eV_A": {
+      "Ag": 22.35457098989806,
+      "C": 11.435824,
+      "Si": 13.435916,
+      "Ti": 14.888736
+    },
+    "atoms_above_500_eV_A": 0,
+    "not_approved_for_MD_or_heating": true,
+    "reason": "FIRE and cold stability screens still pending; SI01 local force transfer failure remains under investigation."
+  }
+}

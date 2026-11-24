@@ -1,0 +1,96 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ideal_cross_morse_fit/V13_IFACE_02_base.data
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 28.312675) with tilt (3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  64 atoms
+  read_data CPU = 0.001 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style hybrid eam tersoff morse 8.0
+pair_coeff 1 1 eam /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+Reading eam potential file /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff * * tersoff /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/TSCBOP.tersoff NULL C Si Ti
+pair_coeff 1 2 morse 0.0 2.0 2.15 8.0
+pair_coeff 1 3 morse 0.0 2.0 2.40 8.0
+pair_coeff 1 4 morse 0.0 2.0 2.34 8.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo_style custom step atoms pe press
+thermo 1
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 10
+  ghost atom cutoff = 10
+  binsize = 5, bins = 2 2 6
+  5 neighbor lists, perpetual/occasional/extra = 5 0 0
+  (1) pair eam, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair tersoff, perpetual, skip from (5)
+      attributes: full, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair morse, perpetual, skip from (4)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) neighbor class addition, perpetual, half/full from (5)
+      attributes: half, newton on
+      pair build: halffull/newton/tri
+      stencil: none
+      bin: none
+  (5) neighbor class addition, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 5.819 | 5.819 | 5.819 Mbytes
+   Step        Atoms        PotEng         Press     
+         0          64  -339.25836     -43670.943    
+Loop time of 1.222e-06 on 1 procs for 0 steps with 64 atoms
+
+81.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.222e-06  |            |       |100.00
+
+Nlocal:             64 ave          64 max          64 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           2444 ave        2444 max        2444 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ideal_cross_morse_fit/V13_IFACE_02_base.dump id type x y z fx fy fz modify sort id
+Total wall time: 0:00:00

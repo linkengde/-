@@ -1,0 +1,29 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ag_precollapse_nve_compare/V14_force5/candidate.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/AgTiSiC_POD_v14.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/v14_targeted_ag_f5_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 10
+thermo_style custom step time atoms temp pe ke etotal press c_fmax
+thermo_modify lost error flush yes format float %.14g
+timestep 0.001
+run 0
+velocity all create 1810.056942965326 291107 mom yes rot no dist gaussian
+write_dump all custom /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ag_precollapse_nve_compare/V14_force5/start.dump id type x y z modify sort id
+fix integ all nve
+dump trj all custom 10 /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/ag_precollapse_nve_compare/V14_force5/candidate.dump id type x y z
+dump_modify trj sort id
+run 100
+undump trj
+unfix integ

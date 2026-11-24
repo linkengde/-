@@ -1,0 +1,92 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/interface_cold_nve/heldout_interface.data
+Reading data file ...
+  triclinic box = (0 0 0) to (6.115 5.2957453 28.068243) with tilt (3.0575 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  64 atoms
+  read_data CPU = 0.002 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/AgTiSiC_POD_v14.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v14_targeted_ag_force5/v14_targeted_ag_f5_coefficients.pod Ag C Si Ti
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+thermo 10
+thermo_style custom step time temp pe ke etotal press
+velocity all create 300.0 24601 mom yes rot yes dist gaussian
+fix int all nve
+timestep 0.001
+dump tr all custom 10 /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage2_p0_ag_dft_diagnostics/interface_cold_nve/V14_force5/traj.dump id type x y z vx vy vz fx fy fz
+dump_modify tr sort id
+run 100
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 3 2 9
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 2.976 | 2.976 | 2.976 Mbytes
+   Step          Time           Temp          PotEng         KinEng         TotEng         Press     
+         0   0              300           -414.31327      2.4430167     -411.87025     -498836.18    
+        10   0.01           315.83784     -414.44221      2.5719904     -411.87022     -499844.14    
+        20   0.02           361.88058     -414.81846      2.9469344     -411.87152     -497658.09    
+        30   0.03           284.04183     -414.18313      2.3130631     -411.87007     -493487.61    
+        40   0.04           303.73477     -414.34148      2.4734304     -411.86805     -496942.81    
+        50   0.05           33972.348     -534.92569      276.65005     -258.27564     -627056.86    
+ERROR: Lost atoms: original 64 current 63
+For more information see https://docs.lammps.org/err0008 (src/src/thermo.cpp:526)
