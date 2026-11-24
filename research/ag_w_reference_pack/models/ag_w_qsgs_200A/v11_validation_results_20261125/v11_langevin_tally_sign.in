@@ -1,0 +1,16 @@
+units metal
+atom_style atomic
+boundary p p p
+region box block 0 20 0 20 0 20 units box
+create_box 1 box
+create_atoms 1 random 100 94211 box
+mass 1 183.84
+pair_style zero 4.76
+pair_coeff * *
+velocity all create 100.0 72341 mom yes rot no dist gaussian
+fix integrator all nve
+fix thermostat all langevin 1000.0 1000.0 0.1 123456 tally yes
+timestep 0.0001
+thermo 200
+thermo_style custom step temp ke f_thermostat etotal
+run 2000

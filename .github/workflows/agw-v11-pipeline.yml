@@ -158,7 +158,8 @@ jobs:
             --geometry-fractions-npz v11_artifacts/agw_v11_geometry_fractions.npz \
             --output v11_artifacts/v11_ttm_no_source.json \
             --pulse-fwhm-ps 0.01 --pulse-center-ps 0.02 --cooling-ps 0.02 \
-            --grid-A 10 --box-xy-A 200 --source-scale 0 --exploratory
+            --grid-A 10 --box-xy-A 200 --dt-ps 0.0001 \
+            --source-scale 0 --initial-electron-temperature-from-lattice --exploratory
 
       - name: Low-energy Gaussian Ag source TTM coupling
         run: |
@@ -169,7 +170,8 @@ jobs:
             --geometry-fractions-npz v11_artifacts/agw_v11_geometry_fractions.npz \
             --output v11_artifacts/v11_ttm_gaussian_source.json \
             --pulse-fwhm-ps 0.01 --pulse-center-ps 0.02 --cooling-ps 0.02 \
-            --grid-A 10 --box-xy-A 200 --source-scale 1 --exploratory
+            --grid-A 10 --box-xy-A 200 --dt-ps 0.0001 \
+            --source-scale 1 --initial-electron-temperature-from-lattice --exploratory
 
       - name: Upload V11 generated structure, MD, mapping and TTM results
         if: always()

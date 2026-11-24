@@ -78,5 +78,63 @@
     "result": "COLD_GATE_STILL_FAILS; phase temperature difference increased; no TTM run",
     "input_sha256": "9447093ae2ea3a8b30917fba1a2072fad7839572d0ee18d5a22d5d9a4768fe90",
     "metrics_sha256": "85881293f46c99189788abe08b8bd5d31b8b8c1ec41223e07132a873d5d55c54"
+  },
+  "statuses": {
+    "geometry_build": "PASS",
+    "static_exploratory_screen": "PASS_WITH_HIGH_RESIDUAL_FORCES",
+    "cold_baseline": "FAIL_PHASE_TEMPERATURE_SPLIT_AND_CONTINUING_RELAXATION",
+    "cold_1ps_followup": "FAIL_PHASE_TEMPERATURE_SPLIT_WORSENED",
+    "mapping_10A_mapping_only": "PASS",
+    "TTM_no_source_0p08ps_software_link": "PASS",
+    "TTM_gaussian_0p08ps_software_link": "PASS",
+    "Ag_melt_quench_physical_result": "NOT_EVALUATED"
+  },
+  "mapping_preflight": {
+    "status": "AGW_MAPPING_PREFLIGHT_PASS",
+    "grid_A": 10.0,
+    "max_total_phase_fill": 1.0,
+    "phase_cic_max_row_sum_error": 2.220446049250313e-16,
+    "newton_candidates": 367582,
+    "Ag_Newton_atoms": 231274,
+    "W_Newton_atoms": 136103,
+    "Ag_source_power_on_state_eV_ps": 6210.163541294391,
+    "source_power_conservation_error_eV_ps": 0.0,
+    "run0_mobile_max_force_eV_A": 5.835523303945081,
+    "ttm_steps_executed": 0
+  },
+  "ttm_software_link": {
+    "shared_restart_step": 8200,
+    "grid_A": 10.0,
+    "timestep_ps": 0.0001,
+    "integration_time_ps": 0.08,
+    "pulse_fwhm_ps": 0.01,
+    "pulse_center_ps": 0.02,
+    "cooling_ps": 0.02,
+    "interface_h_W_m2_K": 1000000000.0,
+    "electron_initialization": "phase-specific COM-removed mean Newton-layer lattice temperatures",
+    "source_total_eV": 66.10506077211893,
+    "source_on_state_power_eV_ps": 6210.163541294391,
+    "no_source": {
+      "status": "AGW_TTM_SOFTWARE_LINK_PASS",
+      "max_combined_energy_residual_eV": 0.007266178021817282,
+      "combined_tolerance_eV": 0.0319696595869157,
+      "max_grid_step_residual_eV": 1.4273787992633577e-14,
+      "max_Te_Ag_K": 311.51417510210274,
+      "max_Te_W_K": 357.61901464396226
+    },
+    "gaussian_source": {
+      "status": "AGW_TTM_SOFTWARE_LINK_PASS",
+      "max_combined_energy_residual_eV": 0.007266400601158907,
+      "combined_tolerance_eV": 0.09807447958450118,
+      "max_grid_step_residual_eV": 7.333209596951122e-14,
+      "max_Te_Ag_K": 630.8403165032712,
+      "max_Te_Ag_time_ps": 0.0208,
+      "max_Te_W_K": 370.9138566692708
+    },
+    "interpretation": "software/numerical coupling only; no melt/quench or physical validation"
+  },
+  "implementation_sha256": {
+    "agw_ttm_md_pilot.py": "895edae355363d8f3c3e486403838cb9a840c528d50f9ff134893cee306ea86b",
+    "agw_v11_pipeline.yml": "4b1bcfcb49f1f3329db8709a52d57080548b85bb1b11066efe6974d2bcc2af55"
   }
 }

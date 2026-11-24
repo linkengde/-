@@ -31,6 +31,7 @@ sys.path.insert(0, str(HERE))
 from agw_ttm_reference import (  # noqa: E402
     AgWMappingError,
     AgWTTMGrid,
+    KB_EV_K,
     M_VV2E_METAL,
     map_agw_newton_layer,
     lattice_temperature_by_cell,
@@ -104,6 +105,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dt-ps", type=float, default=0.0005, help="LAMMPS metal-unit timestep")
     parser.add_argument("--source-scale", type=float, default=1.0, help="Scale on inherited I0=5 eV/(ps A^2)")
     parser.add_argument("--interface-h-W-m2-K", type=float, default=1.0e9, help="Provisional Ag/W electronic interface conductance")
+    parser.add_argument(
+        "--initial-electron-temperature-from-lattice", action="store_true",
+        help="Initialize each phase electron grid from the COM-removed Newton-layer phase temperature",
+    )
     parser.add_argument("--seed", type=int, default=20261124)
     return parser.parse_args()
 
@@ -195,6 +200,7 @@ def main() -> None:
             "mass 2 107.8682",
             "pair_style eam/fs",
             f"pair_coeff * * {POTENTIAL} W Ag",
+            "pair_modify compute yes",
             "neighbor 2.0 bin",
             "neigh_modify delay 0 every 1 check yes",
             f"timestep {args.dt_ps:.12g}",
@@ -243,7 +249,6 @@ def main() -> None:
             "velocity fixed set 0.0 0.0 0.0",
             "fix hold fixed setforce 0.0 0.0 0.0",
             "thermo 0",
-            "thermo_style custom step time atoms temp pe ke etotal",
         ]
         for command in continuation_commands:
             lmp.command(command)
@@ -258,6 +263,7 @@ def main() -> None:
         if not np.array_equal(types, expected_types):
             raise RuntimeError("read_dump changed atom types relative to the template data")
         newton_mask = np.isin(current_ids, newton_group_ids)
+        lmp.command("compute __agw_ttm_pe all pe")
         lmp.command("run 0 pre no post no")
         force_view = lmp.numpy.extract_atom("f")
         force_vectors = np.array(force_view[:nlocal], dtype=float, copy=True)
@@ -279,12 +285,13 @@ def main() -> None:
         lmp.command("fix bath_integrate bath nve")
         lmp.command("fix newton_integrate newton nve")
         lmp.command(f"fix bath_heat bath langevin 300.0 300.0 0.1 {args.seed} tally yes")
-        # Keep LAMMPS thermo output off during the Python-coupled loop. The
-        # fix tally is read directly after each sampled step; asking LAMMPS's
-        # Thermo class to print this scalar in run-0 setup segfaulted in the
-        # bundled MPICH build before any TTM step.
-        lmp.command("thermo_style custom step time atoms temp pe ke etotal")
-        lmp.command("thermo 0")
+        # Establish an energy-accounting origin after the first integrated
+        # step. The initial high-force restart can have a measurable first-step
+        # Verlet transient; include it in the state baseline, not TTM exchange.
+        lmp.command("run 1 pre yes post no")
+        bath_energy_start = float(lmp.extract_fix("bath_heat", 0, 0))
+        # Thermo output stays disabled; PE and bath exchange are queried via
+        # direct compute and fix-langevin tally handles.
         # LAMMPS may reallocate atom arrays during the NVT equilibration.
         # Refresh Python/NumPy views before reading or writing atom state.
         positions_view = lmp.numpy.extract_atom("x")
@@ -371,13 +378,40 @@ def main() -> None:
         atom_map_ag, atom_map_w = mapped["atom_map_ag"], mapped["atom_map_w"]
         velocity_view = lmp.numpy.extract_atom("v")
         velocity = np.array(velocity_view[:nlocal], copy=True)
-        atom_energy_initial = float(lmp.get_thermo("pe")) + 0.5 * M_VV2E_METAL * float(
+        initial_electron_temperature_stats = {"mode": "uniform_300K"}
+        if args.initial_electron_temperature_from_lattice:
+            phase_stats = {}
+            for element, phase_grid, lattice_t in (
+                ("Ag", electrons.ag, (velocity[idx_ag], masses_ag)),
+                ("W", electrons.w, (velocity[idx_w], masses_w)),
+            ):
+                phase_velocity, phase_masses = lattice_t
+                if len(phase_velocity) < 2:
+                    raise RuntimeError(f"Too few mapped {element} atoms to initialize its electron temperature")
+                phase_vcm = np.average(phase_velocity, axis=0, weights=phase_masses)
+                peculiar = phase_velocity - phase_vcm
+                kinetic = 0.5 * M_VV2E_METAL * float(np.sum(phase_masses[:, None] * peculiar**2))
+                dof = 3 * len(phase_velocity) - 3
+                phase_temperature = 2.0 * kinetic / (dof * KB_EV_K)
+                active = phase_grid.f_ag > 0.0
+                if not np.isfinite(phase_temperature) or phase_temperature <= 0.0:
+                    raise RuntimeError(f"Invalid mapped {element} phase temperature for electron initialization")
+                clipped = float(np.clip(phase_temperature, phase_grid.parameters.Tmin, phase_grid.parameters.Tmax))
+                phase_grid.temperature_K[active] = clipped
+                phase_stats[element] = {
+                    "temperature_K": clipped,
+                    "mapped_atoms": int(len(phase_velocity)),
+                }
+            initial_electron_temperature_stats = {
+                "mode": "phase_specific_COM_removed_mean_lattice_temperature",
+                "by_phase": phase_stats,
+            }
+        atom_energy_initial = float(lmp.extract_compute("__agw_ttm_pe", 0, 0)) + 0.5 * M_VV2E_METAL * float(
             np.sum(masses_all[:, None] * velocity**2)
         )
         electron_energy_initial = float(
             electrons.electron_energy_ag_eV.sum() + electrons.electron_energy_w_eV.sum()
         )
-        bath_energy_start = float(lmp.get_thermo("f_bath_heat"))
         source_total = lattice_ag_total = lattice_w_total = 0.0
         grid_residual_max = 0.0
         combined_residual_max = 0.0
@@ -409,14 +443,16 @@ def main() -> None:
             grid_residual_max = max(grid_residual_max, abs(account.conservation_residual_eV))
 
             if step == 1 or step % report_every == 0 or step == total_steps:
-                pe = float(lmp.get_thermo("pe"))
+                pe = float(lmp.extract_compute("__agw_ttm_pe", 0, 0))
                 kinetic = 0.5 * M_VV2E_METAL * float(np.sum(masses_all[:, None] * velocity**2))
                 atom_energy = pe + kinetic
                 electron_energy = float(
                     electrons.electron_energy_ag_eV.sum() + electrons.electron_energy_w_eV.sum()
                 )
-                bath_delta = float(lmp.get_thermo("f_bath_heat")) - bath_energy_start
-                residual = atom_energy + electron_energy - atom_energy_initial - electron_energy_initial - source_total - bath_delta
+                bath_delta = float(lmp.extract_fix("bath_heat", 0, 0)) - bath_energy_start
+                # LAMMPS's Langevin tally is the signed energy transfer into
+                # the thermostat reservoir (opposite the atom-system change).
+                residual = atom_energy + electron_energy - atom_energy_initial - electron_energy_initial - source_total + bath_delta
                 combined_residual_max = max(combined_residual_max, abs(residual))
                 history.append({
                     "step": step, "time_ps": step * args.dt_ps,
@@ -426,12 +462,12 @@ def main() -> None:
                     "source_energy_eV": source_total,
                     "electron_to_lattice_Ag_eV": lattice_ag_total,
                     "electron_to_lattice_W_eV": lattice_w_total,
-                    "bath_energy_added_eV": bath_delta,
+                    "bath_energy_tally_eV": bath_delta,
                     "combined_energy_residual_eV": residual,
                 })
 
         final = history[-1]
-        energy_scale_eV = abs(source_total) + abs(final["bath_energy_added_eV"])
+        energy_scale_eV = abs(source_total) + abs(final["bath_energy_tally_eV"])
         energy_tolerance_eV = max(1.0e-3, 1.0e-3 * energy_scale_eV)
         combined_ledger_pass = combined_residual_max <= energy_tolerance_eV
         grid_ledger_pass = grid_residual_max <= max(1.0e-9, 1.0e-10 * max(abs(source_total), 1.0))
@@ -445,12 +481,13 @@ def main() -> None:
             "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None},
             "atom_model": "Dai 2006 EFS eam/fs; type 1=W, type 2=Ag; p p f; fixed 0-20 A; 300 K bath 20-40 A; TTM/material map 40-200 A; Newton integration 40-300 A to keep monitor-region atoms dynamic",
             "electron_model": "Reused Ag finite-volume reference core with separate Ag/W phase grids and provisional equal-opposite interface exchange",
+            "initial_electron_temperature": initial_electron_temperature_stats,
             "source_model": "Ag-only Gaussian in x/y and exponential depth; temporal Gaussian with requested FWHM and center",
             "spatial_source_parameters": {"I0_eV_ps_A2": 5.0 * args.source_scale, "R_A": 30.0, "skin_depth_A": 20.0, "center_xy_A": [100.0, 100.0], "surface_z_A": 200.0},
             "temporal_parameters": {"pulse_fwhm_ps": args.pulse_fwhm_ps, "pulse_center_ps": args.pulse_center_ps, "cooling_after_center_plus_4fwhm_ps": args.cooling_ps},
-            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
+            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "pre_ttm_integrator_steps": 1, "heating_and_cooling_steps": total_steps, "box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
             "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "candidate_newton_atoms": mapped["candidate_newton_atoms"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
-            "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_added_eV": final["bath_energy_added_eV"], "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
+            "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_tally_eV": final["bath_energy_tally_eV"], "bath_tally_sign":"positive means energy transferred to the thermostat reservoir", "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
             "history": history,
             "limitations": [
                 "This pilot run used an explicit exploratory-only override; an energy-ledger PASS is a software/numerical coupling result, not a quantitative melting or physical-validity pass.",
