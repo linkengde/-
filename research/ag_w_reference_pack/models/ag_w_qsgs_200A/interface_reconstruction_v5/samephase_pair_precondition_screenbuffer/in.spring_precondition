@@ -1,0 +1,38 @@
+# Temporary collision-aware Ag-W interface precondition
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/-/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/samephase_pair_precondition_screenbuffer/interface_precondition.data.gz
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay soft 3.0 morse 3.0
+pair_coeff 1 1 soft 50 2.70
+pair_coeff 1 1 morse 1.0 2 2.74507789655 3.0
+pair_coeff 1 2 soft 50 2.75
+pair_coeff 1 2 morse 0.0 2 2.8 3.0
+pair_coeff 2 2 soft 50 2.48
+pair_coeff 2 2 morse 1.0 2 2.8881233396 3.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group interface id 1:387507
+group far id 387508:482601
+group mobile union all
+fix far_hold far setforce 0.0 0.0 0.0
+fix bottomcap all wall/harmonic zlo 0.0 100.0 2.0 2.0
+fix topcap all wall/harmonic zhi 200.0 100.0 2.0 2.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable f2 atom fx*fx+fy*fy+fz*fz
+compute fmax mobile reduce max v_fmag
+compute f2mean mobile reduce ave v_f2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step pe c_fmax v_frms
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.05
+minimize 0.0 0.1 10000 50000
+unfix far_hold
+minimize 0.0 0.02 10000 50000
+write_data geometry_precondition.data
+write_dump all custom geometry_precondition.dump id type x y z fx fy fz modify sort id

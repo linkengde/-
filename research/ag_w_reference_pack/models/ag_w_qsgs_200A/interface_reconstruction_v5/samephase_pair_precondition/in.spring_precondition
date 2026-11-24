@@ -1,0 +1,42 @@
+# Temporary collision-aware Ag-W interface precondition
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/-/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/samephase_pair_precondition/interface_precondition.data.gz
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay soft 3.0 morse 3.0
+pair_coeff 1 1 soft 0.0
+pair_coeff 1 1 morse 1.0 2.0 2.74507789655 3.0
+pair_coeff 1 2 soft 50
+pair_coeff 1 2 morse 0.0 2.0 2.8 3.0
+pair_coeff 2 2 soft 0.0
+pair_coeff 2 2 morse 1.0 2.0 2.8881233396 3.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region bottom_region block INF INF INF INF 0 19.999999 units box
+group bottom region bottom_region
+group interface id 1:387507
+group far id 387508:482601
+group far_tether subtract far bottom
+group mobile subtract all bottom
+fix anchor bottom setforce 0.0 0.0 0.0
+fix far_hold far setforce 0.0 0.0 0.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable f2 atom fx*fx+fy*fy+fz*fz
+compute fmax mobile reduce max v_fmag
+compute f2mean mobile reduce ave v_f2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step pe c_fmax v_frms
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 0.05 5000 25000
+unfix far_hold
+fix far_spring far_tether spring/self 8
+minimize 1.0e-8 0.02 5000 25000
+unfix far_spring
+write_data spring_precondition.data.gz
+write_dump all custom spring_precondition.dump id type x y z fx fy fz modify sort id

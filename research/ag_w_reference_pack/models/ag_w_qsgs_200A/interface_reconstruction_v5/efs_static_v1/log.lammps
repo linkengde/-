@@ -1,0 +1,73 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+package omp 4
+set 4 OpenMP thread(s) per MPI task
+using multi-threaded neighbor list subroutines
+# Full-size spring-free Dai EFS static minimization for v5.
+# No MD or TTM is started here. The bottom layer remains mobile during static relaxation.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../samephase_pair_precondition_screenbuffer_fast/geometry_precondition.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 1.876 seconds
+
+pair_style eam/fs/omp
+pair_coeff * * ../../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+variable atom_force atom sqrt(fx*fx+fy*fy+fz*fz)
+variable atom_force2 atom fx*fx+fy*fy+fz*fz
+compute fmax_all all reduce max v_atom_force
+compute f2mean all reduce ave v_atom_force2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step atoms pe fmax fnorm c_fmax_all v_frms
+thermo_modify lost error flush yes
+
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 0.0 0.1 10000 100000
+Last active /omp style is pair_style eam/fs/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs/omp, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 262.8 | 262.8 | 262.8 Mbytes
+   Step        Atoms        PotEng          Fmax          Fnorm        c_fmax_all       v_frms
+         0      482601  -2402015.1      4.1241435      477.78213      4.221808       0.68775823
+       100      482601  -2422381.1      2.3763234      157.26103      2.941405       0.22637424
+       200      482601  -2430014        1.8473807      104.78279      1.9677375      0.15083283
+       300      482601  -2434853.9      1.8200172      78.075986      2.1563382      0.11238889
+       400      482601  -2438317.9      1.3971695      61.935049      1.6398061      0.089154317
+       500      482601  -2440384.1      1.5126543      53.362417      1.8290707      0.076814177
+       600      482601  -2442179.5      1.3826161      45.675579      1.9021605      0.065749121
+       700      482601  -2443544.3      1.200231       39.52466       1.529622       0.056894991
+       800      482601  -2444509.6      1.550047       35.664843      1.739563       0.051338858
+       900      482601  -2445428.1      1.6580518      32.343463      1.9269376      0.046557796
+      1000      482601  -2446147.9      1.3195133      29.260471      1.5011073      0.042119887
+      1100      482601  -2446763.7      1.0235154      27.179019      1.4104145      0.039123678
+      1200      482601  -2447363.3      1.4322631      24.361278      1.4399312      0.035067593
+      1300      482601  -2447837.4      0.89612474     22.416688      1.1251236      0.032268393
+      1400      482601  -2448236.9      1.257453       20.427853      1.3736447      0.029405504
+      1500      482601  -2448583.9      0.90058739     18.962666      1.0934434      0.027296394
+      1600      482601  -2448907.8      0.83975195     17.87095       1.0550467      0.02572489
+ERROR: Lost atoms: original 482601 current 482600
+For more information see https://docs.lammps.org/err0008 (src/src/thermo.cpp:526)

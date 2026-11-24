@@ -1,0 +1,38 @@
+# Full-size spring-free Dai EFS static minimization for v5 with the intended fixed bottom.
+# No MD or TTM is started here.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../samephase_pair_precondition_screenbuffer_fast/geometry_precondition.data.gz
+
+pair_style eam/fs/omp
+pair_coeff * * ../../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+group mobile subtract all fixed_bottom
+fix anchor fixed_bottom setforce 0.0 0.0 0.0
+
+variable atom_force atom sqrt(fx*fx+fy*fy+fz*fz)
+variable atom_force2 atom fx*fx+fy*fy+fz*fz
+variable zatom atom z
+compute fmax_mobile mobile reduce max v_atom_force
+compute f2mean_mobile mobile reduce ave v_atom_force2
+compute zmin all reduce min v_zatom
+compute zmax all reduce max v_zatom
+variable frms_mobile equal sqrt(c_f2mean_mobile)
+thermo 100
+thermo_style custom step atoms pe fmax fnorm c_fmax_mobile v_frms_mobile c_zmin c_zmax
+thermo_modify lost error flush yes
+
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 0.0 0.1 10000 100000
+run 0
+variable final_energy equal pe
+print "V5_EFS_STATIC_RESULT atoms=$(atoms) energy_eV=$(v_final_energy:%.14g) max_mobile_force_eV_A=$(c_fmax_mobile:%.12g) rms_mobile_force_eV_A=$(v_frms_mobile:%.12g)"
+write_data efs_minimized.data
+write_dump all custom efs_minimized.dump id type x y z fx fy fz modify sort id

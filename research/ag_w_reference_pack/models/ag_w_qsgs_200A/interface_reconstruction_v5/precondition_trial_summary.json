@@ -1,0 +1,113 @@
+{
+  "title": "Ag-W QSGS v5 precondition trial ledger",
+  "source_qsgs_sha256": "204961ff92491b02d3517a172377b997b378f47e74c47541457ca9b6e76d25f0",
+  "source_qsgs_modified": false,
+  "distance_screens_A": {
+    "Ag_W": 2.54,
+    "W_W": 2.6,
+    "Ag_Ag": 2.48
+  },
+  "trials": [
+    {
+      "name": "normal_shift_raw_mask_half_gap_1.35A",
+      "directory": "trials/gap1p35_decay10",
+      "status": "FAIL",
+      "minimum_distances_A": {"Ag_W": 0.1089, "W_W": 0.2905, "Ag_Ag": 0.3197},
+      "reason": "The signed-normal displacement alone did not preserve either phase lattice."
+    },
+    {
+      "name": "normal_shift_raw_mask_smoothed_normals",
+      "directory": "trials/gap1p35_decay10_smooth2",
+      "status": "FAIL",
+      "minimum_distances_A": {"Ag_W": 0.0709, "W_W": 0.5101, "Ag_Ag": 0.4557},
+      "reason": "Smoothing the normal field alone did not resolve phase overlap or lattice collapse."
+    },
+    {
+      "name": "smoothed_mask_half_gap_1.35A",
+      "directory": "trials/smoothed2_gap1p35_decay10_normal2",
+      "status": "FAIL",
+      "atom_counts": {"W": 178555, "Ag": 304046, "total": 482601},
+      "mass_ratio_Ag_over_W": 0.9991270074148824,
+      "phase_density_relative_error": {"W": -0.0007573632963195909, "Ag": 0.0009095113292365564},
+      "minimum_distances_A": {"Ag_W": 0.7684, "W_W": 0.6314, "Ag_Ag": 0.4436},
+      "reason": "The regularized QSGS mask met composition and connectivity checks, but local-normal shifts collapsed same-phase neighbor distances."
+    },
+    {
+      "name": "smoothed_mask_half_gap_0.4A",
+      "directory": "trials/smoothed2_gap0p4_decay10_normal2",
+      "status": "FAIL",
+      "atom_counts": {"W": 178555, "Ag": 304046, "total": 482601},
+      "mass_ratio_Ag_over_W": 0.9991270074148824,
+      "phase_density_relative_error": {"W": -0.0007573632963195909, "Ag": 0.0009095113292365564},
+      "minimum_distances_A": {"Ag_W": 0.4736, "W_W": 2.0798, "Ag_Ag": 2.1585},
+      "reason": "Reducing the signed-normal shift relieved but did not resolve atomic overlaps."
+    },
+    {
+      "name": "harmonic_same_phase_bonds_with_cross_softcore",
+      "directory": "spring_stage",
+      "status": "FAIL_INCOMPLETE",
+      "result": "The LAMMPS trial stopped before output. Logs reported a short communication cutoff and inconsistent periodic image flags for explicit bonds crossing x/y seams."
+    },
+    {
+      "name": "same_phase_morse_with_fixed_bottom_and_cross_softcore",
+      "directory": "samephase_pair_precondition_wall",
+      "status": "FAIL",
+      "minimum_distances_A": {"Ag_W": 0.5429868, "W_W": 2.1702, "Ag_Ag": 2.3407},
+      "reason": "Fixing the bottom layer during geometry construction left severe overlaps in that region."
+    },
+    {
+      "name": "same_phase_morse_all_mobile_no_screen_cutoffs",
+      "directory": "samephase_pair_precondition_free_nontether",
+      "status": "FAIL",
+      "minimum_distances_A": {"Ag_W": 2.8583, "W_W": 2.3691, "Ag_Ag": 2.5475},
+      "pairs_below_screens": {"Ag_W": 0, "W_W": 27112, "Ag_Ag": 0},
+      "topology_largest_component_share": {"W": 0.9932738, "Ag": 0.9999967},
+      "reason": "Releasing all atoms preserved phase connectivity and cleared cross-phase contacts, but many W-W distances remained short."
+    },
+    {
+      "name": "same_phase_morse_high_curvature",
+      "directory": "samephase_pair_precondition_free_nontether_k32",
+      "status": "FAIL",
+      "reason": "The high-curvature temporary potential drove atoms through the z wall and LAMMPS aborted."
+    },
+    {
+      "name": "same_phase_morse_with_frozen_distance_screen_cutoffs",
+      "directory": "samephase_pair_precondition_frozen_screens",
+      "status": "FAIL",
+      "minimum_distances_A": {"Ag_W": 2.4498, "W_W": 2.5494, "Ag_Ag": 2.6083},
+      "pairs_below_screens": {"Ag_W": 23142, "W_W": 9715, "Ag_Ag": 0},
+      "topology_largest_component_share": {"W": 0.99328498, "Ag": 0.99999013},
+      "reason": "The first full precondition run retained some cross and W-W short contacts."
+    },
+    {
+      "name": "screenbuffer_pair_precondition",
+      "directory": "samephase_pair_precondition_screenbuffer_fast",
+      "status": "GEOMETRY_CANDIDATE_ONLY",
+      "atom_counts": {"W": 178555, "Ag": 304046, "total": 482601},
+      "mass_ratio_Ag_over_W": 0.9991270074148824,
+      "phase_density_relative_error": {"W": -0.0007573632963195909, "Ag": 0.0009095113292365564},
+      "minimum_distances_A": {"Ag_W": 2.6134, "W_W": 2.5801, "Ag_Ag": 2.5281},
+      "pairs_below_screens": {"Ag_W": 0, "W_W": 7, "Ag_Ag": 0},
+      "topology_largest_component_share": {"W": 0.99327378, "Ag": 0.99997040},
+      "xy_winding_rank": {"W": 2, "Ag": 2},
+      "spans_z": {"W": true, "Ag": true},
+      "reason": "This was the best temporary-precondition candidate. Seven W-W pairs remained slightly below the frozen screen, so it was not a geometry pass."
+    },
+    {
+      "name": "spring_free_dai_efs_minimize_without_fixed_bottom",
+      "directory": "efs_static_v1",
+      "status": "FAIL_LOST_ATOM",
+      "reason": "LAMMPS lost one atom by step 1600 before writing a minimized structure."
+    },
+    {
+      "name": "spring_free_dai_efs_minimize_with_fixed_bottom",
+      "directory": "efs_static_v1_fixed_bottom",
+      "status": "STATIC_EFS_FAIL",
+      "final_structure": "efs_minimized.data.gz",
+      "static_audit": "static_audit.json",
+      "reason": "The minimizer reached its 10000-step cap. The EFS-relaxed structure had severe short contacts and atoms above z=200 A."
+    }
+  ],
+  "thermal_dynamics_started": false,
+  "ttm_solver_modified": false
+}

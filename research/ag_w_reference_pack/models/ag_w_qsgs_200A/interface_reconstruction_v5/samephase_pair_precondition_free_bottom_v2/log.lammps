@@ -1,0 +1,190 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+package omp 4
+set 4 OpenMP thread(s) per MPI task
+using multi-threaded neighbor list subroutines
+# Temporary collision-aware Ag-W interface precondition
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/-/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v5/samephase_pair_precondition_free_bottom_v2/interface_precondition.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  read_data CPU = 0.858 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay soft 3.0 morse 3.0
+pair_coeff 1 1 soft 0.0
+pair_coeff 1 1 morse 1.0 2.0 2.74507789655 3.0
+pair_coeff 1 2 soft 50
+pair_coeff 1 2 morse 0.0 2.0 2.8 3.0
+pair_coeff 2 2 soft 0.0
+pair_coeff 2 2 morse 1.0 2.0 2.8881233396 3.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+group interface id 1:387507
+387507 atoms in group interface
+group far id 387508:482601
+95094 atoms in group far
+group far_tether union far
+95094 atoms in group far_tether
+group mobile union all
+482601 atoms in group mobile
+fix far_hold far setforce 0.0 0.0 0.0
+fix bottomcap all wall/harmonic zlo 0.0 100.0 2.0 2.0
+fix topcap all wall/harmonic zhi 200.0 100.0 2.0 2.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable f2 atom fx*fx+fy*fy+fz*fz
+compute fmax mobile reduce max v_fmag
+compute f2mean mobile reduce ave v_f2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step pe c_fmax v_frms
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.05
+minimize 1.0e-8 0.05 5000 25000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5
+  ghost atom cutoff = 5
+  binsize = 2.5, bins = 80 80 120
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+  (2) pair morse, perpetual, copy from (1)
+      attributes: half, newton on, omp
+      pair build: copy
+      stencil: none
+      bin: none
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 199.9 | 199.9 | 199.9 Mbytes
+   Step         PotEng         c_fmax         v_frms
+         0  -1822818.7      403.98968      42.863179
+       100  -2072950.9      13.374507      0.58873884
+       200  -2218112.9      6.6272011      0.34916475
+       300  -2242495.2      7.9488198      0.29624087
+       400  -2249308.7      1.8818959      0.04491488
+       500  -2252573.9      3.5752742      0.071308618
+       600  -2253676.8      5.1756525      0.021798586
+       700  -2254232.6      1.4134212      0.024617809
+       800  -2254434.8      1.1813891      0.0083890521
+       900  -2254498.7      5.9094438      0.011471534
+      1000  -2254595.1      1.0486887      0.010846205
+      1100  -2254687.1      1.1966755      0.0054110952
+      1191  -2254707.6      2.0444563      0.0048508769
+Loop time of 115.948 on 4 procs for 1191 steps with 482601 atoms
+
+375.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final =
+     -1822818.68719203  -2254707.63007258  -2254707.64153699
+  Force two-norm initial, final = 29776.831 3.3698794
+  Force max component initial, final = 400.74 2.0382793
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 1191 1203
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 95.444     | 95.444     | 95.444     |   0.0 | 82.32
+Neigh   | 3.0743     | 3.0743     | 3.0743     |   0.0 |  2.65
+Comm    | 0.84376    | 0.84376    | 0.84376    |   0.0 |  0.73
+Output  | 0.39906    | 0.39906    | 0.39906    |   0.0 |  0.34
+Modify  | 6.0429     | 6.0429     | 6.0429     |   0.0 |  5.21
+Other   |            | 10.14      |            |       |  8.75
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          50336 ave       50336 max       50336 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    8.23559e+06 ave 8.23559e+06 max 8.23559e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 8235592
+Ave neighs/atom = 17.065012
+Neighbor list builds = 35
+Dangerous builds = 0
+unfix far_hold
+fix far_spring far_tether spring/self 8
+minimize 1.0e-8 0.02 5000 25000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 231.5 | 231.5 | 231.5 Mbytes
+   Step         PotEng         c_fmax         v_frms
+      1191  -2254707.6      6097.8407      66.399938
+      1200  -2348978.2      142.66885      6.9306983
+      1300  -2492076.2      3.774607       0.072276652
+      1400  -2496405.2      13.37742       0.060448555
+      1500  -2497485.1      1.4341528      0.021692098
+      1600  -2497952.8      1.9218494      0.010634117
+      1700  -2498140.1      2.7096717      0.010736148
+      1800  -2498228.7      0.99671851     0.0076218347
+      1900  -2498322.2      7.0370528      0.017422498
+      2000  -2498410.7      1.4213592      0.0077582954
+      2100  -2498460.3      2.4768543      0.0066159114
+      2200  -2498492.3      2.5609568      0.0067755624
+      2300  -2498518.5      1.0715438      0.0037592953
+      2324  -2498528.3      1.3378166      0.0057051446
+Loop time of 107.289 on 4 procs for 1133 steps with 482601 atoms
+
+377.0% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final =
+     -2254707.64153699  -2498528.26039952  -2498528.28114095
+  Force two-norm initial, final = 46127.698 3.9633348
+  Force max component initial, final = 6092.1323 1.2926678
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 1133 1164
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 88.773     | 88.773     | 88.773     |   0.0 | 82.74
+Neigh   | 1.4381     | 1.4381     | 1.4381     |   0.0 |  1.34
+Comm    | 0.71697    | 0.71697    | 0.71697    |   0.0 |  0.67
+Output  | 0.42448    | 0.42448    | 0.42448    |   0.0 |  0.40
+Modify  | 6.2659     | 6.2659     | 6.2659     |   0.0 |  5.84
+Other   |            | 9.671      |            |       |  9.01
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          50293 ave       50293 max       50293 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    8.34712e+06 ave 8.34712e+06 max 8.34712e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 8347121
+Ave neighs/atom = 17.296112
+Neighbor list builds = 16
+Dangerous builds = 0
+unfix far_spring
+write_data geometry_precondition.data
+System init for write_data ...
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+write_dump all custom geometry_precondition.dump id type x y z fx fy fz modify sort id
+Total wall time: 0:03:46

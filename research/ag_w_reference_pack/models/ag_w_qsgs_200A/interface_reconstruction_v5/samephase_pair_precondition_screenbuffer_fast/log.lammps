@@ -1,0 +1,96 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+package omp 4
+set 4 OpenMP thread(s) per MPI task
+using multi-threaded neighbor list subroutines
+# Temporary geometry-only distance margin cleanup; never an MD model.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data geometry_precondition.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 1.851 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay soft 3.0 morse 3.0
+pair_coeff 1 1 soft 50.0 2.80
+pair_coeff 1 1 morse 1.0 2.0 2.745077896545 3.0
+pair_coeff 1 2 soft 50.0 2.75
+pair_coeff 1 2 morse 0.0 2.0 2.8 3.0
+pair_coeff 2 2 soft 50.0 2.48
+pair_coeff 2 2 morse 1.0 2.0 2.888123339598 3.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix bottomcap all wall/harmonic zlo 0.0 100.0 2.0 2.0
+fix topcap all wall/harmonic zhi 200.0 100.0 2.0 2.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable f2 atom fx*fx+fy*fy+fz*fz
+compute fmax all reduce max v_fmag
+compute f2mean all reduce ave v_f2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step pe c_fmax v_frms
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.01
+minimize 0.0 1.0 10000 50000
+Generated 0 of 1 mixed pair_coeff terms from geometric mixing rule
+Hybrid pair style last /omp style morse
+Last active /omp style is pair_style morse
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5
+  ghost atom cutoff = 5
+  binsize = 2.5, bins = 80 80 120
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair soft, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+  (2) pair morse, perpetual
+      attributes: half, newton on, omp, cut 5
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire
+    0.01     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no
+Per MPI rank memory allocation (min/avg/max) = 225.1 | 225.1 | 225.1 Mbytes
+   Step         PotEng         c_fmax         v_frms
+         0  -2354868.9      19.435104      4.0714345
+       100  -2432319.6      3.5434526      0.43503
+       200  -2436612.6      3.2609323      0.25337174
+       300  -2436144.1      7.2132487      0.27801751
+       400  -2433913.5      8.6635172      0.37496159
+       500  -2430968.8      9.1098931      0.49291148
+       600  -2428422.1      12.934529      0.61545964
+       700  -2426834.8      10.766436      0.74673455
+       800  -2429531.4      2.1988186      0.086956737
+       900  -2431795.6      2.0528755      0.069687806
+      1000  -2433549.7      5.4057969      0.086299484
+      1100  -2435448        4.5323474      0.13074947
+      1200  -2436838.1      7.6906166      0.1874698
+      1300  -2438153.1      11.226761      0.24846929
+      1400  -2438930.3      7.8276057      0.30594033
+      1500  -2439828.8      12.208047      0.3719312
+      1600  -2440304.5      8.2546891      0.4478925
+      1700  -2440717.7      12.406853      0.51802161
+      1800  -2442421        2.1343865      0.047840343
+      1900  -2443147.5      2.5995853      0.039130449
+      2000  -2443750.6      3.9048248      0.054659232
+      2100  -2444456.9      6.088105       0.087663654
+      2200  -2444958.5      8.7219418      0.12382872
+      2300  -2445567.1      8.5763135      0.17477541
+      2400  -2446050.6      7.1041887      0.21694106
+      2500  -2446354.7      9.468446       0.25505744
+      2600  -2446786.8      6.9515578      0.31102818

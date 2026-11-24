@@ -1,0 +1,136 @@
+{
+  "title": "Ag-W QSGS interface reconstruction v5 signed-normal geometry precondition",
+  "status": "GEOMETRY_PREFLIGHT_FAIL_STATIC_EFS_NOT_RUN",
+  "md_start_gate": "FAIL",
+  "static_efs_status": "NOT_RUN",
+  "method": "Preserve original QSGS lattice sites and all atom identities; shift interface-band atoms along a smoothed signed-distance normal away from the unlike phase, with a Gaussian decay into each same-phase lattice.",
+  "source": {
+    "data_file": "models/ag_w_qsgs_200A/ag_w_qsgs.data.gz",
+    "data_sha256": "204961ff92491b02d3517a172377b997b378f47e74c47541457ca9b6e76d25f0",
+    "morphology_file": "models/ag_w_qsgs_200A/qsgs_morphology.npz",
+    "qsgs_voxels": [
+      80,
+      80,
+      80
+    ],
+    "voxel_size_A": 2.5
+  },
+  "parameters": {
+    "half_gap_A": 1.35,
+    "decay_A": 10.0,
+    "normal_smoothing_vox": 0.8,
+    "frozen_screen_distances_A": {
+      "Ag_W": 2.54,
+      "W_W": 2.6,
+      "Ag_Ag": 2.48
+    }
+  },
+  "box_A": [
+    200.0,
+    200.0,
+    300.0
+  ],
+  "material_A": [
+    200.0,
+    200.0,
+    200.0
+  ],
+  "boundary": "p p f",
+  "counts": {
+    "W": 178435,
+    "Ag": 304036,
+    "total": 482471
+  },
+  "mass_ratio_Ag_over_W": 0.9997660509687712,
+  "mass_ratio_error_fraction": 0.00023394903122875288,
+  "phase_number_density_atoms_A3": {
+    "W": 0.06291784203102962,
+    "Ag": 0.058876065065840436
+  },
+  "target_phase_number_density_atoms_A3": {
+    "W": 0.063007875,
+    "Ag": 0.0588245
+  },
+  "phase_density_error_fraction": {
+    "W_relative": -0.0014289161310452325,
+    "Ag_relative": 0.0008765916555251163
+  },
+  "density_gate_pass": true,
+  "minimum_distances_before_A": {
+    "Ag_W": 0.0800000000000125,
+    "W_W": 2.7450778965450326,
+    "Ag_Ag": 2.886150127291977
+  },
+  "minimum_distances_after_geometry_precondition_A": {
+    "Ag_W": 0.10885438110426021,
+    "W_W": 0.290455670859924,
+    "Ag_Ag": 0.3197250850098678
+  },
+  "pairs_below_frozen_screen_before": {
+    "Ag_W": 93602,
+    "W_W": 0,
+    "Ag_Ag": 0
+  },
+  "pairs_below_frozen_screen_after": {
+    "Ag_W": 19880,
+    "W_W": 368569,
+    "Ag_Ag": 165231
+  },
+  "distance_screen_pass": false,
+  "maximum_displacement_A": 1.3500000000000003,
+  "displacement_percentiles_A": {
+    "50": 1.2109447424798263,
+    "90": 1.3408029378232487,
+    "95": 1.347789916067208,
+    "99": 1.349923210132131,
+    "99.9": 1.349999558090733
+  },
+  "atoms_moved": 478663,
+  "atoms_at_material_z_limits_after_surface_guard": 3637,
+  "topology": {
+    "W": {
+      "atoms": 178435,
+      "components": 1211,
+      "largest_component_atoms": 173452,
+      "largest_component_share": 0.9720738644324264,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        200.0
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 304036,
+      "components": 665,
+      "largest_component_atoms": 303187,
+      "largest_component_share": 0.9972075675248984,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        199.6926822997211
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "topology_gate_pass": false,
+  "material_bounds_gate_pass": true,
+  "mass_gate_pass": true,
+  "candidate": {
+    "file": "ag_w_qsgs_v5_interface_precondition.data.gz",
+    "sha256": "4f9e01788e4f171987489a5c8053a0cafe58fb5baf234a16b88bd051f9670812"
+  },
+  "warning": "Geometry-only preflight is never an MD-start pass. Bonded same-phase elastic preconditioning and staged local EFS relaxation must be followed by fully spring-free EFS convergence and a separate static audit.",
+  "lattice_reference": {
+    "W_xy_strain": [
+      0.004621257785814681,
+      0.004621257785814681
+    ],
+    "Ag_xy_strain": [
+      -0.002045806097500158,
+      -0.002045806097500158
+    ]
+  }
+}

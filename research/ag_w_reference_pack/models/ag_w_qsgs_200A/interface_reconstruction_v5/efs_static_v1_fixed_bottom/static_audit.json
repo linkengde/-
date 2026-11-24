@@ -1,0 +1,113 @@
+{
+  "title": "Ag-W QSGS v5 spring-free Dai EFS static audit",
+  "status": "STATIC_EFS_FAIL",
+  "md_start_gate": "FAIL",
+  "thermal_dynamics_started": false,
+  "potential": "Dai 2006 EFS converted to LAMMPS eam/fs",
+  "boundary": "p p f",
+  "fixed_atoms_during_static_minimization": 0,
+  "input": {
+    "dump": "efs_minimized.dump.gz",
+    "data": "efs_minimized.data.gz",
+    "data_sha256": "29bf0eccea5516f1e51e7454876d7f66a99fd3b4fcdb3905b2e0e27993d3bde8"
+  },
+  "counts": {
+    "W": 178555,
+    "Ag": 304046,
+    "total": 482601
+  },
+  "mass_ratio_Ag_over_W": 0.9991270074148824,
+  "phase_number_density_A^-3": {
+    "W": 0.06296015514809591,
+    "Ag": 0.058878001549186675
+  },
+  "phase_number_density_relative_error": {
+    "W": -0.0007573632963195909,
+    "Ag": 0.0009095113292365564
+  },
+  "minimum_distances_A": {
+    "W_W": 2.4402986067282826,
+    "Ag_Ag": 2.2945342533943376,
+    "Ag_W": 2.4343412455939717
+  },
+  "pairs_below_frozen_screen": {
+    "W_W": 10302,
+    "Ag_Ag": 681,
+    "Ag_W": 797
+  },
+  "frozen_distance_screens_A": {
+    "Ag_W": 2.54,
+    "W_W": 2.6,
+    "Ag_Ag": 2.48
+  },
+  "position_bounds_A": {
+    "x": [
+      0.0,
+      199.999
+    ],
+    "y": [
+      0.0,
+      199.999
+    ],
+    "z": [
+      1.93677,
+      201.543
+    ]
+  },
+  "atoms_outside_material_z_0_200_A": 1871,
+  "forces_eV_A": {
+    "maximum_vector": 0.3809083343798085,
+    "rms_vector": 0.003136426989387681,
+    "p99_vector": 0.004982741015317033,
+    "moving_atom_count": 436484,
+    "fixed_bottom_z_A": 20.0
+  },
+  "minimizer": {
+    "stopping_criterion": "max iterations",
+    "iterations": 10000,
+    "iteration_cap": 10000,
+    "converged": false
+  },
+  "topology": {
+    "W": {
+      "atoms": 178555,
+      "components": 3,
+      "largest_component_atoms": 177356,
+      "largest_component_share": 0.9932849822183641,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        1.95626,
+        201.47
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 304046,
+      "components": 5,
+      "largest_component_atoms": 304042,
+      "largest_component_share": 0.9999868440959592,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        1.97175,
+        201.543
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "gates": {
+    "mass_ratio_within_0.1_percent": true,
+    "phase_number_density_within_1_percent": true,
+    "largest_component_share_at_least_98_percent": true,
+    "both_phases_xy_winding_rank_2": true,
+    "both_phases_span_z": true,
+    "no_frozen_distance_screen_violations": false,
+    "no_atoms_outside_material_z_0_200_A": false,
+    "maximum_force_at_most_0.1_eV_A": false,
+    "rms_force_at_most_0.02_eV_A": true,
+    "spring_free_efs_minimizer_converged": false,
+    "atom_count_matches_input": true
+  },
+  "interpretation": "Do not start 300 K MD or TTM from this structure. Preserve the failed audit and rebuild."
+}

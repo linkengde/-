@@ -1,0 +1,30 @@
+# Full-size spring-free Dai EFS static minimization for v5.
+# No MD or TTM is started here. The bottom layer remains mobile during static relaxation.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../samephase_pair_precondition_screenbuffer_fast/geometry_precondition.data.gz
+
+pair_style eam/fs/omp
+pair_coeff * * ../../../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+variable atom_force atom sqrt(fx*fx+fy*fy+fz*fz)
+variable atom_force2 atom fx*fx+fy*fy+fz*fz
+compute fmax_all all reduce max v_atom_force
+compute f2mean all reduce ave v_atom_force2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step atoms pe fmax fnorm c_fmax_all v_frms
+thermo_modify lost error flush yes
+
+min_style cg
+min_modify dmax 0.01 line quadratic
+minimize 0.0 0.1 10000 100000
+run 0
+variable final_energy equal pe
+print "V5_EFS_STATIC_RESULT atoms=$(atoms) energy_eV=$(v_final_energy:%.14g) max_force_eV_A=$(c_fmax_all:%.12g) rms_force_eV_A=$(v_frms:%.12g)"
+write_data efs_minimized.data
+write_dump all custom efs_minimized.dump id type x y z fx fy fz modify sort id

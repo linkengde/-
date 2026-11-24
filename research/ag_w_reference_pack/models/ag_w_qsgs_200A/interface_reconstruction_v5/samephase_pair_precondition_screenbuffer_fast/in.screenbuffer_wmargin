@@ -1,0 +1,32 @@
+# Temporary geometry-only distance margin cleanup; never an MD model.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data geometry_precondition.data
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay soft 3.0 morse 3.0
+pair_coeff 1 1 soft 50.0 2.80
+pair_coeff 1 1 morse 1.0 2.0 2.745077896545 3.0
+pair_coeff 1 2 soft 50.0 2.75
+pair_coeff 1 2 morse 0.0 2.0 2.8 3.0
+pair_coeff 2 2 soft 50.0 2.48
+pair_coeff 2 2 morse 1.0 2.0 2.888123339598 3.0
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix bottomcap all wall/harmonic zlo 0.0 100.0 2.0 2.0
+fix topcap all wall/harmonic zhi 200.0 100.0 2.0 2.0
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+variable f2 atom fx*fx+fy*fy+fz*fz
+compute fmax all reduce max v_fmag
+compute f2mean all reduce ave v_f2
+variable frms equal sqrt(c_f2mean)
+thermo 100
+thermo_style custom step pe c_fmax v_frms
+thermo_modify flush yes
+min_style fire
+min_modify dmax 0.01
+minimize 0.0 1.0 10000 50000
+write_data geometry_precondition_wmargin.data
+write_dump all custom geometry_precondition_wmargin.dump id type x y z fx fy fz modify sort id
