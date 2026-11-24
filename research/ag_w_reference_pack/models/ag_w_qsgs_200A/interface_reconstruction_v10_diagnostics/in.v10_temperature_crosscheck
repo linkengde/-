@@ -1,0 +1,26 @@
+# Cross-check Python kinetic-temperature analysis against LAMMPS compute temp.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+package omp 4
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+group W type 1
+group Ag type 2
+group mobile subtract all fixed_bottom
+group W_mobile intersect W mobile
+group Ag_mobile intersect Ag mobile
+read_dump interface_reconstruction_v9_hybrid/v9_nve2_end.dump.gz 2200 x y z vx vy vz box no replace yes
+velocity fixed_bottom set 0.0 0.0 0.0
+compute T_mobile mobile temp
+compute T_W W_mobile temp
+compute T_Ag Ag_mobile temp
+thermo_style custom step atoms ke c_T_mobile c_T_W c_T_Ag
+thermo_modify lost error format float %.12g
+run 0

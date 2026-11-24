@@ -1,0 +1,23 @@
+# Geometry/force-only snapshot diagnostic. run 0; no atom integration.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+
+# Set by -var on the command line; use only immutable V6/V9 snapshot dumps.
+read_dump ${stateDump} ${stateStep} x y z vx vy vz box no replace yes
+compute vcell all voronoi/atom
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+dump spatial all custom 1 ${output} id type x y z vx vy vz fx fy fz v_fmag c_vcell[1] c_vcell[2]
+dump_modify spatial sort id format float %.12g
+thermo 0
+thermo_style custom step atoms temp pe ke etotal
+thermo_modify lost error
+run 0

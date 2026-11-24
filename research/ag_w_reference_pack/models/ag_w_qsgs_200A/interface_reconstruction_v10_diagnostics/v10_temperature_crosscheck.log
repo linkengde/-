@@ -1,0 +1,97 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+# Cross-check Python kinetic-temperature analysis against LAMMPS compute temp.
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+package omp 4
+using multi-threaded neighbor list subroutines
+read_data interface_reconstruction_v5/efs_static_v1_fixed_bottom/efs_minimized.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482601 atoms
+  reading velocities ...
+  482601 velocities
+  read_data CPU = 2.122 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs/omp
+pair_coeff * * ../../potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+region bottom_region block INF INF INF INF 0.0 20.0 units box
+group fixed_bottom region bottom_region
+46117 atoms in group fixed_bottom
+group W type 1
+178555 atoms in group W
+group Ag type 2
+304046 atoms in group Ag
+group mobile subtract all fixed_bottom
+436484 atoms in group mobile
+group W_mobile intersect W mobile
+165360 atoms in group W_mobile
+group Ag_mobile intersect Ag mobile
+271124 atoms in group Ag_mobile
+read_dump interface_reconstruction_v9_hybrid/v9_nve2_end.dump.gz 2200 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  482601 atoms before read
+  482601 atoms in snapshot
+  0 atoms purged
+  482601 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  482601 atoms after read
+velocity fixed_bottom set 0.0 0.0 0.0
+compute T_mobile mobile temp
+compute T_W W_mobile temp
+compute T_Ag Ag_mobile temp
+thermo_style custom step atoms ke c_T_mobile c_T_W c_T_Ag
+thermo_modify lost error format float %.12g
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/fs/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs/omp, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 220.7 | 220.7 | 220.7 Mbytes
+   Step        Atoms        KinEng       c_T_mobile       c_T_W          c_T_Ag
+      2200      482601  17198.1008642 304.823551904 323.016448567 293.728755904
+Loop time of 2.764e-06 on 4 procs for 0 steps with 482601 atoms
+
+180.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.764e-06  |            |       |100.00
+
+Nlocal:         482601 ave      482601 max      482601 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          70353 ave       70353 max       70353 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.73812e+07 ave 1.73812e+07 max 1.73812e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17381246
+Ave neighs/atom = 36.015769
+Neighbor list builds = 0
+Dangerous builds = 0
+Total wall time: 0:00:03
