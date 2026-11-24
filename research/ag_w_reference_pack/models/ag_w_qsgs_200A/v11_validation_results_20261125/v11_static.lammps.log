@@ -1,0 +1,126 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+# V11 ideal gyroid Ag-W static relaxation; type 1=W, type 2=Ag
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+read_data /tmp/agw-v11-artifacts/agw_v11_gyroid.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  462180 atoms
+  read_data CPU = 1.099 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+pair_coeff * * /workspace/ag-w-ideal-gyroid-v11-20261124/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+47298 atoms in group fixed
+group mobile subtract all fixed
+414882 atoms in group mobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 200
+thermo_style custom step atoms pe ke etotal press
+thermo_modify lost error flush yes
+min_style fire
+min_modify dmax 0.10
+minimize 1.0e-5 1.0e-3 10000 50000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+     0.1     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 32.63 | 50.4 | 67.99 Mbytes
+   Step        Atoms        PotEng         KinEng         TotEng         Press     
+         0      462180  -2347019.9      0             -2347019.9     -11669.877    
+        22      462180  -2347028.3      6.3477224     -2347021.9     -11663.264    
+Loop time of 3.0517 on 4 procs for 22 steps with 462180 atoms
+
+92.6% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -2347019.88742023  -2347027.49417548  -2347028.27805848
+  Force two-norm initial, final = 102.46728 101.62539
+  Force max component initial, final = 1.8681169 1.8666659
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 22 23
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.9082     | 2.9113     | 2.9156     |   0.2 | 95.40
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.022845   | 0.028236   | 0.032998   |   2.6 |  0.93
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0.0015634  | 0.0040283  | 0.0065036  |   3.9 |  0.13
+Other   |            | 0.1081     |            |       |  3.54
+
+Nlocal:         115545 ave      174829 max       56260 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        34886.2 ave       48273 max       21499 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    4.04504e+06 ave 6.24365e+06 max 1.85001e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16180159
+Ave neighs/atom = 35.00835
+Neighbor list builds = 0
+Dangerous builds = 0
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 32.63 | 50.41 | 68.01 Mbytes
+   Step        Atoms        PotEng         KinEng         TotEng         Press     
+        22      462180  -2347028.3      6.3477224     -2347021.9     -11663.264    
+Loop time of 1.89275e-06 on 4 procs for 0 steps with 462180 atoms
+
+224.5% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.893e-06  |            |       |100.00
+
+Nlocal:         115545 ave      174818 max       56267 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        34886.2 ave       48262 max       21506 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    4.04504e+06 ave  6.2419e+06 max 1.85059e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16180165
+Ave neighs/atom = 35.008363
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data ${relaxed}
+write_data /tmp/agw-v11-artifacts/agw_v11_relaxed.data
+System init for write_data ...
+write_dump all custom ${dump} id type x y z fx fy fz
+write_dump all custom /tmp/agw-v11-artifacts/v11_static.dump id type x y z fx fy fz
+Total wall time: 0:00:05

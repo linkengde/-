@@ -1,0 +1,70 @@
+{
+  "title": "Ag-W V11 local static and cold baseline validation",
+  "date": "2026-11-25",
+  "branch": "research/ag-w-ideal-gyroid-v11-20261124",
+  "generated_geometry_commit": "e97c652d95cc9ec52c469a588cb748197396325f",
+  "simulation_input_code_commit": "84467c5e",
+  "lammps_version": "22 Jul 2025 - Update 4",
+  "mpi_ranks": 4,
+  "potential": "Dai 2006 Ag-W EFS",
+  "potential_sha256": "215c53d03029736f3be4de5f8833a0d5a0e99fd18cd72b9ba118a0b583ff04f0",
+  "input_geometry": {
+    "path": "../v11_generated_data/agw_v11_gyroid.data.gz",
+    "compressed_sha256": "ae09e6fa39947d3988d5af943af14462e0e10d330aa4941ab2905b287fb41b44",
+    "uncompressed_sha256": "475691478b020c8dff3d8db28bb57ced8e8ae69c3c6ff9351428deb95a64354a",
+    "phase_fractions_sha256": "d2806712257feb3c4e0ab8136de6864979d6f09410397fe25f86c5576be95018",
+    "atoms": 462180,
+    "Ag_atoms": 291274,
+    "W_atoms": 170906,
+    "Ag_over_W_mass_ratio": 0.9999950045702779,
+    "box_A": [
+      200,
+      200,
+      300
+    ]
+  },
+  "protocol": {
+    "timestep_fs": 0.25,
+    "fixed_bottom_z_A": [
+      0,
+      20
+    ],
+    "NVT_target_K": 300,
+    "NVT_steps": 8000,
+    "NVT_ps": 2.0,
+    "NVT_damping_ps": 0.1,
+    "NVE_steps": 200,
+    "NVE_ps": 0.05,
+    "velocity_seed": 20261124
+  },
+  "status": {
+    "static_exploratory_screen": "PASS",
+    "cold_baseline_gate": "FAIL_OR_CONTINUE_NVT",
+    "mapping_preflight": "NOT_RUN",
+    "no_source_TTM": "NOT_RUN",
+    "Gaussian_source_TTM": "NOT_RUN"
+  },
+  "key_metrics": {
+    "NVT_end_mobile_K": 301.976,
+    "NVT_end_Ag_K": 271.602,
+    "NVT_end_W_K": 353.583,
+    "NVT_Ag_W_delta_K": 81.981,
+    "NVT_last_0p2ps_PE_delta_eV": -250.0,
+    "NVE_end_mobile_K": 303.047,
+    "NVE_end_Ag_K": 272.357,
+    "NVE_end_W_K": 355.217,
+    "NVE_Ag_W_delta_K": 82.86,
+    "NVE_energy_drift_eV": 0.0,
+    "atom_count_preserved": true
+  },
+  "diagnostic_restart": {
+    "path": "v11_cold.restart.gz",
+    "timestep": 8200,
+    "compressed_sha256": "9e39d4721e59c64af4bdf3b7de25fefb8bee5c8afb4390a1e84a4af482c43968",
+    "resume_use": "decompress first; not an accepted cold/laser start state"
+  },
+  "input_script_sha256": {
+    "in.v11_static_relax": "807da6ab65d338921bf9fdbfc3bb9b29cc6cf70c59bd1a23488352697485fac2",
+    "in.v11_cold_baseline": "fecd1c9a89b8bcc68d9a6be08d8ad4b8cad2d6997e720d78d6aaba9bdeac4390"
+  }
+}
