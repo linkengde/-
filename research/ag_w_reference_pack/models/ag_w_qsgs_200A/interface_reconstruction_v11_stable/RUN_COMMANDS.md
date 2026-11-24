@@ -2,6 +2,21 @@
 
 Run from the repository root in the existing Ag–W environment. The commands below are prepared but have **not** been executed in this chat session.
 
+## 0. Quick code checks
+
+```bash
+/workspace/.venvs/ag-qsgs/bin/python -m py_compile \
+  research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_reference.py \
+  research/ag_w_reference_pack/models/ag_w_qsgs_200A/ttm/agw_ttm_md_pilot.py \
+  research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_stable/scan_v11_padded_z_grid.py \
+  research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_stable/test_v11_padded_z_smoke.py
+
+/workspace/.venvs/ag-qsgs/bin/python \
+  research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v11_stable/test_v11_padded_z_smoke.py
+```
+
+Both commands must pass before running the full structure scan.
+
 ## 1. Padded-z mapping phase scan
 
 ```bash
