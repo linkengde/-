@@ -926,15 +926,16 @@ def map_agw_newton_layer(
     max_transfer_distance_A: float = 20.0,
     grid_offset_xy_A: tuple[float, float] = (0.0, 0.0),
     box_xy_A: float = 200.0,
+    map_z_bounds_A: tuple[float, float] = (40.0, 200.0),
 ) -> dict:
     """Map Newton-layer atom volumes/source to separate Ag/W phase grids.
 
-    Coordinates use a square periodic x/y box and a 0–300 Å z box. ``newton_mask``
+    Coordinates use a square periodic x/y box and an open z direction. ``newton_mask``
     marks static LAMMPS Newton-group membership, established from the template
     data before restart coordinates are loaded. Current coordinates are then
-    filtered to 40≤z≤200 Å before CIC; out-of-range atoms are not clipped into
-    edge cells. The two phase fills are checked together; volume overfill is
-    never silently clipped.
+    filtered to the explicit ``map_z_bounds_A`` interval before CIC; out-of-range
+    atoms are not clipped into edge cells. The two phase fills are checked
+    together; volume overfill is never silently clipped.
     """
     xyz = np.asarray(xyz_absolute_A, dtype=float)
     typ = np.asarray(types, dtype=int)
@@ -948,7 +949,11 @@ def map_agw_newton_layer(
         candidate = np.asarray(newton_mask, dtype=bool)
         if candidate.shape != (len(xyz),):
             raise ValueError("newton_mask must match the atom count")
-    z_inside = (xyz[:, 2] >= 40.0 - 1e-9) & (xyz[:, 2] <= 200.0 + 1e-9)
+    z_bounds = np.asarray(map_z_bounds_A, dtype=float)
+    if z_bounds.shape != (2,) or np.any(~np.isfinite(z_bounds)) or z_bounds[1] <= z_bounds[0]:
+        raise ValueError("map_z_bounds_A must be a finite increasing (z_min, z_max) pair")
+    z_min_A, z_max_A = float(z_bounds[0]), float(z_bounds[1])
+    z_inside = (xyz[:, 2] >= z_min_A - 1e-9) & (xyz[:, 2] <= z_max_A + 1e-9)
     newton = candidate & z_inside
     idx_ag = np.flatnonzero(newton & (typ == 2))
     idx_w = np.flatnonzero(newton & (typ == 1))
@@ -960,7 +965,7 @@ def map_agw_newton_layer(
     if offset.shape != (2,) or np.any(~np.isfinite(offset)):
         raise ValueError("grid_offset_xy_A must contain two finite values")
     offset = np.mod(offset, np.asarray([box_xy_A, box_xy_A]))
-    origin = np.array([offset[0], offset[1], 40.0])
+    origin = np.array([offset[0], offset[1], z_min_A])
     xyz_ag = xyz[idx_ag] - origin
     xyz_w = xyz[idx_w] - origin
     kwargs = dict(source_kwargs or {})
@@ -981,13 +986,14 @@ def map_agw_newton_layer(
         "candidate_newton_atoms": int(candidate.sum()),
         "grid_offset_xy_A": offset.tolist(),
         "box_xy_A": float(box_xy_A),
+        "map_z_bounds_A": [z_min_A, z_max_A],
         "excluded_outside_ttm_region": {
-            "below_40A": int(np.count_nonzero(candidate & (xyz[:, 2] < 40.0 - 1e-9))),
-            "above_200A": int(np.count_nonzero(candidate & (xyz[:, 2] > 200.0 + 1e-9))),
-            "below_40A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] < 40.0 - 1e-9))),
-            "below_40A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] < 40.0 - 1e-9))),
-            "above_200A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] > 200.0 + 1e-9))),
-            "above_200A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] > 200.0 + 1e-9))),
+            "below_map_z_min_A": int(np.count_nonzero(candidate & (xyz[:, 2] < z_min_A - 1e-9))),
+            "above_map_z_max_A": int(np.count_nonzero(candidate & (xyz[:, 2] > z_max_A + 1e-9))),
+            "below_map_z_min_A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] < z_min_A - 1e-9))),
+            "below_map_z_min_A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] < z_min_A - 1e-9))),
+            "above_map_z_max_A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] > z_max_A + 1e-9))),
+            "above_map_z_max_A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] > z_max_A + 1e-9))),
         },
         "mapped_ag_volume_A3": float(joint["fraction_ag"].sum() * np.prod(spacing_A)),
         "mapped_w_volume_A3": float(joint["fraction_w"].sum() * np.prod(spacing_A)),
