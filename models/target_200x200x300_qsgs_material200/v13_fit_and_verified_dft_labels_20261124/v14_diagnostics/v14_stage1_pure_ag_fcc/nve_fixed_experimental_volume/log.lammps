@@ -1,0 +1,199 @@
+LAMMPS (22 Jul 2025 - Update 4)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+clear
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage1_pure_ag_fcc/fcc_256_initial.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (16.36 16.36 16.36)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  256 atoms
+  read_data CPU = 0.002 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/AgTiSiC_POD_v13.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/v13_coefficients.pod Ag C Si Ti
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+compute T all temp
+timestep 0.001
+thermo 10
+thermo_style custom step time atoms c_T pe ke etotal press c_fmax
+thermo_modify temp T flush yes lost error
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 5 5 5
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 2.994 | 2.994 | 2.994 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         Press          c_fmax    
+         0   0                    256   0             -692.63323      0             -692.63323     -146436.51      2.7571195e-16
+Loop time of 1.418e-06 on 1 procs for 0 steps with 256 atoms
+
+141.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 1.418e-06  |            |       |100.00
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1431 ave        1431 max        1431 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        19968 ave       19968 max       19968 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 19968
+Ave neighs/atom = 78
+Neighbor list builds = 0
+Dangerous builds = 0
+velocity all create 300.0 291203 mom yes rot no dist gaussian
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 3.119 | 3.119 | 3.119 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         Press          c_fmax    
+         0   0                    256   300           -692.63323      9.8884011     -682.74483     -144024.41      2.7571195e-16
+Loop time of 8.26e-07 on 1 procs for 0 steps with 256 atoms
+
+484.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 8.26e-07   |            |       |100.00
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1431 ave        1431 max        1431 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        19968 ave       19968 max       19968 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 19968
+Ave neighs/atom = 78
+Neighbor list builds = 0
+Dangerous builds = 0
+fix int all nve
+dump traj all custom 10 trajectory.dump id type x y z vx vy vz fx fy fz
+dump_modify traj sort id format float %.12g flush yes
+run 100
+Per MPI rank memory allocation (min/avg/max) = 3.119 | 3.119 | 3.119 Mbytes
+   Step          Time         Atoms         c_T           PotEng         KinEng         TotEng         Press          c_fmax    
+         0   0                    256   300           -692.63323      9.8884011     -682.74483     -144024.41      2.7571195e-16
+        10   0.01                 256   291.49048     -692.3527       9.6079158     -682.74478     -143658.42      0.23812416   
+        20   0.02                 256   267.7893      -691.57137      8.8266934     -682.74468     -142653.68      0.47738677   
+        30   0.03                 256   233.70478     -690.44775      7.7032221     -682.74453     -141307.33      0.69552278   
+        40   0.04                 256   196.09171     -689.20781      6.463445      -682.74437     -140168.95      0.87253856   
+        50   0.05                 256   162.25922     -688.09252      5.3482807     -682.74424     -139741.62      0.97407756   
+        60   0.06                 256   137.68404     -687.28244      4.5382501     -682.74419     -140196.49      0.98767888   
+        70   0.07                 256   124.54827     -686.84948      4.1052776     -682.7442      -141429.02      0.93161555   
+        80   0.08                 256   121.79859     -686.75891      4.0146442     -682.74427     -143200.62      0.81463229   
+        90   0.09                 256   126.31724     -686.90793      4.1635851     -682.74434     -145239.47      0.6615388    
+       100   0.1                  256   134.4591      -687.17635      4.4319516     -682.7444      -147304.7       0.50320178   
+Loop time of 2.31093 on 1 procs for 100 steps with 256 atoms
+
+Performance: 3.739 ns/day, 6.419 hours/ns, 43.273 timesteps/s, 11.078 katom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.2967     | 2.2967     | 2.2967     |   0.0 | 99.38
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0015465  | 0.0015465  | 0.0015465  |   0.0 |  0.07
+Output  | 0.0088422  | 0.0088422  | 0.0088422  |   0.0 |  0.38
+Modify  | 0.00085031 | 0.00085031 | 0.00085031 |   0.0 |  0.04
+Other   |            | 0.002974   |            |       |  0.13
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           1431 ave        1431 max        1431 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        19968 ave       19968 max       19968 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 19968
+Ave neighs/atom = 78
+Neighbor list builds = 0
+Dangerous builds = 0
+unfix int
+undump traj
+write_data end.data
+System init for write_data ...
+Total wall time: 0:00:02

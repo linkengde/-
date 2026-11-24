@@ -1,0 +1,228 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage1_pure_ag_fcc/fcc_256_initial.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (16.36 16.36 16.36)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  256 atoms
+  read_data CPU = 0.002 seconds
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/AgTiSiC_POD_v13.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/v13_coefficients.pod Ag C Si Ti
+**************** Begin of POD Potentials ****************
+species: Ag C Si Ti 
+periodic boundary conditions: 1 1 1
+number of environment clusters: 1
+number of principal compoments: 1
+inner cut-off radius: 0.5
+outer cut-off radius: 5
+bessel polynomial degree: 4
+inverse polynomial degree: 8
+one-body potential: 1
+two-body radial basis functions: 8
+three-body radial basis functions: 6
+three-body angular degree: 4
+four-body radial basis functions: 4
+four-body angular degree: 3
+five-body radial basis functions: 0
+five-body angular degree: 0
+six-body radial basis functions: 0
+six-body angular degree: 0
+seven-body radial basis functions: 0
+seven-body angular degree: 0
+number of local descriptors per element for one-body potential: 1
+number of local descriptors per element for two-body potential: 32
+number of local descriptors per element for three-body potential: 300
+number of local descriptors per element for four-body potential: 560
+number of local descriptors per element for five-body potential: 0
+number of local descriptors per element for six-body potential: 0
+number of local descriptors per element for seven-body potential: 0
+number of local descriptors per element for all potentials: 893
+number of global descriptors: 3572
+**************** End of POD Potentials ****************
+
+**************** Begin of Model Coefficients ****************
+total number of coefficients for POD potential: 3572
+total number of elements for PCA projection matrix: 0
+total number of elements for PCA centroids: 0
+**************** End of Model Coefficients ****************
+
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz lx ly lz c_fmax
+thermo_modify flush yes lost error
+fix relax all box/relax iso 0.0 vmax 0.0005
+min_style cg
+minimize 1.0e-8 1.0e-6 1000 10000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 5 5 5
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair pod, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+WARNING: Energy due to 1 extra global DOFs will be included in minimizer energies
+ (src/src/min.cpp:222)
+Per MPI rank memory allocation (min/avg/max) = 4.119 | 4.119 | 4.119 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz             Lx             Ly             Lz           c_fmax    
+         0         256  -692.63323     -146436.51     -146436.51     -146436.51     -146436.51      16.36          16.36          16.36          2.7571195e-16
+        10         256  -698.58721     -145470.08     -145470.08     -145470.08     -145470.08      16.2782        16.2782        16.2782        4.5631065e-15
+        20         256  -704.43995     -144372.38     -144372.38     -144372.38     -144372.38      16.1964        16.1964        16.1964        8.5019237e-15
+        30         256  -710.1875      -143151.8      -143151.8      -143151.8      -143151.8       16.1146        16.1146        16.1146        9.1016379e-15
+        40         256  -715.82653     -141830.67     -141830.67     -141830.67     -141830.67      16.0328        16.0328        16.0328        1.0829305e-14
+        50         256  -721.35798     -140685.77     -140685.77     -140685.77     -140685.77      15.951         15.951         15.951         1.3567422e-14
+        60         256  -726.81034     -140993.81     -140993.81     -140993.81     -140993.81      15.8692        15.8692        15.8692        1.0527541e-12
+        70         256  -732.2848      -145225.89     -145225.89     -145225.89     -145225.89      15.7874        15.7874        15.7874        1.5126618e-14
+        80         256  -737.98047     -156008.61     -156008.61     -156008.61     -156008.61      15.7056        15.7056        15.7056        2.3747892e-14
+        90         256  -744.17353     -175019.43     -175019.43     -175019.43     -175019.43      15.6238        15.6238        15.6238        4.7051578e-14
+       100         256  -751.16963     -202637.34     -202637.34     -202637.34     -202637.34      15.542         15.542         15.542         5.7505377e-14
+       110         256  -759.25788     -238188.26     -238188.26     -238188.26     -238188.26      15.4602        15.4602        15.4602        5.3418427e-14
+       120         256  -768.68081     -280381.78     -280381.78     -280381.78     -280381.78      15.3784        15.3784        15.3784        6.537978e-14 
+       130         256  -779.62099     -327694.82     -327694.82     -327694.82     -327694.82      15.2966        15.2966        15.2966        7.9626592e-14
+       140         256  -792.20003     -378626.82     -378626.82     -378626.82     -378626.82      15.2148        15.2148        15.2148        6.8316178e-14
+       150         256  -806.48444     -431836.99     -431836.99     -431836.99     -431836.99      15.133         15.133         15.133         6.7194494e-14
+       160         256  -822.49461     -486198.71     -486198.71     -486198.71     -486198.71      15.0512        15.0512        15.0512        2.4746553e-13
+       170         256  -840.21421     -540804.68     -540804.68     -540804.68     -540804.68      14.9694        14.9694        14.9694        3.5894134e-14
+       180         256  -859.59903     -594946.86     -594946.86     -594946.86     -594946.86      14.8876        14.8876        14.8876        5.8594857e-14
+       190         256  -880.58433     -648086.29     -648086.29     -648086.29     -648086.29      14.8058        14.8058        14.8058        4.6394328e-14
+       200         256  -903.09093     -699821.09     -699821.09     -699821.09     -699821.09      14.724         14.724         14.724         8.3687554e-14
+       210         256  -927.02989     -749856.94     -749856.94     -749856.94     -749856.94      14.6422        14.6422        14.6422        9.0570254e-14
+       220         256  -952.30611     -797981.57     -797981.57     -797981.57     -797981.57      14.5604        14.5604        14.5604        1.1664606e-13
+       230         256  -978.82096     -844043.62     -844043.62     -844043.62     -844043.62      14.4786        14.4786        14.4786        9.2348219e-14
+       240         256  -1006.4742     -887935.63     -887935.63     -887935.63     -887935.63      14.3968        14.3968        14.3968        1.6672688e-13
+       250         256  -1035.1652     -929580.56     -929580.56     -929580.56     -929580.56      14.315         14.315         14.315         2.0757099e-13
+       260         256  -1064.7941     -968921.2      -968921.2      -968921.2      -968921.2       14.2332        14.2332        14.2332        3.1554669e-13
+       270         256  -1095.262      -1005911.9     -1005911.9     -1005911.9     -1005911.9      14.1514        14.1514        14.1514        2.5285422e-13
+       280         256  -1126.4715     -1040512.1     -1040512.1     -1040512.1     -1040512.1      14.0696        14.0696        14.0696        5.8170651e-13
+       290         256  -1158.3268     -1072681.1     -1072681.1     -1072681.1     -1072681.1      13.9878        13.9878        13.9878        7.1032413e-13
+       300         256  -1190.7333     -1102377.5     -1102377.5     -1102377.5     -1102377.5      13.906         13.906         13.906         8.1957947e-13
+       310         256  -1223.5996     -1129713.4     -1129713.4     -1129713.4     -1129713.4      13.8242        13.8242        13.8242        8.4832481e-13
+       320         256  -1256.8525     -1155871.8     -1155871.8     -1155871.8     -1155871.8      13.7424        13.7424        13.7424        1.0152327e-12
+       330         256  -1290.48       -1183704.4     -1183704.4     -1183704.4     -1183704.4      13.6606        13.6606        13.6606        1.7449929e-12
+       340         256  -1324.5592     -1216281.5     -1216281.5     -1216281.5     -1216281.5      13.5788        13.5788        13.5788        1.2391277e-12
+       350         256  -1359.2325     -1255236       -1255236       -1255236       -1255236        13.497         13.497         13.497         1.2287839e-12
+       360         256  -1394.6566     -1300423       -1300423       -1300423       -1300423        13.4152        13.4152        13.4152        1.3925661e-12
+       370         256  -1430.9597     -1350454.8     -1350454.8     -1350454.8     -1350454.8      13.3334        13.3334        13.3334        1.5265914e-12
+       380         256  -1468.2178     -1403373.8     -1403373.8     -1403373.8     -1403373.8      13.2516        13.2516        13.2516        2.0056236e-12
+       390         256  -1506.4489     -1457135.5     -1457135.5     -1457135.5     -1457135.5      13.1698        13.1698        13.1698        3.1684829e-12
+       400         256  -1545.6177     -1509865.4     -1509865.4     -1509865.4     -1509865.4      13.088         13.088         13.088         2.5653849e-12
+       410         256  -1585.6436     -1559955.4     -1559955.4     -1559955.4     -1559955.4      13.0062        13.0062        13.0062        3.1294632e-12
+       420         256  -1626.4103     -1606068.6     -1606068.6     -1606068.6     -1606068.6      12.9244        12.9244        12.9244        3.9062075e-12
+       430         256  -1667.7743     -1647101.1     -1647101.1     -1647101.1     -1647101.1      12.8426        12.8426        12.8426        3.5713759e-12
+       440         256  -1709.5713     -1682129.1     -1682129.1     -1682129.1     -1682129.1      12.7608        12.7608        12.7608        3.8851476e-12
+       450         256  -1751.6213     -1710356.2     -1710356.2     -1710356.2     -1710356.2      12.679         12.679         12.679         4.1958386e-12
+       460         256  -1793.7324     -1731066       -1731066       -1731066       -1731066        12.5972        12.5972        12.5972        4.3822691e-12
+       470         256  -1835.7029     -1743583.2     -1743583.2     -1743583.2     -1743583.2      12.5154        12.5154        12.5154        4.5887845e-12
+       480         256  -1877.3227     -1747252.5     -1747252.5     -1747252.5     -1747252.5      12.4336        12.4336        12.4336        6.1917242e-12
+       490         256  -1918.3791     -1742157.4     -1742157.4     -1742157.4     -1742157.4      12.3518        12.3518        12.3518        5.1909338e-12
+       500         256  -1958.7162     -1733299.5     -1733299.5     -1733299.5     -1733299.5      12.27          12.27          12.27          5.8267383e-12
+       510         256  -1998.3778     -1731848.9     -1731848.9     -1731848.9     -1731848.9      12.1882        12.1882        12.1882        6.127168e-12 
+       520         256  -2037.6559     -1747192.8     -1747192.8     -1747192.8     -1747192.8      12.1064        12.1064        12.1064        7.9242107e-12
+       530         256  -2076.9598     -1781132.2     -1781132.2     -1781132.2     -1781132.2      12.0246        12.0246        12.0246        8.5773503e-12
+       540         256  -2116.6421     -1828709.7     -1828709.7     -1828709.7     -1828709.7      11.9428        11.9428        11.9428        9.6971585e-12
+       550         256  -2156.89       -1881523.5     -1881523.5     -1881523.5     -1881523.5      11.861         11.861         11.861         1.1262806e-11
+       560         256  -2197.6911     -1930431.9     -1930431.9     -1930431.9     -1930431.9      11.7792        11.7792        11.7792        1.0340673e-11
+       570         256  -2238.8453     -1966983.8     -1966983.8     -1966983.8     -1966983.8      11.6974        11.6974        11.6974        1.3967993e-11
+       580         256  -2279.9965     -1983905.6     -1983905.6     -1983905.6     -1983905.6      11.6156        11.6156        11.6156        1.1237939e-11
+       590         256  -2320.6653     -1975078.6     -1975078.6     -1975078.6     -1975078.6      11.5338        11.5338        11.5338        1.7329338e-11
+       600         256  -2360.2787     -1935304       -1935304       -1935304       -1935304        11.452         11.452         11.452         1.6597853e-11
+       610         256  -2398.1907     -1860014.8     -1860014.8     -1860014.8     -1860014.8      11.3702        11.3702        11.3702        1.4313153e-11
+       620         256  -2433.6991     -1745179.8     -1745179.8     -1745179.8     -1745179.8      11.2884        11.2884        11.2884        1.9793564e-11
+       630         256  -2466.0705     -1588867.6     -1588867.6     -1588867.6     -1588867.6      11.2066        11.2066        11.2066        1.9685704e-11
+       640         256  -2494.6025     -1392393.6     -1392393.6     -1392393.6     -1392393.6      11.1248        11.1248        11.1248        1.7243803e-11
+       650         256  -2518.6489     -1155954.9     -1155954.9     -1155954.9     -1155954.9      11.043         11.043         11.043         1.7357886e-11
+       660         256  -2537.558      -875116.73     -875116.73     -875116.73     -875116.73      10.9612        10.9612        10.9612        1.7804241e-11
+       670         256  -2550.5912     -541502.56     -541502.56     -541502.56     -541502.56      10.8794        10.8794        10.8794        2.2706579e-11
+       680         256  -2556.8772     -144798.74     -144798.74     -144798.74     -144798.74      10.7976        10.7976        10.7976        2.4507709e-11
+       685         256  -2557.3019     -0.42476228    -0.42476228    -0.42476228    -0.42476228     10.77093       10.77093       10.77093       2.1112782e-11
+Loop time of 33.7411 on 1 procs for 685 steps with 256 atoms
+
+99.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -692.633226534524  -2557.30194377558  -2557.30194384856
+  Force two-norm initial, final = 1200.6327 0.0015095467
+  Force max component initial, final = 1200.6327 0.0015095467
+  Final line search alpha, max atom move = 0.0022988121 3.4701642e-06
+  Iterations, force evaluations = 685 687
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 33.648     | 33.648     | 33.648     |   0.0 | 99.72
+Neigh   | 0.013739   | 0.013739   | 0.013739   |   0.0 |  0.04
+Comm    | 0.0090565  | 0.0090565  | 0.0090565  |   0.0 |  0.03
+Output  | 0.011013   | 0.011013   | 0.011013   |   0.0 |  0.03
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.05981    |            |       |  0.18
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           3173 ave        3173 max        3173 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        63488 ave       63488 max       63488 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 63488
+Ave neighs/atom = 248
+Neighbor list builds = 9
+Dangerous builds = 0
+unfix relax
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 3.172 | 3.172 | 3.172 Mbytes
+   Step        Atoms        PotEng         Press           Pxx            Pyy            Pzz             Lx             Ly             Lz           c_fmax    
+       685         256  -2557.3019     -0.42476228    -0.42476228    -0.42476228    -0.42476228     10.77093       10.77093       10.77093       2.1112782e-11
+Loop time of 8.53e-07 on 1 procs for 0 steps with 256 atoms
+
+468.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 8.53e-07   |            |       |100.00
+
+Nlocal:            256 ave         256 max         256 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           3173 ave        3173 max        3173 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        81920 ave       81920 max       81920 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 81920
+Ave neighs/atom = 320
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage1_pure_ag_fcc/zero_pressure_relax/fcc_256_relaxed.data
+System init for write_data ...
+Total wall time: 0:00:33

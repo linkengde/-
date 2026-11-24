@@ -1,0 +1,25 @@
+clear
+units metal
+atom_style atomic
+boundary p p p
+atom_modify sort 0 0
+read_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage1_pure_ag_fcc/fcc_256_initial.data
+mass 1 107.8682
+mass 2 12.011
+mass 3 28.0855
+mass 4 47.867
+pair_style pod
+pair_coeff * * /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/AgTiSiC_POD_v13.pod /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/fit_v13/v13_coefficients.pod Ag C Si Ti
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmax all reduce max v_fmag
+thermo 10
+thermo_style custom step atoms pe press pxx pyy pzz lx ly lz c_fmax
+thermo_modify flush yes lost error
+fix relax all box/relax iso 0.0 vmax 0.0005
+min_style cg
+minimize 1.0e-8 1.0e-6 1000 10000
+unfix relax
+run 0
+write_data /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123/v14_stage1_pure_ag_fcc/zero_pressure_relax/fcc_256_relaxed.data

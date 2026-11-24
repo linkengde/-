@@ -1,0 +1,213 @@
+  __  _  _
+ | _ |_)|_||  |
+ |__||  | ||/\| - 26.7.0
+
+User:   agent@9c66364e7ecb
+Date:   Tue Nov 24 01:22:45 2026
+Arch:   x86_64
+Pid:    948633
+CWD:    /workspace/potential-fit/round7_pod_snap/models/target_200x200x300_qsgs_material200/v13_source_and_fit_20261123
+units:  Angstrom and eV
+cores:  1
+OpenMP: False
+
+Versions:
+  Python: 3.12.14
+  ASE:    3.29.0
+  Numpy:  2.5.4
+  Scipy:  1.18.1
+  Libxc:  2.x.y
+
+Paths:
+  gpaw:  /workspace/venvs/gpaw/lib/python3.12/site-packages/gpaw
+  _gpaw: /workspace/venvs/gpaw/lib/python3.12/site-packages/
+        _gpaw.cpython-312-x86_64-linux-gnu.so
+  ase:   /workspace/venvs/gpaw/lib/python3.12/site-packages/ase
+  numpy: /workspace/venvs/gpaw/lib/python3.12/site-packages/numpy
+  scipy: /workspace/venvs/gpaw/lib/python3.12/site-packages/scipy
+
+Git-hashes:
+
+OMP_NUM_THREADS: 
+
+
+Environment variables:
+  GPAW_CPUPY:          False
+  GPAW_DEBUG:          False
+  GPAW_MPI_BACKEND:    serial
+  GPAW_MPI_OPTIONS:    None
+  GPAW_NO_C_EXTENSION: False
+  GPAW_NO_GPU_MPI:     False
+  GPAW_TRACE:          False
+  GPAW_USE_GPUS:       False
+
+Input parameters:
+  mode=PW(ecut=350.0),
+  convergence={'density': 1e-05, 'eigenstates': 1e-05, 'energy': 1e-05},
+  kpts=MonkhorstPack(size=array([4, 4, 4])),
+  maxiter=250,
+  mixer=Pulay(name='pulay', nmaxold=8, beta=0.05, weight=100, sigma=0.015, g_ss=None),
+  occupations=Occupations(name='fermi-dirac', width=0.1, fixmagmom=False),
+  symmetry=Symmetry(point_group=False, time_reversal=False),
+  xc=XC(name='PBE')
+
+Diagonalizing LCAO Hamiltonian
+Converting LCAO to pw mode
+   .------.  
+  /|      |  
+ * |      |  
+ |Ag-Ag---.  
+ |/  Ag  /   
+ Ag-----*    
+
+Atoms  # Å, Bohr magnetons
+|   | symbol |        x |        y |        z |    initial magnetic moments |
+|---|--------|----------|----------|----------|-----------------------------|
+| 0 |     Ag | 0.000000 | 0.000000 | 0.000000 | ( 0.0000,  0.0000,  0.0000) |
+| 1 |     Ag | 0.000000 | 1.350000 | 1.350000 | ( 0.0000,  0.0000,  0.0000) |
+| 2 |     Ag | 1.350000 | 0.000000 | 1.350000 | ( 0.0000,  0.0000,  0.0000) |
+| 3 |     Ag | 1.350000 | 1.350000 | 0.000000 | ( 0.0000,  0.0000,  0.0000) |
+
+
+Unit cell  # Å
+| periodic |        x |        y |        z |  lengths |    angles |
+|----------|----------|----------|----------|----------|-----------|
+|      yes | 2.700000 | 0.000000 | 0.000000 | 2.700000 | 90.000000 |
+|      yes | 0.000000 | 2.700000 | 0.000000 | 2.700000 | 90.000000 |
+|      yes | 0.000000 | 0.000000 | 2.700000 | 2.700000 | 90.000000 |
+
+
+Number of symmetries: 1
+Symmetry operations  # r_c * U_cc + t_c -> r_c
+|   | kind |            matrix            |
+|---|------|------------------------------|
+| 0 |  E   |  1, 0, 0,  0, 1, 0,  0, 0, 1 |
+
+BZ-sampling:
+  Number of BZ points: 64
+  Number of IBZ points: 64
+
+  Monkhorst-Pack size: [4, 4, 4]
+  Monkhorst-Pack shift: [0, 0, 0]
+
+K-points  # in reciprocal-cell coordinates
+|     |                                coordinates |     weight |
+|-----|--------------------------------------------|------------|
+|   0 | ( -0.37500000,  -0.37500000,  -0.37500000) | 0.01562500 |
+|   1 | ( -0.37500000,  -0.37500000,  -0.12500000) | 0.01562500 |
+|   2 | ( -0.37500000,  -0.37500000,   0.12500000) | 0.01562500 |
+|   3 | ( -0.37500000,  -0.37500000,   0.37500000) | 0.01562500 |
+|   4 | ( -0.37500000,  -0.12500000,  -0.37500000) | 0.01562500 |
+|   5 | ( -0.37500000,  -0.12500000,  -0.12500000) | 0.01562500 |
+|   6 | ( -0.37500000,  -0.12500000,   0.12500000) | 0.01562500 |
+|   7 | ( -0.37500000,  -0.12500000,   0.37500000) | 0.01562500 |
+|   8 | ( -0.37500000,   0.12500000,  -0.37500000) | 0.01562500 |
+|   9 | ( -0.37500000,   0.12500000,  -0.12500000) | 0.01562500 |
+| ... |                                            |            |
+|  63 | (  0.37500000,   0.37500000,   0.37500000) | 0.01562500 |
+
+Plane wave coefficients: 296
+Cutoff: 350.0 eV
+
+Spin-components: 1 (collinear spins)
+Bands:           45
+Projectors:      24
+Spin-degeneracy: 2
+Datatype:        complex128
+
+Memory:
+  Storage: CPU
+  Wave functions: 13_639_680 bytes (13_639_680 per core)
+  Projectors: 5_758_976 bytes (5_758_976 per core)
+
+Parallelization:
+  kpt:    1
+  domain: 1
+  band:   1
+
+Density:
+  Valence electrons: 68.0
+  Components: 1
+  Grid points: [12 12 12]
+  Charge: 0.0  # |e|
+
+Potential:
+  Grid points: [12 12 12]
+
+species:
+  Ag:
+    name:    Silver
+    id:      33ddeab48f408598355e2011f1241e14
+    Z:       47.0
+    valence: 17
+    core:    30
+    charge:  0.0  # [|e|]
+    file:    /workspace/venvs/gpaw/lib/python3.12/site-packages/gpaw_data/setups/Ag.PBE.gz
+    compensation charges:
+      type: gauss
+      rc: 0.40  # [Å]
+      lmax: 2
+    cutoffs:
+      filter: 2.35  # [Å]
+      core: 2.19  # [Å]
+    projectors
+    | kind |    occ | energy [eV] | rcut [Å] |
+    |------|--------|-------------|----------|
+    |   5s |  1.000 |      -4.401 |    1.286 |
+    |   4p |  6.000 |     -58.577 |    1.328 |
+    |   5p |  0.000 |      -0.738 |    1.328 |
+    |   4d | 10.000 |      -7.446 |    1.180 |
+    |    s |        |      22.811 |    1.286 |
+    |    d |        |      19.766 |    1.180 |
+  
+    Using partial waves for Ag as LCAO basis
+
+Reference energy: -578391.305415  # eV
+
+eigensolver:
+  PPCG
+  Converge bands: occupied
+  niter=2
+  
+density mixing:
+  Pulay-Mixer
+  Linear mixing parameters: 0.05
+  Old densities: 8
+  Fourier metric: weight=100, sigma=0.015
+  
+occupation numbers:
+  Fermi-Dirac:
+    width: 0.1000  # eV
+  
+
+poisson solver:
+  ecut: 2800.0  # eV
+
+xc functional:
+  name: PBE with 2 nearest neighbor stencil
+
+Initialization done in: 6.106 s
+
+convergence criteria:
+- Maximum integral of absolute [dens]ity change: 1e-05 electrons / valence electron
+- Maximum integral of absolute [eigenst]ate change: 1e-05 eV^2 / valence electron
+- Maximum [total energy] change in last 3 cyles: 1e-05 eV / valence electron
+maximum number of iterations: 250
+
+SCF iterations
+|iter     |     time |      energy | eigst |  dens |
+|---------|----------|-------------|-------|-------|
+|iter:   1| 01:23:11 |  141.956202 | +0.30 |       |
+|iter:   2| 01:23:29 |  143.344909 | -2.33 | -2.02 |
+|iter:   3| 01:23:48 |  138.951415 | -2.39 | -1.95 |
+|iter:   4| 01:24:06 |  152.978766 | -0.79 | -1.95 |
+|iter:   5| 01:24:28 |  115.236620 | -0.33 | -1.86 |
+|iter:   6| 01:24:47 |  150.787342 | -0.67 | -2.02 |
+|iter:   7| 01:25:07 |  152.739345 | -1.54 | -2.18 |
+|iter:   8| 01:25:28 |  152.867361 | -2.31 | -2.02 |
+|iter:   9| 01:25:45 |  153.265821 | -1.75 | -2.47 |
+
+timing:  # [seconds]
+  Total: 184.825  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Init:    6.105  # ━━
+  SCF:   178.609  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
