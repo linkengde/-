@@ -37,3 +37,13 @@ This passes the **level 1 program screen**. It does not produce a stable 300 K c
 **Decision:** the finite, preconditioned structure can execute a short NVE trajectory under the requested bottom-only constraint, but it is not a cold equilibrium start. Stop before adding a TTM source, laser pulse, or interpreting the trajectory as melt/cool behavior. The source QSGS files remain untouched; this pilot uses the v5 volume-preserving regularized mask, which reassigned 43,054 voxels (8.41%). It therefore preserves the large-scale bicontinuous morphology but is not voxel-identical to the original mask.
 
 Machine-readable metrics: `nve_pilot_metrics.json`. Input, outputs, source geometry, and potential hashes are listed in `SHA256SUMS.txt`.
+
+## Next cold-baseline check
+
+The follow-on input `in.nvt_0p5ps_nve_0p05ps` continues from the 25 fs NVE endpoint. It runs 0.5 ps NVT at 300 K (`Tdamp=0.1 ps`, `dt=0.25 fs`), then removes the thermostat and runs 0.05 ps NVE. Only z<20 Å remains fixed. It has no laser source or TTM.
+
+### Follow-up result
+
+The 0.5 ps NVT and 0.05 ps NVE completed with 482,601 atoms retained. The mobile temperature began near 197.5 K and ended at 197.1 K after NVT; during NVT it ranged from about 86.5 to 197.1 K, so the 300 K target was not reached. W and Ag temperatures moved closer together, ending near 198 K and 197 K. NVT total energy increased by about 4.44 keV, with a potential-energy increase of about 4.47 keV and nearly unchanged kinetic energy. This indicates that structural rearrangement continued to absorb thermostat work.
+
+The subsequent 0.05 ps NVE segment stayed near 195 K and conserved total energy to about 0.003 eV. Relative to the NVT start snapshot, 241 mobile atoms moved more than 1 Å and the maximum displacement was about 2.00 Å; no atoms were lost. Minimum pair distances changed only slightly during this segment, but remain short relative to the previous context screens. This verifies a short NVE integration near 197 K, not a 300 K equilibrium baseline. Therefore the cold-baseline stage remains incomplete; no TTM or laser source should be added yet. Detailed thermo, distance, and displacement data are in `nvt_followup_metrics.json`, with the LAMMPS log and compressed snapshots retained beside it.
