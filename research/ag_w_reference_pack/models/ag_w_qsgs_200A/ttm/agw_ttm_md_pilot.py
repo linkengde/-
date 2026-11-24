@@ -29,6 +29,7 @@ else:  # pragma: no cover - protects use outside this repository
 
 sys.path.insert(0, str(HERE))
 from agw_ttm_reference import (  # noqa: E402
+    AgWMappingError,
     AgWTTMGrid,
     M_VV2E_METAL,
     map_agw_newton_layer,
@@ -91,8 +92,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pulse-fwhm-ps", type=float, required=True, help="Explicit Gaussian pulse FWHM")
     parser.add_argument("--pulse-center-ps", type=float, required=True, help="Explicit Gaussian pulse center")
     parser.add_argument("--cooling-ps", type=float, required=True, help="Post-pulse cooling interval")
-    parser.add_argument("--equilibration-ps", type=float, default=1.0, help="300 K mobile-layer equilibration time")
+    parser.add_argument("--equilibration-ps", type=float, default=0.0, help="Optional shared 300 K equilibration before mapping; default preserves the supplied restart")
+    parser.add_argument("--mapping-only", action="store_true", help="Run LAMMPS setup and the restart-to-grid mapping gate, then exit without a TTM step or laser source")
     parser.add_argument("--grid-A", type=float, default=10.0, help="CIC mesh spacing; box lengths must divide evenly")
+    parser.add_argument("--max-map-transfer-A", type=float, default=20.0, help="Maximum joint Ag/W cell-volume transfer distance")
     parser.add_argument("--dt-ps", type=float, default=0.0005, help="LAMMPS metal-unit timestep")
     parser.add_argument("--source-scale", type=float, default=1.0, help="Scale on inherited I0=5 eV/(ps A^2)")
     parser.add_argument("--interface-h-W-m2-K", type=float, default=1.0e9, help="Provisional Ag/W electronic interface conductance")
@@ -127,10 +130,14 @@ def main() -> None:
     if not POTENTIAL.is_file():
         raise SystemExit(f"The selected Dai EFS potential is missing: {POTENTIAL}")
     for name, value in (("pulse FWHM", args.pulse_fwhm_ps), ("cooling time", args.cooling_ps),
-                        ("equilibration time", args.equilibration_ps), ("grid spacing", args.grid_A),
+                        ("grid spacing", args.grid_A), ("maximum map transfer distance", args.max_map_transfer_A),
                         ("timestep", args.dt_ps)):
         if not math.isfinite(value) or value <= 0.0:
             raise SystemExit(f"{name} must be finite and positive")
+    if not math.isfinite(args.equilibration_ps) or args.equilibration_ps < 0.0:
+        raise SystemExit("Equilibration time must be finite and non-negative")
+    if args.mapping_only and args.equilibration_ps != 0.0:
+        raise SystemExit("--mapping-only requires zero equilibration so it performs no MD integration")
     if not math.isfinite(args.pulse_center_ps) or args.pulse_center_ps < 0.0:
         raise SystemExit("Pulse center must be finite and non-negative")
     if not math.isfinite(args.source_scale) or args.source_scale < 0.0:
@@ -160,7 +167,7 @@ def main() -> None:
     log_path = output_path.with_suffix(".lammps.log")
     lmp = lammps(cmdargs=["-screen", "none", "-log", str(log_path)])
     try:
-        commands = [
+        setup_commands = [
             "units metal",
             "atom_style atomic",
             "boundary p p f",
@@ -185,34 +192,54 @@ def main() -> None:
             "group newton region newton_region",
             "group mobile subtract all fixed",
         ]
+        for command in setup_commands:
+            lmp.command(command)
+
+        # The LAMMPS groups are assigned from the template data-file positions
+        # before read_dump updates coordinates. Preserve that exact static
+        # Newton membership for the TTM map and the following integration.
+        nlocal = int(lmp.extract_setting("nlocal"))
+        natoms = int(round(lmp.get_natoms()))
+        if nlocal != natoms:
+            raise RuntimeError(f"Expected all {natoms} atoms on one rank, found {nlocal}")
+        template_positions_view = lmp.numpy.extract_atom("x")
+        template_types_view = lmp.numpy.extract_atom("type")
+        template_ids_view = lmp.numpy.extract_atom("id")
+        template_positions = np.array(template_positions_view[:nlocal], copy=True)
+        template_types = np.array(template_types_view[:nlocal], dtype=int, copy=True)
+        template_ids = np.array(template_ids_view[:nlocal], dtype=np.int64, copy=True)
+        if np.any(~np.isin(template_types, tuple(MASS_BY_TYPE))):
+            raise RuntimeError("The LAMMPS data file must use type 1=W and type 2=Ag")
+        newton_template_mask = (template_positions[:, 2] >= 40.0 - 1e-9) & (template_positions[:, 2] <= 300.0 + 1e-9)
+        newton_group_ids = template_ids[newton_template_mask]
+        template_type_by_id = dict(zip(template_ids.tolist(), template_types.tolist()))
+
         if restart_path is not None:
-            commands.append(f"read_dump {restart_path} {args.restart_step} x y z vx vy vz box no replace yes")
-        commands += [
+            lmp.command(f"read_dump {restart_path} {args.restart_step} x y z vx vy vz box no replace yes")
+        continuation_commands = [
             "velocity fixed set 0.0 0.0 0.0",
             "fix hold fixed setforce 0.0 0.0 0.0",
             "thermo 0",
             "thermo_style custom step time atoms temp pe ke etotal",
         ]
-        for command in commands:
+        for command in continuation_commands:
             lmp.command(command)
 
-        nlocal = int(lmp.extract_setting("nlocal"))
-        natoms = int(round(lmp.get_thermo("atoms")))
-        if nlocal != natoms:
-            raise RuntimeError(f"Expected all {natoms} atoms on one rank, found {nlocal}")
-        positions_view = lmp.numpy.extract_atom("x")
         types_view = lmp.numpy.extract_atom("type")
-        positions_initial = np.array(positions_view[:nlocal], copy=True)
+        ids_view = lmp.numpy.extract_atom("id")
+        current_ids = np.array(ids_view[:nlocal], dtype=np.int64, copy=True)
         types = np.array(types_view[:nlocal], dtype=int, copy=True)
-        if np.any(~np.isin(types, tuple(MASS_BY_TYPE))):
-            raise RuntimeError("The LAMMPS data file must use type 1=W and type 2=Ag")
-        # Keep membership consistent with the statically defined LAMMPS
-        # Newton group during the subsequent 300 K equilibration.
-        newton_mask = (positions_initial[:, 2] >= 40.0 - 1e-9) & (positions_initial[:, 2] <= 200.0 + 1e-9)
+        if len(np.unique(current_ids)) != natoms or not np.array_equal(np.sort(current_ids), np.sort(template_ids)):
+            raise RuntimeError("read_dump changed the atom-ID set relative to the template data")
+        expected_types = np.fromiter((template_type_by_id[int(atom_id)] for atom_id in current_ids), dtype=int, count=nlocal)
+        if not np.array_equal(types, expected_types):
+            raise RuntimeError("read_dump changed atom types relative to the template data")
+        newton_mask = np.isin(current_ids, newton_group_ids)
         lmp.command("run 0 pre no post no")
-        lmp.command("fix eq mobile nvt temp 300.0 300.0 0.1")
-        lmp.command(f"run {equil_steps}")
-        lmp.command("unfix eq")
+        if equil_steps:
+            lmp.command("fix eq mobile nvt temp 300.0 300.0 0.1")
+            lmp.command(f"run {equil_steps}")
+            lmp.command("unfix eq")
         lmp.command("reset_timestep 0")
         lmp.command("fix bath_integrate bath nve")
         lmp.command("fix newton_integrate newton nve")
@@ -227,12 +254,48 @@ def main() -> None:
         # Refresh Python/NumPy views before reading or writing atom state.
         positions_view = lmp.numpy.extract_atom("x")
         types_view = lmp.numpy.extract_atom("type")
+        ids_view = lmp.numpy.extract_atom("id")
         positions_after_eq = np.array(positions_view[:nlocal], copy=True)
+        current_ids = np.array(ids_view[:nlocal], dtype=np.int64, copy=True)
         types = np.array(types_view[:nlocal], dtype=int, copy=True)
-        mapped = map_agw_newton_layer(
-            positions_after_eq, types, shape, spacing,
-            source_kwargs={"allow_above_surface": True}, newton_mask=newton_mask,
-        )
+        newton_mask = np.isin(current_ids, newton_group_ids)
+        try:
+            mapped = map_agw_newton_layer(
+                positions_after_eq, types, shape, spacing,
+                source_kwargs={"allow_above_surface": False}, newton_mask=newton_mask,
+                max_transfer_distance_A=args.max_map_transfer_A,
+            )
+        except AgWMappingError as exc:
+            if not args.mapping_only:
+                raise
+            result = {
+                "status": "AGW_MAPPING_PREFLIGHT_FAIL",
+                "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
+                "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
+                "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
+                "mapping_parameters": {"grid_shape": list(shape), "spacing_A": list(spacing), "max_transfer_distance_A": args.max_map_transfer_A},
+                "static_Newton_group_atoms": int(newton_mask.sum()),
+                "current_Newton_group_atoms_outside_40_to_200A": int(np.count_nonzero(newton_mask & ((positions_after_eq[:, 2] < 40.0 - 1e-9) | (positions_after_eq[:, 2] > 200.0 + 1e-9)))),
+                "reason": str(exc),
+                "ttm_steps_executed": 0,
+                "laser_source_applied": False,
+            }
+            output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+            print(json.dumps(result, indent=2))
+            return
+        if args.mapping_only:
+            result = {
+                "status": "AGW_MAPPING_PREFLIGHT_PASS",
+                "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
+                "static_gate": {"md_start_gate": gate["gate"], "data_sha256": gate["data_sha256"], "audit": str(audit_path), "exploratory_override": bool(args.exploratory)},
+                "restart": {"dump": str(restart_path) if restart_path else None, "sha256": sha256_file(restart_path) if restart_path else None, "timestep": args.restart_step},
+                "mapped_geometry": {"candidate_newton_atoms": mapped["candidate_newton_atoms"], "Ag_atoms": int(len(mapped["atom_indices_ag"])), "W_atoms": int(len(mapped["atom_indices_w"])), "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_quadrature_S1_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
+                "ttm_steps_executed": 0,
+                "laser_source_applied": False,
+            }
+            output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+            print(json.dumps(result, indent=2))
+            return
         idx_ag = mapped["atom_indices_ag"]
         idx_w = mapped["atom_indices_w"]
         masses_all = np.where(types == 1, MASS_BY_TYPE[1], MASS_BY_TYPE[2])
@@ -324,7 +387,7 @@ def main() -> None:
             "spatial_source_parameters": {"I0_eV_ps_A2": 5.0 * args.source_scale, "R_A": 30.0, "skin_depth_A": 20.0, "center_xy_A": [100.0, 100.0], "surface_z_A": 200.0},
             "temporal_parameters": {"pulse_fwhm_ps": args.pulse_fwhm_ps, "pulse_center_ps": args.pulse_center_ps, "cooling_after_center_plus_4fwhm_ps": args.cooling_ps},
             "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "heating_and_cooling_steps": total_steps, "grid_shape": list(shape), "spacing_A": list(spacing), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
-            "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"]},
+            "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "candidate_newton_atoms": mapped["candidate_newton_atoms"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
             "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_added_eV": final["bath_energy_added_eV"], "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
             "history": history,
             "limitations": [

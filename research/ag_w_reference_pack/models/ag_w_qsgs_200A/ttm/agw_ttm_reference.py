@@ -452,6 +452,273 @@ def gaussian_ag_source_power(
     )
 
 
+class AgWMappingError(ValueError):
+    """A conservative Ag/W grid mapping cannot satisfy its stated constraints."""
+
+
+def _raw_cic_volume_power(
+    xyz_A: np.ndarray,
+    power_density_eV_ps_A3: np.ndarray,
+    grid_shape: tuple[int, int, int],
+    spacing_A: tuple[float, float, float],
+    atomic_volume_A3: float,
+) -> tuple[AtomGridMap, np.ndarray, np.ndarray]:
+    mapping = cloud_in_cell_atom_map(xyz_A, grid_shape, spacing_A)
+    ncell = int(np.prod(grid_shape))
+    weights_flat = mapping.weights.ravel()
+    ids_flat = mapping.cell_ids.ravel()
+    atom_volume = np.full(len(xyz_A), atomic_volume_A3)
+    volume = np.bincount(
+        ids_flat,
+        weights=np.repeat(atom_volume, mapping.cell_ids.shape[1]) * weights_flat,
+        minlength=ncell,
+    ).reshape(grid_shape)
+    source = np.bincount(
+        ids_flat,
+        weights=np.repeat(atom_volume * power_density_eV_ps_A3, mapping.cell_ids.shape[1]) * weights_flat,
+        minlength=ncell,
+    ).reshape(grid_shape)
+    return mapping, volume, source
+
+
+def _joint_transfer_atom_map(
+    mapping: AtomGridMap,
+    transfer_fractions: dict[int, list[tuple[int, float]]],
+) -> AtomGridMap:
+    """Apply cell-volume transfers to each atom's interpolation weights."""
+    if not transfer_fractions:
+        return mapping
+    ncell = int(np.prod(mapping.grid_shape))
+    max_targets = max(len(targets) for targets in transfer_fractions.values())
+    target_ids = np.zeros((ncell, max_targets), dtype=int)
+    target_weights = np.zeros((ncell, max_targets), dtype=float)
+    moved_fraction = np.zeros(ncell, dtype=float)
+    for donor, targets in transfer_fractions.items():
+        for slot, (target, fraction) in enumerate(targets):
+            target_ids[donor, slot] = target
+            target_weights[donor, slot] = fraction
+            moved_fraction[donor] += fraction
+    if np.any(moved_fraction > 1.0 + 1e-12):
+        raise AgWMappingError("Joint transfers remove more than a donor cell's CIC contributions")
+
+    ids_columns: list[np.ndarray] = []
+    weight_columns: list[np.ndarray] = []
+    for column in range(mapping.cell_ids.shape[1]):
+        donor = mapping.cell_ids[:, column]
+        weight = mapping.weights[:, column]
+        ids_columns.append(donor)
+        weight_columns.append(weight * (1.0 - moved_fraction[donor]))
+        for slot in range(max_targets):
+            ids_columns.append(target_ids[donor, slot])
+            weight_columns.append(weight * target_weights[donor, slot])
+    ids = np.column_stack(ids_columns)
+    weights = np.column_stack(weight_columns)
+    nonzero_columns = np.sum(weights, axis=0) > 0.0
+    return AtomGridMap(ids[:, nonzero_columns], weights[:, nonzero_columns], mapping.grid_shape)
+
+
+def build_agw_grid_fields_joint(
+    xyz_ag_A: np.ndarray,
+    xyz_w_A: np.ndarray,
+    q_ag_eV_ps_A3: np.ndarray,
+    grid_shape: tuple[int, int, int],
+    spacing_A: tuple[float, float, float],
+    max_transfer_distance_A: float = 20.0,
+) -> dict:
+    """Conservatively map both phases together under one cell-capacity limit.
+
+    Raw CIC contributions from Ag and W share the same cell capacity. Any
+    overflow is moved as a mixed Ag/W volume package to the nearest cells with
+    real remaining capacity. Ag source power and atom-to-grid weights follow
+    the same transfer fractions, so species volume, source power, and lattice
+    energy handoff remain conservative. x/y are periodic; z is open.
+    """
+    xyz_ag = np.asarray(xyz_ag_A, dtype=float)
+    xyz_w = np.asarray(xyz_w_A, dtype=float)
+    q_ag = np.asarray(q_ag_eV_ps_A3, dtype=float)
+    shape = tuple(int(v) for v in grid_shape)
+    spacing = tuple(float(v) for v in spacing_A)
+    if (xyz_ag.ndim != 2 or xyz_ag.shape[1] != 3 or xyz_w.ndim != 2 or xyz_w.shape[1] != 3
+            or not np.all(np.isfinite(xyz_ag)) or not np.all(np.isfinite(xyz_w))):
+        raise ValueError("Ag and W coordinates must have shape (N,3)")
+    if len(q_ag) != len(xyz_ag) or not np.all(np.isfinite(q_ag)) or np.any(q_ag < 0.0):
+        raise ValueError("Ag source power density must be finite, non-negative, and match Ag atoms")
+    if len(xyz_ag) == 0 or len(xyz_w) == 0:
+        raise ValueError("Both Ag and W must contribute atoms to the mapped Newton layer")
+    if (len(shape) != 3 or len(spacing) != 3 or any(v <= 0 for v in shape)
+            or any(not np.isfinite(v) or v <= 0 for v in spacing)):
+        raise ValueError("grid_shape and spacing_A must each contain three positive values")
+    if not np.isfinite(max_transfer_distance_A) or max_transfer_distance_A < 0.0:
+        raise ValueError("Maximum transfer distance must be finite and non-negative")
+
+    map_ag, volume_ag_raw, source_raw = _raw_cic_volume_power(
+        xyz_ag, q_ag, shape, spacing, AG_ATOMIC_VOLUME_A3
+    )
+    map_w, volume_w_raw, _ = _raw_cic_volume_power(
+        xyz_w, np.zeros(len(xyz_w)), shape, spacing, W_ATOMIC_VOLUME_A3
+    )
+    cell_volume = float(np.prod(spacing))
+    raw_total = volume_ag_raw + volume_w_raw
+    total_material = float(raw_total.sum())
+    total_capacity = int(np.prod(shape)) * cell_volume
+    tolerance = max(cell_volume * 1e-12, total_material * 1e-13, 1e-10)
+    if total_material > total_capacity + tolerance:
+        raise AgWMappingError(
+            f"Global Ag+W volume {total_material:.9g} A^3 exceeds grid capacity {total_capacity:.9g} A^3"
+        )
+
+    excess = np.maximum(raw_total - cell_volume, 0.0).ravel()
+    donors = np.flatnonzero(excess > tolerance)
+    volume_ag = volume_ag_raw.ravel().copy()
+    volume_w = volume_w_raw.ravel().copy()
+    source = source_raw.ravel().copy()
+    occupancy = raw_total.ravel().copy()
+    transfer_fractions: dict[int, list[tuple[int, float]]] = {}
+    transfer_distances: list[float] = []
+    transferred_volume_A3 = 0.0
+    transfer_edges = 0
+    nx, ny, nz = shape
+    sx, sy, sz = spacing
+
+    def nearby_cells(donor: int) -> list[tuple[int, float]]:
+        ix = donor // (ny * nz)
+        iy = (donor // nz) % ny
+        iz = donor % nz
+        rx = min(nx // 2, int(np.ceil(max_transfer_distance_A / sx)))
+        ry = min(ny // 2, int(np.ceil(max_transfer_distance_A / sy)))
+        rz = min(nz - 1, int(np.ceil(max_transfer_distance_A / sz)))
+        candidates: dict[int, float] = {}
+        for dx in range(-rx, rx + 1):
+            tx = (ix + dx) % nx
+            ddx = min(abs(dx), nx - abs(dx)) * sx
+            for dy in range(-ry, ry + 1):
+                ty = (iy + dy) % ny
+                ddy = min(abs(dy), ny - abs(dy)) * sy
+                for dz in range(-rz, rz + 1):
+                    tz = iz + dz
+                    if tz < 0 or tz >= nz or (dx == 0 and dy == 0 and dz == 0):
+                        continue
+                    distance = float(np.sqrt(ddx * ddx + ddy * ddy + (dz * sz) ** 2))
+                    if distance > max_transfer_distance_A + 1e-12:
+                        continue
+                    target = int(np.ravel_multi_index((tx, ty, tz), shape))
+                    previous = candidates.get(target)
+                    if previous is None or distance < previous:
+                        candidates[target] = distance
+        return sorted(candidates.items(), key=lambda item: (item[1], item[0]))
+
+    donor_candidates: dict[int, list[tuple[int, float]]] = {}
+    donor_priority: list[tuple[float, float, int, int]] = []
+    for donor_value in donors:
+        donor = int(donor_value)
+        candidates = nearby_cells(donor)
+        donor_candidates[donor] = candidates
+        nearby_free = sum(
+            max(0.0, cell_volume - float(raw_total.ravel()[target]))
+            for target, _ in candidates
+        )
+        scarcity = nearby_free / max(float(excess[donor]), tolerance)
+        donor_priority.append((scarcity, nearby_free, -float(excess[donor]), donor))
+
+    # Handle donors with the fewest nearby free-volume options first. This
+    # reduces (but does not conceal) allocation failure from a poor greedy
+    # ordering when nearby capacity is shared by several overfilled cells.
+    for _, _, _, donor in sorted(donor_priority):
+        donor_excess = float(excess[donor])
+        remaining = donor_excess
+        donor_total = float(raw_total.ravel()[donor])
+        if donor_total <= 0.0:
+            raise AgWMappingError(f"Invalid non-positive donor volume in cell {donor}")
+        for target, distance in donor_candidates[donor]:
+            free = cell_volume - occupancy[target]
+            if free <= tolerance:
+                continue
+            amount = min(remaining, float(free))
+            fraction = amount / donor_total
+            d_ag = float(volume_ag_raw.ravel()[donor]) * fraction
+            d_w = float(volume_w_raw.ravel()[donor]) * fraction
+            d_source = float(source_raw.ravel()[donor]) * fraction
+            volume_ag[donor] -= d_ag
+            volume_w[donor] -= d_w
+            source[donor] -= d_source
+            volume_ag[target] += d_ag
+            volume_w[target] += d_w
+            source[target] += d_source
+            occupancy[donor] -= amount
+            occupancy[target] += amount
+            transfer_fractions.setdefault(donor, []).append((target, fraction))
+            transfer_distances.append(distance)
+            transferred_volume_A3 += amount
+            transfer_edges += 1
+            remaining -= amount
+            if remaining <= tolerance:
+                break
+        if remaining > tolerance:
+            raise AgWMappingError(
+                f"Conservative greedy assignment leaves {remaining:.9g} A^3 overflow at cell {donor} "
+                f"within the configured {max_transfer_distance_A:g} A transfer limit"
+            )
+
+    volume_ag = volume_ag.reshape(shape)
+    volume_w = volume_w.reshape(shape)
+    source = source.reshape(shape)
+    fraction_ag = volume_ag / cell_volume
+    fraction_w = volume_w / cell_volume
+    total_fill = fraction_ag + fraction_w
+    if np.any(total_fill > 1.0 + 1e-10) or np.any(fraction_ag < 0.0) or np.any(fraction_w < 0.0):
+        raise AgWMappingError("Joint mapping left a cell overfilled or produced a negative phase fraction")
+    expected_ag_volume = len(xyz_ag) * AG_ATOMIC_VOLUME_A3
+    expected_w_volume = len(xyz_w) * W_ATOMIC_VOLUME_A3
+    expected_source = float(np.dot(np.full(len(xyz_ag), AG_ATOMIC_VOLUME_A3), q_ag))
+    if abs(float(volume_ag.sum()) - expected_ag_volume) > max(expected_ag_volume * 1e-12, 1e-8):
+        raise AgWMappingError("Joint mapping did not conserve Ag volume")
+    if abs(float(volume_w.sum()) - expected_w_volume) > max(expected_w_volume * 1e-12, 1e-8):
+        raise AgWMappingError("Joint mapping did not conserve W volume")
+    if abs(float(source.sum()) - expected_source) > max(abs(expected_source) * 1e-12, 1e-10):
+        raise AgWMappingError("Joint mapping did not conserve Ag source power")
+
+    joint_map_ag = _joint_transfer_atom_map(map_ag, transfer_fractions)
+    joint_map_w = _joint_transfer_atom_map(map_w, transfer_fractions)
+    diagnostics = {
+        "grid_cell_volume_A3": cell_volume,
+        "max_transfer_distance_A": float(max_transfer_distance_A),
+        "raw_fill_max_ag": float((volume_ag_raw / cell_volume).max()),
+        "raw_fill_max_w": float((volume_w_raw / cell_volume).max()),
+        "raw_fill_max_combined": float((raw_total / cell_volume).max()),
+        "raw_overfilled_cells_ag": int(np.count_nonzero(volume_ag_raw > cell_volume + tolerance)),
+        "raw_overfilled_cells_w": int(np.count_nonzero(volume_w_raw > cell_volume + tolerance)),
+        "raw_overfilled_cells_combined": int(np.count_nonzero(raw_total > cell_volume + tolerance)),
+        "raw_total_volume_A3": total_material,
+        "grid_total_capacity_A3": total_capacity,
+        "raw_total_free_capacity_A3": float(np.maximum(cell_volume - raw_total, 0.0).sum()),
+        "raw_total_excess_volume_A3": float(excess.sum()),
+        "joint_overfilled_cells": int(np.count_nonzero(total_fill > 1.0 + 1e-10)),
+        "joint_fill_max_combined": float(total_fill.max()),
+        "joint_fill_max_ag": float(fraction_ag.max()),
+        "joint_fill_max_w": float(fraction_w.max()),
+        "Ag_volume_A3": float(volume_ag.sum()),
+        "W_volume_A3": float(volume_w.sum()),
+        "Ag_source_power_eV_ps": float(source.sum()),
+        "expected_Ag_source_power_eV_ps": expected_source,
+        "Ag_atom_map_max_row_sum_error": float(np.max(np.abs(joint_map_ag.weights.sum(axis=1) - 1.0))),
+        "W_atom_map_max_row_sum_error": float(np.max(np.abs(joint_map_w.weights.sum(axis=1) - 1.0))),
+        "transferred_total_volume_A3": float(transferred_volume_A3),
+        "transfer_donor_cells": int(len(transfer_fractions)),
+        "transfer_edges": int(transfer_edges),
+        "transfer_receiver_cells": int(len({target for targets in transfer_fractions.values() for target, _ in targets})),
+        "transfer_max_observed_distance_A": float(max(transfer_distances, default=0.0)),
+        "transfer_mean_observed_distance_A": float(np.mean(transfer_distances)) if transfer_distances else 0.0,
+    }
+    return {
+        "fraction_ag": fraction_ag,
+        "fraction_w": fraction_w,
+        "source_power_ag_eV_ps": source,
+        "atom_map_ag": joint_map_ag,
+        "atom_map_w": joint_map_w,
+        "diagnostics": diagnostics,
+    }
+
+
 def map_agw_newton_layer(
     xyz_absolute_A: np.ndarray,
     types: np.ndarray,
@@ -459,24 +726,31 @@ def map_agw_newton_layer(
     spacing_A: tuple[float, float, float],
     source_kwargs: dict | None = None,
     newton_mask: np.ndarray | None = None,
+    max_transfer_distance_A: float = 20.0,
 ) -> dict:
     """Map Newton-layer atom volumes/source to separate Ag/W phase grids.
 
-    Coordinates are assumed in the 200×200×300 Å geometry with Newton atoms
-    restricted to 40≤z≤200 Å. An explicit mask can preserve the original
-    LAMMPS Newton-group membership through a short equilibration. The two phase
-    fills are checked together; volume overfill is never silently clipped.
+    Coordinates are assumed in the 200×200×300 Å geometry. ``newton_mask``
+    marks static LAMMPS Newton-group membership, established from the template
+    data before restart coordinates are loaded. Current coordinates are then
+    filtered to 40≤z≤200 Å before CIC; out-of-range atoms are not clipped into
+    edge cells. The two phase fills are checked together; volume overfill is
+    never silently clipped.
     """
     xyz = np.asarray(xyz_absolute_A, dtype=float)
     typ = np.asarray(types, dtype=int)
-    if xyz.shape != (len(typ), 3):
-        raise ValueError("types and coordinates have inconsistent shapes")
+    if xyz.shape != (len(typ), 3) or not np.all(np.isfinite(xyz)):
+        raise ValueError("coordinates must be finite and have shape (N,3) matching types")
+    if np.any(~np.isin(typ, (1, 2))):
+        raise ValueError("Ag/W atom types must use type 1=W and type 2=Ag")
     if newton_mask is None:
-        newton = (xyz[:, 2] >= 40.0 - 1e-9) & (xyz[:, 2] <= 200.0 + 1e-9)
+        candidate = np.ones(len(xyz), dtype=bool)
     else:
-        newton = np.asarray(newton_mask, dtype=bool)
-        if newton.shape != (len(xyz),):
+        candidate = np.asarray(newton_mask, dtype=bool)
+        if candidate.shape != (len(xyz),):
             raise ValueError("newton_mask must match the atom count")
+    z_inside = (xyz[:, 2] >= 40.0 - 1e-9) & (xyz[:, 2] <= 200.0 + 1e-9)
+    newton = candidate & z_inside
     idx_ag = np.flatnonzero(newton & (typ == 2))
     idx_w = np.flatnonzero(newton & (typ == 1))
     if not len(idx_ag) or not len(idx_w):
@@ -486,23 +760,29 @@ def map_agw_newton_layer(
     xyz_w = xyz[idx_w] - origin
     kwargs = dict(source_kwargs or {})
     q_ag = gaussian_ag_source_power(xyz[idx_ag], **kwargs)
-    ag_fields = build_ag_grid_fields(xyz_ag, q_ag, grid_shape, spacing_A, AG_ATOMIC_VOLUME_A3)
-    w_fields = build_ag_grid_fields(xyz_w, np.zeros(len(idx_w)), grid_shape, spacing_A, W_ATOMIC_VOLUME_A3)
-    total_fill = ag_fields.fraction_ag + w_fields.fraction_ag
-    if float(total_fill.max()) > 1.0 + 1e-8:
-        raise ValueError(
-            f"Mapped Ag+W fill peaks at {float(total_fill.max()):.6g}; refine the grid or repair geometry before TTM"
-        )
+    joint = build_agw_grid_fields_joint(
+        xyz_ag, xyz_w, q_ag, grid_shape, spacing_A, max_transfer_distance_A
+    )
     return {
-        "fraction_ag": ag_fields.fraction_ag,
-        "fraction_w": w_fields.fraction_ag,
-        "source_power_ag_eV_ps": ag_fields.source_power_eV_ps,
-        "atom_map_ag": ag_fields.atom_map,
-        "atom_map_w": w_fields.atom_map,
+        "fraction_ag": joint["fraction_ag"],
+        "fraction_w": joint["fraction_w"],
+        "source_power_ag_eV_ps": joint["source_power_ag_eV_ps"],
+        "atom_map_ag": joint["atom_map_ag"],
+        "atom_map_w": joint["atom_map_w"],
         "atom_indices_ag": idx_ag,
         "atom_indices_w": idx_w,
-        "mapped_ag_volume_A3": float(ag_fields.fraction_ag.sum() * np.prod(spacing_A)),
-        "mapped_w_volume_A3": float(w_fields.fraction_ag.sum() * np.prod(spacing_A)),
-        "max_total_fill_fraction": float(total_fill.max()),
-        "source_power_on_state_eV_ps": float(ag_fields.source_power_eV_ps.sum()),
+        "candidate_newton_atoms": int(candidate.sum()),
+        "excluded_outside_ttm_region": {
+            "below_40A": int(np.count_nonzero(candidate & (xyz[:, 2] < 40.0 - 1e-9))),
+            "above_200A": int(np.count_nonzero(candidate & (xyz[:, 2] > 200.0 + 1e-9))),
+            "below_40A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] < 40.0 - 1e-9))),
+            "below_40A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] < 40.0 - 1e-9))),
+            "above_200A_Ag": int(np.count_nonzero(candidate & (typ == 2) & (xyz[:, 2] > 200.0 + 1e-9))),
+            "above_200A_W": int(np.count_nonzero(candidate & (typ == 1) & (xyz[:, 2] > 200.0 + 1e-9))),
+        },
+        "mapped_ag_volume_A3": float(joint["fraction_ag"].sum() * np.prod(spacing_A)),
+        "mapped_w_volume_A3": float(joint["fraction_w"].sum() * np.prod(spacing_A)),
+        "max_total_fill_fraction": joint["diagnostics"]["joint_fill_max_combined"],
+        "source_power_on_state_eV_ps": float(joint["source_power_ag_eV_ps"].sum()),
+        "mapping_diagnostics": joint["diagnostics"],
     }
