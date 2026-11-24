@@ -31,7 +31,7 @@ fix_modify eq temp Tmobile
 thermo 100
 thermo_style custom step time c_Tmobile c_TAg c_TW pe ke etotal
 thermo_modify lost error flush yes
-fix metrics all ave/time 100 1 100 c_Tmobile c_TAg c_TW pe ke etotal file ${metrics}
+fix metrics all ave/time 100 1 100 c_Tmobile c_TAg c_TW c_PE c_KE v_Etotal file ${metrics}
 run 8000
 unfix eq
 fix cold_nve mobile nve
