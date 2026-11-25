@@ -15,6 +15,8 @@ python prepare_gaussian_pulse_surface_local.py
 "${LMP_BIN}" -in in.local_gaussian_pulse_surface_local_2ps.lmp -log log.local_gaussian_pulse_surface_local_2ps.lammps -screen screen.local_gaussian_pulse_surface_local_2ps.out
 python prepare_gaussian_pulse_surface_local_33750.py
 "${LMP_BIN}" -in in.local_gaussian_pulse_surface_local_33750_2ps.lmp -log log.local_gaussian_pulse_surface_local_33750_2ps.lammps -screen screen.local_gaussian_pulse_surface_local_33750_2ps.out
+python prepare_gaussian_pulse_surface_local_33750_seed2.py
+"${LMP_BIN}" -in in.local_gaussian_pulse_surface_local_33750_seed2_2ps.lmp -log log.local_gaussian_pulse_surface_local_33750_seed2_2ps.lammps -screen screen.local_gaussian_pulse_surface_local_33750_seed2_2ps.out
 python analyze_pulse.py
 python analyze_surface_local_33750.py
 python analyze_ejection_timeseries.py
@@ -24,3 +26,6 @@ python analyze_escape_clusters.py
 "${OVITO_PYTHON}" render_center_slice_22500K_ovito.py
 "${OVITO_PYTHON}" render_center_slice_surface_local_2ps_ovito.py
 "${OVITO_PYTHON}" render_center_slice_surface_local_33750_2ps_ovito.py
+python analyze_surface_local_33750_seed2.py
+python analyze_seed2_ejection_timeseries.py
+"${OVITO_PYTHON}" render_center_slice_surface_local_33750_seed2_2ps_ovito.py
