@@ -1,0 +1,161 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+# Cold-baseline diagnostic from the independently force-relaxed V11 candidate
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+read_data research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_force_relaxed.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  462180 atoms
+  reading velocities ...
+  462180 velocities
+  read_data CPU = 1.890 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+pair_coeff * * research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+47323 atoms in group fixed
+group mobile subtract all fixed
+414857 atoms in group mobile
+group Ag type 2
+291274 atoms in group Ag
+group W type 1
+170906 atoms in group W
+group AgMobile intersect Ag mobile
+261952 atoms in group AgMobile
+group WMobile intersect W mobile
+152905 atoms in group WMobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+velocity mobile create 300.0 20261125 mom yes rot no dist gaussian
+compute Tmobile mobile temp/com
+compute TAg AgMobile temp/com
+compute TW WMobile temp/com
+compute PE all pe
+compute KE all ke
+compute PEatom all pe/atom
+compute PEAg Ag reduce sum c_PEatom
+compute PEW W reduce sum c_PEatom
+compute KEAg AgMobile ke
+compute KEW WMobile ke
+variable Etotal equal c_PE+c_KE
+fix eq mobile nvt temp 300.0 300.0 0.1
+fix_modify eq temp Tmobile
+WARNING: Temperature for fix modify is not for group all (src/src/fix_nh.cpp:1402)
+thermo 100
+thermo_style custom step time c_Tmobile c_TAg c_TW c_PEAg c_PEW c_KEAg c_KEW c_PE c_KE etotal
+thermo_modify lost error flush yes
+fix metrics all ave/time 20 1 20 c_Tmobile c_TAg c_TW c_PEAg c_PEW c_KEAg c_KEW c_PE c_KE v_Etotal file ${metrics}
+fix metrics all ave/time 20 1 20 c_Tmobile c_TAg c_TW c_PEAg c_PEW c_KEAg c_KEW c_PE c_KE v_Etotal file research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_cold_staged_timeseries.dat
+run 2000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 35.09 | 53.32 | 71.33 Mbytes
+   Step          Time        c_Tmobile        c_TAg           c_TW          c_PEAg         c_PEW          c_KEAg         c_KEW           c_PE           c_KE          TotEng    
+         0   0              300            299.61476      300.66067     -855880.93     -1501683.8      10144.916      5942.3883     -2357564.8      16087.304     -2341477.5    
+       100   0.025          208.72043      238.03898      158.4927      -853782.84     -1498849.3      8059.9768      3132.5365     -2352632.1      11192.513     -2341439.6    
+       200   0.05           93.144481      118.97181      48.896889     -849705.82     -1496637.1      4028.3993      966.47263     -2346342.9      4994.8719     -2341348      
+       300   0.075          92.946162      66.558056      138.1522      -847897.51     -1498342.2      2253.6955      2730.5994     -2346239.7      4984.2948     -2341255.4    
+       400   0.1            131.18572      104.93534      176.15534     -849144.06     -1499010.7      3553.1605      3481.7746     -2348154.7      7034.9351     -2341119.8    
+       500   0.125          156.97756      151.07007      167.0955      -850606.96     -1498755.2      5115.2943      3302.7968     -2349362.2      8418.0911     -2340944.1    
+       600   0.15           161.74261      157.07147      169.74137     -850687.65     -1498734.1      5318.5236      3355.1976     -2349421.7      8673.7211     -2340748      
+       700   0.175          144.72664      148.82151      137.70633     -850279.34     -1498035.8      5039.2061      2722.174      -2348315.2      7761.3801     -2340553.8    
+       800   0.2            154.36773      161.98321      141.3146      -850583.54     -1498054        5484.8839      2793.6403     -2348637.6      8278.5242     -2340359.1    
+       900   0.225          187.80888      187.64774      188.07697     -851295.55     -1498912.1      6353.9043      3718.0398     -2350207.6      10071.944     -2340135.7    
+      1000   0.25           186.07288      192.17584      175.60747     -851286.06     -1498591.1      6507.2459      3471.7763     -2349877.1      9979.0222     -2339898.1    
+      1100   0.275          163.11756      169.55071      152.08379     -850358.97     -1498059.6      5741.1786      3007.0567     -2348418.6      8748.2353     -2339670.3    
+      1200   0.3            158.16519      150.89513      170.60436     -849578.79     -1498353        5109.515       3373.3349     -2347931.8      8482.8499     -2339448.9    
+      1300   0.325          165.76585      161.75429      172.61934     -849802.64     -1498308.5      5477.2168      3413.4059     -2348111.2      8890.6227     -2339220.6    
+      1400   0.35           181.73525      186.17951      174.09918     -850470.2      -1498255.1      6304.271       3442.9109     -2348725.4      9747.1819     -2338978.2    
+      1500   0.375          192.34289      193.30607      190.6672      -850539.53     -1498498.8      6545.6071      3770.6347     -2349038.3      10316.242     -2338722      
+      1600   0.4            180.8843       181.64708      179.54798     -849973.21     -1498195.3      6150.872       3551.1629     -2348168.5      9702.0348     -2338466.5    
+      1700   0.425          173.86386      175.87954      170.37608     -849608.37     -1497934.4      5955.615       3370.2234     -2347542.7      9325.8384     -2338216.9    
+      1800   0.45           189.12761      188.27861      190.54184     -849856.49     -1498246.6      6375.4686      3769.1653     -2348103.1      10144.634     -2337958.4    
+      1900   0.475          201.64681      203.42944      198.54709     -850191.14     -1498312        6888.4993      3927.7763     -2348503.1      10816.276     -2337686.8    
+      2000   0.5            199.71464      204.15502      192.05673     -850032.02     -1498094        6913.1035      3799.8936     -2348126.1      10712.997     -2337413.1    
+Loop time of 230.307 on 4 procs for 2000 steps with 462180 atoms
+
+Performance: 0.188 ns/day, 127.948 hours/ns, 8.684 timesteps/s, 4.014 Matom-step/s
+84.1% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 131.54     | 170.89     | 210.93     | 291.0 | 74.20
+Neigh   | 0.25672    | 0.52646    | 0.82564    |  36.3 |  0.23
+Comm    | 6.1627     | 46.319     | 85.779     | 560.7 | 20.11
+Output  | 0.15339    | 0.1543     | 0.15678    |   0.4 |  0.07
+Modify  | 7.3241     | 8.6787     | 10.083     |  44.7 |  3.77
+Other   |            | 3.736      |            |       |  1.62
+
+Nlocal:         115545 ave      177002 max       55563 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        35721.8 ave       50913 max       21453 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    4.05229e+06 ave 6.20814e+06 max 1.86999e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16209167
+Ave neighs/atom = 35.071113
+Neighbor list builds = 5
+Dangerous builds = 0
+unfix eq
+fix cold_nve mobile nve
+run 200
+Per MPI rank memory allocation (min/avg/max) = 35.09 | 53.32 | 71.34 Mbytes
+   Step          Time        c_Tmobile        c_TAg           c_TW          c_PEAg         c_PEW          c_KEAg         c_KEW           c_PE           c_KE          TotEng    
+      2000   0.5            199.71464      204.15502      192.05673     -850032.02     -1498094        6913.1035      3799.8936     -2348126.1      10712.997     -2337413.1    
+      2100   0.525          190.24837      190.62723      189.5453      -849564.57     -1498054.2      6455.112       3750.6136     -2347618.8      10205.726     -2337413.1    
+      2200   0.55           188.50406      187.03124      190.96993     -849432.76     -1498092.8      6333.4172      3779.1322     -2347525.6      10112.549     -2337413.1    
+Loop time of 23.2836 on 4 procs for 200 steps with 462180 atoms
+
+Performance: 0.186 ns/day, 129.354 hours/ns, 8.590 timesteps/s, 3.970 Matom-step/s
+84.0% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 13.69      | 17.766     | 22.009     |  94.8 | 76.30
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.63733    | 4.8653     | 8.9243     | 180.4 | 20.90
+Output  | 0.012724   | 0.012793   | 0.012844   |   0.0 |  0.05
+Modify  | 0.17533    | 0.28906    | 0.40698    |  20.9 |  1.24
+Other   |            | 0.3502     |            |       |  1.50
+
+Nlocal:         115545 ave      176991 max       55559 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:          35737 ave       50903 max       21470 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Neighs:    4.05165e+06 ave 6.20663e+06 max 1.86912e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16206606
+Ave neighs/atom = 35.065572
+Neighbor list builds = 0
+Dangerous builds = 0
+write_restart ${restart}
+write_restart research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_cold_staged.restart
+System init for write_restart ...
+write_dump all custom ${dump} id type x y z vx vy vz fx fy fz
+write_dump all custom research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_cold_staged.dump id type x y z vx vy vz fx fy fz
+Total wall time: 0:04:16

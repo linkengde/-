@@ -1,0 +1,185 @@
+{
+  "title": "Ag-W V11 cold equilibrium validation diagnostic",
+  "status": "COLD_BASELINE_FAIL",
+  "scope": "Independent V11-only candidate; no laser, no TTM, no V5-V10 files modified.",
+  "baseline_commit": "40d6b5676c447c204026346957fee05714561817",
+  "lammps_version": "22 Jul 2025 - Update 4",
+  "input_sha256": {
+    "v11_generated_geometry": "ae09e6fa39947d3988d5af943af14462e0e10d330aa4941ab2905b287fb41b44",
+    "Dai_2006_AgW_EFS": "215c53d03029736f3be4de5f8833a0d5a0e99fd18cd72b9ba118a0b583ff04f0"
+  },
+  "composition": {
+    "atoms": 462180,
+    "fixed_ids": 47323,
+    "mobile_atoms": 414857,
+    "Ag_atoms": 291274,
+    "W_atoms": 170906,
+    "Ag_over_W_mass_ratio": 0.9999950045702779
+  },
+  "force_relaxation": {
+    "stopping_reason": "maximum iteration count (2000/2000), not force convergence",
+    "potential_energy_start_eV": -2347019.88742023,
+    "potential_energy_end_eV": -2357564.75665815,
+    "energy_change_eV": -10544.86923792,
+    "mobile_force_max_eV_A": 1.2388023,
+    "mobile_force_rms_eV_A": 0.0099953913,
+    "Ag_force_rms_eV_A": 0.0078860349,
+    "W_force_rms_eV_A": 0.012826995
+  },
+  "velocity_temperature_check": {
+    "mobile": {
+      "atoms": 414857,
+      "temperature_K": 285.70379999935767,
+      "com_velocity_A_per_ps": [
+        0.0010784070071851505,
+        0.0005875696462816577,
+        -0.10146960865104013
+      ]
+    },
+    "Ag": {
+      "atoms": 261952,
+      "temperature_K": 277.96815095664107,
+      "com_velocity_A_per_ps": [
+        0.004889050896403237,
+        0.0010119665627797494,
+        -0.0603981111205985
+      ]
+    },
+    "W": {
+      "atoms": 152905,
+      "temperature_K": 298.70538993256827,
+      "com_velocity_A_per_ps": [
+        -0.0027520608030853714,
+        0.00016096491104941038,
+        -0.14275477036743187
+      ]
+    }
+  },
+  "nvt_stages": [
+    {
+      "stage": "initial_0p5ps",
+      "start_step": 0,
+      "end_step": 2000,
+      "start_T_mobile_Ag_W_K": [
+        300.0,
+        299.615,
+        300.661
+      ],
+      "end_T_mobile_Ag_W_K": [
+        199.715,
+        204.155,
+        192.057
+      ],
+      "end_W_minus_Ag_K": -12.098000000000013,
+      "last_0p1ps_mobile_dT_K": 18.831000000000017,
+      "last_0p1ps_W_minus_Ag_change_K": -9.999000000000024,
+      "last_0p1ps_potential_energy_change_eV": 40.0,
+      "last_0p1ps_potential_energy_slope_eV_ps": -7753.246753243557
+    },
+    {
+      "stage": "continuation_0p5ps",
+      "start_step": 2200,
+      "end_step": 4200,
+      "start_T_mobile_Ag_W_K": [
+        188.504,
+        187.031,
+        190.97
+      ],
+      "end_T_mobile_Ag_W_K": [
+        246.224,
+        244.51,
+        248.95
+      ],
+      "end_W_minus_Ag_K": 4.439999999999998,
+      "last_0p1ps_mobile_dT_K": 8.72399999999999,
+      "last_0p1ps_W_minus_Ag_change_K": 1.421999999999997,
+      "last_0p1ps_potential_energy_change_eV": 480.0,
+      "last_0p1ps_potential_energy_slope_eV_ps": 5420.779220781953
+    },
+    {
+      "stage": "continuation2_0p5ps",
+      "start_step": 4400,
+      "end_step": 6400,
+      "start_T_mobile_Ag_W_K": [
+        247.084,
+        244.506,
+        251.293
+      ],
+      "end_T_mobile_Ag_W_K": [
+        284.71,
+        278.104,
+        295.777
+      ],
+      "end_W_minus_Ag_K": 17.673000000000002,
+      "last_0p1ps_mobile_dT_K": 7.544999999999959,
+      "last_0p1ps_W_minus_Ag_change_K": 3.0329999999999586,
+      "last_0p1ps_potential_energy_change_eV": 210.0,
+      "last_0p1ps_potential_energy_slope_eV_ps": 2062.3376623363583
+    }
+  ],
+  "precise_nve_check": {
+    "start_step": 6600,
+    "end_step": 6800,
+    "duration_ps": 0.050000000000000044,
+    "total_energy_start_eV": -2330324.8381773,
+    "total_energy_end_eV": -2330324.8385945,
+    "total_energy_drift_eV": -0.00041719991713762283,
+    "potential_energy_change_eV": -83.84302200004458,
+    "kinetic_energy_change_eV": 83.84260479099976,
+    "start_T_mobile_Ag_W_K": [
+      284.16444844449,
+      277.1448393038,
+      295.94280677705
+    ],
+    "end_T_mobile_Ag_W_K": [
+      285.70345750939,
+      277.96781915486,
+      298.70502940418
+    ],
+    "end_W_minus_Ag_K": 20.737210249319958,
+    "end_mobile_force_max_eV_A": 5.0031698981813,
+    "end_mobile_force_rms_eV_A": 0.82549026457383
+  },
+  "final_geometry_and_forces": {
+    "Ag": {
+      "atom_count": 291274,
+      "same_phase_nearest_min_A": 2.274457959602684,
+      "same_phase_nearest_p01_A": 2.5284390809347603,
+      "cross_phase_nearest_min_A": 2.4065166132815308,
+      "cross_phase_nearest_p01_A": 2.776039923438061,
+      "mobile_force_max_eV_A": 3.8071084087230824,
+      "mobile_force_rms_eV_A": 0.540951611260438,
+      "mobile_force_p99_eV_A": 1.2215039924017415,
+      "mobile_atoms_force_gt_2_eV_A": 170,
+      "z_min_A": 0.0,
+      "z_max_A": 198.357
+    },
+    "W": {
+      "atom_count": 170906,
+      "same_phase_nearest_min_A": 2.4421336572759347,
+      "same_phase_nearest_p01_A": 2.5642511091039535,
+      "cross_phase_nearest_min_A": 2.4065166132815308,
+      "cross_phase_nearest_p01_A": 2.6863894429983106,
+      "mobile_force_max_eV_A": 5.003171922420815,
+      "mobile_force_rms_eV_A": 1.1608287939450606,
+      "mobile_force_p99_eV_A": 2.3180793957122328,
+      "mobile_atoms_force_gt_2_eV_A": 5105,
+      "z_min_A": 0.0,
+      "z_max_A": 198.221
+    }
+  },
+  "mobile_displacement_from_force_relaxed_candidate_A": {
+    "mean": 0.31502327534813906,
+    "p99": 1.5795859562177308,
+    "maximum": 5.0629280638776555,
+    "Ag_mean": 0.392591246117409,
+    "W_mean": 0.1821362861787085
+  },
+  "interpretation": [
+    "Initial Ag/W Maxwell temperatures were both approximately 300 K; type/mass mapping is consistent, and one shared NVT group/target was used.",
+    "A 2000-step stricter static relaxation substantially reduced RMS forces, but stopped at the iteration cap and retained a 1.24 eV/A maximum force.",
+    "The Ag/W split narrowed at low temperature, then increased to about 20.7 K by the high-precision NVE endpoint near 286 K.",
+    "The 0.05 ps NVE total-energy drift is about 4.2e-4 eV, while potential energy fell by about 83.8 eV and kinetic energy rose by the same amount; energy conservation therefore does not imply a settled structure.",
+    "Force hotspots and short same/cross-phase contacts remain, so this is not an accepted 300 K baseline."
+  ]
+}

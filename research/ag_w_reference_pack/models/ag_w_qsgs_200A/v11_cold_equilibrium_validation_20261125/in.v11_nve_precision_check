@@ -1,0 +1,36 @@
+# High-precision NVE drift check from the staged 1.6 ps NVT endpoint
+units metal
+atom_style atomic
+boundary p p f
+read_restart ${restart_in}
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+include ${fixed_ids}
+group mobile subtract all fixed
+group Ag type 2
+group W type 1
+group AgMobile intersect Ag mobile
+group WMobile intersect W mobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+compute Tmobile mobile temp/com
+compute TAg AgMobile temp/com
+compute TW WMobile temp/com
+compute PE all pe
+compute KE all ke
+variable Etotal equal c_PE+c_KE
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+variable fn2 atom fx*fx+fy*fy+fz*fz
+compute fmax mobile reduce max v_fn
+compute f2 mobile reduce ave v_fn2
+variable frms equal sqrt(c_f2)
+fix mobile_nve mobile nve
+thermo 10
+thermo_style custom step time c_Tmobile c_TAg c_TW c_PE c_KE v_Etotal c_fmax v_frms
+thermo_modify format float %20.14g lost error flush yes
+fix metrics all ave/time 1 1 1 c_Tmobile c_TAg c_TW c_PE c_KE v_Etotal c_fmax v_frms file ${metrics}
+run 200
+write_dump all custom ${dump} id type x y z vx vy vz fx fy fz

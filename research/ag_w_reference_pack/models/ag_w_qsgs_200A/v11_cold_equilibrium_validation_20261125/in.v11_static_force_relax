@@ -1,0 +1,39 @@
+# Independent stricter force relaxation for the V11 cold-equilibrium diagnostic
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+group Ag type 2
+group W type 1
+group AgMobile intersect Ag mobile
+group WMobile intersect W mobile
+fix hold fixed setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+variable fn2 atom fx*fx+fy*fy+fz*fz
+compute fmaxm mobile reduce max v_fn
+compute f2m mobile reduce ave v_fn2
+compute fmaxag AgMobile reduce max v_fn
+compute f2ag AgMobile reduce ave v_fn2
+compute fmaxw WMobile reduce max v_fn
+compute f2w WMobile reduce ave v_fn2
+variable rmsm equal sqrt(c_f2m)
+variable rmsag equal sqrt(c_f2ag)
+variable rmsw equal sqrt(c_f2w)
+thermo 100
+thermo_style custom step atoms pe etotal press c_fmaxm v_rmsm c_fmaxag v_rmsag c_fmaxw v_rmsw
+thermo_modify lost error flush yes
+min_style fire
+min_modify dmax 0.05
+minimize 0.0 1.0e-2 2000 20000
+run 0
+write_data ${relaxed}
+write_dump all custom ${dump} id type x y z fx fy fz

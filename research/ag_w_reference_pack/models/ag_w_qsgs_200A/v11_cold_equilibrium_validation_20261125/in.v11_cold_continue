@@ -1,0 +1,41 @@
+# Continue staged V11 cold run from its NVE checkpoint with exact fixed IDs.
+units metal
+atom_style atomic
+boundary p p f
+read_restart ${restart_in}
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.00025
+include ${fixed_ids}
+group mobile subtract all fixed
+group Ag type 2
+group W type 1
+group AgMobile intersect Ag mobile
+group WMobile intersect W mobile
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+compute Tmobile mobile temp/com
+compute TAg AgMobile temp/com
+compute TW WMobile temp/com
+compute PE all pe
+compute KE all ke
+compute PEatom all pe/atom
+compute PEAg Ag reduce sum c_PEatom
+compute PEW W reduce sum c_PEatom
+compute KEAg AgMobile ke
+compute KEW WMobile ke
+variable Etotal equal c_PE+c_KE
+fix eq mobile nvt temp 300.0 300.0 0.1
+fix_modify eq temp Tmobile
+thermo 100
+thermo_style custom step time c_Tmobile c_TAg c_TW c_PEAg c_PEW c_KEAg c_KEW c_PE c_KE etotal
+thermo_modify lost error flush yes
+fix metrics all ave/time 20 1 20 c_Tmobile c_TAg c_TW c_PEAg c_PEW c_KEAg c_KEW c_PE c_KE v_Etotal file ${metrics}
+run 2000
+unfix eq
+fix cold_nve mobile nve
+run 200
+write_restart ${restart_out}
+write_dump all custom ${dump} id type x y z vx vy vz fx fy fz

@@ -1,0 +1,161 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+# Independent stricter force relaxation for the V11 cold-equilibrium diagnostic
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+read_data research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_generated_data/agw_v11_gyroid.data.gz
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  462180 atoms
+  read_data CPU = 0.937 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+pair_coeff * * research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+47298 atoms in group fixed
+group mobile subtract all fixed
+414882 atoms in group mobile
+group Ag type 2
+291274 atoms in group Ag
+group W type 1
+170906 atoms in group W
+group AgMobile intersect Ag mobile
+261977 atoms in group AgMobile
+group WMobile intersect W mobile
+152905 atoms in group WMobile
+fix hold fixed setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+variable fn2 atom fx*fx+fy*fy+fz*fz
+compute fmaxm mobile reduce max v_fn
+compute f2m mobile reduce ave v_fn2
+compute fmaxag AgMobile reduce max v_fn
+compute f2ag AgMobile reduce ave v_fn2
+compute fmaxw WMobile reduce max v_fn
+compute f2w WMobile reduce ave v_fn2
+variable rmsm equal sqrt(c_f2m)
+variable rmsag equal sqrt(c_f2ag)
+variable rmsw equal sqrt(c_f2w)
+thermo 100
+thermo_style custom step atoms pe etotal press c_fmaxm v_rmsm c_fmaxag v_rmsag c_fmaxw v_rmsw
+thermo_modify lost error flush yes
+min_style fire
+min_modify dmax 0.05
+minimize 0.0 1.0e-2 2000 20000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+  Parameters for fire:
+    dmax  delaystep dtgrow dtshrink alpha0 alphashrink tmax tmin   integrator   halfstepback   abcfire  
+    0.05     20      1.1     0.5     0.25     0.99      10  0.02 eulerimplicit      yes          no     
+Per MPI rank memory allocation (min/avg/max) = 32.63 | 50.4 | 67.99 Mbytes
+   Step        Atoms        PotEng         TotEng         Press         c_fmaxm         v_rmsm        c_fmaxag       v_rmsag        c_fmaxw         v_rmsw    
+         0      462180  -2347019.9     -2347019.9     -11669.877      2.6385129      0.15908269     2.6385129      0.1139626      2.2318612      0.21544199   
+       100      462180  -2349113.1     -2348875.6     -10504.574      1.6078218      0.027211492    1.6078218      0.027857097    1.0382238      0.026068218  
+       200      462180  -2349806.4     -2349686.5     -10423.058      1.8153001      0.030032925    1.8153001      0.025193643    1.0629973      0.036876502  
+       300      462180  -2350480.6     -2350231.1     -10879.131      1.8653831      0.057606015    1.8653831      0.042608993    1.6641714      0.076768907  
+       400      462180  -2351250.7     -2350762.7     -11665.089      2.4304405      0.092549067    2.4304405      0.064214958    2.4294835      0.12718315   
+       500      462180  -2352168.4     -2351199.2     -12617.786      2.6702943      0.14715242     2.6702943      0.095979827    2.6378769      0.20729353   
+       600      462180  -2353016.7     -2351491.9     -13333.942      3.3214208      0.19969354     3.3214208      0.12609237     2.8024465      0.284535     
+       700      462180  -2354970.5     -2354813.3     -14038.686      1.5372939      0.01796946     1.5372939      0.019380602    0.67967917     0.015251171  
+       800      462180  -2355350       -2355297.5     -14217.539      1.7354452      0.021579861    1.7354452      0.018675408    1.1977981      0.025807214  
+       900      462180  -2355639.5     -2355564.6     -14306.356      1.6949278      0.031131128    1.6949278      0.024587331    1.3369691      0.039922995  
+      1000      462180  -2355914.8     -2355769.4     -14304.389      1.8394373      0.049787669    1.7871348      0.035139642    1.8394373      0.067898651  
+      1100      462180  -2356174       -2355917.6     -14150.39       2.2692932      0.072182438    2.1156747      0.049733117    2.2692932      0.099496527  
+      1200      462180  -2356471.2     -2356441.8     -13824.002      1.949782       0.080160066    1.949782       0.056374204    1.7505031      0.10949807   
+      1300      462180  -2356892.4     -2356875.9     -13907.889      1.1915046      0.0085291842   1.1915046      0.0080175515   0.79087339     0.0093408669 
+      1400      462180  -2356975.7     -2356962.6     -13837.923      1.4752232      0.011261381    1.4752232      0.010033247    0.75901072     0.013100646  
+      1500      462180  -2357055.3     -2357026.7     -13702.429      1.686396       0.01906835     1.686396       0.014712697    1.0432227      0.024813284  
+      1600      462180  -2357150.3     -2357088.6     -13499.069      1.8831756      0.031385548    1.8831756      0.022167343    1.6640155      0.042788534  
+      1700      462180  -2357262.6     -2357141.6     -13130.708      1.9944749      0.044831254    1.9944749      0.030815103    1.333991       0.061858201  
+      1800      462180  -2357453.5     -2357420.8     -12969.99       1.5184398      0.0069929211   1.5184398      0.007665046    0.46837975     0.0056587303 
+      1900      462180  -2357512.7     -2357506.5     -12922.609      1.1515704      0.0072753021   1.1515704      0.006386766    0.86111516     0.0085865342 
+      2000      462180  -2357564.8     -2357554       -12811.483      1.2388023      0.0099953913   1.2388023      0.0078860349   0.82503242     0.012826995  
+Loop time of 230.625 on 4 procs for 2000 steps with 462180 atoms
+
+90.6% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+     -2347019.88742023  -2357564.34163834  -2357564.75665815
+  Force two-norm initial, final = 102.46728 6.4381649
+  Force max component initial, final = 1.8681169 1.0783914
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 2000 2004
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 206.95     | 211.17     | 215.46     |  28.9 | 91.56
+Neigh   | 3.787      | 7.8944     | 11.923     | 142.9 |  3.42
+Comm    | 2.0727     | 2.3545     | 2.6364     |  17.6 |  1.02
+Output  | 0.60223    | 0.60385    | 0.60832    |   0.3 |  0.26
+Modify  | 0.085278   | 0.2376     | 0.39906    |  31.3 |  0.10
+Other   |            | 8.369      |            |       |  3.63
+
+Nlocal:         115545 ave      177336 max       55507 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        35673.5 ave       51227 max       21314 min
+Histogram: 2 0 0 0 0 0 0 0 1 1
+Neighs:    4.06965e+06 ave 6.24226e+06 max 1.87768e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16278585
+Ave neighs/atom = 35.22131
+Neighbor list builds = 91
+Dangerous builds = 0
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Per MPI rank memory allocation (min/avg/max) = 39.01 | 58.86 | 78.53 Mbytes
+   Step        Atoms        PotEng         TotEng         Press         c_fmaxm         v_rmsm        c_fmaxag       v_rmsag        c_fmaxw         v_rmsw    
+      2000      462180  -2357564.8     -2357554       -12811.483      1.2388023      0.0099953913   1.2388023      0.0078860349   0.82503242     0.012826995  
+Loop time of 2.499e-06 on 4 procs for 0 steps with 462180 atoms
+
+200.1% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.499e-06  |            |       |100.00
+
+Nlocal:         115545 ave      177336 max       55507 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:        35673.5 ave       51227 max       21314 min
+Histogram: 2 0 0 0 0 0 0 0 1 1
+Neighs:    4.06965e+06 ave 6.24226e+06 max 1.87768e+06 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 16278585
+Ave neighs/atom = 35.22131
+Neighbor list builds = 0
+Dangerous builds = 0
+write_data ${relaxed}
+write_data research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_force_relaxed.data
+System init for write_data ...
+write_dump all custom ${dump} id type x y z fx fy fz
+write_dump all custom research/ag_w_reference_pack/models/ag_w_qsgs_200A/v11_cold_equilibrium_validation_20261125/v11_force_relaxed.dump id type x y z fx fy fz
+Total wall time: 0:03:53
