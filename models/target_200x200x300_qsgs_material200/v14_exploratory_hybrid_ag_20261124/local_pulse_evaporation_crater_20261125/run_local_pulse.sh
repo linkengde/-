@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LMP_BIN="${LMP_BIN:-/workspace/venvs/podfit/bin/lmp}"
+OVITO_PYTHON="${OVITO_PYTHON:-/workspace/software/ovito-lavapipe/ovito-python.sh}"
+export OMP_NUM_THREADS="${OMP_NUM_THREADS:-1}"
+
+python prepare_gaussian_pulse.py
+"${LMP_BIN}" -in in.local_gaussian_pulse_1ps_nve.lmp -log log.local_gaussian_pulse_1ps_nve.lammps -screen screen.local_gaussian_pulse_1ps_nve.out
+python prepare_gaussian_pulse_9000K.py
+"${LMP_BIN}" -in in.local_gaussian_pulse_9000K_nve.lmp -log log.local_gaussian_pulse_9000K_nve.lammps -screen screen.local_gaussian_pulse_9000K_nve.out
+python prepare_gaussian_pulse_22500K.py
+"${LMP_BIN}" -in in.local_gaussian_pulse_22500K_nve.lmp -log log.local_gaussian_pulse_22500K_nve.lammps -screen screen.local_gaussian_pulse_22500K_nve.out
+python analyze_pulse.py
+python analyze_escape_clusters.py
+"${OVITO_PYTHON}" render_center_slice_ovito.py
+"${OVITO_PYTHON}" render_center_slice_22500K_ovito.py

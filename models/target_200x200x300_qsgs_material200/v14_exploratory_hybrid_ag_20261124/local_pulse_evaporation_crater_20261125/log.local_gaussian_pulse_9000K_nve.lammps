@@ -1,0 +1,163 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data input/initial_data.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  reading velocities ...
+  458248 velocities
+  read_data CPU = 1.476 seconds
+read_dump prepared/local_gaussian_pulse_9000K_start.dump 1700 x y z vx vy vz box yes replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 500)
+  458248 atoms before read
+  458248 atoms in snapshot
+  0 atoms purged
+  458248 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  458248 atoms after read
+# Extend vacuum above the original 300 A box; keep the material coordinates unchanged.
+change_box all z final 0.0 500.0 units box
+Changing box ...
+  orthogonal box = (0 0 0) to (200 200 500)
+
+group skeleton type 1 2 3
+351852 atoms in group skeleton
+group silver type 4
+106396 atoms in group silver
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+Reading eam potential file /workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix lower_reflection silver wall/reflect zlo EDGE
+compute TAg silver temp
+region source_probe sphere 100.0 100.0 200.0 35.0 units box
+compute Tspot silver temp/region source_probe
+compute q6 silver orientorder/atom degrees 1 6 cutoff 3.8
+compute q6mean silver reduce ave c_q6[1]
+variable highq6 atom "c_q6[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+compute msdAg silver msd
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax silver reduce max v_fmag
+variable zpos atom z
+compute zmax silver reduce max v_zpos
+variable above220 atom "z > 220.0"
+compute nag220 silver reduce sum v_above220
+variable above250 atom "z > 250.0"
+compute nag250 silver reduce sum v_above250
+thermo 200
+thermo_style custom step time temp c_Tspot pe ke etotal c_Fmax c_q6mean c_highq6frac c_msdAg[4] c_zmax c_nag220 c_nag250 atoms
+thermo_modify temp TAg lost error flush yes
+WARNING: Temperature for thermo pressure is not for group all (src/src/thermo.cpp:569)
+timestep 0.00025
+reset_timestep 6800 time 1.7
+dump hotdump silver custom 200 trajectory_9000K/ag_hotspot_nve_9000K.dump id type x y z vx vy vz c_q6[1]
+dump_modify hotdump sort id
+fix silver_nve silver nve
+run 4000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 53 53 133
+  5 neighbor lists, perpetual/occasional/extra = 4 1 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair zero, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair lj/cut, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) compute orientorder/atom, occasional
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  (5) neighbor class addition, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 188 | 188 | 188 Mbytes
+   Step          Time           Temp         c_Tspot         PotEng         KinEng         TotEng         c_Fmax        c_q6mean     c_highq6frac    c_msdAg[4]       c_zmax        c_nag220       c_nag250       Atoms   
+      6800   1.7            2497.5621      6184.6239     -224572.7       34348.056     -190224.65      16.853645      0.092018108    0.1879488      0              225.445        2              0                 458248 
+      7000   1.75           2460.592       4920.4539     -224064.23      33839.619     -190224.62      16.519765      0.090941421    0.18591864     0.13119952     226.51939      2              0                 458248 
+      7200   1.8            2452.6034      5025.8607     -223954.37      33729.755     -190224.62      20.101126      0.089848517    0.18251626     0.4285797      227.81192      3              0                 458248 
+      7400   1.85           2447.9842      4887.2365     -223890.84      33666.229     -190224.61      17.087419      0.089402435    0.18160457     0.77288469     228.98511      3              0                 458248 
+      7600   1.9            2447.9859      4699.8799     -223890.86      33666.252     -190224.61      14.239653      0.088763037    0.17922666     1.1299144      230.05296      3              0                 458248 
+      7800   1.95           2433.5431      4599.2491     -223692.2       33467.625     -190224.58      15.422405      0.087860778    0.17824918     1.5009599      231.21061      3              0                 458248 
+      8000   2              2426.8092      4462.4983     -223599.58      33375.017     -190224.56      17.390466      0.087420598    0.17819279     1.8806295      232.78436      4              0                 458248 
+      8200   2.05           2422.5362      4357.3263     -223540.81      33316.252     -190224.55      15.346833      0.087053162    0.1772905      2.2669139      234.30778      6              0                 458248 
+      8400   2.1            2419.926       4358.4991     -223504.91      33280.355     -190224.55      13.955869      0.086760064    0.17712132     2.65878        235.93153      6              0                 458248 
+      8600   2.15           2413.0461      4305.5076     -223410.29      33185.738     -190224.55      14.894919      0.086716597    0.176454       3.0538895      237.54165      7              0                 458248 
+      8800   2.2            2413.4095      4223.4886     -223415.3       33190.735     -190224.57      15.68744       0.086866365    0.17605925     3.4519783      238.91987      7              0                 458248 
+      9000   2.25           2408.9408      4216.8748     -223353.86      33129.28      -190224.58      20.127867      0.086731788    0.17511937     3.8497332      240.38368      8              0                 458248 
+      9200   2.3            2410.5754      4143.0099     -223376.32      33151.76      -190224.56      14.067069      0.085597918    0.1723561      4.2480481      241.98411      9              0                 458248 
+      9400   2.35           2404.1811      4112.2838     -223288.4       33063.821     -190224.58      18.596337      0.085778569    0.17289184     4.6505041      243.26555      10             0                 458248 
+      9600   2.4            2404.6945      4010.4576     -223295.45      33070.882     -190224.57      18.270022      0.085324726    0.17164179     5.0582463      244.48658      11             0                 458248 
+      9800   2.45           2402.2986      4038.8072     -223262.48      33037.931     -190224.55      16.045635      0.085583429    0.17217753     5.4698193      245.97753      14             0                 458248 
+     10000   2.5            2401.6067      3984.8247     -223252.96      33028.416     -190224.55      21.956119      0.085107171    0.17195195     5.8815633      247.21067      14             0                 458248 
+     10200   2.55           2402.9627      3977.012      -223271.61      33047.064     -190224.55      17.403168      0.085257022    0.17259107     6.2919143      248.27303      15             0                 458248 
+     10400   2.6            2401.5877      4018.0538     -223252.69      33028.154     -190224.53      18.721407      0.084996573    0.17231851     6.7022778      249.56636      16             0                 458248 
+     10600   2.65           2400.0384      3978.7962     -223231.37      33006.847     -190224.53      30.143584      0.085552533    0.1739821      7.1148199      250.76139      16             1                 458248 
+     10800   2.7            2401.3994      3923.5548     -223250.13      33025.564     -190224.57      16.767535      0.085880815    0.17518516     7.528563       251.82782      19             2                 458248 
+Loop time of 383.536 on 1 procs for 4000 steps with 458248 atoms
+
+Performance: 0.225 ns/day, 106.538 hours/ns, 10.429 timesteps/s, 4.779 Matom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 298.51     | 298.51     | 298.51     |   0.0 | 77.83
+Neigh   | 22.296     | 22.296     | 22.296     |   0.0 |  5.81
+Comm    | 3.3559     | 3.3559     | 3.3559     |   0.0 |  0.87
+Output  | 31.892     | 31.892     | 31.892     |   0.0 |  8.32
+Modify  | 14.904     | 14.904     | 14.904     |   0.0 |  3.89
+Other   |            | 12.58      |            |       |  3.28
+
+Nlocal:         458248 ave      458248 max      458248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          67624 ave       67624 max       67624 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  1.23799e+07 ave 1.23799e+07 max 1.23799e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 12379882
+Ave neighs/atom = 27.015681
+Neighbor list builds = 32
+Dangerous builds = 0
+write_dump all custom trajectory_9000K/final_all_atoms_9000K.dump id type x y z vx vy vz modify sort id
+write_data trajectory_9000K/final_state_9000K.data
+System init for write_data ...
+Total wall time: 0:06:29
