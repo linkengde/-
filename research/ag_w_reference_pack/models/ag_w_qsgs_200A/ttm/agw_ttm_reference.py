@@ -67,6 +67,77 @@ AG_ATOMIC_VOLUME_A3 = 4.09**3 / 4.0
 W_ATOMIC_VOLUME_A3 = 3.16**3 / 2.0
 
 
+def rescale_lattice_kinetic_bounded(
+    velocities_A_ps: np.ndarray,
+    masses_g_mol: np.ndarray,
+    atom_grid_map: AtomGridMap,
+    energy_to_lattice_eV: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, int]:
+    """Apply a TTM cell-energy change without withdrawing more than atom KE.
+
+    The conservative adjoint CIC weights distribute each cell's requested
+    energy change to its represented atoms. If a negative transfer would make
+    an atom's kinetic energy negative, cap that atom at zero KE. Return the
+    actually applied cell energy and the unapplied correction grid; callers
+    must return that correction to the phase electron grid to preserve total
+    atom-plus-electron energy.
+    """
+    velocity = np.asarray(velocities_A_ps, dtype=float).copy()
+    mass = np.asarray(masses_g_mol, dtype=float)
+    mapping = atom_grid_map
+    target = np.asarray(energy_to_lattice_eV, dtype=float)
+    if velocity.ndim != 2 or velocity.shape[1] != 3:
+        raise ValueError("velocities must have shape (N,3)")
+    if mass.shape != (len(velocity),) or mapping.cell_ids.shape[0] != len(velocity):
+        raise ValueError("mass and atom-grid map must match atom count")
+    if tuple(target.shape) != mapping.grid_shape or not np.all(np.isfinite(target)):
+        raise ValueError("Energy-transfer grid must be finite and match AtomGridMap")
+    if not np.all(np.isfinite(velocity)) or not np.all(np.isfinite(mass)) or np.any(mass <= 0.0):
+        raise ValueError("Velocities must be finite and masses positive")
+
+    flat_cells = mapping.cell_ids.ravel()
+    flat_weights = mapping.weights.ravel()
+    cell_weight_sum = np.bincount(flat_cells, weights=flat_weights, minlength=target.size)
+    normalized_reverse = np.divide(
+        mapping.weights,
+        cell_weight_sum[mapping.cell_ids],
+        out=np.zeros_like(mapping.weights),
+        where=cell_weight_sum[mapping.cell_ids] > 0.0,
+    )
+    requested_atom_delta = np.sum(
+        normalized_reverse * target.ravel()[mapping.cell_ids], axis=1
+    )
+    kinetic_before = 0.5 * M_VV2E_METAL * mass * np.einsum("ij,ij->i", velocity, velocity)
+    applied_atom_delta = np.maximum(requested_atom_delta, -kinetic_before)
+    limited = int(np.count_nonzero(applied_atom_delta < requested_atom_delta - 1.0e-14))
+    kinetic_after = np.maximum(kinetic_before + applied_atom_delta, 0.0)
+    if np.any((kinetic_before <= 0.0) & (applied_atom_delta > 0.0)):
+        raise ValueError("A zero-kinetic atom cannot receive deterministic rescaling energy")
+    scale_squared = np.ones_like(kinetic_before)
+    np.divide(
+        kinetic_after,
+        kinetic_before,
+        out=scale_squared,
+        where=kinetic_before > 0.0,
+    )
+    velocity *= np.sqrt(scale_squared)[:, None]
+    kinetic_applied = 0.5 * M_VV2E_METAL * mass * np.einsum("ij,ij->i", velocity, velocity)
+    actual_atom_delta = kinetic_applied - kinetic_before
+    actual_flat = np.bincount(
+        flat_cells,
+        weights=np.repeat(actual_atom_delta, mapping.cell_ids.shape[1]) * flat_weights,
+        minlength=target.size,
+    )
+    applied_grid = actual_flat.reshape(mapping.grid_shape)
+    correction_grid = target - applied_grid
+    if not np.isclose(
+        float(applied_grid.sum() + correction_grid.sum()), float(target.sum()),
+        rtol=1.0e-12, atol=1.0e-10,
+    ):
+        raise RuntimeError("Bounded lattice transfer failed its total-energy identity")
+    return velocity, applied_grid, correction_grid, limited
+
+
 class AgWParameterError(ValueError):
     """Input property or temperature is outside the selected baseline."""
 
@@ -263,6 +334,27 @@ class AgWTTMGrid:
     @property
     def electron_energy_w_eV(self) -> np.ndarray:
         return self.w.electron_energy_eV
+
+    def return_unapplied_lattice_exchange(self, phase: str, correction_eV: np.ndarray) -> None:
+        """Return atom-kinetic withdrawal that could not be applied to electrons."""
+        if phase == "Ag":
+            grid, fraction, parameters = self.ag, self.fraction_ag, self.ag_parameters
+        elif phase == "W":
+            grid, fraction, parameters = self.w, self.fraction_w, self.w_parameters
+        else:
+            raise ValueError("phase must be 'Ag' or 'W'")
+        correction = np.asarray(correction_eV, dtype=float)
+        if correction.shape != fraction.shape or np.any(~np.isfinite(correction)):
+            raise ValueError("Lattice-exchange correction must be finite and match the phase grid")
+        active = fraction > 0.0
+        if np.any(np.abs(correction[~active]) > 1.0e-10):
+            raise ValueError("Cannot return lattice-exchange energy to an empty phase cell")
+        energy = grid.electron_energy_eV + correction
+        density = np.zeros_like(energy)
+        density[active] = energy[active] / (fraction[active] * self.cell_volume_A3)
+        new_temperature = grid.temperature_K.copy()
+        new_temperature[active] = parameters.temperature_from_ue(density[active])
+        grid.temperature_K = new_temperature
 
     @property
     def temperature_ag_K(self) -> np.ndarray:

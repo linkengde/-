@@ -35,7 +35,7 @@ from agw_ttm_reference import (  # noqa: E402
     M_VV2E_METAL,
     map_agw_newton_layer,
     lattice_temperature_by_cell,
-    rescale_lattice_kinetic,
+    rescale_lattice_kinetic_bounded,
 )
 from agw_ttm_geometry_mapping import map_agw_newton_layer_geometry  # noqa: E402
 
@@ -53,6 +53,23 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def write_json_atomic(path: Path, payload: dict) -> None:
+    """Publish a small progress/result record without leaving partial JSON."""
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def kinetic_temperature(velocity: np.ndarray, masses: np.ndarray) -> float:
+    """COM-removed classical temperature for a selected atomic group."""
+    if len(masses) < 2:
+        return float("nan")
+    center = np.average(velocity, axis=0, weights=masses)
+    peculiar = velocity - center
+    dof = 3 * len(masses) - 3
+    return float(M_VV2E_METAL * np.sum(masses[:, None] * peculiar**2) / (dof * KB_EV_K))
 
 
 def require_static_gate(data_path: Path, audit_path: Path, exploratory: bool = False) -> dict:
@@ -91,6 +108,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--restart-dump", type=Path, help="Optional LAMMPS custom dump to continue positions and velocities from")
     parser.add_argument("--restart-step", type=int, default=4200, help="Timestep recorded in --restart-dump")
     parser.add_argument("--output", type=Path, required=True, help="Output JSON path")
+    parser.add_argument("--snapshot-dir", type=Path, help="Optional directory for initial, selected-time, and final LAMMPS dumps")
+    parser.add_argument("--snapshot-times-ps", type=float, nargs="*", default=[], help="Optional snapshot times relative to TTM run start")
+    parser.add_argument("--omp-threads", type=int, default=1, help="LAMMPS OpenMP threads; use 1 for the serial default")
     parser.add_argument("--pulse-fwhm-ps", type=float, required=True, help="Explicit Gaussian pulse FWHM")
     parser.add_argument("--pulse-center-ps", type=float, required=True, help="Explicit Gaussian pulse center")
     parser.add_argument("--cooling-ps", type=float, required=True, help="Post-pulse cooling interval")
@@ -115,6 +135,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    if args.omp_threads < 1:
+        raise SystemExit("--omp-threads must be at least 1")
     data_path = args.data.resolve()
     audit_path = args.audit.resolve()
     output_path = args.output.resolve()
@@ -183,13 +205,22 @@ def main() -> None:
     equil_steps = int(round(args.equilibration_ps / args.dt_ps))
     end_time_ps = args.pulse_center_ps + 4.0 * args.pulse_fwhm_ps + args.cooling_ps
     total_steps = int(math.ceil(end_time_ps / args.dt_ps))
+    if any(not math.isfinite(t) or t < 0.0 or t > end_time_ps for t in args.snapshot_times_ps):
+        raise SystemExit("Requested snapshot times must lie between zero and the end of the TTM run")
+    snapshot_steps = {int(round(t / args.dt_ps)) for t in args.snapshot_times_ps}
     fwhm2 = args.pulse_fwhm_ps**2
     shape = (nx, nx, int(round(160.0 / args.grid_A)))
     spacing = (args.box_xy_A / nx, args.box_xy_A / nx, args.grid_A)
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    if args.snapshot_dir is not None:
+        args.snapshot_dir.mkdir(parents=True, exist_ok=True)
     log_path = output_path.with_suffix(".lammps.log")
+    progress_path = output_path.with_suffix(".progress.json")
     lmp = lammps(cmdargs=["-screen", "none", "-log", str(log_path)])
     try:
+        if args.omp_threads > 1:
+            lmp.command(f"package omp {args.omp_threads}")
+            lmp.command("suffix omp")
         setup_commands = [
             "units metal",
             "atom_style atomic",
@@ -369,6 +400,24 @@ def main() -> None:
         idx_w = mapped["atom_indices_w"]
         masses_all = np.where(types == 1, MASS_BY_TYPE[1], MASS_BY_TYPE[2])
         masses_ag, masses_w = masses_all[idx_ag], masses_all[idx_w]
+        hot_ag_mask = np.zeros(natoms, dtype=bool)
+        dx0 = np.abs(positions_after_eq[idx_ag, 0] - 0.5 * args.box_xy_A)
+        dy0 = np.abs(positions_after_eq[idx_ag, 1] - 0.5 * args.box_xy_A)
+        dx0 = np.minimum(dx0, args.box_xy_A - dx0)
+        dy0 = np.minimum(dy0, args.box_xy_A - dy0)
+        depth0 = 200.0 - positions_after_eq[idx_ag, 2]
+        hot_ag_mask[idx_ag] = (
+            (dx0**2 + dy0**2 <= 30.0**2) & (depth0 >= 0.0) & (depth0 <= 60.0)
+        )
+        hot_ag_indices = np.flatnonzero(hot_ag_mask)
+        if len(hot_ag_indices) < 2:
+            raise RuntimeError("The Ag Gaussian monitoring region has fewer than two atoms")
+        hot_ag_masses = masses_all[hot_ag_indices]
+        monitor_positions0 = positions_after_eq.copy()
+        if args.snapshot_dir is not None:
+            lmp.command(
+                f"write_dump all custom {args.snapshot_dir.resolve() / 'snapshot_000000_start.dump'} id type x y z vx vy vz"
+            )
         electrons = AgWTTMGrid(
             mapped["fraction_ag"], mapped["fraction_w"], spacing,
             source_power_ag_eV_ps=mapped["source_power_ag_eV_ps"],
@@ -413,6 +462,8 @@ def main() -> None:
             electrons.electron_energy_ag_eV.sum() + electrons.electron_energy_w_eV.sum()
         )
         source_total = lattice_ag_total = lattice_w_total = 0.0
+        exchange_returned_to_electrons_ag = exchange_returned_to_electrons_w = 0.0
+        limited_atom_transfers_ag = limited_atom_transfers_w = 0
         grid_residual_max = 0.0
         combined_residual_max = 0.0
         history: list[dict] = []
@@ -428,18 +479,24 @@ def main() -> None:
             envelope = math.exp(-4.0 * math.log(2.0) * ((time_mid - args.pulse_center_ps) ** 2) / fwhm2)
             electrons.set_source_envelope(args.source_scale * envelope)
             account = electrons.advance(args.dt_ps, tl_ag, tl_w, heat_on=True)
-            velocity_ag, applied_ag = rescale_lattice_kinetic(
+            velocity_ag, applied_ag, correction_ag, limited_ag = rescale_lattice_kinetic_bounded(
                 velocity[idx_ag], masses_ag, atom_map_ag, account.lattice_energy_ag_eV
             )
-            velocity_w, applied_w = rescale_lattice_kinetic(
+            velocity_w, applied_w, correction_w, limited_w = rescale_lattice_kinetic_bounded(
                 velocity[idx_w], masses_w, atom_map_w, account.lattice_energy_w_eV
             )
+            electrons.return_unapplied_lattice_exchange("Ag", correction_ag)
+            electrons.return_unapplied_lattice_exchange("W", correction_w)
             velocity[idx_ag] = velocity_ag
             velocity[idx_w] = velocity_w
             velocity_view[:nlocal] = velocity
             source_total += account.source_to_electron_eV
             lattice_ag_total += float(applied_ag.sum())
             lattice_w_total += float(applied_w.sum())
+            exchange_returned_to_electrons_ag += float(correction_ag.sum())
+            exchange_returned_to_electrons_w += float(correction_w.sum())
+            limited_atom_transfers_ag += limited_ag
+            limited_atom_transfers_w += limited_w
             grid_residual_max = max(grid_residual_max, abs(account.conservation_residual_eV))
 
             if step == 1 or step % report_every == 0 or step == total_steps:
@@ -450,6 +507,12 @@ def main() -> None:
                     electrons.electron_energy_ag_eV.sum() + electrons.electron_energy_w_eV.sum()
                 )
                 bath_delta = float(lmp.extract_fix("bath_heat", 0, 0)) - bath_energy_start
+                positions_now = np.array(lmp.numpy.extract_atom("x")[:nlocal], copy=True)
+                displacement = positions_now - monitor_positions0
+                displacement[:, :2] -= args.box_xy_A * np.rint(
+                    displacement[:, :2] / args.box_xy_A
+                )
+                hot_displacement = np.linalg.norm(displacement[hot_ag_indices], axis=1)
                 # LAMMPS's Langevin tally is the signed energy transfer into
                 # the thermostat reservoir (opposite the atom-system change).
                 residual = atom_energy + electron_energy - atom_energy_initial - electron_energy_initial - source_total + bath_delta
@@ -462,9 +525,45 @@ def main() -> None:
                     "source_energy_eV": source_total,
                     "electron_to_lattice_Ag_eV": lattice_ag_total,
                     "electron_to_lattice_W_eV": lattice_w_total,
+                    "lattice_exchange_returned_to_electrons_Ag_eV": exchange_returned_to_electrons_ag,
+                    "lattice_exchange_returned_to_electrons_W_eV": exchange_returned_to_electrons_w,
+                    "limited_atom_withdrawals_Ag": limited_atom_transfers_ag,
+                    "limited_atom_withdrawals_W": limited_atom_transfers_w,
+                    "lattice_T_Ag_Newton_K": kinetic_temperature(velocity[idx_ag], masses_ag),
+                    "lattice_T_W_Newton_K": kinetic_temperature(velocity[idx_w], masses_w),
+                    "hot_zone_Ag_lattice_T_K": kinetic_temperature(
+                        velocity[hot_ag_indices], hot_ag_masses
+                    ),
+                    "hot_zone_Ag_displacement_rms_A": float(
+                        np.sqrt(np.mean(hot_displacement**2))
+                    ),
+                    "hot_zone_Ag_fraction_displaced_over_2A": float(
+                        np.mean(hot_displacement > 2.0)
+                    ),
                     "bath_energy_tally_eV": bath_delta,
                     "combined_energy_residual_eV": residual,
                 })
+                write_json_atomic(progress_path, {
+                    "status": "RUNNING",
+                    "time_ps": step * args.dt_ps,
+                    "planned_end_time_ps": end_time_ps,
+                    "source_scale": args.source_scale,
+                    "omp_threads": args.omp_threads,
+                    "history_samples": len(history),
+                    "latest": history[-1],
+                    "max_sampled_combined_residual_eV": combined_residual_max,
+                    "max_grid_step_residual_eV": grid_residual_max,
+                })
+
+            if args.snapshot_dir is not None and step in snapshot_steps:
+                lmp.command(
+                    f"write_dump all custom {args.snapshot_dir.resolve() / f'snapshot_{step:06d}.dump'} id type x y z vx vy vz"
+                )
+
+        if args.snapshot_dir is not None and total_steps not in snapshot_steps:
+            lmp.command(
+                f"write_dump all custom {args.snapshot_dir.resolve() / f'snapshot_{total_steps:06d}_final.dump'} id type x y z vx vy vz"
+            )
 
         final = history[-1]
         energy_scale_eV = abs(source_total) + abs(final["bath_energy_tally_eV"])
@@ -482,24 +581,48 @@ def main() -> None:
             "atom_model": "Dai 2006 EFS eam/fs; type 1=W, type 2=Ag; p p f; fixed 0-20 A; 300 K bath 20-40 A; TTM/material map 40-200 A; Newton integration 40-300 A to keep monitor-region atoms dynamic",
             "electron_model": "Reused Ag finite-volume reference core with separate Ag/W phase grids and provisional equal-opposite interface exchange",
             "initial_electron_temperature": initial_electron_temperature_stats,
+            "atomic_diagnostics": {
+                "scope": "mapped Newton-layer atom temperatures; hot-zone Ag tracks atoms initially within r<=30 A and 0<=200-z<=60 A",
+                "hot_zone_Ag_atoms": int(len(hot_ag_indices)),
+                "displacement_reference": "post-restart state after first NVE setup step",
+                "snapshot_directory": str(args.snapshot_dir.resolve()) if args.snapshot_dir is not None else None,
+                "snapshot_steps": sorted(snapshot_steps),
+            },
             "source_model": "Ag-only Gaussian in x/y and exponential depth; temporal Gaussian with requested FWHM and center",
             "spatial_source_parameters": {"I0_eV_ps_A2": 5.0 * args.source_scale, "R_A": 30.0, "skin_depth_A": 20.0, "center_xy_A": [100.0, 100.0], "surface_z_A": 200.0},
             "temporal_parameters": {"pulse_fwhm_ps": args.pulse_fwhm_ps, "pulse_center_ps": args.pulse_center_ps, "cooling_after_center_plus_4fwhm_ps": args.cooling_ps},
-            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "pre_ttm_integrator_steps": 1, "heating_and_cooling_steps": total_steps, "box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1},
+            "numerics": {"dt_ps": args.dt_ps, "equilibration_steps": equil_steps, "pre_ttm_integrator_steps": 1, "heating_and_cooling_steps": total_steps, "box_xy_A": args.box_xy_A, "grid_shape": list(shape), "spacing_A": list(spacing), "grid_offset_xy_A": list(grid_offset_xy), "interface_h_W_m2_K": args.interface_h_W_m2_K, "mpi4py_available": MPI is not None, "mpi_ranks": int(MPI.COMM_WORLD.Get_size()) if MPI is not None else 1, "omp_threads": args.omp_threads},
             "mapped_geometry": {"Ag_atoms_Newton": int(len(idx_ag)), "W_atoms_Newton": int(len(idx_w)), "candidate_newton_atoms": mapped["candidate_newton_atoms"], "excluded_outside_ttm_region": mapped["excluded_outside_ttm_region"], "Ag_source_on_state_eV_ps": mapped["source_power_on_state_eV_ps"], "max_total_phase_fill": mapped["max_total_fill_fraction"], "joint_mapping_diagnostics": mapped["mapping_diagnostics"]},
             "energy_check": {"status": energy_status, "source_eV": source_total, "bath_energy_tally_eV": final["bath_energy_tally_eV"], "bath_tally_sign":"positive means energy transferred to the thermostat reservoir", "final_combined_residual_eV": final["combined_energy_residual_eV"], "max_sampled_combined_residual_eV": combined_residual_max, "combined_tolerance_eV": energy_tolerance_eV, "max_grid_step_residual_eV": grid_residual_max, "combined_ledger_pass": combined_ledger_pass, "grid_ledger_pass": grid_ledger_pass},
+            "bounded_lattice_handoff": {
+                "status": "negative atomic kinetic energy prevented; unapplied cell exchange returned to the matching electron phase",
+                "Ag_limited_atom_withdrawals": int(limited_atom_transfers_ag),
+                "W_limited_atom_withdrawals": int(limited_atom_transfers_w),
+                "Ag_exchange_returned_to_electrons_eV": exchange_returned_to_electrons_ag,
+                "W_exchange_returned_to_electrons_eV": exchange_returned_to_electrons_w,
+            },
             "history": history,
             "limitations": [
                 "This pilot run used an explicit exploratory-only override; an energy-ledger PASS is a software/numerical coupling result, not a quantitative melting or physical-validity pass.",
                 "The Ag/W phase-fraction and atom-to-grid maps are frozen at the post-read initial coordinates; large melt migration or composition redistribution is not represented.",
                 "The Ag/W electronic interface conductance is a provisional analogue-based 1 GW m^-2 K^-1 unless explicitly changed; it is not a measured Ag/W value.",
                 "The deterministic velocity-rescaling handoff conserves kinetic energy but does not preserve local momentum or add stochastic phonon fluctuations.",
+                "If a negative cell exchange would overdraw an atom's kinetic energy, the transfer is capped at zero kinetic energy and the unapplied amount is returned to that phase's electron grid; this is a numerical positivity safeguard, not a validated atom-electron coupling law.",
                 "The combined ledger uses the Langevin fix energy tally; this prototype has no matched no-TTM NVE drift control run.",
                 "The pulse is a user-specified exploratory Gaussian and is not normalized to a measured absorbed fluence.",
                 "A completed pilot is not by itself evidence that the EFS potential quantitatively predicts Ag-W melting or solidification.",
             ],
         }
         output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+        write_json_atomic(progress_path, {
+            "status": "COMPLETED",
+            "time_ps": end_time_ps,
+            "source_scale": args.source_scale,
+            "omp_threads": args.omp_threads,
+            "result_path": str(output_path),
+            "energy_check": result["energy_check"],
+            "latest": history[-1],
+        })
         print(json.dumps({key: result[key] for key in ("status", "static_gate", "mapped_geometry", "energy_check", "limitations")}, indent=2))
         if energy_status != "PASS":
             raise SystemExit("Ag-W TTM-MD pilot energy ledger failed the recorded numerical tolerance")
