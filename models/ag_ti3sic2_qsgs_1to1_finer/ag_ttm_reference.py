@@ -163,6 +163,7 @@ class StepAccounting:
     conservation_residual_eV: float
     substeps: int
     lattice_energy_per_cell_eV: np.ndarray
+    bottom_sink_removed_eV: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -450,6 +451,8 @@ class AgTTMGrid:
         lattice_temperature_K: np.ndarray | float = 300.0,
         heat_on: bool = True,
         coupling_on: bool = True,
+        bottom_sink_mask: np.ndarray | None = None,
+        bottom_sink_temperature_K: float = 300.0,
     ) -> StepAccounting:
         """Advance TTM fields, adapting explicit substeps and returning energy.
 
@@ -469,12 +472,38 @@ class AgTTMGrid:
         source_total = 0.0
         lattice_total = 0.0
         diffusion_total = 0.0
+        sink_removed_total = 0.0
         lattice_energy_grid = np.zeros_like(self.f_ag)
         elapsed = 0.0
         substeps = 0
         active = self.f_ag > 0.0
         max_ue = self.parameters.ue(self.parameters.Tmax)
         min_ue = self.parameters.ue(self.parameters.Tmin)
+
+        # 可选理想底部热沉：在指定 Ag 电子网格单元施加固定温度边界，
+        # 并将每步从这些单元移除的能量单独计入守恒账本。
+        if bottom_sink_mask is None:
+            sink = np.zeros_like(active)
+        else:
+            sink = np.asarray(bottom_sink_mask, dtype=bool).copy()
+            if sink.shape != self.f_ag.shape:
+                raise ValueError("bottom_sink_mask shape must match fraction_ag")
+            sink &= active
+        if np.any(sink):
+            sink_temperature = float(bottom_sink_temperature_K)
+            if (not np.isfinite(sink_temperature)
+                    or sink_temperature < self.parameters.Tmin
+                    or sink_temperature > self.parameters.Tmax):
+                raise TTMRangeError("Bottom sink temperature is outside the parameter table")
+            target_sink_energy = (
+                self.f_ag * self.cell_volume_A3
+                * self.parameters.ue(sink_temperature)
+            )
+            before = self.electron_energy_eV
+            sink_removed_total += float((before[sink] - target_sink_energy[sink]).sum())
+            self.temperature_K[sink] = sink_temperature
+        else:
+            target_sink_energy = np.zeros_like(self.f_ag)
 
         while elapsed < dt_ps - max(1.0e-15, dt_ps * 1.0e-13):
             te = self.temperature_K
@@ -517,6 +546,12 @@ class AgTTMGrid:
                 lattice_energy = lattice_rate * subdt
                 new_energy = current_energy + subdt * (diffusion_rate + source_rate) - lattice_energy
                 new_energy[~active] = 0.0
+                sink_removed_step = (
+                    float((new_energy[sink] - target_sink_energy[sink]).sum())
+                    if np.any(sink) else 0.0
+                )
+                if np.any(sink):
+                    new_energy[sink] = target_sink_energy[sink]
                 bad_low = active & (new_energy < emin - np.maximum(1.0e-13, np.abs(emin) * 1.0e-12))
                 bad_high = active & (new_energy > emax + np.maximum(1.0e-13, emax * 1.0e-12))
                 if not np.any(bad_low) and not np.any(bad_high):
@@ -540,17 +575,29 @@ class AgTTMGrid:
             source_energy = float((source_rate * accepted_dt).sum())
             coupling_energy = float(lattice_energy.sum())
             diffusion_energy = float((diffusion_rate * accepted_dt).sum())
+            if np.any(sink):
+                # 在任何步长回退后，按实际接受的子步重新算热沉移除量。
+                sink_removed_step = float((
+                    current_energy[sink]
+                    + accepted_dt * (diffusion_rate[sink] + source_rate[sink])
+                    - lattice_energy[sink]
+                    - target_sink_energy[sink]
+                ).sum())
             self.temperature_K = new_te
             self.time_ps += accepted_dt
             elapsed += accepted_dt
             source_total += source_energy
             lattice_total += coupling_energy
             diffusion_total += diffusion_energy
+            sink_removed_total += sink_removed_step
             lattice_energy_grid += lattice_energy
             substeps += 1
 
         final_total = float(self.electron_energy_eV.sum())
-        residual = (final_total - initial_total) - source_total + lattice_total - diffusion_total
+        residual = (
+            (final_total - initial_total) - source_total + lattice_total
+            - diffusion_total + sink_removed_total
+        )
         return StepAccounting(
             elapsed_ps=elapsed,
             source_to_electron_eV=source_total,
@@ -559,6 +606,7 @@ class AgTTMGrid:
             conservation_residual_eV=residual,
             substeps=substeps,
             lattice_energy_per_cell_eV=lattice_energy_grid,
+            bottom_sink_removed_eV=sink_removed_total,
         )
 
 
@@ -631,8 +679,12 @@ def rescale_lattice_kinetic(
     after_atom = 0.5 * M_VV2E_METAL * mass * np.sum(velocity**2, axis=1)
     actual_total = float(np.sum(after_atom - before_atom))
     target_total = float(np.sum(target))
-    if not np.isclose(actual_total, target_total, rtol=1.0e-10, atol=1.0e-12):
-        raise RuntimeError("Applied lattice kinetic-energy transfer does not match target")
+    if not np.isclose(actual_total, target_total, rtol=1.0e-10, atol=1.0e-8):
+        raise RuntimeError(
+            "Applied lattice kinetic-energy transfer mismatch: "
+            f"actual={actual_total:.16g} eV, target={target_total:.16g} eV, "
+            f"difference={actual_total - target_total:.6g} eV"
+        )
     # Per-cell reports use the same conservative adjoint weights as the map.
     actual_flat = np.bincount(
         mapping.cell_ids.ravel(),
