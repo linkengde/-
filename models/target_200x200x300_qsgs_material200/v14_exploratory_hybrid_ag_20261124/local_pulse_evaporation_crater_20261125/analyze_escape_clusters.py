@@ -14,6 +14,7 @@ FILES={
  'pulse_9000K_1ps':ROOT/'trajectory_9000K/final_all_atoms_9000K.dump',
  'pulse_22500K_1ps':ROOT/'trajectory_22500K/final_all_atoms_22500K.dump',
  'pulse_surface_local_2ps':ROOT/'trajectory_surface_local_2ps/final_all_atoms_surface_local.dump',
+ 'pulse_surface_local_33750_2ps':ROOT/'trajectory_surface_local_33750_2ps/final_all_atoms_surface_local_33750.dump',
 }
 
 def read_dump(path):
