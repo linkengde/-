@@ -28,7 +28,7 @@ echo '76b3ec5b2ee0a233dc7f69d760c0d7f5733bd899e8e833f60121553c8296606f  /tmp/Ag_
 
 ## 软件环境
 
-原试跑环境使用 Python 3.12、LAMMPS Python 包 2025.7.22.4.0、mpi4py 4.1.2、NumPy 2.5.3 和 SciPy 1.18.1。轨迹分析使用 OVITO Python 3.17.2。LAMMPS、TTM 参考代码、EAM 和 WCA 输入分别位于仓库的 `models/ag_ti3sic2_qsgs_1to1_finer/` 下。
+原试跑环境使用 Python 3.12、LAMMPS Python 包 2025.7.22.4.0、mpi4py 4.1.2、NumPy 2.5.3 和 SciPy 1.18.1。轨迹分析使用 OVITO Python 3.17.2。LAMMPS、TTM 参考代码、Ag TTM 参数表、Ag EAM 和 WCA 输入分别位于仓库的 `models/ag_ti3sic2_qsgs_1to1_finer/` 下；参数表文件为 `ttm_data/Ag_TTM_hybrid_figure_fit_300_20000K.csv`，校验值见 `DEPENDENCY_SHA256.txt`。
 
 ## 运行命令
 
