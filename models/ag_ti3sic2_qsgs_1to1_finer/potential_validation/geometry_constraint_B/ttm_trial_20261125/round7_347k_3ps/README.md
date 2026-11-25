@@ -1,8 +1,8 @@
 # Round7 347,464 原子 TTM 加热与熔化判读复现包
 
-本目录保存一次完整的 **3 ps 探索性热源开启试跑**、轨迹帧、能量账本，以及用 Q₆、PTM、MSD 联合判读的脚本和报告。该运行没有确认 Ag 熔化；当前同条件 8 ps 延长试跑尚在进行，完成后将另行归档。
+本目录保存一次完整的 **3 ps 探索性热源开启试跑**、轨迹帧、能量账本，以及用 Q₆、PTM、MSD 联合判读的脚本和报告。3 ps 结果显示热区明显失序，但不足以确认熔化。随后同条件长时试跑在 5.78 ps 停止；局部熔化判读和扩展轨迹见相邻目录 `../round7_347k_melt_onset_5p78ps/`。
 
-当前 8 ps 试跑配置与本次 3 ps 配置完全相同，只把 `AG_TTM_TRIAL_STEPS` 从 6,000 改为 16,000。它从原始几何和相同随机种子重新开始，并非从 3 ps 末态接续：现有 driver 没有保存 TTM 电子网格检查点，不能无损恢复耦合状态。8 ps 完成结果会在任务结束后补充到本分支。
+长时试跑配置与本次 3 ps 配置完全相同，只把 `AG_TTM_TRIAL_STEPS` 从 6,000 改为 16,000。它从原始几何和相同随机种子重新开始，并非从 3 ps 末态接续：现有 driver 没有保存 TTM 电子网格检查点，不能无损恢复耦合状态。长时试跑在 5.78 ps 达到停止判据后主动结束；5.5 ps 是最后一个完整轨迹帧。
 
 ## 复现输入和来源
 
@@ -52,7 +52,7 @@ python -m py_compile "$out/ttm_round7_347k.py"
 python -u "$out/ttm_round7_347k.py" > "$out/run.log" 2>&1
 ```
 
-要复现当前进行中的长时长方案，将 `AG_TTM_TRIAL_STEPS=6000` 改成 `AG_TTM_TRIAL_STEPS=16000`，并给 `AG_TTM_TRIAL_OUTPUT_DIR` 指定另一个空目录。其他热源参数不变。
+要重跑长时长方案，将 `AG_TTM_TRIAL_STEPS=6000` 改成 `AG_TTM_TRIAL_STEPS=16000`，并给 `AG_TTM_TRIAL_OUTPUT_DIR` 指定另一个空目录。原运行在 5.78 ps 根据 Q₆/PTM/MSD 的持续液态样信号主动停止；其他热源参数不变。
 
 若仓库不在 `/workspace/-`，请同步调整脚本内 `ROOT` 常量，使其指向 `models/ag_ti3sic2_qsgs_1to1_finer`。
 

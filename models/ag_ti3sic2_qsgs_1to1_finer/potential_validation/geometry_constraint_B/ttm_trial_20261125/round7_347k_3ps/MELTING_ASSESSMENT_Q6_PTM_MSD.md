@@ -47,4 +47,4 @@
 - 运行汇总：`trial_summary.json`
 - 热输入日志：`run.log`
 
-已按相同热源和几何启动 8 ps 长时试跑，见相邻目录 `../round7_347k_8ps/`；须待温度、Q₆、PTM、MSD 一起复核后再判断是否进入熔化。
+随后相同热源长时试跑在 5.78 ps 停止；Q₆、PTM、MSD 在 5.0–5.5 ps 持续支持热区 Ag 呈液态样，完整判读见相邻目录 `../round7_347k_melt_onset_5p78ps/`。
