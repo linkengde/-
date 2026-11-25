@@ -1,0 +1,50 @@
+clear
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../simple_ag_fixed_skeleton_20261125/reheat_melt_assessment_20261125/data/ag_equilibrated_300K.data
+read_dump prepared/local_gaussian_pulse_1479eV_seed20261133_start.dump 1700 x y z vx vy vz box yes replace yes
+change_box all z final 0.0 500.0 units box
+
+group skeleton type 1 2 3
+group silver type 4
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ../../../ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix lower_reflection silver wall/reflect zlo EDGE
+compute TAg silver temp
+region source_probe sphere 100.0 100.0 203.0 35.0 units box
+compute Tspot silver temp/region source_probe
+compute q6 silver orientorder/atom degrees 1 6 cutoff 3.8
+compute q6mean silver reduce ave c_q6[1]
+variable highq6 atom "c_q6[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+compute msdAg silver msd
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax silver reduce max v_fmag
+variable zpos atom z
+compute zmax silver reduce max v_zpos
+variable above220 atom "z > 220.0"
+compute nag220 silver reduce sum v_above220
+variable above250 atom "z > 250.0"
+compute nag250 silver reduce sum v_above250
+thermo 200
+thermo_style custom step time temp c_Tspot pe ke etotal c_Fmax c_q6mean c_highq6frac c_msdAg[4] c_zmax c_nag220 c_nag250 atoms
+thermo_modify temp TAg lost error flush yes
+timestep 0.00025
+reset_timestep 6800 time 1.7
+dump hotdump silver custom 200 trajectory_surface_local_1479eV_seed20261133_2ps/ag_hotspot_1479eV_seed20261133.dump id type x y z vx vy vz c_q6[1]
+dump_modify hotdump sort id
+fix silver_nve silver nve
+run 8000
+write_dump all custom trajectory_surface_local_1479eV_seed20261133_2ps/final_all_atoms_1479eV_seed20261133.dump id type x y z vx vy vz modify sort id
+write_data trajectory_surface_local_1479eV_seed20261133_2ps/final_state_1479eV_seed20261133.data
