@@ -1,0 +1,182 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 1 OpenMP thread(s) per MPI task
+clear
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../simple_ag_fixed_skeleton_20261125/reheat_melt_assessment_20261125/data/ag_equilibrated_300K.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  458248 atoms
+  reading velocities ...
+  458248 velocities
+  read_data CPU = 1.545 seconds
+read_dump prepared/local_gaussian_pulse_1109eV_seed20261132_start.dump 1700 x y z vx vy vz box yes replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 500)
+  458248 atoms before read
+  458248 atoms in snapshot
+  0 atoms purged
+  458248 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  458248 atoms after read
+change_box all z final 0.0 500.0 units box
+Changing box ...
+  orthogonal box = (0 0 0) to (200 200 500)
+
+group skeleton type 1 2 3
+351852 atoms in group skeleton
+group silver type 4
+106396 atoms in group silver
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ../../../ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+Reading eam potential file ../../../ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam with DATE: 2007-06-11
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix lower_reflection silver wall/reflect zlo EDGE
+compute TAg silver temp
+region source_probe sphere 100.0 100.0 203.0 35.0 units box
+compute Tspot silver temp/region source_probe
+compute q6 silver orientorder/atom degrees 1 6 cutoff 3.8
+compute q6mean silver reduce ave c_q6[1]
+variable highq6 atom "c_q6[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+compute msdAg silver msd
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax silver reduce max v_fmag
+variable zpos atom z
+compute zmax silver reduce max v_zpos
+variable above220 atom "z > 220.0"
+compute nag220 silver reduce sum v_above220
+variable above250 atom "z > 250.0"
+compute nag250 silver reduce sum v_above250
+thermo 200
+thermo_style custom step time temp c_Tspot pe ke etotal c_Fmax c_q6mean c_highq6frac c_msdAg[4] c_zmax c_nag220 c_nag250 atoms
+thermo_modify temp TAg lost error flush yes
+WARNING: Temperature for thermo pressure is not for group all (src/src/thermo.cpp:569)
+timestep 0.00025
+reset_timestep 6800 time 1.7
+dump hotdump silver custom 200 trajectory_surface_local_1109eV_seed20261132_2ps/ag_hotspot_1109eV_seed20261132.dump id type x y z vx vy vz c_q6[1]
+dump_modify hotdump sort id
+fix silver_nve silver nve
+run 8000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7.55
+  ghost atom cutoff = 7.55
+  binsize = 3.775, bins = 53 53 133
+  5 neighbor lists, perpetual/occasional/extra = 4 1 0
+  (1) pair eam, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (2) pair zero, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (3) pair lj/cut, perpetual, skip from (5)
+      attributes: half, newton on
+      pair build: skip
+      stencil: none
+      bin: none
+  (4) compute orientorder/atom, occasional
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  (5) neighbor class addition, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 188 | 188 | 188 Mbytes
+   Step          Time           Temp         c_Tspot         PotEng         KinEng         TotEng         c_Fmax        c_q6mean     c_highq6frac    c_msdAg[4]       c_zmax        c_nag220       c_nag250       Atoms   
+      6800   1.7            2476.4441      8210.3841     -224572.7       34057.627     -190515.08      16.853645      0.092018108    0.1879488      0              225.445        2              0                 458248 
+      7000   1.75           2453.0423      6881.032      -224250.85      33735.79      -190515.06      26.037489      0.091093917    0.18637919     0.13006695     226.5018       2              0                 458248 
+      7200   1.8            2445.1081      6912.89       -224141.72      33626.675     -190515.05      20.237881      0.089845194    0.18352194     0.42657091     227.66311      3              0                 458248 
+      7400   1.85           2442.0341      6648.9602     -224099.43      33584.399     -190515.03      17.801066      0.089801148    0.1829768      0.77149073     228.78097      3              0                 458248 
+      7600   1.9            2443.3772      6568.9229     -224117.92      33602.871     -190515.05      28.676562      0.08942119     0.18129441     1.1309635      229.80808      3              0                 458248 
+      7800   1.95           2431.2914      6413.1784     -223951.73      33436.658     -190515.07      16.16007       0.088725817    0.18068348     1.5049497      230.85401      3              0                 458248 
+      8000   2              2425.3648      6303.5094     -223870.21      33355.152     -190515.05      22.316228      0.088088119    0.17948983     1.8889126      232.36116      5              0                 458248 
+      8200   2.05           2425.064       6365.8533     -223866.06      33351.015     -190515.04      15.587434      0.087781703    0.17900109     2.2803476      233.84109      5              0                 458248 
+      8400   2.1            2419.5411      6223.2947     -223790.08      33275.061     -190515.02      23.638576      0.087543766    0.17897289     2.679878       235.36787      6              0                 458248 
+      8600   2.15           2412.6832      6189.3357     -223695.77      33180.747     -190515.02      16.682184      0.087581682    0.17857814     3.0852322      236.88087      8              0                 458248 
+      8800   2.2            2415.5814      6101.4167     -223735.64      33220.605     -190515.03      18.957456      0.087590699    0.17865333     3.4933912      238.22934      10             0                 458248 
+      9000   2.25           2409.7569      6123.2671     -223655.51      33140.503     -190515.01      19.787245      0.087527085    0.17741268     3.9051509      239.63098      12             0                 458248 
+      9200   2.3            2410.254       6024.7977     -223662.34      33147.34      -190515         26.911998      0.086618687    0.17596526     4.3213368      241.06763      14             0                 458248 
+      9400   2.35           2406.8412      5951.8057     -223615.4       33100.403     -190515         14.466006      0.086070934    0.17456483     4.742472       242.27727      23             0                 458248 
+      9600   2.4            2406.2332      5653.5748     -223607.05      33092.043     -190515.01      14.36795       0.085674194    0.17303282     5.171532       243.49587      26             0                 458248 
+      9800   2.45           2404.674       5747.5547     -223585.61      33070.599     -190515.01      17.767467      0.085497335    0.1732302      5.6059882      244.79727      32             0                 458248 
+     10000   2.5            2402.0895      5675.7706     -223550.06      33035.056     -190515.01      14.31197       0.085551603    0.17359675     6.043239       245.90464      37             0                 458248 
+     10200   2.55           2403.6554      5609.1262     -223571.58      33056.591     -190514.99      16.901211      0.086390729    0.17545772     6.4827069      246.97509      40             0                 458248 
+     10400   2.6            2407.4613      5548.6439     -223623.92      33108.932     -190514.98      17.751889      0.086357548    0.17460243     6.9263288      248.12462      44             0                 458248 
+     10600   2.65           2399.4656      5470.9257     -223513.96      32998.97      -190514.99      15.162097      0.087247378    0.17671717     7.3742614      249.18851      48             0                 458248 
+     10800   2.7            2400.09        5342.5266     -223522.54      33007.557     -190514.98      18.728564      0.086698644    0.1773187      7.8253828      250.2187       52             2                 458248 
+     11000   2.75           2395.7972      5189.3969     -223463.49      32948.519     -190514.97      13.689493      0.086428881    0.17612504     8.2788823      251.67577      58             2                 458248 
+     11200   2.8            2392.5681      5038.4995     -223419.09      32904.111     -190514.98      18.332702      0.086591742    0.17617204     8.7352235      253.17196      65             2                 458248 
+     11400   2.85           2396.3983      4879.2499     -223471.76      32956.787     -190514.97      17.522418      0.086142634    0.17541073     9.1969642      254.63576      66             2                 458248 
+     11600   2.9            2394.1338      4833.2699     -223440.62      32925.644     -190514.97      23.171961      0.085632125    0.17412309     9.6645382      256.18116      71             3                 458248 
+     11800   2.95           2393.8464      4807.0955     -223436.68      32921.691     -190514.99      14.548799      0.085178107    0.17252528     10.133695      257.6094       77             3                 458248 
+     12000   3              2392.3871      4693.7915     -223416.62      32901.622     -190514.99      15.293095      0.085073086    0.17286364     10.602043      258.91125      80             4                 458248 
+     12200   3.05           2393.4364      4629.0538     -223431.04      32916.052     -190514.98      22.799126      0.085002616    0.17259107     11.071461      260.35465      87             4                 458248 
+     12400   3.1            2390.5553      4480.6714     -223391.4       32876.43      -190514.97      15.658964      0.084865273    0.17123764     11.545868      261.68023      92             4                 458248 
+     12600   3.15           2385.864       4492.8446     -223326.91      32811.912     -190515         25.454754      0.084765204    0.17264747     12.028492      262.81879      96             4                 458248 
+     12800   3.2            2385.1174      4406.3909     -223316.64      32801.645     -190515         14.75673       0.084457522    0.1707395      12.511564      264.08848      101            4                 458248 
+     13000   3.25           2391.6392      4421.6157     -223406.32      32891.337     -190514.98      17.5632        0.084666681    0.17133163     12.997494      265.51957      105            4                 458248 
+     13200   3.3            2390.902       4415.4127     -223396.17      32881.198     -190514.97      17.552331      0.084515422    0.17027896     13.492742      267.57081      111            6                 458248 
+     13400   3.35           2387.5239      4365.5815     -223349.72      32834.741     -190514.98      27.902356      0.084973113    0.17176398     13.993244      269.62204      115            7                 458248 
+     13600   3.4            2388.4728      4257.2476     -223362.77      32847.79      -190514.98      24.138721      0.085181077    0.17267566     14.49885       271.67327      123            9                 458248 
+     13800   3.45           2386.6376      4159.5933     -223337.54      32822.551     -190514.99      16.801607      0.084837346    0.17151961     15.014063      273.7244       127            11                458248 
+     14000   3.5            2394.3506      4200.7995     -223443.62      32928.625     -190515         14.368932      0.084980592    0.17174518     15.53327       275.77462      132            13                458248 
+     14200   3.55           2391.2116      4100.1189     -223400.47      32885.456     -190515.01      13.059633      0.084736976    0.17177337     16.054025      277.82383      136            18                458248 
+     14400   3.6            2394.4369      4147.686      -223444.84      32929.812     -190515.03      16.68032       0.084437251    0.17202714     16.581137      279.87289      140            18                458248 
+     14600   3.65           2384.8244      4078.3904     -223312.65      32797.615     -190515.04      21.552945      0.084406664    0.17207414     17.112946      281.92195      148            18                458248 
+     14800   3.7            2380.9431      3969.2313     -223259.27      32744.237     -190515.04      14.316141      0.084624827    0.1715384      17.649497      283.97101      156            18                458248 
+Loop time of 823.934 on 1 procs for 8000 steps with 458248 atoms
+
+Performance: 0.210 ns/day, 114.435 hours/ns, 9.710 timesteps/s, 4.449 Matom-step/s
+99.9% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 622.14     | 622.14     | 622.14     |   0.0 | 75.51
+Neigh   | 70.615     | 70.615     | 70.615     |   0.0 |  8.57
+Comm    | 7.1866     | 7.1866     | 7.1866     |   0.0 |  0.87
+Output  | 66.644     | 66.644     | 66.644     |   0.0 |  8.09
+Modify  | 30.549     | 30.549     | 30.549     |   0.0 |  3.71
+Other   |            | 26.8       |            |       |  3.25
+
+Nlocal:         458248 ave      458248 max      458248 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          67803 ave       67803 max       67803 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  1.23675e+07 ave 1.23675e+07 max 1.23675e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 12367504
+Ave neighs/atom = 26.98867
+Neighbor list builds = 99
+Dangerous builds = 0
+write_dump all custom trajectory_surface_local_1109eV_seed20261132_2ps/final_all_atoms_1109eV_seed20261132.dump id type x y z vx vy vz modify sort id
+write_data trajectory_surface_local_1109eV_seed20261132_2ps/final_state_1109eV_seed20261132.data
+System init for write_data ...
+Total wall time: 0:13:51
