@@ -1,0 +1,96 @@
+{
+  "status": "GEOMETRY_PREVIEW_ONLY_MD_START_FAIL",
+  "purpose": "Finer QSGS W-backbone morphology candidate following the V12 visual review.",
+  "selected_candidate": "qsgs_finer_massbalanced_candidate",
+  "qsgs_parameters": {
+    "core_seed_probability": 0.0025,
+    "growth_probability_base": 0.1,
+    "maximum_generations": 8,
+    "target_W_voxel_fraction": 0.355,
+    "seed": 20261128,
+    "grid": [
+      80,
+      80,
+      80
+    ],
+    "voxel_size_A": [
+      2.5,
+      2.5,
+      2.5
+    ]
+  },
+  "model": {
+    "material_A": [
+      200.0,
+      200.0,
+      200.0
+    ],
+    "box_A": [
+      200.0,
+      200.0,
+      300.0
+    ],
+    "boundary": "p p f",
+    "atoms": 482375,
+    "Ag_atoms": 303993,
+    "W_atoms": 178382,
+    "Ag_over_W_mass_ratio": 0.999921657094891,
+    "mass_ratio_relative_error": 7.834290510899677e-05,
+    "W_voxel_fraction": 0.355
+  },
+  "W_local_diameter_A": {
+    "method": "2x Euclidean distance transform on W voxel mask; voxel spacing 2.5 A",
+    "quantiles_10_25_50_75_90": [
+      5.0,
+      5.0,
+      5.0,
+      7.0710678118654755,
+      7.0710678118654755
+    ]
+  },
+  "comparison_to_V12": {
+    "V12_q90_A": 8.660254037844387,
+    "V13_q90_A": 7.0710678118654755,
+    "q90_reduction_fraction": 0.18350341907227402,
+    "median_A_unchanged_at_voxel_resolution": true
+  },
+  "atomic_phase_connectivity": {
+    "W": {
+      "atoms": 178382,
+      "components": 2434,
+      "largest_component_atoms": 175151,
+      "largest_component_share": 0.9818871859268312,
+      "neighbor_cutoff_A": 2.95,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        199.08
+      ],
+      "largest_component_spans_z": true
+    },
+    "Ag": {
+      "atoms": 303993,
+      "components": 515,
+      "largest_component_atoms": 303325,
+      "largest_component_share": 0.9978025809804831,
+      "neighbor_cutoff_A": 3.15,
+      "xy_winding_rank": 2,
+      "largest_component_z_extent_A": [
+        0.0,
+        198.36499999999998
+      ],
+      "largest_component_spans_z": true
+    }
+  },
+  "interface_geometry": {
+    "minimum_Ag_W_distance_A": 0.0800000000000125,
+    "interpretation": "Direct lattice assignment still has severe Ag/W overlap; static relaxation and MD validation are not claimed."
+  },
+  "render_files": {
+    "composite": "v13_finer_qsgs_morphology_preview.png",
+    "full": "v13_finer_qsgs_full_model_ovito.png",
+    "cutaway": "v13_finer_qsgs_cutaway_ovito.png"
+  },
+  "reproduction_command": "python research/ag_w_reference_pack/scripts/build_ag_w_qsgs.py --output <output> --seed 20261128 --p-core 0.0025 --p-grow 0.10 --generations 8 --target-w-fraction 0.3550 --grid 80",
+  "render_script": "render_v13_finer_qsgs_ovito.py"
+}
