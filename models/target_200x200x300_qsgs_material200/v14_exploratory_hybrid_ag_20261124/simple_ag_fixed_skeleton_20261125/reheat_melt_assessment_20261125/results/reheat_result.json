@@ -1,0 +1,37 @@
+{
+  "status": "exploratory high-temperature Ag liquid-like state observed",
+  "melting_onset_or_melting_point_established": false,
+  "reason_onset_not_established": "The 300 K starting geometry has only 7.7597% FCC/HCP atoms by PTM; it is not a mostly crystalline Ag reference.",
+  "simulation": {
+    "box_angstrom": [200, 200, 300],
+    "total_atoms": 458248,
+    "Ag_atoms": 106396,
+    "time_step_fs": 1.0,
+    "duration_ps": 1.7,
+    "method": "LAMMPS direct uniform NVT heating of Ag; not TTM",
+    "Ag_Ag_potential": "Ag_u3.eam (Foiles et al. file archived in repository)",
+    "skeleton": "Ti/Si/C coordinates fixed; not integrated and not a heat sink",
+    "Ag_skeleton_cross_term": "pairwise repulsive LJ/WCA, epsilon 0.5 eV"
+  },
+  "melting_indicators": {
+    "Q6": "LAMMPS compute orientorder/atom, l=6, explicit cutoff 3.8 Angstrom; mean and fraction above 0.30 are descriptive",
+    "PTM": "OVITO 3.17.2 PolyhedralTemplateMatchingModifier on Ag-only frames",
+    "MSD": "LAMMPS compute msd on Ag relative to the 300 K equilibrated starting coordinates"
+  },
+  "key_frames": [
+    {"time_ps": 0.0, "T_Ag_K": 298.72176, "Q6_mean_rcut3p8": 0.2053293, "Q6_fraction_gt0p30": 0.45402083, "PTM_FCC_HCP_fraction": 0.0775969021, "MSD_A2": 0.0},
+    {"time_ps": 0.5, "T_Ag_K": 1743.2226, "Q6_mean_rcut3p8": 0.17536531, "Q6_fraction_gt0p30": 0.40289109, "PTM_FCC_HCP_fraction": 0.0021523366, "MSD_A2": 1.1242478},
+    {"time_ps": 0.8, "T_Ag_K": 1802.891, "Q6_mean_rcut3p8": 0.13350391, "Q6_fraction_gt0p30": 0.29706004, "PTM_FCC_HCP_fraction": 0.0000281965, "MSD_A2": 2.9143958},
+    {"time_ps": 1.1, "T_Ag_K": 1966.5413, "Q6_mean_rcut3p8": 0.1212585, "Q6_fraction_gt0p30": 0.26575247, "PTM_FCC_HCP_fraction": 0.0, "MSD_A2": 4.574905},
+    {"time_ps": 1.7, "T_Ag_K": 2395.7719, "Q6_mean_rcut3p8": 0.092018108, "Q6_fraction_gt0p30": 0.1879488, "MSD_A2": 8.9517577}
+  ],
+  "end_state": {
+    "total_atoms": 458248,
+    "Ag_atoms": 106396,
+    "atom_loss": 0,
+    "Ag_Fmax_eV_per_angstrom": 16.854969,
+    "PTM_other_fraction": 1.0,
+    "MSD_increment_final_0p5ps_A2": 3.76731
+  },
+  "interpretation": "Combined loss of PTM crystal classification, decreasing first-shell Q6, and increasing MSD supports a strongly disordered mobile liquid-like Ag state at high temperature. It does not establish an equilibrium melting point or an onset from crystalline Ag."
+}

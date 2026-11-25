@@ -1,0 +1,46 @@
+clear
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ${initial_data}
+group skeleton type 1 2 3
+group silver type 4
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ${ag_eam_file}
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+fix bottom_support silver wall/reflect zlo EDGE
+compute TAg silver temp
+compute q6 silver orientorder/atom degrees 1 6
+compute q6mean silver reduce ave c_q6[1]
+variable highq6 atom "c_q6[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+compute msdAg silver msd
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute Fmax silver reduce max v_fmag
+thermo 100
+thermo_style custom step time temp pe ke etotal press c_Fmax c_q6mean c_highq6frac c_msdAg[4] atoms
+thermo_modify temp TAg flush yes
+timestep 0.001
+dump agtraj silver custom 100 ${output_dump} id type x y z vx vy vz c_q6[1]
+dump_modify agtraj sort id
+fix ramp1 silver nvt temp 298.72176 1800.0 0.02
+run 500
+unfix ramp1
+fix hold1800 silver nvt temp 1800.0 1800.0 0.02
+run 500
+unfix hold1800
+fix ramp2 silver nvt temp 1800.0 2400.0 0.02
+run 200
+unfix ramp2
+fix hold2400 silver nvt temp 2400.0 2400.0 0.02
+run 500
+write_dump all custom ${final_dump} id type x y z vx vy vz modify sort id
