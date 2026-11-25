@@ -45,3 +45,13 @@ python analyze_ag_ag_neighbors.py
 5.5 ps 最近 Ag–Ag 邻距最小 2.220 Å，1% 分位数 2.400 Å；虽然没有达到 50 eV/Å 安全力阈值或出现原子丢失，这类短接触仍需保留为风险信号。骨架完全固定，WCA 界面无真实 Ag/MAX 黏附，TTM 使用 Python 参考实现。
 
 最终数据、热量账本及判读见 `MELTING_ASSESSMENT_Q6_PTM_MSD_5P78PS.md`、`TRIAL_SUMMARY_STOPPED_5P78PS.json`、`step_metrics.csv` 和 `run.log`。文件校验和在 `SHA256SUMS.txt`。
+
+## OVITO 熔池视图
+
+`Ag_melt_pool_5p5ps_OVITO.png` 是完整 347k 复合模型在 5.5 ps 的 OVITO 双视图：左侧为全模型，右侧为热源区特写。深灰色为完全固定的 Ti₃SiC₂ 支撑骨架，浅蓝色为其余 Ag，红色为预定义热源核心内 q̄₆ < 0.45 的 Ag。红色只表示结构判据下的局部液态样原子，不代表全部 Ag 已熔化。
+
+图由 `render_melt_pool_5p5ps.py` 渲染；脚本读取本目录的 `frame_05.500ps_step11000.dump.gz` 和 `analyze_q6_ptm_msd.py`，需要 OVITO 3.17.2 Python 环境及可用的 Tachyon 渲染器。运行示例：
+
+```bash
+python render_melt_pool_5p5ps.py
+```
