@@ -1,0 +1,62 @@
+{
+  "status": "COMPLETED",
+  "model_atoms": 276658,
+  "Ag_atoms": 64234,
+  "Ti3SiC2_atoms": 212424,
+  "geometry_data": "/workspace/-/models/ag_ti3sic2_qsgs_1to1_finer/potential_validation/geometry_constraint_B/thinner_scaffold_candidate_05_20261125/ag_ti3sic2_qsgs.data",
+  "Ag_mobile_atoms": 54540,
+  "Ag_TTM_atoms": 46165,
+  "box_A": [
+    200.0,
+    200.0,
+    300.0
+  ],
+  "material_z_A": [
+    0.0,
+    150.0
+  ],
+  "skeleton_handling": "all Ti/Si/C atoms fixed as an ideal rigid support",
+  "bottom_boundary": "Ag with initial z<20 A fixed; no separate thermostat during this source-on trial",
+  "Ag_Ag_potential": "Foiles Ag_u3.eam",
+  "Ag_skeleton_boundary": "repulsive WCA geometric support; not a fitted physical interface",
+  "TTM_implementation": "repository Python reference operator coupled through LAMMPS Python API; not native LAMMPS fix ttm",
+  "duration_requested_ps": 0.5,
+  "duration_completed_ps": 0.5,
+  "timestep_fs": 0.5,
+  "source_peak_eV_ps_A2": 5.0,
+  "source_scale": 1.0,
+  "source_profile": "XY circular Gaussian (R=30 A) times z surface exponential (skin=20 A)",
+  "electron_grid_shape": [
+    20,
+    20,
+    15
+  ],
+  "electron_grid_spacing_A": [
+    10.0,
+    10.0,
+    10.0
+  ],
+  "source_total_eV": 1493.09949353689,
+  "electron_to_lattice_energy_eV": 84.6806268363068,
+  "combined_energy_residual_eV": -0.07180223201703484,
+  "newton_Ag_temperature_final_K": 890.513009706041,
+  "mobile_Ag_Fmax_max_eV_A": 10.212017114925048,
+  "electron_temperature_max_K": 3088.0373746232262,
+  "force_abort_threshold_eV_A": 50.0,
+  "atom_to_grid_map": "fixed at starting coordinates for this short exploratory run",
+  "runtime_s": 249.79693378900265,
+  "process_peak_RSS_GiB": 0.2618370056152344,
+  "trajectory_frames": [
+    "frame_00.250ps_step00500.dump.gz",
+    "frame_00.500ps_step01000.dump.gz",
+    "frame_00000_step0.dump.gz"
+  ],
+  "limitations": [
+    "The source model was built as geometry only and has not passed force minimization or thermal equilibration.",
+    "All Ti3SiC2 atoms are immobile, so the scaffold does not vibrationally conduct heat.",
+    "The WCA wall provides only geometric exclusion and has no calibrated Ag/MAX-phase binding or adhesion.",
+    "The TTM operator is a numerical reference prototype with deterministic mean-field energy handoff.",
+    "The atom-to-grid map remains fixed as Ag moves; large structural changes invalidate a production interpretation.",
+    "This run contains only the heat-on stage; it does not establish a stable melt pool, heat-off response, or resolidification."
+  ]
+}
