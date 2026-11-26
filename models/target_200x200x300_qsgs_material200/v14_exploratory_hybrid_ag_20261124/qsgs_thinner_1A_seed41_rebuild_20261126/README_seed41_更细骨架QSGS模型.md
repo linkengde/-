@@ -62,3 +62,7 @@ OVITO Python 模块可用时，生成中文预览图：
 ```bash
 python models/target_200x200x300_qsgs_material200/v14_exploratory_hybrid_ag_20261124/qsgs_thinner_1A_seed41_rebuild_20261126/render_seed41_ovito.py
 ```
+
+## 加热结果
+
+seed41 Ag 均匀 NVT 加热记录、输入、日志、Q6/MSD 轨迹、OVITO PTM 逐帧统计和末帧见 `runs/seed41_heating_q6_ptm_msd_20261126/HEATING_REPORT_CN.md`。最终时间为 1.800 ps。加热采用 Ag EAM + 固定骨架几何障碍的探索性模型，不是 TTM。

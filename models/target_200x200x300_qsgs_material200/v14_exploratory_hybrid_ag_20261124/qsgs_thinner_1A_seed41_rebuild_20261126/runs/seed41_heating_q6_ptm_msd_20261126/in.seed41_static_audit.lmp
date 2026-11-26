@@ -1,0 +1,29 @@
+clear
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../../qsgs_thin_1A_seed41_200x200x500.data
+
+group skeleton type 1 2 3
+group silver type 4
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ../../../../../../models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+velocity skeleton set 0.0 0.0 0.0
+fix bottom_support silver wall/reflect zlo EDGE
+compute TAg silver temp
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute FmaxAg silver reduce max v_fmag
+thermo 1
+thermo_style custom step time c_TAg pe ke etotal c_FmaxAg atoms
+thermo_modify temp TAg flush yes
+run 0

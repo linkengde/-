@@ -1,0 +1,44 @@
+clear
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data ../../qsgs_thin_1A_seed41_200x200x500.data
+
+group skeleton type 1 2 3
+group silver type 4
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ../../../../../../models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+velocity skeleton set 0.0 0.0 0.0
+fix bottom_support silver wall/reflect zlo EDGE
+compute TAg silver temp
+compute q6Ag silver orientorder/atom degrees 1 6
+compute q6mean silver reduce ave c_q6Ag[1]
+variable highq6 atom "c_q6Ag[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+compute msdAg silver msd
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute FmaxAg silver reduce max v_fmag
+thermo 100
+thermo_style custom step time c_TAg pe ke etotal c_FmaxAg c_q6mean c_highq6frac c_msdAg[4] atoms
+thermo_modify temp TAg flush yes
+
+timestep 0.0001
+velocity silver create 300.0 20261126 mom yes rot no dist gaussian
+fix cold silver nvt temp 300.0 300.0 0.01
+dump cold silver custom 100 seed41_cold_0p1ps_ag.dump id type x y z c_q6Ag[1]
+dump_modify cold sort id
+run 1000
+unfix cold
+undump cold
+write_restart seed41_after_cold_0p1ps.restart
+write_dump all custom seed41_after_cold_0p1ps_all.dump id type x y z vx vy vz modify sort id
