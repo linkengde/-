@@ -1,0 +1,62 @@
+clear
+units metal
+dimension 3
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_restart seed41_after_pulse2_7p8ps.restart
+reset_timestep 28400 time 7.8
+
+group skeleton type 1 2 3
+group silver type 4
+pair_style hybrid eam zero 2.40407837 lj/cut 2.40407837
+pair_modify pair lj/cut shift yes
+pair_coeff * * zero
+pair_coeff 4 4 eam ../../../../../../models/ag_ti3sic2_qsgs_1to1_finer/potentials/Ag_u3.eam
+pair_coeff 1 4 lj/cut 0.5 2.08210927 2.33708864
+pair_coeff 2 4 lj/cut 0.5 2.14179034 2.40407837
+pair_coeff 3 4 lj/cut 0.5 1.91771227 2.15255924
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+fix freeze_skeleton skeleton setforce 0.0 0.0 0.0
+velocity skeleton set 0.0 0.0 0.0
+fix bottom_reflection silver wall/reflect zlo EDGE
+
+compute TAg silver temp
+region source_probe sphere 100.0 100.0 180.09 35.0 units box
+compute Tspot silver temp/region source_probe
+compute q6Ag silver orientorder/atom degrees 1 6 cutoff 3.8
+compute q6mean silver reduce ave c_q6Ag[1]
+variable highq6 atom "c_q6Ag[1] > 0.30"
+compute highq6frac silver reduce ave v_highq6
+variable fmag atom sqrt(fx*fx+fy*fy+fz*fz)
+compute FmaxAg silver reduce max v_fmag
+variable zpos atom z
+compute zmaxAg silver reduce max v_zpos
+variable above220 atom "z > 220.0"
+variable above250 atom "z > 250.0"
+variable above300 atom "z > 300.0"
+variable above400 atom "z > 400.0"
+variable rxy atom "sqrt((x-100.0)^2+(y-100.0)^2)"
+variable src220 atom "(z > 220.0) && (v_rxy < 25.0)"
+variable src300 atom "(z > 300.0) && (v_rxy < 25.0)"
+compute N220 silver reduce sum v_above220
+compute N250 silver reduce sum v_above250
+compute N300 silver reduce sum v_above300
+compute N400 silver reduce sum v_above400
+compute Nsrc220 silver reduce sum v_src220
+compute Nsrc300 silver reduce sum v_src300
+thermo 100
+thermo_style custom step time c_TAg c_Tspot pe ke etotal c_FmaxAg c_q6mean c_highq6frac c_zmaxAg c_N220 c_N250 c_N300 c_N400 c_Nsrc220 c_Nsrc300 atoms
+thermo_modify temp TAg lost warn flush yes
+timestep 0.00025
+run 0
+
+dump plume silver custom 400 seed41_afterpulse2_NVE_ag_nomsd.dump id type x y z c_q6Ag[1]
+dump_modify plume sort id
+fix silver_nve silver nve
+run 12000
+unfix silver_nve
+undump plume
+write_restart seed41_afterpulse2_10p8ps_nomsd.restart
+write_dump all custom seed41_afterpulse2_final_10p8ps_nomsd_all.dump id type x y z vx vy vz modify sort id
