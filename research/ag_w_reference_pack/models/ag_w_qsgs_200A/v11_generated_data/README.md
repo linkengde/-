@@ -2,8 +2,8 @@
 
 This directory stores the generated V11 ideal bicontinuous Gyroid Ag-W starting geometry.
 
-- Workflow run: 45458111579
-- Source commit: 40d6b5676c447c204026346957fee05714561817
+- Workflow run: 45743731200
+- Source commit: cf214b1f7615df778b2b513817a8ca5e5453f50f
 - Atom count: 462,180 (Ag 291,274; W 170,906)
 - Ag:W mass ratio: approximately 1:1
 - Box: 200 x 200 x 300 Angstrom
