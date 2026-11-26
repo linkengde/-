@@ -1,0 +1,34 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+group tungsten type 1
+group silver type 2
+group mobile_w intersect mobile tungsten
+group mobile_ag intersect mobile silver
+velocity fixed set 0.0 0.0 0.0
+velocity mobile create 300.0 20261141 mom yes rot no dist gaussian
+compute Tmobile mobile temp/com
+compute TW mobile_w temp/com
+compute TAg mobile_ag temp/com
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmaxm mobile reduce max v_fn
+thermo 100
+thermo_style custom step atoms c_Tmobile c_TAg c_TW pe ke etotal c_fmaxm
+thermo_modify lost error flush yes
+run 0
+fix eq mobile nvt temp 300.0 300.0 0.1
+timestep 0.0005
+run 400
+unfix eq
+write_dump all custom ${dump} id type x y z vx vy vz
+write_data ${nvtdata}

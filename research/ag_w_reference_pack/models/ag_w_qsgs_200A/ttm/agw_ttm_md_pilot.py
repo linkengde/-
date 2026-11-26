@@ -117,7 +117,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--equilibration-ps", type=float, default=0.0, help="Optional shared 300 K equilibration before mapping; default preserves the supplied restart")
     parser.add_argument("--mapping-only", action="store_true", help="Run LAMMPS setup and the restart-to-grid mapping gate, then exit without a TTM step or laser source")
     parser.add_argument("--grid-A", type=float, default=10.0, help="CIC mesh spacing; box lengths must divide evenly")
-    parser.add_argument("--geometry-fractions-npz", type=Path, help="Optional V11 analytic Ag/W/void geometry fractions; atom CIC is then phase-restricted for kinetic-energy handoff")
+    parser.add_argument("--geometry-fractions-npz", type=Path, help="Optional supplied Ag/W/void geometry fractions; atom CIC is then phase-restricted for kinetic-energy handoff")
     parser.add_argument("--grid-offset-x-A", type=float, default=0.0, help="Periodic x phase of the CIC mesh, in A")
     parser.add_argument("--grid-offset-y-A", type=float, default=0.0, help="Periodic y phase of the CIC mesh, in A")
     parser.add_argument("--box-xy-A", type=float, default=200.0, help="Square periodic x/y box length used by the data/restart and TTM mesh")

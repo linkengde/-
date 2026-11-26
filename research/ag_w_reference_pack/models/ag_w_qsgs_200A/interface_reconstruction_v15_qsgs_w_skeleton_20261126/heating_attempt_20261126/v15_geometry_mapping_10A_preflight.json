@@ -1,0 +1,75 @@
+{
+  "status": "AGW_MAPPING_PREFLIGHT_PASS",
+  "purpose": "LAMMPS setup and restart-to-grid mapping gate only; no TTM step or laser source was applied.",
+  "static_gate": {
+    "md_start_gate": "EXPLORATORY_ONLY",
+    "data_sha256": "3297d312190f29dea7b707d4ccb7589319b359849689ea0f9de20ba4c947acc8",
+    "audit": "./v15_exploratory_manifest.json",
+    "exploratory_override": true
+  },
+  "restart": {
+    "dump": "./run_inputs/v15_300K_after_0p2ps.dump.gz",
+    "timestep": 400,
+    "sha256_uncompressed": "70a0dde66049829b1a437b0d225fdd58cd9798b967ea08b3352c1d4f50a2eb58"
+  },
+  "mapping_parameters": {
+    "box_xy_A": 200.0,
+    "grid_offset_xy_A": [
+      0.0,
+      0.0
+    ]
+  },
+  "LAMMPS_run0_force_screen": {
+    "all_max_eV_A": 4.77004228676301,
+    "mobile_max_eV_A": 4.77004228676301,
+    "mobile_rms_eV_A": 0.9501208770306384,
+    "mobile_atoms": 433133,
+    "not_an_equilibrium_acceptance": true
+  },
+  "mapped_geometry": {
+    "candidate_newton_atoms": 384315,
+    "Ag_atoms": 238568,
+    "W_atoms": 142228,
+    "excluded_outside_ttm_region": {
+      "below_40A": 123,
+      "above_200A": 3396,
+      "below_40A_Ag": 86,
+      "below_40A_W": 37,
+      "above_200A_Ag": 2689,
+      "above_200A_W": 707
+    },
+    "Ag_source_quadrature_S1_eV_ps": 8812.277417875837,
+    "max_total_phase_fill": 1.0,
+    "joint_mapping_diagnostics": {
+      "mapping_method": "V15 four-parameter QSGS binary W mask and complementary Ag mask, block-averaged phase fractions + phase-restricted CIC",
+      "atomic_volume_capacity_flow_used": false,
+      "max_total_phase_fill": 1.0,
+      "mean_void_fraction": 0.0,
+      "Ag_geometry_volume_A3": 4127365.7407407407,
+      "W_geometry_volume_A3": 2272634.2592592593,
+      "Ag_phase_cic": {
+        "atoms_without_phase_cell_support": 0,
+        "active_phase_cells": 6400,
+        "active_phase_cells_without_atom_support": 0,
+        "max_atom_row_sum_error": 4.440892098500626e-16,
+        "minimum_active_cell_support_weight": 11.187510878549615
+      },
+      "W_phase_cic": {
+        "atoms_without_phase_cell_support": 0,
+        "active_phase_cells": 6393,
+        "active_phase_cells_without_atom_support": 0,
+        "max_atom_row_sum_error": 2.220446049250313e-16,
+        "minimum_active_cell_support_weight": 1.8419126911065782
+      },
+      "Ag_source_power_eV_ps": 8812.277417875837,
+      "expected_Ag_source_power_eV_ps": 8812.277417875837,
+      "source_power_conservation_error_eV_ps": 0.0,
+      "source_radial_RMS_A": 30.35149931124002,
+      "source_mean_depth_A": 20.692544146877978,
+      "Ag_atom_map_max_row_sum_error": 4.440892098500626e-16,
+      "W_atom_map_max_row_sum_error": 2.220446049250313e-16
+    }
+  },
+  "ttm_steps_executed": 0,
+  "laser_source_applied": false
+}

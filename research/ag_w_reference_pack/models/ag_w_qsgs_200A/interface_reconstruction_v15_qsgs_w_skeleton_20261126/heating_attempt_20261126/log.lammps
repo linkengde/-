@@ -1,0 +1,136 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+package omp 4
+using multi-threaded neighbor list subroutines
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+read_data v15_relaxed.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482678 atoms
+  reading velocities ...
+  482678 velocities
+  read_data CPU = 1.685 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+pair_coeff * * /workspace/ag-w-ideal-gyroid-v11-20261124/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+49545 atoms in group fixed
+group mobile subtract all fixed
+433133 atoms in group mobile
+group tungsten type 1
+178527 atoms in group tungsten
+group silver type 2
+304151 atoms in group silver
+group mobile_w intersect mobile tungsten
+161814 atoms in group mobile_w
+group mobile_ag intersect mobile silver
+271319 atoms in group mobile_ag
+velocity fixed set 0.0 0.0 0.0
+velocity mobile create 300.0 20261141 mom yes rot no dist gaussian
+compute Tmobile mobile temp/com
+compute TW mobile_w temp/com
+compute TAg mobile_ag temp/com
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+compute fmaxm mobile reduce max v_fn
+thermo 100
+thermo_style custom step atoms c_Tmobile c_TAg c_TW pe ke etotal c_fmaxm
+thermo_modify lost error flush yes
+run 0
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Last active /omp style is pair_style eam/fs/omp
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs/omp, perpetual
+      attributes: half, newton on, omp
+      pair build: half/bin/atomonly/newton/omp
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 225.9 | 225.9 | 225.9 Mbytes
+   Step        Atoms      c_Tmobile        c_TAg           c_TW          PotEng         KinEng         TotEng        c_fmaxm    
+         0      482678   300            299.32829      301.12763     -2028669.9      16796.012     -2011873.9      5.6475989    
+Loop time of 2.944e-06 on 4 procs for 0 steps with 482678 atoms
+
+135.9% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 2.944e-06  |            |       |100.00
+
+Nlocal:         482678 ave      482678 max      482678 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          68831 ave       68831 max       68831 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.78251e+07 ave 1.78251e+07 max 1.78251e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17825055
+Ave neighs/atom = 36.929495
+Neighbor list builds = 0
+Dangerous builds = 0
+fix eq mobile nvt temp 300.0 300.0 0.1
+timestep 0.0005
+run 400
+Last active /omp style is pair_style eam/fs/omp
+Per MPI rank memory allocation (min/avg/max) = 230.1 | 230.1 | 230.1 Mbytes
+   Step        Atoms      c_Tmobile        c_TAg           c_TW          PotEng         KinEng         TotEng        c_fmaxm    
+         0      482678   300            299.32829      301.12763     -2028669.9      16796.012     -2011873.9      5.6475989    
+       100      482678   297.46946      293.23213      304.57522     -2028452.5      16655.309     -2011797.2      5.310748     
+       200      482678   331.83516      332.68107      330.41394     -2030502.6      18582.263     -2011920.4      4.7721633    
+       300      482678   333.53918      333.12906      334.22491     -2030886.8      18682.491     -2012204.3      4.6152858    
+       400      482678   339.5331       338.22155      341.73426     -2031570.3      19024.695     -2012545.6      4.7682248    
+Loop time of 48.012 on 4 procs for 400 steps with 482678 atoms
+
+Performance: 0.360 ns/day, 66.683 hours/ns, 8.331 timesteps/s, 4.021 Matom-step/s
+391.4% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 44.503     | 44.503     | 44.503     |   0.0 | 92.69
+Neigh   | 0.17246    | 0.17246    | 0.17246    |   0.0 |  0.36
+Comm    | 0.62033    | 0.62033    | 0.62033    |   0.0 |  1.29
+Output  | 0.10229    | 0.10229    | 0.10229    |   0.0 |  0.21
+Modify  | 2.0596     | 2.0596     | 2.0596     |   0.0 |  4.29
+Other   |            | 0.5541     |            |       |  1.15
+
+Nlocal:         482678 ave      482678 max      482678 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          68847 ave       68847 max       68847 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.78194e+07 ave 1.78194e+07 max 1.78194e+07 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 17819358
+Ave neighs/atom = 36.917693
+Neighbor list builds = 1
+Dangerous builds = 0
+unfix eq
+write_dump all custom ${dump} id type x y z vx vy vz
+write_dump all custom v15_300K_after_0p2ps.dump id type x y z vx vy vz
+write_data ${nvtdata}
+write_data v15_300K_after_0p2ps.data
+System init for write_data ...
+Last active /omp style is pair_style eam/fs/omp
+Total wall time: 0:00:51

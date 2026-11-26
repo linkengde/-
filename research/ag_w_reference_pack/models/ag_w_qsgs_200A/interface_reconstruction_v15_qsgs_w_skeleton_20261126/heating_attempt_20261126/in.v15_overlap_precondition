@@ -1,0 +1,35 @@
+units metal
+atom_style atomic
+boundary p p f
+read_data ${data}
+mass 1 183.84
+mass 2 107.8682
+pair_style hybrid/overlay eam/fs soft 2.5
+pair_coeff * * eam/fs ${potential} W Ag
+pair_coeff 1 2 soft 20.0 2.5
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+region fixed_bottom block INF INF INF INF 0 19.999999 units box
+group fixed region fixed_bottom
+group mobile subtract all fixed
+fix hold fixed setforce 0.0 0.0 0.0
+variable fn atom sqrt(fx*fx+fy*fy+fz*fz)
+variable fn2 atom fx*fx+fy*fy+fz*fz
+compute fmaxm mobile reduce max v_fn
+compute f2m mobile reduce ave v_fn2
+variable rmsm equal sqrt(c_f2m)
+thermo 100
+thermo_style custom step atoms pe etotal press c_fmaxm v_rmsm
+thermo_modify lost error flush yes
+min_style fire
+min_modify dmax 0.01
+minimize 0.0 1.0e-2 750 10000
+write_data ${soft_data}
+write_dump all custom ${soft_dump} id type x y z fx fy fz
+pair_style eam/fs
+pair_coeff * * ${potential} W Ag
+min_modify dmax 0.01
+minimize 0.0 1.0e-2 1500 20000
+run 0
+write_data ${relaxed}
+write_dump all custom ${relaxed_dump} id type x y z fx fy fz

@@ -1,0 +1,81 @@
+LAMMPS (22 Jul 2025 - Update 4)
+  using 4 OpenMP thread(s) per MPI task
+units metal
+atom_style atomic
+boundary p p f
+atom_modify sort 0 0
+read_data /workspace/ag-w-ideal-gyroid-v11-20261124/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v15_qsgs_w_skeleton_20261126/heating_attempt_20261126/v15_relaxed.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  482678 atoms
+  reading velocities ...
+  482678 velocities
+  read_data CPU = 1.905 seconds
+mass 1 183.84
+mass 2 107.8682
+pair_style eam/fs
+pair_coeff * * /workspace/ag-w-ideal-gyroid-v11-20261124/research/ag_w_reference_pack/potential_files/derived/Dai_2006_EFS_AgW.eam.fs W Ag
+pair_modify compute yes
+neighbor 2.0 bin
+neigh_modify delay 0 every 1 check yes
+timestep 0.0005
+region fixed_region block INF INF INF INF 0 19.999999 units box
+region bath_region block INF INF INF INF 20 39.999999 units box
+region newton_region block INF INF INF INF 40 300 units box
+group fixed region fixed_region
+49545 atoms in group fixed
+group bath region bath_region
+48818 atoms in group bath
+group newton region newton_region
+384315 atoms in group newton
+group mobile subtract all fixed
+433133 atoms in group mobile
+read_dump /workspace/ag-w-ideal-gyroid-v11-20261124/research/ag_w_reference_pack/models/ag_w_qsgs_200A/interface_reconstruction_v15_qsgs_w_skeleton_20261126/heating_attempt_20261126/v15_300K_after_0p2ps.dump 400 x y z vx vy vz box no replace yes
+Scanning dump file ...
+Reading snapshot from dump file ...
+  orthogonal box = (0 0 0) to (200 200 300)
+  482678 atoms before read
+  482678 atoms in snapshot
+  0 atoms purged
+  482678 atoms replaced
+  0 atoms trimmed
+  0 atoms added
+  482678 atoms after read
+velocity fixed set 0.0 0.0 0.0
+fix hold fixed setforce 0.0 0.0 0.0
+thermo 0
+compute __agw_ttm_pe all pe
+run 0 pre no post no
+WARNING: No fixes with time integration, atoms won't move
+For more information see https://docs.lammps.org/err0028 (src/src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.76
+  ghost atom cutoff = 6.76
+  binsize = 3.38, bins = 60 60 89
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair eam/fs, perpetual
+      attributes: half, newton on
+      pair build: half/bin/atomonly/newton
+      stencil: half/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 222.5 | 222.5 | 222.5 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+       400   304.92741     -2031566.7      0             -2012542        92786.589    
+Loop time of 1.152e-06 on 4 procs for 0 steps with 482678 atoms
+
+reset_timestep 0
+fix bath_integrate bath nve
+fix newton_integrate newton nve
+fix bath_heat bath langevin 300.0 300.0 0.1 20261124 tally yes
+run 1 pre yes post no
+Per MPI rank memory allocation (min/avg/max) = 235.3 | 235.3 | 235.3 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   304.92741     -2031566.7      0             -2012542        92786.589    
+         1   304.81522     -2031571.9      0             -2012554.2      92786.566    
+Loop time of 0.477262 on 4 procs for 1 steps with 482678 atoms
+
+Total wall time: 0:00:06

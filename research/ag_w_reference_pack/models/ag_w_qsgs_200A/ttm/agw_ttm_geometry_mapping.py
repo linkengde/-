@@ -1,7 +1,7 @@
-"""Geometry-consistent Ag/W mapping for V11.
+"""Geometry-consistent Ag/W mapping from supplied phase-volume grids.
 
-The analytic gyroid phase fractions define material occupancy. CIC is used
-only for atom kinetic-energy handoff and Ag source deposition.
+Input Ag/W phase fractions define material occupancy. CIC is used only for
+atom kinetic-energy handoff and Ag source deposition.
 """
 from __future__ import annotations
 import numpy as np
@@ -46,7 +46,7 @@ def map_agw_newton_layer_geometry(
     xyz_absolute_A, types, fraction_ag, fraction_w, grid_shape, spacing_A,
     source_kwargs=None, newton_mask=None, grid_offset_xy_A=(0.0,0.0), box_xy_A=200.0,
 ):
-    """Map V11 atoms to analytic Ag/W geometry fractions and phase-aware CIC."""
+    """Map atoms to supplied Ag/W geometry fractions and phase-aware CIC."""
     xyz=np.asarray(xyz_absolute_A,dtype=float); typ=np.asarray(types,dtype=int)
     shape=tuple(int(v) for v in grid_shape); spacing=tuple(float(v) for v in spacing_A)
     fa=np.asarray(fraction_ag,dtype=float); fw=np.asarray(fraction_w,dtype=float)
@@ -89,7 +89,7 @@ def map_agw_newton_layer_geometry(
     r2=(x-box_xy_A/2)**2+(y-box_xy_A/2)**2
     depth=np.maximum(0,200-z); ps=float(source.sum())
     diag={
-      "mapping_method":"analytic gyroid phase-volume fractions + phase-restricted CIC",
+      "mapping_method":"input phase-volume fractions + phase-restricted CIC",
       "atomic_volume_capacity_flow_used":False,
       "max_total_phase_fill":float(total.max()),
       "mean_void_fraction":float(np.mean(1-total)),
