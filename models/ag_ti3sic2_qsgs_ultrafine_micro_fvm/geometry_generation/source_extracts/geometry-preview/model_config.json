@@ -1,0 +1,85 @@
+{
+  "model_id": "ag_ti3sic2_single_temperature_enthalpy_fvm_150cube_preview",
+  "status": "geometry_preview_ready_solver_integration_pending",
+  "model_type": "single_temperature_enthalpy_fvm_with_free_surface_flow_force_inputs",
+  "grid": {
+    "shape_xyz": [150, 150, 150],
+    "cell_pitch_nm": 0.301857485,
+    "domain_size_nm": [45.27862275, 45.27862275, 45.27862275],
+    "pitch_status": "provisional_from_2026-11-06_P1I"
+  },
+  "geometry": {
+    "method": "random_four_parameter_QSGS_face_growth",
+    "phase_definition": "Ti3SiC2 skeleton grown stochastically; Ag is the complementary phase",
+    "four_growth_parameters": {
+      "nucleation_probability_P0": 0.012,
+      "growth_probability_Px": 0.11,
+      "growth_probability_Py": 0.11,
+      "growth_probability_Pz": 0.11
+    },
+    "target_skeleton_volume_fraction": 0.30,
+    "random_seed": 1106,
+    "parameter_status": "provisional_preview_assumptions",
+    "boundary_during_growth": "nonperiodic_face_growth"
+  },
+  "thermal_model": {
+    "temperature_fields": 1,
+    "enthalpy_method": "finite_volume",
+    "phase_change": "Ag latent-heat plateau and liquid fraction",
+    "case_A": {
+      "skeleton_heat_capacity": true,
+      "skeleton_conductivity": true,
+      "interface_resistance_m2_K_W": null,
+      "status": "requires_interface_resistance_input"
+    },
+    "case_B": {
+      "skeleton_heat_capacity": true,
+      "skeleton_conductivity": true,
+      "interface_resistance_m2_K_W": 0.0,
+      "interface_condition": "ideal_thermal_contact"
+    }
+  },
+  "heat_source": {
+    "multiplier": 4.0,
+    "spatial_template": "2026-11-06_P1I_composite_Ag_Ti3SiC2_source",
+    "reference_power_mW": 8.93189911185,
+    "derived_power_mW_if_reference_is_1x": 35.7275964474,
+    "temporal_reference": "full_2026-11-06_P1I_heating_history_until_safety_cutoff",
+    "do_not_reuse_old_temperature_fields": true
+  },
+  "flow_forces": {
+    "marangoni_tangential_multiplier": 3.0,
+    "arc_pressure_multiplier": 3.0,
+    "arc_pressure_configured_peak_Pa_from_2026-11-06_reference": 501000000.0,
+    "normal_capillary_stress": "unchanged_from_P1I"
+  },
+  "boundaries": {
+    "thermal": {
+      "x": "adiabatic",
+      "y": "adiabatic",
+      "z": "adiabatic"
+    },
+    "flow": {
+      "x": "periodic",
+      "y": "periodic",
+      "top": "open_to_ambient_pressure"
+    },
+    "radiation_and_convection": false
+  },
+  "initial_state": {
+    "temperature_K": 300.0,
+    "import_previous_temperature_field": false
+  },
+  "reference_run_2026_11_06": {
+    "branch": "codex/ag70-p1i-3x-hold3ps",
+    "commit": "7e53064386e2078bcc2f3281c4e9d35829c1e88c",
+    "grid_xyz": [64, 64, 76],
+    "reference_source_power_mW": 8.93189911185,
+    "marangoni_multiplier": 3.0,
+    "configured_arc_pressure_MPa": 501.0,
+    "target_hold_ps": 3.0,
+    "actual_hold_ps_before_safety_cutoff": 0.17750321,
+    "heat_off_time_ps": 0.80095092,
+    "solidification_time_ps": 1.10183585
+  }
+}

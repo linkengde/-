@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "handoff_base_commit": "1334d51a6f3611cc9fd16c619c433099245990af",
+  "model_kind": "single_temperature_transient_heat_conduction_enthalpy",
+  "scope": "Ag phase-change transport on a QSGS Ag/Ti3SiC2 bicontinuous geometry; continuum model, not atomistic MD",
+  "geometry": {
+    "source_file": "../../qsgs_morphology.npz",
+    "source_npz_key": "skeleton",
+    "axis_order": "x,y,z",
+    "source_shape_voxels": [100, 100, 50],
+    "size_A": [299.635, 301.857484616085, 158.6115],
+    "native_voxel_pitch_A": [2.99635, 3.01857484616085, 3.17223],
+    "skeleton_fraction": 0.583346,
+    "ag_fraction": 0.416654,
+    "geometry_definition": "QSGS binary morphology already stored in repository; do not regenerate for this handoff",
+    "original_projection_grids": [
+      {"label": "5A", "file": "../qsgs_phase_fractions_5A.npz", "shape_xyz": [60, 61, 32], "actual_spacing_A": [4.993916666666666, 4.9484833543620494, 4.956609375], "mixed_cells": 73912, "total_cells": 117120},
+      {"label": "10A", "file": "../qsgs_phase_fractions_10A.npz", "shape_xyz": [30, 31, 16], "actual_spacing_A": [9.987833333333333, 9.737338213422097, 9.91321875], "mixed_cells": 13583, "total_cells": 14880}
+    ],
+    "strictly_nested_comparison_grids": [
+      {"label": "10A_nested", "file": "../qsgs_phase_fractions_10A_nested.npz", "shape_xyz": [30, 31, 16]},
+      {"label": "5A_nested", "file": "../qsgs_phase_fractions_5A_nested.npz", "shape_xyz": [60, 62, 32]}
+    ],
+    "ag_connectivity_source": "Native binary Ag mask is the complement of qsgs_morphology.npz:skeleton. qsgs_component_coarsegrain.py partitions native Ag into six-face-connected nodes and only links real Ag shared faces. This graph is currently validated for the two-temperature solver, not wired into the single-temperature CLI."
+  },
+  "initial_state": {
+    "temperature_K": 300.0,
+    "enthalpy_reference_temperature_K": 300.0,
+    "initial_enthalpy_relative_to_reference": 0.0,
+    "single_temperature_initialization": "Start independently from uniform 300 K; do not import any two-temperature checkpoint."
+  },
+  "thermal_model": {
+    "temperature_field": "one local temperature T and one total lattice enthalpy field H",
+    "source_enters": "Ag total lattice enthalpy directly",
+    "electron_heat_capacity_Ce": false,
+    "electron_conductivity_ke": false,
+    "electron_lattice_coupling_G": false,
+    "ag_total_conductivity_used": true,
+    "phase_change": {
+      "melting_temperature_K": 1235.08,
+      "latent_heat_J_mol": 11297.0,
+      "latent_heat_J_kg": 104729.66082682385,
+      "liquid_fraction_rule": "At Tm, f_l=(h-h_s(Tm))/L_f clipped to [0,1]; below the latent plateau f_l=0, above it f_l=1 and liquid sensible heat raises T. Volumetric implementation weights by Ag fraction and fixed solid reference density.",
+      "volume_change_on_melting": "not modeled; solid reference density is fixed"
+    }
+  },
+  "heat_source": {
+    "profile": "Q=I0/l_skin * exp(-r^2/R^2) * exp(-d/l_skin) * S(t), applied only to Ag; d is depth below z top",
+    "lateral_profile": "exp(-r^2/R^2)",
+    "peak_flux_eV_per_ps_A2": 5.0,
+    "peak_flux_W_per_m2": 80108831700000.0,
+    "gaussian_radius_A": 30.0,
+    "absorption_depth_A": 20.0,
+    "peak_volume_rate_W_per_m3": 40054415850000000000000.0,
+    "center_xy": "domain center unless explicitly supplied",
+    "time_profile": "rectangular step: source on for heat-ps, then off for cool-ps",
+    "masking": "Ag phase fraction in the projected prototype; exact binary-QSGS integration is available in qsgs_source_integration.py but not exposed in the current single-temperature CLI",
+    "post_mask_renormalization": false,
+    "measured_integrated_powers": [
+      {"method": "existing single-temperature projected cell-center source", "grid": "5A", "domain": "one QSGS tile", "power_mW": 0.880833, "status": "historical pilot; grid-dependent discretization"},
+      {"method": "existing single-temperature projected cell-center source", "grid": "10A", "domain": "one QSGS tile", "power_mW": 0.863925, "status": "historical pilot; grid-dependent discretization"},
+      {"method": "exact analytic integral over binary Ag voxels and conservative aggregation", "grid": "10A or 5A", "domain": "3x3 lateral repeat", "power_mW": 0.886217924228131, "status": "validated for separate two-temperature full-domain run; must be reconnected and revalidated for single-temperature production"}
+    ]
+  },
+  "boundary_conditions": {
+    "x": "periodic",
+    "y": "periodic",
+    "z": "insulated at both outer faces in current single-temperature solver",
+    "bottom_dirichlet_heat_sink": false,
+    "free_surface_radiation_or_convection": false,
+    "case_A": "Adiabatic scaffold limit: Ti3SiC2 contributes no heat capacity or conductivity; only Ag heat conduction is represented through the projected field. Not a measured interface condition.",
+    "case_B": "Ideal thermal contact limit: shared local temperature and volume-weighted Ag/Ti3SiC2 heat capacity/conductivity, with zero added interface resistance. Not a measured interface condition.",
+    "case_A_B_are_extremes_not_calibrated_interface_models": true
+  },
+  "current_prototype_gaps": [
+    "CLI exposes only 5A/10A projected cells and Cases A/B; no native graph or tile_xy option.",
+    "CLI has no bottom heat sink, explicit timestep, or spatial field snapshot option.",
+    "Current CLI samples the source at thermal-cell centers and multiplies by Ag fraction; it does not call the exact binary geometry source integrator.",
+    "5A and 10A projected-cell solutions have not passed spatial convergence for local melt-pool claims.",
+    "The continuous solver does not model melt flow, free-surface deformation, atomistic fixed/Newton/sputter/evaporation layers, or grain structure."
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "status": "SHORT_LOCAL_HEATING_SMOKE_PASSED",
+  "heat_sources_applied": true,
+  "flow_or_evaporation_run": false,
+  "models": [
+    {
+      "model": "ultrafine_500nm",
+      "seed": 1105,
+      "boundary_case": "B",
+      "grid_shape_xyz": [
+        150,
+        150,
+        150
+      ],
+      "size_A": [
+        100000.00000000001,
+        100000.00000000001,
+        100000.00000000001
+      ],
+      "size_m": [
+        1.0000000000000003e-05,
+        1.0000000000000003e-05,
+        1.0000000000000003e-05
+      ],
+      "initial_temperature_K": 300.0,
+      "peak_surface_gaussian_flux_W_m2": 1000000000000.0,
+      "source_footprint_definition": "Gaussian radial radius = 0.10 of RVE x length; exponential depth = 0.01 of RVE z length",
+      "gaussian_radius_A": 10000.000000000002,
+      "absorption_depth_A": 1000.0000000000001,
+      "source_geometry_integration": "exact separable integral over binary QSGS Ag voxels; contributions to round-off-only projected cells are omitted",
+      "source_power_W": 2.7071170502500816,
+      "stable_timestep_limit_s": 1.9192750878270803e-12,
+      "test_timestep_s": 5e-13,
+      "test_step_count": 10,
+      "test_duration_s": 5e-12,
+      "injected_energy_J": 1.3535585251250406e-11,
+      "final_enthalpy_J": 1.3535585251250408e-11,
+      "energy_residual_J": 1.6155871338926322e-27,
+      "temperature_min_K": 300.0,
+      "temperature_mean_K": 300.0054759425322,
+      "temperature_max_K": 314.10067934985875,
+      "max_ag_liquid_fraction": 0.0,
+      "liquid_fraction_range_valid": true,
+      "elapsed_seconds": 7.560231798000132,
+      "process_peak_rss_mib": 676.09375,
+      "step_history_csv": "short_heating_ultrafine_500nm.csv",
+      "interpretation": "synthetic local-source code smoke only; flux and footprint are numerical test inputs, not measured arc conditions"
+    },
+    {
+      "model": "micro_10um",
+      "seed": 1105,
+      "boundary_case": "B",
+      "grid_shape_xyz": [
+        150,
+        150,
+        150
+      ],
+      "size_A": [
+        2000000.0,
+        2000000.0,
+        2000000.0
+      ],
+      "size_m": [
+        0.0002,
+        0.0002,
+        0.0002
+      ],
+      "initial_temperature_K": 300.0,
+      "peak_surface_gaussian_flux_W_m2": 1000000000000.0,
+      "source_footprint_definition": "Gaussian radial radius = 0.10 of RVE x length; exponential depth = 0.01 of RVE z length",
+      "gaussian_radius_A": 200000.0,
+      "absorption_depth_A": 20000.0,
+      "source_geometry_integration": "exact separable integral over binary QSGS Ag voxels; contributions to round-off-only projected cells are omitted",
+      "source_power_W": 1082.8468201000323,
+      "stable_timestep_limit_s": 7.67710035130832e-10,
+      "test_timestep_s": 5e-13,
+      "test_step_count": 10,
+      "test_duration_s": 5e-12,
+      "injected_energy_J": 5.4142341005001604e-09,
+      "final_enthalpy_J": 5.414234100500161e-09,
+      "energy_residual_J": 8.271806125530277e-25,
+      "temperature_min_K": 300.0,
+      "temperature_mean_K": 300.0002739783973,
+      "temperature_max_K": 300.73636829706317,
+      "max_ag_liquid_fraction": 0.0,
+      "liquid_fraction_range_valid": true,
+      "elapsed_seconds": 6.48526058599964,
+      "process_peak_rss_mib": 875.7265625,
+      "step_history_csv": "short_heating_micro_10um.csv",
+      "interpretation": "synthetic local-source code smoke only; flux and footprint are numerical test inputs, not measured arc conditions"
+    }
+  ],
+  "limitations": [
+    "Only 10 stable explicit steps were advanced from a uniform 300 K state.",
+    "The Gaussian footprint is scaled with each RVE and must not be interpreted as the same physical arc source.",
+    "No mesh convergence, measured heat boundary, finite interface resistance, flow, or full melting/cooling cycle was tested."
+  ]
+}
