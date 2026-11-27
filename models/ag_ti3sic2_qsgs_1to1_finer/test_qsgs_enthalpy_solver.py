@@ -7,7 +7,7 @@ import numpy as np
 
 MODEL_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(MODEL_DIR / "phase_field_qsgs"))
-from qsgs_enthalpy_solver import QSGSEnthalpyGrid  # noqa: E402
+from qsgs_enthalpy_solver import QSGSEnthalpyGrid, Ti3SiC2ThermalProperties  # noqa: E402
 
 
 class QSGSEnthalpySolverTests(unittest.TestCase):
@@ -19,7 +19,7 @@ class QSGSEnthalpySolverTests(unittest.TestCase):
         for boundary in ("A", "B"):
             model = QSGSEnthalpyGrid(self.grid_path, boundary)
             shape = model.temperature_shape
-            for temperature, liquid_fraction in ((300.0, 0.0), (900.0, 0.0), (1235.08, 0.37), (1300.0, 1.0)):
+            for temperature, liquid_fraction in ((300.0, 0.0), (900.0, 0.0), (1235.08, 0.37), (1300.0, 1.0), (1800.0, 1.0), (2000.0, 1.0)):
                 t = np.full(shape, temperature)
                 f = np.full(shape, liquid_fraction)
                 h = model.enthalpy_density_from_state(t, f)
@@ -55,6 +55,41 @@ class QSGSEnthalpySolverTests(unittest.TestCase):
         row = model.advance(dt, source_on=True)
         self.assertGreater(row["injected_energy_J"], 0.0)
         self.assertAlmostEqual(row["total_energy_J"], row["injected_energy_J"], delta=1.0e-11 * row["injected_energy_J"])
+
+    def test_ti3sic2_properties_extend_to_2000k_and_reject_above(self):
+        properties = Ti3SiC2ThermalProperties()
+        self.assertAlmostEqual(
+            properties.cp_J_kg_K(300.0), 560.3756617000839, delta=1.0e-9
+        )
+        self.assertAlmostEqual(
+            properties.cp_J_kg_K(1473.15), 783.0773165577963, delta=1.0e-9
+        )
+        self.assertAlmostEqual(
+            properties.cp_J_kg_K(2000.0), 798.0792813783802, delta=1.0e-9
+        )
+        self.assertAlmostEqual(
+            properties.conductivity_W_m_K(2000.0), 29.6, delta=1.0e-12
+        )
+        self.assertAlmostEqual(
+            properties.specific_enthalpy_J_kg(2000.0),
+            1268886.2334097673,
+            delta=1.0e-6,
+        )
+        with self.assertRaisesRegex(ValueError, "2000.00 K"):
+            properties.cp_J_kg_K(2000.01)
+
+    def test_case_b_enthalpy_guard_stops_above_2000k(self):
+        model = QSGSEnthalpyGrid(self.grid_path, "B")
+        liquid = np.ones(model.temperature_shape)
+        with self.assertRaisesRegex(ValueError, "2000.00 K"):
+            model.enthalpy_density_from_state(
+                np.full(model.temperature_shape, 2000.01), liquid
+            )
+        enthalpy_at_limit = model.enthalpy_density_from_state(
+            np.full(model.temperature_shape, 2000.0), liquid
+        )
+        with self.assertRaisesRegex(ValueError, "2000.00 K"):
+            model.state_from_enthalpy_density(enthalpy_at_limit + 1.0e12)
 
     def test_explicit_timestep_guard(self):
         model = QSGSEnthalpyGrid(self.grid_path, "A")
