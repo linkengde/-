@@ -1,0 +1,51 @@
+{
+  "materials_at_temperature_K": {
+    "temperature_K": 300.0,
+    "Ag": {
+      "thermal_conductivity_W_m_K": 429.0,
+      "phase": "solid",
+      "candidate_source": "repository thermophysical_candidates.csv; citation audit incomplete"
+    },
+    "Ti3SiC2": {
+      "thermal_conductivity_W_m_K": 37.25,
+      "phase": "solid",
+      "candidate_source": "repository thermophysical_candidates.csv; citation audit incomplete"
+    }
+  },
+  "rves": {
+    "ultrafine_500nm": {
+      "domain_edge_m": 1e-5,
+      "target_skeleton_p50_um": 0.54
+    },
+    "micro_10um": {
+      "domain_edge_m": 2e-4,
+      "target_skeleton_p50_um": 10.8
+    }
+  },
+  "phase_volume_fractions": {
+    "Ag_volume_fraction": 0.7,
+    "Ti3SiC2_volume_fraction": 0.3
+  },
+  "boundary_and_solver": {
+    "boundary_condition": "fully periodic affine-gradient corrector",
+    "reference_temperature_K": 300.0,
+    "imposed_macro_temperature_difference_K": 10.0,
+    "relative_tolerance": 1e-9,
+    "maximum_CG_iterations": 500,
+    "FFT_workers": 4
+  },
+  "validation_runs": {
+    "analytic_periodic_grid_n": 48,
+    "performance_grid_n": [50, 100, 150],
+    "QSGS_morphology_grid_n": [150, 200, 300],
+    "fixed_voxel_refinement": {
+      "source_grid_n": 150,
+      "refinement_factor_per_axis": 2,
+      "target_grid_n": 300
+    },
+    "random_seeds": [1105, 1136, 1182]
+  },
+  "interface_resistance_sensitivity_m2_K_W": [0.0, 1e-10, 1e-9, 1e-8],
+  "interface_resistance_values_are_measured_data": false,
+  "scope": "steady linear conduction only; no arc heat source, phase change, liquid flow, Marangoni force, arc pressure, or evaporation"
+}

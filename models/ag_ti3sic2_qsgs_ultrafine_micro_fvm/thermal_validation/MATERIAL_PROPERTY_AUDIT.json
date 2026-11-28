@@ -1,0 +1,34 @@
+{
+  "status": "PARTIAL_SOURCE_AUDIT_NUMERICAL_BASELINE_ONLY",
+  "purpose": "300 K constant-k conduction benchmarks and candidate RVE estimates; not a complete publication-grade property validation",
+  "temperature_K": 300.0,
+  "single_consistent_property_set_used_in_all_cases": true,
+  "values": {
+    "Ag_k_W_m_K": 429.0,
+    "Ag_source_note": "User-supplied baseline values attributed to NIST/CDC thermophysical table",
+    "Ti3SiC2_k_W_m_K": 37.25,
+    "Ti3SiC2_equation": "k_W_m_K(T) = 38.6 - 0.0045*T",
+    "Ti3SiC2_reported_fit_range_C": [
+      25,
+      1200
+    ],
+    "Ti3SiC2_fit_R2": 0.86,
+    "Cp_and_density_used": false
+  },
+  "sources_and_git_blobs": {
+    "main_commit": "fbc7fbd1081fcb4a2a86a671188c3327a577631f",
+    "single_temperature_study_commit": "703b63ccf840dc0f8d0e85349221c8457163417f",
+    "main_solver_blob": "708df50bd80f4fe84fbb2b38e16026f97f3da9fd",
+    "study_solver_blob": "43826c0aa746659a36c3b4b03de5ad9ff4e6b8b1"
+  },
+  "input_files": {
+    "candidate_csv_sha256": "28d7895dc6e4554c8ca01038018eedf46f5bba4e14b462c815fb8b5662ad2711",
+    "candidate_json_sha256": "1de6f518dd6f65b775ad029c3a2dc5b07ecf6aebffb8743db028d028804e08d3"
+  },
+  "unresolved_items": [
+    "Ag 429 W/(m K) is attributed to a NIST/CDC table in the repository, but table title, revision, row/page, original URL, and DOI are absent.",
+    "Ti3SiC2 fit is attributed to Barsoum et al. (1999), Section 3.4, Figure 6, and Qiu et al. (2020), Equation 24, but complete bibliography and DOI are absent from the extracted handoff.",
+    "The Ag/Ti3SiC2 interface resistance has no reliable measured value in the repository; finite-R values in this run are explicitly numerical sensitivity parameters."
+  ],
+  "interpretation": "Solver verification is GO for the declared candidate constants. Absolute effective conductivities remain conditional candidates pending complete source verification."
+}

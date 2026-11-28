@@ -1,0 +1,222 @@
+{
+  "status": "PASS",
+  "solver": "periodic cell-centred conservative FV with FFT-preconditioned CG",
+  "grid_shape": [
+    48,
+    48,
+    48
+  ],
+  "domain_length_m": [
+    1e-05,
+    1e-05,
+    1e-05
+  ],
+  "temperature_reference_K": 300.0,
+  "temperature_delta_K_for_linear_cases": 10.0,
+  "thermal_conductivity_inputs_W_m_K": {
+    "Ag": 429.0,
+    "Ti3SiC2": 37.25
+  },
+  "finite_interface_resistance_test_parameter_m2_K_W": 1e-09,
+  "finite_R_parameter_is_measured_data": false,
+  "acceptance_relative_error": 0.01,
+  "cases": [
+    {
+      "mean_heat_flux_W_m2": 429000000.0000015,
+      "exact_heat_flux_W_m2": 428999999.99999964,
+      "relative_flux_error": 4.307095543210049e-15,
+      "normalized_flux_nonuniformity": 1.0913624352230576e-12,
+      "temperature_min_K": 300.1041666666667,
+      "temperature_max_K": 309.8958333333333,
+      "interface_temperature_jump_K": [],
+      "expected_interface_temperature_jump_qR_K": [],
+      "maximum_interface_temperature_jump_error_K": 0.0,
+      "interface_resistance_m2_K_W": 0.0,
+      "case": "pure_Ag_1D_Dirichlet",
+      "status": "PASS"
+    },
+    {
+      "mean_heat_flux_W_m2": 37249999.999999925,
+      "exact_heat_flux_W_m2": 37250000.0,
+      "relative_flux_error": 2.0001558649459943e-15,
+      "normalized_flux_nonuniformity": 1.6371275754582994e-12,
+      "temperature_min_K": 300.10416666666674,
+      "temperature_max_K": 309.8958333333334,
+      "interface_temperature_jump_K": [],
+      "expected_interface_temperature_jump_qR_K": [],
+      "maximum_interface_temperature_jump_error_K": 0.0,
+      "interface_resistance_m2_K_W": 0.0,
+      "case": "pure_Ti3SiC2_1D_Dirichlet",
+      "status": "PASS"
+    },
+    {
+      "mean_heat_flux_W_m2": 68547989.2760795,
+      "exact_heat_flux_W_m2": 68547989.2761394,
+      "relative_flux_error": 8.736619041708323e-13,
+      "normalized_flux_nonuniformity": 8.5379310645045e-12,
+      "temperature_min_K": 300.19168900804306,
+      "temperature_max_K": 309.98335567470957,
+      "interface_temperature_jump_K": [
+        0.0
+      ],
+      "expected_interface_temperature_jump_qR_K": [
+        0.0
+      ],
+      "maximum_interface_temperature_jump_error_K": 0.0,
+      "interface_resistance_m2_K_W": 0.0,
+      "case": "Ag_Ti3SiC2_series_1D_Dirichlet_R0",
+      "status": "PASS"
+    },
+    {
+      "mean_heat_flux_W_m2": 68081305.6153805,
+      "exact_heat_flux_W_m2": 68081305.61541629,
+      "relative_flux_error": 5.25733002093268e-13,
+      "normalized_flux_nonuniformity": 8.596456865206515e-12,
+      "temperature_min_K": 300.190383964249,
+      "temperature_max_K": 309.98346899144923,
+      "interface_temperature_jump_K": [
+        0.06808130561540793
+      ],
+      "expected_interface_temperature_jump_qR_K": [
+        0.06808130561541104
+      ],
+      "maximum_interface_temperature_jump_error_K": 3.1086244689504383e-15,
+      "interface_resistance_m2_K_W": 1e-09,
+      "case": "Ag_Ti3SiC2_series_1D_Dirichlet_finite_R",
+      "status": "PASS"
+    },
+    {
+      "case": "pure_Ag_1D",
+      "expected_W_m_K": 429.0,
+      "tensor_W_m_K": [
+        [
+          428.99999999999994,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          428.99999999999994,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          428.99999999999994
+        ]
+      ],
+      "maximum_relative_diagonal_error": 1.3250214186668535e-16,
+      "status": "PASS"
+    },
+    {
+      "case": "pure_Ti3SiC2_1D",
+      "expected_W_m_K": 37.25,
+      "tensor_W_m_K": [
+        [
+          37.25,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          37.25,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          37.25
+        ]
+      ],
+      "maximum_relative_diagonal_error": 0.0,
+      "status": "PASS"
+    },
+    {
+      "case": "Ag_Ti3SiC2_series_and_parallel_laminate_R0",
+      "expected_series_x_W_m_K": 68.5479892761394,
+      "expected_parallel_yz_W_m_K": 233.125,
+      "tensor_W_m_K": [
+        [
+          68.54798927613977,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          233.12499999999997,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          233.12499999999997
+        ]
+      ],
+      "series_relative_error": 5.390124881808367e-15,
+      "parallel_relative_error": 1.2191617986232283e-16,
+      "maximum_off_diagonal_W_m_K": 0.0,
+      "status": "PASS"
+    },
+    {
+      "case": "Ag_Ti3SiC2_parallel_x_and_series_y_laminate_R0",
+      "expected_series_y_W_m_K": 68.5479892761394,
+      "expected_parallel_xz_W_m_K": 233.125,
+      "tensor_W_m_K": [
+        [
+          233.12499999999997,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          68.54798927614021,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          233.12499999999997
+        ]
+      ],
+      "maximum_diagonal_relative_error": 1.1816812240887573e-14,
+      "status": "PASS"
+    },
+    {
+      "case": "Ag_Ti3SiC2_series_laminate_finite_R",
+      "interface_resistance_m2_K_W": 1e-09,
+      "expected_series_x_W_m_K": 67.620933471648,
+      "expected_parallel_yz_W_m_K": 233.125,
+      "tensor_W_m_K": [
+        [
+          67.62093347164982,
+          -0.0,
+          -0.0
+        ],
+        [
+          -0.0,
+          233.12499999999997,
+          -0.0
+        ],
+        [
+          -0.0,
+          -0.0,
+          233.12499999999997
+        ]
+      ],
+      "maximum_relative_error": 2.6899797298842665e-14,
+      "status": "PASS"
+    },
+    {
+      "case": "no_source_uniform_300K_hold",
+      "maximum_operator_residual_W": 0.0,
+      "status": "PASS"
+    },
+    {
+      "case": "periodic_adiabatic_global_energy_balance",
+      "sum_divergence_W": 2.883977778811442e-17,
+      "normalized_global_balance": 1.0420319277133185e-18,
+      "status": "PASS"
+    }
+  ],
+  "wall_seconds": 0.10970860900124535
+}
