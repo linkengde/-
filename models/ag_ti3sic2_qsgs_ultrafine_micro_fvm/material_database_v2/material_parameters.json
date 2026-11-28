@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "database_scope": "single-temperature enthalpy FVM properties; Ag flow properties stored for a later stage",
+  "Ag": {
+    "molar_mass_kg_mol": 0.1078682,
+    "melting_temperature_K": 1235.08,
+    "latent_heat_fusion_J_mol": 11296.8,
+    "latent_heat_fusion_J_kg": 104727.80671226552,
+    "solid_cp_formula_J_mol_K": "4.184*(5.272+0.001836*T+22200/T**2)",
+    "solid_cp_range_K": [
+      298.15,
+      1235.08
+    ],
+    "liquid_cp_J_mol_K": 33.472,
+    "liquid_cp_range_K": [
+      1235.08,
+      2000.0
+    ],
+    "solid_reference_density_fixed_kg_m3": 10499.4,
+    "solid_density_equation_not_used_in_first_solver": "10503.8-0.6453*(T-293.15)-6.94e-5*(T-293.15)^2",
+    "liquid_density_equation_not_used_in_first_solver": "9327.1-0.9956*(T-1234.93)",
+    "density_source_transition_change_percent": {
+      "value": 5.16,
+      "uncertainty": 0.14
+    },
+    "thermal_conductivity_policy": "separate solid/liquid interpolation tables; no interpolation across Tm; linear phase-fraction blend only inside 1 K numerical interval",
+    "liquid_conductivity_status": "Ho recommended/provisional estimate; no direct molten-Ag thermal-conductivity experiment in supplied Ho copy; estimated uncertainty about 20 percent"
+  },
+  "Ti3SiC2": {
+    "molar_mass_kg_mol": 0.195708,
+    "reference_density_kg_m3": 4500.0,
+    "cp_formula_J_mol_K": "164.4-16419/T",
+    "conductivity_formula_W_m_K": "38.6-0.0045*T",
+    "primary_solver_upper_temperature_K": 1473.15,
+    "density_policy": "fixed 4500 kg/m^3; no thermal expansion or structural change",
+    "expansion_note": "CSV value alpha_volume=8.90e-6 K^-1 is not the tensor-derived volumetric coefficient; 2 alpha_a+alpha_c is about 26.95e-6 K^-1"
+  },
+  "solver_policy": {
+    "reference_temperature_K": 300.0,
+    "Ag_mushy_interval_width_baseline_K": 1.0,
+    "fixed_density_in_enthalpy_solver": true,
+    "interface_resistance_baseline_m2_K_W": 0.0,
+    "interface_resistance_sensitivity_m2_K_W": [
+      1e-10,
+      1e-09,
+      1e-08
+    ]
+  },
+  "source_notes": [
+    "Pankratz compiled heat of fusion is 11296.8 J/mol; Feber and Cagran experimental values are preserved as alternatives, not averaged.",
+    "Stage 4 database and checksums remain unchanged; v2 is an independent candidate.",
+    "Pankratz data above 1600 K are marked as source extrapolation; Ti3SiC2 solver stops at 1473.15 K."
+  ]
+}
