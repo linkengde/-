@@ -1,0 +1,41 @@
+{
+  "source_candidate_table": "geometry_generation/source_extracts/single-temperature-study/solver/thermophysical_candidates.csv",
+  "source_candidate_json": "geometry_generation/source_extracts/single-temperature-study/solver/thermophysical_candidates.json",
+  "geometry_seed": 1105,
+  "geometry_source": "geometry_generation/qsgs_seed_1105.npz",
+  "domain_edge_m": {
+    "ultrafine_500nm": 1e-5,
+    "micro_10um": 2e-4
+  },
+  "phase_volume_fraction_target": {
+    "Ag": 0.7,
+    "Ti3SiC2": 0.3
+  },
+  "phase_change": {
+    "enthalpy_reference_temperature_K": 300.0,
+    "Ag_mushy_interval_width_K": 1.0,
+    "mushy_interval_sensitivity_widths_K": [0.5, 1.0, 2.0],
+    "Ti3SiC2_maximum_temperature_K": 1473.15,
+    "density_policy": "fixed solid-reference density in both Ag phases; no expansion or mass migration"
+  },
+  "interface_resistance_sensitivity_m2_K_W": [0.0, 1e-9],
+  "solver": {
+    "method": "fully implicit enthalpy residual with damped Newton and matrix-free preconditioned CG",
+    "relative_nonlinear_tolerance": 1e-8,
+    "maximum_nonlinear_iterations": 20,
+    "linear_relative_tolerance": 1e-8,
+    "maximum_linear_iterations": 200
+  },
+  "numerical_heating_test": {
+    "source_definition": "uniform volumetric source deposited only in Ag cells inside a centered sphere; not an arc heat source",
+    "source_region_radius_fraction_of_edge": 0.08,
+    "source_rate_W_m3_at_10um": 4e18,
+    "heat_duration_s_at_10um": 1e-9,
+    "cool_duration_s_at_10um": 2e-6,
+    "wall_time_budget_s_per_case": 3600,
+    "reference_sink_temperature_K": 300.0,
+    "dimensionless_scale_rule": "Q scales as L^-2 and time scales as L^2 to preserve the conduction/source similarity group"
+  },
+  "validation_only": true,
+  "no_real_arc_or_liquid_flow": true
+}
